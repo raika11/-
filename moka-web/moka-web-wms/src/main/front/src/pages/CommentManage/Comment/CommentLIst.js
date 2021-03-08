@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { MokaCard } from '@components';
-
-import CommentListBox from './CommentListBox';
 import Search from './CommentSearch';
+import CommentListBox from './CommentListBox';
 
-// 차단 목록 텝.
+/**
+ * 댓글 관리 > 댓글 목록
+ */
 const CommentLIst = ({ matchPath }) => {
     const [selectBannedItem, setSelectBannedItem] = useState([]);
 
     return (
         <>
-            <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="댓글 관리">
+            <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="댓글 목록">
                 <Search selectBannedItem={selectBannedItem} setSelectBannedItem={setSelectBannedItem} />
                 <CommentListBox matchPath={matchPath} selectBannedItem={selectBannedItem} setSelectBannedItem={setSelectBannedItem} />
             </MokaCard>

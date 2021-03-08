@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
-import { API_BASE_URL } from '@/constants';
+import { API_BASE_URL, AREA_ALIGN_H } from '@/constants';
 import { previewAreaModal, PREVIEW_AREA_MODAL } from '@store/merge';
 import toast from '@utils/toastUtil';
-import { MokaLoader } from '@components';
+import { MokaLoader, MokaResizableBox } from '@components';
 
 /**
  * 컴포넌트워크 미리보기
@@ -15,7 +15,10 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
     const [previewContent, setPreviewContent] = useState(null);
     const loading = useSelector(({ loading }) => loading[PREVIEW_AREA_MODAL]);
     const area = useSelector(({ desking }) => desking.area);
+    const sidebarIsOpen = useSelector(({ layout }) => layout.sidebarIsOpen);
     const iframeRef = useRef(null);
+    const flexableRef = useRef(null);
+    const [maxSize, setMaxSize] = useState([530, 530]);
 
     /**
      * 전체화면 미리보기
@@ -47,6 +50,12 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
             }),
         );
     }, [area.areaSeq, componentList, show, dispatch]);
+
+    useEffect(() => {
+        setTimeout(function () {
+            setMaxSize([flexableRef.current.offsetWidth, flexableRef.current.offsetHeight]);
+        }, 200);
+    }, [area.areaAlign, sidebarIsOpen]);
 
     useEffect(() => {
         if (!iframeRef.current) return;
@@ -88,17 +97,21 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
             {/* iframe 클릭 막기 */}
             {/* <div className="absolute-top" style={{ bottom: 0, top: 58, right: 41 }} /> */}
 
-            <div className="custom-scroll flex-fill">
-                <iframe
-                    ref={iframeRef}
-                    title="컴포넌트미리보기"
-                    frameBorder="0"
-                    className={clsx('float-left h-100', { 'w-100': !isNaverChannel })}
-                    style={{ width: isNaverChannel ? 530 : undefined }}
-                />
+            <div className="overflow-hidden flex-fill d-flex">
+                <div className="overflow-hidden flex-fill" ref={flexableRef}>
+                    <MokaResizableBox width={maxSize[0]} height={maxSize[1]} minConstraints={[530, 530]} maxConstraints={maxSize} axis="both">
+                        <iframe
+                            ref={iframeRef}
+                            title="컴포넌트미리보기"
+                            frameBorder="0"
+                            className={clsx('h-100', { 'w-100': !isNaverChannel })}
+                            style={{ width: isNaverChannel ? 530 : undefined }}
+                        />
+                    </MokaResizableBox>
+                </div>
 
                 {isNaverChannel && (
-                    <div className="float-left pt-card pl-gutter" style={{ width: 'calc(100% - 530px)' }}>
+                    <div className="flex-shrink-0 pt-card pl-gutter user-select-text" style={{ width: 460 }}>
                         <h2 className="color-positive">네이버 채널</h2>
                         <h4 className="color-positive">연예/스포츠 기사 편집시 오류!</h4>
                         <p className="mb-2 color-gray-900">top-single: 상단 이미지 기사 1꼭지 (이미지 없는 기사 편집 시 텍스트로 노출)</p>

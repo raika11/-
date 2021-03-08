@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -110,6 +111,64 @@ public class BoardSaveDTO {
     @ApiModelProperty("주소")
     @Size(max = 512, message = "{tps.board.error.size.addr}")
     private String addr;
+
+    /**
+     * 답변 푸시 수신 여부
+     */
+    @ApiModelProperty("답변 푸시 수신 여부")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board.error.pattern.pushReceiveYn}")
+    @Builder.Default
+    private String pushReceiveYn = MokaConstants.NO;
+
+    /**
+     * 답변 이메일 수신 여부
+     */
+    @ApiModelProperty("답변 이메일 수신 여부")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board.error.pattern.emailReceiveYn}")
+    @Builder.Default
+    private String emailReceiveYn = MokaConstants.NO;
+
+    /**
+     * app os
+     */
+    @ApiModelProperty("app os")
+    @Size(max = 3, message = "{tps.board.error.size.appOs}")
+    private String appOs;
+
+    /**
+     * 디바이스 구분
+     */
+    @ApiModelProperty("디바이스 구분")
+    @Size(max = 1, message = "{tps.board.error.size.devDiv}")
+    private String devDiv;
+
+    /**
+     * 디바이스 푸시 토큰
+     */
+    @ApiModelProperty("디바이스 푸시 토큰")
+    @Size(max = 512, message = "{tps.board.error.size.token}")
+    private String token;
+
+    /**
+     * 이메일 주소
+     */
+    @ApiModelProperty("이메일 주소")
+    @Size(max = 512, message = "{tps.board.error.size.email}")
+    private String email;
+
+    /**
+     * 휴대폰 번호
+     */
+    @ApiModelProperty("휴대폰 번호")
+    @Size(max = 512, message = "{tps.board.error.size.mobilePhone}")
+    private String mobilePhone;
+
+    /**
+     * 신고페이지 url
+     */
+    @ApiModelProperty("신고페이지 url")
+    @Size(max = 200, message = "{tps.board.error.size.url}")
+    private String url;
 
 
     /**

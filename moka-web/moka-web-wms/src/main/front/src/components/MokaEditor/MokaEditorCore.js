@@ -4,12 +4,12 @@ import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 import defaultOptions from './options';
 import { MokaIcon } from '@components';
-import { propTypes as editorPropTypes } from './MonacoEditor';
+
 const MonacoEditor = React.lazy(() => import('./MonacoEditor'));
 let errorDecoId = 0;
 
-export const propTypes = {
-    ...editorPropTypes,
+const propTypes = {
+    ...MonacoEditor.propTypes,
     /**
      * 전체화면 버튼 노출
      * @default

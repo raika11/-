@@ -151,6 +151,15 @@ public interface BoardService {
     Optional<Board> findTopBoard(Integer boardId);
 
     /**
+     * 순서 변경
+     *
+     * @param boardSeq 게시물 일련번호
+     * @param ordNo    순서번호
+     * @return 수정 결과
+     */
+    long updateOrdNo(Long boardSeq, String ordNo);
+
+    /**
      * 조회수 증가
      *
      * @param boardSeq 게시물 일련번호

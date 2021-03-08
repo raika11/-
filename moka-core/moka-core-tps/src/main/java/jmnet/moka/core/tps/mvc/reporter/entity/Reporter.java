@@ -269,7 +269,7 @@ public class Reporter extends BaseAudit {
     /**
      * 기자한마디
      */
-    @Column(name = "REP_TALK", updatable = false)
+    @Column(name = "REP_TALK")
     private String repTalk;
 
     /**

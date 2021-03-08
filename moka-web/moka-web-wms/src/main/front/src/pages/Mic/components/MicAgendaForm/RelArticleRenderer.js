@@ -91,7 +91,7 @@ const RelArticleRenderer = forwardRef((params, ref) => {
     );
 
     return (
-        <div key={article.totalId} className="py-1 pl-1 pr-2 d-flex align-items-center">
+        <div key={article.totalId} className="py-2 pl-1 pr-2 d-flex align-items-center">
             {/* 썸네일 변경/편집 버튼 */}
             <div className="d-flex flex-column mr-3">
                 <Button variant="gray-700" size="sm" className="w-100" onClick={() => setArcShow(true)}>

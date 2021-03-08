@@ -1,7 +1,6 @@
 import { takeLatest, put, call, select } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
-
 import * as datasetAction from './datasetAction';
 import * as datasetAPI from './datasetApi';
 
@@ -40,9 +39,16 @@ function* saveDataset({ payload: { type, actions, callback } }) {
 
         // 도메인 데이터
         let dataset = yield select(({ dataset }) => dataset.dataset);
+        const dataApiParam =
+            dataset.dataApiParam !== ''
+                ? JSON.stringify(dataset.dataApiParam, (key, value) => {
+                      if (value !== null) return value;
+                  })
+                : dataset.dataApiParam;
+
         dataset = {
             ...dataset,
-            dataApiParam: dataset.dataApiParam !== '' ? JSON.stringify(dataset.dataApiParam) : dataset.dataApiParam,
+            dataApiParam: dataApiParam,
             dataApiParamShape: null,
         };
         const response = type === 'insert' ? yield call(datasetAPI.postDataset, { dataset }) : yield call(datasetAPI.putDataset, { dataset });

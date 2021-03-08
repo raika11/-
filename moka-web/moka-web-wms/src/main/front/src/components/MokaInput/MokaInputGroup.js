@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import MokaPrependLinkInput from './MokaPrependLinkInput';
-import MokaInput, { propTypes as inputPropTypes } from './MokaInput';
+import MokaInput from './MokaInput';
 
 const propTypes = {
-    ...inputPropTypes,
+    ...MokaInput.propTypes,
     /**
      * MokaInput의 className
      */

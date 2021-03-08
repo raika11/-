@@ -178,6 +178,7 @@ public class BoardRestController extends AbstractCommonController {
             @Valid BoardSaveDTO boardDTO, @ApiParam(hidden = true) @NotNull Principal principal)
             throws InvalidDataException, NoDataException {
 
+
         // BoardDTO -> Board 변환
         Board board = modelMapper.map(boardDTO, Board.class);
         board.setBoardId(boardId);
@@ -190,6 +191,8 @@ public class BoardRestController extends AbstractCommonController {
         BoardInfo boardInfo = boardInfoService
                 .findBoardInfoById(boardId)
                 .orElseThrow(() -> new NoDataException(msg("tps.board-info.error.not-exist")));
+
+        validInteractionOperation(boardInfo, board);
 
         validFileOperation(boardInfo, boardDTO.getAttaches());
 
@@ -251,6 +254,8 @@ public class BoardRestController extends AbstractCommonController {
                     .orElseThrow(() -> new NoDataException(msg("tps.board.error.no-data.parentBoardSeq")));
 
             board.setBoardInfo(parentBoard.getBoardInfo());
+            // 부모 순서와 답글 순서 일치화
+            board.setOrdNo(parentBoard.getOrdNo());
 
         } catch (Exception e) {
             log.error("[FAIL TO INSERT BOARD]", e);
@@ -354,7 +359,7 @@ public class BoardRestController extends AbstractCommonController {
         }
 
         // 부모 일련번호 DB에 없으면 에러 처리
-        boardService
+        Board parentBoard = boardService
                 .findBoardBySeq(newBoard.getParentBoardSeq())
                 .orElseThrow(() -> new NoDataException(msg("tps.board.error.no-data.parentBoardSeq")));
 
@@ -364,6 +369,8 @@ public class BoardRestController extends AbstractCommonController {
                 .equals(newBoard.getParentBoardSeq())) {
             throw new InvalidDataException(msg("tps.board.error.unmatched-parentBoardSeq"));
         }
+        // 부모 순서와 답글 순서 일치화
+        newBoard.setOrdNo(newBoard.getOrdNo());
 
         return processUpdateEntity(newBoard, oldBoard, boardDTO.getAttaches());
     }
@@ -379,7 +386,9 @@ public class BoardRestController extends AbstractCommonController {
             throws InvalidDataException {
         ActionType actionType = board.getBoardSeq() != null && board.getBoardSeq() > 0 ? ActionType.UPDATE : ActionType.INSERT;
         try {
-            // insert or update
+            // 상호작용 파라미터 검증
+            validInteractionOperation(board.getBoardInfo(), board);
+            // 파일 파라미터 검증
             validFileOperation(board.getBoardInfo(), boardAttachSaveDTOSet);
 
             Board returnValue = actionType == ActionType.UPDATE ? boardService.updateBoard(board) : boardService.insertBoard(board);
@@ -459,6 +468,25 @@ public class BoardRestController extends AbstractCommonController {
             // 액션 로그에 실패 로그 출력
             tpsLogger.error(ActionType.DELETE, e.toString());
             throw new Exception(msg("tps.board.error.delete"), e);
+        }
+    }
+
+    /**
+     * 글 순서 변경
+     *
+     * @param boardSeq 게시물 일련번호
+     * @return 성공 여부
+     */
+    @ApiOperation(value = "글 순서 변경")
+    @PutMapping("/{boardSeq}/order")
+    public ResponseEntity<?> putOrder(
+            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
+            @ApiParam("게시물 순서번호") @RequestParam("ordNo") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") String ordNo) {
+
+        if (boardService.updateOrdNo(boardSeq, ordNo) > 0) {
+            return new ResponseEntity<>(new ResultDTO<>(true), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ResultDTO<>(false), HttpStatus.OK);
         }
     }
 
@@ -593,6 +621,57 @@ public class BoardRestController extends AbstractCommonController {
         board.setRegName(userDTO.getUserName());
         board.setRegDiv(TpsConstants.BOARD_REG_DIV_ADMIN);
         board.setRegIp(HttpHelper.getRemoteAddr());
+    }
+
+    /**
+     * 푸시, 메일 파라미터 검증
+     *
+     * @param boardInfo 게시판정보
+     * @param board     게시물정보
+     * @throws InvalidDataException 오류데이터 에러 처리
+     */
+    private void validInteractionOperation(BoardInfo boardInfo, Board board)
+            throws InvalidDataException {
+
+        // 답변푸시설정이 안되어 있는 게시판에 게시물의 답변푸시수신이 Y로 되어 있는 경우
+        if (boardInfo
+                .getAnswPushYn()
+                .equals(MokaConstants.NO)) {
+            if (board
+                    .getPushReceiveYn()
+                    .equals(MokaConstants.YES)) {
+                new InvalidDataException(msg("tps.board.error.do-not-push"));
+            }
+        }
+
+        // 답변푸시수신이 Y로 되어 있지만 푸시 전송 정보가 누락되어 있는 경우
+        if (board
+                .getPushReceiveYn()
+                .equals(MokaConstants.YES)) {
+            if (McpString.isEmpty(board.getAppOs()) || McpString.isEmpty(board.getDevDiv()) || McpString.isEmpty(board.getToken())) {
+                new InvalidDataException(msg("tps.board.error.need-push-info"));
+            }
+        }
+
+        // 이메일 발송 설정이 안되어 있는 게시판의 게시물에 이메일수신이 Y로 되어 있는 경우
+        if (boardInfo
+                .getEmailSendYn()
+                .equals(MokaConstants.NO)) {
+            if (board
+                    .getEmailReceiveYn()
+                    .equals(MokaConstants.YES)) {
+                new InvalidDataException(msg("tps.board.error.do-not-email"));
+            }
+        }
+
+        // 게시물에 이메일수신이 Y로 되어 있는 경우, 이메일 주소 입력 여부 체크
+        if (board
+                .getEmailReceiveYn()
+                .equals(MokaConstants.YES)) {
+            if (McpString.isEmpty(board.getEmail())) {
+                new InvalidDataException(msg("tps.board.error.need-email-address"));
+            }
+        }
     }
 
     private void validFileOperation(BoardInfo boardInfo, List<BoardAttachSaveDTO> boardAttachSaveDTOSet)

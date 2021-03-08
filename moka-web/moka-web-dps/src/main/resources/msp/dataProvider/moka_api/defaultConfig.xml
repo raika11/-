@@ -17,7 +17,6 @@
     category.codes
   </acl>
   <parameter>
-    <termName desc="검색할 용어">.{0,100}</termName>
     <page type="number" default="1">[1-9][0-9]{0,2}</page>
     <count type="number" default="20">[0-9]{1,3}</count>
     <start type="number" default="0" eval="((page le 0 ? 1 :page) - 1)*count">[0-9]{1,5}</start>

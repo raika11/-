@@ -216,7 +216,7 @@ export default handleActions(
         [act.GET_COMPONENT_WORK_HISTORY_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.history.componentWorkHistory.list = body.list;
-                draft.history.total = body.totalCnt;
+                draft.history.componentWorkHistory.total = body.totalCnt;
                 draft.error = initialState.error;
             });
         },

@@ -176,12 +176,13 @@ public class BulkFileUtil {
                     continue;
                 }
 
-                if( f.length() == 0)
-                    if( !f.delete() ){
+                if (f.length() == 0) {
+                    if (!f.delete()) {
                         log.trace(" BulkFileUtil :: getDirScanFiles file Delete failed");
                     }
-                else
+                } else {
                     files.add(f);
+                }
             }
         }
         if( files.size() <= 0 )

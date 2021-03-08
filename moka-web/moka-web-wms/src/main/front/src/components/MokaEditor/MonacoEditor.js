@@ -14,7 +14,7 @@ monaco.editor.defineTheme('mokaTheme', {
     ],
 });
 
-export const propTypes = {
+const propTypes = {
     /**
      * language
      */

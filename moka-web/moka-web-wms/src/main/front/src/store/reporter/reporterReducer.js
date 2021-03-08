@@ -39,11 +39,6 @@ export default handleActions(
         /**
          * 데이터 변경
          */
-        [act.CHANGE_REPORTER]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.reporter = payload;
-            });
-        },
         [act.CLEAR_REPORTER]: (state) => {
             return produce(state, (draft) => {
                 draft.reporter = initialState.reporter;

@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-
 import { MokaTable } from '@components';
 import { columnDefs } from './ReporterAgGridColumns';
 import { changeSearchOption, GET_REPORTER_LIST, getReporterList } from '@store/reporter';
 
 /**
- * 기자 목록 AgGrid
+ * 기자 관리 > 기자 목록 AgGrid
  */
 const ReporterMgrAgGrid = ({ match }) => {
     const history = useHistory();

@@ -56,11 +56,21 @@ const PollEdit = ({ onDelete }) => {
                 }),
             );
         } else {
-            setEdit(
-                produce(edit, (draft) => {
-                    draft[name] = value;
-                }),
-            );
+            let isValid = true;
+            if (name === 'allowAnswCnt') {
+                if (edit.itemCnt < value) {
+                    toast.warning('허용 답변수는 보기 개수보다 클 수 없습니다.');
+                    isValid = false;
+                }
+            }
+
+            if (isValid) {
+                setEdit(
+                    produce(edit, (draft) => {
+                        draft[name] = value;
+                    }),
+                );
+            }
         }
     };
 

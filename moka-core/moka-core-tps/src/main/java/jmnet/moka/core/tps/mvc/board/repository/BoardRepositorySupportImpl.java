@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.board.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
@@ -62,7 +63,7 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
             query.where(qBoard.titlePrefix1.eq(searchDTO.getTitlePrefix1()));
         }
 
-        query.where(qBoard.usedYn.eq(searchDTO.getUsedYn()));
+        query.where(qBoard.delYn.eq(searchDTO.getDelYn()));
 
         if (McpString.isNotEmpty(searchDTO.getKeyword())) {
             String keyword = searchDTO
@@ -90,7 +91,7 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
             query = getQuerydsl().applyPagination(pageable, query);
         }
 
-        query.orderBy(qBoard.parentBoardSeq.desc(), qBoard.depth.asc(), qBoard.indent.asc());
+        query.orderBy(qBoard.ordNo.asc(), qBoard.parentBoardSeq.desc(), qBoard.depth.asc(), qBoard.indent.asc());
 
         QueryResults<Board> list = query
                 .join(qBoard.boardInfo)
@@ -104,6 +105,7 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
     @EntityGraph(attributePaths = {"boardInfo", "attaches", "jpodChannel"}, type = EntityGraph.EntityGraphType.LOAD)
     public Page<Board> findAllJpodNotice(JpodNoticeSearchDTO searchDTO) {
         QBoard qBoard = QBoard.board;
+        QBoardInfo boardInfo = QBoardInfo.boardInfo;
 
         JPQLQuery<Board> query = from(qBoard);
 
@@ -134,8 +136,10 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
                             .contains(keyword)));
         }
 
-        query.where(qBoard.channelId.isNotNull());
-        query.where(qBoard.ordNo.eq(TpsConstants.BOARD_NOTICE_CONTENT));
+        query.where(qBoard.boardId.eq(JPAExpressions
+                .select(boardInfo.boardId)
+                .from(boardInfo)
+                .where(boardInfo.channelType.eq(TpsConstants.BOARD_JPOD))));
 
         if (McpString.isNotEmpty(searchDTO.getChannelId()) && searchDTO.getChannelId() > 0) {
             query.where(qBoard.channelId.eq(searchDTO.getChannelId()));
@@ -146,7 +150,7 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
             query = getQuerydsl().applyPagination(pageable, query);
         }
 
-        query.orderBy(qBoard.parentBoardSeq.desc(), qBoard.depth.asc(), qBoard.indent.asc());
+        query.orderBy(qBoard.ordNo.asc(), qBoard.parentBoardSeq.desc(), qBoard.depth.asc(), qBoard.indent.asc());
 
         QueryResults<Board> list = query
                 .join(qBoard.boardInfo)
@@ -168,6 +172,22 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
         return update(qBoard)
                 .where(builder)
                 .set(qBoard.parentBoardSeq, parentBoardSeq)
+                .execute();
+    }
+
+    @Override
+    public long updateOrdNo(Long boardSeq, String ordNo) {
+        QBoard qBoard = QBoard.board;
+        QBoard board = QBoard.board;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qBoard.parentBoardSeq.eq(JPAExpressions
+                .select(board.parentBoardSeq)
+                .from(board)
+                .where(board.boardSeq.eq(boardSeq))));
+        return update(qBoard)
+                .where(builder)
+                .set(qBoard.ordNo, ordNo)
                 .execute();
     }
 

@@ -25,7 +25,7 @@ export const getReporter = (repSeq) => {
     });
 };
 
-//  그룹 수정
+// 기자 수정
 export const putReporter = ({ reporter }) => {
     return instance.put(`/api/reporters/${reporter.repSeq}`, qs.stringify(reporter)).catch((err) => {
         throw err;

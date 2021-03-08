@@ -116,9 +116,10 @@ const DeskingTree = ({ setComponentAgGridInstances, match }) => {
             // areaSeq까지 트리 오픈
             let paths = findPath(areaSeq);
             loadWork(areaSeq);
-            setExpanded(paths);
+            setExpanded([...expanded, ...paths]);
             setSelected(String(areaSeq));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, areaSeq, findPath, tree, loadWork]);
 
     useEffect(() => {

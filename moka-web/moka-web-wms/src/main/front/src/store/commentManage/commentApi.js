@@ -40,7 +40,6 @@ export const deleteComment = ({ cmtSeq, params }) => {
 
 // 차단 목록 조회.
 export const getCommentsBlocks = ({ search }) => {
-    // console.log(search);
     return instance.get(`/api/comments-blocks?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });

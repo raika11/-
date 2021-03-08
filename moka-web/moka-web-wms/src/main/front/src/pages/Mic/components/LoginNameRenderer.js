@@ -14,7 +14,7 @@ const LoginNameRenderer = ({ data }) => {
                 })}
                 style={{ height: '25px' }}
             ></span>
-            <span className="flex-fill">{`${data.loginName}(${data.loginId})`}</span>
+            <span className="flex-fill" style={{ lineHeight: '18px', marginTop: 2 }}>{`${data.loginName}(${data.loginId})`}</span>
         </div>
     );
 };

@@ -15,7 +15,6 @@ export const columnDefs = [
         headerName: '등록자/ID',
         field: 'regInfo',
         tooltipField: 'regInfo',
-        width: 110,
         flex: 1,
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
@@ -28,7 +27,10 @@ export const columnDefs = [
     },
 ];
 
-const BenneHistoryModal = (props) => {
+/**
+ * 댓글 관리 > 차단 히스토리 모달
+ */
+const BannedHistoryModal = (props) => {
     const { show, onHide, Element } = props;
     const { seqNo } = Element;
     const dispatch = useDispatch();
@@ -49,8 +51,8 @@ const BenneHistoryModal = (props) => {
         onHide();
     };
 
-    // 팝업이 뜨면 목록 가지고 오기.
     useEffect(() => {
+        // 팝업이 뜨면 목록 가지고 오기.
         const setModalHeaderTitle = (type) => {
             if (type === 'I') {
                 setBanneTitle(`차단 IP 히스토리`);
@@ -70,15 +72,15 @@ const BenneHistoryModal = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]);
 
-    // store 목록이 업데이트 되면 그리드 데이터 설정.
     useEffect(() => {
+        // store 목록이 업데이트 되면 그리드 데이터 설정.
         const setGridRowData = (data) => {
             setRowData(
                 data.map((e, index) => {
                     return {
                         id: `${e.regDt}-${index}`,
                         bannedYn: e.usedYn === 'Y' ? '차단' : '복원',
-                        regInfo: `${e.regMember.memberId}/${e.regMember.memberNm}`,
+                        regInfo: `${e.regMember.memberNm} / ${e.regMember.memberId}`,
                         regDt: e.regDt,
                     };
                 }),
@@ -89,7 +91,7 @@ const BenneHistoryModal = (props) => {
     }, [list]);
 
     return (
-        <MokaModal width={600} show={show} onHide={handleClickHide} title={banneTitle} size="xl" footerClassName="justify-content-center" draggable>
+        <MokaModal size="md" width={600} show={show} onHide={handleClickHide} title={banneTitle} draggable>
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
@@ -98,10 +100,9 @@ const BenneHistoryModal = (props) => {
                 onRowNodeId={(data) => data.id}
                 loading={loading}
                 paging={false}
-                selected={0}
             />
         </MokaModal>
     );
 };
 
-export default BenneHistoryModal;
+export default BannedHistoryModal;

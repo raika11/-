@@ -8,6 +8,7 @@ export const columnDefs = [
         rowDrag: true,
         width: 24,
         suppressMenu: true,
+        cellStyle: { lineHeight: 'normal' },
         rowDragText: (params) => {
             return params.rowNode.data.item.title;
         },
@@ -16,6 +17,7 @@ export const columnDefs = [
         field: 'item',
         width: 400,
         flex: 1,
+        cellStyle: { lineHeight: 'normal' },
         suppressKeyboardEvent: suppressKeyboardEvent,
         cellRendererFramework: ({ data }) => {
             return <RelationPollSortItemRenderer {...data} />;

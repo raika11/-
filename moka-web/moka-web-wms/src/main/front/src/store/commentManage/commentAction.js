@@ -7,11 +7,15 @@ import { createRequestActionTypes } from '@store/commons/saga';
 export const CHANGE_SEARCH_OPTION = 'comment/CHANGE_SEARCH_OPTION';
 export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
 
-// 차단 메뉴 구분값 처리.
+/**
+ * 차단 메뉴 구분값 처리
+ */
 export const INITIALIZE_BANNED_PARAMS = 'comment/INITIALIZE_BANNED_PARAMS';
 export const initializeBannedParams = createAction(INITIALIZE_BANNED_PARAMS);
 
-// 공통 구분값 처리.
+/**
+ * 공통 구분값 처리
+ */
 export const [GET_INIT_DATA, GET_INIT_DATA_SUCCESS, GET_INIT_DATA_FAILURE] = createRequestActionTypes('comment/GET_INIT_DATA');
 export const getInitData = createAction(GET_INIT_DATA, (...actions) => actions);
 
@@ -51,21 +55,29 @@ export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList)
 export const [DELETE_COMMENT, DELETE_COMMENT_SUCCESS, DELETE_COMMENT_FAILURE] = createRequestActionTypes('comment/DELETE_COMMENT');
 export const deleteComment = createAction(DELETE_COMMENT, ({ cmtSeq, params, callback }) => ({ cmtSeq, params, callback }));
 
-//// 차단 관리.
+/**
+ * 차단 관리
+ */
 export const [GET_COMMENTS_BLOCKS, GET_COMMENTS_BLOCKS_SUCCESS, GET_COMMENTS_BLOCKS_FAILURE] = createRequestActionTypes('comment/GET_COMMENTS_BLOCKS');
 export const getCommentsBlocks = createAction(GET_COMMENTS_BLOCKS, (...actions) => actions);
 
 export const CHANGE_BANNEDS_SEARCH_OPTION = 'comment/CHANGE_BANNEDS_SEARCH_OPTION';
 export const changeBannedsSearchOption = createAction(CHANGE_BANNEDS_SEARCH_OPTION, (search) => search);
 
-// 차단 등록, 수정
+/**
+ * 차단 등록, 수정
+ */
 export const SAVE_BLOCKS = 'comment/SAVE_BLOCKS';
 export const saveBlocks = createAction(SAVE_BLOCKS, ({ type, seqNo, blockFormData, callback }) => ({ type, seqNo, blockFormData, callback }));
 
-// 차단 목록 차단//복원
+/**
+ * 차단 목록 차단,복원
+ */
 export const BLOCKS_USED = 'comment/BLOCKS_USED';
 export const blocksUsed = createAction(BLOCKS_USED, ({ seqNo, usedYn, callback }) => ({ seqNo, usedYn, callback }));
 
-// 차단 히스토리 목록.
+/**
+ * 차단 히스토리 목록
+ */
 export const [GET_BLOCK_HISTORY, GET_BLOCK_HISTORY_SUCCESS, GET_BLOCK_HISTORY_FAILURE] = createRequestActionTypes('comment/GET_BLOCK_HISTORY');
 export const getBlockHistory = createAction(GET_BLOCK_HISTORY, ({ seqNo }) => ({ seqNo: seqNo }));

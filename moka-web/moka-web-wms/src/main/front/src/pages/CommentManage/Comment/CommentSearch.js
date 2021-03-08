@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import moment from 'moment';
 import { MokaInput, MokaSearchInput } from '@components';
 import CommentBlockModal from '@pages/CommentManage/CommentModal/CommentBlockModal';
 import { initialState, getCommentList, changeSearchOption } from '@store/commentManage';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { DB_DATEFORMAT } from '@/constants';
-import { messageBox } from '@utils/toastUtil';
 import { AuthButton } from '@pages/Auth/AuthButton';
 
 moment.locale('ko');
@@ -34,13 +33,11 @@ const CommentSearch = ({ selectBannedItem }) => {
         COMMENT_STATUS_CODE: store.comment.common.COMMENT_STATUS_CODE,
         COMMENT_MEDIA_CODE: store.comment.common.COMMENT_MEDIA_CODE,
         COMMENT_SITE_CODE: store.comment.common.COMMENT_SITE_CODE,
-        searchGroupId: store.comment.common.searchGroupId,
-        searchStatusList: store.comment.common.searchStatusList,
-        searchIdTypeList: store.comment.common.searchIdTypeList,
-        searchTypeList: store.comment.common.searchTypeList,
     }));
 
-    // 검색 옵션 변경시 업데이트.
+    /**
+     * 검색 옵션 변경시 업데이트.
+     */
     const handleChangeSearchInput = (e) => {
         const { name, value } = e.target;
         setSearchData({
@@ -49,7 +46,9 @@ const CommentSearch = ({ selectBannedItem }) => {
         });
     };
 
-    // 검색 날짜 변경 처리.
+    /**
+     * 검색 날짜 변경 처리.
+     */
     const handleDateChange = (name, date) => {
         if (name === 'startDt') {
             const startDt = new Date(date);
@@ -75,9 +74,10 @@ const CommentSearch = ({ selectBannedItem }) => {
         });
     };
 
-    // 검색 버튼 처리.
+    /**
+     * 검색 버튼 처리.
+     */
     const handleClickSearchButton = () => {
-        // dispatch(changeSearchOption(searchData));
         dispatch(
             changeSearchOption({
                 ...searchData,
@@ -115,8 +115,7 @@ const CommentSearch = ({ selectBannedItem }) => {
     // 최초 로딩시 목록 가지고 옴.
     useEffect(() => {
         dispatch(getCommentList());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
         <Form className="mb-14">

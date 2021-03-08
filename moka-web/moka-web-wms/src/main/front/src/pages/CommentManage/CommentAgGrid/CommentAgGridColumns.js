@@ -45,7 +45,7 @@ export const columnDefs = [
         },
     },
     {
-        headerName: '등록자',
+        headerName: '이름/ID',
         field: 'userInfo',
         tooltipField: 'userId',
         width: 150,
@@ -118,7 +118,7 @@ export const BannedColumnDefs = {
             cellStyle: { display: 'flex', alignItems: 'center' },
         },
         {
-            headerName: '아이디/이름',
+            headerName: '아이디',
             field: 'tagValue',
             tooltipField: 'tagValue',
             width: 130,

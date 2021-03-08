@@ -12,7 +12,7 @@ import { Col } from 'react-bootstrap';
 const BannedList = React.lazy(() => import('./BannedList'));
 
 /**
- * 차단관리
+ * 댓글 관리 > 차단 관리
  */
 const Banned = ({ match, ...rest }) => {
     const matchPoints = useBreakpoint();
@@ -88,7 +88,7 @@ const Banned = ({ match, ...rest }) => {
             <Row className="m-0">
                 <Helmet>
                     <title>{`${pagesParams.pageName}`}</title>
-                    <meta name="description" content={`${pagesParams.pageName} 페이지 입니다.`} />
+                    <meta name="description" content={`${pagesParams.pageName} 페이지입니다.`} />
                     <meta name="robots" content="noindex" />
                 </Helmet>
 

@@ -77,9 +77,13 @@ const BulknListSearchBox = (props) => {
         history.push(`/${bulkPathName}/add`);
     };
 
+    //
     useEffect(() => {
-        dispatch(getBulkList());
-    }, [bulkPathName, bulkartDiv, dispatch, sourceCode]);
+        if (bulkPathName && bulkartDiv) {
+            dispatch(getBulkList());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [bulkPathName, bulkartDiv]);
 
     return (
         <>

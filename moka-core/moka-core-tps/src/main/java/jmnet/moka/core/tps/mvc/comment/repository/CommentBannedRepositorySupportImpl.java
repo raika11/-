@@ -66,9 +66,9 @@ public class CommentBannedRepositorySupportImpl extends TpsQueryDslRepositorySup
                 }
             }
         }
-        
+
         if (McpString.isNotEmpty(searchDTO.getMedia())) {
-            query.where(qCommentBanned.tagValue.contains(searchDTO.getMedia()));
+            query.where(qCommentBanned.tagValue.endsWith(searchDTO.getMedia()));
         }
 
         if (McpString.isYes(searchDTO.getUseTotal())) {

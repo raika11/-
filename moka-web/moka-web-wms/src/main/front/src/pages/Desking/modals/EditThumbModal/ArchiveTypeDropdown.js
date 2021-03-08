@@ -93,7 +93,7 @@ const ArchiveTypeDropdown = (props) => {
         const { checked, id } = e.target;
         let resultList = [];
         if (typeof onChange === 'function') {
-            if (id === 'All') {
+            if (id === 'imgtype-all') {
                 if (checked) {
                     onChange('All');
                 } else {
@@ -120,9 +120,9 @@ const ArchiveTypeDropdown = (props) => {
     };
 
     useEffect(() => {
-        // 이미지 타입 배열 객체로 변환
+        // 이미지 타입 목록
         if (imageTypeList) {
-            setImageObj(Object.assign({}, imageTypeList));
+            setImageObj(imageTypeList.map((li, idx) => ({ ...li, index: idx })));
         }
     }, [imageTypeList]);
 

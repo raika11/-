@@ -11,7 +11,7 @@ import { MokaIcon, MokaInput, MokaInputGroup } from '@components';
  */
 const CustomMenu = forwardRef(({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
     return (
-        <div ref={ref} style={{ ...style, width: 160, minWidth: 160 }} className={clsx('px-2', className)} aria-labelledby={labeledBy}>
+        <div ref={ref} style={{ ...style, minWidth: 222 }} className={clsx('px-2', className)} aria-labelledby={labeledBy}>
             {children}
         </div>
     );
@@ -93,7 +93,7 @@ const ArchiveOriginDropdown = (props) => {
         const { checked, id } = e.target;
         let resultList = [];
         if (typeof onChange === 'function') {
-            if (id === 'all') {
+            if (id === 'origin-all') {
                 if (checked) {
                     onChange('all');
                 } else {
@@ -120,9 +120,9 @@ const ArchiveOriginDropdown = (props) => {
     };
 
     useEffect(() => {
-        // 출처 목록 객체로 변환
+        // 출처 목록
         if (originList) {
-            setOriginObj(Object.assign({}, originList));
+            setOriginObj(originList.map((li, idx) => ({ ...li, index: idx })));
         }
     }, [originList]);
 

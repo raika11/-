@@ -15,7 +15,7 @@ import RegisterModal from './modals/RegisterModal';
 
 const SignIn = () => {
     const dispatch = useDispatch();
-    const [userId, setUserId] = useState(getLocalItem(SIGNIN_MEMBER_ID) || 'ssc01');
+    const [userId, setUserId] = useState(getLocalItem(SIGNIN_MEMBER_ID) || '');
     const [showUnlockModal, setShowUnlockModal] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
     const [password, setPassword] = useState('');

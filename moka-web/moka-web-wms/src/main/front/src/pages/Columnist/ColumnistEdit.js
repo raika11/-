@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { MokaCard, MokaInputLabel } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -13,8 +14,9 @@ import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInva
 /**
  * 칼럼니스트 등록, 수정
  */
-const ColumnistEdit = ({ history, match }) => {
+const ColumnistEdit = ({ match }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const { seqNo } = useParams();
     const imgFileRef = useRef(null);
     const [fileValue, setFileValue] = useState(null);
@@ -200,7 +202,7 @@ const ColumnistEdit = ({ history, match }) => {
     };
 
     // 취소 버튼 클릭.
-    const handleClickCancleButton = () => {
+    const handleClickCancelButton = () => {
         dispatch(clearColumnist());
         history.push(match.path);
     };
@@ -304,7 +306,7 @@ const ColumnistEdit = ({ history, match }) => {
                 },
                 {
                     text: '취소',
-                    onClick: handleClickCancleButton,
+                    onClick: handleClickCancelButton,
                     variant: 'negative',
                     disabled: editDisabled.editBoxButton,
                 },

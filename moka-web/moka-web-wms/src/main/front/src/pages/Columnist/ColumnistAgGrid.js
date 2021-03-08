@@ -42,6 +42,7 @@ const ColumnistAgGrid = ({ match }) => {
             list.map((data) => {
                 return {
                     ...data,
+                    regMember: `${data.regMember.memberId}(${data.regMember.memberNm})`,
                     regDt: (data.regDt || '').slice(0, -3),
                 };
             }),

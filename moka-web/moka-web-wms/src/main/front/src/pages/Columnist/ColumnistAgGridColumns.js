@@ -30,6 +30,12 @@ export default [
         flex: 1,
     },
     {
+        headerName: '등록자',
+        field: 'regMember',
+        tooltipField: 'regMember',
+        width: 130,
+    },
+    {
         headerName: '등록일',
         field: 'regDt',
         width: 130,

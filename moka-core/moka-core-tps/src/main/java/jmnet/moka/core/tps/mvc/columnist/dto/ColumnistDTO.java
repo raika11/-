@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -117,5 +118,8 @@ public class ColumnistDTO implements Serializable {
     @ApiModelProperty("등록일자")
     @DTODateTimeFormat
     private Date regDt;
+
+    @ApiModelProperty(value = "등록자", hidden = true)
+    private MemberSimpleDTO regMember;
 
 }

@@ -93,6 +93,7 @@ const SourceSelector = (props) => {
     const [selectedList, setSelectedList] = useState([]); // 체크된 매체 리스트
     const [renderList, setRenderList] = useState([]); // 렌더링되는 매체 리스트
     const [toggleText, setToggleText] = useState('매체 전체');
+    const [isAllChecked, setAllChecked] = useState(true);
     const deskingSourceList = useSelector((store) => store.articleSource.deskingSourceList); // 데스킹 매체
     const typeSourceList = useSelector((store) => store.articleSource.typeSourceList); // 타입별 매체
 
@@ -117,17 +118,22 @@ const SourceSelector = (props) => {
             const { checked, id } = e.target;
             let resultList = [];
 
-            const target = findSource(id);
-            if (checked) {
-                resultList = [...selectedList, target].sort(function (a, b) {
-                    return a.index - b.index;
-                });
+            if (id === 'all') {
+                // 매체 전체 예외처리
+                resultList = checked ? renderList : [];
             } else {
-                const isSelected = selectedList.findIndex((sl) => sl.sourceCode === id);
-                if (isSelected > -1) {
-                    resultList = produce(selectedList, (draft) => {
-                        draft.splice(isSelected, 1);
+                const target = findSource(id);
+                if (checked) {
+                    resultList = [...selectedList, target].sort(function (a, b) {
+                        return a.index - b.index;
                     });
+                } else {
+                    const isSelected = selectedList.findIndex((sl) => sl.sourceCode === id);
+                    if (isSelected > -1) {
+                        resultList = produce(selectedList, (draft) => {
+                            draft.splice(isSelected, 1);
+                        });
+                    }
                 }
             }
 
@@ -135,7 +141,7 @@ const SourceSelector = (props) => {
                 onChange(resultList.map((r) => r.sourceCode).join(','));
             }
         },
-        [findSource, onChange, selectedList],
+        [findSource, onChange, renderList, selectedList],
     );
 
     /**
@@ -175,13 +181,17 @@ const SourceSelector = (props) => {
 
             if (selectedList.length === renderList.length) {
                 setToggleText('매체 전체');
+                setAllChecked(true);
             } else if (selectedList.length === 1) {
                 setToggleText(target.sourceName);
+                setAllChecked(false);
             } else {
                 setToggleText(`${target.sourceName} 외 ${selectedList.length - 1}건`);
+                setAllChecked(false);
             }
         } else {
             setToggleText('');
+            setAllChecked(false);
         }
     }, [findSource, renderList, selectedList]);
 
@@ -215,6 +225,15 @@ const SourceSelector = (props) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll w-100">
+                {/* 매체 전체 옵션 */}
+                <MokaInput
+                    name="sourceList"
+                    onChange={handleChangeValue}
+                    className="mb-2"
+                    as="checkbox"
+                    inputProps={{ label: '매체 전체', custom: true, checked: isAllChecked }}
+                    id="all"
+                />
                 {renderList.map((cd, idx) => (
                     <MokaInput
                         key={cd.sourceCode}

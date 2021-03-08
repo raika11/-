@@ -110,7 +110,8 @@ const ArticleMediaList = (props) => {
         } else {
             if (key === 'sourceList') {
                 setError({ ...error, sourceList: false });
-                !!value ? setSourceOn(true) : setSourceOn(false);
+                value === '' || value.length > 0 ? setSourceOn(true) : setSourceOn(false);
+                // !!value ? setSourceOn(true) : setSourceOn(false);
             }
             setSearch({ ...search, [key]: value });
         }

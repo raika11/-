@@ -23,7 +23,7 @@
     </keys>
   </api>
 
-  <api id="article.n" resultWrap="N">
+  <api id="article.info" resultWrap="N">
     <description>기사 상세 정보를 조회한다.v2</description>
     <parameter>
       <totalId desc="기사Id" type="number" required="Y">[0-9]{1,9}</totalId>

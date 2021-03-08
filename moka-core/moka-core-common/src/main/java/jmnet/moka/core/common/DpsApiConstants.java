@@ -43,7 +43,7 @@ public class DpsApiConstants {
     /**
      * 기사 관련 API
      **/
-    public static final String ARTICLE = "article";
+    public static final String ARTICLE = "article.info";
     public static final String ARTICLE_SECTION_LIST = "list";
 
     /**

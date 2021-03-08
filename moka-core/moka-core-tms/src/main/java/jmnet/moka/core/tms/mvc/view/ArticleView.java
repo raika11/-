@@ -111,7 +111,9 @@ public class ArticleView extends AbstractView {
             paramMap.put("totalId", articleId);
             // 기사정보 조회
             JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE, paramMap, true);
-            Map<String, Object> articleInfo = rebuildInfo(jsonResult, mergeContext);
+            Map<String, Object> articleInfo = (Map<String, Object>)jsonResult.get("article");
+            this.insertSubTitle(articleInfo);
+            this.setEPaper(articleInfo,mergeContext);
             mergeContext.set("article", articleInfo);
             this.setCodesAndMenus(loader, articleInfo, mergeContext);
             StringBuilder sb =
@@ -143,34 +145,9 @@ public class ArticleView extends AbstractView {
         }
     }
 
-    private Map<String, Object> rebuildInfo(JSONResult jsonResult, MergeContext mergeContext) {
-        Map<String, Object> article = new HashMap<>();
-        article.put("basic", jsonResult.getDataListFirst("BASIC"));
-        article.put("content", jsonResult.getDataList("CONTENT"));
-        article.put("reporter", jsonResult.getDataList("REPORTER"));
-        article.put("meta", jsonResult.getDataList("META"));
-        article.put("mastercode", jsonResult.getDataList("MASTERCODE"));
-        article.put("servicemap", jsonResult.getDataList("SERVICEMAP"));
-        article.put("keyword", jsonResult.getDataList("KEYWORD"));
-        article.put("clickcnt", jsonResult.getDataList("CLICKCNT"));
-        article.put("multi", jsonResult.getDataList("MULTI"));
-        article.put("meta_fb", jsonResult.getDataListFirst("META_FB"));
-        article.put("meta_tw", jsonResult.getDataListFirst("META_TW"));
-        article.put("meta_ja", jsonResult.getDataListFirst("META_JA"));
-        this.insertSubTitle(article);
-        this.setEPaper(article, mergeContext);
-        return article;
-    }
-
     private void insertSubTitle(Map<String, Object> articleInfo) {
-        List contentList = (List) articleInfo.get("content");
-        if (contentList.size() == 0) {
-            return;
-        }
-        Map contentMap = (Map) contentList.get(0);
-        String content = (String) contentMap.get("ART_CONTENT");
-        Map basicMap = (Map) articleInfo.get("basic");
-        Object subTitleObj = basicMap.get("ART_SUB_TITLE");
+        String content = (String) articleInfo.get("ART_CONTENT");
+        Object subTitleObj = articleInfo.get("ART_SUB_TITLE");
         if (subTitleObj == null) {
             return;
         }
@@ -180,36 +157,41 @@ public class ArticleView extends AbstractView {
             matcher.appendReplacement(sb, "$0<div class=\"ab_subtitle\"><p>" + (String) subTitleObj + "</p></div>");
             matcher.appendTail(sb);
             content = sb.toString();
-            contentMap.put("ART_CONTENT", content);
+            articleInfo.put("ART_CONTENT", content);
         }
     }
 
-    private void setEPaper(Map<String, Object> article, MergeContext mergeContext) {
-        Object basic = article.get("basic");
-        if (basic == null || ((Map) basic).size() == 0) {
-            return;
-        }
-        Map basicMap = (Map) basic;
+    private void setEPaper(Map<String, Object> articleInfo, MergeContext mergeContext) {
+        Object source = articleInfo.get("source");
+        if ( source == null || ((Map)source).size() ==0) {return;}
+        Map<String,Object> soruceMap = (Map<String,Object>)source;
+        Object typeSetting = articleInfo.get("typeSetting");
+        if ( typeSetting == null || ((Map)typeSetting).size() ==0) {return;}
+        Map<String,Object> typeSettingMap = (Map<String,Object>)typeSetting;
         String nowHour = McpDate
                 .nowStr()
                 .substring(0, 13);
         // 오전 06시 이후 링크 노출
-        String serviceTime = basicMap
-                .get("SERVICE_DAYTIME")
-                .toString()
-                .substring(0, 11) + "06";
+        Object serviceTimeObj = articleInfo
+                .get("SERVICE_DAYTIME");
+        if ( serviceTimeObj instanceof JSONResult && ((JSONResult)serviceTimeObj).isEmpty()) {
+            return;
+        } else if ( serviceTimeObj == null){
+            return;
+        }
+        String serviceTime = ((String)serviceTimeObj).substring(0, 11) + "06";
         if (nowHour.compareTo(serviceTime) <= 0) {
             return;
         }
-        String sourceCode = basicMap
+        String sourceCode = soruceMap
                 .get("SOURCE_CODE")
                 .toString();
         String title = null;
         String link = null;
-        String pressMyun = basicMap
+        String pressMyun = typeSettingMap
                 .get("PRESS_MYUN")
                 .toString();
-        String pressCategory = basicMap
+        String pressCategory = typeSettingMap
                 .get("PRESS_CATEGORY")
                 .toString()
                 .trim();
@@ -224,14 +206,14 @@ public class ArticleView extends AbstractView {
             } else {
                 title = pressMyun + "면";
             }
-            link = "https://www.joins.com/v2?mseq=11&tid=" + basicMap
+            link = "https://www.joins.com/v2?mseq=11&tid=" + articleInfo
                     .get("TOTAL_ID")
                     .toString();
         } else if (sourceCode.equals("61")) { // 중앙선데이일 경우
-            title = basicMap
+            title = typeSettingMap
                     .get("PRESS_NUMBER")
                     .toString() + "호 " + pressMyun + "면";
-            link = "https://www.joins.com/v2?mseq=12&tid=" + basicMap
+            link = "https://www.joins.com/v2?mseq=12&tid=" + articleInfo
                     .get("TOTAL_ID")
                     .toString();
         }
@@ -250,7 +232,7 @@ public class ArticleView extends AbstractView {
         Map<String, String> epaper = new HashMap<String, String>();
         epaper.put("title", title);
         epaper.put("link", link);
-        article.put("epaper", epaper);
+        articleInfo.put("epaper", epaper);
     }
 
     private void setCodesAndMenus(DataLoader loader, Map<String, Object> articleInfo, MergeContext mergeContext)
@@ -259,9 +241,9 @@ public class ArticleView extends AbstractView {
         // 리셋코리아 ( ResetKorea ), e글중심 (Opinion,eTextCenter)이면 카테고리 변경 (테이블로 관리)
         // 키워드와 카테고리를 매핑하는 DPS API필요
 
-        String masterCode = functions.joinColumn((List<Map<String, Object>>) articleInfo.get("mastercode"), "MASTER_CODE");
-        String serviceCode = functions.joinColumn((List<Map<String, Object>>) articleInfo.get("servicemap"), "SERVICE_CODE");
-        String sourceCode = (String) ((Map<String, Object>) articleInfo.get("basic")).get("SOURCE_CODE");
+        String masterCode = functions.joinColumn((List<Map<String, Object>>) articleInfo.get("codes"), "MASTER_CODE");
+        String serviceCode = functions.joinColumn((List<Map<String, Object>>) articleInfo.get("codes"), "SERVICE_CODE");
+        String sourceCode = (String) ((Map<String, Object>) articleInfo.get("source")).get("SOURCE_CODE");
         Map<String, Object> codesParam = new HashMap<>();
         codesParam.put(MokaConstants.CATEGORY_MASTER_CODE_LIST, masterCode);
         codesParam.put(MokaConstants.CATEGORY_SERVICE_CODE_LIST, serviceCode);
@@ -281,10 +263,17 @@ public class ArticleView extends AbstractView {
         }
     }
 
+    /**
+     * 기사페이지 정보를 가져온다.
+     * @param templateMerger
+     * @param domainId
+     * @param articleInfo
+     * @return
+     * @throws DataLoadException
+     */
     private String getArticlePageId(MokaTemplateMerger templateMerger, String domainId, Map<String, Object> articleInfo)
             throws DataLoadException {
-        Map<String, Object> basic = (Map<String, Object>) articleInfo.get("basic");
-        String articleType = (String) basic.get("ART_TYPE");
+        String articleType =  (String)articleInfo.get("ART_TYPE");
         return templateMerger.getArticlePageId(domainId, articleType);
     }
 }

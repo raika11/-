@@ -22,6 +22,7 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
@@ -133,8 +134,9 @@ public class AmpArticleView extends AbstractView {
             DataLoader loader = templateMerger.getDataLoader();
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("totalId", articleId);
-            JSONResult jsonResult = loader.getJSONResult("article", paramMap, true);
-            Map<String, Object> articleInfo = rebuildInfo(jsonResult, mergeContext);
+            JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE, paramMap, true);
+            Map<String, Object> articleInfo = (Map<String, Object>)jsonResult.get("article");
+            convertAmp(articleInfo);
             mergeContext.set("article", articleInfo);
             StringBuilder sb = templateMerger.merge(MokaConstants.ITEM_ARTICLE_PAGE, templateMerger.getArticlePageId(domainId, "A"), mergeContext);
             this.cacheManager.set(cacheType, cacheKey, sb.toString());
@@ -165,29 +167,8 @@ public class AmpArticleView extends AbstractView {
         }
     }
 
-    private Map<String, Object> rebuildInfo(JSONResult jsonResult, MergeContext mergeContext) {
-        Map<String, Object> article = new HashMap<>();
-        article.put("basic", jsonResult.getDataListFirst("BASIC"));
-        article.put("title", jsonResult.getDataList("TITLE"));
-        article.put("content", jsonResult.getDataList("CONTENT"));
-        article.put("reporter", jsonResult.getDataList("REPORTER"));
-        article.put("meta", jsonResult.getDataList("META"));
-        article.put("mastercode", jsonResult.getDataList("MASTERCODE"));
-        article.put("servicemap", jsonResult.getDataList("SERVICEMAP"));
-        article.put("keyword", jsonResult.getDataList("KEYWORD"));
-        article.put("clickcnt", jsonResult.getDataList("CLICKCNT"));
-        article.put("multi", jsonResult.getDataList("MULTI"));
-        article.put("meta_fb", jsonResult.getDataListFirst("META_FB"));
-        article.put("meta_tw", jsonResult.getDataListFirst("META_TW"));
-        article.put("meta_ja", jsonResult.getDataListFirst("META_JA"));
-        convertAmp(article);
-        return article;
-    }
-
-    private void convertAmp(Map<String, Object> article) {
-        List contentList = (List) article.get("content");
-        Map contentMap = (Map) contentList.get(0);
-        String originalContent = (String) contentMap.get("ART_CONTENT");
+    private void convertAmp(Map<String, Object> articleInfo) {
+        String originalContent = (String) articleInfo.get("ART_CONTENT");
         // 본문
         String ampContent = originalContent
                 .replaceAll("(?i)<br.*?\\/?>", "<br>")
@@ -247,13 +228,13 @@ public class AmpArticleView extends AbstractView {
         ampContent = ampContent.replaceAll("(?i)<div class=\"tag_quotation\">(.*?)</div>", "<div class=\"ab_quot\"><p>$1</p></div>");
 
         //서브 타이틀
-        ampContent = convertAmpSubTitle(ampContent, article);
+        ampContent = convertAmpSubTitle(ampContent, articleInfo);
 
         //메타 이미지 (
-        setMetaImage(article);
+        setMetaImage(articleInfo);
 
         //타이틀 처리
-        setMobileTitle(article);
+        setMobileTitle(articleInfo);
 
         //alt 태그 수정
         ampContent = convertAmpAlt(ampContent);
@@ -267,8 +248,8 @@ public class AmpArticleView extends AbstractView {
         //본문 광고 삽입
         ampContent = setAmpAd(ampContent);
 
-        contentMap.put("ART_CONTENT", ampContent);
-        article.put("userTagList", useTagList);
+        articleInfo.put("ART_CONTENT", ampContent);
+        articleInfo.put("userTagList", useTagList);
     }
 
     private String convertAmpImage(String ampContent, boolean old) {
@@ -461,9 +442,8 @@ public class AmpArticleView extends AbstractView {
         return new String[] {sb.toString(), useTagList};
     }
 
-    private String convertAmpSubTitle(String ampContent, Map<String, Object> article) {
-        Map basicMap = (Map) article.get("basic");
-        Object subTitleObj = basicMap.get("ART_SUB_TITLE");
+    private String convertAmpSubTitle(String ampContent, Map<String, Object> articleInfo) {
+        Object subTitleObj = articleInfo.get("ART_SUB_TITLE");
         if (McpString.isEmpty(subTitleObj)) {
             return ampContent;
         }
@@ -480,35 +460,28 @@ public class AmpArticleView extends AbstractView {
         return ampContent;
     }
 
-    private void setMetaImage(Map<String, Object> article) {
-        Map metaJa = (Map) article.get("meta_ja");
-        String jaImage = (String) metaJa.get("IMG_URL");
+    private void setMetaImage(Map<String, Object> articleInfo) {
+        String jaImage = (String) articleInfo.get("ART_THUMB");
         String[] size = null;
         if (McpString.isNotEmpty(jaImage)) {
             size = getImageSize(jaImage);
         }
         if (size != null) {
-            metaJa.put("IMAGE_WIDTH", size[0]);
-            metaJa.put("IMAGE_HEIGHT", size[1]);
+            articleInfo.put("IMAGE_WIDTH", size[0]);
+            articleInfo.put("IMAGE_HEIGHT", size[1]);
         } else {
-            metaJa.put("IMG_URL", "https://static.joins.com/joongang_15re/profile_joongang_200.png");
-            metaJa.put("IMAGE_WIDTH", 200);
-            metaJa.put("IMAGE_HEIGHT", 200);
+            articleInfo.put("IMG_URL", "https://static.joins.com/joongang_15re/profile_joongang_200.png");
+            articleInfo.put("IMAGE_WIDTH", 200);
+            articleInfo.put("IMAGE_HEIGHT", 200);
         }
     }
 
-    private void setMobileTitle(Map<String, Object> article) {
-        String mobileTitle = functions.findColumn((List<Map<String, Object>>) article.get("title"), "TITLE_DIV", "M", "TITLE");
-        if (McpString.isEmpty(mobileTitle)) { //예외처리 mobile title이 없을 경우
-            mobileTitle = ((Map) article.get("basic"))
-                    .get("ART_TITLE")
-                    .toString();
-        }
+    private void setMobileTitle(Map<String, Object> articleInfo) {
+        String mobileTitle = (String)articleInfo.get("MOB_TITLE");
         mobileTitle = mobileTitle
                 .replace("<.*?>", "")
                 .trim();
-        Map metaJa = (Map) article.get("meta_ja");
-        metaJa.put("ART_TITLE", mobileTitle);
+        articleInfo.put("MOB_TITLE", mobileTitle);
     }
 
     private String convertAmpAlt(String ampContent) {

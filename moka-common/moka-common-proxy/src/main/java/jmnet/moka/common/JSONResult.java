@@ -81,7 +81,7 @@ public class JSONResult implements Map {
             }
             return obj;
         }
-        return NULL;
+        return null;
     }
 
     public Object get(int index) {

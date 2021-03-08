@@ -172,6 +172,7 @@ public class CommentBannedRestController extends AbstractCommonController {
                             tagValues.add(tagValue);
                         }
                     } catch (Exception ex) {
+                        ex.printStackTrace();
                         tagValues.add(tagValue);
                     }
                 } else {

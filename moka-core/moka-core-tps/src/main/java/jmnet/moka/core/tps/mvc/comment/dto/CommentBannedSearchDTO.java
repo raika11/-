@@ -23,4 +23,6 @@ public class CommentBannedSearchDTO extends SearchDTO {
     private CommentBannedType tagType = CommentBannedType.W;
 
     private String tagDiv;
+
+    private String media;
 }

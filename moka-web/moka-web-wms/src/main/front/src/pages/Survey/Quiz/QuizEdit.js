@@ -794,7 +794,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                         value={questionSetup.questionType}
                                     >
                                         <option value="third">객관식</option>
-                                        <option value="first">주관식</option>
+                                        <option value="first">단답식</option>
                                     </MokaInputLabel>
                                 </Col>
                                 <Col xs={5}>

@@ -39,6 +39,11 @@
   &[readonly] {
     background-color: $input-disabled-bg;
   }
+
+  // Placeholder font-size
+  &::placeholder {
+    font-size: $input-btn-font-size;
+  }
 }
 
 .form-label {

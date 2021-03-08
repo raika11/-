@@ -86,8 +86,8 @@ public final class CommentCode {
 
     public enum CommentOrderType implements EnumCode {
         A("A", "최신순"),
-        B("B", "좋아요순"),
-        C("C", "싫어요순"),
+        //B("B", "좋아요순"),
+        //C("C", "싫어요순"),
         D("D", "신고순");
 
         private String code;

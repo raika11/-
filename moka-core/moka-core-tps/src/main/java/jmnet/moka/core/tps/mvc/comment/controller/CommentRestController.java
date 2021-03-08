@@ -163,7 +163,7 @@ public class CommentRestController extends AbstractCommonController {
                         msg = msg("tps.comment.success.delete-all");
                         break;
                     default:
-                        msg = msg("tps.comment-banned.success.id");
+                        msg = msg("tps.comment.success.status-" + statusType.getCode());
                 }
 
             } else {

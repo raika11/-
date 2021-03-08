@@ -149,18 +149,9 @@ const MokaEditorCore = forwardRef((props, ref) => {
             const editor = editorRef.current;
 
             if (editor) {
-                const monaco = editor.monaco;
                 const editorInstance = editor.editorInstance;
                 const str = tag.substr(13);
-                editor.insertText(str);
-
-                // 태그 넣은 후 개행 생성
-                if (monaco && editorInstance) {
-                    const c = editorInstance.getSelection();
-                    const moveRange = new monaco.Range(c.startLineNumber + 1, str.length, c.endLineNumber + 1, str.length);
-                    editorInstance.setSelection(moveRange);
-                    editorInstance.focus();
-                }
+                editorInstance.trigger('keyboard', 'type', { text: str });
             }
         }
     }, [tag]);

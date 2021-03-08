@@ -81,7 +81,7 @@ const ArchiveSearch = () => {
             <div className="mr-2">
                 <MokaInput
                     as="dateTimePicker"
-                    inputProps={{ timeFormat: null, width: 140 }}
+                    inputProps={{ timeFormat: null, width: 145 }}
                     value={startDate}
                     onChange={(date) => {
                         if (typeof date === 'object') {
@@ -102,7 +102,7 @@ const ArchiveSearch = () => {
             <div className="mr-2">
                 <MokaInput
                     as="dateTimePicker"
-                    inputProps={{ timeFormat: null, width: 140 }}
+                    inputProps={{ timeFormat: null, width: 145 }}
                     value={finishDate}
                     onChange={(date) => {
                         if (typeof date === 'object') {
@@ -120,7 +120,7 @@ const ArchiveSearch = () => {
                 />
             </div>
 
-            <div className="mr-2" style={{ width: 160 }}>
+            <div className="mr-2">
                 <ArchiveOriginDropdown
                     originValue={search.originCode}
                     onChange={(value) => {

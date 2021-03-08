@@ -8,11 +8,10 @@ import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.columnist.dto.ColumnistSearchDTO;
 import jmnet.moka.core.tps.mvc.columnist.entity.Columnist;
 import jmnet.moka.core.tps.mvc.columnist.entity.QColumnist;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberSimpleInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 
 /**
  * <pre>
@@ -36,9 +35,9 @@ public class ColumnistRepositorySupportImpl extends TpsQueryDslRepositorySupport
     }
 
     @Override
-    @EntityGraph(attributePaths = {"regMember"}, type = EntityGraphType.LOAD)
     public Page<Columnist> findAllColumnist(ColumnistSearchDTO searchDTO) {
         QColumnist qColumnist = QColumnist.columnist;
+        QMemberSimpleInfo memberSimpleInfo = QMemberSimpleInfo.memberSimpleInfo;
         JPQLQuery<Columnist> query = from(qColumnist);
 
         // 상태구분
@@ -62,7 +61,10 @@ public class ColumnistRepositorySupportImpl extends TpsQueryDslRepositorySupport
             query = getQuerydsl().applyPagination(pageable, query);
         }
 
-        QueryResults<Columnist> list = query.fetchResults();
+        QueryResults<Columnist> list = query
+                .leftJoin(qColumnist.regMember, memberSimpleInfo)
+                .fetchJoin()
+                .fetchResults();
 
         return new PageImpl<Columnist>(list.getResults(), pageable, list.getTotal());
     }

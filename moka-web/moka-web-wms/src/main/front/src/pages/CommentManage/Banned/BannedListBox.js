@@ -5,6 +5,9 @@ import { GET_COMMENTS_BLOCKS } from '@store/commentManage';
 import { BannedColumnDefs } from '@pages/CommentManage/CommentAgGrid/CommentAgGridColumns';
 import { changeBannedsSearchOption, getCommentsBlocks } from '@store/commentManage';
 
+/**
+ * 댓글 관리 > 차단 목록 AgGrid
+ */
 const BannedListBox = () => {
     const dispatch = useDispatch();
     const [gridApi, setGridApi] = useState(null);

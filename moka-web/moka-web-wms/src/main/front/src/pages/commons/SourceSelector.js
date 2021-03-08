@@ -178,7 +178,7 @@ const SourceSelector = (props) => {
             } else if (selectedList.length === 1) {
                 setToggleText(target.sourceName);
             } else {
-                setToggleText(`${target.sourceName} 외 ${selectedList.length - 1}개`);
+                setToggleText(`${target.sourceName} 외 ${selectedList.length - 1}건`);
             }
         } else {
             setToggleText('');

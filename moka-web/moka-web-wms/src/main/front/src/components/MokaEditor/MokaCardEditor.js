@@ -2,10 +2,10 @@ import React, { Suspense, forwardRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { MokaIcon, MokaCard } from '@components';
 import defaultOptions from './options';
-import MokaEditor from './MokaEditorCore';
+import MokaEditor, { propTypes as editorProps } from './MokaEditorCore';
 
 const propTypes = {
-    ...MokaEditor.propTypes,
+    ...editorProps,
     /**
      * card의 width
      */

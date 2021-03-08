@@ -138,6 +138,7 @@ const NaverStandWork = (props) => {
                     deskingPart={deskingPart}
                     onRowClicked={handleRowClicked}
                     onDelete={handleClickDelete}
+                    onSave={handleClickSave}
                 />
             )}
 

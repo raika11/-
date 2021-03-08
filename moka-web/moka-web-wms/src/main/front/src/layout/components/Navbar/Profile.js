@@ -1,18 +1,16 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import clsx from 'clsx';
-
 import Image from 'react-bootstrap/Image';
-import Dropdown from 'react-bootstrap/Dropdown';
+// import Dropdown from 'react-bootstrap/Dropdown';
+// import bg from '@assets/images/bg.jpeg';
 
-import bg from '@assets/images/bg.jpeg';
-
-const profileCustomToggle = forwardRef(({ children, onClick, id }, ref) => {
-    return (
-        <div ref={ref} className="dropdown-toggle cursor-pointer" onClick={onClick} id={id}>
-            {children}
-        </div>
-    );
-});
+// const profileCustomToggle = forwardRef(({ children, onClick, id }, ref) => {
+//     return (
+//         <div ref={ref} className="dropdown-toggle cursor-pointer" onClick={onClick} id={id}>
+//             {children}
+//         </div>
+//     );
+// });
 
 /**
  * 프로필

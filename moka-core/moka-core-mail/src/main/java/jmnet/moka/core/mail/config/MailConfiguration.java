@@ -4,8 +4,11 @@ package jmnet.moka.core.mail.config; /**
 
 import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
+
+import jmnet.moka.core.common.logger.ActionLoggerConfiguration;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -26,6 +29,7 @@ import org.springframework.util.StringUtils;
  * @since 2019. 11. 29. 오후 2:05:07
  */
 @Configuration
+@AutoConfigureAfter({ActionLoggerConfiguration.class,StmpMailConfiguration.class})
 @AutoConfigureBefore({DataSourceAutoConfiguration.class})
 @Import({MailJpaConfiguration.class, MailQuerydslConfiguration.class})
 @ComponentScan(basePackages = {"jmnet.moka.core.mail.mvc", "jmnet.moka.core.mail.common.logger"})

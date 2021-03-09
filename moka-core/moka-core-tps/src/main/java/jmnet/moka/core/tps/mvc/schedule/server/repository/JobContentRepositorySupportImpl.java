@@ -62,6 +62,18 @@ public class JobContentRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         if(!McpString.isEmpty(usedYn)){
             builder.and(jobContent.usedYn.eq(usedYn));
         }
+        if(!McpString.isEmpty(keyword)){
+            if(!McpString.isEmpty(searchType) && searchType.equals("keyword1")){
+                builder.and(jobContent.pkgNm.contains(keyword));
+            }
+            else if(!McpString.isEmpty(searchType) && searchType.equals("keyword2")){
+                builder.and(jobContent.targetPath.contains(keyword));
+            }
+            else if(!McpString.isEmpty(searchType) && searchType.equals("keyword3")){
+                builder.and(jobContent.jobDesc.contains(keyword));
+            }
+
+        }
 
         JPQLQuery<JobContent> query = queryFactory.selectFrom(jobContent);
         query = getQuerydsl().applyPagination(pageable, query);

@@ -1,6 +1,6 @@
 package jmnet.moka.web.bulk.task.bulkdump.process.joongang;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.List;
@@ -239,7 +239,7 @@ public class BulkJoongangArticleTest {
 
     @Test
     public void processContentTag_ab_ds_timeline() {
-        final TestData testData = new TestData_ab_ds_timeline();
+        final TestData testData = new TestData_ab_ds_timeline();       // = new TestData_ab_ds_timeline2()
         bulkJoongangArticle.getContentHtml().setData(testData.getTestString());
         bulkJoongangArticle.processContentTag_ab_ds_timeline();
         testData.test( bulkJoongangArticle.getContentHtml().getData() );

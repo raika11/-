@@ -72,10 +72,12 @@ public class BulkDumpClientProcess {
                 result = (new BulkSundayProcess(bulkDumpEnv)).doProcess( totalVo, bulkDumpTask, bulkDumpService, dumpJobTotal);
                 if( result != BulkDumpResult.SUCCESS )
                     return result;
+                break;
             case "JJL":  //	조인스랜드(중앙일보 조인스랜드) - 중앙일보와 같이 전송해야 하는 경우가 있어서 끝 부분을 L로 맞췄다
                 result = (new BulkJoinsLandProcess(bulkDumpEnv)).doProcess( totalVo, bulkDumpTask, bulkDumpService, dumpJobTotal);
                 if( result != BulkDumpResult.SUCCESS )
                     return result;
+                break;
             default:
                 totalVo.logError("Not Defined DumpClientProcess TargetCode {}", bulkDumpTotal.getTargetCode());
                 break;

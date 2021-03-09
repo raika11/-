@@ -1,9 +1,9 @@
 package jmnet.moka.web.bulk.task.bulkdump.process.basic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.FileOutputStream;
-import java.nio.charset.Charset;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Date;
@@ -168,17 +168,20 @@ public class BulkDumpProcess {
         }
         final String tmpFileName = BulkFileUtil.getTempFileName(dumpJobTotal.getSourceDir(), dumpEnvCP.getFileExt() );
 
-        BufferedOutputStream bs = null;
+        BufferedWriter bs = null;
         try {
             if( tmpFileName == null ) {
                 throw new BulkException("파일 이름을 생성할 수 없습니다.");
             }
-            bs = new BufferedOutputStream(new FileOutputStream(tmpFileName));
-            if ("U8".equals(dumpEnvCP.getEncodeType()))
-                bs.write(cpFormat.getBytes(StandardCharsets.UTF_8));
-            else {
-                bs.write(cpFormat.getBytes(Charset.defaultCharset()));
+            if ("U8".equals(dumpEnvCP.getEncodeType())) {
+                bs = new BufferedWriter
+                        (new OutputStreamWriter(new FileOutputStream(tmpFileName), StandardCharsets.UTF_8));
             }
+            else {
+                bs = new BufferedWriter
+                        (new OutputStreamWriter(new FileOutputStream(tmpFileName), "EUC-KR"));
+            }
+            bs.write(cpFormat);
             dumpJobTotal.getSourceFileNames().add(tmpFileName);
             dumpJob.getSourceJobFiles().add( new BulkDumpJobFileVo(tmpFileName, fileName));
             dumpJob.setCpFormat( cpFormat );

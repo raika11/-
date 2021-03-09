@@ -63,7 +63,7 @@ public class BulkDumpEnvCP implements Serializable {
     @XmlElement(name = "FormatDelete")
     private String formatDelete;
 
-    @XmlElement(name = "EncodeType")
+    @XmlAttribute(name = "EncodeType")
     private String encodeType;
 
     @XmlElement(name = "FtpConfig")

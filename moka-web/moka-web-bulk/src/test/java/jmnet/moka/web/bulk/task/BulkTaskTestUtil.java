@@ -93,7 +93,7 @@ public class BulkTaskTestUtil {
             task.doProcess(new DBTaskInputData(inputData));
 
             if( wait ){
-                Thread.sleep(10000);
+                Thread.sleep(1000000);
             }
 
             task.stopServer();

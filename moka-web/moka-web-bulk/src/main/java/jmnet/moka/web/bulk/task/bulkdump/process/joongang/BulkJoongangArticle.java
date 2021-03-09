@@ -220,11 +220,11 @@ public class BulkJoongangArticle extends BulkArticle {
 
         //2016.01.14 by song
         getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule( getContentHtml().toString(), "<div class=\"tag_pictorial\" ", "</div>")); //화보 제외
-        getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule( getContentHtml().toString(), "<div class=\"tag_poll\" ", "</div>")); //투표 제외
-        getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule( getContentHtml().toString(), "<div class=\"tag_sns\" ", "</div>")); //sns 제외
+        getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule( getContentHtml().toString(), "<div class=\"tag_poll\"", "</div>")); //투표 제외
+        getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule( getContentHtml().toString(), "<div class=\"tag_sns\"", "</div>")); //sns 제외
 
         //2020.03.18
-        getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule( getContentHtml().toString(), "<div class=\"htmlTag\" ", "</div>")); //htmltag 파티클 제외
+        getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule( getContentHtml().toString(), "<div id=\"htmlTag\"", "</div>")); //htmltag 파티클 제외
 
         getContentHtml().replace("pds.joinsmsn.com", "pds.joins.com");
     }
@@ -579,7 +579,10 @@ public class BulkJoongangArticle extends BulkArticle {
         contentNaver = sb.toString();
 
         //<span class="dim" style="display: none;">■</span> 유형 전부 지우기 - 아티클박스 관련 전부 지운다.
-        contentNaver = contentNaver.replaceAll("(?i)<div(\\s *?)class=\"(\\bdim\\b)[^>]+>(\\s*?)(.*?)</div>", "");
+        //contentNaver = contentNaver.replaceAll("(?i)<div(\\s *?)class=\"(\\bdim\\b)[^>]+>(\\s*?)(.*?)</div>", "");
+        contentNaver = contentNaver.replaceAll("(?i)<div(\\s *?)class=\"(\\bdim\\b)((.|\\n|\\r\\n)*?)</div>", "");
+        //final Pattern PATTERN_ContentTag_dim = Pattern.compile("(?<dimGroup><div(\\s *?)class=\"(\\bdim\\b)((.|\\r\\n|\\n)*?)</div>)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+        //contentNaver = BulkTagUtil.regexReplaceGroup( contentNaver, PATTERN_ContentTag_dim, "dimGroup", "");
         contentNaver = contentNaver.replaceAll("(?i)<span(\\s*?)class=\"(\\bdim\\b)[^>]+>.</span>", "");
 
         final Pattern PATTERN_ContentTag_naverAdBoxTail = Pattern.compile("<div(\\s*?)(.*?)(\\bab_box_article\\b)[^\"]\"[^>]+>(\\s*?)(.*?)(\\bab_box_inner\\b)[^>]+>(\\s*)(.*?)(\\bab_box_bullet\\b)(\\s*?)(.*?)[^>]+>(\\s*?)</span>(\\s*?)(?<abBoxTitleline><div(\\s*?)class.+(\\bab_box_titleline\\b)[^>]+>)(\\s*?)(.*?)(</div>?)(\\s*?)(.*?)(</div>?)(\\s*?)(.*?)(?<aBboxContent><div(\\s*?)class.+(\\bab_box_content\\b)[^>]+>)", Pattern.CASE_INSENSITIVE);
@@ -882,7 +885,7 @@ public class BulkJoongangArticle extends BulkArticle {
             String innerHtml = elementTimeLine.html().replace("<!-- 사진, 영상이 있을때 chat_box_photo 추가 -->", "");
             innerHtml = BulkTagUtil.replaceTag(innerHtml, "h2", "b");
             innerHtml = BulkTagUtil.replaceTag(innerHtml, "strong", "b");
-            innerHtml = BulkTagUtil.replaceHTMLSpecialChars(innerHtml, "div,img,b");
+            innerHtml = BulkTagUtil.replaceHTMLSpecialChars(innerHtml, "div,img,b,br");
             elementTimeLine = elementTimeLine.html(innerHtml);
 
             for( Element elementSub : elementTimeLine.getElementsByClass("ab_photo")){

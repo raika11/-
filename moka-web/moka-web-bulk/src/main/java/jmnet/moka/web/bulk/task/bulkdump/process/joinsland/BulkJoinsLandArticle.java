@@ -2,13 +2,16 @@ package jmnet.moka.web.bulk.task.bulkdump.process.joinsland;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkArticle;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
+import jmnet.moka.web.bulk.util.BulkUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +42,28 @@ public class BulkJoinsLandArticle extends BulkArticle {
         super(totalVo);
     }
 
+    @Override
+    public void processBulkDumpNewsVo(BulkDumpNewsVo newsVo, List<BulkDumpNewsMMDataVo> bulkDumpNewsMMDataList) {
+        super.processBulkDumpNewsVo(newsVo, bulkDumpNewsMMDataList);
+
+        getTotalId().setData(newsVo.getContentId());
+        getTotalId10().setData(String.format("%010d", BulkUtil.parseInt(newsVo.getContentId())));
+
+        getContCode1().setData(newsVo.getContCode1());
+        getContCode2().setData("000");
+        getContCode3().setData("000");
+
+        getTitle().setData(newsVo.getTitle().trim());
+        getArtReporter().setData(newsVo.getArtReporter().trim());
+
+        if ( newsVo.getEmail() != null && !newsVo.getEmail().isEmpty()) {
+            getEmail().setData(newsVo.getEmail().trim());
+        }
+
+        getContentHtml().setData(newsVo.getContent().trim());
+        getServiceurl().setData(newsVo.getServiceUrl().trim());
+    }
+
     public void processMediaFullName() {
         getMediaFullName().setData("중앙일보 조인스랜드");
     }
@@ -52,6 +77,8 @@ public class BulkJoinsLandArticle extends BulkArticle {
         getContentHtml().setData(contentHtml);
 
         getContentText().setData( BulkTagUtil.standardBulkClearingTag(contentHtml));
+
+        getContentHtmlNaver().setData(contentHtml);
     }
 
     private static final Pattern PATTERN_ContentTag_daumPhotoBundle = Pattern.compile("<div class=\"tag_photobundle\">(\\s)*<img.*?>(\\s)*</div>", Pattern.CASE_INSENSITIVE );

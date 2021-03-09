@@ -31,6 +31,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author sapark
  * @since 2021-03-05 005 오전 9:29
  */
+@SuppressWarnings("SpellCheckingInspection")
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureBefore(MokaBulkConfiguration.class)
@@ -86,14 +87,40 @@ public class BulkTaskTest {
 
         // 2046	2021-02-18 13:43:34.000	323	SOI	U	23996956	N	N	파티클 테스트용	3
         Map<String, Object> map = new HashMap<>();
-        map.put("SEQ_NO", 2046 );
+        map.put("SEQ_NO", 2338 );
         map.put("INS_DT", new Date());
         map.put("SOURCE_CODE", "323");
         map.put("TARGET_CODE", "SOI");
         map.put("IUD", "U");
-        map.put("CONTENT_ID", 23996956);
-        map.put("TITLE", "파티클 테스트용");
+        map.put("CONTENT_ID", 24012460);
+        map.put("TITLE", "&#91;타임라인-이미지 박스/이미지/영상등록/그래픽이미지/페이스북/관련기사/요약문&#93; 고양·평택서 AZ백신 접종후 사망");
         map.put("ORG_SOURCE_CODE", "3");
+        map.put("JHOT_YN", "N");
+
+        assertTrue((new BulkTaskTestUtil(this)).processDBTask(taskConf, map, true));
+    }
+
+    @Test
+    public void doProcessDumpJoinsLand(){
+        final String taskConf =
+                "<Task class=\"jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask\"\n"
+                        + "    name=\"벌크 Dump\"\n"
+                        + "    bulkDumpClientCount=\"5\"\n"
+                        + "    bulkDumpEnvFile=\"classpath:conf/bulkdumpenv.xml\"\n"
+                        + "    ovpWaitTime=\"10m\"\n"
+                        + "    intervalTime=\"10s\">\n"
+                        + "  </Task>";
+
+        // 2046	2021-02-18 13:43:34.000	323	SOI	U	23996956	N	N	파티클 테스트용	3
+        Map<String, Object> map = new HashMap<>();
+        map.put("SEQ_NO", 2355 );
+        map.put("INS_DT", new Date());
+        map.put("SOURCE_CODE", "JL3");
+        map.put("TARGET_CODE", "JJL");
+        map.put("IUD", "U");
+        map.put("CONTENT_ID", 142883);
+        map.put("TITLE", "'e편한세상 울산역 어반스퀘어' 3월 분양");
+        map.put("ORG_SOURCE_CODE", "JL");
         map.put("JHOT_YN", "N");
 
         assertTrue((new BulkTaskTestUtil(this)).processDBTask(taskConf, map, true));

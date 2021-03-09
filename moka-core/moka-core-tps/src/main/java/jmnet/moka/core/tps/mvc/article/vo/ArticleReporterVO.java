@@ -43,15 +43,52 @@ public class ArticleReporterVO implements Serializable {
     @Column(name = "REP_NAME")
     private String repName;
 
-    /**
-     * 기자 Email
-     */
-    @Column(name = "REP_EMAIL")
-    private String repEmail;
+    //    /**
+    //     * 기자 Email
+    //     */
+    //    @Column(name = "REP_EMAIL")
+    //    private String repEmail;
 
     /**
      * 순서
      */
     @Column(name = "ORD_NO")
-    private int ordNo;
+    @Builder.Default
+    private int ordNo = 1;
+
+    /**
+     * 기자 프로필 사진
+     */
+    @Column(name = "REP_PHOTO")
+    private String repPhoto;
+
+    /**
+     * 직업정보
+     */
+    @Column(name = "JPLUS_JOB_INFO")
+    private String jplusJobInfo;
+
+    /**
+     * 집배신 이메일
+     */
+    @Column(name = "REP_EMAIL1")
+    private String repEmail1;
+
+    /**
+     * 기자한마디
+     */
+    @Column(name = "REP_TALK")
+    private String repTalk;
+
+    /**
+     * 필진타입 (J1:기자필진,J2:외부필진,J3:그룹필진,J0:필진해지)
+     */
+    @Column(name = "JPLUS_REP_DIV")
+    private String jplusRepDiv;
+
+    /**
+     * 기자회사
+     */
+    @Column(name = "CMP_NM")
+    private String cmpNm;
 }

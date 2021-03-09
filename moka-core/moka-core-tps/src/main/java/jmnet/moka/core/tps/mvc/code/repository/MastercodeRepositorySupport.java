@@ -20,4 +20,12 @@ import jmnet.moka.core.tps.mvc.code.entity.Mastercode;
  */
 public interface MastercodeRepositorySupport {
     List<Mastercode> findList(CodeSearchDTO search);
+
+    /**
+     * 마스터코드 모두 조회(서비스맵 정보 포함)
+     *
+     * @return
+     */
+    List<Mastercode> findAllCode();
+
 }

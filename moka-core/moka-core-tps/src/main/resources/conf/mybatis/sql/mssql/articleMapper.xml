@@ -519,7 +519,7 @@
       #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{serviceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{repName, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{repEmail, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{repEmail1, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </insert>
 

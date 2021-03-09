@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -94,6 +95,36 @@ public class Mastercode {
     @Column(name = "CODE_ORD")
     @Builder.Default
     private Integer codeOrd = 1;
+
+    /**
+     * 서비스코드
+     */
+    @Transient
+    private String serviceCode;
+
+    /**
+     * 첫번째코드
+     */
+    @Transient
+    private String frstCode;
+
+    /**
+     * 두번째코드
+     */
+    @Transient
+    private String scndCode;
+
+    /**
+     * 첫번째코드한글명
+     */
+    @Transient
+    private String frstKorNm;
+
+    /**
+     * 두번째코드한글명
+     */
+    @Transient
+    private String scndKorNm;
 
     @PrePersist
     @PreUpdate

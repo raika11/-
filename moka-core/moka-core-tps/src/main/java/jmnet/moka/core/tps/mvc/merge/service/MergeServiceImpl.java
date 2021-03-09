@@ -13,6 +13,7 @@ import java.util.Map;
 import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.NoDataException;
@@ -616,14 +617,7 @@ public class MergeServiceImpl implements MergeService {
                 .format(df));
 
         //카테고리 정보 변환
-        CodeSearchDTO search = CodeSearchDTO
-                .builder()
-                .usedYn(MokaConstants.YES)
-                .build();
-        search.setPage(0);
-        search.setSize(9999);
-        search.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
-        List<Mastercode> materCodeList = codeService.findAllMastercode(search);
+        List<Mastercode> materCodeList = codeService.findAllCode();
 
         List<Map<String, Object>> categoryList = new ArrayList<>();
         for (String category : updateDto.getCategoryList()) {
@@ -635,10 +629,20 @@ public class MergeServiceImpl implements MergeService {
                     .findFirst()
                     .get();
             Map map = new HashMap();
+            map.put("TOTAL_ID", totalId);
             map.put("MASTER_CODE", category);
-            map.put("SERVICE_KORNAME", matercode.getServiceKorname());   // 미리보기에서는 일부 데이타만 하고 있음. 나중에 본문 쿼리 수정후 조치필요??
-            map.put("SECTION_KORNAME", matercode.getSectionKorname());
-            map.put("CONTENT_KORNAME", matercode.getContentKorname());
+            map.put("MASTER_PATH",
+                    matercode.getServiceKorname() + "," + McpString.defaultValue(matercode.getSectionKorname(), "일반") + "," + McpString.defaultValue(
+                            matercode.getContentKorname(), "일반"));
+            map.put("SERVICE_KORNAME", matercode.getServiceKorname());
+            map.put("SECTION_KORNAME", McpString.defaultValue(matercode.getSectionKorname(), "일반"));
+            map.put("CONTENT_KORNAME", McpString.defaultValue(matercode.getContentKorname(), "일반"));
+            map.put("SERVICE_CODE", matercode.getServiceCode());
+            map.put("SERVICE_PATH", matercode.getFrstKorNm() + "," + McpString.defaultValue(matercode.getScndKorNm(), "일반"));
+            map.put("FRST_CODE", matercode.getFrstCode());
+            map.put("SCND_CODE", matercode.getScndCode());
+            map.put("FRST_KOR_NM", matercode.getFrstKorNm());
+            map.put("SCND_KOR_NM", McpString.defaultValue(matercode.getScndKorNm(), "일반"));
             categoryList.add(map);
         }
 
@@ -646,18 +650,26 @@ public class MergeServiceImpl implements MergeService {
         List<Map<String, Object>> reporterList = new ArrayList<>();
         for (ArticleReporterVO vo : updateDto.getReporterList()) {
             Map map = new HashMap();
+            map.put("REP_EMAIL1", vo.getRepEmail1());
+            map.put("REP_PHOTO", vo.getRepPhoto());
+            map.put("JPLUS_JOB_INFO", vo.getJplusJobInfo());
+            map.put("REP_SEQ", vo.getRepSeq());
             map.put("REP_NAME", vo.getRepName());
-            map.put("REP_EMAIL1", vo.getRepEmail());
-            //            map.put("JOINS_BLOG", vo.);
+            map.put("REP_TALK", vo.getRepTalk());
+            map.put("JPLUS_REP_DIV", vo.getJplusRepDiv());
+            map.put("CMP_NM", vo.getCmpNm());
             reporterList.add(map);
         }
 
         // 태그정보 변환
         List<Map<String, Object>> tagList = new ArrayList<>();
+        int sortNo = 1;
         for (String tag : updateDto.getTagList()) {
             Map map = new HashMap();
             map.put("TOTAL_ID", totalId);
             map.put("KEYWORD", tag);
+            map.put("SORT_NO", sortNo);
+            sortNo++;
             reporterList.add(map);
         }
 

@@ -36,4 +36,9 @@ public class CodeServiceImpl implements CodeService {
     public List<JamMastercode> findAllJamMastercode() {
         return jamMastercodeRepository.findAll();
     }
+
+    @Override
+    public List<Mastercode> findAllCode() {
+        return mastercodeRepository.findAllCode();
+    }
 }

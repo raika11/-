@@ -413,7 +413,7 @@ public class ArticleServiceImpl implements ArticleService {
             paramRepMap.put("ordNo", reporter.getOrdNo());
             paramRepMap.put("serviceDay", McpDate.dateStr(articleBasic.getServiceDaytime(), "yyyyMMdd"));
             paramRepMap.put("repName", reporter.getRepName());
-            paramRepMap.put("repEmail", reporter.getRepEmail());
+            paramRepMap.put("repEmail1", reporter.getRepEmail1());
             if (isReturnErr(articleMapper.callUpa15ReArticleReporterIns(paramRepMap))) {
                 return false;
             }

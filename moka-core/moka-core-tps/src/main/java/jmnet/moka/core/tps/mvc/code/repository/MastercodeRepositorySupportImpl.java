@@ -10,6 +10,7 @@ package jmnet.moka.core.tps.mvc.code.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -18,6 +19,7 @@ import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.code.dto.CodeSearchDTO;
 import jmnet.moka.core.tps.mvc.code.entity.Mastercode;
 import jmnet.moka.core.tps.mvc.code.entity.QMastercode;
+import jmnet.moka.core.tps.mvc.code.entity.QServiceMap;
 import org.springframework.data.domain.Sort;
 
 /**
@@ -83,5 +85,22 @@ public class MastercodeRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         return query
                 .fetchResults()
                 .getResults();
+    }
+
+    @Override
+    public List<Mastercode> findAllCode() {
+        QMastercode master = QMastercode.mastercode;
+        QServiceMap serviceMap = QServiceMap.serviceMap;
+
+        JPQLQuery<Mastercode> query = queryFactory
+                .select(Projections.fields(Mastercode.class, master.as("masterCode"), master.as("serviceEngname"), master.as("sectionEngname"),
+                        master.as("contentEngname"), master.as("serviceKorname"), master.as("sectionKorname"), master.as("contentKorname"),
+                        master.as("usedYn"), master.as("codeOrd"), serviceMap.frstCode.as("frstCode"), serviceMap.scndCode.as("scndCode"),
+                        serviceMap.frstKorNm.as("frstKorNm"), serviceMap.scndKorNm.as("scndKorNm")))
+                .from(master)
+                .leftJoin(serviceMap)
+                .on(master.masterCode.eq(serviceMap.masterCode))
+                .fetchJoin();
+        return query.fetch();
     }
 }

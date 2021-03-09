@@ -18,4 +18,11 @@ public interface CodeService {
     List<ServiceMap> findAllServiceMap(CodeSearchDTO search);
 
     List<JamMastercode> findAllJamMastercode();
+
+    /**
+     * 마스터코드 모두 조회(서비스맵 정보 포함)
+     *
+     * @return
+     */
+    List<Mastercode> findAllCode();
 }

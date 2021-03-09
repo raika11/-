@@ -36,9 +36,11 @@ public class JoinsLandServiceImpl implements JoinsLandService {
         joinsLandMapper.callUspBulkJoinslandNewstableIns(articleTotal);
 
         final JoinsLandArticleVo article = articleTotal.getMainData();
-        for( JoinsLandImageVo image : article.getImages() ) {
-            articleTotal.setCurImage(image);
-            joinsLandMapper.callUspBulkJoinslandNewsMMdataIns(articleTotal);
+        if( article.getImages() != null ) {
+            for (JoinsLandImageVo image : article.getImages()) {
+                articleTotal.setCurImage(image);
+                joinsLandMapper.callUspBulkJoinslandNewsMMdataIns(articleTotal);
+            }
         }
     }
 }

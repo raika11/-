@@ -126,6 +126,27 @@ public class RcvTaskTest {
     }
 
     @Test
+    public void doProcessJoinsLand() {
+        final String taskConf =
+                "<Task class=\"jmnet.moka.web.rcv.task.joinsland.JoinsLandTask\"\n"
+                        + "    name=\"JoinsLand\"\n"
+                        + "    retryCount=\"3\"\n"
+                        + "    intervalTime=\"10s\">\n"
+                        + "    <TaskInput dirInput=\"/box/rcv/cp/joinsland\"\n"
+                        + "      dirSuccess=\"/box/rcv/cp/joinsland/comp\"\n"
+                        + "      dirFailed=\"/box/rcv/cp/joinsland/error\"\n"
+                        + "      fileFilter=\"*.xml\"\n"
+                        + "      fileWaitTime=\"3s\"\n"
+                        + "      alertLimitUse=\"1\"\n"
+                        + "      alertLimitFileCount=\"50\"\n"
+                        + "      alertLimitFileTime=\"20m\"\n"
+                        + "      retryCount=\"3\"/>\n"
+                        + "  </Task>";
+
+        assertTrue((new RcvTaskTestUtil(this)).processFileTask(taskConf));
+    }
+
+    @Test
     public void doProcessArtAfterIud() {
         final String taskConf = "<Task class=\"jmnet.moka.web.rcv.task.artafteriud.ArtAfterIudTask\"\n"
                 + "    name=\"등록기사 After Iud\"\n"

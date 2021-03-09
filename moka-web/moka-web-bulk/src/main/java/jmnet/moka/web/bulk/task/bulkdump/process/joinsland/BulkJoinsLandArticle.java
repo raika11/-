@@ -46,6 +46,9 @@ public class BulkJoinsLandArticle extends BulkArticle {
     public void processBulkDumpNewsVo(BulkDumpNewsVo newsVo, List<BulkDumpNewsMMDataVo> bulkDumpNewsMMDataList) {
         super.processBulkDumpNewsVo(newsVo, bulkDumpNewsMMDataList);
 
+        /// Joinsland 는 HP MF 와 같은 타입이 없이 모두 다 이미지이다.
+        setBulkDumpNewsImageList(bulkDumpNewsMMDataList);
+
         getTotalId().setData(newsVo.getContentId());
         getTotalId10().setData(String.format("%010d", BulkUtil.parseInt(newsVo.getContentId())));
 
@@ -185,7 +188,7 @@ public class BulkJoinsLandArticle extends BulkArticle {
             getImageBlockTxt2().addDelimiterConcat(imgSrc, ";");
 
             final String naverDesc = BulkTagUtil.specialHtmlTag(imgDesc.replace( "\"", "" ));
-            getImageBlockXmlNaver().concat(String.format("<image href=\"%s\" caption_content=\"%s\"/>\r\n", imgSrc, naverDesc));
+            getImageBlockXmlNaver().concat(String.format("<image caption_content=\"%s\" href=\"%s\"/>\r\n", naverDesc, imgSrc));
         }
     }
 }

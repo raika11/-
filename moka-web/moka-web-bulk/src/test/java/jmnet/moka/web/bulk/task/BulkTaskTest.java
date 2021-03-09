@@ -113,12 +113,12 @@ public class BulkTaskTest {
 
         // 2046	2021-02-18 13:43:34.000	323	SOI	U	23996956	N	N	파티클 테스트용	3
         Map<String, Object> map = new HashMap<>();
-        map.put("SEQ_NO", 2355 );
+        map.put("SEQ_NO", 2576 );
         map.put("INS_DT", new Date());
-        map.put("SOURCE_CODE", "JL3");
+        map.put("SOURCE_CODE", "JL8");
         map.put("TARGET_CODE", "JJL");
         map.put("IUD", "U");
-        map.put("CONTENT_ID", 142883);
+        map.put("CONTENT_ID", 142868);
         map.put("TITLE", "'e편한세상 울산역 어반스퀘어' 3월 분양");
         map.put("ORG_SOURCE_CODE", "JL");
         map.put("JHOT_YN", "N");

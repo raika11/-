@@ -14,9 +14,9 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
      * 이미지 파일 변경 (PC)
      */
     const setPcFileValue = (data) => {
-        onChange({ key: 'agndImgFile', value: data });
+        onChange({ agndImgFile: data });
         if (!data) {
-            onChange({ key: 'agndImg', value: null });
+            onChange({ agndImg: null });
         }
     };
 
@@ -24,9 +24,9 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
      * 이미지 파일 변경 (M)
      */
     const setMFileValue = (data) => {
-        onChange({ key: 'agndImgMobFile', value: data });
+        onChange({ agndImgMobFile: data });
         if (!data) {
-            onChange({ key: 'agndImgMob', value: null });
+            onChange({ agndImgMob: null });
         }
     };
 

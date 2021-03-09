@@ -17,11 +17,14 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
 
     const dispatch = useDispatch();
 
-    const handleClickAdd = (row) => {
-        if (onAdd instanceof Function) {
-            onAdd(row);
-        }
-    };
+    const handleClickAdd = useCallback(
+        (row) => {
+            if (onAdd instanceof Function) {
+                onAdd(row);
+            }
+        },
+        [onAdd],
+    );
 
     const handleClickRow = (row) => {
         if (onRowClicked instanceof Function) {
@@ -59,16 +62,15 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
                                 })),
                             );
                             setTotal(response.body.totalCnt);
-                            setLoading(false);
                         } else {
                             toast.warning('관련투표 리스트를 조회하는데 실패하였습니다.');
                         }
+                        setLoading(false);
                     },
                 }),
             );
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [dispatch],
+        [codes.pollCategory, dispatch, handleClickAdd],
     );
 
     useEffect(() => {
@@ -76,10 +78,11 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
             console.log(search);
             loadList(search);
         }
-    }, [loadList, search, show]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show]);
 
     return (
-        <MokaModal title="관련 투표 팝업" show={show} onHide={onHide} size="md" width={600} draggable>
+        <MokaModal title="관련 투표 팝업" show={show} onHide={onHide} size="md" width={600} loading={loading} draggable>
             <RelationPollModalSearchComponent onSearch={setSearch} searchOptions={search} />
             <RelationPollModalAgGridComponent
                 rowData={rows}

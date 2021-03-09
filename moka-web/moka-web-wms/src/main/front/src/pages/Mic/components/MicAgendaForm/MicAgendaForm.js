@@ -10,7 +10,7 @@ import RelationPollModal from '@pages/Survey/Poll/modals/RelationPollModal';
 /**
  * 시민마이크 아젠다 폼
  */
-const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categoryAllList, error, gridInstance, setGridInstance }) => {
+const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categoryAllList, error, gridInstance, setGridInstance, codes }) => {
     const [categoryOptions, setCategoryOptions] = useState([]);
     const [cts, setCts] = useState([]);
     const [show, setShow] = useState(false);
@@ -23,9 +23,9 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
         const { name, value, checked } = e.target;
 
         if (name === 'usedYn' || name === 'agndTop') {
-            onChange({ key: name, value: checked ? 'Y' : 'N' });
+            onChange({ [name]: checked ? 'Y' : 'N' });
         } else {
-            onChange({ key: name, value });
+            onChange({ [name]: value });
         }
     };
 
@@ -35,9 +35,9 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
      */
     const handleDate = (date) => {
         if (typeof date === 'object') {
-            onChange({ key: 'agndServiceDt', value: date });
+            onChange({ agndServiceDt: date });
         } else if (date === '') {
-            onChange({ key: 'agndServiceDt', value: null });
+            onChange({ agndServiceDt: null });
         }
     };
 
@@ -45,7 +45,19 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
      * 카테고리 변경
      * @param {*} value 변경값
      */
-    const handleChangeCategory = (value) => onChange({ key: 'categoryList', value });
+    const handleChangeCategory = (value) => onChange({ categoryList: value });
+
+    /**
+     * 투표 변경
+     * @param {*} value 변경값
+     */
+    const handleChangePoll = ({ id, title }) => {
+        onChange({
+            pollSeq: id,
+            pollTitle: title,
+        });
+        setShow(false);
+    };
 
     useEffect(() => {
         // 카테고리 옵션 변경
@@ -187,13 +199,13 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
 
             {/* 찬반 투표 */}
             <Form.Row className="mb-2">
-                <MokaInputLabel label="찬반 투표" className="flex-fill mr-2" value={agenda.pollSeq} disabled />
+                <MokaInputLabel label="찬반 투표" className="flex-fill mr-2" value={agenda.pollTitle} disabled />
                 <Button variant="searching" className="flex-shrink-0" onClick={() => setShow(true)}>
                     투표 찾기
                 </Button>
 
                 {/* 투표 모달 */}
-                <RelationPollModal show={show} onHide={() => setShow(false)} />
+                <RelationPollModal show={show} onHide={() => setShow(false)} codes={codes} onAdd={handleChangePoll} />
             </Form.Row>
 
             {/* 배경이미지 */}

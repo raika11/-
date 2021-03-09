@@ -22,7 +22,7 @@ const MokaTableLoadButton = forwardRef((props, ref) => {
     const { onClick } = props;
 
     useImperativeHandle(ref, () => ({
-        refresh: () => false,
+        refresh: () => true,
     }));
 
     const handleClick = useCallback(

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
@@ -27,6 +27,7 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
         invalidList: mic.invalidList,
     }));
     const AGENDA_ARTICLE_PROGRESS = useSelector(({ app }) => app.AGENDA_ARTICLE_PROGRESS); //  기사화 단계
+    const codes = useSelector(({ poll }) => poll.codes); // 투표 모달에 쓰는 데이터
     const [temp, setTemp] = useState(initialState.agenda);
     const [gridInstance, setGridInstance] = useState(null);
     const [error, setError] = useState({});
@@ -98,12 +99,18 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
     /**
      * 아젠다 데이터 변경
      */
-    const handleChangeValue = ({ key, value }) => {
-        setTemp({ ...temp, [key]: value });
-        if (error[key]) {
-            setError({ ...error, [key]: false });
-        }
-    };
+    const handleChangeValue = useCallback(
+        (newData) => {
+            setTemp({ ...temp, ...newData });
+            // setTemp(temp)
+            Object.keys(newData).forEach((key) => {
+                if (error[key]) {
+                    setError({ ...error, [key]: false });
+                }
+            });
+        },
+        [error, temp],
+    );
 
     useEffect(() => {
         if (agndSeq) {
@@ -165,6 +172,7 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
                 onChange={handleChangeValue}
                 gridInstance={gridInstance}
                 setGridInstance={setGridInstance}
+                codes={codes}
             />
         </MokaCard>
     );

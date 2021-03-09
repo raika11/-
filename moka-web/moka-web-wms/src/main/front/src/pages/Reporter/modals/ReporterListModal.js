@@ -95,7 +95,7 @@ const ReporterListModal = (props) => {
             centered
             draggable
         >
-            <div className="mb-2">
+            <div className="mb-14">
                 <MokaSearchInput value={keyword} onChange={handleChangeValue} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
             </div>
             <MokaTable

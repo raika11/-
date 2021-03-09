@@ -115,6 +115,7 @@ public class ScheduleJobHandler {
                     
                     scheduleMap.put(genContent.getJobSeq(), scheduledFuture);
                     result = true;
+                    log.debug("appendJob : {} : {}", genContent.getJobSeq(), result);
                 }
             }
         } catch (BeansException | ClassNotFoundException e) {

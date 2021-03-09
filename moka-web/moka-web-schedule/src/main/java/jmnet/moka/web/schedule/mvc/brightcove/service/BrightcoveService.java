@@ -35,6 +35,14 @@ public interface BrightcoveService {
             throws IOException;
 
     /**
+     * brightcove analytics 목록 조회
+     *
+     * @return
+     */
+    List<Map<String, Object>> findAnalytics(BrightcoveCredentailVO credentail, String url)
+            throws IOException;
+
+    /**
      * brightcove 인증 정보 조회
      *
      * @return BrightcoveCredentailVO

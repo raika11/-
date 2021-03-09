@@ -128,4 +128,8 @@ public abstract class AbstractReserveJob implements ReserveJob {
      * 각 Job별 기능 구현
      */
     public abstract GenContentHistory invoke(GenContentHistory history);
+
+    protected boolean CallApi(){
+        return false;
+    }
 }

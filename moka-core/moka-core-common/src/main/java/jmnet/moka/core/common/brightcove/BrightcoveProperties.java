@@ -66,4 +66,10 @@ public class BrightcoveProperties {
 
     @Value("${brightcove.ovp.sort}")
     private String ovpDefaultSort;
+
+    //analytic items
+    @Value("https://analytics.api.brightcove.com/v1")
+    private String analiticsUrl;
+    @Value("6057955867001")
+    private String bcAccountId;
 }

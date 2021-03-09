@@ -59,8 +59,8 @@ function* getPollList({ type, payload }) {
             });
         }
         search = produce(search, (draft) => {
-            draft['startDt'] = moment(search.startDt).format(DB_DATEFORMAT);
-            draft['endDt'] = moment(search.endDt).format(DB_DATEFORMAT);
+            draft['startDt'] = search.startDt ? moment(search.startDt).format(DB_DATEFORMAT) : null;
+            draft['endDt'] = search.endDt ? moment(search.endDt).format(DB_DATEFORMAT) : null;
         });
 
         const response = yield call(pollApi.getPollList, { search });

@@ -46,7 +46,7 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
             setLoading(true);
             dispatch(
                 getRelationPollList({
-                    search: { ...searchObj, startDt: '', endDt: '' },
+                    search: { ...searchObj },
                     callback: (response) => {
                         if (response.header.success) {
                             setRows(
@@ -73,6 +73,7 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
 
     useEffect(() => {
         if (show) {
+            console.log(search);
             loadList(search);
         }
     }, [loadList, search, show]);

@@ -53,14 +53,16 @@ function* saveBlock({ payload: { type, seqNo, blockFormData, callback } }) {
         } else {
             response = yield call(commentAPI.postCommentsBlocks, { blockFormData: blockFormData });
         }
-
         callbackData = response.data;
+
+        if (response.data.header.success && response.data.body) {
+            // 성공
+        } else {
+            const msg = response.data.header.message;
+            toast.error(msg);
+        }
     } catch (e) {
         callbackData = errorResponse(e);
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
     }
     if (typeof callback === 'function') {
         yield call(callback, callbackData);

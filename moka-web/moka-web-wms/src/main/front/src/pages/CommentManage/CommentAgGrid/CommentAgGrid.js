@@ -3,7 +3,6 @@ import { AgGridReact } from 'ag-grid-react';
 import clsx from 'clsx';
 import { MokaPagination, MokaLoader } from '@components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
-import { localeText } from './CommentAgGridColumns';
 import { DeleteButtonRenderer, DateItemRenderer, UserInfoRenderer, BanneButtonRenderer, HistoryButtonRenderer, CommentItemRenderer } from './CommentGridRenderer';
 
 /**

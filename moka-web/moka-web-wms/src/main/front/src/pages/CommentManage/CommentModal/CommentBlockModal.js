@@ -19,7 +19,7 @@ const CommentBlockModal = (props) => {
 
     const { show, onHide, ModalUsage, selectBannedItem } = props;
     const [editData, setEditData] = useState({
-        BannedType: 'U',
+        bannedType: 'U',
         tagValues: '',
         tagDiv: 'A',
         tagDesc: '',
@@ -97,8 +97,8 @@ const CommentBlockModal = (props) => {
 
         if (gubun === 'comment' && type === 'save') {
             formData.append('usedYn', 'Y');
-            formData.append('tagType', editData.BannedType);
-            if (editData.BannedType === 'U') {
+            formData.append('tagType', editData.bannedType);
+            if (editData.bannedType === 'U') {
                 formData.append(
                     'tagValues',
                     selectBannedItem
@@ -136,7 +136,7 @@ const CommentBlockModal = (props) => {
                 return;
             }
 
-            if (editData.BannedType === 'I') {
+            if (editData.bannedType === 'I') {
                 // 차단후 복원된 이력이 있는 ID 입니다. 재차단 하시겠습니까? 어떻게?
                 setConfirmModalUsage({
                     title: '차단 IP 등록',
@@ -144,7 +144,7 @@ const CommentBlockModal = (props) => {
                     gubun: 'comment',
                 });
                 setConfirmModal(true);
-            } else if (editData.BannedType === 'U') {
+            } else if (editData.bannedType === 'U') {
                 // 차단후 복원된 이력이 있는 IP 입니다. 재차단 하시겠습니까?
                 setConfirmModalUsage({
                     title: '차단 ID 등록',
@@ -249,7 +249,7 @@ const CommentBlockModal = (props) => {
                                     label="차단 종류"
                                     value="U"
                                     id="dataset-type1"
-                                    inputProps={{ custom: true, label: 'ID', checked: editData.BannedType === 'U' ? true : false }}
+                                    inputProps={{ custom: true, label: 'ID', checked: editData.bannedType === 'U' ? true : false }}
                                     onChange={handleChangeValue}
                                     name="BannedType"
                                 />
@@ -259,9 +259,9 @@ const CommentBlockModal = (props) => {
                                     as="radio"
                                     value="I"
                                     id="dataset-type2"
-                                    inputProps={{ custom: true, label: 'IP', checked: editData.BannedType === 'I' ? true : false }}
+                                    inputProps={{ custom: true, label: 'IP', checked: editData.bannedType === 'I' ? true : false }}
                                     onChange={handleChangeValue}
-                                    name="BannedType"
+                                    name="bannedType"
                                 />
                             </Col>
                         </>

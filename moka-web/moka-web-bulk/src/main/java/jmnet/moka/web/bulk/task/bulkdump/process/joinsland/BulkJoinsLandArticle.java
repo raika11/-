@@ -187,7 +187,7 @@ public class BulkJoinsLandArticle extends BulkArticle {
             
             getImageBlockTxt2().addDelimiterConcat(imgSrc, ";");
 
-            final String naverDesc = BulkTagUtil.specialHtmlTag(imgDesc.replace( "\"", "" ));
+            final String naverDesc = BulkTagUtil.specialHtmlTag(imgDesc.replace( "\"", "" )).trim();
             getImageBlockXmlNaver().concat(String.format("<image caption_content=\"%s\" href=\"%s\"/>\r\n", naverDesc, imgSrc));
         }
     }

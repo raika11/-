@@ -21,7 +21,8 @@ const BulkMonitorSumAgGrid = () => {
                 <p className="mb-0">벌크 현황 정보</p>
             </div>
             <MokaTable
-                className="flex-fill ag-grid-align-center"
+                className="overflow-hidden flex-fill ag-grid-align-center"
+                agGridHeight={173}
                 columnDefs={columnDefs}
                 onRowNodeId={(params) => params.status}
                 rowData={totalList}

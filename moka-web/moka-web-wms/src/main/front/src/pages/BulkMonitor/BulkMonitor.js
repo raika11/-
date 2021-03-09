@@ -28,7 +28,7 @@ const BulkMonitor = () => {
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            <MokaCard title="벌크 모니터링" bodyClassName="d-flex flex-column" width={1596}>
+            <MokaCard title="벌크 모니터링" className="w-100" bodyClassName="d-flex flex-column">
                 {/* 벌크 모니터링 검색 */}
                 <BulkMonitorSearch />
 

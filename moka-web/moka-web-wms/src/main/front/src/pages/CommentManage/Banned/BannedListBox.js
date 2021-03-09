@@ -11,7 +11,7 @@ import { changeBannedsSearchOption, getCommentsBlocks } from '@store/commentMana
 const BannedListBox = () => {
     const dispatch = useDispatch();
     const [gridApi, setGridApi] = useState(null);
-    const selectDoubleClickRow = useRef(null);
+    // const selectDoubleClickRow = useRef(null);
     const [rowData, setRowData] = useState([]);
 
     // 스토어 연결.
@@ -43,78 +43,78 @@ const BannedListBox = () => {
     );
 
     // 더블 클릭하면 최초 렌더링 한 상태로 css 를 업데이트.
-    const resetRowHeight = () => {
-        gridApi.resetRowHeights(); // 리셋. 리셋을 해주 않으면 css 가 꺠지는 현상이 있어서 무조건 한번 리셋.
+    // const resetRowHeight = () => {
+    //     gridApi.resetRowHeights(); // 리셋. 리셋을 해주 않으면 css 가 꺠지는 현상이 있어서 무조건 한번 리셋.
 
-        gridApi.refreshCells({
-            force: true,
-        });
+    //     gridApi.refreshCells({
+    //         force: true,
+    //     });
 
-        // 그리드 row 를 기존 css 로 변경 처리.
-        gridApi.forEachNode(function (rowNode) {
-            for (var j = 0; j < rowNode.gridOptionsWrapper.columnController.allDisplayedColumns.length; j++) {
-                if (rowNode.gridOptionsWrapper.columnController.allDisplayedColumns[j].colDef.field === 'tagDesc') {
-                    rowNode.gridOptionsWrapper.columnController.allDisplayedColumns[j].colDef.cellStyle = {
-                        boxSizing: 'border-box',
-                        whiteSpace: 'normal',
-                        lineHeight: '20px',
-                        fontSize: '14px',
-                        height: '50px',
-                        display: '-webkit-box',
-                        paddingTop: '5px',
-                        '-webkit-line-clamp': 2,
-                        '-webkit-box-orient': 'vertical',
-                        overflow: 'hidden',
-                        cursor: 'pointer',
-                    };
-                }
-            }
-        });
+    //     // 그리드 row 를 기존 css 로 변경 처리.
+    //     gridApi.forEachNode(function (rowNode) {
+    //         for (var j = 0; j < rowNode.gridOptionsWrapper.columnController.allDisplayedColumns.length; j++) {
+    //             if (rowNode.gridOptionsWrapper.columnController.allDisplayedColumns[j].colDef.field === 'tagDesc') {
+    //                 rowNode.gridOptionsWrapper.columnController.allDisplayedColumns[j].colDef.cellStyle = {
+    //                     boxSizing: 'border-box',
+    //                     whiteSpace: 'normal',
+    //                     lineHeight: '20px',
+    //                     fontSize: '14px',
+    //                     height: '50px',
+    //                     display: '-webkit-box',
+    //                     paddingTop: '5px',
+    //                     '-webkit-line-clamp': 2,
+    //                     '-webkit-box-orient': 'vertical',
+    //                     overflow: 'hidden',
+    //                     cursor: 'pointer',
+    //                 };
+    //             }
+    //         }
+    //     });
 
-        // 새로 고침 처리.
-        gridApi.refreshCells({
-            force: true,
-        });
+    //     // 새로 고침 처리.
+    //     gridApi.refreshCells({
+    //         force: true,
+    //     });
 
-        gridApi.resetRowHeights();
-        gridApi.onRowHeightChanged();
-    };
+    //     gridApi.resetRowHeights();
+    //     gridApi.onRowHeightChanged();
+    // };
 
     // 더블 클릭 했을경우.
-    const handleDoubleClickListRow = (params) => {
-        resetRowHeight();
+    // const handleDoubleClickListRow = (params) => {
+    //     resetRowHeight();
 
-        if (selectDoubleClickRow.current === params.data.cmtSeq) {
-            selectDoubleClickRow.current = null;
-            return false;
-        }
+    //     if (selectDoubleClickRow.current === params.data.cmtSeq) {
+    //         selectDoubleClickRow.current = null;
+    //         return false;
+    //     }
 
-        selectDoubleClickRow.current = params.data.cmtSeq;
+    //     selectDoubleClickRow.current = params.data.cmtSeq;
 
-        // 혹시 몰라서 텀을 약간 줌.
-        setTimeout(function () {
-            // gridStartRowReset(params);
-        }, 500);
+    //     // 혹시 몰라서 텀을 약간 줌.
+    //     setTimeout(function () {
+    //         // gridStartRowReset(params);
+    //     }, 500);
 
-        gridApi.redrawRows();
+    //     gridApi.redrawRows();
 
-        const focusedCell = params.api.getFocusedCell();
+    //     const focusedCell = params.api.getFocusedCell();
 
-        const row = gridApi.getDisplayedRowAtIndex(focusedCell.rowIndex);
+    //     const row = gridApi.getDisplayedRowAtIndex(focusedCell.rowIndex);
 
-        focusedCell.column.colDef.cellStyle = '';
+    //     focusedCell.column.colDef.cellStyle = '';
 
-        gridApi.forEachNode(function (rowNode) {
-            if (rowNode.data && rowNode.data.seqNo === params.data.seqNo) {
-                rowNode.setRowHeight();
-            }
-        });
-        gridApi.refreshCells({
-            force: true,
-        });
-        gridApi.redrawRows({ rowNodes: [row] });
-        gridApi.onRowHeightChanged();
-    };
+    //     gridApi.forEachNode(function (rowNode) {
+    //         if (rowNode.data && rowNode.data.seqNo === params.data.seqNo) {
+    //             rowNode.setRowHeight();
+    //         }
+    //     });
+    //     gridApi.refreshCells({
+    //         force: true,
+    //     });
+    //     gridApi.redrawRows({ rowNodes: [row] });
+    //     gridApi.onRowHeightChanged();
+    // };
 
     const onGridReady = (params) => {
         setGridApi(params.api);
@@ -213,7 +213,7 @@ const BannedListBox = () => {
                     onRowSelected={(e) => handleGridRowSelected(e)}
                     onColumnResized={(e) => onColumnResized(e)}
                     onColumnVisible={(e) => onColumnVisible(e)}
-                    onRowDoubleClicked={(e) => handleDoubleClickListRow(e)}
+                    // onRowDoubleClicked={(e) => handleDoubleClickListRow(e)}
                     onGridReady={(e) => onGridReady(e)}
                     changeSearchOption={(e) => handleChangeSearchOption(e)}
                     preventRowClickCell={['bannedElement', 'historyInfo']}

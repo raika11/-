@@ -125,6 +125,7 @@ const AgGrid = forwardRef((props, ref) => {
                 onChangeSearchOption={onChangeSearchOption}
                 frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
                 rowSelection="multiple"
+                refreshCellsParams={{ force: true }}
             />
 
             {/* 제목 변경 모달 */}

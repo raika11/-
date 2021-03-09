@@ -90,19 +90,19 @@ public class DpsDomainResolver extends AbstractDomainResolver {
     public ReservedMap getReservedMap(String domainId) {
         ReservedMap reservedMap = this.allReservedMap.get(domainId);
         if (reservedMap == null) {
-            synchronized (this.allReservedMap) {
+//            synchronized (this.allReservedMap) {
                 if ((reservedMap = this.allReservedMap.get(domainId)) == null) {
                     reservedMap = loadReservedMap(domainId);
                 }
-            }
+//            }
             allReservedMap.put(domainId, reservedMap);
         } else {
             if (reservedMap.isExpired()) {
-                synchronized (this.allReservedMap) {
+//                synchronized (this.allReservedMap) {
                     if ((reservedMap = this.allReservedMap.get(domainId)) == null) {
                         reservedMap = loadReservedMap(domainId);
                     }
-                }
+//                }
             }
         }
         return reservedMap;

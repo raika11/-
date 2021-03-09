@@ -118,7 +118,9 @@ public class ArticleView extends AbstractView {
             this.setCodesAndMenus(loader, articleInfo, mergeContext);
             StringBuilder sb =
                     templateMerger.merge(MokaConstants.ITEM_ARTICLE_PAGE, this.getArticlePageId(templateMerger, domainId, articleInfo), mergeContext);
-            this.cacheManager.set(cacheType, cacheKey, sb.toString());
+            if (this.cacheManager != null) {
+                this.cacheManager.set(cacheType, cacheKey, sb.toString());
+            }
             writeArticle(request, response, sb.toString());
             actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE,
                     System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), articleId);

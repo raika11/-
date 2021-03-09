@@ -139,7 +139,9 @@ public class AmpArticleView extends AbstractView {
             convertAmp(articleInfo);
             mergeContext.set("article", articleInfo);
             StringBuilder sb = templateMerger.merge(MokaConstants.ITEM_ARTICLE_PAGE, templateMerger.getArticlePageId(domainId, "A"), mergeContext);
-            this.cacheManager.set(cacheType, cacheKey, sb.toString());
+            if (this.cacheManager != null) {
+                this.cacheManager.set(cacheType, cacheKey, sb.toString());
+            }
             writeArticle(request, response, sb.toString());
             actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.AMP_ARTICLE,
                     System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), articleId);

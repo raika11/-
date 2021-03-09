@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Map;
 import org.springframework.beans.BeansException;
 import org.springframework.core.Ordered;
-import org.springframework.lang.Nullable;
 import org.springframework.web.context.support.WebApplicationObjectSupport;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
@@ -30,7 +29,8 @@ public class DefaultMergeViewResolver extends WebApplicationObjectSupport implem
     }
 
     @Override
-    public View resolveViewName(String viewName, Locale locale) throws BeansException {
+    public View resolveViewName(String viewName, Locale locale)
+            throws BeansException {
         //		if (!context.isTypeMatch(viewName, View.class)) {
         //			if (logger.isDebugEnabled()) {
         //				logger.debug("Found bean named '" + viewName + "' but it does not implement View");

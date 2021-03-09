@@ -449,8 +449,8 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
             return (Map<String, JSONResult>)context.get(MokaConstants.MERGE_DATA_MAP);
         } else {
             MergeContext parent = context;
-            while ( parent.has(Constants.PARENT)) {
-                if ( parent == null) break;
+            while ( parent != null && parent.has(Constants.PARENT)) {
+//                if ( parent == null) break;
                 parent = (MergeContext)parent.get(Constants.PARENT);
             }
             Map<String, JSONResult> dataMap = new HashMap<String, JSONResult>(16);

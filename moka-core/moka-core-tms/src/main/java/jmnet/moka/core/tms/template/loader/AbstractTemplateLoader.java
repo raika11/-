@@ -1,24 +1,17 @@
 package jmnet.moka.core.tms.template.loader;
 
-import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.map.listener.EntryAddedListener;
-import com.hazelcast.map.listener.EntryEvictedListener;
-import com.hazelcast.map.listener.EntryExpiredListener;
-import com.hazelcast.map.listener.EntryRemovedListener;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.cache.HazelcastCache;
-import jmnet.moka.common.cache.hazelcast.HazelcastMapListener;
 import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.TemplateLoader;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.exception.TmsException;
@@ -37,7 +30,6 @@ import jmnet.moka.core.tms.template.parse.model.CtTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.PgTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.TpTemplateRoot;
-import org.apache.commons.net.nntp.Article;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.GenericApplicationContext;
@@ -53,16 +45,14 @@ import org.springframework.context.support.GenericApplicationContext;
  */
 public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem> {
     public static final String PATH_PARAM_PREFIX = "/*";
+    private static final Logger logger = LoggerFactory.getLogger(AbstractTemplateLoader.class);
     protected String domainId;
-
     protected ConcurrentMap<String, MergeItem> mergeItemMap;
     protected ConcurrentMap<String, MokaTemplateRoot> templateRootMap;
     /*  REST 방식일 경우 URI에 "/*" 를 추가한다.     */
     protected ConcurrentMap<String, String> uri2ItemMap;
     protected boolean cacheable;
     protected long itemExpireTime;
-
-    private static final Logger logger = LoggerFactory.getLogger(AbstractTemplateLoader.class);
 
     public AbstractTemplateLoader(GenericApplicationContext appContext, String domainId, boolean cacheable, long itemExpireTime) {
         this.domainId = domainId;
@@ -83,9 +73,11 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         }
 
         if (hzInstance != null && cacheable) {
-            this.mergeItemMap = hzInstance.getMap(this.domainId+"_mergeItem");
-            this.uri2ItemMap = hzInstance.getMap(this.domainId+"_uri2Item");
-            hzCache.getHazelcastDelegator().addListener((IMap<String,String>)this.uri2ItemMap);
+            this.mergeItemMap = hzInstance.getMap(this.domainId + "_mergeItem");
+            this.uri2ItemMap = hzInstance.getMap(this.domainId + "_uri2Item");
+            hzCache
+                    .getHazelcastDelegator()
+                    .addListener((IMap<String, String>) this.uri2ItemMap);
         } else {
             this.uri2ItemMap = new ConcurrentHashMap<>();
             this.mergeItemMap = new ConcurrentHashMap<>();
@@ -124,8 +116,8 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
             return itemKey;
         }
         // REST 방식 중 default 파라미터를 사용하는 경우
-        if ( this.uri2ItemMap.containsKey(uri+AbstractTemplateLoader.PATH_PARAM_PREFIX)) {
-            return this.uri2ItemMap.get(uri+AbstractTemplateLoader.PATH_PARAM_PREFIX);
+        if (this.uri2ItemMap.containsKey(uri + AbstractTemplateLoader.PATH_PARAM_PREFIX)) {
+            return this.uri2ItemMap.get(uri + AbstractTemplateLoader.PATH_PARAM_PREFIX);
         }
         // REST 방식인 경우 마지막 경로를 제거하고 PageItem을 찾는다.
         int lastSlashIndex = uri.lastIndexOf("/");
@@ -137,9 +129,9 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
 
     protected String getPageUriLowerCase(String uri, String urlParam) {
         // 2020-11-26 backoffice에서 path parameter가 있을 경우 /*를 넣어주는 방식으로 변경
-//        if (McpString.isNotEmpty(urlParam)) {
-//            uri = uri + AbstractTemplateLoader.PATH_PARAM_PREFIX;
-//        }
+        //        if (McpString.isNotEmpty(urlParam)) {
+        //            uri = uri + AbstractTemplateLoader.PATH_PARAM_PREFIX;
+        //        }
         return uri.toLowerCase();
     }
 
@@ -198,9 +190,9 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         MokaTemplateRoot templateRoot = null;
         if (item instanceof PageItem) {
             templateRoot = new PgTemplateRoot((PageItem) item);
-        } else if (item instanceof ArticlePageItem)
+        } else if (item instanceof ArticlePageItem) {
             templateRoot = new ApTemplateRoot((ArticlePageItem) item);
-        else if (item instanceof ComponentItem) {
+        } else if (item instanceof ComponentItem) {
             templateRoot = new CpTemplateRoot((ComponentItem) item, this);
         } else if (item instanceof ContainerItem) {
             templateRoot = new CtTemplateRoot((ContainerItem) item);

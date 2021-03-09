@@ -14,14 +14,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,7 +35,6 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.purge.model.PurgeItem;
-import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
@@ -296,14 +293,14 @@ public class CommandController {
             if (McpString.isNotEmpty(articleId)) {
                 // 기사페이지 purge
                 String cacheType = KeyResolver.CACHE_ARTICLE_MERGE;
-                for(DomainItem domainItem : domainResolver.getDomainInfoList()) {
+                for (DomainItem domainItem : domainResolver.getDomainInfoList()) {
                     String cacheKey = KeyResolver.makeArticleCacheKey(domainItem.getItemId(), articleId);
                     List<Map<String, Object>> purgeResult = this.cacheManager.purge(cacheType, cacheKey);
                     list.add(purgeResult);
                 }
                 // 기사페이지중 AMP 페이지 purge
                 cacheType = KeyResolver.CACHE_AMP_ARTICLE_MERGE;
-                for(DomainItem domainItem : domainResolver.getDomainInfoList()) {
+                for (DomainItem domainItem : domainResolver.getDomainInfoList()) {
                     String cacheKey = KeyResolver.makeArticleCacheKey(domainItem.getItemId(), articleId);
                     List<Map<String, Object>> purgeResult = this.cacheManager.purge(cacheType, cacheKey);
                     list.add(purgeResult);

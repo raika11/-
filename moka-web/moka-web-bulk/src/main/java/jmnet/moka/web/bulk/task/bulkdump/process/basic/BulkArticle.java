@@ -276,9 +276,12 @@ public abstract class BulkArticle implements Serializable {
 
     public void processContent_restoreSpecialHtmlTagForContent() {
         // HTML 버전도 치환되었던것들 되돌리기 위해서(<br> 태그 \n 개행으로 변환처리포함)
-        getContentHtml().setData(getContentHtml().toString()
+        getContentHtml().setData(getContentHtml()
+                .toString()
                 .replace("&amp;", "&")
                 .replace("&amp", "&")
+                .replace("&prime;", "″")
+                .replace("&prime", "″")
                 .replace("&nbsp;", " ")
                 .replace("&nbsp", " ")
                 .replace("&quot;", "\"")

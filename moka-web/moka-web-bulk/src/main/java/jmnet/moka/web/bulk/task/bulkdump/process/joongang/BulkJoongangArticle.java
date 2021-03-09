@@ -371,7 +371,7 @@ public class BulkJoongangArticle extends BulkArticle {
         contentHtmlNate = "<b>" + getSubTitle().toString() + "</b>\r\n\r\n" + contentHtmlNate.trim();
 
         for( Map.Entry<String, String> entry : videoMap.entrySet() ){
-            contentHtmlNate = contentHtmlNate.replace(entry.getValue(),
+            contentHtmlNate = contentHtmlNate.replace(entry.getKey(),
                     entry.getValue().replaceAll(
                             "(?i)<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(http.+youtube.+))\"(?:\\s*?)data-service=\"youtube[^>]+>(?:\\s*?)</div>",
                             "<iframe src=\"$1\" width=\"605\" height=\"339\" allowfullscreen=\"true\"></iframe>"));

@@ -116,7 +116,8 @@ const DeskingTree = ({ setComponentAgGridInstances, match }) => {
             // areaSeq까지 트리 오픈
             let paths = findPath(areaSeq);
             loadWork(areaSeq);
-            setExpanded([...expanded, ...paths]);
+            // 중복 expanded 제거
+            setExpanded([...new Set([...expanded, ...paths])]);
             setSelected(String(areaSeq));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

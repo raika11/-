@@ -109,14 +109,8 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
 
             <div className="overflow-hidden flex-fill d-flex">
                 <div className="overflow-hidden flex-fill" ref={flexableRef}>
-                    <MokaResizableBox width={maxSize[0]} height={maxSize[1]} minConstraints={[530, 530]} maxConstraints={maxSize} axis="both">
-                        <iframe
-                            ref={iframeRef}
-                            title="컴포넌트미리보기"
-                            frameBorder="0"
-                            className={clsx('h-100', { 'w-100': !isNaverChannel })}
-                            style={{ width: isNaverChannel ? 530 : undefined }}
-                        />
+                    <MokaResizableBox width={maxSize[0]} height={maxSize[1]} minConstraints={[530, 530]} maxConstraints={maxSize} axis="both" handleSize={[40, 40]}>
+                        <iframe ref={iframeRef} title="컴포넌트미리보기" frameBorder="0" className="h-100 w-100" />
                     </MokaResizableBox>
                 </div>
 

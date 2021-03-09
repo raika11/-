@@ -67,18 +67,22 @@ public class DbRequestHandler implements RequestHandler {
             String setNames = dbRequest.getSetNames();
             if (McpString.isNotEmpty(setNames)) {
                 String[] setNamesArray = setNames.split(",");
-                for (int i = 0; i < setNamesArray.length; i++) {
-                    if (apiResult == null) {
-                        if (resultList.size() > 0) {
-                            apiResult = ApiResult.createApiResult(startTime, endTime, resultList.get(i), true, null);
+                if ( setNamesArray.length == 1) { // set이 하나일 경우 전체가 결과임
+                    apiResult = ApiResult.createApiResult(startTime, endTime, resultList, true, null);
+                } else {
+                    for (int i = 0; i < setNamesArray.length; i++) {
+                        if (apiResult == null) {
+                            if (resultList.size() > 0) {
+                                apiResult = ApiResult.createApiResult(startTime, endTime, resultList.get(i), true, null);
+                            } else {
+                                apiResult = ApiResult.createApiResult(startTime, endTime, new ArrayList<>(), true, null);
+                            }
                         } else {
-                            apiResult = ApiResult.createApiResult(startTime, endTime, new ArrayList<>(), true, null);
-                        }
-                    } else {
-                        if (resultList.size() > 0) {
-                            apiResult.addApiResult(setNamesArray[i], ApiResult.createApiResult(startTime, endTime, resultList.get(i), true, null));
-                        } else {
-                            apiResult.addApiResult(setNamesArray[i], ApiResult.createApiResult(startTime, endTime, new ArrayList<>(), true, null));
+                            if (resultList.size() > 0) {
+                                apiResult.addApiResult(setNamesArray[i], ApiResult.createApiResult(startTime, endTime, resultList.get(i), true, null));
+                            } else {
+                                apiResult.addApiResult(setNamesArray[i], ApiResult.createApiResult(startTime, endTime, new ArrayList<>(), true, null));
+                            }
                         }
                     }
                 }

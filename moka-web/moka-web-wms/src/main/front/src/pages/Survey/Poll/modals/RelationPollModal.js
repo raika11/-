@@ -8,10 +8,10 @@ import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import produce from 'immer';
-
+const initialState = { searchType: 'title', keyword: '', page: 0, size: 20, sort: 'pollSeq,desc', status: ['S', 'D'] };
 const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
     const [total, setTotal] = useState(0);
-    const [search, setSearch] = useState({ searchType: 'title', keyword: '', page: 0, size: 20, sort: 'pollSeq,desc', status: ['S', 'D'] });
+    const [search, setSearch] = useState(initialState);
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -77,6 +77,8 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
     useEffect(() => {
         if (show) {
             loadList(search);
+        } else {
+            setSearch(initialState);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]);

@@ -12,10 +12,9 @@ import commonUtil from '@utils/commonUtil';
 import PollDetailCompareAnswerContainer from '@pages/Survey/Poll/components/PollDetailCompareAnswerContainer';
 import produce from 'immer';
 import useDebounce from '@hooks/useDebounce';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { selectArticleItemChange, selectArticleListChange } from '@store/survey/quiz';
 import moment from 'moment';
-import { BASIC_DATEFORMAT } from '@/constants';
 import clsx from 'clsx';
 
 const tempItem = { imgUrl: null, linkUrl: '', pollSeq: 1897, title: '' };
@@ -152,11 +151,12 @@ const PollEdit = ({ onDelete }) => {
     };
 
     const handleClickPollResult = () => {
+        //TODO: 투표현황 및 결과 기획되면 추가 개발
         let statusKor = '현황';
         if (pollStatus === 'R') {
             statusKor = '결과';
         }
-        toast.info(`투표 ${statusKor} 기능은 준비중 입니다.`);
+        messageBox.alert(`투표 ${statusKor} 기능은 준비중 입니다.`);
     };
 
     const dividePollStatus = (startDt, endDt) => {

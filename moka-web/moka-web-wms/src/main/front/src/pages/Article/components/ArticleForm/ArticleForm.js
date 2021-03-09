@@ -131,7 +131,8 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
             if (temp.reporterList.findIndex((s) => String(s.value) === String(value.value)) > -1) {
                 toast.warning('포함된 기자입니다');
             } else {
-                const narr = [...temp.reporterList, value];
+                let narr = [...temp.reporterList, value];
+                narr = narr.map((a) => ({ ...a, repEmail: a.repEmail1 }));
                 setTemp({
                     ...temp,
                     reporterList: narr,
@@ -233,7 +234,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 artContent: content,
             },
             artSubTitle: temp.artSubTitle,
-            reporterList: temp.reporterList,
+            reporterList: (temp.reporterList || []).map((c, idx) => ({ ...c, ordNo: idx + 1 })), // ordNo 셋팅,
             tagList: temp.tagList,
             categoryList: temp.categoryList,
         };

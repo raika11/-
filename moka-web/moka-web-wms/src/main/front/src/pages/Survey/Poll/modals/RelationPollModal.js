@@ -34,14 +34,15 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
 
     const handleChangeSearchOptions = (option) => {
         const { key, value } = option;
-        setSearch(
-            produce(search, (draft) => {
-                draft[key] = value;
-                if (key === 'size') {
-                    draft['page'] = 0;
-                }
-            }),
-        );
+        const ns = produce(search, (draft) => {
+            draft[key] = value;
+            if (key === 'size') {
+                draft['page'] = 0;
+            }
+        });
+
+        setSearch(ns);
+        loadList(search);
     };
 
     const loadList = useCallback(
@@ -75,7 +76,6 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
 
     useEffect(() => {
         if (show) {
-            console.log(search);
             loadList(search);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

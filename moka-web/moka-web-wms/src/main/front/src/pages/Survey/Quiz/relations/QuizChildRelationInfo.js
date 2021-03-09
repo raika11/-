@@ -25,7 +25,7 @@ const QuizChildRelationInfo = ({ HandleSave }) => {
         <div className="d-flex">
             <MokaCard
                 title="관련 정보"
-                className="flex-fill"
+                className="w-100"
                 footer
                 footerClassName="justify-content-center"
                 footerButtons={[

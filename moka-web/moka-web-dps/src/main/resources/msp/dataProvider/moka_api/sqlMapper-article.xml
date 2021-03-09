@@ -186,4 +186,13 @@
       ) }
   </select>
 
+  <!--article.flag-->
+  <select id="dps.article.articleFlag" parameterType="map" resultType="map" resultMap="map"
+    statementType="CALLABLE">
+    {call UPU_15RE_ARTICLE_SEL_FLAG(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+
 </mapper>

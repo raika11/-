@@ -126,4 +126,16 @@
     </keys>
   </api>
 
+  <!--기사 FLAG 정보-->
+  <api id="article.flag">
+    <description>기사 FLAG정보를 조회한다.</description>
+    <parameter>
+      <totalId desc="기사Id" type="number" required="Y">[0-9]{1,9}</totalId>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.article.articleFlag</request>
+    <keys>
+      totalId
+    </keys>
+  </api>
+
 </apiConfig>

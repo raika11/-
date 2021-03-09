@@ -1,14 +1,24 @@
 package jmnet.moka.core.tms.mvc.handler;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.common.JSONResult;
+import jmnet.moka.common.template.exception.DataLoadException;
+import jmnet.moka.common.template.exception.TemplateMergeException;
+import jmnet.moka.common.template.exception.TemplateParseException;
+import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.mvc.CdnRedirector;
 import jmnet.moka.core.tms.mvc.HttpParamFactory;
@@ -78,7 +88,7 @@ public class ArticleHandler extends AbstractHandler {
     }
 
     public String merge(HttpServletRequest request, HttpServletResponse response, Model model)
-            throws IOException {
+            throws IOException, TemplateMergeException, TemplateParseException, DataLoadException {
         // 머지 옵션설정
         MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
         String articleId = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_ARTICLE_ID);
@@ -97,8 +107,28 @@ public class ArticleHandler extends AbstractHandler {
 
         // TODO 노출조건을 처리한다.
         // DPS API에 노출조건 조회, 멤버십으로 로그인/성인여부 판단
-
-
+        MokaTemplateMerger templateMerger = this.domainTemplateMerger.getTemplateMerger(domainId);
+        DataLoader loader = templateMerger.getDataLoader();
+        // 기사조건 조회
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("totalId", articleId);
+        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE_FLAG, paramMap, true);
+        Map<String, Object> flagMap = jsonResult.getDataListFirst();
+        if ( flagMap == null ) {  // flag가 없으면...
+            return null;
+        }
+        String serviceFlag = (String)flagMap.get("SERVICE_FLAG");
+        if (McpString.isEmpty(serviceFlag) || serviceFlag.equalsIgnoreCase("N")) {
+            return null;  // 서비스기사 아님으로 redirect
+        }
+        String adultFlag = (String)flagMap.get("ADULT_FLAG");
+        if (McpString.isEmpty(adultFlag) || adultFlag.equalsIgnoreCase("Y")) {
+            return null; // 로그인 체크 + 성인체크, 그렇지 않으면 로그인으로  redirect
+        }
+        String payFlag = (String)flagMap.get("PAY_FLAG");
+        if (McpString.isEmpty(adultFlag) || adultFlag.equalsIgnoreCase("Y")) {
+            return null; // 로그인 체크 + 유료회원, 그렇지 않으면 로그인  redirect
+        }
 
         // 예약어를 설정한다.
         ReservedMap reservedMap = domainResolver.getReservedMap(domainId);

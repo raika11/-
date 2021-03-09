@@ -44,6 +44,7 @@ public class DpsApiConstants {
      * 기사 관련 API
      **/
     public static final String ARTICLE = "article.info";
+    public static final String ARTICLE_FLAG = "article.flag";
     public static final String ARTICLE_SECTION_LIST = "list";
 
     /**

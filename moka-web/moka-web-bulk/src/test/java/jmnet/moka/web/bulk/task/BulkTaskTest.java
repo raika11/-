@@ -87,13 +87,13 @@ public class BulkTaskTest {
 
         // 2046	2021-02-18 13:43:34.000	323	SOI	U	23996956	N	N	파티클 테스트용	3
         Map<String, Object> map = new HashMap<>();
-        map.put("SEQ_NO", 2338 );
+        map.put("SEQ_NO", 2460 );
         map.put("INS_DT", new Date());
         map.put("SOURCE_CODE", "323");
         map.put("TARGET_CODE", "SOI");
         map.put("IUD", "U");
-        map.put("CONTENT_ID", 24012460);
-        map.put("TITLE", "&#91;타임라인-이미지 박스/이미지/영상등록/그래픽이미지/페이스북/관련기사/요약문&#93; 고양·평택서 AZ백신 접종후 사망");
+        map.put("CONTENT_ID", 24012459);
+        map.put("TITLE", "&#91;타임라인-사진묶음/타임라인/GIF이미지/영상검색/데이터입력(표)/인스타그램/투표/인용구&#93; 고양·평택서 AZ백신 접종후 사망");
         map.put("ORG_SOURCE_CODE", "3");
         map.put("JHOT_YN", "N");
 

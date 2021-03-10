@@ -194,7 +194,8 @@
     resultMap="ArticleDetailMap,ArticleCodeMap,ArticleReporterMap,ArticleComponentRelMap"
     statementType="CALLABLE">
     {call UPU_15RE_ARTICLE_SEL(
-      #{value, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      #{value, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      'Y'
       ) }
   </select>
 

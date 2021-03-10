@@ -46,38 +46,38 @@ import org.xml.sax.SAXException;
 
 public class ApiParser {
     public static final Logger logger = LoggerFactory.getLogger(ApiParser.class);
-	private static final String EL_API_CONFIG = "apiConfig";
-	private static final String EL_API = "api";
-	private static final String EL_DESCRIPTION = "description";
-	private static final String EL_PARAMETER = "parameter";
+    private static final String EL_API_CONFIG = "apiConfig";
+    private static final String EL_API = "api";
+    private static final String EL_DESCRIPTION = "description";
+    private static final String EL_PARAMETER = "parameter";
     private static final String EL_REF_PARAMETER = "refParameter";
     private static final String EL_PARAMETER_GROUP = "parameterGroup";
-	private static final String EL_REQUEST = "request";
+    private static final String EL_REQUEST = "request";
     private static final String EL_KEYS = "keys";
     private static final String EL_IP_GROUP = "ipGroup";
     private static final String EL_ACL = "acl";
     private static final String EL_REFERER = "referer";
-	private static final String EL_CHILDREN = "./*";
-	private static final String ATTR_ID = "id";
-	private static final String ATTR_METHOD = "method";
+    private static final String EL_CHILDREN = "./*";
+    private static final String ATTR_ID = "id";
+    private static final String ATTR_METHOD = "method";
     private static final String ATTR_EXPIRE = "expire";
     private static final String ATTR_RESULTWRAP = "resultWrap";
     private static final String ATTR_NAME = "name";
-	private static final String ATTR_PERIOD = "period";
-	private static final String ATTR_TYPE = "type";
+    private static final String ATTR_PERIOD = "period";
+    private static final String ATTR_TYPE = "type";
     private static final String ATTR_DESCRIPTION = "desc";
     private static final String ATTR_HINTS = "hints";
-	private static final String ATTR_REQUIRE = "require";
-	private static final String ATTR_RESULTNAME = "resultName";
-	private static final String ATTR_SETNAMES = "setNames";
-	private static final String ATTR_METHOD_NAME = "methodName";
-	private static final String ATTR_SELECTOR = "selector";
-	private static final String ATTR_TOTAL = "total";
-	private static final String ATTR_DML_TYPE = "dmlType";
-	private static final String ATTR_INCLUDE = "include";
-	private static final String ATTR_EXCLUDE = "exclude";
-	public static final String ATTR_DEFAULT = "default";
-	public static final String ATTR_ASYNC = "async";
+    private static final String ATTR_REQUIRE = "require";
+    private static final String ATTR_RESULTNAME = "resultName";
+    private static final String ATTR_SETNAMES = "setNames";
+    private static final String ATTR_METHOD_NAME = "methodName";
+    private static final String ATTR_SELECTOR = "selector";
+    private static final String ATTR_TOTAL = "total";
+    private static final String ATTR_DML_TYPE = "dmlType";
+    private static final String ATTR_INCLUDE = "include";
+    private static final String ATTR_EXCLUDE = "exclude";
+    public static final String ATTR_DEFAULT = "default";
+    public static final String ATTR_ASYNC = "async";
     public static final String ATTR_EVAL = "eval";
     public static final String ATTR_API_PATH = "apiPath";
     public static final String ATTR_API_ID = "apiId";
@@ -85,12 +85,12 @@ public class ApiParser {
     public static final String ATTR_IP_GROUP = "ipGroup";
     public static final String ATTR_CONTENT_TYPE = "contentType";
     public static final String ATTR_CORS = "cors";
-	public static final String PARAM_TYPE_NUMBER = "number";
-	public static final String PARAM_TYPE_STRING = "string";
-	public static final String PARAM_TYPE_DATE = "date";
+    public static final String PARAM_TYPE_NUMBER = "number";
+    public static final String PARAM_TYPE_STRING = "string";
+    public static final String PARAM_TYPE_DATE = "date";
     public static final String PARAM_TYPE_COOKIE = "cookie";
-	public static final String PARAM_DEFAULT_DATE_NOW = "now";
-	public static final String PARAM_DEFAULT_DATE_TODAY = "today";
+    public static final String PARAM_DEFAULT_DATE_NOW = "now";
+    public static final String PARAM_DEFAULT_DATE_TODAY = "today";
     private static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
     public static final List<String> EMPTY_TOKEN_LIST = new ArrayList<>(0);
     private static XPathFactory xPathFactory = XPathFactory.newInstance();
@@ -99,9 +99,10 @@ public class ApiParser {
     private Document document;
     private DefaultApiConfig defaultApiConfig;
 
-    public ApiParser(Resource resource) throws ParserConfigurationException, SAXException, IOException {
+    public ApiParser(Resource resource)
+            throws ParserConfigurationException, SAXException, IOException {
         this(resource, null);
-	}
+    }
 
     public ApiParser(Resource resource, DefaultApiConfig defaultApiConfig)
             throws ParserConfigurationException, IOException {
@@ -110,88 +111,96 @@ public class ApiParser {
         parseDocument();
         this.defaultApiConfig = defaultApiConfig;
     }
-    
-    private void parseDocument() throws ParserConfigurationException, IOException {
-    	DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+
+    private void parseDocument()
+            throws ParserConfigurationException, IOException {
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         try {
             this.document = documentBuilder.parse(resource.getInputStream());
         } catch (Exception e) {
-            logger.error("Api parsing error: {} {}", resource.getFile().getAbsolutePath(),
-                    e.getMessage());
+            logger.error("Api parsing error: {} {}", resource
+                    .getFile()
+                    .getAbsolutePath(), e.getMessage());
         }
     }
-    
-    public NodeList getNodeList(Node node, String xpathStr) throws XPathExpressionException {
-		XPathExpression exp = this.xpath.compile(xpathStr);
-		Object result = exp.evaluate(node, XPathConstants.NODESET);
-		return (NodeList)result;
+
+    public NodeList getNodeList(Node node, String xpathStr)
+            throws XPathExpressionException {
+        XPathExpression exp = this.xpath.compile(xpathStr);
+        Object result = exp.evaluate(node, XPathConstants.NODESET);
+        return (NodeList) result;
     }
 
-    public Node getNode(Node node, String xpathStr) throws XPathExpressionException {
-    	XPathExpression exp = this.xpath.compile(xpathStr);
-    	Object result = exp.evaluate(node, XPathConstants.NODE);
-    	return (Node)result;
+    public Node getNode(Node node, String xpathStr)
+            throws XPathExpressionException {
+        XPathExpression exp = this.xpath.compile(xpathStr);
+        Object result = exp.evaluate(node, XPathConstants.NODE);
+        return (Node) result;
     }
-    
-//    private boolean getBool(Element element, String attribute, boolean defaultValue) {
-//    	String value = element.getAttribute(attribute);
-//    	if ( value == null ) return defaultValue; 
-//    	if (value.equalsIgnoreCase("true")) return true;
-//    	return false;
-//    }
-    
-    public Map<String, Api> getApiMap(ApiConfig apiConfig) throws XPathExpressionException, ApiException {
-    	Node apiConfigNode = getNode(this.document, EL_API_CONFIG);
-    	NodeList apiNodes = getNodeList(apiConfigNode, "./"+EL_API);
-    	Map<String, Api> apiMap = new HashMap<String, Api>(64);
-    	for (  int i=0; i < apiNodes.getLength(); i++) {
-    		Api api = getApi(apiConfig, apiNodes.item(i));
-    		apiMap.put(api.getId(), api);
-    	}
-    	return apiMap;
+
+    //    private boolean getBool(Element element, String attribute, boolean defaultValue) {
+    //    	String value = element.getAttribute(attribute);
+    //    	if ( value == null ) return defaultValue;
+    //    	if (value.equalsIgnoreCase("true")) return true;
+    //    	return false;
+    //    }
+
+    public Map<String, Api> getApiMap(ApiConfig apiConfig)
+            throws XPathExpressionException, ApiException {
+        Node apiConfigNode = getNode(this.document, EL_API_CONFIG);
+        NodeList apiNodes = getNodeList(apiConfigNode, "./" + EL_API);
+        Map<String, Api> apiMap = new HashMap<String, Api>(64);
+        for (int i = 0; i < apiNodes.getLength(); i++) {
+            Api api = getApi(apiConfig, apiNodes.item(i));
+            apiMap.put(api.getId(), api);
+        }
+        return apiMap;
     }
-    
-    private Api getApi(ApiConfig apiConfig, Node node) throws XPathExpressionException, ApiException {
-    	Element apiEl = (Element)node;
-    	String id = apiEl.getAttribute(ATTR_ID);
-    	String methodStr = apiEl.getAttribute(ATTR_METHOD);
-    	String resultUnwrapStr = apiEl.getAttribute(ATTR_RESULTWRAP);
-    	HttpMethod method = HttpMethod.GET;
-    	if (methodStr.equalsIgnoreCase("post")) {
-    	    method = HttpMethod.POST;
+
+    private Api getApi(ApiConfig apiConfig, Node node)
+            throws XPathExpressionException, ApiException {
+        Element apiEl = (Element) node;
+        String id = apiEl.getAttribute(ATTR_ID);
+        String methodStr = apiEl.getAttribute(ATTR_METHOD);
+        String resultUnwrapStr = apiEl.getAttribute(ATTR_RESULTWRAP);
+        HttpMethod method = HttpMethod.GET;
+        if (methodStr.equalsIgnoreCase("post")) {
+            method = HttpMethod.POST;
         }
         String expireAttr = apiEl.getAttribute(ATTR_EXPIRE);
         long expire = ApiCacheHelper.EXPIRE_UNDEFINED;
         if (McpString.isNotEmpty(expireAttr)) {
             expire = TimeHumanizer.parseLong(expireAttr, ApiCacheHelper.EXPIRE_UNDEFINED);
         }
-    	String period = apiEl.getAttribute(ATTR_PERIOD);
-    	Node descriptionNode = getNode(apiEl, "./"+EL_DESCRIPTION);
-    	String description = descriptionNode.getTextContent(); 
-    	String cors =apiEl.getAttribute(ATTR_CORS);
-    	String contentType =apiEl.getAttribute(ATTR_CONTENT_TYPE);
-    	boolean resultWrap = true;
-    	if ( McpString.isNotEmpty(resultUnwrapStr) && resultUnwrapStr.equalsIgnoreCase("N")) {
+        String period = apiEl.getAttribute(ATTR_PERIOD);
+        Node descriptionNode = getNode(apiEl, "./" + EL_DESCRIPTION);
+        String description = descriptionNode.getTextContent();
+        String cors = apiEl.getAttribute(ATTR_CORS);
+        String contentType = apiEl.getAttribute(ATTR_CONTENT_TYPE);
+        boolean resultWrap = true;
+        if (McpString.isNotEmpty(resultUnwrapStr) && resultUnwrapStr.equalsIgnoreCase("N")) {
             resultWrap = false;
         }
         Api api = new Api(apiConfig, id, method, expire, period, description, contentType, cors, resultWrap);
-    	setParameter(api, apiEl);
-    	setRequestList(api, apiEl);
+        setParameter(api, apiEl);
+        setRequestList(api, apiEl);
         setKeys(api, apiEl);
-    	return api;
+        return api;
     }
-    
-    private void setParameter(Api api, Element apiEl) throws XPathExpressionException {
-    	List<Parameter> parameterList = getParameterList(apiEl);
-    	for ( Parameter parameter : parameterList) {
-    		api.addParamer(parameter);
-    	}
-    }
-    
 
-    public List<Parameter> getParameterList(Element parentEl) throws XPathExpressionException {
-    	List<Parameter> parameterList = new ArrayList<Parameter>(8);
-    	Node parameterNode = getNode(parentEl, EL_PARAMETER);
+    private void setParameter(Api api, Element apiEl)
+            throws XPathExpressionException {
+        List<Parameter> parameterList = getParameterList(apiEl);
+        for (Parameter parameter : parameterList) {
+            api.addParamer(parameter);
+        }
+    }
+
+
+    public List<Parameter> getParameterList(Element parentEl)
+            throws XPathExpressionException {
+        List<Parameter> parameterList = new ArrayList<Parameter>(8);
+        Node parameterNode = getNode(parentEl, EL_PARAMETER);
 
         if (parameterNode != null) {
             NodeList paremeterNodes = getNodeList(parameterNode, EL_CHILDREN);
@@ -203,8 +212,7 @@ public class ApiParser {
                     // defaultApiConfig가 있을 경우 refParameter를 처리한다.
                     if (this.defaultApiConfig != null) {
                         List<String> refParamList = getTokenList(childEl);
-                        parameterList.addAll(
-                                this.defaultApiConfig.getDefaultParameterList(refParamList));
+                        parameterList.addAll(this.defaultApiConfig.getDefaultParameterList(refParamList));
                     }
                 } else if (commonAttr.equalsIgnoreCase("Y")) { //common = "Y" 일 경우
                     Parameter parameter = this.defaultApiConfig.getDefaultParameter(name);
@@ -237,22 +245,22 @@ public class ApiParser {
                             require = true;
                         }
                     }
-                    parameterList
-                            .add(new Parameter(name, type, desc, hints, filter, require, value,
-                                    evalStr));
+                    parameterList.add(new Parameter(name, type, desc, hints, filter, require, value, evalStr));
                 }
             }
-    	}
-    	return parameterList;
+        }
+        return parameterList;
     }
-    
-    public List<Parameter> getParameterList() throws XPathExpressionException {
-    	Element doucumentElement = this.document.getDocumentElement();
-    	List<Parameter> parameterList = getParameterList(doucumentElement);
-    	return parameterList;
+
+    public List<Parameter> getParameterList()
+            throws XPathExpressionException {
+        Element doucumentElement = this.document.getDocumentElement();
+        List<Parameter> parameterList = getParameterList(doucumentElement);
+        return parameterList;
     }
-    
-    public Map<String, IpGroup> getIpGroupMap() throws XPathExpressionException {
+
+    public Map<String, IpGroup> getIpGroupMap()
+            throws XPathExpressionException {
         Element doucumentElement = this.document.getDocumentElement();
         NodeList nodes = getNodeList(doucumentElement, EL_IP_GROUP);
         Map<String, IpGroup> ipGroupMap = new LinkedHashMap<String, IpGroup>();
@@ -285,7 +293,8 @@ public class ApiParser {
     }
 
 
-    public HashMap<String, List<String>> getParameterGroupMap() throws XPathExpressionException {
+    public HashMap<String, List<String>> getParameterGroupMap()
+            throws XPathExpressionException {
         Element doucumentElement = this.document.getDocumentElement();
         NodeList nodes = getNodeList(doucumentElement, EL_PARAMETER_GROUP);
         HashMap<String, List<String>> paramGroupMap = new HashMap<String, List<String>>();
@@ -294,7 +303,9 @@ public class ApiParser {
             String groupName = parameterGroupEl.getAttribute(ATTR_NAME);
             String text = parameterGroupEl.getTextContent();
             if (McpString.isNotEmpty(text)) {
-                String[] paramNames = text.trim().split("\\s+");
+                String[] paramNames = text
+                        .trim()
+                        .split("\\s+");
                 paramGroupMap.put(groupName, Arrays.asList(paramNames));
             }
         }
@@ -309,55 +320,59 @@ public class ApiParser {
         for (int i = 0; i < nodes.getLength(); i++) {
             Element refererEl = (Element) nodes.item(i);
             String referers = refererEl.getTextContent();
-            if ( McpString.isNotEmpty(referers)) {
+            if (McpString.isNotEmpty(referers)) {
                 referers = referers.trim();
             }
-            Arrays.stream(referers.split(",")).forEach(r-> refererSet.add(r.trim()));
+            Arrays
+                    .stream(referers.split(","))
+                    .forEach(r -> refererSet.add(r.trim()));
         }
         return refererSet;
     }
 
-    private void setRequestList(Api api, Element apiEl) throws ApiException, XPathExpressionException {
-    	NodeList requestNodes = getNodeList(apiEl, EL_REQUEST);
-    	for ( int i=0; i < requestNodes.getLength(); i++) {
-			Element requestEl = (Element)requestNodes.item(i);
-			String type = requestEl.getAttribute(ATTR_TYPE);
+    private void setRequestList(Api api, Element apiEl)
+            throws ApiException, XPathExpressionException {
+        NodeList requestNodes = getNodeList(apiEl, EL_REQUEST);
+        for (int i = 0; i < requestNodes.getLength(); i++) {
+            Element requestEl = (Element) requestNodes.item(i);
+            String type = requestEl.getAttribute(ATTR_TYPE);
             String evalAttr = requestEl.getAttribute(ATTR_EVAL);
-			String totalAttr = requestEl.getAttribute(ATTR_TOTAL);
-			String asyncAttr = requestEl.getAttribute(ATTR_ASYNC);
+            String totalAttr = requestEl.getAttribute(ATTR_TOTAL);
+            String asyncAttr = requestEl.getAttribute(ATTR_ASYNC);
             boolean eval = false;
-			boolean total = false;
-			boolean async = false;
-			String resultName = requestEl.getAttribute(ATTR_RESULTNAME);
-			String setNames = requestEl.getAttribute(ATTR_SETNAMES);
-			String methodName = requestEl.getAttribute(ATTR_METHOD_NAME);
-			String selector = requestEl.getAttribute(ATTR_SELECTOR);
-			if ( type == null || type.length() == 0 ) {
-				type = Request.TYPE_DB;
-			}
+            boolean total = false;
+            boolean async = false;
+            String resultName = requestEl.getAttribute(ATTR_RESULTNAME);
+            String setNames = requestEl.getAttribute(ATTR_SETNAMES);
+            String methodName = requestEl.getAttribute(ATTR_METHOD_NAME);
+            String selector = requestEl.getAttribute(ATTR_SELECTOR);
+            if (type == null || type.length() == 0) {
+                type = Request.TYPE_DB;
+            }
             if (evalAttr != null && evalAttr.length() != 0) {
                 eval = evalAttr.equalsIgnoreCase("Y") ? true : false;
             }
-			if ( totalAttr != null && totalAttr.length() != 0 ) {
-				total = totalAttr.equalsIgnoreCase("Y") ? true : false;
-			}
-			if ( asyncAttr != null && asyncAttr.length() != 0 ) {
-				async = asyncAttr.equalsIgnoreCase("Y") ? true : false;
-			}
-			if ( resultName == null || resultName.length()==0) {
-				resultName = ApiResult.MAIN_DATA;
-			}
-			String textContent = requestEl.getTextContent();
-			if ( type.equals(Request.TYPE_DB)) {
-				String dmlType = requestEl.getAttribute(ATTR_DML_TYPE);
-                api.addRequest(
-                        new DbRequest(type, eval, async, resultName, setNames, textContent, total, dmlType));
-			} else if ( type.equals(Request.TYPE_URL)) {
-				String include = requestEl.getAttribute(ATTR_INCLUDE);
-				String exclude = requestEl.getAttribute(ATTR_EXCLUDE);
-				api.addRequest(new UrlRequest(type, async, resultName, textContent, include, exclude, selector));
-			} else if ( type.equals(Request.TYPE_SCRIPT)) {
-				api.addRequest(new ScriptRequest(type, async, resultName, textContent));
+            if (totalAttr != null && totalAttr.length() != 0) {
+                total = totalAttr.equalsIgnoreCase("Y") ? true : false;
+            }
+            if (asyncAttr != null && asyncAttr.length() != 0) {
+                async = asyncAttr.equalsIgnoreCase("Y") ? true : false;
+            }
+            if (resultName == null || resultName.length() == 0) {
+                resultName = ApiResult.MAIN_DATA;
+            }
+            String textContent = requestEl
+                    .getTextContent()
+                    .trim();
+            if (type.equals(Request.TYPE_DB)) {
+                String dmlType = requestEl.getAttribute(ATTR_DML_TYPE);
+                api.addRequest(new DbRequest(type, eval, async, resultName, setNames, textContent, total, dmlType));
+            } else if (type.equals(Request.TYPE_URL)) {
+                String include = requestEl.getAttribute(ATTR_INCLUDE);
+                String exclude = requestEl.getAttribute(ATTR_EXCLUDE);
+                api.addRequest(new UrlRequest(type, async, resultName, textContent, include, exclude, selector));
+            } else if (type.equals(Request.TYPE_SCRIPT)) {
+                api.addRequest(new ScriptRequest(type, async, resultName, textContent));
             } else if (type.equals(Request.TYPE_PURGE)) {
                 String apiPath = requestEl.getAttribute(ATTR_API_PATH);
                 String apiId = requestEl.getAttribute(ATTR_API_ID);
@@ -368,24 +383,27 @@ public class ApiParser {
                     textContent = textContent.trim();
                 }
                 api.addRequest(new ModuleRequest(type, textContent, methodName, async, resultName));
-			} else if ( type.equals(Request.TYPE_SAMPLE)) {
-				api.addRequest(new SampleRequest(type, async, resultName, textContent));
-			} else {
-				throw new ApiException(String.format("Invalid Request Type: %s, API = %s/%s ", type, api.getApiConfig().getPath(), api.getId()),
-						api.getApiConfig().getPath(), api.getId());
-			}
-    	}
+            } else if (type.equals(Request.TYPE_SAMPLE)) {
+                api.addRequest(new SampleRequest(type, async, resultName, textContent));
+            } else {
+                throw new ApiException(String.format("Invalid Request Type: %s, API = %s/%s ", type, api
+                        .getApiConfig()
+                        .getPath(), api.getId()), api
+                        .getApiConfig()
+                        .getPath(), api.getId());
+            }
+        }
     }
 
-    private void setKeys(Api api, Element apiEl) throws XPathExpressionException {
+    private void setKeys(Api api, Element apiEl)
+            throws XPathExpressionException {
         Node keysNode = getNode(apiEl, EL_KEYS);
         List<String> keyList = getTokenList(keysNode);
         // #이 붙은 group에 대한 처리를 한다.
         List<String> groupSplitted = new ArrayList<String>(8);
         for (String key : keyList) {
             if (key.startsWith("#")) {
-                groupSplitted
-                        .addAll(this.defaultApiConfig.getParameterNameListByParameterGroup(key));
+                groupSplitted.addAll(this.defaultApiConfig.getParameterNameListByParameterGroup(key));
             } else {
                 groupSplitted.add(key);
             }
@@ -397,7 +415,9 @@ public class ApiParser {
         if (node != null) {
             String text = node.getTextContent();
             if (McpString.isNotEmpty(text)) {
-                String[] tokens = text.trim().split("\\s+");
+                String[] tokens = text
+                        .trim()
+                        .split("\\s+");
                 return Arrays.asList(tokens);
             }
         }

@@ -6,15 +6,13 @@ import jmnet.moka.core.common.brightcove.BrightcoveProperties;
 import jmnet.moka.web.schedule.mvc.brightcove.service.BrightcoveService;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <pre>
@@ -37,9 +35,6 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
     @Autowired
     private BrightcoveProperties brightcoveProperties;
 
-    @Value("${pc-home.rss-url}")
-    private String pcHomeRssUrl;
-
     @Override
     public void invoke() {
 
@@ -48,18 +43,33 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String now = format.format(date);
 
-        StringBuffer content = new StringBuffer();
-        content.append(brightcoveProperties.getAnaliticsUrl() +"/data?accounts="+ brightcoveProperties.getBcAccountId());
-        content.append("&dimensions=video");
-        content.append("&fields=play_request,video,video_engagement_100,video_seconds_viewed,video.custom_fields.media_category");
-        content.append("&where=video.q==+media_category:22_JPod");
-        content.append("&from="+ now +"&to="+ now);
+        //GET 주소 + 파라미터 입력
+        StringBuffer contentUrl = new StringBuffer();
+        contentUrl.append(brightcoveProperties.getAnaliticsUrl() +"/data?accounts="+ brightcoveProperties.getBcAccountId());
+        contentUrl.append("&dimensions=video");
+        contentUrl.append("&fields=play_request,video,video_engagement_100,video_seconds_viewed,video.custom_fields.media_category");
+        contentUrl.append("&where=video.q==+media_category:22_JPod");
+        contentUrl.append("&from="+ now +"&to="+ now);
 
-        String url = content.toString();
         try {
-            List<Map<String, Object>> list = brightcoveService.findAnalytics(credentail, url);
-            log.debug("list : "+ list.toString());
-        } catch (IOException e) {
+            //analytics API 호출
+            JSONObject jsonObject = (JSONObject) brightcoveService.findAnalytics(credentail, contentUrl.toString());
+            log.debug("jsonObject : "+ jsonObject);
+            log.debug("item_count : {}", jsonObject.get("item_count"));
+            JSONArray items = (JSONArray) jsonObject.get("items");
+            for(Object item : items){
+                JSONObject tmp = (JSONObject) item;
+                log.debug("now : {}", now);
+                log.debug("video : {}", tmp.get("video"));
+                log.debug("play_request : {}", tmp.get("play_request"));
+                log.debug("0 : {}", 0);
+                log.debug("video_seconds_viewed : {}", tmp.get("video_seconds_viewed"));
+                log.debug("video_engagement_100 : {}", tmp.get("video_engagement_100"));
+                log.debug("===============================================");
+            }
+
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -25,7 +25,7 @@ public interface BoardRepositorySupport {
 
     long updateParentBoardSeq(Long boardSeq, Long parentBoardSeq);
 
-    long updateOrdNo(Long boardSeq, String ordNo);
+    long updateOrdNo(Long boardSeq, Integer ordNo);
 
     long updateViewCnt(Long boardSeq);
 

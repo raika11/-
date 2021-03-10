@@ -178,9 +178,9 @@ public class TpsConstants extends MokaConstants {
     public static final String BOARD_REG_DIV_MEMBER = "M";
 
     // 공지사항 게시물
-    public static final String BOARD_NOTICE_CONTENT = "9";
+    public static final int BOARD_NOTICE_CONTENT = 9;
     // 일반 게시물
-    public static final String BOARD_GENERAL_CONTENT = "1";
+    public static final int BOARD_GENERAL_CONTENT = 1;
 
     // 댓글 태그 구분 그룹 코드
     public static final String CMT_TAG_DIV = "CMT_TAG_DIV";

@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -112,7 +113,7 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      */
     @Column(name = "ORD_NO", nullable = false)
     @Builder.Default
-    private String ordNo = "1";
+    private Integer ordNo = TpsConstants.BOARD_GENERAL_CONTENT;
 
     /**
      * 조회수

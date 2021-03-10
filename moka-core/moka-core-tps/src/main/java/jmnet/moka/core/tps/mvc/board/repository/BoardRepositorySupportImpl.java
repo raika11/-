@@ -176,7 +176,7 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
     }
 
     @Override
-    public long updateOrdNo(Long boardSeq, String ordNo) {
+    public long updateOrdNo(Long boardSeq, Integer ordNo) {
         QBoard qBoard = QBoard.board;
         QBoard board = QBoard.board;
 

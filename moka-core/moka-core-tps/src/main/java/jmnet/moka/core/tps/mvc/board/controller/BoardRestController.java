@@ -481,7 +481,7 @@ public class BoardRestController extends AbstractCommonController {
     @PutMapping("/{boardSeq}/order")
     public ResponseEntity<?> putOrder(
             @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
-            @ApiParam("게시물 순서번호") @RequestParam("ordNo") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") String ordNo) {
+            @ApiParam("게시물 순서번호") @RequestParam("ordNo") @Min(value = 0, message = "{tps.board.error.min.ordNo}") Integer ordNo) {
 
         if (boardService.updateOrdNo(boardSeq, ordNo) > 0) {
             return new ResponseEntity<>(new ResultDTO<>(true), HttpStatus.OK);

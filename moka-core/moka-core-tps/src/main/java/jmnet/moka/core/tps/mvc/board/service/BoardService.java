@@ -157,7 +157,7 @@ public interface BoardService {
      * @param ordNo    순서번호
      * @return 수정 결과
      */
-    long updateOrdNo(Long boardSeq, String ordNo);
+    long updateOrdNo(Long boardSeq, Integer ordNo);
 
     /**
      * 조회수 증가

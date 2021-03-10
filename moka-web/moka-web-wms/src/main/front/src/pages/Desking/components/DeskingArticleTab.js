@@ -43,6 +43,8 @@ const DeskingArticleTab = (props) => {
                     callback: ({ header }) => {
                         if (!header.success) {
                             messageBox.alert(header.message);
+                        } else {
+                            source.api.deselectAll();
                         }
                     },
                 }),

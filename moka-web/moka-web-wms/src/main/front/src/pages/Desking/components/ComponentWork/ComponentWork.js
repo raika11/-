@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -50,8 +50,6 @@ const ComponentWork = (props) => {
     // const { editFormPart } = props;
     const dispatch = useDispatch();
     const workStatus = useSelector(({ desking }) => desking.workStatus);
-
-    // state
     const [loading, setLoading] = useState(false);
     const [deskingWorkData, setDeskingWorkData] = useState({});
     const [editModalShow, setEditModalShow] = useState(false);
@@ -60,74 +58,86 @@ const ComponentWork = (props) => {
     /**
      * 편집기사 목록에서 Row클릭
      */
-    const handleRowClicked = (rowData) => {
-        // deskingPart로 지정된 필드가 없으면 수정불가
-        if (deskingPart && deskingPart !== '') {
-            setDeskingWorkData(rowData);
-            setEditModalShow(true);
-        }
-    };
+    const handleRowClicked = useCallback(
+        (rowData) => {
+            // deskingPart로 지정된 필드가 없으면 수정불가
+            if (deskingPart && deskingPart !== '') {
+                setDeskingWorkData(rowData);
+                setEditModalShow(true);
+            }
+        },
+        [deskingPart],
+    );
 
     /**
      * 편집기사 수정 (put)
      * @param {object} deskingWork 저장할 편집기사 데이터
      * @param {func} callback 저장 후 실행
      */
-    const handleClickPut = (deskingWork, callback) => {
-        let saveData = deskingWork;
-        delete saveData.onRowClicked;
-        delete saveData.onSave;
-        delete saveData.onDelete;
-        delete saveData.deskingPart;
+    const handleClickPut = useCallback(
+        (deskingWork, callback) => {
+            let saveData = deskingWork;
+            delete saveData.onRowClicked;
+            delete saveData.onSave;
+            delete saveData.onDelete;
+            delete saveData.deskingPart;
 
-        dispatch(
-            putDeskingWork({
-                componentWorkSeq: component.seq,
-                areaSeq,
-                deskingWork: saveData,
-                callback,
-            }),
-        );
-    };
+            dispatch(
+                putDeskingWork({
+                    componentWorkSeq: component.seq,
+                    areaSeq,
+                    deskingWork: saveData,
+                    callback,
+                }),
+            );
+        },
+        [areaSeq, component.seq, dispatch],
+    );
 
     /**
      * 편집기사 추가 (post)
      * @param {object} deskingWork 저장할 편집기사 데이터
      * @param {func} callback 저장 후 실행
      */
-    const handleClickPost = (deskingWork, callback) => {
-        dispatch(
-            postDeskingWork({
-                componentWorkSeq: component.seq,
-                datasetSeq: component.datasetSeq,
-                areaSeq,
-                deskingWork: {
-                    ...deskingWork,
-                    contentOrd: 1,
-                    contentType: 'D',
-                },
-                callback,
-            }),
-        );
-    };
+    const handleClickPost = useCallback(
+        (deskingWork, callback) => {
+            dispatch(
+                postDeskingWork({
+                    componentWorkSeq: component.seq,
+                    datasetSeq: component.datasetSeq,
+                    areaSeq,
+                    deskingWork: {
+                        ...deskingWork,
+                        contentOrd: 1,
+                        contentType: 'D',
+                    },
+                    callback,
+                }),
+            );
+        },
+        [areaSeq, component.datasetSeq, component.seq, dispatch],
+    );
 
     /**
      * 편집기사 삭제 (delete)
      * @param {object} deskingWork 삭제할 편집기사 데이터
      */
-    const handleClickDelete = (deskingWork) => {
-        const option = {
-            componentWorkSeq: component.seq,
-            datasetSeq: component.datasetSeq,
-            list: [deskingWork],
-            callback: ({ header }) => {
-                if (!header.success) {
-                    toast.fail(header.message);
-                }
-            },
-        };
-        dispatch(deleteDeskingWorkList(option));
-    };
+    const handleClickDelete = useCallback(
+        (deskingWork) => {
+            const option = {
+                componentWorkSeq: component.seq,
+                datasetSeq: component.datasetSeq,
+                list: [deskingWork],
+                callback: ({ header }) => {
+                    if (!header.success) {
+                        toast.fail(header.message);
+                    }
+                },
+            };
+            dispatch(deleteDeskingWorkList(option));
+        },
+        [component.datasetSeq, component.seq, dispatch],
+    );
 
     return (
         <div

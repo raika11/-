@@ -297,11 +297,12 @@ public class TourRestController extends AbstractCommonController {
                             .builder()
                             .from(fromEmailAddress)
                             .to(new String[] {returnValue.getWriterEmail()})
-                            .templateName("tour-mail")
+                            .templateName(getTourTemplateName(returnValue.getTourStatus()))
                             .context(returnValue)
                             .title("견학 안내 메일입니다.")
                             .build());
                 }
+
                 ResultDTO<TourApplyVO> resultDTO = new ResultDTO<TourApplyVO>(returnValue, msg("tps.common.success.update"));
                 tpsLogger.success(ActionType.UPDATE, true);
                 return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -440,14 +441,26 @@ public class TourRestController extends AbstractCommonController {
         switch (tourStatus) {
             case "S":
                 tourStatusName = "신청";
+                break;
             case "A":
                 tourStatusName = "승인";
+                break;
             case "R":
                 tourStatusName = "반려";
+                break;
             case "C":
                 tourStatusName = "취소";
+                break;
         }
         return tourStatusName;
+    }
+
+    private String getTourTemplateName(String tourStatus) {
+        String tourTemplateName = "tour-mail-forbidden";
+        if(tourStatus.equals("A")) {
+            tourTemplateName = "tour-mail-allowed";
+        }
+        return tourTemplateName;
     }
 
 }

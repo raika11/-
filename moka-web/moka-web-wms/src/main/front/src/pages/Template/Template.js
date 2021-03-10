@@ -23,7 +23,7 @@ const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 /**
  * 템플릿 관리
  */
-const Template = ({ match, menuById }) => {
+const Template = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const template = useSelector(({ template }) => template.template);

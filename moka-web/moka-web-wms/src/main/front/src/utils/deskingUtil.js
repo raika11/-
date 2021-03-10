@@ -177,13 +177,12 @@ export const addDeskingWorkDropzone = (onDragStop, sourceGrid, targetGrid, curre
                 return;
             }
 
-            let draggingIdx = overRow.getAttribute('row-index');
-
-            if (hover.idx !== draggingIdx) {
+            let overRowIdx = Number(overRow.getAttribute('row-index'));
+            if (hover.idx !== overRowIdx) {
                 clearNextStyle(next.node);
                 clearHoverStyle(hover.node);
                 clearWorkStyle(workElement);
-                hover = { idx: draggingIdx, node: overRow };
+                hover = { idx: overRowIdx, node: overRow };
                 overRow.classList.add('ag-row-hover');
 
                 const selected = targetGrid.api.getSelectedRows();

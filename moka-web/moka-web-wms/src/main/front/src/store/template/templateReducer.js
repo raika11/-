@@ -13,7 +13,7 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        sort: 'templateSeq,desc',
+        sort: 'templateName,desc',
         domainId: null,
         templateGroup: 'all',
         widthMin: null,

@@ -164,67 +164,44 @@ const CommentListBox = ({ setSelectBannedItem }) => {
         setSelectBannedItem(gridApi.getSelectedRows());
     };
 
-    // store 에 list 내용이 업데이트 되면 grid 목록을 설정.
     useEffect(() => {
-        setRowData([]);
-        const inirGridRow = (data) => {
-            setRowData(
-                data.map((element) => {
-                    // 상태 코드
-                    let statusText = element.status;
-                    let elementState = COMMENT_STATUS_CODE.filter((e) => e.code === element.status);
-                    if (elementState.length > 0) {
-                        statusText = elementState[0].name;
-                    }
+        // store 에 list 내용이 업데이트 되면 grid 목록을 설정
+        setRowData(
+            list.map((element) => {
+                // 상태 코드
+                let statusText = element.status;
+                let elementState = COMMENT_STATUS_CODE.filter((e) => e.code === element.status);
+                if (elementState.length > 0) {
+                    statusText = elementState[0].name;
+                }
 
-                    // 매체 코드
-                    let mediaText = '';
-                    let urlGrpInfo = COMMENT_MEDIA_CODE.filter((e) => Number(e.dtlCd) === element.urlGrp);
-                    if (urlGrpInfo.length > 0) {
-                        mediaText = urlGrpInfo[0].cdNm;
-                    }
+                // 매체 코드
+                let mediaText = '';
+                let urlGrpInfo = COMMENT_MEDIA_CODE.filter((e) => Number(e.dtlCd) === element.urlGrp);
+                if (urlGrpInfo.length > 0) {
+                    mediaText = urlGrpInfo[0].cdNm;
+                }
 
-                    return {
-                        urlSeq: element.urlSeq,
-                        contentId: element.contentId,
-                        cmtSeq: element.cmtSeq,
-                        cmtParentSeq: element.cmtParentSeq,
-                        commentUrl: element.commentUrl,
-                        cont: element.cont,
-                        likeCnt: element.likeCnt,
-                        hateCnt: element.hateCnt,
-                        memId: element.memId,
+                return {
+                    ...element,
+                    statusText: statusText,
+                    mediaText: mediaText,
+                    userInfo: {
                         memNm: element.memNm,
-                        memImage: element.memImage,
-                        regDt: element.regDt,
+                        memId: element.memId,
+                    },
+                    action: {
+                        cmtSeq: element.cmtSeq,
                         status: element.status,
-                        statusText: statusText,
-                        memIp: element.memIp,
-                        memSite: element.memSite,
-                        declareCnt: element.declareCnt,
-                        reCnt: element.reCnt,
-                        urlGrp: element.urlGrp,
-                        mediaText: mediaText,
-                        artTitle: element.artTitle,
-                        userInfo: {
-                            memNm: element.memNm,
-                            memId: element.memId,
-                        },
-                        action: {
-                            cmtSeq: element.cmtSeq,
-                            status: element.status,
-                            memNm: element.memNm,
-                            memId: element.memId,
-                        },
-                    };
-                }),
-            );
-        };
+                        memNm: element.memNm,
+                        memId: element.memId,
+                    },
+                };
+            }),
+        );
         // console.log(list);
-        if (list) {
-            inirGridRow(list);
-        }
-    }, [COMMENT_MEDIA_CODE, COMMENT_STATUS_CODE, list]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [list]);
 
     return (
         <CommentAgGrid

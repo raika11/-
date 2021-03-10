@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MokaModal } from '@components';
 
 const BannedConfirmModal = (props) => {
-    const { show, onHide, ModalUsage } = props;
+    const { show, onHide, modalUsage } = props;
 
     const [modalState, setModalState] = useState({
         title: '',
@@ -18,14 +18,14 @@ const BannedConfirmModal = (props) => {
     };
 
     useEffect(() => {
-        if (ModalUsage.title && ModalUsage.content && show) {
+        if (modalUsage.title && modalUsage.content && show) {
             setModalState({
-                title: ModalUsage.title,
-                content: ModalUsage.content,
-                gubun: ModalUsage.gubun,
+                title: modalUsage.title,
+                content: modalUsage.content,
+                gubun: modalUsage.gubun,
             });
         }
-    }, [ModalUsage, show]);
+    }, [modalUsage, show]);
 
     return (
         <MokaModal

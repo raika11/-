@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { MokaModal } from '@components';
 import { useDispatch } from 'react-redux';
+import { MokaModal } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
-
 import { deleteComment, getCommentList } from '@store/commentManage';
-
 import { BannedConfirmModal } from '@pages/CommentManage/CommentModal';
 
+/**
+ * 댓글 관리 > 댓글 액션 모달
+ */
 const CommentActionModal = (props) => {
-    const { show, onHide, ModalUsage } = props;
-    const { deleteType } = ModalUsage;
+    const { show, onHide, modalUsage } = props;
+    const { deleteType } = modalUsage;
 
     const [confirmModalState, setConfirmModalState] = useState(false);
     const dispatch = useDispatch();
@@ -20,10 +21,6 @@ const CommentActionModal = (props) => {
         BNC: '사용자 ID 차단 및 댓글을 삭제하시겠습니까?',
         BNA: '사용자 ID 차단 및 과거 댓글 전체를 삭제하시겠습니까?',
         restore: '댓글을 복구하시겠습니까?',
-    };
-
-    const handleClickHide = () => {
-        onHide();
     };
 
     /**
@@ -40,16 +37,16 @@ const CommentActionModal = (props) => {
         // dispatch(clearComment());
         dispatch(
             deleteComment({
-                cmtSeq: ModalUsage.cmtSeq,
+                cmtSeq: modalUsage.cmtSeq,
                 params: {
                     statusType: paramsStatusType,
                     deleteType: paramsDeleteType,
                 },
                 callback: ({ header: { success, message }, body }) => {
                     // 임시로 모두 다시 가지고 옴.
-                    dispatch(getCommentList());
                     if (success === true) {
                         toast.success(message);
+                        dispatch(getCommentList());
                     } else {
                         const { totalCnt, list } = body;
                         if (totalCnt > 0 && Array.isArray(list)) {
@@ -75,17 +72,17 @@ const CommentActionModal = (props) => {
             size="sm"
             width={400}
             show={show}
-            onHide={handleClickHide}
+            onHide={onHide}
             title={deleteType === 'restore' ? `댓글 복구` : `댓글 삭제`}
             buttons={[
                 { text: '확인', variant: 'positive', onClick: handleClickSave },
-                { text: '취소', variant: 'negative', onClick: handleClickHide },
+                { text: '취소', variant: 'negative', onClick: onHide },
             ]}
             draggable
         >
             <p className="mb-0">{alertMessage[deleteType]}</p>
             <BannedConfirmModal
-                ModalUsage={ModalUsage}
+                modalUsage={modalUsage}
                 show={confirmModalState}
                 onHide={() => {
                     setConfirmModalState(false);

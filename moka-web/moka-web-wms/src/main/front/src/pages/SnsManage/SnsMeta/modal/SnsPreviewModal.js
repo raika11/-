@@ -21,12 +21,12 @@ const SnsPreviewModal = ({ show, onHide, totalId }) => {
                 tabs={[
                     <React.Fragment>
                         <div className="px-3 py-2">
-                            <iframe src={`https://news.joins.com/article/${totalId}`} title={totalId} style={{ border: 'none', height: '600px', width: '100%' }} />
+                            <iframe src={`https://stg-news.joongang.co.kr/article/${totalId}`} title={totalId} style={{ border: 'none', height: '600px', width: '100%' }} />
                         </div>
                     </React.Fragment>,
                     <React.Fragment>
                         <div className="px-3 py-2">
-                            <iframe src={`https://mnews.joins.com/article/${totalId}`} title={totalId} style={{ border: 'none', height: '600px', width: '100%' }} />
+                            <iframe src={`https://stg-news.joongang.co.kr/article/${totalId}`} title={totalId} style={{ border: 'none', height: '600px', width: '100%' }} />
                         </div>
                     </React.Fragment>,
                 ]}

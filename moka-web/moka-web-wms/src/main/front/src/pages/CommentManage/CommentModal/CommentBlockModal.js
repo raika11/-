@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Form, Col } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 import { MokaModal, MokaInputLabel, MokaInput } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
-import { useDispatch, useSelector } from 'react-redux';
+import { invalidListToError } from '@utils/convertUtil';
 import { saveBlocks, getCommentsBlocks, getCommentList } from '@store/commentManage';
 import { BannedConfirmModal } from '@pages/CommentManage/CommentModal';
 
@@ -12,18 +14,19 @@ import { BannedConfirmModal } from '@pages/CommentManage/CommentModal';
 const CommentBlockModal = (props) => {
     const dispatch = useDispatch();
 
-    // 검색용 select 값과 store 값을 연결.
+    // 댓글 차단 사유 목록
     const { COMMENT_TAG_DIV_CODE } = useSelector((store) => ({
         COMMENT_TAG_DIV_CODE: store.comment.common.COMMENT_TAG_DIV_CODE,
     }));
 
-    const { show, onHide, ModalUsage, selectBannedItem } = props;
+    const { show, onHide, modalUsage, selectBannedItem } = props;
     const [editData, setEditData] = useState({
         bannedType: 'U',
         tagValues: '',
         tagDiv: 'A',
         tagDesc: '',
     });
+    const [error, setError] = useState({});
 
     const [confirmModal, setConfirmModal] = useState(false);
     const [confirmModalUsage, setConfirmModalUsage] = useState({
@@ -35,6 +38,7 @@ const CommentBlockModal = (props) => {
      * 닫기
      */
     const handleClickHide = () => {
+        setEditData({ bannedType: 'U', tagValues: '', tagDiv: 'A', tagDesc: '' });
         onHide();
     };
 
@@ -51,9 +55,88 @@ const CommentBlockModal = (props) => {
     };
 
     /**
+     * 유효성 검사
+     * @param {object} 검사 대상
+     */
+    const validate = (obj) => {
+        let isInvalid = false,
+            errList = [];
+
+        if (!obj.tagValues && modalUsage.usage === `U`) {
+            errList.push({
+                field: 'tagValues',
+                reason: 'ID는 필수 입력 항목입니다.',
+            });
+            isInvalid = isInvalid | true;
+        } else if (!obj.tagValues && modalUsage.usage === `I`) {
+            errList.push({
+                field: 'tagValues',
+                reason: 'IP는 필수 입력 항목입니다.',
+            });
+        } else if (!obj.tagValues && modalUsage.usage === `W`) {
+            errList.push({
+                field: 'tagValues',
+                reason: '금지어는 필수 입력 항목입니다.',
+            });
+        }
+
+        if (!/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/g.test(obj.tagValues) && modalUsage.usage === `U`) {
+            errList.push({
+                field: 'tagValues',
+                reason: 'ID는 이메일 형식입니다.',
+            });
+            isInvalid = isInvalid | true;
+        } else if (
+            !/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/g.test(
+                obj.tagValues,
+            ) &&
+            modalUsage.usage === `I`
+        ) {
+            errList.push({
+                field: 'tagValues',
+                reason: 'IP 형식이 올바르지 않습니다.',
+            });
+            isInvalid = isInvalid | true;
+        }
+
+        // if (!/^[A-Za-z0-9_-`/]+$/g.test(obj.dtlCd)) {
+        //     errList.push({
+        //         field: 'dtlCd',
+        //         reason: '코드 형식이 올바르지 않습니다. 영문 대소문자, 숫자, _, -만 입력 가능합니다.',
+        //     });
+        //     isInvalid = isInvalid | true;
+        // }
+        // if (!obj.cdNm) {
+        //     errList.push({
+        //         field: 'cdNm',
+        //         reason: '코드 한글명은 필수 입력 항목입니다.',
+        //     });
+        //     isInvalid = isInvalid | true;
+        // }
+        // if (!obj.cdOrd) {
+        //     errList.push({
+        //         field: 'cdOrd',
+        //         reason: '순서는 필수 입력 항목입니다.',
+        //     });
+        //     isInvalid = isInvalid | true;
+        // }
+        // if (!/^[0-9]+$/g.test(obj.cdOrd)) {
+        //     errList.push({
+        //         field: 'cdOrd',
+        //         reason: '순서는 숫자만 입력 가능합니다.',
+        //     });
+        //     isInvalid = isInvalid | true;
+        // }
+
+        setError(invalidListToError(errList));
+        return !isInvalid;
+    };
+
+    /**
      * 차단 등록 처리
      */
     const handleSaveBlocks = (formData) => {
+        // if (validate(formData))
         dispatch(
             saveBlocks({
                 type: 'SAVE',
@@ -75,16 +158,12 @@ const CommentBlockModal = (props) => {
                         return;
                     }
 
-                    if (success === false && seqNo && tagValue === editData.tagValues) {
-                        toast.success(message);
-                    }
-
                     if (success === true) {
                         toast.success(message);
                         dispatch(getCommentsBlocks());
                     }
 
-                    onHide(); // 모달창 닫기.
+                    handleClickHide(); // 모달창 닫기
                     dispatch(getCommentList());
                 },
             }),
@@ -102,7 +181,7 @@ const CommentBlockModal = (props) => {
                 formData.append(
                     'tagValues',
                     selectBannedItem
-                        .map((e) => e.memId)
+                        .map((e) => `${e.memId}@${e.memSite}`)
                         .reduce((acc, curr) => (acc.includes(curr) ? acc : [...acc, curr]), [])
                         .join(','),
                 );
@@ -126,7 +205,7 @@ const CommentBlockModal = (props) => {
      */
     const handleClickSave = () => {
         let formData = new FormData();
-        formData.append('tagType', ModalUsage.usage);
+        formData.append('tagType', modalUsage.usage);
         formData.append('usedYn', 'Y');
 
         // 댓글 관리 처리.
@@ -214,13 +293,13 @@ const CommentBlockModal = (props) => {
             handleSaveBlocks(formData);
         };
 
-        if (ModalUsage.usage === `comment`) {
+        if (modalUsage.usage === `comment`) {
             doCommentMenu();
-        } else if (ModalUsage.usage === `U`) {
+        } else if (modalUsage.usage === `U`) {
             doUMenu();
-        } else if (ModalUsage.usage === `I`) {
+        } else if (modalUsage.usage === `I`) {
             doIMenu();
-        } else if (ModalUsage.usage === `W`) {
+        } else if (modalUsage.usage === `W`) {
             doWMenu();
         }
     };
@@ -241,7 +320,7 @@ const CommentBlockModal = (props) => {
         >
             <Form>
                 <Form.Row className="mb-2 align-items-center">
-                    {ModalUsage.usage && ModalUsage.usage === `comment` && (
+                    {modalUsage.usage && modalUsage.usage === `comment` && (
                         <>
                             <Col xs={3} className="p-0 mr-2">
                                 <MokaInputLabel
@@ -266,41 +345,63 @@ const CommentBlockModal = (props) => {
                             </Col>
                         </>
                     )}
-                    {ModalUsage.usage && ModalUsage.usage === `U` && (
+                    {modalUsage.usage && modalUsage.usage === `U` && (
                         <>
                             <Col className="p-0">
-                                <MokaInputLabel label="차단 ID" id="tagValues" name="tagValues" value={editData.tagValues} onChange={handleChangeValue} />
+                                <MokaInputLabel
+                                    label="차단 ID"
+                                    id="tagValues"
+                                    name="tagValues"
+                                    value={editData.tagValues}
+                                    onChange={handleChangeValue}
+                                    isInvalid={error.tagValues}
+                                />
                             </Col>
                         </>
                     )}
-                    {ModalUsage.usage && ModalUsage.usage === `I` && (
+                    {modalUsage.usage && modalUsage.usage === `I` && (
                         <>
                             <Col className="p-0">
-                                <MokaInputLabel label="차단 IP" id="tagValues" name="tagValues" value={editData.tagValues} onChange={handleChangeValue} />
+                                <MokaInputLabel
+                                    label="차단 IP"
+                                    id="tagValues"
+                                    name="tagValues"
+                                    value={editData.tagValues}
+                                    onChange={handleChangeValue}
+                                    isInvalid={error.tagValues}
+                                />
                             </Col>
                         </>
                     )}
-                    {ModalUsage.usage && ModalUsage.usage === `W` && (
+                    {modalUsage.usage && modalUsage.usage === `W` && (
                         <>
                             <Col className="p-0">
-                                <MokaInputLabel label="금지어" id="tagValues" name="tagValues" value={editData.tagValues} onChange={handleChangeValue} />
+                                <MokaInputLabel
+                                    label="금지어"
+                                    id="tagValues"
+                                    name="tagValues"
+                                    value={editData.tagValues}
+                                    onChange={handleChangeValue}
+                                    isInvalid={error.tagValues}
+                                />
                             </Col>
                         </>
                     )}
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={12} className="p-0">
+                    <Col className="p-0">
                         <MokaInputLabel as="select" label="차단사유" name="tagDiv" id="tagDiv" value={editData.tagDiv} onChange={handleChangeValue}>
-                            {COMMENT_TAG_DIV_CODE.map((item, index) => (
-                                <option key={index} value={item.dtlCd}>
-                                    {item.cdNm}
-                                </option>
-                            ))}
+                            {COMMENT_TAG_DIV_CODE &&
+                                COMMENT_TAG_DIV_CODE.map((item, index) => (
+                                    <option key={index} value={item.dtlCd}>
+                                        {item.cdNm}
+                                    </option>
+                                ))}
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>
                 <Form.Row>
-                    <Col xs={12} className="p-0">
+                    <Col className="p-0">
                         <MokaInputLabel
                             as="textarea"
                             label="차단 내용"
@@ -314,16 +415,14 @@ const CommentBlockModal = (props) => {
                     </Col>
                 </Form.Row>
             </Form>
-            {confirmModalUsage && (
-                <BannedConfirmModal
-                    ModalUsage={confirmModalUsage}
-                    show={confirmModal}
-                    onHide={(e) => {
-                        ConfirmModalResult(e);
-                        setConfirmModal(false);
-                    }}
-                />
-            )}
+            <BannedConfirmModal
+                modalUsage={confirmModalUsage}
+                show={confirmModal}
+                onHide={(e) => {
+                    ConfirmModalResult(e);
+                    setConfirmModal(false);
+                }}
+            />
         </MokaModal>
     );
 };

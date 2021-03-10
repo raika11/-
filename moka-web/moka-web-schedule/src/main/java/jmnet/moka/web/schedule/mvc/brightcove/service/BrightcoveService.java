@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.core.common.brightcove.BrightcoveCredentailVO;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 /**
  * <pre>
@@ -39,8 +41,8 @@ public interface BrightcoveService {
      *
      * @return
      */
-    List<Map<String, Object>> findAnalytics(BrightcoveCredentailVO credentail, String url)
-            throws IOException;
+    JSONObject findAnalytics(BrightcoveCredentailVO credentail, String url)
+            throws IOException, ParseException;
 
     /**
      * brightcove 인증 정보 조회

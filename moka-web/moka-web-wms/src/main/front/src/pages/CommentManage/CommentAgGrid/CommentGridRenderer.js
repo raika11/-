@@ -4,11 +4,41 @@ import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import Dropdown from 'react-bootstrap/Dropdown';
 import toast, { messageBox } from '@utils/toastUtil';
-
 import { CommentActionModal, BannedHistoryModal } from '@pages/CommentManage/CommentModal';
 import { getCommentsBlocks, blocksUsed, clearBlocksList } from '@store/commentManage';
 import { useDispatch } from 'react-redux';
 
+/**
+ * 이름 / ID
+ */
+export const UserInfoRenderer = ({ value }) => {
+    const { memNm, memId } = value;
+    return (
+        <>
+            <p className="mb-0">{memNm}</p>
+            <p className="mb-0">{memId}</p>
+        </>
+    );
+};
+
+/**
+ * 날짜
+ */
+export const DateItemRenderer = (props) => {
+    const { value } = props;
+    const firstTime = value && value.length > 10 ? value.substr(0, 10) : value;
+    const thirdTime = value && value.length > 10 ? value.substr(10, 6) : value;
+    return (
+        <>
+            <p className="mb-0">{firstTime}</p>
+            <p className="mb-0">{thirdTime}</p>
+        </>
+    );
+};
+
+/**
+ * 삭제 버튼 드롭 다운 토글
+ */
 const DropdownToggle = forwardRef(({ onClick, id }, ref) => {
     return (
         <div ref={ref} className="btn-sm" onClick={onClick} id={id}>
@@ -17,19 +47,9 @@ const DropdownToggle = forwardRef(({ onClick, id }, ref) => {
     );
 });
 
-export const UserInfoRenderer = ({ value }) => {
-    const { memNm, memId } = value;
-    return (
-        <>
-            {/*<Col className="d-felx pl-0" style={{ lineHeight: '25px' }}>{memId}</Col>*/}
-            <Col className="d-flex pl-0" style={{ lineHeight: '1.1em' }}>
-                {memNm}({memId})
-            </Col>
-        </>
-    );
-};
-
-// 삭제 버튼
+/**
+ * 삭제 버튼
+ */
 export const DeleteButtonRenderer = (props) => {
     const { cmtSeq, status, memNm, memId } = props.value;
 
@@ -84,7 +104,7 @@ export const DeleteButtonRenderer = (props) => {
     }, [handleClickBannedButton, viewN]);
 
     return (
-        <>
+        <div className="h-100 d-flex align-items-center">
             {status === 'A' ? (
                 <MokaOverlayTooltipButton tooltipText="삭제" variant="outline-table-btn" className="p-0">
                     <Dropdown style={{ position: 'unset' }}>
@@ -93,21 +113,24 @@ export const DeleteButtonRenderer = (props) => {
                     </Dropdown>
                 </MokaOverlayTooltipButton>
             ) : (
-                <Button variant="outline-table-btn" className="mr-2" size="sm" onClick={() => handleClickRestore()}>
+                <Button variant="outline-table-btn" className="mr-2" size="sm" onClick={handleClickRestore}>
                     복구
                 </Button>
             )}
             <CommentActionModal
-                ModalUsage={modalUsage}
+                modalUsage={modalUsage}
                 show={defaultInputModalState}
                 onHide={() => {
                     setDefaultInputModalState(false);
                 }}
             />
-        </>
+        </div>
     );
 };
 
+/**
+ * 좋아요, 싫어요
+ */
 export const InfoItemRenderer = (props) => {
     const { value } = props;
     return (
@@ -124,29 +147,22 @@ export const InfoItemRenderer = (props) => {
     );
 };
 
-export const DateItemRenderer = (props) => {
-    const { value } = props;
-    const firstTime = value && value.length > 10 ? value.substr(0, 10) : value;
-    const thirdTime = value && value.length > 10 ? value.substr(10, 6) : value;
+/**
+ * 계정 정보
+ */
+export const MemSiteRenderer = (props) => {
+    const { data } = props;
+    console.log(data);
     return (
         <>
-            <Col className="d-felx pl-0" style={{ lineHeight: '25px' }}>
-                {firstTime}
-            </Col>
-            <Col className="d-felx pl-0" style={{ lineHeight: '25px' }}>
-                {thirdTime}
-            </Col>
+            <p className="mb-0">test</p>
         </>
     );
 };
 
-export const CommentItemRenderer = (props) => {
-    const { value } = props;
-
-    return <>{value}</>;
-};
-
-// 차단 관리에서 차단 복원 버튼 처리.
+/**
+ * 차단 관리에서 차단 복원 버튼 처리.
+ */
 export const BanneButtonRenderer = (props) => {
     const {
         value: { usedYn, seqNo },
@@ -188,13 +204,13 @@ export const BanneButtonRenderer = (props) => {
 
     // 차단 복원 버튼
     return (
-        <div className="d-flex align-items-center">
+        <div className="h-100 d-flex align-items-center">
             {usedYn === 'Y' ? (
-                <Button variant="outline-table-btn2" className="mr-2" size="sm" onClick={() => handleClickRestoreButton()}>
+                <Button variant="outline-table-btn2" className="mr-2" size="sm" onClick={handleClickRestoreButton}>
                     복원
                 </Button>
             ) : (
-                <Button variant="outline-table-btn" className="mr-2" size="sm" onClick={() => handleClickBanneButton()}>
+                <Button variant="outline-table-btn" className="mr-2" size="sm" onClick={handleClickBanneButton}>
                     차단
                 </Button>
             )}
@@ -202,7 +218,9 @@ export const BanneButtonRenderer = (props) => {
     );
 };
 
-// 차단 히스토리 버튼
+/**
+ * 차단 히스토리 버튼
+ */
 export const HistoryButtonRenderer = ({ value }) => {
     const [historyState, setHistoryState] = useState(false);
 
@@ -211,8 +229,8 @@ export const HistoryButtonRenderer = ({ value }) => {
     };
 
     return (
-        <div>
-            <MokaIcon iconName="fal-history" onClick={() => handleClickHistoryModal()} />
+        <div className="h-100 d-flex align-items-center">
+            <MokaIcon iconName="fal-history" onClick={handleClickHistoryModal} />
 
             <BannedHistoryModal
                 Element={value}

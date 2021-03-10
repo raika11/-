@@ -48,6 +48,12 @@ public class DpsApiConstants {
     public static final String ARTICLE_SECTION_LIST = "list";
 
     /**
+     * 기사 미리보기 관련 API
+     **/
+    public static final String ARTICLE_PREVIEW = "article.preview";
+    public static final String RARTICLE_PREVIEW = "rarticle.preview";
+
+    /**
      * 편집(데스킹) API
      **/
     public static final String DESKING = "desking";

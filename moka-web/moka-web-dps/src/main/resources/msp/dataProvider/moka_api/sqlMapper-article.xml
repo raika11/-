@@ -123,7 +123,8 @@
   <select id="articleN" parameterType="map" resultType="map" resultMap="map,map,map,map"
     statementType="CALLABLE">
     {call UPU_15RE_ARTICLE_SEL(
-      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y'
       ) }
   </select>
 

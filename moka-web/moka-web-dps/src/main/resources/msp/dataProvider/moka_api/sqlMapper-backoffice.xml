@@ -3,10 +3,10 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dps.backoffice">
 
-  <resultMap id="wmap" type="hashmap"/>
+  <resultMap id="bmap" type="hashmap"/>
 
   <!-- desking.work -->
-  <select id="deskingWork" parameterType="hashmap" resultType="hashmap" resultMap="wmap,wmap"
+  <select id="deskingWork" parameterType="hashmap" resultType="hashmap" resultMap="bmap,bmap"
     statementType="CALLABLE">
     {call USP_WMS_DESKING_WORK_LIST_SEL(
       #{ids, mode=IN, jdbcType=VARCHAR, javaType=string},
@@ -18,73 +18,22 @@
       ) }
   </select>
 
-  <!-- rcv article basic -->
-  <select id="rcvArticleBasic" parameterType="hashmap" resultType="hashmap">
-    select A.*, SOURCE_NAME, SOURCE_BASEURL, SOURCE_TYPE, A.TITLE AS ART_TITLE
-    from TB_RCV_ARTICLE_BASIC A,
-         TB_ARTICLE_SOURCE B
-    where A.SOURCE_CODE = B.SOURCE_CODE
-      AND A.RID = #{rid}
-  </select>
-  <!-- rcv article content -->
-  <select id="rcvArticleContent" parameterType="hashmap" resultType="hashmap">
-    select CONTENT AS ART_CONTENT
-    FROM TB_RCV_ARTICLE_BASIC
-    where RID = #{rid}
-  </select>
-  <!-- rcv article reporter -->
-  <select id="rcvArticleReporter" parameterType="hashmap" resultType="hashmap">
-    select B.*
-    from TB_RCV_ARTICLE_REPORTER A,
-         TB_15RE_REPORTER B
-    where A.RID = #{rid}
-      AND A.REPORTER_NAME = B.REP_NAME
-      AND A.REPORTER_EMAIL = B.REP_EMAIL1
-  </select>
-  <!-- rcv article mastercode -->
-  <select id="rcvArticleMastercode" parameterType="hashmap" resultType="hashmap">
-    select MAS.*
-    from TB_RCV_ARTICLE_CODE RCODE,
-         TB_RCV_CODE_CONV RCONV,
-         TB_MASTERCODE MAS,
-         TB_RCV_ARTICLE_BASIC RART
-    where RCODE.RID = #{rid}
-      AND RCODE.CODE_ID = RCONV.FR_CODE
-      AND RCODE.RID = RART.RID
-      AND RCONV.SOURCE_CODE = RART.SOURCE_CODE
-      AND RCONV.TO_CODE = MAS.MASTER_CODE
-    order by RCODE.CODE_ORD
-  </select>
-  <!-- rcv article servicemap -->
-  <select id="rcvArticleServicemap" parameterType="hashmap" resultType="hashmap">
-    select B.*
-    from TB_SERVICE_MAP B
-    where EXISTS(
-            select MAS.*
-            from TB_RCV_ARTICLE_CODE RCODE,
-                 TB_RCV_CODE_CONV RCONV,
-                 TB_MASTERCODE MAS,
-                 TB_RCV_ARTICLE_BASIC RART
-            where RCODE.RID = #{rid}
-              AND RCODE.CODE_ID = RCONV.FR_CODE
-              AND RCODE.RID = RART.RID
-              AND RCONV.SOURCE_CODE = RART.SOURCE_CODE
-              AND RCONV.TO_CODE = MAS.MASTER_CODE
-              AND MAS.MASTER_CODE = B.MASTER_CODE
-            )
-  </select>
-  <!-- rcv article keyword -->
-  <select id="rcvArticleKeyword" parameterType="hashmap" resultType="hashmap">
-    SELECT *
-    FROM TB_RCV_ARTICLE_KEYWORD
-    WHERE RID = #{rid}
-  </select>
-  <!-- rcv article multi -->
-  <select id="rcvArticleMulti" parameterType="hashmap" resultType="hashmap">
-    select *
-    from TB_RCV_ARTICLE_COMPONENT
-    where RID = #{rid}
+  <!-- article preview -->
+  <select id="articlePreview" parameterType="hashmap" resultType="hashmap"
+    resultMap="bmap,bmap,bmap,bmap"
+    statementType="CALLABLE">
+    {call UPU_15RE_ARTICLE_SEL(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      null
+      ) }
   </select>
 
-
+  <!-- rcv article preview-->
+  <select id="rarticlePreview" parameterType="hashmap" resultType="hashmap"
+    resultMap="bmap,bmap,bmap"
+    statementType="CALLABLE">
+    {call UPA_RCV_ARTICLE_BASIC_SEL(
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
 </mapper>

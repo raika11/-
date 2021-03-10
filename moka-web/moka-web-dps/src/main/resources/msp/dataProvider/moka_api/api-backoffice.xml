@@ -19,18 +19,26 @@
     </keys>
   </api>
 
-  <api id="rcvArticle" expire="0">
-    <description>수신기사 기본 정보를 조회한다.</description>
+  <api id="article.preview" resultWrap="N">
+    <description>기사 상세 정보를 조회한다.(미리보기용)</description>
     <parameter>
-      <rid desc="수신기사Id">[0-9]{1,9}</rid>
+      <totalId desc="기사Id" type="number" required="Y">[0-9]{1,9}</totalId>
     </parameter>
-    <request resultName="BASIC">dps.backoffice.rcvArticleBasic</request>
-    <request resultName="CONTENT">dps.backoffice.rcvArticleContent</request>
-    <request resultName="REPORTER">dps.backoffice.rcvArticleReporter</request>
-    <request resultName="MASTERCODE">dps.backoffice.rcvArticleMastercode</request>
-    <request resultName="SERVICEMAP">dps.backoffice.rcvArticleServicemap</request>
-    <request resultName="KEYWORD">dps.backoffice.rcvArticleKeyword</request>
-    <request resultName="MULTI">dps.backoffice.rcvArticleMulti</request>
+    <request dmlType="sp" setNames="_DATA,CODE,REPORTER,COMPONENT">dps.backoffice.articlePreview
+    </request>
+    <request type="module">jmnet.moka.web.dps.module.ArticleModule</request>
+    <keys>
+      totalId
+    </keys>
+  </api>
+
+  <api id="rarticle.preview" resultWrap="N">
+    <description>수신기사 상세 정보를 조회한다.(미리보기용)</description>
+    <parameter>
+      <rid desc="수신기사Id" type="number" required="Y">[0-9]{1,9}</rid>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA,CODE,REPORTER">dps.backoffice.rarticlePreview</request>
+    <request type="module">jmnet.moka.web.dps.module.ArticleModule</request>
     <keys>
       rid
     </keys>

@@ -15,6 +15,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.code.dto.CodeSearchDTO;
 import jmnet.moka.core.tps.mvc.code.entity.Mastercode;
@@ -93,11 +94,12 @@ public class MastercodeRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         QServiceMap serviceMap = QServiceMap.serviceMap;
 
         JPQLQuery<Mastercode> query = queryFactory
-                .select(Projections.fields(Mastercode.class, master.as("masterCode"), master.as("serviceEngname"), master.as("sectionEngname"),
-                        master.as("contentEngname"), master.as("serviceKorname"), master.as("sectionKorname"), master.as("contentKorname"),
-                        master.as("usedYn"), master.as("codeOrd"), serviceMap.frstCode.as("frstCode"), serviceMap.scndCode.as("scndCode"),
+                .select(Projections.fields(Mastercode.class, master.masterCode, master.serviceEngname, master.sectionEngname, master.contentEngname,
+                        master.serviceKorname, master.sectionKorname, master.contentKorname, master.usedYn, master.codeOrd,
+                        serviceMap.serviceCode.as("serviceCode"), serviceMap.frstCode.as("frstCode"), serviceMap.scndCode.as("scndCode"),
                         serviceMap.frstKorNm.as("frstKorNm"), serviceMap.scndKorNm.as("scndKorNm")))
                 .from(master)
+                .where(master.usedYn.eq(MokaConstants.YES))
                 .leftJoin(serviceMap)
                 .on(master.masterCode.eq(serviceMap.masterCode))
                 .fetchJoin();

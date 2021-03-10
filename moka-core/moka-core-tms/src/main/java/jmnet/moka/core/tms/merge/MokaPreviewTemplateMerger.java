@@ -80,7 +80,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         }
         Environment env = this.appContext.getBean(Environment.class);
         String[] profiles = env.getActiveProfiles();
-        String domainUrl = (profiles.length == 0?"http://":"https://") + domainItem.get(ItemConstants.DOMAIN_URL) + "/" + pagePath;
+        String domainUrl = (profiles.length == 0 ? "http://" : "https://") + domainItem.get(ItemConstants.DOMAIN_URL) + "/" + pagePath;
         int firstMetaIndex = sb.indexOf("<meta");
         if (firstMetaIndex < 0) {
             firstMetaIndex = sb.indexOf("<META");
@@ -105,7 +105,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
     private MergeContext createMergeContext(boolean preview) {
         MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
         // TMS의 PagePathResolver, MergeHandler에서 설정하는 context 정보를 추가한다.
-        if ( preview ) {
+        if (preview) {
             mergeContext
                     .getMergeOptions()
                     .setPreview(preview);
@@ -134,7 +134,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         mergeContext.set(MokaConstants.MERGE_PATH, pageItem.get(ItemConstants.PAGE_URL));
 
         // 카테고리 설정
-        HttpParamMap httpParamMap = (HttpParamMap)mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
+        HttpParamMap httpParamMap = (HttpParamMap) mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
         httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, pageItem.getString(ItemConstants.PAGE_CATEGORY));
         this.setCodesAndMenus(pageItem.getString(ItemConstants.PAGE_DOMAIN_ID), pageItem, mergeContext);
         return mergeContext;
@@ -142,26 +142,26 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
     public StringBuilder merge(String pageItemId)
             throws TemplateMergeException, TemplateParseException, DataLoadException, TemplateLoadException {
-        PageItem pageItem = (PageItem) this.templateLoader.getItem(MokaConstants.ITEM_PAGE,pageItemId);
+        PageItem pageItem = (PageItem) this.templateLoader.getItem(MokaConstants.ITEM_PAGE, pageItemId);
         MergeContext mergeContext = createMergeContext(pageItem, false);
         return super.merge(MokaConstants.ITEM_PAGE, pageItemId, mergeContext);
     }
 
-    public String mergeSource(String temsSource) throws TemplateMergeException {
+    public String mergeSource(String temsSource)
+            throws TemplateMergeException {
         StringBuilder sb;
         try {
             TemplateItem templateItem = new TemplateItem();
             templateItem.put(ItemConstants.TEMPLATE_ID, "temp");
             templateItem.put(ItemConstants.TEMPLATE_BODY, temsSource);
             TemplateRoot templateRoot = new TpTemplateRoot(templateItem);
-            sb = new StringBuilder(templateRoot.getTemplateSize()*2);
+            sb = new StringBuilder(templateRoot.getTemplateSize() * 2);
             MergeContext mergeContext = createMergeContext(false);
             templateRoot.merge(this, mergeContext, sb);
         } catch (Exception e) {
-            throw new TemplateMergeException("Template Merge Fail : temporary merge",
-                    e);
+            throw new TemplateMergeException("Template Merge Fail : temporary merge", e);
         }
-        return sb == null? "" : sb.toString();
+        return sb == null ? "" : sb.toString();
     }
 
     public StringBuilder merge(PageItem pageItem, MergeItem wrapItem, boolean mergePage)
@@ -180,9 +180,15 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
         if (wrapItem != null) {
             if (mergePage) { // page를 머지하고, wrapItem을 highlight
-                mergeContext.getMergeOptions().setWrapItem(true);
-                mergeContext.getMergeOptions().setShowItem(wrapItem.getItemType());
-                mergeContext.getMergeOptions().setShowItemId(wrapItem.getItemId());
+                mergeContext
+                        .getMergeOptions()
+                        .setWrapItem(true);
+                mergeContext
+                        .getMergeOptions()
+                        .setShowItem(wrapItem.getItemType());
+                mergeContext
+                        .getMergeOptions()
+                        .setShowItemId(wrapItem.getItemId());
                 this.setItem(wrapItem.getItemType(), wrapItem.getItemId(), wrapItem);
             } else { // wrapItem을 머지
                 itemType = wrapItem.getItemType();
@@ -242,6 +248,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
     /**
      * 기사페이지 미리보기
+     *
      * @param articlePageItem
      * @param totalId
      * @return
@@ -257,9 +264,9 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("totalId", totalId.toString());
         JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE, paramMap, true);
-        Map<String, Object> articleInfo = (Map<String, Object>)jsonResult.get("article");
+        Map<String, Object> articleInfo = (Map<String, Object>) jsonResult.get("article");
         this.insertSubTitle(articleInfo);
-        this.setEPaper(articleInfo,mergeContext);
+        this.setEPaper(articleInfo, mergeContext);
         mergeContext.set("article", articleInfo);
         mergeContext.set(MokaConstants.MERGE_PATH, "/article/" + totalId.toString());
         this.setCodesAndMenus(loader, articleInfo, mergeContext);
@@ -294,23 +301,26 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
     private void setEPaper(Map<String, Object> articleInfo, MergeContext mergeContext) {
         Object source = articleInfo.get("source");
-        if ( source == null || ((Map)source).size() ==0) {return;}
-        Map<String,Object> soruceMap = (Map<String,Object>)source;
+        if (source == null || ((Map) source).size() == 0) {
+            return;
+        }
+        Map<String, Object> soruceMap = (Map<String, Object>) source;
         Object typeSetting = articleInfo.get("typeSetting");
-        if ( typeSetting == null || ((Map)typeSetting).size() ==0) {return;}
-        Map<String,Object> typeSettingMap = (Map<String,Object>)typeSetting;
+        if (typeSetting == null || ((Map) typeSetting).size() == 0) {
+            return;
+        }
+        Map<String, Object> typeSettingMap = (Map<String, Object>) typeSetting;
         String nowHour = McpDate
                 .nowStr()
                 .substring(0, 13);
         // 오전 06시 이후 링크 노출
-        Object serviceTimeObj = articleInfo
-                .get("SERVICE_DAYTIME");
-        if ( serviceTimeObj instanceof JSONResult && ((JSONResult)serviceTimeObj).isEmpty()) {
+        Object serviceTimeObj = articleInfo.get("SERVICE_DAYTIME");
+        if (serviceTimeObj instanceof JSONResult && ((JSONResult) serviceTimeObj).isEmpty()) {
             return;
-        } else if ( serviceTimeObj == null){
+        } else if (serviceTimeObj == null) {
             return;
         }
-        String serviceTime = ((String)serviceTimeObj).substring(0, 11) + "06";
+        String serviceTime = ((String) serviceTimeObj).substring(0, 11) + "06";
         if (nowHour.compareTo(serviceTime) <= 0) {
             return;
         }
@@ -413,8 +423,13 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         DataLoader loader = this.getDataLoader();
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("totalId", totalId.toString());
-        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE, paramMap, true);
+        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE_PREVIEW, paramMap, true);
+
+        // 기사정보 변경
         Map<String, Object> articleInfo = rebuildInfoArticle(jsonResult, categoryList, reporterList, tagList, title, subTitle, content);
+
+        this.insertSubTitle(articleInfo);
+        this.setEPaper(articleInfo, mergeContext);
         mergeContext.set("article", articleInfo);
         mergeContext.set(MokaConstants.MERGE_PATH, "/article/" + totalId.toString());
         this.setCodesAndMenus(loader, articleInfo, mergeContext);
@@ -431,35 +446,17 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         return sb;
     }
 
+    // 기사정보 변경
     private Map<String, Object> rebuildInfoArticle(JSONResult jsonResult, List<Map<String, Object>> categoryList,
             List<Map<String, Object>> reporterList, List<Map<String, Object>> tagList, String title, String subTitle, String content) {
-        Map<String, Object> article = new HashMap<>();
-        //        article.put("basic", jsonResult.getDataListFirst("BASIC"));
-        //        article.put("content", jsonResult.getDataList("CONTENT"));
-        //        article.put("reporter", jsonResult.getDataList("REPORTER"));
-        //        article.put("meta", jsonResult.getDataList("META"));
-        //        article.put("mastercode", jsonResult.getDataList("MASTERCODE"));
-        article.put("servicemap", jsonResult.getDataList("SERVICEMAP"));
-        //        article.put("keyword", jsonResult.getDataList("KEYWORD"));
-        //        article.put("clickcnt", jsonResult.getDataList("CLICKCNT"));
-        article.put("multi", jsonResult.getDataList("MULTI"));
-
-        Map<String, Object> basicJson = jsonResult.getDataListFirst("BASIC");
-        basicJson.replace("ART_TITLE", title);
-        basicJson.replace("ART_SUB_TITLE", subTitle);
-        article.put("basic", basicJson);
-        List<Map<String, Object>> contentList = jsonResult.getDataList("CONTENT");
-        if (contentList.size() > 0) {
-            contentList
-                    .get(0)
-                    .replace("ART_CONTENT", content);
-        }
-        article.put("content", contentList);
-        article.put("reporter", reporterList);
-        article.put("mastercode", categoryList);
-        article.put("keyword", tagList);
-
-        return article;
+        Map<String, Object> articleInfo = (Map<String, Object>) jsonResult.get("article");
+        articleInfo.put("codes", categoryList); // 분류변경
+        articleInfo.put("reporters", reporterList); // 기자변경
+        articleInfo.put("keywords", tagList);   // 태그변경
+        articleInfo.put("ART_TITLE", title);    // 제목변경
+        articleInfo.put("ART_SUB_TITLE", subTitle); // 부제목변경
+        articleInfo.put("ART_CONTENT", content);    // 본문변경
+        return articleInfo;
     }
 
     /**
@@ -487,8 +484,13 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         DataLoader loader = this.getDataLoader();
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("rid", rid.toString());
-        JSONResult jsonResult = loader.getJSONResult("rcvArticle", paramMap, true);
+        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.RARTICLE_PREVIEW, paramMap, true);
+
+        // 기사정보 변경
         Map<String, Object> articleInfo = rebuildInfoRcv(jsonResult, categoryList, reporterList, tagList);
+
+        this.insertSubTitle(articleInfo);
+        this.setEPaper(articleInfo, mergeContext);
         mergeContext.set("article", articleInfo);
         mergeContext.set(MokaConstants.MERGE_PATH, "/article/" + rid.toString());
         this.setCodesAndMenus(loader, articleInfo, mergeContext);
@@ -507,22 +509,11 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
     private Map<String, Object> rebuildInfoRcv(JSONResult jsonResult, List<Map<String, Object>> categoryList, List<Map<String, Object>> reporterList,
             List<Map<String, Object>> tagList) {
-        Map<String, Object> article = new HashMap<>();
-        article.put("basic", jsonResult.getDataListFirst("BASIC"));
-        article.put("content", jsonResult.getDataList("CONTENT"));
-        //        article.put("reporter", jsonResult.getDataList("REPORTER"));
-        //        article.put("meta", jsonResult.getDataList("META"));
-        //        article.put("mastercode", jsonResult.getDataList("MASTERCODE"));
-        article.put("servicemap", jsonResult.getDataList("SERVICEMAP"));
-        //        article.put("keyword", jsonResult.getDataList("KEYWORD"));
-        //        article.put("clickcnt", jsonResult.getDataList("CLICKCNT"));
-        article.put("multi", jsonResult.getDataList("MULTI"));
-
-        article.put("reporter", reporterList);
-        article.put("mastercode", categoryList);
-        article.put("keyword", tagList);
-
-        return article;
+        Map<String, Object> articleInfo = (Map<String, Object>) jsonResult.get("article");
+        articleInfo.put("codes", categoryList); // 분류변경
+        articleInfo.put("reporters", reporterList); // 기자변경
+        articleInfo.put("keywords", tagList);   // 태그변경
+        return articleInfo;
     }
 
 }

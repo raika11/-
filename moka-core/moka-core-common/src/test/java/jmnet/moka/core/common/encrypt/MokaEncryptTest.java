@@ -47,10 +47,4 @@ public class MokaEncryptTest {
         }
     }
 
-    @Test
-    public void membershipDecript()
-            throws Exception {
-        MokaCrypt mokaCrypt = new MokaCrypt("qsx#*03k8f*j3ldd0bkekf39f@(jbnd!");
-        logger.info("decrypt:{}",mokaCrypt.decrypt("NSRtzCZrFqM/M2W7GUCZNOz2LHHHBKO2+OETkJIInJu/OrGgEkvpbS/By/wNZcI8"));
-    }
 }

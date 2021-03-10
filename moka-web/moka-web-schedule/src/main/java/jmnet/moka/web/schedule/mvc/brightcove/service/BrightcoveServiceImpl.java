@@ -111,7 +111,7 @@ public class BrightcoveServiceImpl implements BrightcoveService {
 
 
     /**
-     * brightcove 통계데이터 조회
+     * brightcove jpod 통계데이터 조회
      *
      * @return
      */
@@ -125,6 +125,8 @@ public class BrightcoveServiceImpl implements BrightcoveService {
 
         String requestUrl = url;
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+        //String으로 response를 받으면 XML형태로 전달되는 관계로 getJson 추가
+        //ResponseEntity<String> responseEntity = restTemplateHelper.get(requestUrl, params, headers);
         ResponseEntity<JSONArray> responseEntity = restTemplateHelper.getJson(requestUrl, params, headers);
 
         List<Map<String, Object>> list = ResourceMapper

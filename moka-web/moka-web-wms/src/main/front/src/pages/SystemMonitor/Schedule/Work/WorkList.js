@@ -5,11 +5,11 @@ import AgGrid from './WorkAgGrid';
 /**
  * 스케줄 서버 관리 > 작업 목록
  */
-const WorkList = () => {
+const WorkList = ({ match }) => {
     return (
         <>
-            <Search />
-            <AgGrid />
+            <Search match={match} />
+            <AgGrid match={match} />
         </>
     );
 };

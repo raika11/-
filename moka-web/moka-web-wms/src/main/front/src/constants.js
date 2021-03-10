@@ -76,6 +76,8 @@ export const CODETYPE_API_TYPE = 'API_TYPE';
 export const CODETYPE_TOUR_AGE = 'TOUR_AGE';
 // 공통코드 : 벌크 전송 포털
 export const CODETYPE_BULK_SITE = 'BULK_SITE';
+// 공통코드 : 스케줄 작업 분류
+export const CODETYPE_GEN_CATE = 'GEN_CATE';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';

@@ -1,18 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
-
-import { MokaCard, MokaCardTabs } from '@/components';
+import { MokaCard } from '@/components';
 import RunState from './RunState/index';
 import Work from './Work/index';
 import DeleteWork from './DeleteWork/index';
 import DeployServer from './DeployServer/index';
+import { getGenCate } from '@/store/codeMgt';
 
 /**
- * 스케줄 서버 관리
+ * 시스템 모니터링 > 스케줄 서버 관리
  */
 const Schedule = ({ match }) => {
+    const dispatch = useDispatch();
     const [activeKey, setActiveKey] = useState(0);
 
     const tabs = [<RunState match={match} />, <Work match={match} />, <DeleteWork match={match} />, <DeployServer match={match} />];
@@ -36,6 +38,10 @@ const Schedule = ({ match }) => {
     //     }
     //     // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [parentKey]);
+    useEffect(() => {
+        // 기타코드 스케줄 작업 목록
+        dispatch(getGenCate());
+    }, [dispatch]);
 
     return (
         <>

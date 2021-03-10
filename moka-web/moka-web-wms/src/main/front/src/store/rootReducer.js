@@ -48,6 +48,7 @@ import editLog from '@store/editLog/editLogReducer';
 import searchKeyword from '@store/searchKeyword/searchKeywordReducer';
 import quiz from '@store/survey/quiz/quizReducer';
 import mic from '@store/mic/micReducer';
+import schedule from '@store/schedule/scheduleReducer';
 
 export default combineReducers({
     toastr,
@@ -98,4 +99,5 @@ export default combineReducers({
     searchKeyword,
     mic,
     quiz,
+    schedule,
 });

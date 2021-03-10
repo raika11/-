@@ -16,15 +16,15 @@ const Work = (props) => {
             <div className="mr-gutter d-flex flex-column" style={{ width: 892 }}>
                 <h2 style={{ marginBottom: '20px' }}>작업 목록</h2>
                 <Suspense>
-                    <WorkList />
+                    <WorkList match={match} />
                 </Suspense>
             </div>
 
             {/* 작업 등록, 수정 */}
             <Switch>
-                <Route path={[`${match.path}/work-list/add`, `${match.path}/work-list/:seqNo`]}>
+                <Route path={[`${match.path}/work-list/add`, `${match.path}/work-list/:jobSeq`]}>
                     <div className="flex-fill">
-                        <WorkEdit />
+                        <WorkEdit match={match} />
                     </div>
                 </Route>
             </Switch>

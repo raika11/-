@@ -3,6 +3,8 @@ export default [
         headerName: 'ID',
         field: 'templateSeq',
         width: 50,
+        sortable: true,
+        comparator: () => 0,
     },
     {
         headerName: '템플릿명',
@@ -13,6 +15,8 @@ export default [
         cellClassRules: {
             'usedyn-n': (params) => params.data.usedYn === 'N',
         },
+        sortable: true,
+        comparator: () => 0,
     },
     {
         headerName: '위치그룹',

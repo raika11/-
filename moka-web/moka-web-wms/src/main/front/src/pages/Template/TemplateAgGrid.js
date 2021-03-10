@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaTable, MokaTableTypeButton } from '@components';
 import { TemplateThumbTable } from '@pages/Template/components';
 import { API_BASE_URL } from '@/constants';
-import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/template';
+import { initialState, GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/template';
 import CopyModal from './modals/CopyModal';
 
 /**
@@ -17,14 +17,7 @@ const TemplateAgGrid = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const UPLOAD_PATH_URL = useSelector(({ app }) => app.UPLOAD_PATH_URL);
     const loading = useSelector(({ loading }) => loading[GET_TEMPLATE_LIST]);
-    const { total, list, search, template } = useSelector((store) => ({
-        total: store.template.total,
-        list: store.template.list,
-        search: store.template.search,
-        template: store.template.template,
-    }));
-
-    //state
+    const { total, list, search, template } = useSelector(({ template }) => template);
     const [listType, setListType] = useState('list');
     const [rowData, setRowData] = useState([]);
     const [copyModalShow, setCopyModalShow] = useState(false);
@@ -54,6 +47,17 @@ const TemplateAgGrid = ({ onDelete, match }) => {
      */
     const handleClickAdd = () => history.push(`${match.path}/add`);
 
+    /**
+     * 테이블 sort 변경
+     * @param {object} params instance
+     */
+    const handleSortChange = (params) => {
+        const sortModel = params.api.getSortModel();
+        const sort = sortModel[0] ? `${sortModel[0].colId},${sortModel[0].sort}` : initialState.search.sort;
+        let temp = { ...search, sort, page: 0 };
+        dispatch(getTemplateList(changeSearchOption(temp)));
+    };
+
     useEffect(() => {
         if (list.length > 0) {
             setRowData(
@@ -79,11 +83,7 @@ const TemplateAgGrid = ({ onDelete, match }) => {
         <>
             {/* 버튼 그룹 */}
             <div className="d-flex mb-14">
-                <MokaTableTypeButton
-                    onSelect={(selectedKey) => {
-                        setListType(selectedKey);
-                    }}
-                />
+                <MokaTableTypeButton onSelect={(selectedKey) => setListType(selectedKey)} />
                 <div className="pt-0">
                     <Button variant="positive" onClick={handleClickAdd}>
                         템플릿 등록
@@ -105,6 +105,7 @@ const TemplateAgGrid = ({ onDelete, match }) => {
                     size={search.size}
                     displayPageNum={3}
                     onChangeSearchOption={handleChangeSearchOption}
+                    onSortChanged={handleSortChange}
                     preventRowClickCell={['delete']}
                     selected={template.templateSeq}
                 />

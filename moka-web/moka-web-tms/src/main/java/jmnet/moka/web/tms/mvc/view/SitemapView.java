@@ -1,4 +1,4 @@
-package jmnet.moka.core.tms.mvc.view;
+package jmnet.moka.web.tms.mvc.view;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
-import jmnet.moka.core.tms.mvc.handler.SitemapHandler;
+import jmnet.moka.web.tms.mvc.handler.SitemapHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
-package jmnet.moka.core.tms.mvc.handler;
+package jmnet.moka.web.tms.mvc.handler;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +25,7 @@ import jmnet.moka.core.tms.mvc.HttpParamFactory;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.domain.ReservedMap;
+import jmnet.moka.core.tms.mvc.handler.AbstractHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,8 +111,7 @@ public class ArticleHandler extends AbstractHandler {
         MokaTemplateMerger templateMerger = this.domainTemplateMerger.getTemplateMerger(domainId);
         DataLoader loader = templateMerger.getDataLoader();
         // 기사조건 조회
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("totalId", articleId);
+        Map<String, Object> paramMap = Collections.singletonMap("totalId", articleId);
         JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE_FLAG, paramMap, true);
         Map<String, Object> flagMap = jsonResult.getDataListFirst();
         if ( flagMap == null ) {  // flag가 없으면...

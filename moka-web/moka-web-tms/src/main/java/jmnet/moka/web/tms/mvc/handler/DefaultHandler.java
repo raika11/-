@@ -1,8 +1,7 @@
-package jmnet.moka.core.tms.mvc.handler;
+package jmnet.moka.web.tms.mvc.handler;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.template.exception.TemplateLoadException;
@@ -24,6 +23,7 @@ import jmnet.moka.core.tms.mvc.HttpParamFactory;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.domain.ReservedMap;
+import jmnet.moka.core.tms.mvc.handler.AbstractHandler;
 import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

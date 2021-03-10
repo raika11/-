@@ -1,4 +1,4 @@
-package jmnet.moka.core.tms.mvc.view;
+package jmnet.moka.web.tms.mvc.view;
 
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;

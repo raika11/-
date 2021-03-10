@@ -1,4 +1,4 @@
-package jmnet.moka.core.tms.mvc.view;
+package jmnet.moka.web.tms.mvc.view;
 
 import java.awt.Image;
 import java.io.IOException;
@@ -7,7 +7,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

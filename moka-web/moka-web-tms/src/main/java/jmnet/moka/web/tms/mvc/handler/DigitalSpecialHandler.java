@@ -1,4 +1,4 @@
-package jmnet.moka.core.tms.mvc.handler;
+package jmnet.moka.web.tms.mvc.handler;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
+import jmnet.moka.core.tms.mvc.handler.AbstractHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

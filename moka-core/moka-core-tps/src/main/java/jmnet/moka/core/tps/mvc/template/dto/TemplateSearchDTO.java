@@ -64,4 +64,26 @@ public class TemplateSearchDTO extends SearchDTO {
         this.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
         this.templateGroup = TpsConstants.SEARCH_TYPE_ALL;
     }
+
+    public Integer getSortFlag() {
+        // 1: TEMPLATE_NAME,ASC, 2: TEMPLATE_NAME,DESC, 3: TEMPLATE_SEQ,DESC, 4: TEMPLATE_SEQ,ASC
+        for (String sort : this.getSort()) {
+            sort = sort
+                    .toUpperCase()
+                    .replace(" ", "");
+            if (sort.equals("TEMPLATENAME,ASC")) {
+                return 1;
+            }
+            if (sort.equals("TEMPLATENAME,DESC")) {
+                return 2;
+            }
+            if (sort.equals("TEMPLATESEQ,ASC")) {
+                return 3;
+            }
+            if (sort.equals("TEMPLATESEQ,DESC")) {
+                return 4;
+            }
+        }
+        return 1;
+    }
 }

@@ -73,8 +73,8 @@ public class TemplateServiceImpl implements TemplateService {
                     .equals("artPageSeq") || search
                     .getSearchType()
                     .equals("containerSeq")) {
-                search.clearSort();
-                search.addSort("templateSeq,desc");
+                //search.clearSort();
+                //search.addSort("templateSeq,desc");
             }
             return templateMapper.findAll(search);
         }

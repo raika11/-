@@ -2,6 +2,7 @@ package jmnet.moka.web.schedule;
 
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import jmnet.moka.web.schedule.config.PropertyHolder;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,7 @@ import org.springframework.core.env.AbstractEnvironment;
 
 
 @SpringBootApplication
+@MapperScan(basePackages = "jmnet.moka.web.schedule.mvc.**.mapper")
 @EnableEncryptableProperties
 public class MokaScheduleApplication {
 

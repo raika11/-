@@ -17,6 +17,7 @@ const Reserved = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_RESERVED] || loading[SAVE_RESERVED] || loading[DELETE_RESERVED]);
+    const currentMenu = useSelector(({ auth }) => auth.currentMenu);
 
     /**
      * 삭제 버튼
@@ -59,14 +60,14 @@ const Reserved = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>예약어 관리</title>
-                <meta name="description" content="예약어 관리 페이지입니다." />
+                <title>{currentMenu?.menuDisplayNm}</title>
+                <meta name="description" content={`${currentMenu?.menuDisplayNm}페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             {/* 예약어 목록 */}
             <Col xs={5} className="p-0 pr-gutter">
-                <MokaCard width={412} className="w-100" bodyClassName="d-flex flex-column" title="예약어 검색">
+                <MokaCard width={412} className="w-100" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
                     <Suspense>
                         <ReservedList match={match} onDelete={handleClickDelete} />
                     </Suspense>

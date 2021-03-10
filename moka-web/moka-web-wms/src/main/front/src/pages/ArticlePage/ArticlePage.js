@@ -28,8 +28,9 @@ const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 const ArticlePage = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const articlePage = useSelector((store) => store.articlePage.articlePage);
-    const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
+    const articlePage = useSelector(({ articlePage }) => articlePage.articlePage);
+    const articleTypeRows = useSelector(({ codeMgt }) => codeMgt.articleTypeRows);
+    const currentMenu = useSelector(({ auth }) => auth.currentMenu);
 
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
@@ -170,8 +171,8 @@ const ArticlePage = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>기사페이지 관리</title>
-                <meta name="description" content="기사페이지관리 입니다." />
+                <title>{currentMenu?.menuDisplayNm}</title>
+                <meta name="description" content={`${currentMenu?.menuDisplayNm}페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
@@ -180,13 +181,13 @@ const ArticlePage = ({ match }) => {
                 width={412}
                 className="mr-gutter"
                 bodyClassName="d-flex flex-column"
-                title="기사페이지 검색"
+                title={currentMenu?.menuDisplayNm}
                 expansion={expansionState[0]}
                 onExpansion={handleListExpansion}
                 foldable
             >
                 <Suspense>
-                    <ArticlePageList match={match} onDelete={handleClickDelete} />
+                    <ArticlePageList match={match} />
                 </Suspense>
             </MokaCard>
 

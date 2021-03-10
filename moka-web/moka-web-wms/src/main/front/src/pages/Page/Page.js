@@ -30,6 +30,7 @@ const Page = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { page, tree, treeBySeq } = useSelector(({ page }) => page);
+    const currentMenu = useSelector(({ auth }) => auth.currentMenu);
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
@@ -204,15 +205,15 @@ const Page = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>페이지관리</title>
-                <meta name="description" content="페이지관리페이지입니다." />
+                <title>{currentMenu?.menuDisplayNm}</title>
+                <meta name="description" content={`${currentMenu?.menuDisplayNm}페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             {/* 리스트 */}
             <MokaCard
                 className="mr-gutter"
-                title="페이지관리"
+                title={currentMenu?.menuDisplayNm}
                 foldable
                 height={CARD_DEFAULT_HEIGHT}
                 expansion={expansionState[0]}

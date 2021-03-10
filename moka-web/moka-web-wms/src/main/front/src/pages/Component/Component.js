@@ -22,6 +22,7 @@ const Component = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const component = useSelector(({ component }) => component.component);
+    const currentMenu = useSelector(({ auth }) => auth.currentMenu);
 
     // state
     const [activeTabIdx, setActiveTabIdx] = useState(0);
@@ -95,13 +96,13 @@ const Component = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>컴포넌트 관리</title>
-                <meta name="description" content="컴포넌트 관리페이지입니다." />
+                <title>{currentMenu?.menuDisplayNm}</title>
+                <meta name="description" content={`${currentMenu?.menuDisplayNm}페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title="컴포넌트 관리">
+            <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
                 <Suspense>
                     <ComponentList onDelete={handleClickDelete} match={match} />
                 </Suspense>

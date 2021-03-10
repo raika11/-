@@ -23,13 +23,11 @@ const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 /**
  * 템플릿 관리
  */
-const Template = ({ match }) => {
+const Template = ({ match, menuById }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-
-    const { template } = useSelector((store) => ({
-        template: store.template.template,
-    }));
+    const template = useSelector(({ template }) => template.template);
+    const currentMenu = useSelector(({ auth }) => auth.currentMenu);
 
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
@@ -158,8 +156,8 @@ const Template = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>템플릿관리</title>
-                <meta name="description" content="템플릿관리페이지입니다." />
+                <title>{currentMenu?.menuDisplayNm}</title>
+                <meta name="description" content={`${currentMenu?.menuDisplayNm}페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
@@ -167,7 +165,7 @@ const Template = ({ match }) => {
             <MokaCard
                 width={412}
                 className="mr-gutter"
-                title="템플릿 관리"
+                title={currentMenu?.menuDisplayNm}
                 bodyClassName="d-flex flex-column"
                 expansion={expansionState[0]}
                 onExpansion={handleListExpansion}

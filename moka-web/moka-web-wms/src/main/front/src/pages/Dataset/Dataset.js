@@ -20,6 +20,7 @@ const Dataset = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const dataset = useSelector(({ dataset }) => dataset.dataset);
+    const currentMenu = useSelector(({ auth }) => auth.currentMenu);
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     /**
@@ -84,13 +85,13 @@ const Dataset = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>데이터셋관리</title>
-                <meta name="description" content="데이터셋관리페이지입니다." />
+                <title>{currentMenu?.menuDisplayNm}</title>
+                <meta name="description" content={`${currentMenu?.menuDisplayNm}페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title="데이터셋 관리">
+            <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
                 <Suspense>
                     <DatasetList onDelete={handleClickDelete} match={match} />
                 </Suspense>

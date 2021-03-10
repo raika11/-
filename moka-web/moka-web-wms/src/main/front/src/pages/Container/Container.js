@@ -27,10 +27,8 @@ const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 const Container = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-
-    const { container } = useSelector((store) => ({
-        container: store.container.container,
-    }));
+    const container = useSelector(({ container }) => container.container);
+    const currentMenu = useSelector(({ auth }) => auth.currentMenu);
 
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
@@ -194,8 +192,8 @@ const Container = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>컨테이너 관리</title>
-                <meta name="description" content="컨테이너 관리페이지입니다." />
+                <title>{currentMenu?.menuDisplayNm}</title>
+                <meta name="description" content={`${currentMenu?.menuDisplayNm}페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
@@ -203,7 +201,7 @@ const Container = ({ match }) => {
             <MokaCard
                 width={412}
                 className="mr-gutter"
-                title="컨테이너 관리"
+                title={currentMenu?.menuDisplayNm}
                 bodyClassName="d-flex flex-column"
                 foldable
                 expansion={expansionState[0]}

@@ -9,7 +9,7 @@ import { GET_ARTICLE_PAGE_LIST, getArticlePageList, changeSearchOption } from '@
 /**
  * 템플릿 AgGrid 컴포넌트
  */
-const ArticlePageAgGrid = ({ match, onDelete }) => {
+const ArticlePageAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_ARTICLE_PAGE_LIST]);
@@ -46,12 +46,11 @@ const ArticlePageAgGrid = ({ match, onDelete }) => {
                 list.map((data) => {
                     return {
                         ...data,
-                        onDelete,
                     };
                 }),
             );
         }
-    }, [list, onDelete]);
+    }, [list]);
 
     return (
         <>

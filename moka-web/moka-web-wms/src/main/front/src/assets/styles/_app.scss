@@ -61,7 +61,6 @@
 @import '4-utilities/close';
 
 // 3rd party plugins
-@import 'react-resizable/css/styles';
 @import "@fullcalendar/bootstrap/main";
 
 // 3rd party plugin styles
@@ -77,6 +76,7 @@
 @import '5-vendor/fullcalendar';
 @import '5-vendor/fontawesome-pro/scss/solid';
 @import '5-vendor/fontawesome-pro/scss/regular';
+@import '5-vendor/react-resizable';
 
 // 서울시스템 추가
 @import 'non_responsive';

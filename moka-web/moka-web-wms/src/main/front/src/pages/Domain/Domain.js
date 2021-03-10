@@ -17,17 +17,13 @@ const DomainList = React.lazy(() => import('./DomainList'));
 const Domain = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-
-    const { loading } = useSelector((store) => ({
-        loading: store.loading[GET_DOMAIN] || store.loading[SAVE_DOMAIN],
-    }));
+    const loading = useSelector(({ loading }) => loading[GET_DOMAIN] || loading[SAVE_DOMAIN]);
+    const currentMenu = useSelector(({ auth }) => auth.currentMenu);
 
     /**
      * 도메인 등록
      */
-    const handleAddClickDomain = () => {
-        history.push(`${match.path}/add`);
-    };
+    const handleAddClickDomain = () => history.push(`${match.path}/add`);
 
     /**
      * 도메인 삭제
@@ -92,14 +88,14 @@ const Domain = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>도메인 관리</title>
-                <meta name="description" content="도메인 관리페이지입니다." />
+                <title>{currentMenu?.menuDisplayNm}</title>
+                <meta name="description" content={`${currentMenu?.menuDisplayNm}페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             {/* 리스트 */}
             <Col xs={5} className="p-0 pr-gutter">
-                <MokaCard className="w-100" height={CARD_DEFAULT_HEIGHT} bodyClassName="d-flex flex-column" title="도메인 관리">
+                <MokaCard className="w-100" height={CARD_DEFAULT_HEIGHT} bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
                     <div className="mb-14 d-flex justify-content-end">
                         <Button variant="positive" onClick={handleAddClickDomain}>
                             도메인 등록

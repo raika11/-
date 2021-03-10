@@ -67,14 +67,13 @@ const TemplateAgGrid = ({ onDelete, match }) => {
                         id: data.templateSeq,
                         name: data.templateName,
                         thumb,
-                        onDelete,
                     };
                 }),
             );
         } else {
             setRowData([]);
         }
-    }, [UPLOAD_PATH_URL, list, onDelete]);
+    }, [UPLOAD_PATH_URL, list]);
 
     return (
         <>

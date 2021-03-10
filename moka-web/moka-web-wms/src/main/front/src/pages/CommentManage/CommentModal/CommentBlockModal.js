@@ -203,7 +203,7 @@ const CommentBlockModal = (props) => {
     /**
      * 저장 버튼 클릭 이벤트
      */
-    const handleClickSave = () => {
+    const handleClickSave = (e) => {
         let formData = new FormData();
         formData.append('tagType', modalUsage.usage);
         formData.append('usedYn', 'Y');
@@ -318,7 +318,7 @@ const CommentBlockModal = (props) => {
             id="commentBlockModal"
             draggable
         >
-            <Form>
+            <Form onSubmit={(e) => e.preventDefault()}>
                 <Form.Row className="mb-2 align-items-center">
                     {modalUsage.usage && modalUsage.usage === `comment` && (
                         <>

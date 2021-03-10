@@ -24,7 +24,7 @@
     statementType="CALLABLE">
     {call UPU_15RE_ARTICLE_SEL(
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      null
+      'Y'
       ) }
   </select>
 

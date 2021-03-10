@@ -566,9 +566,12 @@ public class MergeServiceImpl implements MergeService {
         // 기사페이지 정보 조회
         ArticlePage articlePage = articlePageService.findByArticePage(artType, domainId);
         if (articlePage == null) {
-            String message = messageByLocale.get("tps.common.error.no-data");
-            tpsLogger.fail(message, true);
-            throw new NoDataException(message);
+            articlePage = articlePageService.findByArticePage(TpsConstants.DEFAULT_ART_TYPE, domainId);
+            if (articlePage == null) {
+                String message = messageByLocale.get("tps.common.error.no-data");
+                tpsLogger.fail(message, true);
+                throw new NoDataException(message);
+            }
         }
         ArticlePageDTO articlePageDto = modelMapper.map(articlePage, ArticlePageDTO.class);
 

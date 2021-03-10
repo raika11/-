@@ -232,6 +232,7 @@ public class ArticleServiceImpl implements ArticleService {
                 String[] otherReps = articleDto
                         .getArtReporter()
                         .split("\\.");
+                int ordNo = 1;
                 for (String rep : otherReps) {
                     long cnt = reporterList
                             .stream()
@@ -243,14 +244,23 @@ public class ArticleServiceImpl implements ArticleService {
                         ArticleReporterVO vo = ArticleReporterVO
                                 .builder()
                                 .repName(rep)
+                                .ordNo(ordNo)
                                 .build();
                         reporterList.add(vo);
                     }
+                    ordNo++;
                 }
             }
 
             if (reporterList.size() > 0) {
-                articleDto.setReporterList(reporterList);
+                List<ArticleReporterVO> sortList = reporterList
+                        .stream()
+                        .sorted((prev, next) -> {
+                            return (int) (long) (prev.getOrdNo() - next.getOrdNo());
+                        })
+                        .collect(Collectors.toList());
+                ;
+                articleDto.setReporterList(sortList);
             }
 
             // 태그목록

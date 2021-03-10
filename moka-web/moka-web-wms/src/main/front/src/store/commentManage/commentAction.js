@@ -14,12 +14,6 @@ export const INITIALIZE_BANNED_PARAMS = 'comment/INITIALIZE_BANNED_PARAMS';
 export const initializeBannedParams = createAction(INITIALIZE_BANNED_PARAMS);
 
 /**
- * 공통 구분값 처리
- */
-export const [GET_INIT_DATA, GET_INIT_DATA_SUCCESS, GET_INIT_DATA_FAILURE] = createRequestActionTypes('comment/GET_INIT_DATA');
-export const getInitData = createAction(GET_INIT_DATA, (...actions) => actions);
-
-/**
  * 스토어 데이터 삭제
  */
 export const CLEAR_STORE = 'comment/CLEAR_COMMENT_ALL';
@@ -36,10 +30,18 @@ export const clearBlocksList = createAction(CLEAR_BLOCKS_LIST);
 export const clearBlockHistory = createAction(CLEAR_BLOCK_HISTORY);
 
 /**
+ * 댓글 화면 초기 설정 정보 조회
+ */
+export const [GET_INIT_DATA, GET_INIT_DATA_SUCCESS] = createRequestActionTypes('comment/GET_INIT_DATA');
+export const getInitData = createAction(GET_INIT_DATA, () => ({}));
+
+/**
  * 데이터 조회
  */
 export const [GET_COMMENT_LIST, GET_COMMENT_LIST_SUCCESS, GET_COMMENT_LIST_FAILURE] = createRequestActionTypes('comment/GET_COMMENT_LIST');
 export const getCommentList = createAction(GET_COMMENT_LIST, (...actions) => actions);
+export const [GET_COMMENTS_BLOCKS, GET_COMMENTS_BLOCKS_SUCCESS, GET_COMMENTS_BLOCKS_FAILURE] = createRequestActionTypes('comment/GET_COMMENTS_BLOCKS');
+export const getCommentsBlocks = createAction(GET_COMMENTS_BLOCKS, (...actions) => actions);
 
 /**
  * 데이터 변경
@@ -50,16 +52,10 @@ export const changeComment = createAction(CHANGE_COMMENT, (comment) => comment);
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
 /**
- * 댓글 삭제
+ * 댓글 상태 변경
  */
 export const [DELETE_COMMENT, DELETE_COMMENT_SUCCESS, DELETE_COMMENT_FAILURE] = createRequestActionTypes('comment/DELETE_COMMENT');
 export const deleteComment = createAction(DELETE_COMMENT, ({ cmtSeq, params, callback }) => ({ cmtSeq, params, callback }));
-
-/**
- * 차단 관리
- */
-export const [GET_COMMENTS_BLOCKS, GET_COMMENTS_BLOCKS_SUCCESS, GET_COMMENTS_BLOCKS_FAILURE] = createRequestActionTypes('comment/GET_COMMENTS_BLOCKS');
-export const getCommentsBlocks = createAction(GET_COMMENTS_BLOCKS, (...actions) => actions);
 
 export const CHANGE_BANNEDS_SEARCH_OPTION = 'comment/CHANGE_BANNEDS_SEARCH_OPTION';
 export const changeBannedsSearchOption = createAction(CHANGE_BANNEDS_SEARCH_OPTION, (search) => search);

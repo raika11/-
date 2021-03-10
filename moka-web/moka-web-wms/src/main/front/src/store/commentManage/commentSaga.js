@@ -1,38 +1,22 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { callApiAfterActions, errorResponse } from '@store/commons/saga';
+import { createRequestSaga, callApiAfterActions, errorResponse } from '@store/commons/saga';
 import toast from '@/utils/toastUtil';
 
 import * as act from './commentAction';
-import * as commentAPI from './commentApi';
+import * as api from './commentApi';
+
+/**
+ * 댓글 화면 초기 설정 정보 조회
+ */
+const getInitData = createRequestSaga(act.GET_INIT_DATA, api.getInitData);
 
 /**
  * 목록
  */
-const getCommentList = callApiAfterActions(act.GET_COMMENT_LIST, commentAPI.getCommentList, (state) => state.comment.comments);
-const getCommentsBlocksSaga = callApiAfterActions(act.GET_COMMENTS_BLOCKS, commentAPI.getCommentsBlocks, (state) => state.comment.banneds.commentsBlocks);
-// const getInitDataSaga = callApiAfterActions(act.GET_INIT_DATA, commentAPI.getInitData, (state) => state);
-
-// init data 임시.
-function* getInitDataSaga() {
-    yield put(startLoading(act.GET_INIT_DATA));
-
-    try {
-        let response = yield call(commentAPI.getInitData);
-
-        yield put({
-            type: act.GET_INIT_DATA_SUCCESS,
-            payload: response.data.body,
-        });
-    } catch (e) {
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
-    }
-
-    yield put(finishLoading(act.GET_INIT_DATA));
-}
+const getCommentList = callApiAfterActions(act.GET_COMMENT_LIST, api.getCommentList, (state) => state.comment.comments);
+const getCommentsBlocks = callApiAfterActions(act.GET_COMMENTS_BLOCKS, api.getCommentsBlocks, (state) => state.comment.banneds.commentsBlocks);
+// const getInitDataSaga = callApiAfterActions(act.GET_INIT_DATA, api.getInitData, (state) => state);
 
 /**
  * 등록/수정
@@ -49,9 +33,9 @@ function* saveBlock({ payload: { type, seqNo, blockFormData, callback } }) {
 
     try {
         if (type === 'UPDATE') {
-            response = yield call(commentAPI.putCommentsBlocks, { seqNo: seqNo, blockFormData: blockFormData });
+            response = yield call(api.putCommentsBlocks, { seqNo: seqNo, blockFormData: blockFormData });
         } else {
-            response = yield call(commentAPI.postCommentsBlocks, { blockFormData: blockFormData });
+            response = yield call(api.postCommentsBlocks, { blockFormData: blockFormData });
         }
         callbackData = response.data;
 
@@ -82,7 +66,7 @@ function* deleteComment({ payload: { cmtSeq, params, callback } }) {
     let response;
 
     try {
-        response = yield call(commentAPI.deleteComment, { cmtSeq: cmtSeq, params: params });
+        response = yield call(api.deleteComment, { cmtSeq: cmtSeq, params: params });
         callbackData = response.data;
     } catch (e) {
         callbackData = errorResponse(e);
@@ -107,7 +91,7 @@ function* blocksUsedSaga({ payload: { seqNo, usedYn, callback } }) {
     let response;
 
     try {
-        response = yield call(commentAPI.putCommentsBlocksUsed, { seqNo: seqNo, usedYn: usedYn, callback });
+        response = yield call(api.putCommentsBlocksUsed, { seqNo: seqNo, usedYn: usedYn, callback });
         callbackData = response.data;
     } catch (e) {
         callbackData = errorResponse(e);
@@ -123,7 +107,7 @@ function* blocksUsedSaga({ payload: { seqNo, usedYn, callback } }) {
 }
 
 // 차단 히스토리 목록 사가.
-// const getBlockHistorySaga = callApiAfterActions(act.GET_BLOCK_HISTORY, commentAPI.getBlockHistory, (e) => {
+// const getBlockHistorySaga = callApiAfterActions(act.GET_BLOCK_HISTORY, api.getBlockHistory, (e) => {
 //     console.log(e);
 // });
 
@@ -131,7 +115,7 @@ function* getBlockHistorySaga({ payload: { seqNo } }) {
     yield put(startLoading(act.GET_BLOCK_HISTORY));
 
     try {
-        let response = yield call(commentAPI.getBlockHistory, { seqNo: seqNo });
+        let response = yield call(api.getBlockHistory, { seqNo: seqNo });
         yield put({
             type: act.GET_BLOCK_HISTORY_SUCCESS,
             payload: response.data,
@@ -147,11 +131,11 @@ function* getBlockHistorySaga({ payload: { seqNo } }) {
 }
 
 export default function* commentSaga() {
+    yield takeLatest(act.GET_INIT_DATA, getInitData);
     yield takeLatest(act.GET_COMMENT_LIST, getCommentList);
     yield takeLatest(act.SAVE_BLOCKS, saveBlock);
     yield takeLatest(act.DELETE_COMMENT, deleteComment);
-    yield takeLatest(act.GET_COMMENTS_BLOCKS, getCommentsBlocksSaga);
+    yield takeLatest(act.GET_COMMENTS_BLOCKS, getCommentsBlocks);
     yield takeLatest(act.BLOCKS_USED, blocksUsedSaga);
-    yield takeLatest(act.GET_INIT_DATA, getInitDataSaga);
     yield takeLatest(act.GET_BLOCK_HISTORY, getBlockHistorySaga);
 }

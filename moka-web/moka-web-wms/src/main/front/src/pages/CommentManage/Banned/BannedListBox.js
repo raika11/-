@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import CommentAgGrid from '@pages/CommentManage/CommentAgGrid';
 import { GET_COMMENTS_BLOCKS } from '@store/commentManage';
 import { BannedColumnDefs } from '@pages/CommentManage/CommentAgGrid/CommentAgGridColumns';
@@ -15,14 +15,17 @@ const BannedListBox = () => {
     const [rowData, setRowData] = useState([]);
 
     // 스토어 연결.
-    const { pageGubun, list, total, search, loading } = useSelector((store) => ({
-        pageGubun: store.comment.banneds.pageGubun,
-        list: store.comment.banneds.commentsBlocks.list,
-        total: store.comment.banneds.commentsBlocks.total,
-        search: store.comment.banneds.commentsBlocks.search,
-        blockUsed: store.comment.blockUsed,
-        loading: store.loading[GET_COMMENTS_BLOCKS],
-    }));
+    const { pageGubun, list, total, search, loading } = useSelector(
+        (store) => ({
+            pageGubun: store.comment.banneds.pageGubun,
+            list: store.comment.banneds.commentsBlocks.list,
+            total: store.comment.banneds.commentsBlocks.total,
+            search: store.comment.banneds.commentsBlocks.search,
+            blockUsed: store.comment.blockUsed,
+            loading: store.loading[GET_COMMENTS_BLOCKS],
+        }),
+        shallowEqual,
+    );
 
     // 페이지 구분값 ( id, ip, word)
     const pageGubunMemo = useMemo(() => pageGubun, [pageGubun]);
@@ -133,93 +136,77 @@ const BannedListBox = () => {
     };
 
     useEffect(() => {
-        const inirGridRow = (data) => {
-            setRowData(
-                data.map((element) => {
-                    let tagValue = element.tagValue;
-                    let tagSource = '';
+        setRowData(
+            list.map((element) => {
+                let tagValue = element.tagValue;
+                let tagSource = '';
 
-                    if (pageGubunMemo === 'U' && tagValue.indexOf('@') > 0) {
-                        const tempTagValueArray = tagValue.split('@');
-                        tagValue = tempTagValueArray[0];
-                        tagSource = tempTagValueArray[1];
-                    }
+                if (pageGubunMemo === 'U' && tagValue.indexOf('@') > 0) {
+                    const tempTagValueArray = tagValue.split('@');
+                    tagValue = tempTagValueArray[0];
+                    tagSource = tempTagValueArray[1];
+                }
 
-                    // 2021-01-25 09:31  tagDesc 내용과 등록자가 같이 붙어 있어서 _ 구분자로 앞에 내용만 뿌려주기로.
-                    let tagDesc = element.tagDesc;
+                // 2021-01-25 09:31  tagDesc 내용과 등록자가 같이 붙어 있어서 _ 구분자로 앞에 내용만 뿌려주기로.
+                let tagDesc = element.tagDesc;
 
-                    if (tagDesc && tagDesc !== undefined && tagDesc !== null && tagDesc.indexOf('_') > 0) {
-                        const tempTagDescArray = tagDesc.split('_');
-                        tagDesc = tempTagDescArray[0];
-                    }
+                if (tagDesc && tagDesc !== undefined && tagDesc !== null && tagDesc.indexOf('_') > 0) {
+                    const tempTagDescArray = tagDesc.split('_');
+                    tagDesc = tempTagDescArray[0];
+                }
 
-                    let regMemberId = '';
-                    let regMemberNm = '';
-                    let regMemberInfo = '';
+                let regMemberId = '';
+                let regMemberNm = '';
+                let regMemberInfo = '';
 
-                    if (element.regMember) {
-                        regMemberId = element.regMember.memberId;
-                        regMemberNm = element.regMember.memberNm;
-                        regMemberInfo = `${element.regMember.memberNm}(${element.regMember.memberId})`;
-                    }
+                if (element.regMember) {
+                    regMemberId = element.regMember.memberId;
+                    regMemberNm = element.regMember.memberNm;
+                    regMemberInfo = `${element.regMember.memberNm}(${element.regMember.memberId})`;
+                }
 
-                    let regDt = element.regDt && element.regDt.length > 10 ? element.regDt.substr(0, 16) : element.regDt;
+                let regDt = element.regDt && element.regDt.length > 10 ? element.regDt.substr(0, 16) : element.regDt;
 
-                    return {
-                        bannedElement: element,
+                return {
+                    ...element,
+                    bannedElement: element,
+                    tagValue: tagValue,
+                    tagSource: tagSource,
+                    tagDesc: tagDesc,
+                    cdNm: element.tagDivCode.cdNm,
+                    regDt: regDt,
+                    memberId: regMemberId,
+                    memberNm: regMemberNm,
+                    regMemberInfo: regMemberInfo,
+                    historyInfo: {
                         tagType: element.tagType,
-                        tagValue: tagValue,
-                        tagSource: tagSource,
+                        tagValue: element.tagValue,
                         seqNo: element.seqNo,
-                        tagDesc: tagDesc,
-                        tagDiv: element.tagDiv,
-                        tagDivCode: element.tagDivCode,
-                        cdNm: element.tagDivCode.cdNm,
-                        tagRegDt: element.tagRegDt,
-                        usedYn: element.usedYn,
-                        regDt: regDt,
-                        memberId: regMemberId,
-                        memberNm: regMemberNm,
-                        regMemberInfo: regMemberInfo,
-                        historyInfo: {
-                            tagType: element.tagType,
-                            tagValue: element.tagValue,
-                            seqNo: element.seqNo,
-                        },
-                    };
-                }),
-            );
-        };
-
-        // list 가 업데이트 되고 로딩이 끝나면 그리드 목록 업데이트.
-        if (list) {
-            setRowData([]);
-            inirGridRow(list);
-        }
+                    },
+                };
+            }),
+        );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [list]);
 
     return (
-        <>
-            {rowData.length > 0 && (
-                <CommentAgGrid
-                    loading={loading}
-                    columnDefs={BannedColumnDefs[pageGubunMemo]}
-                    total={total}
-                    page={search.page}
-                    size={search.size}
-                    rowData={rowData}
-                    getRowNodeId={(params) => params.seqNo}
-                    onRowSelected={(e) => handleGridRowSelected(e)}
-                    onColumnResized={(e) => onColumnResized(e)}
-                    onColumnVisible={(e) => onColumnVisible(e)}
-                    // onRowDoubleClicked={(e) => handleDoubleClickListRow(e)}
-                    onGridReady={(e) => onGridReady(e)}
-                    changeSearchOption={(e) => handleChangeSearchOption(e)}
-                    preventRowClickCell={['bannedElement', 'historyInfo']}
-                />
-            )}
-        </>
+        <CommentAgGrid
+            loading={loading}
+            columnDefs={BannedColumnDefs[pageGubunMemo]}
+            total={total}
+            page={search.page}
+            size={search.size}
+            rowData={rowData}
+            rowHeight={50}
+            getRowNodeId={(params) => params.seqNo}
+            onRowSelected={(e) => handleGridRowSelected(e)}
+            onColumnResized={(e) => onColumnResized(e)}
+            onColumnVisible={(e) => onColumnVisible(e)}
+            // onRowDoubleClicked={(e) => handleDoubleClickListRow(e)}
+            onGridReady={(e) => onGridReady(e)}
+            changeSearchOption={(e) => handleChangeSearchOption(e)}
+            preventRowClickCell={['bannedElement', 'historyInfo']}
+        />
     );
 };
 

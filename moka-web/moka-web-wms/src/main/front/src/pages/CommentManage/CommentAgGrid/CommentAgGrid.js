@@ -3,7 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import clsx from 'clsx';
 import { MokaPagination, MokaLoader } from '@components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
-import { DeleteButtonRenderer, DateItemRenderer, UserInfoRenderer, BanneButtonRenderer, HistoryButtonRenderer, CommentItemRenderer } from './CommentGridRenderer';
+import { DeleteButtonRenderer, DateItemRenderer, UserInfoRenderer, BanneButtonRenderer, HistoryButtonRenderer, MemSiteRenderer } from './CommentGridRenderer';
 
 /**
  * 댓글 관리 > 댓글 목록 AgGrid
@@ -20,6 +20,7 @@ const CommentAgGrid = (props) => {
         onGridReady,
         changeSearchOption,
         rowData,
+        rowHeight,
         onRowDoubleClicked,
         getRowHeight,
         onRowSelected,
@@ -39,8 +40,8 @@ const CommentAgGrid = (props) => {
                 <AgGridReact
                     immutableData
                     defaultColDef={{
-                        wrapText: true,
-                        autoHeight: true,
+                        wrapText: false,
+                        // autoHeight: true,
                         // suppressColumnsToolPanel: true,
                         // suppressMenu: true,
                         // suppressSizeToFit: true,
@@ -52,8 +53,8 @@ const CommentAgGrid = (props) => {
                         // resizable: true,
                     }}
                     onGridReady={onGridReady}
-                    rowData={rowData ? rowData : []}
-                    rowHeight={32}
+                    rowData={rowData}
+                    rowHeight={rowHeight}
                     getRowNodeId={getRowNodeId}
                     columnDefs={columnDefs}
                     localeText={{ noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' }}
@@ -72,7 +73,8 @@ const CommentAgGrid = (props) => {
                         userInfoRenderer: UserInfoRenderer,
                         banneButtonRenderer: BanneButtonRenderer,
                         historyButtonRenderer: HistoryButtonRenderer,
-                        commentItemRenderer: CommentItemRenderer,
+                        memSiteRenderer: MemSiteRenderer,
+                        // commentItemRenderer: CommentItemRenderer,
                     }}
                     preventRowClickCell={preventRowClickCell}
                     // suppressRowClickSelection={false}

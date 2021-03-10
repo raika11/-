@@ -9,11 +9,11 @@ import moment from 'moment';
  */
 export const initialState = {
     common: {
-        COMMENT_MEDIA_CODE: [],
-        COMMENT_ORDER_CODE: [],
-        COMMENT_SITE_CODE: [],
-        COMMENT_STATUS_CODE: [],
-        COMMENT_TAG_DIV_CODE: [],
+        // COMMENT_MEDIA_CODE: [],
+        // COMMENT_ORDER_CODE: [],
+        // COMMENT_SITE_CODE: [],
+        // COMMENT_STATUS_CODE: [],
+        // COMMENT_TAG_DIV_CODE: [],
     },
     comments: {
         total: 0,
@@ -32,7 +32,6 @@ export const initialState = {
             endDt: moment().format('YYYY-MM-DD'),
             memType: '',
             groupId: '',
-            // contentId: '',
         },
     },
     banneds: {
@@ -81,7 +80,9 @@ export default handleActions(
                 draft.comments.search = newSearch;
             });
         },
-        // 차단 관리 검색 옵션.
+        /**
+         * 차단 관리 검색 옵션.
+         */
         [act.CHANGE_BANNEDS_SEARCH_OPTION]: (state, { payload: newSearch }) => {
             return produce(state, (draft) => {
                 draft.banneds.commentsBlocks.search = newSearch;
@@ -105,29 +106,22 @@ export default handleActions(
                 draft.invalidList = payload;
             });
         },
-        // banned 메뉴 구분값
-        [act.INITIALIZE_BANNED_PARAMS]: (state, { payload }) => {
+        /**
+         * 댓글 화면 초기 설정 정보 조회
+         */
+        [act.GET_INIT_DATA_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.banneds.pagePathName = payload.pagePathName;
-                draft.banneds.pageGubun = payload.pageGubun;
-                draft.banneds.pageName = payload.pageName;
+                draft.common = body;
             });
         },
         /**
          * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,
-        // 공통 구분값 처리.
-        [act.GET_INIT_DATA_SUCCESS]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.common = payload;
-            });
-        },
-        // 댓글 목록 초기화.
         [act.CLEAR_LIST]: (state) => {
             return produce(state, (draft) => {
-                draft.comments.total = initialState.comments.total;
                 draft.comments.list = initialState.comments.list;
+                draft.comments.total = initialState.comments.total;
                 draft.error = initialState.error;
             });
         },
@@ -136,24 +130,55 @@ export default handleActions(
                 draft.comments.search = initialState.search;
             });
         },
+        [act.CLEAR_BLOCK_HISTORY]: (state) => {
+            return produce(state, (draft) => {
+                draft.blockHistory = initialState.blockHistory;
+            });
+        },
+        [act.CLEAR_BLOCKS_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.banneds.commentsBlocks.list = initialState.banneds.commentsBlocks.list;
+            });
+        },
+        /**
+         * 차단 메뉴 구분값
+         */
+        [act.INITIALIZE_BANNED_PARAMS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.banneds.pagePathName = payload.pagePathName;
+                draft.banneds.pageGubun = payload.pageGubun;
+                draft.banneds.pageName = payload.pageName;
+            });
+        },
         /**
          * 목록
          */
         [act.GET_COMMENT_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                // draft.error = initialState.error;
                 draft.comments.list = body.list;
                 draft.comments.total = body.totalCnt;
+                draft.comments.error = initialState.error;
             });
         },
         [act.GET_COMMENT_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                // draft.error = payload;
                 draft.comments.list = initialState.comments.list;
                 draft.comments.total = initialState.comments.total;
+                draft.comments.error = payload;
             });
         },
-
+        [act.GET_COMMENTS_BLOCKS_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.banneds.commentsBlocks.list = body.list;
+                draft.banneds.commentsBlocks.total = body.totalCnt;
+            });
+        },
+        [act.GET_COMMENTS_BLOCKS_FAILURE]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.banneds.commentsBlocks.list = initialState.banneds.commentsBlocks.list;
+                draft.banneds.commentsBlocks.total = initialState.banneds.commentsBlocks.total;
+            });
+        },
         /**
          * 삭제
          */
@@ -168,28 +193,13 @@ export default handleActions(
                 draft.commentError = payload;
             });
         },
-
-        [act.GET_COMMENTS_BLOCKS_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.banneds.commentsBlocks.list = body.list;
-                draft.banneds.commentsBlocks.total = body.totalCnt;
-            });
-        },
-
-        [act.CLEAR_BLOCK_HISTORY]: (state) => {
-            return produce(state, (draft) => {
-                draft.blockHistory = initialState.blockHistory;
-            });
-        },
+        /**
+         * 조회
+         */
         [act.GET_BLOCK_HISTORY_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.blockHistory.list = body.list;
                 draft.blockHistory.total = body.totalCnt;
-            });
-        },
-        [act.CLEAR_BLOCKS_LIST]: (state) => {
-            return produce(state, (draft) => {
-                draft.banneds.commentsBlocks.list = initialState.banneds.commentsBlocks.list;
             });
         },
     },

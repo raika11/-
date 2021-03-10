@@ -121,16 +121,16 @@ const CommentSearch = ({ selectBannedItem }) => {
         <Form className="mb-14">
             <Form.Row>
                 <Col xs={1} className="p-0 pr-2">
-                    <MokaInput as="select" value={searchData.groupId} onChange={(e) => handleChangeSearchInput(e)} name="groupId" id="groupId">
+                    <MokaInput as="select" value={searchData.groupId} onChange={handleChangeSearchInput} name="groupId" id="groupId">
                         <option value="">전체매체</option>
-                        {COMMENT_MEDIA_CODE.map((item, index) => (
-                            <option key={index} value={item.dtlCd}>
-                                {item.cdNm}
-                            </option>
-                        ))}
+                        {COMMENT_MEDIA_CODE &&
+                            COMMENT_MEDIA_CODE.map((item, index) => (
+                                <option key={index} value={item.dtlCd}>
+                                    {item.cdNm}
+                                </option>
+                            ))}
                     </MokaInput>
                 </Col>
-
                 <Col xs={3} className="p-0 pr-2 d-flex">
                     <MokaInput
                         as="dateTimePicker"
@@ -155,58 +155,51 @@ const CommentSearch = ({ selectBannedItem }) => {
                         }}
                     />
                 </Col>
-
                 <Col xs={2} className="p-0 pr-2 d-flex">
-                    <MokaInput as="select" className="mr-1" value={searchData.status} onChange={(e) => handleChangeSearchInput(e)} name="status" id="status">
+                    <MokaInput as="select" className="mr-1" value={searchData.status} onChange={handleChangeSearchInput} name="status" id="status">
                         <option value="Y">상태전체</option>
-                        {COMMENT_STATUS_CODE.map((status, index) => (
-                            <option key={index} value={status.code}>
-                                {status.name}
-                            </option>
-                        ))}
+                        {COMMENT_STATUS_CODE &&
+                            COMMENT_STATUS_CODE.map((status, index) => (
+                                <option key={index} value={status.code}>
+                                    {status.name}
+                                </option>
+                            ))}
                     </MokaInput>
-
-                    <MokaInput as="select" className="ml-1" value={searchData.orderType} onChange={(e) => handleChangeSearchInput(e)} name="orderType" id="orderType">
+                    <MokaInput as="select" className="ml-1" value={searchData.orderType} onChange={handleChangeSearchInput} name="orderType" id="orderType">
                         <option value="">전체</option>
-                        {COMMENT_ORDER_CODE.map((order, index) => (
-                            <option key={index} value={order.code}>
-                                {order.name}
-                            </option>
-                        ))}
+                        {COMMENT_ORDER_CODE &&
+                            COMMENT_ORDER_CODE.map((order, index) => (
+                                <option key={index} value={order.code}>
+                                    {order.name}
+                                </option>
+                            ))}
                     </MokaInput>
                 </Col>
-
                 <Col xs={2} className="p-0 pr-2 d-flex">
-                    <MokaInput as="select" className="mr-1" value={searchData.memType} onChange={(e) => handleChangeSearchInput(e)} name="memType" id="memType">
+                    <MokaInput as="select" className="mr-1" value={searchData.memType} onChange={handleChangeSearchInput} name="memType" id="memType">
                         <option value="">전체계정</option>
-                        {COMMENT_SITE_CODE.map((item, index) => (
-                            <option key={index} value={item.dtlCd}>
-                                {item.cdNm}
-                            </option>
-                        ))}
+                        {COMMENT_SITE_CODE &&
+                            COMMENT_SITE_CODE.map((item, index) => (
+                                <option key={index} value={item.dtlCd}>
+                                    {item.cdNm}
+                                </option>
+                            ))}
                     </MokaInput>
-
-                    <MokaInput as="select" className="ml-1" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
+                    <MokaInput as="select" className="ml-1" value={searchData.searchType} onChange={handleChangeSearchInput} name="searchType" id="searchType">
                         <option value="memNm">이름</option>
                         <option value="memId">ID</option>
                         <option value="cont">댓글 내용</option>
                     </MokaInput>
                 </Col>
                 <Col xs={4} className="p-0 d-flex">
-                    <MokaSearchInput
-                        value={searchData.keyword}
-                        onChange={(e) => handleChangeSearchInput(e)}
-                        onSearch={(e) => handleClickSearchButton(e)}
-                        name="keyword"
-                        className="flex-fill mr-1"
-                    />
-                    <Button variant="negative" className="flex-shrink-0 mr-1" onClick={() => handleClickReloadButton()}>
+                    <MokaSearchInput className="mr-1 flex-fill" value={searchData.keyword} onChange={handleChangeSearchInput} onSearch={handleClickSearchButton} name="keyword" />
+                    <Button variant="negative" className="mr-1 flex-shrink-0" onClick={handleClickReloadButton}>
                         초기화
                     </Button>
-                    <AuthButton variant="primary" className="mr-1 flex-shrink-0" onClick={() => handleClickBlockButton()}>
+                    <AuthButton variant="primary" className="mr-1 flex-shrink-0" onClick={handleClickBlockButton}>
                         등록
                     </AuthButton>
-                    <AuthButton variant="negative" className="flex-shrink-0" onClick={() => handleCLickDeleteButton()}>
+                    <AuthButton variant="negative" className="flex-shrink-0" onClick={handleCLickDeleteButton}>
                         삭제
                     </AuthButton>
                 </Col>
@@ -214,11 +207,10 @@ const CommentSearch = ({ selectBannedItem }) => {
 
             {defaultInputModalState && (
                 <CommentBlockModal
-                    ModalUsage={modalUsage}
+                    modalUsage={modalUsage}
                     selectBannedItem={selectBannedItem}
                     show={defaultInputModalState}
                     onHide={() => {
-                        // dispatch(getCommentList());
                         setDefaultInputModalState(false);
                     }}
                     onSave={(e, i) => {

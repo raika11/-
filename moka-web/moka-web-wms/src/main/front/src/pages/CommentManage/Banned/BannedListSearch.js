@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
@@ -68,27 +68,31 @@ export const blockWordReason = [
 /**
  * 댓글 관리 > 차단 목록 검색
  */
-const BannedListSearch = ({ pathName }) => {
+const BannedListSearch = ({ match }) => {
     const dispatch = useDispatch();
 
     // 차단 등록 모달 에 전달 할 값
     const [modalUsage, setModalUsage] = useState({
         usage: '',
     });
-
     // 스토어 연결.
-    const { pageGubun, storeSearch, COMMENT_SITE_CODE, COMMENT_TAG_DIV_CODE } = useSelector((store) => ({
-        COMMENT_SITE_CODE: store.comment.common.COMMENT_SITE_CODE,
-        COMMENT_TAG_DIV_CODE: store.comment.common.COMMENT_TAG_DIV_CODE,
-        pageGubun: store.comment.banneds.pageGubun,
-        storeSearch: store.comment.banneds.commentsBlocks.search,
-    }));
+    const { pageGubun, storeSearch, COMMENT_SITE_CODE, COMMENT_TAG_DIV_CODE } = useSelector(
+        (store) => ({
+            COMMENT_SITE_CODE: store.comment.common.COMMENT_SITE_CODE,
+            COMMENT_TAG_DIV_CODE: store.comment.common.COMMENT_TAG_DIV_CODE,
+            pageGubun: store.comment.banneds.pageGubun,
+            storeSearch: store.comment.banneds.commentsBlocks.search,
+        }),
+        shallowEqual,
+    );
 
     const [searchData, setSearchData] = useState(initialState.banneds.commentsBlocks.search);
     // 차단 모달 열기 닫기.
     const [defaultInputModalState, setDefaultInputModalState] = useState(false);
 
-    // 검색 데이터 변경.
+    /**
+     * 검색 데이터 변경.
+     */
     const handleChangeSearchInput = (e) => {
         const { name, value } = e.target;
         setSearchData({
@@ -99,8 +103,7 @@ const BannedListSearch = ({ pathName }) => {
 
     // 검색 버튼 처리.
     const handleClickSearchButton = () => {
-        dispatch(changeBannedsSearchOption(searchData));
-        dispatch(getCommentsBlocks());
+        dispatch(getCommentsBlocks(changeBannedsSearchOption({ ...searchData, page: 0 })));
     };
 
     const handleOnClickMemoryButton = () => {
@@ -121,7 +124,7 @@ const BannedListSearch = ({ pathName }) => {
     }, [pageGubun]);
 
     useEffect(() => {
-        // 최초 로딩시 URL 구분 값으로 검색 옵션( 차단 리스트 에 필요한 구분값.) 설정 및 목록 가지고 오기.
+        // 최초 로딩시 URL 구분 값으로 검색 옵션(차단 리스트 에 필요한 구분값) 설정 및 목록 가지고 오기.
         const initStoreSearch = (pathname) => {
             let tagtype = '';
 
@@ -138,21 +141,10 @@ const BannedListSearch = ({ pathName }) => {
                 usage: tagtype,
             });
 
-            dispatch(
-                changeBannedsSearchOption({
-                    ...initialState.banneds.commentsBlocks.search,
-                    tagType: tagtype,
-                }),
-            );
-
-            setSearchData({
-                ...initialState.banneds.commentsBlocks.search,
-                tagType: tagtype,
-            });
-            dispatch(getCommentsBlocks());
+            dispatch(getCommentsBlocks(changeBannedsSearchOption({ ...searchData, tagType: tagtype })));
         };
 
-        initStoreSearch(pathName);
+        initStoreSearch(match.path);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -162,120 +154,117 @@ const BannedListSearch = ({ pathName }) => {
 
     return (
         <Form className="mb-14">
-            {(function () {
-                // 차단 IP 관리 일 경우.
-                if (pageGubun === 'I') {
-                    return (
-                        <>
-                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={searchData.tagDiv} onChange={(e) => handleChangeSearchInput(e)} name="tagDiv" id="tagDiv">
-                                    <option value="">전체</option>
-                                    {COMMENT_TAG_DIV_CODE.map((item, index) => (
-                                        <option key={index} value={item.dtlCd}>
-                                            {item.cdNm}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                            </div>
-                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
-                                    <option value="">전체</option>
-                                    {blockIpReason.map((media, index) => (
-                                        <option key={index} value={media.value}>
-                                            {media.name}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                            </div>
-                        </>
-                    );
-                } else if (pageGubun === 'U') {
-                    return (
-                        <>
-                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={searchData.media} onChange={(e) => handleChangeSearchInput(e)} name="media" id="media">
-                                    <option value="">전체계정</option>
-                                    {COMMENT_SITE_CODE.map((item, index) => (
-                                        <option key={index} value={item.dtlCd}>
-                                            {item.cdNm}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                            </div>
-                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={searchData.tagDiv} onChange={(e) => handleChangeSearchInput(e)} name="tagDiv" id="tagDiv">
-                                    <option value="">전체</option>
-                                    {COMMENT_TAG_DIV_CODE.map((item, index) => (
-                                        <option key={index} value={item.dtlCd}>
-                                            {item.cdNm}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                            </div>
-                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
-                                    <option value="">전체</option>
-                                    {blockUserReason.map((media, index) => (
-                                        <option key={index} value={media.value}>
-                                            {media.name}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                            </div>
-                        </>
-                    );
-                } else if (pageGubun === 'W') {
-                    return (
-                        <>
-                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={searchData.tagDiv} onChange={(e) => handleChangeSearchInput(e)} name="tagDiv" id="tagDiv">
-                                    <option value="">전체</option>
-                                    {COMMENT_TAG_DIV_CODE.map((item, index) => (
-                                        <option key={index} value={item.dtlCd}>
-                                            {item.cdNm}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                            </div>
-                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
-                                    <option value="">전체</option>
-                                    {blockWordReason.map((media, index) => (
-                                        <option key={index} value={media.value}>
-                                            {media.name}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                            </div>
-                        </>
-                    );
-                }
-            })()}
-
+            {/* 차단 IP 관리 일 경우 */}
+            {pageGubun === 'I' && (
+                <>
+                    <div className="mr-2 d-inline-block" style={{ width: 140 }}>
+                        <MokaInput as="select" value={searchData.tagDiv} onChange={handleChangeSearchInput} name="tagDiv" id="tagDiv">
+                            <option value="">전체</option>
+                            {COMMENT_TAG_DIV_CODE &&
+                                COMMENT_TAG_DIV_CODE.map((item, index) => (
+                                    <option key={index} value={item.dtlCd}>
+                                        {item.cdNm}
+                                    </option>
+                                ))}
+                        </MokaInput>
+                    </div>
+                    <div className="mr-2 d-inline-block" style={{ width: 140 }}>
+                        <MokaInput as="select" value={searchData.searchType} onChange={handleChangeSearchInput} name="searchType" id="searchType">
+                            <option value="">전체</option>
+                            {blockIpReason.map((media, index) => (
+                                <option key={index} value={media.value}>
+                                    {media.name}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </div>
+                </>
+            )}
+            {/* 차단 ID 관리 일 경우 */}
+            {pageGubun === 'U' && (
+                <>
+                    <div className="mr-2 d-inline-block" style={{ width: 140 }}>
+                        <MokaInput as="select" value={searchData.media} onChange={handleChangeSearchInput} name="media" id="media">
+                            <option value="">전체계정</option>
+                            {COMMENT_SITE_CODE &&
+                                COMMENT_SITE_CODE.map((item, index) => (
+                                    <option key={index} value={item.dtlCd}>
+                                        {item.cdNm}
+                                    </option>
+                                ))}
+                        </MokaInput>
+                    </div>
+                    <div className="mr-2 d-inline-block" style={{ width: 140 }}>
+                        <MokaInput as="select" value={searchData.tagDiv} onChange={handleChangeSearchInput} name="tagDiv" id="tagDiv">
+                            <option value="">전체</option>
+                            {COMMENT_TAG_DIV_CODE &&
+                                COMMENT_TAG_DIV_CODE.map((item, index) => (
+                                    <option key={index} value={item.dtlCd}>
+                                        {item.cdNm}
+                                    </option>
+                                ))}
+                        </MokaInput>
+                    </div>
+                    <div className="mr-2 d-inline-block" style={{ width: 140 }}>
+                        <MokaInput as="select" value={searchData.searchType} onChange={handleChangeSearchInput} name="searchType" id="searchType">
+                            <option value="">전체</option>
+                            {blockUserReason.map((media, index) => (
+                                <option key={index} value={media.value}>
+                                    {media.name}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </div>
+                </>
+            )}
+            {/* 차단 금지어 관리 일 경우 */}
+            {pageGubun === 'W' && (
+                <>
+                    <div className="mr-2 d-inline-block" style={{ width: 140 }}>
+                        <MokaInput as="select" value={searchData.tagDiv} onChange={handleChangeSearchInput} name="tagDiv" id="tagDiv">
+                            <option value="">전체</option>
+                            {COMMENT_TAG_DIV_CODE &&
+                                COMMENT_TAG_DIV_CODE.map((item, index) => (
+                                    <option key={index} value={item.dtlCd}>
+                                        {item.cdNm}
+                                    </option>
+                                ))}
+                        </MokaInput>
+                    </div>
+                    <div className="mr-2 d-inline-block" style={{ width: 140 }}>
+                        <MokaInput as="select" value={searchData.searchType} onChange={handleChangeSearchInput} name="searchType" id="searchType">
+                            <option value="">전체</option>
+                            {blockWordReason.map((media, index) => (
+                                <option key={index} value={media.value}>
+                                    {media.name}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </div>
+                </>
+            )}
             {/* 키워드 및 검색 버튼 */}
             <div className="mr-2 d-inline-block">
-                <MokaSearchInput value={searchData.keyword} onChange={(e) => handleChangeSearchInput(e)} onSearch={() => handleClickSearchButton()} name="keyword" />
+                <MokaSearchInput value={searchData.keyword} onChange={handleChangeSearchInput} onSearch={handleClickSearchButton} name="keyword" />
             </div>
             <div className="d-inline-block float-right">
                 <Button variant="positive" className="mr-1" onClick={() => setDefaultInputModalState(true)}>
                     등록
                 </Button>
-                <Button variant="negative" className="mr-1" onClick={() => handleOnClickApplyButton()}>
+                <Button variant="negative" className="mr-1" onClick={handleOnClickApplyButton}>
                     적용하기
                 </Button>
-                <Button variant="negative" onClick={() => handleOnClickMemoryButton()}>
+                <Button variant="negative" onClick={handleOnClickMemoryButton}>
                     메모리
                 </Button>
             </div>
-            {defaultInputModalState && (
-                <CommentBlockModal
-                    ModalUsage={modalUsage}
-                    show={defaultInputModalState}
-                    onHide={() => {
-                        setDefaultInputModalState(false);
-                    }}
-                />
-            )}
+            <CommentBlockModal
+                modalUsage={modalUsage}
+                show={defaultInputModalState}
+                onHide={() => {
+                    setDefaultInputModalState(false);
+                }}
+            />
         </Form>
     );
 };

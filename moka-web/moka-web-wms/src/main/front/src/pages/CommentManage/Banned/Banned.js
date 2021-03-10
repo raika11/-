@@ -1,21 +1,18 @@
 import React, { Suspense, useEffect, useState, useRef } from 'react';
-import { Helmet } from 'react-helmet';
-import { Switch, Route } from 'react-router-dom';
-import { initializeBannedParams, clearStore, getInitData } from '@store/commentManage';
 import { useDispatch } from 'react-redux';
-import useBreakpoint from '@hooks/useBreakpoint';
-import Row from 'react-bootstrap/Row';
+import { Helmet } from 'react-helmet';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
-import clsx from 'clsx';
-import { Col } from 'react-bootstrap';
-
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { initializeBannedParams, clearStore, getInitData } from '@store/commentManage';
 const BannedList = React.lazy(() => import('./BannedList'));
 
 /**
  * 댓글 관리 > 차단 관리
  */
 const Banned = ({ match, ...rest }) => {
-    const matchPoints = useBreakpoint();
+    const history = useHistory();
     const dispatch = useDispatch();
     const pathName = useRef(null);
     const [pagesParams, setPagesParams] = useState(initpagesParams);
@@ -23,7 +20,7 @@ const Banned = ({ match, ...rest }) => {
     useEffect(() => {
         // 라우터로 기본 공통 구분값 설정.
         const initPageParams = ({ path }) => {
-            const pathName = path.split('/').reverse()[0];
+            const pathName = path.replace('/', '');
             switch (pathName) {
                 case 'banned-id':
                     setPagesParams({
@@ -47,8 +44,7 @@ const Banned = ({ match, ...rest }) => {
                     });
                     break;
                 default:
-                    // 없는 데이터 처리는 어떻게?
-                    console.log('경로에서 페이지 데이터를 가지고 오지 못했습니다.');
+                    history.push('/404');
             }
         };
 
@@ -61,8 +57,8 @@ const Banned = ({ match, ...rest }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [match]);
 
-    // 파라미터가 변경 되면 store에 등록.
     useEffect(() => {
+        // 파라미터가 변경 되면 store에 등록.
         const storeInit = ({ pagePathName }) => {
             if (pagePathName !== '') {
                 dispatch(initializeBannedParams(pagesParams));
@@ -73,18 +69,18 @@ const Banned = ({ match, ...rest }) => {
     }, [pagesParams]);
 
     useEffect(() => {
+        dispatch(getInitData());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
         return () => {
             dispatch(clearStore());
         };
     }, [dispatch]);
 
-    useEffect(() => {
-        dispatch(getInitData());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     return (
-        <Container className="p-0 position-relative" fluid style={!(matchPoints.md || matchPoints.lg) ? { paddingRight: '48px' } : { paddingRight: 0 }}>
+        <Container className="p-0 position-relative" fluid>
             <Row className="m-0">
                 <Helmet>
                     <title>{`${pagesParams.pageName}`}</title>
@@ -98,9 +94,9 @@ const Banned = ({ match, ...rest }) => {
                         path={[`/${pagesParams.pagePathName}`]}
                         exact
                         render={() => (
-                            <Col sm={12} md={12} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
+                            <Col sm={12} md={12} className="p-0">
                                 <Suspense>
-                                    <BannedList {...rest} />
+                                    <BannedList match={match} />
                                 </Suspense>
                             </Col>
                         )}

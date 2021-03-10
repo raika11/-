@@ -86,8 +86,8 @@ public class BoardSaveDTO {
      */
     @ApiModelProperty(value = "1:일반 9:공지", required = true)
     @Builder.Default
-    @Pattern(regexp = "[1|9]$", message = "{tps.board.error.pattern.ordNo}")
-    private String ordNo = TpsConstants.BOARD_GENERAL_CONTENT;
+    @Min(value = 0, message = "{tps.board.error.min.ordNo}")
+    private Integer ordNo = TpsConstants.BOARD_GENERAL_CONTENT;
 
 
     /**

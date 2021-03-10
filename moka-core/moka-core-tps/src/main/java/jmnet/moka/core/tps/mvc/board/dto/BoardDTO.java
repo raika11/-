@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -179,8 +178,7 @@ public class BoardDTO {
      */
     @ApiModelProperty("1:일반 9:공지")
     @Builder.Default
-    @Pattern(regexp = "[1|9]{1}$", message = "{tps.board.error.pattern.ordNo}")
-    private String ordNo = TpsConstants.BOARD_GENERAL_CONTENT;
+    private Integer ordNo = TpsConstants.BOARD_GENERAL_CONTENT;
 
     /**
      * 내용
@@ -201,8 +199,57 @@ public class BoardDTO {
      * 주소
      */
     @ApiModelProperty("주소")
-    @Size(max = 512, message = "{tps.board.error.size.addr}")
     private String addr;
+
+    /**
+     * 답변 푸시 수신 여부
+     */
+    @ApiModelProperty("답변 푸시 수신 여부")
+    @Builder.Default
+    private String pushReceiveYn = MokaConstants.NO;
+
+    /**
+     * 답변 이메일 수신 여부
+     */
+    @ApiModelProperty("답변 이메일 수신 여부")
+    @Builder.Default
+    private String emailReceiveYn = MokaConstants.NO;
+
+    /**
+     * app os
+     */
+    @ApiModelProperty("app os")
+    private String appOs;
+
+    /**
+     * 디바이스 구분
+     */
+    @ApiModelProperty("디바이스 구분")
+    private String devDiv;
+
+    /**
+     * 디바이스 푸시 토큰
+     */
+    @ApiModelProperty("디바이스 푸시 토큰")
+    private String token;
+
+    /**
+     * 이메일 주소
+     */
+    @ApiModelProperty("이메일 주소")
+    private String email;
+
+    /**
+     * 휴대폰 번호
+     */
+    @ApiModelProperty("휴대폰 번호")
+    private String mobilePhone;
+
+    /**
+     * 신고페이지 url
+     */
+    @ApiModelProperty("신고페이지 url")
+    private String url;
 
     /**
      * J팟채널

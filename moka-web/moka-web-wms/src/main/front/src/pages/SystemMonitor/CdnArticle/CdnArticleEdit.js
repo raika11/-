@@ -202,7 +202,7 @@ const CdnArticleEdit = ({ match }) => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="메모" as="textarea" name="description" value={temp.description} onChange={handleChangeValue} inputProps={{ rows: 7 }} />
+                        <MokaInputLabel label="메모" as="textarea" name="memo" value={temp.memo} onChange={handleChangeValue} inputProps={{ rows: 7 }} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">

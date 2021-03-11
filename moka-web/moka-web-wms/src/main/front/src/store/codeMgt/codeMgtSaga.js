@@ -298,6 +298,7 @@ const getApiType = createReadOnlySaga(act.GET_API_TYPE, 'apiTypeRows', constants
 const getTourAge = createReadOnlySaga(act.GET_TOUR_AGE, 'tourAgeRows', constants.CODETYPE_TOUR_AGE);
 const getBulkSite = createReadOnlySaga(act.GET_BULK_SITE, 'bulkSiteRows', constants.CODETYPE_BULK_SITE);
 const getGenCate = createReadOnlySaga(act.GET_GEN_CATE, 'genCateRows', constants.CODETYPE_GEN_CATE);
+const getBoSchjob = createReadOnlySaga(act.GET_BO_SCHJOB, 'boSchjobRows', constants.CODETYPE_BO_SCHJOB);
 
 /** saga */
 export default function* codeMgt() {
@@ -342,6 +343,7 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_TOUR_AGE, getTourAge);
     yield takeLatest(act.GET_BULK_SITE, getBulkSite);
     yield takeLatest(act.GET_GEN_CATE, getGenCate);
+    yield takeLatest(act.GET_BO_SCHJOB, getBoSchjob);
 
     yield takeLatest(act.GET_SPECIAL_CHAR_CODE, getSpecialCharCode);
     yield takeLatest(act.SAVE_SPECIAL_CHAR_CODE, putSpecialCharCode);

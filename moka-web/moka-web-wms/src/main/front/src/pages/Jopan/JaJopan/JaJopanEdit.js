@@ -28,29 +28,31 @@ const JaJopanEdit = () => {
     }, [jopan]);
 
     useEffect(() => {
-        instance
-            .get(`jopan?sourceCode=${temp.sourceCode}&ho=${temp.ho}&pressDate=${temp.pressDate}&myun=${temp.myun}&section=${temp.section}&revision=${temp.revision}`)
-            .then(function (response) {
-                if (response.data) {
-                    if (!iframeRef.current) return;
-                    let doc = iframeRef.current.contentDocument;
-                    if (!doc) {
-                        iframeRef.current.src = 'about:blank';
-                        iframeRef.current.onload = function () {
-                            doc = iframeRef.current.contentDocument;
+        if (temp.sourceCode) {
+            instance
+                .get(`jopan?sourceCode=${temp.sourceCode}&ho=${temp.ho}&pressDate=${temp.pressDate}&myun=${temp.myun}&section=${temp.section}&revision=${temp.revision}`)
+                .then(function (response) {
+                    if (response.data) {
+                        if (!iframeRef.current) return;
+                        let doc = iframeRef.current.contentDocument;
+                        if (!doc) {
+                            iframeRef.current.src = 'about:blank';
+                            iframeRef.current.onload = function () {
+                                doc = iframeRef.current.contentDocument;
+                                doc.open();
+                                doc.write(response.data);
+                                doc.close();
+                                iframeRef.current.onload = null;
+                            };
+                        } else {
                             doc.open();
                             doc.write(response.data);
                             doc.close();
-                            iframeRef.current.onload = null;
-                        };
-                    } else {
-                        doc.open();
-                        doc.write(response.data);
-                        doc.close();
+                        }
+                        setLoding(false);
                     }
-                    setLoding(false);
-                }
-            });
+                });
+        }
     }, [temp]);
 
     return (

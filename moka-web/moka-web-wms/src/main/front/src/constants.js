@@ -78,6 +78,8 @@ export const CODETYPE_TOUR_AGE = 'TOUR_AGE';
 export const CODETYPE_BULK_SITE = 'BULK_SITE';
 // 공통코드 : 스케줄 작업 분류
 export const CODETYPE_GEN_CATE = 'GEN_CATE';
+// 공통코드 : 스케줄 예약 코드
+export const CODETYPE_BO_SCHJOB = 'BO_SCHJOB';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';

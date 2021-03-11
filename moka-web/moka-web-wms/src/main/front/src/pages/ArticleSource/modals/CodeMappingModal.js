@@ -104,20 +104,23 @@ const CodeMappingModal = (props) => {
                 <div className="w-100 d-flex align-items-center">
                     <p className="mb-0 mr-2">매체 코드 : {data.sourceCode}</p>
                     <p className="mb-0 mr-2">매체명 : {data.sourceName}</p>
-                    {/* 등록 */}
-                    <Button variant="outline-table-btn" onClick={handleClickAdd} style={{ position: 'absolute', left: 230 }}>
+                    {/* <Button variant="outline-table-btn" onClick={handleClickAdd} style={{ position: 'absolute', left: 385 }}>
                         등록
-                    </Button>
+                    </Button> */}
                 </div>
             }
             width={900}
-            height={600}
             id="code_mapping_modal"
             draggable
         >
             <Container fluid className="p-0 flex-fill">
                 <Row className="m-0">
                     <Col xs={6} className="p-0 pt-2 pr-gutter">
+                        <div className="mb-14 d-flex justify-content-end">
+                            <Button variant="outline-table-btn" onClick={handleClickAdd}>
+                                등록
+                            </Button>
+                        </div>
                         <AgGrid
                             show={show}
                             data={data}

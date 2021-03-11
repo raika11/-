@@ -407,7 +407,7 @@ const BoardsEdit = () => {
         >
             <>
                 {(function () {
-                    if (editState.page === 'board' && (editState.mode === 'add' || editState.mode === 'modify')) {
+                    if (loading === false && editState.page === 'board' && (editState.mode === 'add' || editState.mode === 'modify')) {
                         return <BoardsEditForm EditState={editState} EditData={editData} HandleChangeFormData={(e) => handleEditDataChange(e)} />;
                     } else if (loading === false && editState.page === 'reply' && (editState.mode === 'add' || editState.mode === 'modify')) {
                         return (

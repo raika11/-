@@ -30,10 +30,14 @@ const FbArtEdit = () => {
     });
 
     const handleChangeEditValue = ({ target: { name, value } }, isCheckedValue = false) => {
+        let cpEdit = { ...edit };
         if (isCheckedValue) {
             value = !edit['fb'][name];
+            if (name === 'isReserve') {
+                cpEdit = { ...cpEdit, fb: { ...cpEdit['fb'], reserveDt: null } };
+            }
         }
-        setEdit({ ...edit, fb: { ...edit['fb'], [name]: value } });
+        setEdit({ ...cpEdit, fb: { ...cpEdit['fb'], [name]: value } });
     };
 
     const handleClickCancel = () => {
@@ -339,7 +343,7 @@ const FbArtEdit = () => {
                             <Col xs={12}>
                                 <MokaInput
                                     as="dateTimePicker"
-                                    name="fb-reserveDt"
+                                    name="reserveDt"
                                     className="right"
                                     value={edit.fb.reserveDt}
                                     onChange={(e) => {

@@ -148,7 +148,7 @@ public class FileXmlTaskInput<P, C> extends TaskInput {
                 }
 
                 if (this.filePreProcess != null) {
-                    if (filePreProcess.preProcess(f)) {
+                    if (!filePreProcess.preProcess(f)) {
                         continue;
                     }
                 }

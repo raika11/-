@@ -1,4 +1,4 @@
-import { takeLatest, put, call } from 'redux-saga/effects';
+import { takeLatest, put, call, select } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
 import * as act from './scheduleAction';
@@ -59,6 +59,68 @@ const getJobList = callApiAfterActions(act.GET_JOB_LIST, api.getJobList, (state)
 const getJob = createRequestSaga(act.GET_JOB, api.getJob);
 
 /**
+ * 작업 등록
+ */
+function* saveJob({ payload: { job, jobSeq, callback } }) {
+    const ACTION = act.SAVE_JOB;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        // 등록 수정 분기
+        const response = yield call(jobSeq ? api.putJob : api.postJob, { job });
+        callbackData = response.data;
+        if (response.data.header.success) {
+            // 목록 다시 검색
+            const search = yield select((store) => store.schedule.work.search);
+            yield put({ type: act.GET_JOB_LIST, payload: { search } });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 작업 삭제
+ */
+function* deleteJob({ payload: { jobSeq, callback } }) {
+    const ACTION = act.DELETE_JOB;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(api.deleteJob, { jobSeq });
+        callbackData = response.data;
+        if (response.data.header.success) {
+            // 목록 다시 검색
+            const search = yield select((store) => store.schedule.work.search);
+            yield put({ type: act.GET_JOB_LIST, payload: { search } });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 삭제 작업 목록 조회
+ */
+const getJobDeleteList = callApiAfterActions(act.GET_JOB_DELETE_LIST, api.getJobDeleteList, (state) => state.schedule.deleteWork);
+
+/**
  * 배포 서버 목록 조회
  */
 const getDistributeServerList = callApiAfterActions(act.GET_DISTRIBUTE_SERVER_LIST, api.getDistributeServerList, (state) => state.schedule.deployServer);
@@ -67,5 +129,8 @@ export default function* scheduleSaga() {
     yield takeLatest(act.GET_DISTRIBUTE_SERVER_CODE, getDistributeServerCode);
     yield takeLatest(act.GET_JOB_LIST, getJobList);
     yield takeLatest(act.GET_JOB, getJob);
+    yield takeLatest(act.SAVE_JOB, saveJob);
+    yield takeLatest(act.DELETE_JOB, deleteJob);
+    yield takeLatest(act.GET_JOB_DELETE_LIST, getJobDeleteList);
     yield takeLatest(act.GET_DISTRIBUTE_SERVER_LIST, getDistributeServerList);
 }

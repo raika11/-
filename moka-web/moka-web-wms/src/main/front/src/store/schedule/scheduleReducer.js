@@ -30,15 +30,15 @@ export const initialState = {
             jobSeq: '',
             usedYn: 'Y',
             delYn: '',
-            category: '',
+            category: 'E1',
             pkgNm: '',
-            jobType: '',
+            jobType: 'S',
             jobCd: '',
             serverSeq: '',
             period: 300,
             sendType: '',
             ftpPort: '',
-            ftpPassive: '',
+            ftpPassive: 'Y',
             callUrl: '',
             targetPath: '',
             jobDesc: '',
@@ -49,6 +49,23 @@ export const initialState = {
             jobStatus: {},
             regMember: {},
             modMember: {},
+        },
+    },
+    deleteWork: {
+        list: [],
+        total: 0,
+        error: null,
+        search: {
+            sort: 'jobSeq,desc',
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            searchType: '',
+            keyword: '',
+            useTotal: '',
+            category: '',
+            period: '',
+            sendType: '',
+            serverSeq: '',
         },
     },
     deployServer: {
@@ -81,6 +98,11 @@ export default handleActions(
                 draft.work.search = payload;
             });
         },
+        [act.CHANGE_DELETE_WORK_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.deleteWork.search = payload;
+            });
+        },
         [act.CHANGE_DEPLOY_SERVER_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.deployServer.search = payload;
@@ -93,6 +115,11 @@ export default handleActions(
         [act.CLEAR_WORK_SEARCH]: (state) => {
             return produce(state, (draft) => {
                 draft.work.search = initialState.work.search;
+            });
+        },
+        [act.CLEAR_DELETE_WORK_SEARCH]: (state) => {
+            return produce(state, (draft) => {
+                draft.deleteWork.search = initialState.deleteWork.search;
             });
         },
         [act.CLEAR_JOB]: (state) => {
@@ -141,6 +168,23 @@ export default handleActions(
         [act.GET_JOB_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.work.job = initialState.work.job;
+            });
+        },
+        /**
+         * 삭제 작업 목록 조회
+         */
+        [act.GET_JOB_DELETE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.deleteWork.list = body.list;
+                draft.deleteWork.total = body.totalCnt;
+                draft.deleteWork.error = initialState.deleteWork.error;
+            });
+        },
+        [act.GET_JOB_DELETE_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.deleteWork.list = initialState.deleteWork.list;
+                draft.deleteWork.total = initialState.deleteWork.total;
+                draft.deleteWork.error = payload;
             });
         },
         /**

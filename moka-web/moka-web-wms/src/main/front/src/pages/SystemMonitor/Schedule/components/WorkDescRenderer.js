@@ -1,13 +1,9 @@
-import React, { forwardRef, useImperativeHandle } from 'react';
+import React from 'react';
 
 /**
  * 테이블 URL, 배포 경로, 설명
  */
-const WorkDescRenderer = forwardRef(({ data }, ref) => {
-    useImperativeHandle(ref, () => ({
-        refresh: () => false,
-    }));
-
+const WorkDescRenderer = ({ data }) => {
     return (
         <div className="d-flex flex-column justify-content-center h-100">
             <p className="mb-0">{data.pkgNm}</p>
@@ -15,6 +11,6 @@ const WorkDescRenderer = forwardRef(({ data }, ref) => {
             <p className="mb-0 color-success">{data.jobDesc}</p>
         </div>
     );
-});
+};
 
 export default WorkDescRenderer;

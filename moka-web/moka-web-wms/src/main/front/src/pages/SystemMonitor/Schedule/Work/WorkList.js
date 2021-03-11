@@ -1,4 +1,5 @@
 import React from 'react';
+import Card from 'react-bootstrap/Card';
 import Search from './WorkSearch';
 import AgGrid from './WorkAgGrid';
 
@@ -8,8 +9,13 @@ import AgGrid from './WorkAgGrid';
 const WorkList = ({ match }) => {
     return (
         <>
-            <Search match={match} />
-            <AgGrid match={match} />
+            <Card.Header>
+                <Card.Title as="h2">작업 목록</Card.Title>
+            </Card.Header>
+            <Card.Body className="d-flex flex-column custom-scroll" style={{ height: 600 }}>
+                <Search match={match} />
+                <AgGrid match={match} />
+            </Card.Body>
         </>
     );
 };

@@ -55,6 +55,9 @@ const WorkAgGrid = ({ match }) => {
             size={search.size}
             selected={job.jobSeq}
             onChangeSearchOption={handleChangeSearchOption}
+            refreshCellsParams={{
+                force: true,
+            }}
         />
     );
 };

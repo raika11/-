@@ -13,8 +13,7 @@ const Work = (props) => {
     return (
         <div className="h-100 d-flex">
             {/* 작업 목록 */}
-            <div className="mr-gutter d-flex flex-column" style={{ width: 892 }}>
-                <h2 style={{ marginBottom: '20px' }}>작업 목록</h2>
+            <div className="mr-gutter" style={{ width: 892 }}>
                 <Suspense>
                     <WorkList match={match} />
                 </Suspense>

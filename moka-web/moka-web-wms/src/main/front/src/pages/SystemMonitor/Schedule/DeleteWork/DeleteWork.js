@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import DeleteWorkEdit from './DeleteWorkEdit';
 
 const DeleteWorkList = React.lazy(() => import('./DeleteWorkList'));
@@ -13,24 +13,20 @@ const DeleteWork = (props) => {
     return (
         <div className="h-100 d-flex">
             {/* 삭제 작업 목록 */}
-            <div className="mr-gutter d-flex flex-column" style={{ width: 892 }}>
-                <h2 style={{ marginBottom: '20px' }}>삭제 작업 목록</h2>
+            <div className="mr-gutter" style={{ width: 892 }}>
                 <Suspense>
-                    <DeleteWorkList />
+                    <DeleteWorkList match={match} />
                 </Suspense>
             </div>
 
             {/* 삭제 작업 조회 */}
-            <Switch>
-                <Route path={[`${match.path}/work-delete/:seqNo`]}>
-                    <div className="flex-fill">
-                        <h2 style={{ marginBottom: '20px' }}>삭제 작업 조회</h2>
-                        <Suspense>
-                            <DeleteWorkEdit />
-                        </Suspense>
-                    </div>
-                </Route>
-            </Switch>
+            <Route path={[`${match.path}/work-delete/:seqNo`]}>
+                <div className="flex-fill">
+                    <Suspense>
+                        <DeleteWorkEdit />
+                    </Suspense>
+                </div>
+            </Route>
         </div>
     );
 };

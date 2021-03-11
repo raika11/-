@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Col } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -63,34 +63,38 @@ const BoardsListSearchBox = (props) => {
     }, [boardType]);
 
     return (
-        <Form.Row className="d-flex justify-content-between mb-14">
-            <div className="d-flex flex-fill">
-                <div className="mr-2">
-                    <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
-                        <option value="">선택</option>
-                        {selectItem.usedYn.map((item, index) => (
-                            <option key={index} value={item.value}>
-                                {item.name}
-                            </option>
-                        ))}
-                    </MokaInput>
-                </div>
+        <Form.Row className="mb-14">
+            <Col xs={2} className="p-0 pr-2">
+                <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
+                    <option value="">전체</option>
+                    {selectItem.usedYn.map((item, index) => (
+                        <option key={index} value={item.value}>
+                            {item.name}
+                        </option>
+                    ))}
+                </MokaInput>
+            </Col>
+            <Col xs={8} className="p-0 pr-2">
                 <MokaSearchInput
                     id="keyword"
                     name="keyword"
-                    className="mr-1 w-50"
+                    className="mb-0"
                     placeholder={'게시판명, 설명'}
                     value={searchData.keyword}
                     onChange={(e) => handleSearchChange(e)}
                     onSearch={() => handleClickSearchButton()}
                 />
-                <Button variant="negative" className="h-100" onClick={() => handleClickSearchResetButton()}>
+            </Col>
+            <Col xs={1} className="p-0 align-items-center">
+                <Button variant="negative" onClick={() => handleClickSearchResetButton()}>
                     초기화
                 </Button>
-            </div>
-            <Button variant="positive" className="h-100" onClick={() => handleBoardNewButton()}>
-                게시판 등록
-            </Button>
+            </Col>
+            <Col xs={1} className="p-0 align-items-center text-right">
+                <Button variant="positive" onClick={() => handleBoardNewButton()}>
+                    등록
+                </Button>
+            </Col>
         </Form.Row>
     );
 };

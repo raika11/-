@@ -287,7 +287,7 @@ function* getListmenuContentsInfoSaga({ payload: { boardId, boardSeq } }) {
 }
 
 // 게시글 등록 하기.
-function* saveBoardContentsSaga({ payload: { boardId, contents, files, callback } }) {
+function* saveBoardContentsSaga({ payload: { boardId, formData, callback } }) {
     yield put(startLoading(SAVE_BOARD_CONTENTS));
 
     let callbackData = {};
@@ -296,10 +296,8 @@ function* saveBoardContentsSaga({ payload: { boardId, contents, files, callback 
     try {
         const PostData = {
             boardId: boardId,
-            contents: contents,
-            files: files,
+            formData: formData,
         };
-
         response = yield call(saveBoardContents, { PostData });
         callbackData = response.data;
     } catch (e) {
@@ -317,7 +315,7 @@ function* saveBoardContentsSaga({ payload: { boardId, contents, files, callback 
 }
 
 // 게시글 정보 수정.
-function* updateBoardContentsSaga({ payload: { boardId, boardSeq, contents, files, callback } }) {
+function* updateBoardContentsSaga({ payload: { boardId, boardSeq, formData, callback } }) {
     yield put(startLoading(UPDATE_BOARD_CONTENTS));
 
     let callbackData = {};
@@ -327,8 +325,7 @@ function* updateBoardContentsSaga({ payload: { boardId, boardSeq, contents, file
         response = yield call(updateBoardContents, {
             boardId: boardId,
             boardSeq: boardSeq,
-            contents: contents,
-            files: files,
+            formData: formData,
         });
         callbackData = response.data;
     } catch (e) {

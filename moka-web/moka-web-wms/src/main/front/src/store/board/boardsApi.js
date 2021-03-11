@@ -126,9 +126,9 @@ export const getBoardReportersChannalList = () => {
 };
 
 // 게시판 게시글 등록.
-export const saveBoardContents = ({ PostData: { boardId, contents, files } }) => {
+export const saveBoardContents = ({ PostData: { boardId, formData } }) => {
     return instance
-        .post(`/api/boards/${boardId}/contents`, makeBoardContentsFormData({ files: files, contentsData: contents }), {
+        .post(`/api/boards/${boardId}/contents`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -139,9 +139,9 @@ export const saveBoardContents = ({ PostData: { boardId, contents, files } }) =>
 };
 
 // 게시판 게시글 수정.
-export const updateBoardContents = ({ boardId, boardSeq, contents, files }) => {
+export const updateBoardContents = ({ boardId, boardSeq, formData }) => {
     return instance
-        .put(`/api/boards/${boardId}/contents/${boardSeq}`, makeBoardContentsFormData({ files: files, contentsData: contents }), {
+        .put(`/api/boards/${boardId}/contents/${boardSeq}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

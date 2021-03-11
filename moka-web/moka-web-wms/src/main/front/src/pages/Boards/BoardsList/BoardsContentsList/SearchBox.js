@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Col } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { selectItem } from '@pages/Boards/BoardConst';
 import moment from 'moment';
@@ -8,6 +8,18 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { initialState, changeListmenuSearchOption, clearSetMenuSearchOption, clearListmenuContentsInfo, getListmenuContentsList } from '@store/board';
 import toast from '@utils/toastUtil';
+import produce from 'immer';
+
+const initGubunSearchItem = {
+    nm1: {
+        ck: false,
+        list: [],
+    },
+    nm2: {
+        ck: false,
+        list: [],
+    },
+};
 
 const SearchBox = (props) => {
     const searchInitData = initialState.listmenu.contentsList.search;
@@ -17,11 +29,12 @@ const SearchBox = (props) => {
     const boardId = useRef(null);
 
     // 공통 구분값 URL
-    const { pagePathName, channeltype_list } = useSelector((store) => ({
+    const { pagePathName, selectboard } = useSelector((store) => ({
         pagePathName: store.board.pagePathName,
-        channeltype_list: store.board.channeltype_list,
+        selectboard: store.board.listmenu.selectboard,
     }));
 
+    const [gubunSearchItem, setGubunSearchItem] = useState(initGubunSearchItem);
     const [searchData, setSearchData] = useState(searchInitData);
 
     // sotre 기본 검색 옵션 리턴.
@@ -105,6 +118,39 @@ const SearchBox = (props) => {
     }, [params]);
 
     useEffect(() => {
+        const setPageSearchItem = ({ titlePrefixNm1, titlePrefix1, titlePrefixNm2, titlePrefix2 }) => {
+            let tempItem = initGubunSearchItem;
+            if (titlePrefixNm1) {
+                tempItem = produce(tempItem, (draft) => {
+                    draft.nm1.ck = true;
+                    draft.nm1.name = titlePrefixNm1;
+                    draft.nm1.list = titlePrefix1
+                        .split(',')
+                        .map((e) => e.replace(' ', ''))
+                        .filter((e) => e !== '');
+                });
+            }
+
+            if (titlePrefixNm2) {
+                tempItem = produce(tempItem, (draft) => {
+                    draft.nm2.ck = true;
+                    draft.nm2.name = titlePrefixNm2;
+                    draft.nm2.list = titlePrefix2
+                        .split(',')
+                        .map((e) => e.replace(' ', ''))
+                        .filter((e) => e !== '');
+                });
+            }
+
+            setGubunSearchItem(tempItem);
+        };
+
+        if (selectboard.boardId) {
+            setPageSearchItem(selectboard);
+        }
+    }, [selectboard]);
+
+    useEffect(() => {
         const setStartPage = () => {
             searchDataReset();
         };
@@ -117,11 +163,12 @@ const SearchBox = (props) => {
     return (
         <Form className="mb-14">
             {/* 날짜 */}
-            <Form.Row className="d-flex mb-2">
+            <Form.Row className="d-flex mb-2 mr-0">
                 {/* 시작 날짜 */}
-                <div style={{ width: 130 }} className="mr-2 flex-shrink-0">
+                <Col xs={5} className="p-0 pr-2 d-flex">
                     <MokaInput
                         as="dateTimePicker"
+                        className="mr-1"
                         name="startDt"
                         id="startDt"
                         value={searchData.startDt}
@@ -132,12 +179,12 @@ const SearchBox = (props) => {
                         }}
                         inputProps={{ timeFormat: null }}
                     />
-                </div>
 
-                {/* 종료 날짜 */}
-                <div style={{ width: 130 }} className="mr-2 flex-shrink-0">
+                    {/* 종료 날짜 */}
+
                     <MokaInput
                         as="dateTimePicker"
+                        className="ml-1"
                         name="endDt"
                         id="endDt"
                         value={searchData.endDt}
@@ -148,53 +195,54 @@ const SearchBox = (props) => {
                         }}
                         inputProps={{ timeFormat: null }}
                     />
-                </div>
+                </Col>
 
                 {/* 게시판 사용 비상용 선택. */}
-                <div className="flex-shrink-0 mr-2">
-                    <MokaInput as="select" name="usedYn" id="usedYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
-                        <option hidden>선택</option>
-                        {selectItem.usedYn.map((item, index) => (
-                            <option key={index} value={item.value}>
-                                {item.name}
+                <MokaInput className="mr-2" as="select" name="usedYn" id="usedYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
+                    {selectItem.usedYn.map((item, index) => (
+                        <option key={index} value={item.value}>
+                            {item.name}
+                        </option>
+                    ))}
+                </MokaInput>
+
+                {gubunSearchItem && gubunSearchItem.nm1.ck === true && (
+                    <MokaInput className="mr-2" as="select" name="titlePrefix1" id="titlePrefix1" value={searchData.titlePrefix1} onChange={(e) => handleSearchChange(e)}>
+                        <option value="">{gubunSearchItem.nm1.name}</option>
+                        {gubunSearchItem.nm1.list.map((item, index) => (
+                            <option key={index} value={item}>
+                                {item}
                             </option>
                         ))}
                     </MokaInput>
-                </div>
+                )}
 
-                {/* 말머리1 검색. */}
-                <MokaInput
-                    className="mr-2 flex-fill"
-                    id="titlePrefix1"
-                    name="titlePrefix1"
-                    placeholder="말머리1"
-                    value={searchData.titlePrefix1}
-                    onChange={(e) => handleSearchChange(e)}
-                />
+                {gubunSearchItem && gubunSearchItem.nm2.ck === true && (
+                    <MokaInput className="mr-2" as="select" name="titlePrefix2" id="titlePrefix2" value={searchData.titlePrefix2} onChange={(e) => handleSearchChange(e)}>
+                        <option value="">{gubunSearchItem.nm2.name}</option>
+                        {gubunSearchItem.nm2.list.map((item, index) => (
+                            <option key={index} value={item}>
+                                {item}
+                            </option>
+                        ))}
+                    </MokaInput>
+                )}
 
                 {/* 검색 옵션 리셋. */}
-                <Button className="flex-shrink-0" variant="negative" onClick={() => handleClickResetButton()}>
-                    초기화
-                </Button>
+                <Col xs={1} className="p-0 pr-2">
+                    <Button className="flex-shrink-0" variant="negative" onClick={() => handleClickResetButton()}>
+                        초기화
+                    </Button>
+                </Col>
+                {/* </Col> */}
             </Form.Row>
 
             <Form.Row>
                 {/* 채널 선택. */}
-                <div className="flex-shrink-0 mr-2">
-                    <MokaInput as="select" name="searchType" id="searchType" value={searchData.searchType} onChange={(e) => handleSearchChange(e)}>
-                        <option hidden>선택</option>
-                        {channeltype_list.map((item, index) => (
-                            <option key={index} value={item.dtlCd}>
-                                {item.cdNm}
-                            </option>
-                        ))}
-                    </MokaInput>
-                </div>
-
                 <MokaSearchInput
                     id="keyword"
                     name="keyword"
-                    className="mr-1 flex-fill"
+                    className="mr-2 flex-fill"
                     placeholder={'제목, 내용, 등록자 명'}
                     value={searchData.keyword}
                     onChange={(e) => handleSearchChange(e)}

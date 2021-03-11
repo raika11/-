@@ -105,18 +105,18 @@ public class BrightcoveServiceImpl implements BrightcoveService {
 
 
     /**
-     * brightcove 통계데이터 조회
+     * brightcove jpod meta 통계데이터 조회
      *
      * @return
      */
     @Override
-    public JSONObject findAnalytics(BrightcoveCredentailVO credentail, String url)
+    public JSONObject findJpodMetaAnalytics(BrightcoveCredentailVO credentail, String url)
             throws IOException, ParseException {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
         headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
         headers.add(MokaConstants.AUTHORIZATION, String.format("%s %s", credentail.getTokenType(), credentail.getAccessToken()));
-        log.debug("header {} : {}", MokaConstants.AUTHORIZATION, headers.get(MokaConstants.AUTHORIZATION));
+        //log.debug("header {} : {}", MokaConstants.AUTHORIZATION, headers.get(MokaConstants.AUTHORIZATION));
 
         String requestUrl = url;
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();

@@ -17,7 +17,7 @@ public interface HttpPushClient {
      * @return 전송 결과
      * @throws Exception 예외 처리
      */
-    public PushHttpResponse push(FcmMessage fcmMessage)
+    PushHttpResponse push(PushAppToken pushToken, FcmMessage fcmMessage)
             throws Exception;
 
     /**
@@ -28,6 +28,6 @@ public interface HttpPushClient {
      * @param nrl        전송 완료 Listener
      * @throws IOException 예외 처리
      */
-    public void push(PushAppToken pushToken, FcmMessage fcmMessage, PushHttpResponseListener nrl)
+    void push(PushAppToken pushToken, FcmMessage fcmMessage, PushHttpResponseListener nrl)
             throws IOException;
 }

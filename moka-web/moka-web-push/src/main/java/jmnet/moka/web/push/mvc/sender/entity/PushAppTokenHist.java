@@ -1,21 +1,13 @@
 package jmnet.moka.web.push.mvc.sender.entity;
 
+import lombok.*;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
- * 푸시 앱 토큰 정보
+ * 푸시 앱 토큰 이력 정보
  */
 @Entity
 @AllArgsConstructor
@@ -23,16 +15,22 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
-@Table(name = "TB_PUSH_APP_TOKEN")
-public class PushAppToken implements Serializable {
+@Table(name = "TB_PUSH_APP_TOKEN_HIST")
+public class PushAppTokenHist implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 토큰 일련번호
+     * 이력 일련번호
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "HIST_SEQ", nullable = false)
+    private Long histSeq;
+
+    /**
+     * 토큰 일련번호
+     */
     @Column(name = "TOKEN_SEQ", nullable = false)
     private Long tokenSeq;
 
@@ -61,11 +59,16 @@ public class PushAppToken implements Serializable {
     private Date modDt;
 
     /**
+     * 입력일시
+     */
+    @Column(name = "INS_DT")
+    private Date insDt;
+
+    /**
      * 회원 아이디
      */
     @Column(name = "MEM_ID")
     private String memId;
-
 
     /**
      * 푸시 토큰

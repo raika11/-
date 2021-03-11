@@ -10,8 +10,6 @@ import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.push.config.PropertyHolder;
-import jmnet.moka.web.push.mvc.sender.entity.MobPushItem;
-import jmnet.moka.web.push.mvc.sender.entity.PushApp;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.service.PushContentsService;
 import lombok.extern.slf4j.Slf4j;
@@ -107,12 +105,12 @@ public class PushSenderHandler {
      *
      * @param pushItem job 정보
      */
-    public boolean addPushJob(PushContents pushItem) {
+    public boolean addPushJob(PushContents pushItem, int appSeq) {
         boolean result = false;
 
+        log.debug("[ addPushJob ]");
+
         String pushType = pushItem.getPushType();
-        System.out.println("==========================================");
-        System.out.println("getPushType="+pushItem.getPushType());
 
         if(pushType.equals("T")){   pushItem.setPushType("senderT");    }
         if(pushType.equals("S")){   pushItem.setPushType("senderS");    }
@@ -120,11 +118,12 @@ public class PushSenderHandler {
         if(pushType.equals("N")){   pushItem.setPushType("senderN");    }
 
         if (scheduleMap.containsKey(pushItem.getPushType())) {// 작업 유형 존재할 경우 실행
-            System.out.println("getContentSeq   ="+pushItem.getContentSeq());
-            System.out.println("getRsvDt        ="+pushItem.getRsvDt());
+           // System.out.println("getContentSeq   ="+pushItem.getContentSeq());
+          // System.out.println("appSeq          ="+appSeq);
+           // System.out.println("getRsvDt        ="+pushItem.getRsvDt());
             pushSendJobTaskExecutor.execute(() -> scheduleMap
                     .get(pushItem.getPushType())
-                    .doTask(pushItem));
+                    .doTask(pushItem, appSeq));
             result = true;
         }
         return result;

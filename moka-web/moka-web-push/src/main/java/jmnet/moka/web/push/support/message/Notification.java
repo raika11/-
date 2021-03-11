@@ -56,4 +56,14 @@ public class Notification {
     private String subtitle;
 
     private int badge = 0;
+
+
+
+    private String content_available;
+    private String mutable_content;
+    private String url;
+    private String key1;
+    private String key2;
+    private int key3;
+    private String image_url;
 }

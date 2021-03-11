@@ -1,7 +1,7 @@
 package jmnet.moka.web.push.support.httpclient;
 
 import java.util.concurrent.TimeUnit;
-import jmnet.moka.web.push.mvc.sender.entity.MobApp;
+import jmnet.moka.web.push.mvc.sender.entity.PushApp;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 
@@ -19,7 +19,7 @@ import okhttp3.OkHttpClient;
  */
 public class PushHttpClientBuilder {
 
-    private MobApp mobApp;
+    private PushApp pushApp;
     private OkHttpClient.Builder builder;
     private ConnectionPool connectionPool;
 
@@ -34,8 +34,8 @@ public class PushHttpClientBuilder {
         return builder;
     }
 
-    public PushHttpClientBuilder setMobApp(MobApp mobApp) {
-        this.mobApp = mobApp;
+    public PushHttpClientBuilder setPushApp(PushApp pushApp) {
+        this.pushApp = pushApp;
         return this;
     }
 
@@ -49,6 +49,6 @@ public class PushHttpClientBuilder {
                 builder.connectionPool(connectionPool);
             }
         }
-        return new HttpPushFcmClient(mobApp.getFcmKey());
+        return new HttpPushFcmClient(pushApp.getFcmKey());
     }
 }

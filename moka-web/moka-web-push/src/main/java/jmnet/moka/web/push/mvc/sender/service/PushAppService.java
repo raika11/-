@@ -1,6 +1,9 @@
 package jmnet.moka.web.push.mvc.sender.service;
 
 import jmnet.moka.web.push.mvc.sender.dto.PushAppSearchDTO;
+import jmnet.moka.web.push.mvc.sender.entity.PushApp;
+
+import java.util.Optional;
 
 /**
  * 작업 Service
@@ -14,5 +17,14 @@ public interface PushAppService {
      * @param search 작업 정보
      * @return 중복여부
      */
-    boolean isValidData(PushAppSearchDTO search);
+    Optional<PushApp> isValidData(PushAppSearchDTO search);
+
+
+    /**
+     * 대상 토큰 일련번호로 App 조회
+     *
+     * @param appSeq 토큰 ID
+     * @return 가장 큰 토큰 일련번호
+     */
+    <PushApp> Optional<jmnet.moka.web.push.mvc.sender.entity.PushApp> findByAppSeq(Integer appSeq);
 }

@@ -1,7 +1,6 @@
 package jmnet.moka.web.push.mvc.sender.dto;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -44,13 +43,11 @@ public class PushSendDTO {
     /**
      * 요청일자
      */
-    @ApiModelProperty("요청일자")
+    @ApiModelProperty(value = "출고예약(요청일자)")
     //@DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
     //private Date reserveDt;
     @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
     private String reserveDt;
-
-
 
     /**
      * 푸시기사 일련번호
@@ -77,6 +74,34 @@ public class PushSendDTO {
      */
     @ApiModelProperty(value = "푸시기사 Push제목의 아이콘 부분(속보:B, 단독:S)", required = true)
     private String iconType;
-
-
+    /**
+     * 레터에서 편집자 사진 노출여부(Y/N)
+     */
+    @ApiModelProperty(value = "레터에서 편집자 사진 노출여부(Y/N)")
+    private String picYn;
+    /**
+     * 메일 발송 여부 ( Y:발송, N:발송안함 )
+     */
+    @ApiModelProperty(value = "메일 발송 여부 ( Y:발송, N:발송안함 )")
+    private String sendEmail;
+    /**
+     * 작성 기자 아이디 - 뉴스룸 레터용
+     */
+    @ApiModelProperty(value = "작성 기자 아이디 - 뉴스룸 레터용")
+    private String repId;
+    /**
+     * 관련 콘텐트URL
+     */
+    @ApiModelProperty(value = "관련 콘텐트URL")
+    private String relUrl;
+    /**
+     * 이미지URL
+     */
+    @ApiModelProperty(value = "이미지URL")
+    private String imgUrl;
+    /**
+     * 푸시이미지URL
+     */
+    @ApiModelProperty(value = "푸시이미지URL")
+    private String pushUrl;
 }

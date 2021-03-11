@@ -29,7 +29,7 @@ public class PushAppSearchDTO implements Serializable {
     /**
      * 앱 일련번호
      */
-    private Long appSeq;
+    private Integer appSeq;
     /**
      * 관련 콘텐트ID
      */

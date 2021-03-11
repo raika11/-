@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jmnet.moka.common.data.support.SearchDTO;
 import lombok.*;
 
 import java.io.Serializable;
@@ -30,7 +31,7 @@ import java.util.List;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ApiModel("푸시 전송 기사 이력 DTO")
-public class PushContentsProcDTO implements Serializable {
+public class PushContentsProcDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1L;
     public static final Type TYPE = new TypeReference<List<PushContentsProcDTO>>() {
@@ -46,7 +47,7 @@ public class PushContentsProcDTO implements Serializable {
      * 앱 일련번호
      */
     @ApiModelProperty("앱 일련번호")
-    private Long appSeq;
+    private Integer appSeq;
 
     /**
      * 전송 상태(0 : 전송 전, 1 : 전송 완료, 2 : 서버오류, 3 : 토큰 오류, 4 : 전송 오류, 5 : 타임 오버, 9 : 전송 중)

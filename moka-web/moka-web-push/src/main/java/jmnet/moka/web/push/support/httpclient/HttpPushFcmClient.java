@@ -48,7 +48,7 @@ public class HttpPushFcmClient implements HttpPushClient {
     }
 
 
-    public PushHttpResponse push(FcmMessage fcmMessage)
+    public PushHttpResponse push(PushAppToken pushToken, FcmMessage fcmMessage)
             throws Exception {
         final Request request = buildRequest(fcmMessage);
         Response response = null;
@@ -57,11 +57,12 @@ public class HttpPushFcmClient implements HttpPushClient {
             response = client
                     .newCall(request)
                     .execute();
-            return parseResponse(null, fcmMessage, response);
+            return parseResponse(pushToken, fcmMessage, response);
         } catch (Throwable t) {
             return new PushHttpResponse(null, -1, null, t.getMessage(), null);
         } finally {
             if (response != null) {
+                System.out.println("finally response="+response);
                 response
                         .body()
                         .close();
@@ -114,13 +115,17 @@ public class HttpPushFcmClient implements HttpPushClient {
 
     protected final Request buildRequest(FcmMessage fcmMessage)
             throws IOException {
+        String fcmUrl = "https://fcm.googleapis.com/fcm/send";
+        System.out.println("[ Request buildRequest ]");
 
         byte[] message = ResourceMapper
                 .getDefaultObjectMapper()
                 .writeValueAsString(fcmMessage)
                 .getBytes(Charset.forName("UTF-8"));
+
         Request.Builder rb = new Request.Builder()
-                .url(propertyHolder.getFcmUrl())
+                .url(fcmUrl)
+                //.url(propertyHolder.getFcmUrl())
                 .post(new RequestBody() {
 
                     @Override

@@ -21,7 +21,7 @@ export const initialState = {
         masterCode: null, // 분류(1개)
         startServiceDay: null, // 시작일
         endServiceDay: null, // 종료일
-        contentType: null, // 기사타입(all, P, N)
+        movieTab: null, // 영상 기사만 조회하는지 (null, Y)
         pressCategory: null, // 출판 카테고리
         bulkYn: 'all', // 벌크여부(all, Y, N)
         serviceFlag: '', // 서비스여부('', Y, N)
@@ -65,7 +65,7 @@ export const initialState = {
             masterCode: null, // 분류
             startServiceDay: null, // 시작일
             endServiceDay: null, // 종료일
-            contentType: null, // 기사타입
+            movieTab: null, // 영상기사
         },
     },
     // 벌크 기사
@@ -81,7 +81,7 @@ export const initialState = {
             masterCode: null, // 분류
             startServiceDay: null, // 시작일
             endServiceDay: null, // 종료일
-            contentType: null, // 기사타입
+            movieTab: null, // 영상기사
         },
     },
     // 등록 기사 수정 히스토리

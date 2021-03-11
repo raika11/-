@@ -129,7 +129,7 @@ const ArticleMediaList = (props) => {
             startServiceDay: moment(nd).subtract(2, 'days').startOf('day'),
             endServiceDay: moment(nd).endOf('day'),
             page: 0,
-            contentType: 'W',
+            movieTab: 'Y',
         });
     };
 
@@ -183,7 +183,7 @@ const ArticleMediaList = (props) => {
             startServiceDay: moment(startServiceDay),
             endServiceDay: moment(endServiceDay),
             page: 0,
-            contentType: 'W',
+            movieTab: 'Y',
         };
         setSearch(ns);
         setType(tp);

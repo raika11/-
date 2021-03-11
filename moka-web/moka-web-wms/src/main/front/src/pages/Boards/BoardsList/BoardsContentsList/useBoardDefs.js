@@ -52,7 +52,7 @@ export default function useBoardDefs(selectBoard = []) {
                     headerName: `${titlePrefixNm1}`,
                     field: 'titlePrefix1',
                     cellStyle: { display: 'flex', alignItems: 'center' },
-                    width: 80,
+                    width: 70,
                 });
             }
 
@@ -61,7 +61,7 @@ export default function useBoardDefs(selectBoard = []) {
                     headerName: `${titlePrefixNm2}`,
                     field: 'titlePrefix2',
                     cellStyle: { display: 'flex', alignItems: 'center' },
-                    width: 80,
+                    width: 70,
                 });
             }
 
@@ -97,7 +97,7 @@ export default function useBoardDefs(selectBoard = []) {
                 ColumnDefs.push({
                     headerName: '첨부파일',
                     field: 'fileItem',
-                    width: 80,
+                    width: 60,
                     cellRenderer: 'fileItemRenderer',
                 });
             }

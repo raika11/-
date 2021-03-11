@@ -9,8 +9,6 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
         componentList: desking.list,
         isNaverChannel: desking.isNaverChannel,
     }));
-
-    // state
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     // 핫키로 탭 변경

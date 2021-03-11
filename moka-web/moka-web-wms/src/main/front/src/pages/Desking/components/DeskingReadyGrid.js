@@ -10,12 +10,13 @@ import toast from '@utils/toastUtil';
 const DeskingReadyGrid = (props) => {
     const { componentAgGridInstances = [], agGridIndex: sourceIdx, component } = props;
     const dispatch = useDispatch();
-    const components = useSelector((store) => store.desking.list);
+    const components = useSelector(({ desking }) => desking.list);
 
     useEffect(() => {
-        if (componentAgGridInstances.length !== components.length) return;
+        const filteredComponents = components.filter((comp) => comp.viewYn === 'Y');
+        if (componentAgGridInstances.length !== filteredComponents.length) return;
 
-        components.forEach((comp, targetIdx) => {
+        filteredComponents.forEach((comp, targetIdx) => {
             if (component.seq === comp.seq) return;
 
             if (!componentAgGridInstances[sourceIdx]) {

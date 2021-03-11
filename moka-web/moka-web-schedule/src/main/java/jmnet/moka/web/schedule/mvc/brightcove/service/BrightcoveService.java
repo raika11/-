@@ -37,11 +37,11 @@ public interface BrightcoveService {
             throws IOException;
 
     /**
-     * brightcove analytics 목록 조회
+     * brightcove jpod meta analytics 목록 조회
      *
      * @return
      */
-    JSONObject findAnalytics(BrightcoveCredentailVO credentail, String url)
+    JSONObject findJpodMetaAnalytics(BrightcoveCredentailVO credentail, String url)
             throws IOException, ParseException;
 
     /**

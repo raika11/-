@@ -8,12 +8,13 @@ import { MokaCard } from '@/components';
  * 수신기사 > 중앙선데이 조판 상세정보
  */
 const SundayJopanEdit = () => {
-    const jopan = useSelector((store) => store.rcvArticle.jopan);
     const [temp, setTemp] = useState({});
+    const jopan = useSelector((store) => store.rcvArticle.jopan);
 
     const [loading, setLoding] = useState(true);
     const iframeRef = useRef(null);
 
+    console.log(temp);
     useEffect(() => {
         // 조판 정보 셋팅
         setTemp({
@@ -28,29 +29,31 @@ const SundayJopanEdit = () => {
     }, [jopan]);
 
     useEffect(() => {
-        instance
-            .get(`jopan?sourceCode=${temp.sourceCode}&ho=${temp.ho}&pressDate=${temp.pressDate}&myun=${temp.myun}&section=${temp.section}&revision=${temp.revision}`)
-            .then(function (response) {
-                if (response.data) {
-                    if (!iframeRef.current) return;
-                    let doc = iframeRef.current.contentDocument;
-                    if (!doc) {
-                        iframeRef.current.src = 'about:blank';
-                        iframeRef.current.onload = function () {
-                            doc = iframeRef.current.contentDocument;
+        if (temp.sourceCode) {
+            instance
+                .get(`jopan?sourceCode=${temp.sourceCode}&ho=${temp.ho}&pressDate=${temp.pressDate}&myun=${temp.myun}&section=${temp.section}&revision=${temp.revision}`)
+                .then(function (response) {
+                    if (response.data) {
+                        if (!iframeRef.current) return;
+                        let doc = iframeRef.current.contentDocument;
+                        if (!doc) {
+                            iframeRef.current.src = 'about:blank';
+                            iframeRef.current.onload = function () {
+                                doc = iframeRef.current.contentDocument;
+                                doc.open();
+                                doc.write(response.data);
+                                doc.close();
+                                iframeRef.current.onload = null;
+                            };
+                        } else {
                             doc.open();
                             doc.write(response.data);
                             doc.close();
-                            iframeRef.current.onload = null;
-                        };
-                    } else {
-                        doc.open();
-                        doc.write(response.data);
-                        doc.close();
+                        }
+                        setLoding(false);
                     }
-                    setLoding(false);
-                }
-            });
+                });
+        }
     }, [temp]);
 
     return (

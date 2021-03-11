@@ -33,6 +33,7 @@ const SundayJopanSearch = () => {
     const handleClickSearch = () => {
         let ns = {
             ...search,
+            pressDate: moment(search.pressDate).format(DB_DATEFORMAT),
             page: 0,
         };
         dispatch(changeJopanSearchOption(ns));
@@ -71,7 +72,7 @@ const SundayJopanSearch = () => {
         dispatch(changeJopanSearchOption(ns));
         dispatch(getJopanList({ search: ns }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch]);
+    }, []);
 
     return (
         <Form className="mb-14">

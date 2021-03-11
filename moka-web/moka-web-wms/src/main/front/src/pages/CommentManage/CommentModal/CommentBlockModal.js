@@ -330,7 +330,7 @@ const CommentBlockModal = (props) => {
                                     id="dataset-type1"
                                     inputProps={{ custom: true, label: 'ID', checked: editData.bannedType === 'U' ? true : false }}
                                     onChange={handleChangeValue}
-                                    name="BannedType"
+                                    name="bannedType"
                                 />
                             </Col>
                             <Col xs={1} className="p-0">

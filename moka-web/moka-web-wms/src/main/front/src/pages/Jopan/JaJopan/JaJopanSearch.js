@@ -33,6 +33,7 @@ const JaJopanSearch = () => {
     const handleClickSearch = () => {
         let ns = {
             ...search,
+            pressDate: moment(search.pressDate).format(DB_DATEFORMAT),
             page: 0,
         };
         dispatch(changeJopanSearchOption(ns));

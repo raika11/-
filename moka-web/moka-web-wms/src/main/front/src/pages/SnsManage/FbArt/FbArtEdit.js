@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { snsNames } from '@/constants';
+import { DB_DATEFORMAT, snsNames } from '@/constants';
 import { clearSnsMeta, GET_SNS_META, getSnsMeta, getSnsSendArticleList, initialState, publishSnsMeta } from '@store/snsManage';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
@@ -30,9 +30,8 @@ const FbArtEdit = () => {
     });
 
     const handleChangeEditValue = ({ target: { name, value } }, isCheckedValue = false) => {
-        console.log(edit);
         if (isCheckedValue) {
-            value = !edit['fb'].usedYn;
+            value = !edit['fb'][name];
         }
         setEdit({ ...edit, fb: { ...edit['fb'], [name]: value } });
     };
@@ -64,6 +63,11 @@ const FbArtEdit = () => {
         for (const item of data) {
             const snsTypeEng = item.snsType.toLowerCase();
             const snsKor = snsNames[snsTypeEng];
+
+            if (!item.usedYn) {
+                toast.warning(`사용안함으로 설정되어 있습니다. 사용여부 변경후 다시 전송해 주세요(${snsKor})`);
+                return false;
+            }
 
             if (commonUtil.isEmpty(item.title)) {
                 toast.warning(`${snsKor} 제목을 입력해 주세요.`);
@@ -165,7 +169,7 @@ const FbArtEdit = () => {
             <hr className="divider my-32" />
 
             {/* 페이스북 메타 정보 */}
-            <div>
+            {/*<div>
                 <Row className="m-0 mb-2">
                     <Col xs={4} className="p-0 pr-12 d-flex align-items-center">
                         <p className="mb-0 h4 font-weight-bold color-gray-800">페이스북 메타 정보</p>
@@ -229,8 +233,126 @@ const FbArtEdit = () => {
                         <span className="ft-12">수정정보 {edit.article.snsRegDt}</span>
                     </Col>
                 </Row>
-            </div>
+            </div>*/}
+            <Form>
+                <Form.Row className="mb-2">
+                    <MokaInputLabel
+                        as="switch"
+                        name="usedYn"
+                        id="fb-usedYn"
+                        label="사용여부"
+                        onChange={(e) => {
+                            handleChangeEditValue(e, true);
+                        }}
+                        inputProps={{ label: '', checked: edit.fb.usedYn }}
+                    />
+                </Form.Row>
 
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel label="타이틀" name="title" onChange={handleChangeEditValue} value={edit.fb.title} />
+                    </Col>
+                </Form.Row>
+
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel
+                            as="textarea"
+                            name="summary"
+                            label="설명\n(리드문)"
+                            inputClassName="resize-none custom-scroll"
+                            onChange={handleChangeEditValue}
+                            value={edit.fb.summary}
+                            inputProps={{ rows: 4 }}
+                        />
+                    </Col>
+                </Form.Row>
+
+                <Form.Row className="mb-1">
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel
+                            as="textarea"
+                            name="postMessage"
+                            label="메시지"
+                            inputClassName="resize-none custom-scroll"
+                            onChange={handleChangeEditValue}
+                            value={edit.fb.postMessage}
+                        />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0 d-flex justify-content-end">
+                        <span>1줄 25자 기준</span>
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={7} className="p-0">
+                        <div className="d-flex w-100">
+                            <MokaInputLabel
+                                as="none"
+                                label={
+                                    <React.Fragment>
+                                        <p className="mb-gutter">
+                                            SNS 이미지
+                                            <br />
+                                            850*350px
+                                        </p>
+                                        <Button
+                                            variant="gray-700"
+                                            size="sm"
+                                            onClick={() => {
+                                                setShowEditThumbModal(true);
+                                            }}
+                                            className="w-100 mb-1"
+                                        >
+                                            신규등록
+                                        </Button>
+                                        <Button variant="outline-gray-700" size="sm" className="w-100" onClick={handleEditClick}>
+                                            편집
+                                        </Button>
+                                    </React.Fragment>
+                                }
+                            />
+                            <div className="d-flex flex-column flex-fill">
+                                <MokaImageInput className="mb-1 input-border" img={edit.fb.imgUrl} width={192} height={108} deleteButton={true} />
+                                <p className="text-danger mb-0">1200*628 이미지 용량 제한: 1MB.</p>
+                            </div>
+                        </div>
+                    </Col>
+                    <Col xs={5} className="align-contents-center">
+                        <Form.Row className="d-flex pt-4">
+                            <Col xs={12} className="d-flex w-100 align-items-center">
+                                <MokaInputLabel as="none" label="예약" />
+                                <MokaInput
+                                    as="checkbox"
+                                    name="isReserve"
+                                    id="fb-isReserve"
+                                    className="p-0"
+                                    onChange={(e) => {
+                                        handleChangeEditValue(e, true);
+                                    }}
+                                    inputProps={{ label: '예약 노출', checked: edit.fb.isReserve, custom: true }}
+                                />
+                            </Col>
+                        </Form.Row>
+                        <Form.Row className="d-flex pt-2">
+                            <Col xs={12}>
+                                <MokaInput
+                                    as="dateTimePicker"
+                                    name="fb-reserveDt"
+                                    className="right"
+                                    value={edit.fb.reserveDt}
+                                    onChange={(e) => {
+                                        handleChangeEditValue({ target: { name: 'reserveDt', value: new Date(moment(e._d).format(DB_DATEFORMAT)) } });
+                                    }}
+                                    inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm' }}
+                                    disabled={!edit.fb.isReserve}
+                                />
+                            </Col>
+                        </Form.Row>
+                    </Col>
+                </Form.Row>
+            </Form>
             <EditThumbModal
                 show={showEditThumbModal}
                 cropHeight={300}

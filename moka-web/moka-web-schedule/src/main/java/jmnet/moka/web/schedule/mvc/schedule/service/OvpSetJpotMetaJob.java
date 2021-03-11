@@ -46,6 +46,7 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
         boolean success = true;
 
         BrightcoveCredentailVO credentail = brightcoveService.getClientCredentials();
+
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String now = format.format(date);
@@ -60,7 +61,7 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
 
         try {
             //analytics API 호출
-            JSONObject jsonObject = (JSONObject) brightcoveService.findAnalytics(credentail, contentUrl.toString());
+            JSONObject jsonObject = (JSONObject) brightcoveService.findJpodMetaAnalytics(credentail, contentUrl.toString());
             log.debug("item_count : {}", jsonObject.get("item_count"));
             JSONArray items = (JSONArray) jsonObject.get("items");
             for(Object item : items){
@@ -73,6 +74,7 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
                 param.setPlayUv(0L);
                 param.setPlayTime((Long) tmp.get("video_seconds_viewed"));
                 param.setCompleteCnt((Long) tmp.get("video_engagement_100"));
+
                 int result = ovpSetJpotMetaJobMapper.findOne(param);
                 log.debug("execute procedure result : {}", result);
 

@@ -158,7 +158,7 @@ const SnsMetaEdit = () => {
             const snsTypeEng = item.snsType.toLowerCase();
             const snsKor = snsNames[snsTypeEng];
 
-            if (!item.usedYn) {
+            if (!item.usedYn && type === 'send') {
                 toast.warning(`사용안함으로 설정되어 있습니다. 사용여부 변경후 다시 전송해 주세요(${snsKor})`);
                 return false;
             }

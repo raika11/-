@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@components';
 import { columnDefs } from '@pages/SEOMeta/SEOMetaAgGridColumn';
 import { changeSeoMetaSearchOptions, GET_SEO_META_LIST, getSeoMetaList } from '@store/seoMeta';
+import { ARTICLE_URL } from '@/constants';
 
 /**
  * SEO 메타 AgGrid
@@ -58,7 +59,7 @@ const SEOMetaAgGrid = ({ match }) => {
             onChangeSearchOption={handleChangeSearchOption}
             onRowClicked={(data, param) => {
                 if (param.type === 'cellClicked' && param.column.colId === 'artTitle') {
-                    window.open(`https://mnews.joins.com/article/${data.totalId}`, 'pop', '');
+                    window.open(`${ARTICLE_URL}${data.totalId}`, 'pop', '');
                 }
             }}
             selected={totalId}

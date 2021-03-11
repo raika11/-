@@ -139,7 +139,7 @@ export const snsNames = {
 export const DIGITAL_SPECIAL_URL = 'https://news.joins.com/DigitalSpecial/';
 
 // 본문 링크
-export const ARTICLE_URL = 'https://news.joins.com/article/';
+export const ARTICLE_URL = 'https://stg-news.joongang.co.kr/article/';
 export const MOBILE_ARTICLE_URL = 'https://mnews.joins.com/article/';
 
 // 페이스북 디버그 툴 링크 (모바일URL)

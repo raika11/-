@@ -1150,7 +1150,7 @@ public class DeskingServiceImpl implements DeskingService {
         String fileName = String.join("_", fileNames) + "." + extension;
 
         // 경로 생성. 루트일경우 index, 그 외의 페이지는 2depth의 서비스명을 사용한다.
-        // https://stg-wimage.joongang.co.kr/1000/index/202001/
+        // https://stg-wimage.joongang.co.kr/1000/index/202001/{contentId}_{datasetSeq}_{yyyyMMddHHmmss}.확장자
         String yyyyMM = McpDate.yearStr() + McpDate.monthStr();
         Optional<String> twoDepthName = Arrays
                 .stream(area

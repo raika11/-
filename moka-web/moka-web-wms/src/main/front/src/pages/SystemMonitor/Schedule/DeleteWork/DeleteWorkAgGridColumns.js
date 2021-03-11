@@ -6,16 +6,19 @@ export default [
     {
         headerName: '번호',
         field: 'seqNo',
+        cellStyle: { display: 'flex', alignItems: 'center' },
         width: 45,
     },
     {
         headerName: '분류',
-        field: 'group',
+        field: 'category',
+        cellStyle: { display: 'flex', alignItems: 'center' },
         width: 50,
     },
     {
         headerName: '주기',
-        field: 'cycle',
+        field: 'period',
+        cellStyle: { display: 'flex', alignItems: 'center' },
         width: 50,
     },
     {
@@ -31,27 +34,5 @@ export default [
         field: 'info',
         width: 240,
         cellRendererFramework: (row) => <WorkDelRenderer {...row} />,
-    },
-];
-
-export const rowData = [
-    {
-        seqNo: '146',
-        group: '중앙4',
-        cycle: '1분',
-        url: 'http://gen.joins.com/joongang/rss/make_news_rss/ctg/11',
-        route: '=>{ND@192.168.71.232}CMS_rss.joins.comjoins_money_list.xml',
-        desc: '[JOINS 뉴스 RSS 생성]',
-        create: '200/0',
-        deploy: '-1/0',
-        lastDt: '2020-01-06 15:20:22',
-        error: 'FTP 접속 오류로 배포 실패 FTP 접속 오류로 배포 실패 FTP 접속 오류로 배포 실패 FTP 접속 오류로 배포 실패',
-        regDt: '2019-10-19 10:05',
-        regAdmin: '관리자1(admin1)',
-        modDt: '2020-01-20 10:04',
-        modAdmin: '관리자1(admin1)',
-        usedYn: 'Y',
-        delDt: '2019-10-19 10:05',
-        delAdmin: '관리자1(admin1)',
     },
 ];

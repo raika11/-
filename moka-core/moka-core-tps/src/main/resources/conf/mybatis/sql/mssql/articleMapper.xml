@@ -230,7 +230,7 @@
     #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
-      <when test="movieTab == 'Y'">
+      <when test='movieTab == "Y"'>
         #{movieTab},
       </when>
       <otherwise>

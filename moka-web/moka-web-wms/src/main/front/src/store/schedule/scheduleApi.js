@@ -29,6 +29,42 @@ export const getJob = (jobSeq) => {
 };
 
 /**
+ * 작업 등록
+ */
+export const postJob = ({ job }) => {
+    return instance.post(`/api/schedule-server/job`, qs.stringify(job)).catch((err) => {
+        throw err;
+    });
+};
+
+/**
+ * 작업 수정
+ */
+export const putJob = ({ job }) => {
+    return instance.put(`/api/schedule-server/job/${job.jobSeq}`, qs.stringify(job)).catch((err) => {
+        throw err;
+    });
+};
+
+/**
+ * 작업 삭제
+ */
+export const deleteJob = ({ jobSeq }) => {
+    return instance.put(`/api/schedule-server/job/${jobSeq}/delete`).catch((err) => {
+        throw err;
+    });
+};
+
+/**
+ * 삭제 작업 목록 조회
+ */
+export const getJobDeleteList = ({ search }) => {
+    return instance.get(`/api/schedule-server/job-deleted?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+/**
  * 배포 서버 목록 조회
  */
 export const getDistributeServerList = ({ search }) => {

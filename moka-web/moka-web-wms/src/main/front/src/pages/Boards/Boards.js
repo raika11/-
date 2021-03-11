@@ -4,7 +4,7 @@ import { clearStore, initializeParams, getBoardChannelTypeList } from '@store/bo
 const BoardsSet = React.lazy(() => import('./BoardsSet'));
 const BoardsList = React.lazy(() => import('./BoardsList'));
 
-const Boards = ({ match }) => {
+const Boards = ({ match, displayName }) => {
     const dispatch = useDispatch();
     const pathName = useRef(match.path);
     const [pagesParams, setPagesParams] = useState(initpagesParams);
@@ -75,11 +75,11 @@ const Boards = ({ match }) => {
 
     return pagesParams.gubun === 'set' ? (
         <Suspense>
-            <BoardsSet />
+            <BoardsSet match={match} displayName={displayName} />
         </Suspense>
     ) : (
         <Suspense>
-            <BoardsList />
+            <BoardsList match={match} displayName={displayName} />
         </Suspense>
     );
 };

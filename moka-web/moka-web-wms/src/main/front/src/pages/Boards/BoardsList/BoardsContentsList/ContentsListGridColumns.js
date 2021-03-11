@@ -1,7 +1,5 @@
 import React from 'react';
-import RegistItemRenderer from './RegistItemRenderer';
 import FileItemRenderer from './FileItemRenderer';
-import TitleItemRenderer from './TitleItemRenderer';
 
 export const ColumnDefs = [
     {
@@ -10,43 +8,65 @@ export const ColumnDefs = [
         cellStyle: { display: 'flex', alignItems: 'center' },
         width: 70,
     },
-    // front 에서 각 게시글 마다에 채널명을 가지고 올수가 없어서 안보이게 처리.
     {
-        headerName: '채널명',
+        headerName: '구분',
         field: 'channelName',
         cellStyle: { display: 'flex', alignItems: 'center' },
         width: 100,
     },
     {
-        headerName: '제목',
-        field: 'titleItem',
+        headerName: '지역',
+        field: 'title',
         width: 250,
         flex: 1,
-        cellRendererFramework: (params) => <TitleItemRenderer paramsValue={params.value} />,
+        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
-        headerName: '말머리1',
-        field: 'titlePrefix1',
+        headerName: '제목',
+        field: 'title',
         cellStyle: { display: 'flex', alignItems: 'center' },
         width: 120,
     },
     {
-        headerName: '등록자\n등록일시',
+        headerName: '작성자',
         field: 'registItem',
         cellStyle: { fontSize: '12px', lineHeight: '18px' },
         width: 120,
-        cellRendererFramework: (params) => <RegistItemRenderer regDt={params.value.regDt} regName={params.value.regName} regId={params.value.regId} />,
     },
     {
-        headerName: '조회수',
-        field: 'viewCnt',
+        headerName: '작성일시',
+        field: 'regDt',
         cellStyle: { display: 'flex', alignItems: 'center' },
         width: 60,
+    },
+    {
+        headerName: '조회',
+        field: 'viewcount',
+        width: 80,
+        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '첨부파일',
         field: 'fileItem',
         width: 80,
         cellRendererFramework: (params) => <FileItemRenderer attaches={params.value.attaches} />,
+    },
+    // {
+    //     headerName: '추천/비추천',
+    //     field: 'viewcount',
+    //     width: 80,
+    //     cellStyle: { display: 'flex', alignItems: 'center' },
+    // },
+    // {
+    //     headerName: '신고',
+    //     field: 'viewcount',
+    //     width: 80,
+    //     cellStyle: { display: 'flex', alignItems: 'center' },
+    // },
+    {
+        headerName: '노출',
+        field: 'usedYn',
+        width: 40,
+        cellRenderer: 'usedYnRenderer',
     },
 ];

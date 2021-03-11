@@ -58,6 +58,8 @@ export const clearListmenuSearchOption = createAction(CLEAR_LISTMENU_SEARCH_OPTI
 export const CLEAR_LISTMENU_CONTENTSINFO = 'board/CLEAR_LISTMENU_CONTENTSINFO';
 export const clearListmenuContentsInfo = createAction(CLEAR_LISTMENU_CONTENTSINFO);
 
+// 게시판 답변 정보 초기화.
+
 // 게시글 선택한 게시판 정보 가지고 오기.
 export const [GET_LISTMENU_SELECT_BOARD, GET_LISTMENU_SELECT_BOARD_SUCCESS, GET_LISTMENU_SELECT_BOARD_FAILURE] = createRequestActionTypes('board/GET_LISTMENU_SELECT_BOARD');
 export const getListmenuSelectBoard = createAction(GET_LISTMENU_SELECT_BOARD, ({ boardId }) => ({ boardId }));
@@ -70,13 +72,21 @@ export const getListmenuContentsList = createAction(GET_LISTMENU_CONTENTS_LIST, 
 export const [GET_LISTMENU_CONTENTS_INFO, GET_LISTMENU_CONTENTS_INFO_SUCCESS, GET_LISTMENU_CONTENTS_INFO_FAILURE] = createRequestActionTypes('board/GET_LISTMENU_CONTENTS_INFO');
 export const getListmenuContentsInfo = createAction(GET_LISTMENU_CONTENTS_INFO, ({ boardId, boardSeq }) => ({ boardId, boardSeq }));
 
+// 게시글 정보중 내용 변경.
+export const CHANGE_LISTMENU_CONTENT = 'board/CHANGE_LISTMENU_CONTENT';
+export const changeListmenuContent = createAction(CHANGE_LISTMENU_CONTENT, ({ content }) => ({ content }));
+
+// 게시글 답변 내용 변경.
+export const CHANGE_LISTMENU_REPLY_CONTENT = 'board/CHANGE_LISTMENU_REPLY_CONTENT';
+export const changeListmenuReplyContent = createAction(CHANGE_LISTMENU_REPLY_CONTENT, ({ content }) => ({ content }));
+
 // 게시글 정보 저장.
 export const [SAVE_BOARD_CONTENTS, SAVE_BOARD_CONTENTS_SUCCESS, SAVE_BOARD_CONTENTS_FAILURE] = createRequestActionTypes('board/SAVE_BOARD_CONTENTS');
-export const saveBoardContents = createAction(SAVE_BOARD_CONTENTS, ({ boardId, contents, files, callback }) => ({ boardId, contents, files, callback }));
+export const saveBoardContents = createAction(SAVE_BOARD_CONTENTS, ({ boardId, formData, callback }) => ({ boardId, formData, callback }));
 
 // 게시글 정보 수정.
 export const [UPDATE_BOARD_CONTENTS, UPDATE_BOARD_CONTENTS_SUCCESS, UPDATE_BOARD_CONTENTS_FAILURE] = createRequestActionTypes('board/UPDATE_BOARD_CONTENTS');
-export const updateBoardContents = createAction(UPDATE_BOARD_CONTENTS, ({ boardId, boardSeq, contents, files, callback }) => ({ boardId, boardSeq, contents, files, callback }));
+export const updateBoardContents = createAction(UPDATE_BOARD_CONTENTS, ({ boardId, boardSeq, formData, callback }) => ({ boardId, boardSeq, formData, callback }));
 
 // 게시글 정보 삭제.
 export const [DELETE_BOARD_CONTENTS] = createRequestActionTypes('board/DELETE_BOARD_CONTENTS');

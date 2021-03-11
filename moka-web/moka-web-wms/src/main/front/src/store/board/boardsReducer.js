@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import moment from 'moment';
+import { selectItem } from '@pages/Boards/BoardConst';
 import {
     CLEAR_STORE,
     INITIALIZE_PARAMS,
@@ -17,6 +18,8 @@ import {
     GET_LISTMENU_CONTENTS_INFO_SUCCESS,
     CLEAR_LISTMENU_CONTENTSINFO,
     GET_LISTMENU_SELECT_BOARD_SUCCESS,
+    CHANGE_LISTMENU_CONTENT,
+    CHANGE_LISTMENU_REPLY_CONTENT,
 } from './boardsAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
@@ -66,39 +69,50 @@ export const initialState = {
             keyword: '',
         },
         boardinfo: {
-            boardId: null,
-            boardName: null,
-            boardType: null,
+            boardType: '',
+            channelType: null,
             usedYn: 'Y',
-            titlePrefix1: null,
-            titlePrefix2: null,
-            insLevel: 1,
-            viewLevel: 1,
-            answLevel: 1,
-            replyLevel: 1,
+            titlePrefixNm1: '',
+            titlePrefixNm2: '',
+            titlePrefix1: '',
+            titlePrefix2: '',
+            insLevel: '1',
+            viewLevel: '1',
+            answLevel: '1',
+            replyLevel: '0',
+            recomFlag: '0',
             editorYn: 'N',
             answYn: 'N',
             replyYn: 'N',
+            declareYn: 'N',
+            captchaYn: 'N',
+            secretYn: 'N',
+            ordYn: 'N',
+            pushYn: 'Y',
+            emailReceiveYn: 'Y',
+            receiveEmail: '',
+            answPushYn: 'Y',
+            emailSendYn: 'N',
+            sendEmail: '',
             fileYn: 'N',
             allowFileCnt: 0,
             allowFileSize: 0,
-            allowFileExt: '',
-            recomFlag: null,
-            declareYn: 'N',
-            captchaYn: 'N',
-            channelType: null,
-            boardDesc: null,
-            emailReceiveYn: 'N',
-            receiveEmail: null,
-            sendEmail: null,
-            emailSendYn: 'N',
-            exceptItem: null,
-            channelId: '',
+            allowFileExt: selectItem.FileExt.join(','),
+            allowItem: '',
+            regDt: '',
+            boardUrl: '',
+            boardName: '',
+            boardDesc: '',
+            headerContent: null,
+            footerContent: null,
         },
     },
     listmenu: {
         groupList: [],
-        selectboard: {},
+        selectboard: {
+            boardId: null,
+            allowItem: '',
+        },
         contentsList: {
             total: 0,
             list: [],
@@ -112,6 +126,7 @@ export const initialState = {
                 startDt: moment().format('YYYY-MM-DD 00:00:00'),
                 endDt: moment().format('YYYY-MM-DD 23:59:00'),
                 titlePrefix1: '',
+                titlePrefix2: '',
             },
         },
         contents: {
@@ -219,7 +234,19 @@ export default handleActions(
         // 선택한 게시글 정보 클리어 처리.
         [CLEAR_LISTMENU_CONTENTSINFO]: (state) => {
             return produce(state, (draft) => {
-                draft.listmenu.contents.info = initialState.listmenu.contents.info;
+                draft.listmenu.contents = initialState.listmenu.contents;
+            });
+        },
+
+        // Tree 메뉴 리스트 정상 처리.
+        [CHANGE_LISTMENU_CONTENT]: (state, { payload: { content } }) => {
+            return produce(state, (draft) => {
+                draft.listmenu.contents.info.content = content;
+            });
+        },
+        [CHANGE_LISTMENU_REPLY_CONTENT]: (state, { payload: { content } }) => {
+            return produce(state, (draft) => {
+                draft.listmenu.contents.reply.content = content;
             });
         },
     },

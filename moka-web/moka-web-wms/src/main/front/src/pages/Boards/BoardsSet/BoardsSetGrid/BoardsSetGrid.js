@@ -5,7 +5,7 @@ import { DISPLAY_PAGE_NUM } from '@/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeSetMenuSearchOption, GET_SETMENU_BOARD_LIST } from '@store/board';
 import { useHistory, useParams } from 'react-router-dom';
-import { selectItem } from '@pages/Boards/BoardConst';
+import ButtonRenderer from './ButtonRenderer';
 
 const BulkhHotClicAgGrid = () => {
     const dispatch = useDispatch();
@@ -45,37 +45,19 @@ const BulkhHotClicAgGrid = () => {
             setRowData([]);
             setRowData(
                 element.map((data) => {
-                    const { boardType } = selectItem;
                     const regDt = (data.regDt || '').slice(0, -3);
-                    const boardTypeName = boardType.find((element) => {
-                        return element.value === data.boardType;
-                    });
+                    const modDt = (data.modDt || '').slice(0, -3);
 
                     return {
-                        llowFileCnt: data.llowFileCnt,
-                        allowFileExt: data.allowFileExt,
-                        allowFileSize: data.allowFileSize,
-                        answLevel: data.answLevel,
-                        answYn: data.answYn,
-                        boardDesc: data.boardDesc,
                         boardId: data.boardId,
                         boardName: data.boardName,
-                        boardType: data.boardType,
-                        boardTypeName: boardTypeName.name,
-                        captchaYn: data.captchaYn,
-                        channelType: data.channelType,
-                        declareYn: data.declareYn,
-                        editorYn: data.editorYn,
-                        fileYn: data.fileYn,
-                        insLevel: data.insLevel,
-                        recomFlag: data.recomFlag,
-                        replyLevel: data.replyLevel,
-                        replyYn: data.replyYn,
-                        titlePrefix1: data.titlePrefix1,
-                        titlePrefix2: data.titlePrefix2,
-                        usedYn: data.usedYn,
-                        viewLevel: data.viewLevel,
                         regDt: regDt,
+                        modDt: modDt,
+                        usedYn: data.usedYn,
+                        buttonInfo: {
+                            boardId: data.boardId,
+                            boardUrl: data.boardUrl,
+                        },
                     };
                 }),
             );
@@ -86,7 +68,7 @@ const BulkhHotClicAgGrid = () => {
     return (
         <>
             <MokaTable
-                className="overflow-hidden flex-fill"
+                className="flex-fill overflow-hidden"
                 // agGridHeight={650}
                 columnDefs={ColumnDefs}
                 rowData={rowData}
@@ -100,6 +82,10 @@ const BulkhHotClicAgGrid = () => {
                 displayPageNum={DISPLAY_PAGE_NUM}
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={params.boardId}
+                frameworkComponents={{
+                    buttonRenderer: ButtonRenderer,
+                }}
+                preventRowClickCell={['button']}
             />
         </>
     );

@@ -12,7 +12,7 @@ const BoardsContentsList = () => {
     }));
 
     return (
-        <MokaCard width={750} className="mr-gutter" title={`${selectboard.boardName} 목록`} bodyClassName="d-flex flex-column">
+        <MokaCard width={750} className="mr-gutter" title={`${selectboard.boardName} 글목록`} bodyClassName="d-flex flex-column">
             <SearchBox />
             <ContentsListGrid />
         </MokaCard>

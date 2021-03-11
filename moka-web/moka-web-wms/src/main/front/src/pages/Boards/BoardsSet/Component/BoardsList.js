@@ -29,7 +29,7 @@ const BoardsList = () => {
     }, [boardType]);
 
     return (
-        <MokaCard width={850} title={`${cardTitle} 게시판 목록`} className="mr-gutter" bodyClassName="d-flex flex-column">
+        <MokaCard title={`${cardTitle} 게시판 목록`} className="w-100" bodyClassName="d-flex flex-column">
             <BoardsListSearchBox />
             <BoardsSetGrid />
         </MokaCard>

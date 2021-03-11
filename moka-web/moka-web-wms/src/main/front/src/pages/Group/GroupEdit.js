@@ -341,8 +341,8 @@ const GroupEdit = ({ match }) => {
             className="w-100 shadow-none"
             footerClassName="justify-content-center"
             footerButtons={[
-                { text: groupCd ? '수정' : '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
-                groupCd && { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'mr-1' },
+                { text: paramCd ? '수정' : '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
+                paramCd && { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancel },
             ].filter((a) => a)}
             footer

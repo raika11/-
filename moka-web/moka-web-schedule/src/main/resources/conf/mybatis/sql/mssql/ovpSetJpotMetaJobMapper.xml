@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.web.schedule.mvc.ovp.mapper.OvpSetJpotMetaJobMapper">
+
+    <!-- 배포서버 별 작업 실행상태 통계 리스트 -->
+    <select id="findOne" parameterType="OvpSetJpotMetaJobDTO" resultType="integer" statementType="CALLABLE">
+        {call UPA_JPOD_METADATA_EDIT(
+                #{statDate, mode=IN, jdbcType=VARCHAR, javaType=string},
+                #{vodCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+                #{playPv, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+                #{playUv, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+                #{playTime, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+                #{completeCnt, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+            ) }
+    </select>
+
+</mapper>

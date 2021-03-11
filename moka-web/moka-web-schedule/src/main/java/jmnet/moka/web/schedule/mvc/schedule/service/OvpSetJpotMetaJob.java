@@ -4,6 +4,8 @@ package jmnet.moka.web.schedule.mvc.schedule.service;
 import jmnet.moka.core.common.brightcove.BrightcoveCredentailVO;
 import jmnet.moka.core.common.brightcove.BrightcoveProperties;
 import jmnet.moka.web.schedule.mvc.brightcove.service.BrightcoveService;
+import jmnet.moka.web.schedule.mvc.ovp.dto.OvpSetJpotMetaJobDTO;
+import jmnet.moka.web.schedule.mvc.ovp.mapper.OvpSetJpotMetaJobMapper;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
@@ -35,8 +37,13 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
     @Autowired
     private BrightcoveProperties brightcoveProperties;
 
+    @Autowired
+    private OvpSetJpotMetaJobMapper ovpSetJpotMetaJobMapper;
+
     @Override
     public void invoke() {
+
+        boolean success = true;
 
         BrightcoveCredentailVO credentail = brightcoveService.getClientCredentials();
         Date date = new Date();
@@ -54,23 +61,34 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
         try {
             //analytics API 호출
             JSONObject jsonObject = (JSONObject) brightcoveService.findAnalytics(credentail, contentUrl.toString());
-            log.debug("jsonObject : "+ jsonObject);
             log.debug("item_count : {}", jsonObject.get("item_count"));
             JSONArray items = (JSONArray) jsonObject.get("items");
             for(Object item : items){
                 JSONObject tmp = (JSONObject) item;
-                log.debug("now : {}", now);
-                log.debug("video : {}", tmp.get("video"));
-                log.debug("play_request : {}", tmp.get("play_request"));
-                log.debug("0 : {}", 0);
-                log.debug("video_seconds_viewed : {}", tmp.get("video_seconds_viewed"));
-                log.debug("video_engagement_100 : {}", tmp.get("video_engagement_100"));
-                log.debug("===============================================");
+
+                OvpSetJpotMetaJobDTO param = new OvpSetJpotMetaJobDTO();
+                param.setStatDate(now);
+                param.setVodCode(tmp.get("video").toString());
+                param.setPlayPv((Long) tmp.get("play_request"));
+                param.setPlayUv(0L);
+                param.setPlayTime((Long) tmp.get("video_seconds_viewed"));
+                param.setCompleteCnt((Long) tmp.get("video_engagement_100"));
+                int result = ovpSetJpotMetaJobMapper.findOne(param);
+                log.debug("execute procedure result : {}", result);
+
+                //procedure 실행 실패 시
+                if(result == 0){
+                    success= false;
+                }
             }
+
+            //AbstractSchduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
+            //임시로 성공/실패만 입력 + 그외 입력값은 입력정의 필요
+            setFinish(success);
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString());
         }
 
     }

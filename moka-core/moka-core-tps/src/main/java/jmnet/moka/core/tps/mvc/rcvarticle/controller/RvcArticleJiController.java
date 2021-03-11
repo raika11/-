@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
@@ -167,7 +168,14 @@ public class RvcArticleJiController extends AbstractCommonController {
         String xmlBody = rcvArticleJiXmlDTO.getXmlBody();
         StringBuilder sb = new StringBuilder(1024);
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        ByteArrayInputStream bi = new ByteArrayInputStream(xmlBody.getBytes("EUC-KR"));
+        BufferedReader sr = new BufferedReader(new StringReader(xmlBody));
+        String xmlPi = sr.readLine();
+        ByteArrayInputStream bi = null;
+        if (xmlPi.contains("EUC-KR")) {
+            bi = new ByteArrayInputStream(xmlBody.getBytes("EUC-KR"));
+        } else {
+            bi = new ByteArrayInputStream(xmlBody.getBytes("UTF-8"));
+        }
         Document document = documentBuilder.parse(bi);
         Node rootNode = document.getDocumentElement();
         NodeList newsComponentList = getNodeList(rootNode, "//NewsItem/NewsComponent/NewsComponent");

@@ -24,6 +24,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 public class PushSenderJob extends PushJob {
-    private int tokenCnt = 1000;
-    private int threadPoolCnt = 10;
+    int tokenCnt = 1000;
+    int threadPoolCnt = 10;
 }

@@ -1,9 +1,11 @@
 package jmnet.moka.web.push.mvc.sender.repository;
 
-import jmnet.moka.web.push.mvc.sender.entity.PushApp;
-
+import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -12,7 +14,7 @@ import java.util.Optional;
  *
  */
 @Repository
-public interface PushAppRepositorySupport {
+public interface PushAppTokenRepositorySupport {
 
     /**
      * 특정작업 존재여부 확인 - 앱 일련번호
@@ -20,6 +22,6 @@ public interface PushAppRepositorySupport {
      * @param appSeq   검색조건
      * @return 작업
      */
-    Optional<PushApp> findAllByAppSeq(Long appSeq);
+    Optional<PushAppToken> findFirstByAppSeqOrderByTokenSeqDesc(Integer appSeq);
 
 }

@@ -49,4 +49,13 @@ public interface PushContentsRepositorySupport {
      */
     Page<PushContents> findAllByUsedYn(String usedYn, Pageable pageable);
 
+    /**
+     * 콘텐트 Seq 로 작업 목록 조회
+     *
+     * @param contentSeq   검색조건
+     * @param pageable
+     * @return 작업 목록
+     */
+    Page<PushContents> findAllByContentSeq(Long contentSeq, Pageable pageable);
+
 }

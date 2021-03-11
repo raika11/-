@@ -85,10 +85,9 @@ public class PushContentsProc implements Serializable {
     private Date endDt;
 
     /**
-     * 종료일시
+     * 컨텐츠 일련번호
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTENT_SEQ", referencedColumnName = "CONTENT_SEQ", insertable = false, updatable = false)
     private PushContents pushContents;
-
 }

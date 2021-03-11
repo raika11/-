@@ -5,15 +5,11 @@ import jmnet.moka.web.push.mvc.sender.dto.PushContentSeqSearchDTO;
 import jmnet.moka.web.push.mvc.sender.dto.PushContentUsedYnSearchDTO;
 import jmnet.moka.web.push.mvc.sender.dto.PushRelContentIdSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
-import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
-import jmnet.moka.web.push.mvc.sender.repository.PushContentsProcRepository;
 import jmnet.moka.web.push.mvc.sender.repository.PushContentsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -21,8 +17,6 @@ public class PushContentsServiceImpl implements PushContentsService{
 
     @Autowired
     private PushContentsRepository pushContentsRepository;
-    @Autowired
-    private PushContentsProcRepository pushContentsProcRepository;
 
     @Override
     public boolean isValidData(PushAppSearchDTO search) {
@@ -38,10 +32,6 @@ public class PushContentsServiceImpl implements PushContentsService{
         return pushContentsRepository.findByRelContentId(search.getRelContentId(), search.getPageable());
     }
     @Override
-    public PushContentsProc savePushContentsProc(PushContentsProc pushContentsProc) {
-        return pushContentsProcRepository.save(pushContentsProc);
-    }
-    @Override
     public PushContents saveDelYn(PushContents pushContents) {
         return pushContentsRepository.save(pushContents);
     }
@@ -54,5 +44,10 @@ public class PushContentsServiceImpl implements PushContentsService{
     @Override
     public Page<PushContents> findAllByUsedYn(PushContentUsedYnSearchDTO search) {
         return pushContentsRepository.findAllByUsedYn(search.getUsedYn(), search.getPageable());
+    }
+
+    @Override
+    public Page<PushContents> findAllByContentSeq(PushContentSeqSearchDTO search) {
+        return pushContentsRepository.findAllByContentSeq(search.getContentSeq(), search.getPageable());
     }
 }

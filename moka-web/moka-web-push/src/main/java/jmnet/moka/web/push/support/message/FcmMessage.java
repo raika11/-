@@ -41,7 +41,7 @@ public class FcmMessage {
     /**
      * 다수의 수신자 배열에 포함될 수 있는 등록 토큰 수는 1~1,000개
      */
-    private List<String> registrationIds;
+    private List<String> registration_ids;
 
     /**
      * 다수의 토픽 조건 토픽 in topics. &amp;&amp;, || 지원

@@ -8,11 +8,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 import jmnet.moka.web.push.mvc.sender.dto.*;
-import jmnet.moka.web.push.mvc.sender.entity.PushContents;
-import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
-import jmnet.moka.web.push.mvc.sender.entity.PushContentsProcPK;
+import jmnet.moka.web.push.mvc.sender.entity.*;
 import jmnet.moka.web.push.mvc.sender.service.PushAppDeleteService;
 import jmnet.moka.web.push.mvc.sender.service.PushContentsService;
+import jmnet.moka.web.push.mvc.sender.service.PushContentsProcService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,7 +38,6 @@ import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.web.push.support.sender.PushSenderHandler;
 
 import jmnet.moka.web.push.mvc.sender.service.PushAppService;
-import jmnet.moka.web.push.mvc.sender.entity.MobPushItem;
 
 
 /**
@@ -68,12 +66,14 @@ public class MessageGatewayController {
     private final PushAppService pushAppService;
 
     private final PushContentsService pushContentsService;
+    private final PushContentsProcService pushContentsProcService;
 
     private final PushAppDeleteService pushAppDeleteService;
 
-    public MessageGatewayController(PushAppService pushAppService, PushContentsService pushContentsService, PushAppDeleteService pushAppDeleteService) {
+    public MessageGatewayController(PushAppService pushAppService, PushContentsService pushContentsService, PushContentsProcService pushContentsProcService, PushAppDeleteService pushAppDeleteService) {
         this.pushAppService = pushAppService;
         this.pushContentsService = pushContentsService;
+        this.pushContentsProcService = pushContentsProcService;
         this.pushAppDeleteService = pushAppDeleteService;
     }
 
@@ -97,7 +97,7 @@ public class MessageGatewayController {
         //validCodeData(sendDTO);
 
         //앱 일련번호
-        Long appSeq = sendDTO.getJobSeq();
+        Integer appSeq = sendDTO.getJobSeq().intValue();
         //푸시기사 일련번호
         Long relContentId = sendDTO.getRelContentId();
 
@@ -131,6 +131,13 @@ public class MessageGatewayController {
         contentsItem.setIconType(sendDTO.getIconType());
         contentsItem.setRsvDt(McpDate.date("yyyyMMdd", sendDTO.getReserveDt().toString()));
 
+        contentsItem.setPicYn(sendDTO.getPicYn());
+        contentsItem.setSendEmail(sendDTO.getSendEmail());
+        contentsItem.setRepId(sendDTO.getRepId());
+        contentsItem.setRelUrl(sendDTO.getRelUrl());
+        contentsItem.setImgUrl(sendDTO.getImgUrl());
+        contentsItem.setPushImgUrl(sendDTO.getPushUrl());
+
         contentsItem.setTitle(sendDTO.getTitle());
         contentsItem.setSubTitle(sendDTO.getTitle());
         contentsItem.setContent(sendDTO.getContent());
@@ -142,8 +149,8 @@ public class MessageGatewayController {
 
         contentsItem.setRegId("ssc01");
         contentsItem.setModId("ssc01");
-        contentsItem.setRegDt(McpDate.todayDate());
-        contentsItem.setModDt(McpDate.todayDate());
+        contentsItem.setRegDt(McpDate.now());
+        contentsItem.setModDt(McpDate.now());
 
         try {
             PushContents pushContents = modelMapper.map(contentsItem, PushContents.class);
@@ -194,7 +201,7 @@ public class MessageGatewayController {
                         .build();
                 pushContentsProc.setId(pushContentsProcPK);
 
-                PushContentsProc returnProcValue = pushContentsService.savePushContentsProc(pushContentsProc);
+                PushContentsProc returnProcValue = pushContentsProcService.savePushContentsProc(pushContentsProc);
                 log.debug("[SUCCESS TO INSERT PUSH CONTENTSPROC]");
             } catch (Exception e) {
                 log.error("[FAIL TO INSERT PUSH CONTENTSPROC]", e);
@@ -209,10 +216,10 @@ public class MessageGatewayController {
                 .builder()
                 .pushType(sendDTO.getPushType())
                 .contentSeq(contentSeq)
-               // .rsvDt(McpDate.date("yyyyMMdd", sendDTO.getReserveDt().toString()))
+                .rsvDt(McpDate.date("yyyyMMdd", sendDTO.getReserveDt().toString()))
                // .pushItemSeq((long) Math.random())
                 .build();
-        boolean success = pushSenderHandler.addPushJob(pushItem);
+        boolean success = pushSenderHandler.addPushJob(pushItem,appSeq);
 
         log.debug("푸시 전송 Job 추가");
 

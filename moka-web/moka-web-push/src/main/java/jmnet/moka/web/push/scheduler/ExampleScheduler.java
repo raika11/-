@@ -1,14 +1,12 @@
 package jmnet.moka.web.push.scheduler;
 
-import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.web.push.mvc.sender.dto.PushContentUsedYnSearchDTO;
 import jmnet.moka.web.push.mvc.sender.dto.PushContentsDTO;
 import jmnet.moka.web.push.mvc.sender.dto.PushContentsProcDTO;
-import jmnet.moka.web.push.mvc.sender.dto.PushRelContentIdSearchDTO;
-import jmnet.moka.web.push.mvc.sender.entity.MobPushItem;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
 import jmnet.moka.web.push.mvc.sender.entity.PushContentsProcPK;
+import jmnet.moka.web.push.mvc.sender.service.PushContentsProcService;
 import jmnet.moka.web.push.mvc.sender.service.PushContentsService;
 import jmnet.moka.web.push.support.scheduler.AbstractScheduler;
 import lombok.extern.slf4j.Slf4j;
@@ -40,13 +38,17 @@ public class ExampleScheduler extends AbstractScheduler {
 
     private final PushContentsService pushContentsService;
 
-    public ExampleScheduler(PushContentsService pushContentsService) {
+    private final PushContentsProcService pushContentsProcService;
+
+    public ExampleScheduler(PushContentsService pushContentsService, PushContentsProcService pushContentsProcService) {
         this.pushContentsService = pushContentsService;
+        this.pushContentsProcService = pushContentsProcService;
     }
 
     @Override
     public void invoke() throws Exception {
 
+        Integer appSeq = 0;  //확인 필요 컬럼
         log.debug("설정 시간에 활성화되어 푸시 컨텐츠 조회 후 컨텐츠가 있을 경우 메세지를 전송하는 스케줄러");
 
         // todo 1. 푸시 대상 컨텐츠 조회
@@ -104,7 +106,6 @@ public class ExampleScheduler extends AbstractScheduler {
             PushContentsProc pushContentsProc = modelMapper.map(contentsProcItem, PushContentsProc.class);
 
             Integer cnt = 0;
-            Integer appSeq = 0;  //확인 필요 컬럼
 
             for(int i=0; i < dtoList.size(); i++) {
 
@@ -123,7 +124,7 @@ public class ExampleScheduler extends AbstractScheduler {
                 pushContentsProc.setLastTokenSeq(cnt.longValue());
             }
 
-            PushContentsProc returnProcValue = pushContentsService.savePushContentsProc(pushContentsProc);
+            PushContentsProc returnProcValue = pushContentsProcService.savePushContentsProc(pushContentsProc);
             log.debug("[SUCCESS TO INSERT PUSH CONTENTSPROC]");
         } catch (Exception e) {
             log.error("[FAIL TO INSERT PUSH CONTENTSPROC]", e);
@@ -139,7 +140,7 @@ public class ExampleScheduler extends AbstractScheduler {
                     .pushType(dtoList.get(i).getPushType())
                     .contentSeq(dtoList.get(i).getContentSeq().longValue())
                     .build();
-            boolean success = pushSenderHandler.addPushJob(pushItem);
+            boolean success = pushSenderHandler.addPushJob(pushItem, appSeq);
         }
     }
 }

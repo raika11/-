@@ -24,8 +24,6 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class PushContentsProcPK implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     /**
      * 콘텐트 일련번호
     */

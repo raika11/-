@@ -59,6 +59,9 @@ public class ArticleSearchDTO extends SearchDTO {
     @ApiModelProperty("콘텐트타입")
     private String contentType;
 
+    @ApiModelProperty("영상여부")
+    private String movieYn;
+
     @ApiModelProperty("매체목록 (필수/구분자,)")
     @JsonIgnore
     @Length(min = 1, message = "{tps.article.error.length.sourceList}")
@@ -80,7 +83,6 @@ public class ArticleSearchDTO extends SearchDTO {
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
         super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
         this.masterCode = TpsConstants.SEARCH_TYPE_ALL;
-        this.contentType = TpsConstants.SEARCH_TYPE_ALL;
         this.pressCategory = TpsConstants.SEARCH_TYPE_ALL;
         this.bulkYn = TpsConstants.SEARCH_TYPE_ALL;
         this.serviceFlag = TpsConstants.SEARCH_TYPE_ALL;

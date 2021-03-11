@@ -452,7 +452,13 @@ public class ArticleRestController extends AbstractCommonController {
             }
 
             // 기사정보 조회
-            ArticleBasicDTO dto = modelMapper.map(articleBasic, ArticleBasicDTO.class);
+            ArticleBasic articleBasicNew = articleService
+                    .findArticleBasicById(totalId)
+                    .orElseThrow(() -> {
+                        tpsLogger.fail(msg("tps.common.error.no-data"), true);
+                        return new NoDataException(msg("tps.common.error.no-data"));
+                    });
+            ArticleBasicDTO dto = modelMapper.map(articleBasicNew, ArticleBasicDTO.class);
             articleService.findArticleInfo(dto);
 
             // purge

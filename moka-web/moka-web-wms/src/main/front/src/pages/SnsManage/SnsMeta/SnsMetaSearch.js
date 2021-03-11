@@ -3,13 +3,11 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 import toast from '@utils/toastUtil';
-import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
 import commonUtil from '@utils/commonUtil';
 
 const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
     const [dateType, setDateType] = useState('today');
-    const [disabled, setDisabled] = useState({ date: true });
+    const [disabled, setDisabled] = useState({ date: false });
     const [options, setOptions] = useState(searchOptions);
 
     const handleSearchReset = () => {
@@ -61,7 +59,7 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
         } else {
             const { startDt, endDt } = commonUtil.toRangeDateForDateType(dateType);
             setOptions({ ...options, startDt, endDt });
-            setDisabled({ ...disabled, date: true });
+            //setDisabled({ ...disabled, date: true });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateType]);
@@ -90,7 +88,7 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                         <option value="today">오늘</option>
                         <option value="thisWeek">이번주</option>
                         <option value="thisMonth">이번달</option>
-                        <option value="direct">직접입력</option>
+                        {/*<option value="direct">직접입력</option>*/}
                     </MokaInput>
                 </div>
                 <div style={{ width: 130 }} className="mr-2 flex-shrink-0">

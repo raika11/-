@@ -20,8 +20,8 @@
     #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
-      <when test='movieYn == "Y"'>
-        #{movieYn},
+      <when test='movieTab == "Y"'>
+        #{movieTab},
       </when>
       <otherwise>
         NULL,
@@ -230,8 +230,8 @@
     #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
-      <when test="movieYn == 'Y'">
-        #{movieYn},
+      <when test="movieTab == 'Y'">
+        #{movieTab},
       </when>
       <otherwise>
         NULL,

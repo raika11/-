@@ -60,7 +60,7 @@ public class ArticleSearchDTO extends SearchDTO {
     private String contentType;
 
     @ApiModelProperty("영상여부")
-    private String movieYn;
+    private String movieTab;
 
     @ApiModelProperty("매체목록 (필수/구분자,)")
     @JsonIgnore

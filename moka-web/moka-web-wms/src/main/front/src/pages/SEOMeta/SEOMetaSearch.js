@@ -17,7 +17,7 @@ const SEOMetaSearch = () => {
     const storeSearch = useSelector((store) => store.seoMeta.search);
     const [dateType, setDateType] = useState('today');
     const [search, setSearch] = useState(initialState.search);
-    const [disabled, setDisabled] = useState({ date: true });
+    const [disabled, setDisabled] = useState({ date: false });
 
     /**
      * change input value
@@ -83,11 +83,11 @@ const SEOMetaSearch = () => {
     useEffect(() => {
         // 날짜 타입에 따른 셋팅
         if (dateType === 'direct') {
-            setDisabled({ ...disabled, date: false });
+            //setDisabled({ ...disabled, date: false });
         } else {
             const { startDt, endDt } = commonUtil.toRangeDateForDateType(dateType);
             setSearch({ ...search, startDt: moment(startDt, DB_DATEFORMAT), endDt: moment(endDt, DB_DATEFORMAT) });
-            setDisabled({ ...disabled, date: true });
+            //setDisabled({ ...disabled, date: true });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateType]);
@@ -101,7 +101,7 @@ const SEOMetaSearch = () => {
                         <option value="today">오늘</option>
                         <option value="thisWeek">이번주</option>
                         <option value="thisMonth">이번달</option>
-                        <option value="direct">직접입력</option>
+                        {/*<option value="direct">직접입력</option>*/}
                     </MokaInput>
                 </div>
                 <div className="mr-2">

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.DpsApiConstants;
@@ -42,8 +43,10 @@ import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Article 서비스 구현체
@@ -72,14 +75,18 @@ public class ArticleServiceImpl implements ArticleService {
     @Value("${tms.default.api.path}")
     private String defaultApiPath;
 
+    private final EntityManager entityManager;
+
     public ArticleServiceImpl(ArticleBasicRepository articleBasicRepository, ArticleTitleRepository articleTitleRepository,
-            ArticleHistoryRepository articleHistoryRepository, ArticleMapper articleMapper, ModelMapper modelMapper, FtpHelper ftpHelper) {
+            ArticleHistoryRepository articleHistoryRepository, ArticleMapper articleMapper, ModelMapper modelMapper, FtpHelper ftpHelper,
+            @Qualifier("tpsEntityManagerFactory") EntityManager entityManager) {
         this.articleBasicRepository = articleBasicRepository;
         this.articleTitleRepository = articleTitleRepository;
         this.articleHistoryRepository = articleHistoryRepository;
         this.articleMapper = articleMapper;
         this.modelMapper = modelMapper;
         this.ftpHelper = ftpHelper;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -348,6 +355,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @Transactional
     public boolean insertArticleIud(ArticleBasic articleBasic, ArticleBasicUpdateDTO updateDto) {
 
         // html escape
@@ -489,6 +497,8 @@ public class ArticleServiceImpl implements ArticleService {
                 .iudDiv(TpsConstants.WORKTYPE_UPDATE)
                 .build();
         articleHistoryRepository.save(history);
+
+        entityManager.flush();
 
         return true;
     }

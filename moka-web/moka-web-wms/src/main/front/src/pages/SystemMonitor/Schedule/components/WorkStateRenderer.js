@@ -9,23 +9,34 @@ import { DB_DATEFORMAT } from '@/constants';
  */
 const WorkStateRenderer = forwardRef(({ data }, ref) => {
     useImperativeHandle(ref, () => ({
-        refresh: () => false,
+        refresh: () => true,
     }));
 
+    const contentRender = () => {
+        return (
+            <>
+                {data.regMember && (
+                    <p className="mb-0 text-truncate">{`등록 ${data.regDt ? moment(data.regDt).format(DB_DATEFORMAT) : ''} ${data.regMember.memberNm}(${
+                        data.regMember.memberId
+                    })`}</p>
+                )}
+                {data.modMember && (
+                    <p className="mb-0 text-truncate">{`수정 ${data.modDt ? moment(data.modDt).format(DB_DATEFORMAT) : ''} ${data.modMember.memberNm}(${
+                        data.modMember.memberId
+                    })`}</p>
+                )}
+            </>
+        );
+    };
+
     return (
-        <OverlayTrigger
-            overlay={
-                <Tooltip id="tooltip-table-edit-info">
-                    {data.regMember && <p className="mb-0">{`등록 ${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember.memberNm}(${data.regMember.memberId})`}</p>}
-                    {data.modMember && <p className="mb-0">{`수정 ${moment(data.modDt).format(DB_DATEFORMAT)} ${data.modMember.memberNm}(${data.modMember.memberId})`}</p>}
-                </Tooltip>
-            }
-        >
-            <div className="d-flex flex-column justify-content-center h-100">
-                {data.regMember && <p className="mb-0">{`등록 ${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember.memberNm}(${data.regMember.memberId})`}</p>}
-                {data.modMember && <p className="mb-0">{`수정 ${moment(data.modDt).format(DB_DATEFORMAT)} ${data.modMember.memberNm}(${data.modMember.memberId})`}</p>}
-            </div>
-        </OverlayTrigger>
+        <>
+            {data.regMember && (
+                <OverlayTrigger overlay={<Tooltip id="tooltip-table-edit-info">{contentRender()}</Tooltip>}>
+                    <div className="d-flex flex-column justify-content-center h-100">{contentRender()}</div>
+                </OverlayTrigger>
+            )}
+        </>
     );
 });
 

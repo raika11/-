@@ -59,7 +59,7 @@ const getJobList = callApiAfterActions(act.GET_JOB_LIST, api.getJobList, (state)
 const getJob = createRequestSaga(act.GET_JOB, api.getJob);
 
 /**
- * 작업 등록
+ * 작업 등록, 수정
  */
 function* saveJob({ payload: { job, jobSeq, callback } }) {
     const ACTION = act.SAVE_JOB;
@@ -118,12 +118,79 @@ function* deleteJob({ payload: { jobSeq, callback } }) {
 /**
  * 삭제 작업 목록 조회
  */
-const getJobDeleteList = callApiAfterActions(act.GET_JOB_DELETE_LIST, api.getJobDeleteList, (state) => state.schedule.deleteWork);
+const getDeleteJobList = callApiAfterActions(act.GET_DELETE_JOB_LIST, api.getDeleteJobList, (state) => state.schedule.deleteWork);
+
+/**
+ * 삭제 작업 상세 조회
+ */
+const getDeleteJob = createRequestSaga(act.GET_DELETE_JOB, api.getDeleteJob);
 
 /**
  * 배포 서버 목록 조회
  */
 const getDistributeServerList = callApiAfterActions(act.GET_DISTRIBUTE_SERVER_LIST, api.getDistributeServerList, (state) => state.schedule.deployServer);
+
+/**
+ * 배포 서버 상세 조회
+ */
+const getDistributeServer = createRequestSaga(act.GET_DISTRIBUTE_SERVER, api.getDistributeServer);
+
+/**
+ * 배포 서버 등록, 수정
+ */
+function* saveDistributeServer({ payload: { server, serverSeq, callback } }) {
+    const ACTION = act.SAVE_DISTRIBUTE_SERVER;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        // 등록 수정 분기
+        const response = yield call(serverSeq ? api.putDistributeServer : api.postDistributeServer, { server });
+        callbackData = response.data;
+        if (response.data.header.success) {
+            // 목록 다시 검색
+            const search = yield select((store) => store.schedule.deployServer.search);
+            yield put({ type: act.GET_DISTRIBUTE_SERVER_LIST, payload: { search } });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 배포 서버 삭제
+ */
+function* deleteServer({ payload: { serverSeq, callback } }) {
+    const ACTION = act.DELETE_SERVER;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(api.deleteDistributeServer, { serverSeq });
+        callbackData = response.data;
+        if (response.data.header.success) {
+            // 목록 다시 검색
+            const search = yield select((store) => store.schedule.deployServer.search);
+            yield put({ type: act.GET_DISTRIBUTE_SERVER_LIST, payload: { search } });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
 
 export default function* scheduleSaga() {
     yield takeLatest(act.GET_DISTRIBUTE_SERVER_CODE, getDistributeServerCode);
@@ -131,6 +198,10 @@ export default function* scheduleSaga() {
     yield takeLatest(act.GET_JOB, getJob);
     yield takeLatest(act.SAVE_JOB, saveJob);
     yield takeLatest(act.DELETE_JOB, deleteJob);
-    yield takeLatest(act.GET_JOB_DELETE_LIST, getJobDeleteList);
+    yield takeLatest(act.GET_DELETE_JOB_LIST, getDeleteJobList);
+    yield takeLatest(act.GET_DELETE_JOB, getDeleteJob);
     yield takeLatest(act.GET_DISTRIBUTE_SERVER_LIST, getDistributeServerList);
+    yield takeLatest(act.GET_DISTRIBUTE_SERVER, getDistributeServer);
+    yield takeLatest(act.SAVE_DISTRIBUTE_SERVER, saveDistributeServer);
+    yield takeLatest(act.DELETE_SERVER, deleteServer);
 }

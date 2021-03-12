@@ -13,7 +13,7 @@ const DeleteWork = (props) => {
     return (
         <div className="h-100 d-flex">
             {/* 삭제 작업 목록 */}
-            <div className="mr-gutter" style={{ width: 892 }}>
+            <div className="mr-gutter" style={{ width: 825 }}>
                 <Suspense>
                     <DeleteWorkList match={match} />
                 </Suspense>
@@ -23,7 +23,7 @@ const DeleteWork = (props) => {
             <Route path={[`${match.path}/work-delete/:seqNo`]}>
                 <div className="flex-fill">
                     <Suspense>
-                        <DeleteWorkEdit />
+                        <DeleteWorkEdit match={match} />
                     </Suspense>
                 </div>
             </Route>

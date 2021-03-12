@@ -32,7 +32,7 @@ export default [
     {
         headerName: '삭제 정보',
         field: 'info',
-        width: 240,
+        width: 250,
         cellRendererFramework: (row) => <WorkDelRenderer {...row} />,
     },
 ];

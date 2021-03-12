@@ -13,18 +13,17 @@ const DeployServer = (props) => {
     return (
         <div className="h-100 d-flex">
             {/* 배포 서버 목록 */}
-            <div className="mr-gutter d-flex flex-column" style={{ width: 892 }}>
-                <h2 style={{ marginBottom: '20px' }}>배포 서버 목록</h2>
+            <div className="mr-gutter" style={{ width: 892 }}>
                 <Suspense>
-                    <DeployServerList />
+                    <DeployServerList match={match} />
                 </Suspense>
             </div>
 
             {/* 배포 서버 등록, 수정 */}
             <Switch>
-                <Route path={[`${match.path}/deploy-server/add`, `${match.path}/deploy-server/:seqNo`]}>
+                <Route path={[`${match.path}/deploy-server/add`, `${match.path}/deploy-server/:serverSeq`]}>
                     <div className="flex-fill">
-                        <DeployServerEdit />
+                        <DeployServerEdit match={match} />
                     </div>
                 </Route>
             </Switch>

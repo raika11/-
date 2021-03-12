@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@/components';
 import columnDefs from './DeleteWorkAgGridColumns';
-import { GET_JOB_DELETE_LIST, getJobList, changeDeleteWorkSearchOption } from '@/store/schedule';
+import { GET_DELETE_JOB_LIST, getJobList, changeDeleteWorkSearchOption } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 삭제 작업 목록 AgGrid
@@ -14,13 +14,15 @@ const DeleteWorkAgGrid = ({ match }) => {
     const total = useSelector((store) => store.schedule.deleteWork.total);
     const list = useSelector((store) => store.schedule.deleteWork.list);
     const search = useSelector((store) => store.schedule.deleteWork.search);
-    const loading = useSelector((store) => store.loading[GET_JOB_DELETE_LIST]);
+    const deleteJob = useSelector((store) => store.schedule.deleteWork.deleteJob);
+    const loading = useSelector((store) => store.loading[GET_DELETE_JOB_LIST]);
 
     /**
      * 테이블 row 클릭
      */
     const handleRowClicked = useCallback(
         (row) => {
+            // dispatch(getDeleteJob(row.seqNo));
             history.push(`${match.path}/work-delete/${row.seqNo}`);
         },
         [history, match.path],
@@ -52,7 +54,7 @@ const DeleteWorkAgGrid = ({ match }) => {
             total={total}
             page={search.page}
             size={search.size}
-            selected={(row) => row.seqNo}
+            selected={deleteJob.seqNo}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );

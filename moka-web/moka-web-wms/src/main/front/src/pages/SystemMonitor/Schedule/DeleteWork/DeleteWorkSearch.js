@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
-import { getJobDeleteList, changeDeleteWorkSearchOption, clearDeleteWorkSearch } from '@/store/schedule';
+import { getDeleteJobList, changeDeleteWorkSearchOption, clearDeleteWorkSearch } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 삭제 작업 목록 검색
@@ -31,7 +31,7 @@ const DeleteWorkSearch = () => {
      */
     const handleClickSearch = () => {
         dispatch(
-            getJobDeleteList(
+            getDeleteJobList(
                 changeDeleteWorkSearchOption({
                     ...search,
                     page: 0,
@@ -48,7 +48,7 @@ const DeleteWorkSearch = () => {
     };
 
     useEffect(() => {
-        dispatch(getJobDeleteList());
+        dispatch(getDeleteJobList());
     }, [dispatch]);
 
     return (

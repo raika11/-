@@ -1,18 +1,20 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@/components';
-import { useHistory } from 'react-router-dom';
+import { initialState, getDistributeServerList, changeDeployServerSearchOption, clearDeployServerSearch } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 배포 서버 검색
  */
-const DeleteWorkSearch = () => {
+const DeleteWorkSearch = ({ match }) => {
     const history = useHistory();
-    const [search, setSearch] = useState({
-        alias: '',
-        ip: '',
-    });
+    const dispatch = useDispatch();
+    const storeSearch = useSelector((store) => store.schedule.deployServer.search);
+    const [search, setSearch] = useState(initialState.deployServer.search);
 
     /**
      * input value
@@ -26,39 +28,61 @@ const DeleteWorkSearch = () => {
     );
 
     /**
+     * 검색 버튼
+     */
+    const handleClickSearch = () => {
+        dispatch(
+            getDistributeServerList(
+                changeDeployServerSearchOption({
+                    ...search,
+                    page: 0,
+                }),
+            ),
+        );
+    };
+
+    /**
      * 초기화 버튼
      */
     const handleClickReset = () => {
-        setSearch({ ...search, alias: '', ip: '' });
+        dispatch(clearDeployServerSearch());
     };
 
     /**
      * 등록 버튼
      */
     const handleClickAdd = () => {
-        history.push(`/schedule/deploy-server/add`);
+        history.push(`${match.path}/deploy-server/add`);
     };
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    useEffect(() => {
+        dispatch(getDistributeServerList());
+    }, [dispatch]);
 
     return (
         <Form className="mb-14">
-            <div className="mb-14 d-flex align-items-center justify-content-between">
-                <div className="d-flex">
-                    <div className="mr-2" style={{ width: 200 }}>
-                        <MokaInputLabel label="별칭" name="alias" value={search.alias} onChange={handleChangeValue} />
+            <Form.Row className="mb-14 justify-content-between">
+                <Col xs={6} className="p-0 d-flex">
+                    <div className="mr-2">
+                        <MokaInputLabel label="별칭" name="serverNm" value={search.serverNm} onChange={handleChangeValue} />
                     </div>
-                    <div style={{ width: 200 }}>
-                        <MokaInputLabel label="서버IP" name="ip" value={search.ip} onChange={handleChangeValue} />
+                    <div>
+                        <MokaInputLabel label="서버IP" name="serverIp" value={search.serverIp} onChange={handleChangeValue} />
                     </div>
-                </div>
+                </Col>
                 <div className="d-flex">
-                    <Button variant="searching" className="mr-1">
+                    <Button variant="searching" className="mr-1" onClick={handleClickSearch}>
                         검색
                     </Button>
-                    <Button variant="outline-neutral" onClick={handleClickReset}>
+                    <Button variant="negative" onClick={handleClickReset}>
                         초기화
                     </Button>
                 </div>
-            </div>
+            </Form.Row>
             <div className="d-flex justify-content-end">
                 <Button variant="positive" onClick={handleClickAdd}>
                     등록

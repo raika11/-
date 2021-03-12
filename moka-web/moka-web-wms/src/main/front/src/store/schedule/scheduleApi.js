@@ -58,8 +58,17 @@ export const deleteJob = ({ jobSeq }) => {
 /**
  * 삭제 작업 목록 조회
  */
-export const getJobDeleteList = ({ search }) => {
+export const getDeleteJobList = ({ search }) => {
     return instance.get(`/api/schedule-server/job-deleted?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+/**
+ * 삭제 작업 상세 조회
+ */
+export const getDeleteJob = (seqNo) => {
+    return instance.get(`/api/schedule-server/job-deleted/${seqNo}`).catch((err) => {
         throw err;
     });
 };
@@ -69,6 +78,42 @@ export const getJobDeleteList = ({ search }) => {
  */
 export const getDistributeServerList = ({ search }) => {
     return instance.get(`/api/schedule-server/distribute-server?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+/**
+ * 배포 서버 상세 조회
+ */
+export const getDistributeServer = (serverSeq) => {
+    return instance.get(`/api/schedule-server/distribute-server/${serverSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+/**
+ * 배포 서버 등록
+ */
+export const postDistributeServer = ({ server }) => {
+    return instance.post(`/api/schedule-server/distribute-server`, qs.stringify(server)).catch((err) => {
+        throw err;
+    });
+};
+
+/**
+ * 배포 서버 수정
+ */
+export const putDistributeServer = ({ server }) => {
+    return instance.put(`/api/schedule-server/distribute-server/${server.serverSeq}`, qs.stringify(server)).catch((err) => {
+        throw err;
+    });
+};
+
+/**
+ * 배포 서버 삭제
+ */
+export const deleteDistributeServer = ({ serverSeq }) => {
+    return instance.put(`/api/schedule-server/distribute-server/${serverSeq}/delete`).catch((err) => {
         throw err;
     });
 };

@@ -127,18 +127,23 @@ const WorkEdit = ({ match }) => {
      * 삭제 버튼
      */
     const handleClickDelete = () => {
-        dispatch(
-            deleteJob({
-                jobSeq: Number(jobSeq),
-                callback: ({ header }) => {
-                    if (header.success) {
-                        toast.success('삭제되었습니다.');
-                        history.push(`${match.path}`);
-                    } else {
-                        messageBox.alert(header.message);
-                    }
-                },
-            }),
+        messageBox.confirm(
+            '작업을 삭제하시겠습니까?',
+            () =>
+                dispatch(
+                    deleteJob({
+                        jobSeq: Number(jobSeq),
+                        callback: ({ header }) => {
+                            if (header.success) {
+                                toast.success('삭제되었습니다.');
+                                history.push(`${match.path}`);
+                            } else {
+                                messageBox.alert(header.message);
+                            }
+                        },
+                    }),
+                ),
+            () => {},
         );
     };
 
@@ -160,6 +165,7 @@ const WorkEdit = ({ match }) => {
     }, [jobSeq]);
 
     useEffect(() => {
+        // 스토어의 job 데이터를 로컬 state에 셋팅
         setData({ ...data, ...job });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [job]);
@@ -210,6 +216,7 @@ const WorkEdit = ({ match }) => {
                                 id="schedule-work-s"
                                 onChange={handleChangeValue}
                                 inputProps={{ custom: true, label: '스케줄', checked: data.jobType === 'S' ? true : false }}
+                                disabled={jobSeq ? true : false}
                             />
                         </Col>
                         <Col xs={4} className="p-0">
@@ -220,6 +227,7 @@ const WorkEdit = ({ match }) => {
                                 id="schedule-work-r"
                                 onChange={handleChangeValue}
                                 inputProps={{ custom: true, label: '백오피스 예약', checked: data.jobType === 'R' ? true : false }}
+                                disabled={jobSeq ? true : false}
                             />
                         </Col>
                     </Form.Row>
@@ -308,7 +316,7 @@ const WorkEdit = ({ match }) => {
                     <MokaInputLabel
                         as="textarea"
                         label="설명"
-                        className={jobSeq ? 'mb-2' : 'mb-4'}
+                        className={jobSeq && 'mb-2'}
                         name="jobDesc"
                         inputProps={{ rows: jobSeq ? 1 : 5 }}
                         value={data.jobDesc}
@@ -352,7 +360,7 @@ const WorkEdit = ({ match }) => {
                                 value={`${moment(data.jobStatus?.lastExecDt).format(DB_DATEFORMAT)}`}
                                 inputProps={{ plaintext: true, readOnly: true }}
                             />
-                            <Form.Row className="mb-4">
+                            <Form.Row>
                                 <MokaInputLabel label=" " as="none" />
                                 <MokaInput
                                     as="textarea"

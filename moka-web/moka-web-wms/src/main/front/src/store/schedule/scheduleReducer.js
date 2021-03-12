@@ -56,7 +56,7 @@ export const initialState = {
         total: 0,
         error: null,
         search: {
-            sort: 'jobSeq,desc',
+            sort: 'seqNo,desc',
             page: 0,
             size: PAGESIZE_OPTIONS[0],
             searchType: '',
@@ -67,13 +67,33 @@ export const initialState = {
             sendType: '',
             serverSeq: '',
         },
+        deleteJob: {
+            seqNo: '',
+            jobSeq: '',
+            serverSeq: '',
+            category: '',
+            period: '',
+            sendType: '',
+            ftpPort: '',
+            ftpPassive: '',
+            callUrl: '',
+            targetPath: '',
+            jobDesc: '',
+            regDt: '',
+            regId: '',
+            jobStatus: '',
+            regMember: {
+                memberId: '',
+                memberNm: '',
+            },
+        },
     },
     deployServer: {
         list: [],
         total: 0,
         error: null,
         search: {
-            sort: '',
+            sort: 'serverSeq,desc',
             page: 0,
             size: PAGESIZE_OPTIONS[0],
             searchType: '',
@@ -81,6 +101,24 @@ export const initialState = {
             useTotal: '',
             serverNm: '',
             serverIp: '',
+        },
+        server: {
+            serverSeq: '',
+            serverNm: '',
+            serverIp: '',
+            accessId: '',
+            regDt: '',
+            regId: '',
+            modDt: '',
+            modId: '',
+            regMember: {
+                memberId: '',
+                memberNm: '',
+            },
+            modMember: {
+                memberId: '',
+                memberNm: '',
+            },
         },
     },
 };
@@ -122,9 +160,19 @@ export default handleActions(
                 draft.deleteWork.search = initialState.deleteWork.search;
             });
         },
+        [act.CLEAR_DEPLOY_SERVER_SEARCH]: (state) => {
+            return produce(state, (draft) => {
+                draft.deployServer.search = initialState.deployServer.search;
+            });
+        },
         [act.CLEAR_JOB]: (state) => {
             return produce(state, (draft) => {
                 draft.work.job = initialState.work.job;
+            });
+        },
+        [act.CLEAR_SERVER]: (state) => {
+            return produce(state, (draft) => {
+                draft.deployServer.server = initialState.deployServer.server;
             });
         },
         /**
@@ -173,18 +221,31 @@ export default handleActions(
         /**
          * 삭제 작업 목록 조회
          */
-        [act.GET_JOB_DELETE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_DELETE_JOB_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.deleteWork.list = body.list;
                 draft.deleteWork.total = body.totalCnt;
                 draft.deleteWork.error = initialState.deleteWork.error;
             });
         },
-        [act.GET_JOB_DELETE_LIST_FAILURE]: (state, { payload }) => {
+        [act.GET_DELETE_JOB_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.deleteWork.list = initialState.deleteWork.list;
                 draft.deleteWork.total = initialState.deleteWork.total;
                 draft.deleteWork.error = payload;
+            });
+        },
+        /**
+         * 삭제 작업 상세 조회
+         */
+        [act.GET_DELETE_JOB_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.deleteWork.deleteJob = body;
+            });
+        },
+        [act.GET_DELETE_JOB_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.deleteWork.deleteJob = initialState.deleteWork.deleteJob;
             });
         },
         /**
@@ -202,6 +263,19 @@ export default handleActions(
                 draft.deployServer.list = initialState.deployServer.list;
                 draft.deployServer.total = initialState.deployServer.total;
                 draft.deployServer.error = payload;
+            });
+        },
+        /**
+         * 배포 서버 상세 조회
+         */
+        [act.GET_DISTRIBUTE_SERVER_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.deployServer.server = body;
+            });
+        },
+        [act.GET_DISTRIBUTE_SERVER_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.deployServer.server = initialState.deployServer.server;
             });
         },
     },

@@ -5,7 +5,7 @@ export default [
         width: 50,
     },
     {
-        headerName: '기사페이지명',
+        headerName: '아티클페이지명',
         field: 'artPageName',
         width: 160,
         flex: 1,

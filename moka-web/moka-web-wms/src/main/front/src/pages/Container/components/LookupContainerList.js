@@ -158,7 +158,7 @@ const LookupContainerList = (props) => {
         } else if (seqType === ITEM_AP) {
             setSearchTypeList(
                 produce(initialState.searchTypeList, (draft) => {
-                    draft.splice(1, 0, { id: 'artPageSeq', name: '기사페이지ID' });
+                    draft.splice(1, 0, { id: 'artPageSeq', name: '아티클페이지ID' });
                 }),
             );
         }

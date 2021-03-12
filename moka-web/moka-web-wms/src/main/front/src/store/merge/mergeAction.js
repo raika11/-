@@ -11,7 +11,7 @@ export const checkSyntax = createAction(CHECK_SYNTAX, ({ content, callback }) =>
 }));
 
 /**
- * 기사페이지 미리보기
+ * 아티클페이지 미리보기
  */
 export const PREVIEW_ARTICLE_PAGE = 'merge/PREVIEW_ARTICLE_PAGE';
 export const previewArticlePage = createAction(PREVIEW_ARTICLE_PAGE, ({ articlePage, totalId, callback }) => ({ articlePage, totalId, callback }));
@@ -73,7 +73,7 @@ export const w3cPage = createAction(W3C_PAGE, ({ content, page, callback }) => (
 }));
 
 /**
- * 기사페이지 W3C검사. syntax 체크 -> 머지결과 -> HTML검사
+ * 아티클페이지 W3C검사. syntax 체크 -> 머지결과 -> HTML검사
  */
 export const W3C_ARTICLE_PAGE = 'merge/W3C_ARTICLE_PAGE';
 export const w3cArticlePage = createAction(W3C_ARTICLE_PAGE, ({ content, articlePage, totalId, callback }) => ({

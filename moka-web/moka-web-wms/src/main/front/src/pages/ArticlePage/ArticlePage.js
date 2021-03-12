@@ -23,7 +23,7 @@ const LookupAdList = React.lazy(() => import('@pages/Ad/components/LookupAdList'
 const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 
 /**
- * 기사페이지 관리
+ * 아티클페이지 관리
  */
 const ArticlePage = ({ match }) => {
     const history = useHistory();
@@ -135,7 +135,7 @@ const ArticlePage = ({ match }) => {
     };
 
     /**
-     * 기사페이지 로드 버튼 이벤트
+     * 아티클페이지 로드 버튼 이벤트
      */
     const handleClickArticlePageLoad = useCallback(
         ({ header, body }) => {
@@ -229,8 +229,8 @@ const ArticlePage = ({ match }) => {
                             tabNavWidth={48}
                             tabNavPosition="right"
                             tabNavs={[
-                                { title: '기사페이지 정보', text: 'Info' },
-                                { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-money-check" /> },
+                                { title: '아티클페이지 정보', text: 'Info' },
+                                { title: '관련 아티클페이지', icon: <MokaIcon iconName="fal-money-check" /> },
                                 { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                                 { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
                                 { title: '관련 템플릿', icon: <MokaIcon iconName="fal-newspaper" /> },

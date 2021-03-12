@@ -76,7 +76,7 @@ const HistoryList = (props) => {
                     : seqType === ITEM_CT
                     ? '컨테이너를 선택해주세요'
                     : seqType === ITEM_AP
-                    ? '기사페이지를 선택해주세요'
+                    ? '아티클페이지를 선택해주세요'
                     : '페이지를 선택해주세요',
             );
         }

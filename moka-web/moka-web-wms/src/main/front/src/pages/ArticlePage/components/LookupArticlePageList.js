@@ -42,7 +42,7 @@ const defaultProps = {
 };
 
 /**
- * seq, seqType을 검색조건으로 사용하는 Lookup 기사페이지 리스트
+ * seq, seqType을 검색조건으로 사용하는 Lookup 아티클페이지 리스트
  */
 const LookupArticlePageList = (props) => {
     const { seq, seqType, show, onLoad } = props;
@@ -180,7 +180,7 @@ const LookupArticlePageList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
-        <MokaCard title="관련 기사페이지" bodyClassName="d-flex flex-column">
+        <MokaCard title="관련 아티클페이지" bodyClassName="d-flex flex-column">
             <Form className="mb-14">
                 {/* 검색조건, 키워드 */}
                 <Form.Row>

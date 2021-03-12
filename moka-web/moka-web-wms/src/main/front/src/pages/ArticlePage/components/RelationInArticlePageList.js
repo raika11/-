@@ -33,7 +33,7 @@ const defaultProps = {
 
 /**
  * 오른쪽 탭에 들어가는
- * 관련된 상위(부모의) 기사페이지 리스트
+ * 관련된 상위(부모의) 아티클페이지 리스트
  *
  * 데이터셋 관리 => 도메인 select 추가
  */
@@ -144,7 +144,7 @@ const RelationInArticlePageList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard title="관련 기사페이지" bodyClassName="d-flex flex-column">
+        <MokaCard title="관련 아티클페이지" bodyClassName="d-flex flex-column">
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-14">
@@ -161,7 +161,7 @@ const RelationInArticlePageList = (props) => {
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-14">
                 <Button variant="positive" onClick={() => window.open('/article-page/add')}>
-                    기사페이지 등록
+                    아티클페이지 등록
                 </Button>
             </div>
 

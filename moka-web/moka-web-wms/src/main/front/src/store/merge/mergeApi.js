@@ -22,7 +22,7 @@ export const postPreviewPG = ({ page }) => {
         });
 };
 
-// 기사페이지 미리보기
+// 아티클페이지 미리보기
 export const postPreviewAP = ({ articlePage, totalId }) => {
     return instance
         .post(`/api/merge/previewAP/${totalId}`, articlePage, {

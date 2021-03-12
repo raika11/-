@@ -6,7 +6,7 @@ import * as api from './articlePageApi';
 import * as act from './articlePageAction';
 
 /**
- * 기사페이지 목록 조회
+ * 아티클페이지 목록 조회
  */
 const getArticlePageList = callApiAfterActions(act.GET_ARTICLE_PAGE_LIST, api.getArticlePageList, (store) => store.articlePage);
 
@@ -58,7 +58,7 @@ export function* getPreviewTotalId({ payload: { artType, callback } }) {
 }
 
 /**
- * 동일기사페이지 유형 존재여부
+ * 동일아티클페이지 유형 존재여부
  */
 function* existsArtType({ payload }) {
     const { callback } = payload;

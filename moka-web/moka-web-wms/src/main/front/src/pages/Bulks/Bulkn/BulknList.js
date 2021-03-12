@@ -16,12 +16,10 @@ const BulknList = (props) => {
     };
 
     return (
-        <>
-            <MokaCard title="네이버 벌크 문구" width={870} loading={null} className="mr-gutter">
-                <BulknListSearchBox HandleEditEnable={handleEditEnable} />
-                <BulknListGrid bulksURL={props.bulksURL} HandleEditEnable={handleEditEnable} />
-            </MokaCard>
-        </>
+        <MokaCard title="네이버 벌크 문구" width={870} className="mr-gutter h-100" bodyClassName="d-flex flex-column">
+            <BulknListSearchBox HandleEditEnable={handleEditEnable} />
+            <BulknListGrid bulksURL={props.bulksURL} HandleEditEnable={handleEditEnable} />
+        </MokaCard>
     );
 };
 

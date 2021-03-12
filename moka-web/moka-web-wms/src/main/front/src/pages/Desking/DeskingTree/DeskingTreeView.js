@@ -55,7 +55,7 @@ const defaultProps = {
  * 데스킹 트리 조회 컴포넌트
  */
 const DeskingTreeView = (props) => {
-    const { data, loading } = props;
+    const { data, loading, ...rest } = props;
 
     /**
      * 트리아이템 생성 함수
@@ -74,7 +74,7 @@ const DeskingTreeView = (props) => {
     };
 
     return (
-        <MokaCard className="mr-gutter treeview" bodyClassName="mt-0 mb-0 p-2" width={200} header={false}>
+        <MokaCard className="mr-gutter h-100 treeview" bodyClassName="mt-0 mb-0 p-2" width={200} header={false} {...rest}>
             <ul className="list-unstyled tree-list">
                 {loading && <MokaLoader />}
                 {!loading &&

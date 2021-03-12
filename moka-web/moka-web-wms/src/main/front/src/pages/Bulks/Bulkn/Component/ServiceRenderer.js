@@ -1,5 +1,4 @@
 import React from 'react';
-import { Form, Col } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { useDispatch } from 'react-redux';
@@ -9,7 +8,7 @@ import { changeBulkused, getBulkList } from '@store/bulks';
 const ServiceRenderer = ({ bulkartSeq, usedYn, status }) => {
     const dispatch = useDispatch();
 
-    // switch 를 클릭했을떄 처리.
+    // switch 를 클릭했을 때 처리.
     // useyn 이 N 이고 상태가 save 상태에만 변경.
     const handleOnchange = (checked) => {
         if (checked === true) {
@@ -48,25 +47,20 @@ const ServiceRenderer = ({ bulkartSeq, usedYn, status }) => {
     };
 
     return (
-        <>
-            <Form>
-                <Form.Row>
-                    <Col xs={12}>
-                        <MokaInputLabel
-                            as="switch"
-                            name={`usedYn_${bulkartSeq}`}
-                            id={`usedYn_${bulkartSeq}`}
-                            // variant="positive"
-                            // labelWidth={87}
-                            // label="사용여부"
-                            inputProps={{ checked: usedYn === 'Y' }}
-                            onChange={(e) => handleOnchange(e.target.checked)}
-                            disabled={usedYn === 'Y' ? true : false}
-                        />
-                    </Col>
-                </Form.Row>
-            </Form>
-        </>
+        <div className="d-flex align-items-center h-100">
+            <MokaInputLabel
+                as="switch"
+                name={`usedYn_${bulkartSeq}`}
+                id={`usedYn_${bulkartSeq}`}
+                className="mt-2"
+                // variant="positive"
+                // labelWidth={87}
+                // label="사용여부"
+                inputProps={{ checked: usedYn === 'Y' }}
+                onChange={(e) => handleOnchange(e.target.checked)}
+                disabled={usedYn === 'Y' ? true : false}
+            />
+        </div>
     );
 };
 

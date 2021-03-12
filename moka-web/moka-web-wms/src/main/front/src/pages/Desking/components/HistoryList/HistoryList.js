@@ -160,7 +160,7 @@ const HistoryList = (props) => {
     }, [selectedComponent.componentSeq, show, handleSearch, loadCnt]);
 
     return (
-        <MokaCard title="히스토리" className="w-100" bodyClassName="d-flex">
+        <MokaCard title="히스토리" className="w-100 h-100" bodyClassName="d-flex">
             {/* 컴포넌트워크 히스토리 */}
             <ComponentWorkHistoryList
                 search={search}

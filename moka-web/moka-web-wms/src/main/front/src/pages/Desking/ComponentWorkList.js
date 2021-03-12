@@ -154,7 +154,7 @@ const ComponentWorkList = (props) => {
                 loading={loading}
                 header={false}
                 width={363}
-                className={clsx('p-0 position-relative', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H, 'mr-1': area.areaAlign === AREA_ALIGN_H })}
+                className={clsx('p-0 position-relative h-100', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H, 'mr-1': area.areaAlign === AREA_ALIGN_H })}
                 bodyClassName="p-0 mt-0 overflow-hidden"
             >
                 <div className="d-flex justify-content-between p-2 border-bottom" style={{ height: 45 }}>
@@ -208,7 +208,7 @@ const ComponentWorkList = (props) => {
 
             {/* 오른쪽 카드 */}
             {rightList.length > 0 && (
-                <MokaCard loading={loading} header={false} width={363} className="p-0 position-relative mr-gutter" bodyClassName="p-0 mt-0 overflow-hidden">
+                <MokaCard loading={loading} header={false} width={363} className="p-0 position-relative mr-gutter h-100" bodyClassName="p-0 mt-0 overflow-hidden">
                     <div className="d-flex justify-content-end p-2 border-bottom" style={{ height: 45 }}></div>
 
                     <div className="custom-scroll scrollable overflow-x-hidden" style={{ height: 'calc(100% - 45px)' }}>

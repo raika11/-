@@ -5,7 +5,7 @@ import HotClickAgGrid from '@pages/Bulks/Bulkh/HotClickGrid/HotClickAgGrid';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 import BulkhHistoryModal from '@pages/Bulks/Bulkh/Modal/BulkhHistoryModal';
-import { getHotClickTitle, saveHotClick, getHotclickList, saveHotClickResend, GET_HOTCLICK_LIST } from '@store/bulks';
+import { getHotClickTitle, saveHotClick, getHotclickList, saveHotClickResend, GET_HOTCLICK_LIST, clearHotclicklist } from '@store/bulks';
 import { useDispatch, useSelector } from 'react-redux';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { useParams } from 'react-router-dom';
@@ -17,26 +17,23 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
     const dispatch = useDispatch();
     const params = useParams();
     const selectBulkartSeq = useRef();
-    const { loading, hotclickList, topTitle, bulkPathName } = useSelector((store) => ({
+    const loading = useSelector(({ loading }) => loading[GET_HOTCLICK_LIST]);
+    const { hotclickList, topTitle, bulkPathName } = useSelector((store) => ({
         bulkPathName: store.bulks.bulkPathName,
         hotclickList: store.bulks.bulkh.hotclickList.list,
         topTitle: store.bulks.bulkh.topTitle,
-        loading: store.loading[GET_HOTCLICK_LIST],
     }));
-
     const [historyModalShow, setHistoryModalShow] = useState(false);
-    // 상단 타이틀 문구 스테이트.
     const [topTitleItem, setTopTitleItem] = useState({
         send: '',
         wait: '',
-    });
+    }); // 상단 타이틀 문구
+    const handleClickHistoryModalButton = () => setHistoryModalShow(true); // 편집 정보 버튼 클릭 처리
 
-    // 편집 정보 버튼 클릭 처리.
-    const handleClickHistoryModalButton = () => {
-        setHistoryModalShow(true);
-    };
-
-    // 전송 버튼 임시저장 버튼 처리.
+    /**
+     * 전송 버튼 임시저장 버튼 처리
+     * @param {*} type type
+     */
     const handleClickSaveButton = (type) => {
         let tempArray = { title: [], url: [], totalId: [] };
 
@@ -90,7 +87,9 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
         );
     };
 
-    // 재전송.
+    /**
+     * 재전송
+     */
     const handleClickResendButton = () => {
         if (!topTitleItem.isWait) {
             dispatch(
@@ -111,26 +110,22 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
         }
     };
 
-    // url 변경 되었을떄 리스트 가지고 오기.
     useEffect(() => {
         if (params.seqNo !== selectBulkartSeq.current) {
             selectBulkartSeq.current = params.seqNo;
-
-            // url 기준으로 핫클릭 리스트를 가지고 오기.
+            // url 기준으로 핫클릭 리스트 조회
             dispatch(getHotclickList({ bulkartSeq: params.seqNo }));
         }
     }, [dispatch, params]);
 
-    // 로딩시 타이틀 가지고 오기.
     useEffect(() => {
-        const getTopTitle = () => {
-            dispatch(getHotClickTitle());
-        };
+        // 타이틀 가져옴
+        const getTopTitle = () => dispatch(getHotClickTitle());
         getTopTitle();
     }, [dispatch]);
 
-    // 상단 타이틀 설정.
     useEffect(() => {
+        // 상단 타이틀 설정
         const setTopTitle = ({ send, wait }) => {
             let sendDt = send.regDt && send.regDt.length > 10 ? send.regDt.substr(0, 16) : send.regDt;
             let waitDt = wait.regDt && wait.regDt.length > 10 ? wait.regDt.substr(0, 16) : wait.regDt;
@@ -151,54 +146,51 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
     }, [topTitle]);
 
     return (
-        <>
-            <MokaCard
-                width={380}
-                loading={loading}
-                className="flex-fill mr-gutter"
-                bodyClassName="scrollable"
-                titleAs={
-                    <>
-                        <Row>
-                            <Col className="justify-content-start" xs={3}>
-                                {/* <MokaInputLabel label="아티클 핫클릭" labelWidth={90} className="h5" as="none" /> */}
-                                <Card.Title as="h2" className={clsx({ 'd-none': false }, 'mb-0')}>
-                                    {`아티클 핫클릭`}
-                                </Card.Title>
-                            </Col>
-                            <Col xs={7}>
-                                <Col className="align-self-top text-right p-0">{topTitleItem.send}</Col>
-                                <Col className="align-self-bottom text-right p-0">
-                                    <span className={clsx('', topTitleItem.isWait && 'text-danger')}>{topTitleItem.wait}</span>
-                                </Col>
-                            </Col>
-                            <Col xs={2} className="p-0 pt-1">
-                                <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={handleClickHistoryModalButton}>
-                                    편집정보
-                                </Button>
-                            </Col>
-                        </Row>
-                    </>
-                }
-                footer
-                footerClassName="justify-content-center"
-                footerButtons={[
-                    { text: '재전송', variant: 'outline-neutral', onClick: () => handleClickResendButton(), className: 'mr-1' },
-                    { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton('publish'), className: 'mr-1' },
-                    { text: '임시저장', variant: 'secondary', onClick: () => handleClickSaveButton('save'), className: 'mr-1' },
-                ]}
+        <MokaCard
+            width={380}
+            loading={loading}
+            className="flex-fill h-100 mr-gutter"
+            bodyClassName="scrollable d-flex flex-column"
+            titleAs={
+                <Row>
+                    <Col className="justify-content-start" xs={3}>
+                        {/* <MokaInputLabel label="아티클 핫클릭" labelWidth={90} className="h5" as="none" /> */}
+                        <Card.Title as="h2" className={clsx({ 'd-none': false }, 'mb-0')}>
+                            {`아티클 핫클릭`}
+                        </Card.Title>
+                    </Col>
+                    <Col xs={7}>
+                        <Col className="align-self-top text-right p-0">{topTitleItem.send}</Col>
+                        <Col className="align-self-bottom text-right p-0">
+                            <span className={clsx('', topTitleItem.isWait && 'text-danger')}>{topTitleItem.wait}</span>
+                        </Col>
+                    </Col>
+                    <Col xs={2} className="p-0 pt-1">
+                        <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={handleClickHistoryModalButton}>
+                            편집정보
+                        </Button>
+                    </Col>
+                </Row>
+            }
+            footer
+            footerClassName="justify-content-center"
+            footerButtons={[
+                { text: '재전송', variant: 'outline-neutral', onClick: () => handleClickResendButton(), className: 'mr-1' },
+                { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton('publish'), className: 'mr-1' },
+                { text: '임시저장', variant: 'secondary', onClick: () => handleClickSaveButton('save'), className: 'mr-1' },
+            ]}
+        >
+            <div
+                className={clsx('component-work component-hot-click border-top pt-0', {
+                    disabled: false,
+                })}
+                id={`agGrid-0`}
             >
-                <div
-                    className={clsx('component-work component-hot-click border-top pt-0', {
-                        disabled: false,
-                    })}
-                    id={`agGrid-0`}
-                >
-                    <HotClickAgGrid componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
-                </div>
-            </MokaCard>
+                <HotClickAgGrid componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
+            </div>
+
             <BulkhHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
-        </>
+        </MokaCard>
     );
 };
 

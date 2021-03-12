@@ -9,7 +9,8 @@ const ComponentWorkList = React.lazy(() => import('./ComponentWorkList'));
 const DeskingTab = React.lazy(() => import('./DeskingTab'));
 
 /**
- * 페이지 편집
+ * 홈 섹션편집
+ * 페이지 편집 하위 메뉴는 min-height 지정, h-100
  */
 const Desking = ({ match }) => {
     const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const Desking = ({ match }) => {
     }, [dispatch]);
 
     return (
-        <div className="d-flex">
+        <div className="d-flex h-100" style={{ minHeight: 817 }}>
             <Helmet>
                 <title>페이지편집</title>
                 <meta name="description" content="페이지편집 페이지입니다." />

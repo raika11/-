@@ -17,7 +17,7 @@ const DeskingWorkHistoryList = (props) => {
     }, [rowData]);
 
     return (
-        <MokaTable columnDefs={columnDefs} rowData={rows} onRowNodeId={(history) => history.histSeq} agGridHeight={721} onRowClicked={() => {}} loading={loading} paging={false} />
+        <MokaTable columnDefs={columnDefs} rowData={rows} onRowNodeId={(history) => history.histSeq} className="h-100" onRowClicked={() => {}} loading={loading} paging={false} />
     );
 };
 

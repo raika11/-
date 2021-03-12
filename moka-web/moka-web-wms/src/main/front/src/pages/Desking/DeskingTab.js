@@ -18,7 +18,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                 onSelectNav={(idx) => setActiveTabIdx(idx)}
                 tabWidth={840}
                 height={817}
-                className="flex-fill"
+                className="flex-fill h-100"
                 tabContentClass="flex-fill"
                 hasHotkeys={true}
                 tabs={[

@@ -108,7 +108,7 @@ const DeskingArticleTab = (props) => {
         });
     }, [componentAgGridInstances, componentList, handleArticleDragStop, isNaverChannel, navIdx, selectedComponent, show, tabNavs]);
 
-    return <MokaCardTabs width={840} className="w-100" onSelectNav={(idx) => setNavIdx(idx)} tabs={createTabs()} tabNavs={tabNavs} />;
+    return <MokaCardTabs width={840} className="w-100 h-100" onSelectNav={(idx) => setNavIdx(idx)} tabs={createTabs()} tabNavs={tabNavs} />;
 };
 
 export default DeskingArticleTab;

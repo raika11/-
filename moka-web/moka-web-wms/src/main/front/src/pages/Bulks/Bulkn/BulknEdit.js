@@ -87,52 +87,6 @@ const BulknEdit = (props) => {
         );
     };
 
-    // 현재 선택한 bulkartSeq 가 없을떄 ( 등록 상태.).
-    useEffect(() => {
-        // 등록 상태.
-        if (bulkartSeq === null) {
-            setBulkArticleRow(rowInit);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [bulkartSeq]);
-
-    // Redux Store 에서 벌크 기사가 변경이되면 State 에도 변경처리.
-    useEffect(() => {
-        const storeBulkArticleToState = (data) => {
-            const { list, bulk } = data;
-            let tempList = rowInit.map(function (e, index) {
-                const t_title = list[index] ? list[index].title.replace(/^\s+|\s+$/g, '') : '';
-                const t_url = list[index] ? list[index].url.replace(/^\s+|\s+$/g, '') : '';
-                const t_symbol = list[index] ? list[index].symbol : '';
-                const title_length = checkTextLength(t_title);
-
-                return {
-                    ...e,
-                    title: t_title,
-                    url: t_url,
-                    symbol: t_symbol,
-                    title_length: title_length,
-                };
-            });
-
-            if (bulkartSeq == null) {
-                setTempButton(false);
-            } else if (bulk.usedYn === 'N') {
-                setTempButton(false);
-            } else {
-                setTempButton(true);
-            }
-
-            setBulkArticleRow(tempList);
-        };
-        if (bulkArticle.list) {
-            storeBulkArticleToState(bulkArticle);
-        }
-
-        // bulkArticle 값이 변경 될때만 실행 되게.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [bulkArticle]);
-
     // 문구 저장.
     const handleClickSaveButton = () => {
         handleSaveBulkArticle('publish');
@@ -272,6 +226,52 @@ ${bulkArticleRow
         commonUtil.popupPreview(W3C_URL, { fragment: checkBody }, 'multipart/form-data');
     };
 
+    // 현재 선택한 bulkartSeq 가 없을떄 ( 등록 상태.).
+    useEffect(() => {
+        // 등록 상태.
+        if (bulkartSeq === null) {
+            setBulkArticleRow(rowInit);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [bulkartSeq]);
+
+    // Redux Store 에서 벌크 기사가 변경이되면 State 에도 변경처리.
+    useEffect(() => {
+        const storeBulkArticleToState = (data) => {
+            const { list, bulk } = data;
+            let tempList = rowInit.map(function (e, index) {
+                const t_title = list[index] ? list[index].title.replace(/^\s+|\s+$/g, '') : '';
+                const t_url = list[index] ? list[index].url.replace(/^\s+|\s+$/g, '') : '';
+                const t_symbol = list[index] ? list[index].symbol : '';
+                const title_length = checkTextLength(t_title);
+
+                return {
+                    ...e,
+                    title: t_title,
+                    url: t_url,
+                    symbol: t_symbol,
+                    title_length: title_length,
+                };
+            });
+
+            if (bulkartSeq == null) {
+                setTempButton(false);
+            } else if (bulk.usedYn === 'N') {
+                setTempButton(false);
+            } else {
+                setTempButton(true);
+            }
+
+            setBulkArticleRow(tempList);
+        };
+        if (bulkArticle.list) {
+            storeBulkArticleToState(bulkArticle);
+        }
+
+        // bulkArticle 값이 변경 될때만 실행 되게.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [bulkArticle]);
+
     // 문구 정보에 약물 정보를 가지고 오는 처리.
     useEffect(() => {
         dispatch(getSpecialCharCode({ grpCd: 'specialChar', dtlCd: 'bulkChar' }));
@@ -291,139 +291,134 @@ ${bulkArticleRow
     }, []);
 
     return (
-        <>
-            <MokaCard
-                loading={loading}
-                title={`네이버 문구 ${bulkartSeq ? '정보' : '등록'}`}
-                width={325}
-                className={'mr-gutter flex-fill'}
-                bodyClassName="overflow-hidden"
-                footerClassName="justify-content-center"
-                footer
-                footerButtons={[
-                    { text: 'W3C 검사', variant: 'outline-neutral', onClick: () => handleClickW3ccheck(), className: 'mr-05' },
-                    { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' }, // , useAuth: true
-                    { text: '임시저장', variant: 'positive', onClick: () => handleClickTempSaveButton(), className: 'mr-05', disabled: tempButton === true ? true : false }, //useAuth: true
-                    // { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-05' },
-                    { text: '미리보기', variant: 'outline-neutral', onClick: (e) => handlePreviewModalButton(e), className: 'mr-05' },
-                    { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton(), className: 'mr-05' },
-                ]}
-            >
-                <Form>
-                    {/* select box 로 변경. */}
-                    {/* <Form.Row>
-                        <Col xs={10} className="justify-content-center align-items-center">
+        <MokaCard
+            loading={loading}
+            title={`네이버 문구 ${bulkartSeq ? '정보' : '등록'}`}
+            width={325}
+            className="flex-fill h-100"
+            bodyClassName="overflow-hidden"
+            footerClassName="justify-content-center"
+            footer
+            footerButtons={[
+                { text: 'W3C 검사', variant: 'outline-neutral', onClick: () => handleClickW3ccheck(), className: 'mr-05' },
+                { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' }, // , useAuth: true
+                { text: '임시저장', variant: 'positive', onClick: () => handleClickTempSaveButton(), className: 'mr-05', disabled: tempButton === true ? true : false }, //useAuth: true
+                // { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-05' },
+                { text: '미리보기', variant: 'outline-neutral', onClick: (e) => handlePreviewModalButton(e), className: 'mr-05' },
+                { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton(), className: 'mr-05' },
+            ]}
+        >
+            {/* select box 로 변경. */}
+            {/* <Form.Row>
+                <Col xs={10} className="justify-content-center align-items-center">
+                    <MokaInputLabel
+                        name={`bulk_medic`}
+                        id={`bulk_medic`}
+                        label="약물"
+                        onChange={(e) => handleChangeBulkinputBox(e)}
+                        labelWidth={87}
+                        value={symbol}
+                        inputClassName="shadow-none border-0"
+                        disabled={editState}
+                    />
+                </Col>
+                <Col xs={2} className="justify-content-center align-items-center text-right">
+                    <Button variant="outline-neutral" onClick={() => handleClickSpecialCharModalButton()} disabled={editState}>
+                        약물 설정
+                    </Button>
+                </Col>
+            </Form.Row> */}
+            {[0, 1, 2].map((e, index) => (
+                <div key={index}>
+                    <Form.Row className="mb-2">
+                        <Col xs={3} className="p-0">
                             <MokaInputLabel
-                                name={`bulk_medic`}
-                                id={`bulk_medic`}
-                                label="약물"
-                                onChange={(e) => handleChangeBulkinputBox(e)}
-                                labelWidth={87}
-                                value={symbol}
-                                inputClassName="shadow-none border-0"
-                                disabled={editState}
+                                label="타이틀"
+                                as="select"
+                                name="symbol"
+                                id={`symbol-${index}`}
+                                value={bulkArticleRow[index] ? bulkArticleRow[index].symbol : ''}
+                                onChange={(e) => handleChangeBulkinputBox(e, index)}
+                            >
+                                <option hidden>선택</option>
+                                {symbol
+                                    .split(' ')
+                                    .filter((e) => e !== '')
+                                    .map((item, index) => (
+                                        <option key={index} value={item}>
+                                            {item}
+                                        </option>
+                                    ))}
+                            </MokaInputLabel>
+                        </Col>
+                        {/* <Col xs={1} className="justify-content-center align-items-center"></Col> */}
+                        {/*<div className="mr-2">
+                                <MokaInput
+                                    as="select"
+                                    name="symbol"
+                                    id="symbol"
+                                    value={bulkArticleRow[index] ? bulkArticleRow[index].symbol : ''}
+                                    onChange={(e) => handleChangeBulkinputBox(e, index)}
+                                    style={{ width: '70px' }}
+                                >
+                                    <option hidden>선택</option>
+                                    {symbol
+                                        .split(' ')
+                                        .filter((e) => e !== '')
+                                        .map((item, index) => (
+                                            <option key={index} value={item}>
+                                                {item}
+                                            </option>
+                                        ))}
+                                </MokaInput>
+                            </div>*/}
+                        <Col xs={8} className="pr-0">
+                            <MokaInputLabel
+                                name="title"
+                                id={`title-${index}`}
+                                onChange={(e) => handleChangeBulkinputBox(e, index)}
+                                value={bulkArticleRow[index] ? bulkArticleRow[index].title : ''}
                             />
                         </Col>
-                        <Col xs={2} className="justify-content-center align-items-center text-right">
-                            <Button variant="outline-neutral" onClick={() => handleClickSpecialCharModalButton()} disabled={editState}>
-                                약물 설정
-                            </Button>
+                        <Col xs={1}>
+                            <MokaInputLabel
+                                name="title_length"
+                                id={`title_length-${index}`}
+                                label={`${bulkArticleRow[index] ? bulkArticleRow[index].title_length : 0}자`}
+                                as="none"
+                                className="h-100 align-items-center d-flex"
+                            />
                         </Col>
-                    </Form.Row> */}
-                    {[0, 1, 2].map(function (e, index) {
-                        return (
-                            <div key={index} className="mb-2 pb-2">
-                                <Form.Row className="mb-2">
-                                    <Col xs={3} className="p-0">
-                                        <MokaInputLabel
-                                            label="타이틀"
-                                            as="select"
-                                            name="symbol"
-                                            id="symbol"
-                                            value={bulkArticleRow[index] ? bulkArticleRow[index].symbol : ''}
-                                            onChange={(e) => handleChangeBulkinputBox(e, index)}
-                                        >
-                                            <option hidden>선택</option>
-                                            {symbol
-                                                .split(' ')
-                                                .filter((e) => e !== '')
-                                                .map((item, index) => (
-                                                    <option key={index} value={item}>
-                                                        {item}
-                                                    </option>
-                                                ))}
-                                        </MokaInputLabel>
-                                    </Col>
-                                    {/* <Col xs={1} className="justify-content-center align-items-center"></Col> */}
-                                    {/*<div className="mr-2">
-                                        <MokaInput
-                                            as="select"
-                                            name="symbol"
-                                            id="symbol"
-                                            value={bulkArticleRow[index] ? bulkArticleRow[index].symbol : ''}
-                                            onChange={(e) => handleChangeBulkinputBox(e, index)}
-                                            style={{ width: '70px' }}
-                                        >
-                                            <option hidden>선택</option>
-                                            {symbol
-                                                .split(' ')
-                                                .filter((e) => e !== '')
-                                                .map((item, index) => (
-                                                    <option key={index} value={item}>
-                                                        {item}
-                                                    </option>
-                                                ))}
-                                        </MokaInput>
-                                    </div>*/}
-                                    <Col xs={8} className="pr-0">
-                                        <MokaInputLabel
-                                            name="title"
-                                            id="title"
-                                            onChange={(e) => handleChangeBulkinputBox(e, index)}
-                                            value={bulkArticleRow[index] ? bulkArticleRow[index].title : ''}
-                                        />
-                                    </Col>
-                                    <Col xs={1}>
-                                        <MokaInputLabel
-                                            name="title_length"
-                                            id="title_length"
-                                            label={`${bulkArticleRow[index] ? bulkArticleRow[index].title_length : 0}자`}
-                                            as="none"
-                                            className="h-100 align-items-center d-flex"
-                                        />
-                                    </Col>
-                                </Form.Row>
+                    </Form.Row>
 
-                                <Form.Row>
-                                    <Col xs={11} className="p-0">
-                                        <MokaInputLabel
-                                            name="url"
-                                            id="url"
-                                            label="url"
-                                            className="w-100"
-                                            onChange={(e) => handleChangeBulkinputBox(e, index)}
-                                            value={bulkArticleRow[index] ? bulkArticleRow[index].url : ''}
-                                        />
-                                    </Col>
-                                </Form.Row>
-                                <hr />
-                            </div>
-                        );
-                    })}
-                </Form>
-                {/*<SpecialCharModal show={modalMShow} onHide={() => setModalMShow(false)} onClickSave={null} />*/}
-                <DefaultInputModal
-                    title="약물 등록"
-                    inputData={{ title: '', value: symbol, isInvalid: false }}
-                    show={modalMShow}
-                    onHide={() => {
-                        dispatch(getSpecialCharCode({ grpCd: 'specialChar', dtlCd: 'bulkChar' }));
-                        setModalMShow(false);
-                    }}
-                    onSave={handleClickSymbolSave}
-                />
-            </MokaCard>
-        </>
+                    <Form.Row>
+                        <Col xs={11} className="p-0">
+                            <MokaInputLabel
+                                name="url"
+                                id={`url-${index}`}
+                                label="URL"
+                                className="w-100"
+                                onChange={(e) => handleChangeBulkinputBox(e, index)}
+                                value={bulkArticleRow[index] ? bulkArticleRow[index].url : ''}
+                            />
+                        </Col>
+                    </Form.Row>
+
+                    <hr className="divider" />
+                </div>
+            ))}
+            {/*<SpecialCharModal show={modalMShow} onHide={() => setModalMShow(false)} onClickSave={null} />*/}
+            <DefaultInputModal
+                title="약물 등록"
+                inputData={{ title: '', value: symbol, isInvalid: false }}
+                show={modalMShow}
+                onHide={() => {
+                    dispatch(getSpecialCharCode({ grpCd: 'specialChar', dtlCd: 'bulkChar' }));
+                    setModalMShow(false);
+                }}
+                onSave={handleClickSymbolSave}
+            />
+        </MokaCard>
     );
 };
 

@@ -31,11 +31,11 @@ const PreviewRenderer = ({ bulkartSeq }) => {
     };
 
     return (
-        <>
+        <div className="d-flex align-items-center justify-content-center h-100">
             <Button variant="outline-table-btn" size="sm" onClick={() => handleClickPreviewButton()}>
                 미리보기
             </Button>
-        </>
+        </div>
     );
 };
 

@@ -146,7 +146,7 @@ const BulkhArticleTab = (props) => {
         });
     }, [componentAgGridInstances, handleArticleDragStop, navIdx, tabNavs]);
 
-    return <MokaCardTabs width={850} className="flex-fill" onSelectNav={(idx) => setNavIdx(idx)} tabs={createTabs()} tabNavs={tabNavs} />;
+    return <MokaCardTabs width={850} className="flex-fill h-100" onSelectNav={(idx) => setNavIdx(idx)} tabs={createTabs()} tabNavs={tabNavs} />;
 };
 
 export default BulkhArticleTab;

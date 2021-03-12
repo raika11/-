@@ -30,6 +30,11 @@ const defaultProps = {
 const initialData = {
     editState: 'disabled', // 에디트 상태. disabled | enable | clean
 };
+
+/**
+ * 네이버 벌크 문구
+ * 페이지 편집 하위 메뉴는 min-height 지정, h-100
+ */
 const Bulkn = ({ bulksParams, bulksURL }) => {
     const [editState, setEditState] = useState(initialData.editState);
     const { bulkPathName } = useSelector((store) => ({
@@ -44,7 +49,7 @@ const Bulkn = ({ bulksParams, bulksURL }) => {
     };
 
     return (
-        <div className="d-flex">
+        <div className="d-flex h-100" style={{ minHeight: 817 }}>
             <Helmet>
                 <title>네이버 벌크 문구 편집</title>
                 <meta name="description" content="네이버벌크편집 페이지입니다." />

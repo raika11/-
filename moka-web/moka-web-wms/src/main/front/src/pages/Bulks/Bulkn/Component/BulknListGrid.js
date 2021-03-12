@@ -75,24 +75,21 @@ const BulknListGrid = () => {
     }, [list]);
 
     return (
-        <>
-            <MokaTable
-                agGridHeight={633}
-                columnDefs={ColumnDefs}
-                rowData={rowData}
-                rowHeight={40}
-                onRowNodeId={(data) => data.bulkartSeq}
-                onRowClicked={handleClickListRow}
-                loading={loading}
-                total={total}
-                page={search.page}
-                size={search.size}
-                displayPageNum={DISPLAY_PAGE_NUM}
-                onChangeSearchOption={handleChangeSearchOption}
-                selected={bulkartSeq}
-                preventRowClickCell={['used', 'preview']}
-            />
-        </>
+        <MokaTable
+            className="overflow-hidden flex-fill"
+            columnDefs={ColumnDefs}
+            rowData={rowData}
+            onRowNodeId={(data) => data.bulkartSeq}
+            onRowClicked={handleClickListRow}
+            loading={loading}
+            total={total}
+            page={search.page}
+            size={search.size}
+            displayPageNum={DISPLAY_PAGE_NUM}
+            onChangeSearchOption={handleChangeSearchOption}
+            selected={bulkartSeq}
+            preventRowClickCell={['used', 'preview']}
+        />
     );
 };
 

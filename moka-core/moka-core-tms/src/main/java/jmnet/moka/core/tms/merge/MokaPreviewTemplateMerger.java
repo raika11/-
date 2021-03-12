@@ -17,6 +17,7 @@ import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
@@ -351,9 +352,8 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
                     .get("TOTAL_ID")
                     .toString();
         } else if (sourceCode.equals("61")) { // 중앙선데이일 경우
-            title = typeSettingMap
-                    .get("PRESS_NUMBER")
-                    .toString() + "호 " + pressMyun + "면";
+            String pressNumber = McpString.defaultValue(typeSettingMap.get("PRESS_NUMBER"), "");
+            title = pressNumber + "호 " + pressMyun + "면";
             link = "https://www.joins.com/v2?mseq=12&tid=" + articleInfo
                     .get("TOTAL_ID")
                     .toString();

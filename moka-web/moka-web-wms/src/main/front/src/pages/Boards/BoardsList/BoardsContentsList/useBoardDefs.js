@@ -83,7 +83,7 @@ export default function useBoardDefs(selectBoard = []) {
                 headerName: '작성일시',
                 field: 'regDt',
                 cellStyle: { display: 'flex', alignItems: 'center' },
-                width: 60,
+                width: 80,
             });
 
             ColumnDefs.push({

@@ -6,18 +6,18 @@
     <parameter>
       <totalId desc="기사Id" require="Y">[0-9]{1,9}</totalId>
     </parameter>
-    <request resultName="BASIC">dps.article.basic</request>
-    <request resultName="TITLE">dps.article.title</request>
-    <request resultName="CONTENT">dps.article.content</request>
-    <request resultName="REPORTER">dps.article.reporter</request>
-    <request resultName="MASTERCODE">dps.article.mastercode</request>
-    <request resultName="SERVICEMAP">dps.article.servicemap</request>
-    <request resultName="KEYWORD">dps.article.keyword</request>
-    <request resultName="CLICKCNT">dps.article.clickcnt</request>
-    <request resultName="MULTI">dps.article.multi</request>
-    <request resultName="META_FB">dps.article.meta_fb</request>
-    <request resultName="META_TW">dps.article.meta_tw</request>
-    <request resultName="META_JA">dps.article.meta_ja</request>
+    <request resultName="BASIC">dps.article.Abasic</request>
+    <request resultName="TITLE">dps.article.Atitle</request>
+    <request resultName="CONTENT">dps.article.Acontent</request>
+    <request resultName="REPORTER">dps.article.Areporter</request>
+    <request resultName="MASTERCODE">dps.article.Amastercode</request>
+    <request resultName="SERVICEMAP">dps.article.Aservicemap</request>
+    <request resultName="KEYWORD">dps.article.Akeyword</request>
+    <request resultName="CLICKCNT">dps.article.Aclickcnt</request>
+    <request resultName="MULTI">dps.article.Amulti</request>
+    <request resultName="META_FB">dps.article.Ameta_fb</request>
+    <request resultName="META_TW">dps.article.Ameta_tw</request>
+    <request resultName="META_JA">dps.article.Ameta_ja</request>
     <keys>
       totalId
     </keys>
@@ -135,6 +135,56 @@
     <request dmlType="sp" setNames="_DATA">dps.article.articleFlag</request>
     <keys>
       totalId
+    </keys>
+  </api>
+
+  <!--기자목록-->
+  <api id="reporter">
+    <description>컬럼니스트 목록을 조회한다.</description>
+    <parameter>
+      <name desc="기자명">.{0,1000}</name>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.article.reporter</request>
+    <request type="script" resultName="_TOTAL">
+      var result = $ac.getAllResult();
+      result.get("PARAM_MAP").get("total");
+    </request>
+    <keys>
+      name
+      #paging
+    </keys>
+  </api>
+
+  <!--J팟 채널 목록-->
+  <api id="jpod.channel">
+    <description>J팟 채널 목록을 조회한다.</description>
+    <parameter>
+      <name desc="채널명">.{0,1000}</name>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.article.jpodChannel</request>
+    <request type="script" resultName="_TOTAL">
+      var result = $ac.getAllResult();
+      result.get("PARAM_MAP").get("total");
+    </request>
+    <keys>
+      #paging
+    </keys>
+  </api>
+
+  <!--J팟 에피소드 목록-->
+  <api id="jpod">
+    <description>J팟 에피소드 목록을 조회한다.</description>
+    <parameter>
+      <id desc="채널ID" type="number" require="Y">^[0-9]{1,9}$</id>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.article.jpodEpisode</request>
+    <request type="script" resultName="_TOTAL">
+      var result = $ac.getAllResult();
+      result.get("PARAM_MAP").get("total");
+    </request>
+    <keys>
+      id
+      #paging
     </keys>
   </api>
 

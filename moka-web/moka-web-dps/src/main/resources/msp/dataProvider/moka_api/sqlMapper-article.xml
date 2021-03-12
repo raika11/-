@@ -4,7 +4,7 @@
 <mapper namespace="dps.article">
 
   <!-- article basic -->
-  <select id="basic" parameterType="hashmap" resultType="map">
+  <select id="Abasic" parameterType="hashmap" resultType="map">
     select A.*, SOURCE_NAME, SOURCE_BASEURL, SOURCE_TYPE
     from TB_ARTICLE_BASIC A,
          TB_ARTICLE_SOURCE B
@@ -12,19 +12,19 @@
       AND A.TOTAL_ID = #{totalId}
   </select>
   <!-- article title -->
-  <select id="title" parameterType="hashmap" resultType="map">
+  <select id="Atitle" parameterType="hashmap" resultType="map">
     select TITLE_DIV, TITLE
     from TB_ARTICLE_TITLE
     where TOTAL_ID = #{totalId}
   </select>
   <!-- article content -->
-  <select id="content" parameterType="hashmap" resultType="map">
+  <select id="Acontent" parameterType="hashmap" resultType="map">
     select *
     FROM TB_ARTICLE_CONTENT
     where TOTAL_ID = #{totalId}
   </select>
   <!-- article reporter -->
-  <select id="reporter" parameterType="hashmap" resultType="map">
+  <select id="Areporter" parameterType="hashmap" resultType="map">
     select B.*
     from TB_15RE_ARTICLE_REPORTER A,
          TB_15RE_REPORTER B
@@ -33,7 +33,7 @@
     ORDER BY A.ORD_NO ASC
   </select>
   <!-- article mastercode -->
-  <select id="mastercode" parameterType="hashmap" resultType="map">
+  <select id="Amastercode" parameterType="hashmap" resultType="map">
     select B.*
     from TB_ARTICLE_CODELIST A,
          TB_MASTERCODE B
@@ -43,7 +43,7 @@
     order by ORD_NO
   </select>
   <!-- article servicemap -->
-  <select id="servicemap" parameterType="hashmap" resultType="map">
+  <select id="Aservicemap" parameterType="hashmap" resultType="map">
     select B.*
     from TB_ARTICLE_CODELIST A,
          TB_SERVICE_MAP B
@@ -54,25 +54,25 @@
     order by ORD_NO
   </select>
   <!-- article keyword -->
-  <select id="keyword" parameterType="hashmap" resultType="map">
+  <select id="Akeyword" parameterType="hashmap" resultType="map">
     SELECT *
     FROM TB_ARTICLE_KEYWORD
     WHERE TOTAL_ID = #{totalId}
   </select>
   <!-- article clickcnt -->
-  <select id="clickcnt" parameterType="hashmap" resultType="map">
+  <select id="Aclickcnt" parameterType="hashmap" resultType="map">
     SELECT *
     FROM TB_15RE_ARTICLE_CLICKCNT
     WHERE TOTAL_ID = #{totalId}
   </select>
   <!-- article multi -->
-  <select id="multi" parameterType="hashmap" resultType="map">
+  <select id="Amulti" parameterType="hashmap" resultType="map">
     select *
     from TB_15RE_ARTICLE_MULTI
     where TOTAL_ID = #{totalId}
   </select>
 
-  <select id="meta_fb" parameterType="hashmap" resultType="map">
+  <select id="Ameta_fb" parameterType="hashmap" resultType="map">
     SELECT TOP 1 B.TOTAL_ID
     ,(CASE
                        WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com' +
@@ -87,7 +87,7 @@
     WHERE B.TOTAL_ID = #{totalId}
   </select>
 
-  <select id="meta_tw" parameterType="hashmap" resultType="map">
+  <select id="Ameta_tw" parameterType="hashmap" resultType="map">
     SELECT TOP 1 B.TOTAL_ID
     ,(CASE
                        WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com' +
@@ -102,7 +102,7 @@
     WHERE B.TOTAL_ID = #{totalId}
   </select>
 
-  <select id="meta_ja" parameterType="hashmap" resultType="map">
+  <select id="Ameta_ja" parameterType="hashmap" resultType="map">
     SELECT TOP 1 B.TOTAL_ID
     ,(CASE
                        WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com' +
@@ -188,12 +188,47 @@
   </select>
 
   <!--article.flag-->
-  <select id="dps.article.articleFlag" parameterType="map" resultType="map" resultMap="map"
+  <select id="articleFlag" parameterType="map" resultType="map" resultMap="map"
     statementType="CALLABLE">
     {call UPU_15RE_ARTICLE_SEL_FLAG(
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
       ) }
   </select>
 
+  <!--reporter-->
+  <select id="reporter" parameterType="map" resultType="map" resultMap="map"
+    statementType="CALLABLE">
+    {call UPU_15RE_REPORTER_LIST_SEL(
+      #{name, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!--jpod 채널-->
+  <select id="jpodChannel" parameterType="map" resultType="map" resultMap="map"
+    statementType="CALLABLE">
+    {call UPU_JPOD_CHANNEL_LIST_SEL(
+      #{name, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!--jpod 에피소드-->
+  <select id="jpodEpisode" parameterType="map" resultType="map" resultMap="map"
+    statementType="CALLABLE">
+    {call UPU_JPOD_EPISODE_LIST_SEL(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
 
 </mapper>

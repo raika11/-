@@ -97,7 +97,7 @@ export default function useBoardDefs(selectBoard = []) {
                 ColumnDefs.push({
                     headerName: '첨부파일',
                     field: 'fileItem',
-                    width: 60,
+                    width: 80,
                     cellRenderer: 'fileItemRenderer',
                 });
             }

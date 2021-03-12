@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaInputLabel } from '@/components';
-import { CodeAutocomplete } from '@/pages/commons';
+import { MokaInputLabel, MokaCard } from '@components';
+import { CodeAutocomplete } from '@pages/commons';
 import toast from '@utils/toastUtil';
 import { getMappingCodeDuplicateCheck, saveMappingCode, deleteMappingCode } from '@store/articleSource';
 
@@ -81,7 +81,7 @@ const CodeMappingEdit = (props) => {
         );
     };
 
-    const handleClickCancel = () => {
+    const handleClickCancle = () => {
         onHide();
     };
 
@@ -96,7 +96,18 @@ const CodeMappingEdit = (props) => {
     }, [mappingCode]);
 
     return (
-        <div className="d-flex flex-column">
+        <MokaCard
+            header={false}
+            className="h-100 w-100 shadow-none"
+            bodyClassName="d-flex flex-column"
+            footer
+            footerClassName="pb-0 d-flex justify-content-center"
+            footerButtons={[
+                { text: temp.seqNo ? '수정' : '저장', onClick: handleClickSave, variant: 'positive', className: 'mr-1' },
+                temp.seqNo && { text: '삭제', onClick: handleClickDelete, variant: 'negative', className: 'mr-1' },
+                { text: '취소', onClick: handleClickCancle, variant: 'negative' },
+            ].filter((a) => a)}
+        >
             <p className="mb-2" style={{ marginLeft: 90 }}>
                 변환 코드 추가: (대소문자 구분합니다)
             </p>
@@ -139,20 +150,7 @@ const CodeMappingEdit = (props) => {
                     onChange={(value) => setTemp({ ...temp, toCode: value })}
                 />
             </div>
-            <div className="mt-5 d-flex justify-content-center">
-                <Button className="mr-1" variant="positive" onClick={handleClickSave}>
-                    {temp.seqNo ? '수정' : '저장'}
-                </Button>
-                {temp.seqNo && (
-                    <Button className="mr-1" variant="negative" onClick={handleClickDelete}>
-                        삭제
-                    </Button>
-                )}
-                <Button variant="negative" onClick={handleClickCancel}>
-                    취소
-                </Button>
-            </div>
-        </div>
+        </MokaCard>
     );
 };
 

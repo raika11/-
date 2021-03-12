@@ -71,6 +71,7 @@ const Quiz = ({ match }) => {
                                         { title: '퀴즈 정보', text: 'Info' },
                                         { title: '관련 정보페이지', text: '관련' },
                                     ]}
+                                    hasHotkeys={true}
                                 />
                             </Col>
                         );

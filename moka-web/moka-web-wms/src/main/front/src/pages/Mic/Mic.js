@@ -64,6 +64,7 @@ const Mic = ({ match }) => {
                                 !isAddPage && { title: '포스트 목록', icon: <MokaIcon iconName="fal-comment-alt" /> },
                             ].filter((a) => a)}
                             foldable={false}
+                            hasHotkeys={true}
                         />
                     );
                 }}

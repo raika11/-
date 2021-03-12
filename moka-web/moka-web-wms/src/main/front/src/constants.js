@@ -189,3 +189,5 @@ export const AREA_HOME = [
     { name: '홈 섹션편집', value: '3' },
     { name: '선데이 홈 섹션편집', value: '61' },
 ];
+
+export const ICON_TAB_HOT_KEYS = ['shift+Q', 'shift+W', 'shift+E', 'shift+R', 'shift+T', 'shift+Y', 'shift+U', 'shift+I', 'shift+O', 'shift+P'];

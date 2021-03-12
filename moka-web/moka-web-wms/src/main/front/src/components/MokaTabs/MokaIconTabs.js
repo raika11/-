@@ -6,6 +6,8 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { ICON_TAB_HOT_KEYS } from '@/constants';
 
 const propTypes = {
     /**
@@ -77,6 +79,11 @@ const propTypes = {
      * 탭의 activeKey를 직접 제어하고 싶을 때 전달
      */
     activeKey: PropTypes.any,
+
+    /**
+     * 핫키 사용 유무
+     */
+    hasHotkeys: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -90,6 +97,7 @@ const defaultProps = {
     onExpansion: null,
     onSelectNav: null,
     foldable: true,
+    hasHotkeys: false,
 };
 
 /**
@@ -112,9 +120,19 @@ const MokaIconTabs = forwardRef((props, ref) => {
         onSelectNav,
         tabContentClass,
         activeKey: parentKey,
+        hasHotkeys,
     } = props;
     const [activeKey, setActiveKey] = useState(0);
     const [isExpand, setIsExpand] = useState(true);
+    const currentHotkeys = hasHotkeys ? ICON_TAB_HOT_KEYS.filter((d, i) => i < tabs.length) : [];
+    // 핫키로 탭 변경
+    useHotkeys(
+        currentHotkeys.join(','),
+        (event, handler) => {
+            setActiveKey(currentHotkeys.indexOf(handler.shortcut));
+        },
+        [currentHotkeys],
+    );
 
     /**
      * 버튼 선택 콜백
@@ -195,7 +213,7 @@ const MokaIconTabs = forwardRef((props, ref) => {
                                 <Nav.Link
                                     eventKey={idx}
                                     onSelect={handleSelect}
-                                    className="text-center flex-fill h-100 border-0 pl-0 pr-0 d-flex justify-content-center align-items-center"
+                                    className={clsx('text-center flex-fill h-100 border-0 pl-0 pr-0 d-flex justify-content-center align-items-center', { disabled: nav.disabled })}
                                     active={activeKey.toString() === idx.toString() && isExpand}
                                     variant="gray-150"
                                 >

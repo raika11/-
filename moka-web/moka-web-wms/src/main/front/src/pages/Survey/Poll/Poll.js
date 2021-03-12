@@ -100,6 +100,7 @@ const Poll = ({ match }) => {
                                         { title: '투표 정보', text: 'Info' },
                                         { title: '관련 정보페이지', text: '관련' },
                                     ]}
+                                    hasHotkeys={true}
                                 />
                             </Col>
                         );

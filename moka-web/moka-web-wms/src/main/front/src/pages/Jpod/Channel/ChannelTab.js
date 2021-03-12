@@ -27,6 +27,7 @@ const ChannelTab = ({ match }) => {
                 { title: 'info', text: 'Info' },
                 { title: '에피소드', icon: <MokaIcon iconName="fal-file" /> },
             ]}
+            hasHotkeys={true}
         />
     );
 };

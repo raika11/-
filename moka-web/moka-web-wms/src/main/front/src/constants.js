@@ -138,7 +138,7 @@ export const snsNames = {
 };
 
 // 디지털스페셜 링크
-export const DIGITAL_SPECIAL_URL = 'https://news.joins.com/DigitalSpecial/';
+export const DIGITAL_SPECIAL_URL = 'https://stg-news.joongang.co.kr/DigitalSpecial/';
 
 // 본문 링크
 export const ARTICLE_URL = 'https://stg-news.joongang.co.kr/article/';

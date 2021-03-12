@@ -35,6 +35,7 @@ const BoardsEdit = () => {
         loading: store.loading[GET_LISTMENU_CONTENTS_INFO],
     }));
 
+    const [noteReady, setNoteReady] = useState();
     const [editData, setEditData] = useState(initialState.listmenu.contents.info); // 게시글 정보가 저장되는 state
     const [editReplayData, setEditReplayData] = useState(initialState.listmenu.contents.info); // 답변 정보가 저장되는 state
 
@@ -327,12 +328,17 @@ const BoardsEdit = () => {
         };
     }, []);
 
+    useEffect(() => {
+        setNoteReady(loading);
+    }, [loading]);
+
     return (
         <MokaCard
-            width={550}
+            // width={550}
             title={editState.title}
             loading={loading}
-            className="flex-fill"
+            // className="flex-fill"
+            className="w-100"
             bodyClassName="d-flex flex-column"
             footer
             footerClassName="justify-content-center"
@@ -407,17 +413,19 @@ const BoardsEdit = () => {
         >
             <>
                 {(function () {
-                    if (loading === false && editState.page === 'board' && (editState.mode === 'add' || editState.mode === 'modify')) {
-                        return <BoardsEditForm EditState={editState} EditData={editData} HandleChangeFormData={(e) => handleEditDataChange(e)} />;
-                    } else if (loading === false && editState.page === 'reply' && (editState.mode === 'add' || editState.mode === 'modify')) {
-                        return (
-                            <BoardsEditReplyForm
-                                EditState={editState}
-                                EditData={editReplayData}
-                                setEditReplayData={setEditReplayData}
-                                HandleChangeFormData={(e) => handleReplyEditDataChange(e)}
-                            />
-                        );
+                    if (noteReady === false || params.boardSeq === 'add') {
+                        if (editState.page === 'board' && (editState.mode === 'add' || editState.mode === 'modify')) {
+                            return <BoardsEditForm EditState={editState} EditData={editData} HandleChangeFormData={(e) => handleEditDataChange(e)} />;
+                        } else if (loading === false && editState.page === 'reply' && (editState.mode === 'add' || editState.mode === 'modify')) {
+                            return (
+                                <BoardsEditReplyForm
+                                    EditState={editState}
+                                    EditData={editReplayData}
+                                    setEditReplayData={setEditReplayData}
+                                    HandleChangeFormData={(e) => handleReplyEditDataChange(e)}
+                                />
+                            );
+                        }
                     }
                 })()}
             </>

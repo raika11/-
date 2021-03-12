@@ -4,7 +4,7 @@ import TreeBox from './TreeBox';
 
 const BoardsGroupTree = () => {
     return (
-        <MokaCard width={230} className="mr-gutter" title="게시판 목록" bodyClassName="d-flex flex-column px-2">
+        <MokaCard className="w-100" title="게시판 목록" bodyClassName="d-flex flex-column px-2">
             <TreeBox />
         </MokaCard>
     );

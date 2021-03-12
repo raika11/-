@@ -218,7 +218,7 @@ const SearchBox = (props) => {
                 )}
 
                 {gubunSearchItem && gubunSearchItem.nm2.ck === true && (
-                    <MokaInput className="mr-2" as="select" name="titlePrefix2" id="titlePrefix2" value={searchData.titlePrefix2} onChange={(e) => handleSearchChange(e)}>
+                    <MokaInput className="mr-1" as="select" name="titlePrefix2" id="titlePrefix2" value={searchData.titlePrefix2} onChange={(e) => handleSearchChange(e)}>
                         <option value="">{gubunSearchItem.nm2.name}</option>
                         {gubunSearchItem.nm2.list.map((item, index) => (
                             <option key={index} value={item}>
@@ -229,12 +229,9 @@ const SearchBox = (props) => {
                 )}
 
                 {/* 검색 옵션 리셋. */}
-                <Col xs={1} className="p-0 pr-2">
-                    <Button className="flex-shrink-0" variant="negative" onClick={() => handleClickResetButton()}>
-                        초기화
-                    </Button>
-                </Col>
-                {/* </Col> */}
+                <Button className="flex-shrink-0" variant="negative" onClick={() => handleClickResetButton()}>
+                    초기화
+                </Button>
             </Form.Row>
 
             <Form.Row>
@@ -242,7 +239,7 @@ const SearchBox = (props) => {
                 <MokaSearchInput
                     id="keyword"
                     name="keyword"
-                    className="mr-2 flex-fill"
+                    className="mr-1 flex-fill"
                     placeholder={'제목, 내용, 등록자 명'}
                     value={searchData.keyword}
                     onChange={(e) => handleSearchChange(e)}

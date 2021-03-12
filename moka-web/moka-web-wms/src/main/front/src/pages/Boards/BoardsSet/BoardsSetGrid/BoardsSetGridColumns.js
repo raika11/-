@@ -32,7 +32,7 @@ export const ColumnDefs = [
     {
         headerName: '',
         field: 'buttonInfo',
-        width: 160,
+        width: 180,
         cellRenderer: 'buttonRenderer',
     },
 ];

@@ -436,6 +436,26 @@ public class TourRestController extends AbstractCommonController {
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "견학 안내 메일 미리보기")
+    @PostMapping(value = "/mail-preview")
+    public ResponseEntity<?> postMailPreview(@ApiParam("신청정보") @RequestBody @Valid TourApplyVO tourApplyVO)
+            throws Exception {
+
+        tourApplyVO.setTourStatusName(getTourStatusName(tourApplyVO.getTourStatus()));
+        String preview = smtpService.getMailBody(SmtpSendDTO
+                .builder()
+                .from(fromEmailAddress)
+                .to(new String[] {tourApplyVO.getWriterEmail()})
+                .templateName(getTourTemplateName(tourApplyVO.getTourStatus()))
+                .context(tourApplyVO)
+                .title("견학 안내 메일입니다.")
+                .build());
+
+        ResultDTO<String> resultDTO = new ResultDTO<>(preview);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
     private String getTourStatusName(String tourStatus) {
         String tourStatusName = "";
         switch (tourStatus) {
@@ -457,7 +477,7 @@ public class TourRestController extends AbstractCommonController {
 
     private String getTourTemplateName(String tourStatus) {
         String tourTemplateName = "tour-mail-forbidden";
-        if(tourStatus.equals("A")) {
+        if (tourStatus.equals("A")) {
             tourTemplateName = "tour-mail-allowed";
         }
         return tourTemplateName;

@@ -52,4 +52,14 @@ public interface SmtpService {
     void send(SmtpSendDTO stmpSend)
             throws Exception;
 
+    /**
+     * 메일 본문 미리보기용
+     *
+     * @param stmpSend 메일 발송 정보
+     * @return 메일 본문
+     * @throws Exception 메일 메세지 오류처리
+     */
+    public String getMailBody(SmtpSendDTO stmpSend)
+            throws Exception;
+
 }

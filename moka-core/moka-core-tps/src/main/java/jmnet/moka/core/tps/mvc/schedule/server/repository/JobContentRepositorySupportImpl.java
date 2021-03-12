@@ -5,6 +5,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.member.entity.QMemberSimpleInfo;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSearchDTO;
@@ -38,6 +39,7 @@ public class JobContentRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         QMemberSimpleInfo memberSimpleInfo = QMemberSimpleInfo.memberSimpleInfo;
 
         BooleanBuilder builder = new BooleanBuilder();
+        String delYn = search.getDelYn();
         String category = search.getCategory();
         Long period = search.getPeriod();
         String sendType = search.getSendType();
@@ -47,8 +49,15 @@ public class JobContentRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         String searchType = search.getSearchType();
         String keyword = search.getKeyword();
 
+        if(!McpString.isEmpty(delYn)){
+            builder.and(jobContent.delYn.eq(delYn));
+        }
+        else{
+            builder.and(jobContent.delYn.eq(MokaConstants.NO));
+        }
+
         if(!McpString.isEmpty(category)){
-            builder.or(jobContent.category.eq(category));
+            builder.and(jobContent.category.eq(category));
         }
         if(!McpString.isEmpty(period)){
             builder.and(jobContent.period.eq(period));

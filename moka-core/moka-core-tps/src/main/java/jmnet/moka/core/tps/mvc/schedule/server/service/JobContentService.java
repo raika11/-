@@ -1,8 +1,8 @@
 package jmnet.moka.core.tps.mvc.schedule.server.service;
 
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSearchDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobDeletedContentSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobContent;
-import jmnet.moka.core.tps.mvc.schedule.server.entity.JobDeletedContent;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;
@@ -52,7 +52,7 @@ public interface JobContentService {
      * @param jobContent 작업
      * @return 없음
      */
-    void deleteJobContent(JobDeletedContent jobDeletedContent, JobContent jobContent);
+    void deleteJobContent(JobContent jobContent);
 
     /**
      * 등록가능한 데이터인지 체크한다.
@@ -61,5 +61,29 @@ public interface JobContentService {
      * @return 중복여부
      */
     boolean isValidData(JobContentSearchDTO search);
+
+    /**
+     * 삭제된 작업목록 조회
+     *
+     * @param search 작업 정보
+     * @return 작업목록
+     */
+    Page<JobContent> findDeletedJobContentList(JobDeletedContentSearchDTO search);
+
+    /**
+     * 삭제된 작업 상세정보 조회
+     *
+     * @param jobSeq 작업 번호
+     * @return 작업
+     */
+    Optional<JobContent> findDeletedJobContentById(Long jobSeq);
+
+    /**
+     * 삭제된 작업 복원
+     *
+     * @param jobContent 작업
+     * @return 없음
+     */
+    void updateDeleteJobContent(JobContent jobContent);
 
 }

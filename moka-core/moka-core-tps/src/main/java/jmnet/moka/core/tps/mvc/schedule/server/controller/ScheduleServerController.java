@@ -29,17 +29,14 @@ import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSaveDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentUpdateDTO;
-import jmnet.moka.core.tps.mvc.schedule.server.dto.JobDeletedContentDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobDeletedContentSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobStatisticDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobStatisticSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.DistributeServer;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobContent;
-import jmnet.moka.core.tps.mvc.schedule.server.entity.JobDeletedContent;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobStatistic;
 import jmnet.moka.core.tps.mvc.schedule.server.service.DistributeServerService;
 import jmnet.moka.core.tps.mvc.schedule.server.service.JobContentService;
-import jmnet.moka.core.tps.mvc.schedule.server.service.JobDeletedContentService;
 import jmnet.moka.core.tps.mvc.schedule.server.service.JobStatisticService;
 import jmnet.moka.core.tps.mvc.schedule.server.vo.JobStatisticVO;
 import lombok.extern.slf4j.Slf4j;
@@ -66,19 +63,16 @@ public class ScheduleServerController extends AbstractCommonController {
     private final DistributeServerService distServerService;
     //작업
     private final JobContentService jobContentService;
-    //삭제된 작업
-    private final JobDeletedContentService jobDeletedContentService;
 
     //암호화 모듈
     private final MokaCrypt mokaCrypt;
 
     public ScheduleServerController(JobStatisticService jobStatisticService, DistributeServerService distServerService,
-            JobContentService jobContentService, JobDeletedContentService jobDeletedContentService, MokaCrypt mokaCrypt) {
+            JobContentService jobContentService, MokaCrypt mokaCrypt) {
 
         this.jobStatisticService = jobStatisticService;
         this.distServerService = distServerService;
         this.jobContentService = jobContentService;
-        this.jobDeletedContentService = jobDeletedContentService;
         this.mokaCrypt = mokaCrypt;
     }
 
@@ -282,15 +276,9 @@ public class ScheduleServerController extends AbstractCommonController {
                 .findJobContentById(jobSeq)
                 .orElseThrow(() -> new NoDataException((infoMessage)));
 
-
-
         try {
-            JobDeletedContent jobDeletedContent = modelMapper.map(jobContent, JobDeletedContent.class);
-            jobDeletedContent.setRegId(getUserId(principal));  //삭제자 ID 추가
-
-            //삭제될 작업 저장 + 작업 삭제(트랜잭션)
-            jobContentService.deleteJobContent(jobDeletedContent, jobContent);
-
+            //작업 삭제처리
+            jobContentService.deleteJobContent(jobContent);
             tpsLogger.success(LoggerCodes.ActionType.DELETE, true);
 
             // 결과리턴
@@ -315,15 +303,15 @@ public class ScheduleServerController extends AbstractCommonController {
     @ApiOperation(value = "삭제된 작업 목록조회")
     @GetMapping("/job-deleted")
     public ResponseEntity<?> getJobDeletedContentList(@Valid @SearchParam JobDeletedContentSearchDTO search) {
-        Page<JobDeletedContent> returnValue = jobDeletedContentService.findJobContentList(search);
+        Page<JobContent> returnValue = jobContentService.findDeletedJobContentList(search);
 
-        List<JobDeletedContentDTO> dtoList = modelMapper.map(returnValue.getContent(), JobDeletedContentDTO.TYPE);
+        List<JobContentDTO> dtoList = modelMapper.map(returnValue.getContent(), JobContentDTO.TYPE);
 
-        ResultListDTO<JobDeletedContentDTO> resultList = new ResultListDTO<JobDeletedContentDTO>();
+        ResultListDTO<JobContentDTO> resultList = new ResultListDTO<JobContentDTO>();
         resultList.setList(dtoList);
         resultList.setTotalCnt(returnValue.getTotalElements());
 
-        ResultDTO<ResultListDTO<JobDeletedContentDTO>> resultDTO = new ResultDTO<ResultListDTO<JobDeletedContentDTO>>(resultList);
+        ResultDTO<ResultListDTO<JobContentDTO>> resultDTO = new ResultDTO<ResultListDTO<JobContentDTO>>(resultList);
         tpsLogger.success(true);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
@@ -331,24 +319,24 @@ public class ScheduleServerController extends AbstractCommonController {
     /**
      * 삭제된 작업 상세조회
      *
-     * @param seqNo 삭제된 작업 번호
+     * @param jobSeq 삭제된 작업 번호
      * @return 삭제된 작업
      */
     @ApiOperation(value = "삭제된 작업 상세조회")
-    @GetMapping("/job-deleted/{seqNo}")
-    public ResponseEntity<?> getJobDeletedContent(@ApiParam("일련 번호(필수)") @PathVariable("seqNo") Long seqNo)
+    @GetMapping("/job-deleted/{jobSeq}")
+    public ResponseEntity<?> getJobDeletedContent(@ApiParam("일련 번호(필수)") @PathVariable("jobSeq") Long jobSeq)
             throws NoDataException {
-        JobDeletedContent jobDeletedContent = jobDeletedContentService
-                .findJobDeletedContentById(seqNo)
+        JobContent jobContent = jobContentService
+                .findDeletedJobContentById(jobSeq)
                 .orElseThrow(() -> {
                     String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(message, true);
                     return new NoDataException(message);
                 });
 
-        JobDeletedContentDTO dto = modelMapper.map(jobDeletedContent, JobDeletedContentDTO.class);
+        JobContentDTO dto = modelMapper.map(jobContent, JobContentDTO.class);
 
-        ResultDTO<JobDeletedContentDTO> resultDTO = new ResultDTO<JobDeletedContentDTO>(dto);
+        ResultDTO<JobContentDTO> resultDTO = new ResultDTO<JobContentDTO>(dto);
         tpsLogger.success(true);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
@@ -357,17 +345,18 @@ public class ScheduleServerController extends AbstractCommonController {
     /**
      * 삭제된 작업 복원
      *
-     * @param seqNo 삭제된 작업 번호
+     * @param jobSeq 삭제된 작업 번호
      * @return 실행 결과
      */
     @ApiOperation(value = "삭제된 작업 복원")
-    @PutMapping("/job-deleted/{seqNo}/recover")
-    public ResponseEntity<?> recoverJobDeletedContent(@ApiParam("일련번호") @PathVariable("seqNo") Long seqNo,
+    @PutMapping("/job-deleted/{jobSeq}/recover")
+    public ResponseEntity<?> recoverJobDeletedContent(@ApiParam("일련번호") @PathVariable("jobSeq") Long jobSeq,
             @ApiParam(hidden = true) @NotNull Principal principal)
             throws Exception {
 
-        JobDeletedContent jobDeletedContent = jobDeletedContentService
-                .findJobDeletedContentById(seqNo)
+
+        JobContent jobContent = jobContentService
+                .findDeletedJobContentById(jobSeq)
                 .orElseThrow(() -> {
                     String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(message, true);
@@ -377,13 +366,9 @@ public class ScheduleServerController extends AbstractCommonController {
 
 
         try {
-            JobContent jobContent = modelMapper.map(jobDeletedContent, JobContent.class);
-            jobContent.setUsedYn("Y");
             jobContent.setRegId(getUserId(principal));  //복원자 ID 추가
-            //jobContentService.insertJobContent(jobContent);
 
-            //삭제된 작업 복원 + 복원된 작업 삭제(트랜잭션)
-            jobDeletedContentService.deletedJobDeletedContent(jobContent, jobDeletedContent);
+            jobContentService.updateDeleteJobContent(jobContent);
 
             tpsLogger.success(LoggerCodes.ActionType.DELETE, true);
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.common.MokaConstants;
 import lombok.*;
 
 import java.lang.reflect.Type;
@@ -22,6 +23,9 @@ public class JobContentSearchDTO extends SearchDTO {
     private static final long serialVersionUID = 1L;
     public static final Type TYPE = new TypeReference<List<JobContentSearchDTO>>() {
     }.getType();
+
+    @ApiModelProperty(hidden = true)
+    private String delYn = MokaConstants.NO;
 
     @ApiModelProperty("분류(기타코드 > GEN_CATE)")
     private String category;

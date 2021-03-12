@@ -17,8 +17,8 @@ export const initialState = {
     },
     searchTypeList: [
         { id: 'all', name: '전체' },
-        { id: 'artPageSeq', name: '기사페이지ID' },
-        { id: 'artPageName', name: '기사페이지명' },
+        { id: 'artPageSeq', name: '아티클페이지ID' },
+        { id: 'artPageName', name: '아티클페이지명' },
         { id: 'artPageBody', name: 'TEMS 소스' },
     ],
     lookup: {

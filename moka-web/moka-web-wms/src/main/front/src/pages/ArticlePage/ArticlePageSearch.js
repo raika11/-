@@ -8,7 +8,7 @@ import { changeLatestDomainId } from '@store/auth';
 import { getArticlePageList, changeSearchOption, initialState } from '@store/articlePage';
 
 /**
- * 관련 기사페이지 검색 컴포넌트
+ * 관련 아티클페이지 검색 컴포넌트
  */
 const ArticlePageSearch = ({ match }) => {
     const history = useHistory();

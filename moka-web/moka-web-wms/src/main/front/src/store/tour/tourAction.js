@@ -62,6 +62,12 @@ export const DELETE_TOUR_APPLY = 'tour/DELETE_TOUR_APPLY';
 export const deleteTourApply = createAction(DELETE_TOUR_APPLY, ({ tourSeq, callback }) => ({ tourSeq, callback }));
 
 /**
+ * 메일 미리보기
+ */
+export const PREVIEW_TOUR_MAIL = 'tour/PRIVIEW_TOUR_MAIL';
+export const previewTourMail = createAction(PREVIEW_TOUR_MAIL, ({ tourApply, callback }) => ({ tourApply, callback }));
+
+/**
  * 비밀번호 초기화
  */
 export const POST_RESET_PWD = 'tour/POST_RESET_PWD';

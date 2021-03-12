@@ -401,9 +401,23 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
         try {
 
             String noContentMessage = msg("tps.common.error.no-data");
-            articleService
+            ArticleBasic articleBasic = articleService
                     .findArticleBasicById(snsPublish.getTotalId())
                     .orElseThrow(() -> new NoDataException(noContentMessage));
+
+            // service flag가 Y인 경우만 sns에 개시한다.
+            if (McpString.isNo(articleBasic.getServiceFlag())) {
+                throw new InvalidDataException(msg("tps.sns.error.save.no-service"));
+            }
+
+            ArticleSnsShare articleSnsShare = articleSnsShareService
+                    .findArticleSnsShareById(snsPublish.getTotalId(), snsPublish.getSnsType())
+                    .orElseThrow(() -> new NoDataException(noContentMessage));
+
+            // 사용여부가 Y인 경우에만 sns에 개시한다.
+            if (McpString.isNo(articleSnsShare.getUsedYn())) {
+                throw new InvalidDataException(msg("tps.sns.error.save.no-used"));
+            }
 
             boolean reserved = false;
             boolean success = true;

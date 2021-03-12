@@ -21,7 +21,7 @@ import { invalidListToError } from '@utils/convertUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 
 /**
- * 기사페이지 등록/수정
+ * 아티클페이지 등록/수정
  */
 const ArticlePageEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
@@ -87,11 +87,11 @@ const ArticlePageEdit = ({ onDelete, match }) => {
         (articlePage) => {
             let isInvalid = false;
             let errList = [];
-            // 기사페이지명 체크
+            // 아티클페이지명 체크
             if (/^[\s\t\n]+/.test(articlePage.artPageName)) {
                 errList.push({
                     field: 'artPageName',
-                    reason: '기사페이지명이 잘못되었습니다.',
+                    reason: '아티클페이지명이 잘못되었습니다.',
                 });
                 isInvalid = isInvalid | true;
             }
@@ -103,7 +103,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
 
     /**
      * 저장 콜백
-     * @param {object} tmp 기사페이지
+     * @param {object} tmp 아티클페이지
      */
     const saveCallback = useCallback(
         (tmp) => {
@@ -132,12 +132,12 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     );
 
     /**
-     * 기사페이지 저장
-     * @param {object} tmp 기사페이지
+     * 아티클페이지 저장
+     * @param {object} tmp 아티클페이지
      */
     const submitPage = useCallback(
         (tmp) => {
-            // 본인을 제외한 기사페이지 중 동일한 기사타입이 있는지 체크
+            // 본인을 제외한 아티클페이지 중 동일한 기사타입이 있는지 체크
             dispatch(
                 existsArtType({
                     domainId: latestDomainId,
@@ -258,9 +258,9 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     }, [invalidList]);
 
     return (
-        <MokaCard title={`기사페이지 ${articlePage.artPageSeq ? '수정' : '등록'}`} loading={loading}>
+        <MokaCard title={`아티클페이지 ${articlePage.artPageSeq ? '수정' : '등록'}`} loading={loading}>
             {/* 버튼 그룹 */}
-            <div className="mb-2 d-flex justify-content-between">
+            <div className="mb-14 d-flex justify-content-between">
                 <div className="d-flex">
                     <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={handleClickW3C}>
                         W3C
@@ -284,29 +284,29 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                 </div>
             </div>
 
-            {/* 기사페이지ID */}
+            {/* 아티클페이지ID */}
             {articlePage.artPageSeq && (
                 <MokaInputLabel
-                    label="기사페이지ID"
+                    label="아티클페이지ID"
                     value={temp.artPageSeq}
                     name="artPageSeq"
                     onChange={handleChangeValue}
                     className="mb-2"
-                    placeholder="기사페이지ID를 입력하세요"
+                    placeholder="아티클페이지ID를 입력하세요"
                     isInvalid={error.artPageName}
                     inputProps={{ plaintext: true, readOnly: true }}
                     required
                 />
             )}
 
-            {/* 기사페이지명 */}
+            {/* 아티클페이지명 */}
             <MokaInputLabel
-                label="기사페이지명"
+                label="아티클페이지명"
                 value={temp.artPageName}
                 name="artPageName"
                 onChange={handleChangeValue}
                 className="mb-2"
-                placeholder="기사페이지명을 입력하세요"
+                placeholder="아티클페이지명을 입력하세요"
                 isInvalid={error.artPageName}
                 inputProps={{ autoComplete: 'off' }}
                 required

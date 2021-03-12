@@ -80,4 +80,12 @@ public class SmtpServiceImpl implements SmtpService {
         }
         send(stmpSend.getFrom(), stmpSend.getTo(), stmpSend.getTitle(), stmpSend.getBody(), stmpSend.isHtml());
     }
+
+    @Override
+    public String getMailBody(SmtpSendDTO stmpSend)
+            throws Exception {
+        Context context = new Context();
+        context.setVariables(BeanConverter.toMap(stmpSend.getContext()));
+        return templateEngine.process(stmpSend.getTemplateName(), context);
+    }
 }

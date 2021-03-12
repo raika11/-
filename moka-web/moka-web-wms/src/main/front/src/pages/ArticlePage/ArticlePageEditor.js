@@ -11,15 +11,8 @@ const ArticlePageEditor = (props) => {
     const dispatch = useDispatch();
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const loading = useSelector(({ loading }) => loading[GET_ARTICLE_PAGE] || loading[DELETE_ARTICLE_PAGE] || loading[SAVE_ARTICLE_PAGE]);
-    const { artPageBody, articlePage, invalidList, inputTag } = useSelector((store) => ({
-        artPageBody: store.articlePage.artPageBody,
-        articlePage: store.articlePage.articlePage,
-        invalidList: store.articlePage.invalidList,
-        inputTag: store.articlePage.inputTag,
-    }));
-
-    // state
-    const [title, setTitle] = useState('기사페이지 수정');
+    const { artPageBody, articlePage, invalidList, inputTag } = useSelector(({ articlePage }) => articlePage);
+    const [title, setTitle] = useState('아티클페이지 수정');
     const [defaultValue, setDefalutValue] = useState('');
     const [error, setError] = useState({});
 
@@ -34,18 +27,18 @@ const ArticlePageEditor = (props) => {
     useEffect(() => {
         // 타이틀 변경
         if (articlePage.artPageSeq) {
-            setTitle(`기사페이지 수정(${articlePage.artPageSeq}_${articlePage.artPageName})`);
+            setTitle(`아티클페이지 수정(${articlePage.artPageSeq}_${articlePage.artPageName})`);
             // defaultValue 변경
             setDefalutValue(artPageBody);
         } else {
-            setTitle('기사페이지 등록');
+            setTitle('아티클페이지 등록');
             setDefalutValue('');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [articlePage.artPageSeq, articlePage.artPageName]);
 
     useEffect(() => {
-        // 기사페이지의 도메인ID를 latestDomainId에 저장
+        // 아티클페이지의 도메인ID를 latestDomainId에 저장
         if (Object.prototype.hasOwnProperty.call(articlePage, 'domain')) {
             const domainId = articlePage.domain.domainId;
             if (domainId && latestDomainId !== domainId) {

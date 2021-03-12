@@ -132,3 +132,16 @@ export const postResetPwd = ({ phone }) => {
         throw err;
     });
 };
+
+// 이메일 미리보기
+export const previewTourMail = ({ tourApply }) => {
+    return instance
+        .post(`/api/tours/mail-preview`, tourApply, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};

@@ -36,7 +36,7 @@
 }
 
 .selected-row {
-    background-color: rgba(33, 150, 243, 0.3);
+    background-color: rgba(33, 150, 243, 0.2);
 }
 
 /* -------------------------------------------------------------------
@@ -54,8 +54,8 @@
             header-column-separator: false,
             range-selection-border-color: transparent,
             row-hover-color: rgba(33, 150, 243, 0.1),
-            alpine-active-color: rgba(33, 150, 243, 0.3),
-            selected-row-background-color: rgba(33, 150, 243, 0.3),
+            alpine-active-color: rgba(33, 150, 243, 0.2),
+            selected-row-background-color: rgba(33, 150, 243, 0.2),
             checkbox-checked-color: rgba(33, 150, 243, 1)
         )
     );

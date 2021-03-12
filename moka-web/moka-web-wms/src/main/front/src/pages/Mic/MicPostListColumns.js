@@ -42,6 +42,7 @@ export default [
         field: 'regDt',
         width: 88,
         wrapText: true,
-        cellStyle: { whiteSpace: 'pre-wrap', display: 'flex', alignItems: 'center', lineHeight: '21px' },
+        tooltipField: 'regDt',
+        cellStyle: { whiteSpace: 'pre', display: 'flex', alignItems: 'center', lineHeight: '21px' },
     },
 ];

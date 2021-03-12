@@ -59,7 +59,7 @@ function* w3cPageSaga(action) {
 }
 
 /**
- * 기사페이지 W3C검사
+ * 아티클페이지 W3C검사
  */
 function* w3cArticlePageSaga(action) {
     yield put(startLoading(act.W3C_ARTICLE_PAGE)); // 로딩 시작

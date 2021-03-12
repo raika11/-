@@ -7,9 +7,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInput, MokaInputLabel } from '@/components';
 import { getTourAge } from '@store/codeMgt';
-import { getTourSetup, putTourApply, getTourApply, deleteTourApply, getTourDenyPossibleList, postResetPwd } from '@/store/tour';
+import { getTourSetup, putTourApply, getTourApply, deleteTourApply, getTourDenyPossibleList, postResetPwd, previewTourMail } from '@/store/tour';
 import toast, { messageBox } from '@/utils/toastUtil';
-import { toTourReservationMailPreviewHTML } from '@utils/convertUtil';
 
 const TourListEdit = ({ match }) => {
     const dispatch = useDispatch();
@@ -112,8 +111,25 @@ const TourListEdit = ({ match }) => {
      * 메일 미리보기 버튼
      */
     const handleClickPreview = (temp) => {
-        const previewMail = window.open(``, '메일 미리보기');
-        previewMail.document.body.innerHTML = toTourReservationMailPreviewHTML(temp);
+        let savetemp = {
+            ...temp,
+            tourDate: moment(temp.tourDate).format('YYYY-MM-DD HH:mm:ss'),
+            regDt: moment(temp.regDt).format('YYYY-MM-DD HH:mm:ss'),
+        };
+        dispatch(
+            previewTourMail({
+                tourApply: savetemp,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        const previewMail = window.open(``, '메일 미리보기');
+                        previewMail.document.body.innerHTML = body;
+                        //toast.success(header.message);
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
     };
     /*
     useImperativeHandle(

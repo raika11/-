@@ -317,7 +317,7 @@ const routes = [
     {
         path: '/article-page',
         name: 'article-page',
-        displayName: '기사페이지 관리',
+        displayName: '아티클페이지 관리',
         component: ArticlePage,
         layout: SidebarOpenLayout,
         side: true,

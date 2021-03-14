@@ -25,7 +25,6 @@ import java.util.List;
 @Service
 public class SenderS extends AbstractPushSender {
 
-
     @Override
     public FcmMessage makePushMessage(Long pushItemSeq, int appSeq) {
 
@@ -36,6 +35,10 @@ public class SenderS extends AbstractPushSender {
 
     }
 
+    @Override
+    protected Long findFirstTokenSeq(Integer appSeq) {
+        return 10000l;
+    }
 
     @Override
     protected Long findLastTokenSeq(Integer appSeq) {
@@ -43,7 +46,7 @@ public class SenderS extends AbstractPushSender {
     }
 
     @Override
-    protected List<PushAppToken> findAllToken(String sendType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx) {return null;
+    protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx, int tokenCnt) {return null;
     }
 
     @Override

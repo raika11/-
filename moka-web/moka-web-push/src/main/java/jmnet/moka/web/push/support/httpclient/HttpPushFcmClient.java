@@ -7,6 +7,8 @@ import jmnet.moka.web.push.config.PropertyHolder;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.support.message.FcmMessage;
 import jmnet.moka.web.push.support.message.PushHttpResponse;
+import jmnet.moka.web.push.support.sender.AbstractPushSender;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -17,6 +19,8 @@ import okhttp3.Response;
 import okio.BufferedSink;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -31,7 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author ince
  * @since 2021-02-09 17:32
  */
+@Slf4j
 public class HttpPushFcmClient implements HttpPushClient {
+    private static final Logger logger = LoggerFactory.getLogger(AbstractPushSender.class);
 
     @Autowired
     private PropertyHolder propertyHolder;
@@ -62,7 +68,7 @@ public class HttpPushFcmClient implements HttpPushClient {
             return new PushHttpResponse(null, -1, null, t.getMessage(), null);
         } finally {
             if (response != null) {
-                System.out.println("finally response="+response);
+                log.info("finally response="+response);
                 response
                         .body()
                         .close();
@@ -116,7 +122,7 @@ public class HttpPushFcmClient implements HttpPushClient {
     protected final Request buildRequest(FcmMessage fcmMessage)
             throws IOException {
         String fcmUrl = "https://fcm.googleapis.com/fcm/send";
-        System.out.println("[ Request buildRequest ]");
+        log.info("[ Request buildRequest ]");
 
         byte[] message = ResourceMapper
                 .getDefaultObjectMapper()

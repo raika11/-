@@ -1,6 +1,8 @@
 package jmnet.moka.web.push.mvc.sender.service;
 
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,12 +15,27 @@ import java.util.Optional;
 public interface PushAppTokenService {
 
     /**
-     * 대상 토큰 중 가장 큰 토큰 일련번호 조회
+     * 토큰 목록 조회
+     *
+     * @param appSeq 토큰 일련번호
+     * @return 토큰 목록 조회 결과
+     */
+    Page<PushAppToken> findPushAppToken(Integer appSeq, Pageable pageable);
+
+    /**
+     * 최소 토큰 일련번호 조회
      *
      * @param appSeq 토큰 ID
-     * @return 가장 큰 토큰 일련번호
+     * @return 토큰 일련번호
      */
-    Optional<PushAppToken> findByAppSeq(Integer appSeq);
+    List<PushAppToken> findByAppSeqAsc(Integer appSeq);
+    /**
+     * 최대 토큰 일련번호 조회
+     *
+     * @param appSeq 토큰 ID
+     * @return 토큰 일련번호
+     */
+    List<PushAppToken> findByAppSeqDesc(Integer appSeq);
 
     /**
      * 대상 토큰 목록 조회
@@ -28,4 +45,12 @@ public interface PushAppTokenService {
      */
     //List<PushAppToken> findAllToken(Integer appSeq, Integer pageIdx);
     List<PushAppToken> findByTokenSeq(Long lastTokenSeq);
+
+
+    /**
+     * 대상 토큰 목록 삭제
+     *
+     * @param pushTokens 에피소드 정보
+     */
+    void deletePushAppToken(List<PushAppToken> pushTokens);
 }

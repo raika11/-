@@ -16,6 +16,7 @@ import org.json.simple.parser.JSONParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -66,34 +67,26 @@ public class SenderT extends AbstractPushSender {
         PushContentSeqSearchDTO searchContentSeq = new PushContentSeqSearchDTO();
 
         searchContentSeq.setContentSeq(pushItemSeq);
+        String pushType = null;
+        String title = null;
+        String content = null;
+        String pushImgUrl = null;
+        try{
+            Page<PushContents> returnValue1 = pushContentsService.findAllByContentSeq(searchContentSeq);
 
-        Page<PushContents> returnValue1 = pushContentsService.findAllByContentSeq(searchContentSeq);
+            List<PushContentsDTO> dtoList1 = modelMapper.map(returnValue1.getContent(), PushContentsDTO.TYPE);
 
-        List<PushContentsDTO> dtoList1 = modelMapper.map(returnValue1.getContent(), PushContentsDTO.TYPE);
-
-        String pushType = dtoList1.get(0).getPushType();
-        String title = dtoList1.get(0).getTitle();
-        String content = dtoList1.get(0).getContent();
-        String pushImgUrl = dtoList1.get(0).getPushImgUrl();
+            for (PushContentsDTO pushContents : dtoList1) {
+                pushType = pushContents.getPushType();
+                title = pushContents.getTitle();
+                content = pushContents.getContent();
+                pushImgUrl = pushContents.getPushImgUrl();
+            }
+        } catch (Exception e) {
+            log.debug(e.toString());
+        }
 
         Optional<PushApp> pushApp = pushAppService.findByAppSeq(appSeq);
-
-        Optional<PushAppToken> appToken = pushAppTokenService.findByAppSeq(appSeq);
-
-        String token = appToken.get().getToken();
-
-        System.out.println("token       =" + token);
-        System.out.println("pushType    =" + pushType);
-        System.out.println("contentSeq  =" + contentSeq);
-        System.out.println("appSeq      =" + appSeq);
-        System.out.println("title       =" + title);
-        System.out.println("content     =" + content);
-
-        /**
-         * TODO 1. 업무별 푸시 메시지 생성 로직 구현
-         */
-        List<String> registration_ids = new ArrayList<String>();
-        registration_ids.add(0,token);
 
         if(pushApp.equals("iOS")){
             Notification notification = new Notification();
@@ -105,7 +98,7 @@ public class SenderT extends AbstractPushSender {
             notification.setKey3(153);
             notification.setImage_url(pushImgUrl);
 
-            return FcmMessage.builder().notification(notification).registration_ids(registration_ids).build();
+            return FcmMessage.builder().notification(notification).build();
         }else{
             Map<String, String> data = new HashMap<>();
             data.put("key1",title);
@@ -113,55 +106,53 @@ public class SenderT extends AbstractPushSender {
             data.put("key3","http://dn.joongdo.co.kr");
             data.put("img_name",pushImgUrl);
 
-            return FcmMessage.builder().registration_ids(registration_ids).data(data).build();
+            return FcmMessage.builder().data(data).build();
         }
     }
 
+    @Override
+    protected Long findFirstTokenSeq(Integer appSeq) {
+        List<PushAppToken> appTokenList = pushAppTokenService.findByAppSeqAsc(appSeq);
+        Long tokenSeq  = 0L;
+
+        tokenSeq = appTokenList.get(0).getTokenSeq();
+
+        return tokenSeq;
+    }
 
     @Override
     protected Long findLastTokenSeq(Integer appSeq) {
-        log.debug("속보 - 푸시 전송을 위한 작업 처리 :findLastTokenSeq  {}", appSeq);
-        System.out.println("[SenderT findLastTokenSeq]  ================");
         /**
          * TODO 2. 대상 토큰 중 가장 큰 토큰 일련번호 조회
          * - 페이징 처리에 사용
          */
+        List<PushAppToken> appTokenList = pushAppTokenService.findByAppSeqDesc(appSeq);
+        Long tokenSeq  = 0L;
 
-        Optional<PushAppToken> appToken = pushAppTokenService.findByAppSeq(appSeq);
+        tokenSeq = appTokenList.get(0).getTokenSeq();
 
-        return appToken.get().getTokenSeq();
+        return tokenSeq;
     }
-
     @Override
-    protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx) throws Exception {
-
+    protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx, int tokenCnt) throws Exception {
         log.debug("속보 - 푸시 전송을 위한 작업 처리 :findAllToken  {}", pageIdx);
 
         /**
          * TODO 3. 토큰 목록 조회
          */
-        System.out.println("(int)lastTokenSeq   ="+(int)lastTokenSeq);
-        System.out.println("appSeq              ="+appSeq);
+        Page<PushAppToken> pushAppTokenlist = pushAppTokenService.findPushAppToken(appSeq, PageRequest.of(pageIdx, tokenCnt));
 
-        List<PushAppToken> returnValue = pushAppTokenService. findByTokenSeq(lastTokenSeq);
-        //List<PushAppToken> returnValue = pushAppTokenService.findAllToken(appSeq, pageIdx);
+        int totalPages = pushAppTokenlist.getTotalPages();
 
-        List<PushAppTokenDTO> pushAppTokenList = modelMapper.map(returnValue, PushAppTokenDTO.TYPE);
-
-        System.out.println("**********************************************");
-        System.out.println("getTokenSeq="+returnValue.get(0).getTokenSeq());
-        System.out.println("getToken="+returnValue.get(0).getToken());
-
-
+        List<PushAppTokenDTO> tokenDTOList = modelMapper.map(pushAppTokenlist.getContent(), PushAppTokenDTO.TYPE);
+        List<PushAppToken> returnValue = pushAppTokenlist.getContent();
 
         PushAppTokenHistDTO pushAppTokenHistDTO = new PushAppTokenHistDTO();
-
         PushAppTokenHist pushAppTokenHist = modelMapper.map(pushAppTokenHistDTO, PushAppTokenHist.class);
 
-        for (PushAppTokenDTO pushAppToken : pushAppTokenList) {
-
-            log.debug("[ 푸시 앱 토큰 이력 등록 ]");
+        for (PushAppTokenDTO pushAppToken : tokenDTOList) {
             try {
+                    log.debug("[ 푸시 앱 토큰 이력 등록 ]");
                     PushTokenSendHistDTO pushTokenSendHistDTO = new PushTokenSendHistDTO();
 
                     PushTokenSendHist pushTokenSendHist = modelMapper.map(pushTokenSendHistDTO, PushTokenSendHist.class);
@@ -173,7 +164,8 @@ public class SenderT extends AbstractPushSender {
                     pushTokenSendHist.setRegDt(McpDate.now());
 
                     insertPushTokenSendHist(pushTokenSendHist);
-                log.debug("[SUCCESS TO INSERT PUSH TOKEN SEND HIST]");
+                    log.debug("[SUCCESS TO INSERT PUSH TOKEN SEND HIST]");
+
             } catch (Exception e) {
                 log.error("[FAIL TO INSERT PUSH TOKEN SEND HIST]", e);
                 throw new Exception("푸시 앱 토큰 전송 이력이 등록 되지 않습니다.", e);
@@ -197,11 +189,13 @@ public class SenderT extends AbstractPushSender {
                 log.error("[FAIL TO INSERT PUSH TOKEN HIST]", e);
                 throw new Exception("푸시 토큰 이력이 등록 되지 않습니다.", e);
             }
+            if(pageIdx > totalPages){
+                returnValue = Collections.emptyList();
+            }
         }
 
         return returnValue;
     }
-
 
     @Override
     protected void insertPushTokenSendHist(PushTokenSendHist pushTokenSendHist) {
@@ -245,101 +239,97 @@ public class SenderT extends AbstractPushSender {
     }
 
     @Override
-    protected void deleteTokens(List<PushAppToken> pushTokensMemberList) {
-
-        //pushAppTokenHistService.savePushAppTokenHist(pushTokensMemberList);
-
+    protected void deleteTokens(List<PushAppToken> pushTokens) {
+        pushAppTokenService.deletePushAppToken(pushTokens);
     }
 
     @Override
     protected PushResponseMessage sendMessage(List<PushAppToken> pushTokens, FcmMessage pushMessage) throws Exception {
 
+        log.info("[ SenderT PushResponseMessage sendMessage ]");
+
         PushResponseMessage sendMessage = new PushResponseMessage();
-        
-        try {
-            System.out.println("[ SenderT PushResponseMessage sendMessage ]#####################################################");
-            System.out.println("pushTokens.size    ="+pushTokens.size());
-            System.out.println("pushTokens          ="+pushTokens.get(0).getToken());
 
-            Optional<PushApp> pushAppOld = pushAppService.findByAppSeq(pushTokens.get(0).getAppSeq());
+        for (PushAppToken pushToken : pushTokens) {
 
-            System.out.println("getAppSeq    ="+pushAppOld.get().getAppSeq());
-            System.out.println("getAppDiv    ="+pushAppOld.get().getAppDiv());
-            System.out.println("getAppOs    ="+pushAppOld.get().getAppOs());
-            System.out.println("getDevDiv    ="+pushAppOld.get().getDevDiv());
+            long tokenSeq = pushToken.getTokenSeq();
+            String token = pushToken.getToken();
+            int appSeq = pushToken.getAppSeq();
 
-            PushApp pushApp = PushApp
-                    .builder()
-                    .appSeq(pushAppOld.get().getAppSeq())
-                    .appDiv(pushAppOld.get().getAppDiv())
-                    .appOs(pushAppOld.get().getAppOs())
-                    .devDiv(pushAppOld.get().getDevDiv())
-                    .appName(pushAppOld.get().getAppName())
-                    .apiKey(pushAppOld.get().getApiKey())
-                    .fcmKey(pushAppOld.get().getApiKey())
-                    .build();
+            try {
+                Optional<PushApp> pushAppOld = pushAppService.findByAppSeq(appSeq);
 
-            /**
-             * FCM에 푸시 요청
-             */
-            PushHttpResponse response = pushSend(pushTokens, pushApp, pushMessage);
+                PushApp pushApp = PushApp
+                        .builder()
+                        .appSeq(pushAppOld.get().getAppSeq())
+                        .appDiv(pushAppOld.get().getAppDiv())
+                        .appOs(pushAppOld.get().getAppOs())
+                        .devDiv(pushAppOld.get().getDevDiv())
+                        .appName(pushAppOld.get().getAppName())
+                        .apiKey(pushAppOld.get().getApiKey())
+                        .fcmKey(pushAppOld.get().getApiKey())
+                        .build();
 
-            String multicastId = null;
-            int statusCode = response.getStatusCode();
-            int success = 0;
-            int failure = 0;
-            int canonicalIds =0;
-            List<FcmResponseResultItem> results;
+                /**
+                 * FCM에 푸시 요청
+                 */
+                PushHttpResponse response = pushSend(token, pushApp, pushMessage);
 
-            System.out.println("-------------------------------------------------------------");
-            System.out.println("PushToken    ="+response.getPushToken().getToken());
-            System.out.println("StatusCode   ="+response.getStatusCode());
-            System.out.println("Headers      ="+response.getHeaders());
-            System.out.println("Message      ="+response.getMessage());
-            System.out.println("Body         ="+response.getBody().toString());
+                String multicastId = null;
+                int statusCode = response.getStatusCode();
+                int success = 0;
+                int failure = 0;
+                int canonicalIds = 0;
+                List<FcmResponseResultItem> results;
 
-            JSONParser p = new JSONParser();
-            JSONObject obj = (JSONObject)p.parse(response.getBody());
-            JSONObject objRst = (JSONObject)p.parse(obj.get("results").toString().replace("[","").replace("]",""));
-            System.out.println("objRst="+objRst);
+                log.info("PushToken    =" + response.getPushToken().getToken());
+                log.info("StatusCode   =" + response.getStatusCode());
+                log.info("Headers      =" + response.getHeaders());
+                log.info("Message      =" + response.getMessage());
+                log.info("Body         =" + response.getBody().toString());
 
-            List<FcmResponseResultItem> getResults = new ArrayList<>();
+                JSONParser p = new JSONParser();
+                JSONObject obj = (JSONObject) p.parse(response.getBody());
+                JSONObject objRst = (JSONObject) p.parse(obj.get("results").toString().replace("[", "").replace("]", ""));
+                log.info("objRst=" + objRst);
 
-            FcmResponseResultItem resultItem = new FcmResponseResultItem();
+                List<FcmResponseResultItem> getResults = new ArrayList<>();
 
-            if (obj.get("multicast_id") != null ) {
-                multicastId = obj.get("multicast_id").toString();
-                sendMessage.setMulticastId(multicastId);
-            }
-            if (obj.get("success") != null ) {
-                success = Integer.valueOf(obj.get("success").toString());
-                sendMessage.setSuccess(success);
-                if(success != 0 && failure == 0){
-                    resultItem.setMessageId(objRst.get("message_id").toString());
+                FcmResponseResultItem resultItem = new FcmResponseResultItem();
+
+                if (obj.get("multicast_id") != null) {
+                    multicastId = obj.get("multicast_id").toString();
+                    sendMessage.setMulticastId(multicastId);
                 }
-            }
-            if (obj.get("failure") != null ) {
-                failure = Integer.valueOf(obj.get("failure").toString());
-                sendMessage.setFailure(failure);
-
-                if(success == 0 && failure != 0){
-                    resultItem.setError(FcmErrorType.getType(response.getStatusCode(), objRst.get("error").toString()));
+                if (obj.get("success") != null) {
+                    success = Integer.valueOf(obj.get("success").toString());
+                    sendMessage.setSuccess(success);
+                    if (success != 0 && failure == 0) {
+                        resultItem.setMessageId(objRst.get("message_id").toString());
+                    }
                 }
-                getResults.add(0, resultItem);
+                if (obj.get("failure") != null) {
+                    failure = Integer.valueOf(obj.get("failure").toString());
+                    sendMessage.setFailure(failure);
+
+                    if (success == 0 && failure != 0) {
+                        resultItem.setError(FcmErrorType.getType(response.getStatusCode(), objRst.get("error").toString()));
+                    }
+                    getResults.add(0, resultItem);
+                }
+                if (obj.get("canonical_ids") != null) {
+                    canonicalIds = Integer.valueOf(obj.get("canonical_ids").toString());
+                    sendMessage.setCanonicalIds(canonicalIds);
+                }
+                ;
+
+                if (obj.get("results") != null) {
+                    sendMessage.setResults(getResults);
+                }
+            } catch (Exception e) {
+                log.error("[FAIL TO SendMessage]", e);
+                throw new Exception(e);
             }
-            if (obj.get("canonical_ids") != null ) {
-                canonicalIds = Integer.valueOf(obj.get("canonical_ids").toString());
-                sendMessage.setCanonicalIds(canonicalIds);
-            };
-
-
-
-            if (obj.get("results") != null ) {
-                sendMessage.setResults(getResults);
-            }
-        } catch (Exception e) {
-            log.error("[FAIL TO SendMessage]", e);
-            throw new Exception(e);
         }
 
             //pushSend(PushApp pushApp, FcmMessagnulle fcmMessage);
@@ -355,14 +345,28 @@ public class SenderT extends AbstractPushSender {
      * @return 전송 결과
      * @throws Exception 오류 처리
      */
-    protected PushHttpResponse pushSend(List<PushAppToken> pushTokens, PushApp pushApp, FcmMessage fcmMessage)
+    protected PushHttpResponse pushSend(String token, PushApp pushApp, FcmMessage fcmMessage)
+    //protected PushHttpResponse pushSend(List<PushAppToken> pushToken, PushApp pushApp, FcmMessage fcmMessage)
             throws Exception {
-        System.out.println("[ SenderT pushSend ] ");
+        log.info("[ SenderT pushSend ] "+token);
 
         PushAppTokenDTO pushAppTokenItem = new PushAppTokenDTO();
-        pushAppTokenItem.setToken(pushTokens.get(0).getToken());
+        pushAppTokenItem.setToken(token);
 
         PushAppToken pushAppToken = modelMapper.map(pushAppTokenItem, PushAppToken.class);
+
+        List<String> registration_ids = new ArrayList<String>();
+
+        if(token.contains("f_DLCVY-ThuTc5YlVHe37o:")){
+            token = token.split("f_DLCVY-ThuTc5YlVHe37o:")[1];
+            token = "f_DLCVY-ThuTc5YlVHe37o:" + token;
+        }
+
+        log.info("token="+token);
+
+        registration_ids.add(token);
+
+        fcmMessage.setRegistration_ids(registration_ids);
 
         /**
          * TODO 14. FCM 전송 로직 구현

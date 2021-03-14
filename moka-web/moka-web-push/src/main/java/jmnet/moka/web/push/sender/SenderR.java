@@ -36,6 +36,10 @@ public class SenderR extends AbstractPushSender {
 
     }
 
+    @Override
+    protected Long findFirstTokenSeq(Integer appSeq) {
+        return 10000l;
+    }
 
     @Override
     protected Long findLastTokenSeq(Integer appSeq) {
@@ -43,7 +47,7 @@ public class SenderR extends AbstractPushSender {
     }
 
     @Override
-    protected List<PushAppToken> findAllToken(String sendType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx) {return null;
+    protected List<PushAppToken> findAllToken(String sendType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx, int tokenCnt) {return null;
     }
 
     @Override

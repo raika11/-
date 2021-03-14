@@ -17,11 +17,18 @@ import java.util.Optional;
 public interface PushAppTokenRepositorySupport {
 
     /**
-     * 특정작업 존재여부 확인 - 앱 일련번호
+     * 처음 토큰 조회
      *
      * @param appSeq   검색조건
      * @return 작업
      */
-    Optional<PushAppToken> findFirstByAppSeqOrderByTokenSeqDesc(Integer appSeq);
+    List<PushAppToken> findFirstByAppSeqOrderByTokenSeqAsc(Integer appSeq);
 
+    /**
+     * 마지막 토큰 조회
+     *
+     * @param appSeq   검색조건
+     * @return 작업
+     */
+    List<PushAppToken> findFirstByAppSeqOrderByTokenSeqDesc(Integer appSeq);
 }

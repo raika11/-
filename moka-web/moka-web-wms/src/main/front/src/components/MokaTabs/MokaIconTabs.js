@@ -125,13 +125,14 @@ const MokaIconTabs = forwardRef((props, ref) => {
     const [activeKey, setActiveKey] = useState(0);
     const [isExpand, setIsExpand] = useState(true);
     const currentHotkeys = hasHotkeys ? ICON_TAB_HOT_KEYS.filter((d, i) => i < tabs.length) : [];
+
     // 핫키로 탭 변경
     useHotkeys(
         currentHotkeys.join(','),
         (event, handler) => {
-            setActiveKey(currentHotkeys.indexOf(handler.shortcut));
+            handleSelect(currentHotkeys.indexOf(handler.shortcut));
         },
-        [currentHotkeys],
+        [currentHotkeys, handleSelect],
     );
 
     /**

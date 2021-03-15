@@ -15,7 +15,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
             <MokaIconTabs
                 foldable={false}
                 activeKey={activeTabIdx}
-                onSelectNav={(idx) => setActiveTabIdx(idx)}
+                onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                 tabWidth={840}
                 height={817}
                 className="flex-fill h-100"

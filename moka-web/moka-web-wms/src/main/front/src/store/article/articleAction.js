@@ -10,7 +10,6 @@ export const CHANGE_BULK_SEARCH_OPTION = 'article/CHANGE_BULK_SEARCH_OPTION';
 export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
 export const changeServiceSearchOption = createAction(CHANGE_SERVICE_SEARCH_OPTION, (search) => search);
 export const changeBulkSearchOption = createAction(CHANGE_BULK_SEARCH_OPTION, (search) => search);
-
 export const CHANGE_INVALID_LIST = 'article/CHANGE_INVALID_LIST';
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
@@ -35,17 +34,19 @@ export const CLEAR_HISTORY = 'article/CLEAR_HISTORY';
 export const clearHistory = createAction(CLEAR_HISTORY);
 
 /**
- * 등록기사 리스트 조회
+ * 등록기사 리스트 조회 (기사만 조회)
  */
 export const [GET_ARTICLE_LIST, GET_ARTICLE_LIST_SUCCESS, GET_ARTICLE_LIST_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_LIST');
-export const getArticleList = createAction(GET_ARTICLE_LIST, ({ search, callback }) => ({ search, callback }));
+export const getArticleList = createAction(GET_ARTICLE_LIST, ({ type, search, getSourceList, callback }) => ({ search, callback }));
 
 /**
  * 기사 조회 (Modal)
- * 등록기사, 서비스 기사, 벌크 기사 3가지 다 처리함(type으로 구분)
+ * @param {array} props.type ['DESKING', 'JOONGANG', 'CONSALES', 'JSTORE', 'SOCIAL', 'BULK', 'RCV'] 데스킹 기사 (서비스 기사), 그 외
+ *                           DESKING => 서비스 기사 조회, BULK => 벌크 기사 조회, 그외 매체 => 등록기사 조회
+ * @param {bool} props.getSourceList true이면 매체 목록을 같이 조회하고 모든 매체 목록을 검색 조건에 포함함
  */
 export const [GET_ARTICLE_LIST_MODAL, GET_ARTICLE_LIST_MODAL_SUCCESS, GET_ARTICLE_LIST_MODAL_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_LIST_MODAL');
-export const getArticleListModal = createAction(GET_ARTICLE_LIST_MODAL, ({ type, search, callback }) => ({ type, search, callback }));
+export const getArticleListModal = createAction(GET_ARTICLE_LIST_MODAL, ({ type, search, getSourceList, callback }) => ({ type, search, getSourceList, callback }));
 
 /**
  * 등록기사 단건 조회

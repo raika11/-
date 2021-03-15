@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaCardTabs } from '@components';
 import { changeHotClickList } from '@store/bulks';
-import { ArticleList, ArticleMediaList } from '@pages/Article/components/Desking';
+import { ArticleList } from '@pages/Article/components/Desking';
 import ReporterList from '@pages/Reporter/components/Desking/ReporterList';
 import ColumnistList from '@pages/Columnist/components/Desking/ColumnistList';
 import { messageBox } from '@utils/toastUtil';
@@ -110,11 +110,12 @@ const BulkhArticleTab = (props) => {
             // 영상기사 조회 컴포넌트
             else if (nav === '영상') {
                 return (
-                    <ArticleMediaList
+                    <ArticleList
                         dropTargetAgGrid={componentAgGridInstances}
                         // dropTargetComponent={componentList}
                         onDragStop={handleArticleDragStop}
                         show={navIdx === idx}
+                        movie
                     />
                 );
             }

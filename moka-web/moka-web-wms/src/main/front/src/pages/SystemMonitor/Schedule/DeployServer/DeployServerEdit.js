@@ -146,7 +146,7 @@ const DeployServerEdit = ({ match }) => {
     }, [dispatch, serverSeq]);
 
     return (
-        <>
+        <div className="flex-fill">
             <Card.Header>
                 <Card.Title as="h2">{serverSeq ? '배포 서버 수정' : '배포 서버 등록'}</Card.Title>
             </Card.Header>
@@ -239,7 +239,7 @@ const DeployServerEdit = ({ match }) => {
                     취소
                 </Button>
             </Card.Footer>
-        </>
+        </div>
     );
 };
 

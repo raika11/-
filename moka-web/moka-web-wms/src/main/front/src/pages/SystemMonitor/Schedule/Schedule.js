@@ -38,6 +38,7 @@ const Schedule = ({ match }) => {
     //     }
     //     // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [parentKey]);
+
     useEffect(() => {
         // 기타코드 스케줄 작업 목록
         dispatch(getGenCate());

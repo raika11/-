@@ -22,9 +22,7 @@ const DeployServer = (props) => {
             {/* 배포 서버 등록, 수정 */}
             <Switch>
                 <Route path={[`${match.path}/deploy-server/add`, `${match.path}/deploy-server/:serverSeq`]}>
-                    <div className="flex-fill">
-                        <DeployServerEdit match={match} />
-                    </div>
+                    <DeployServerEdit match={match} />
                 </Route>
             </Switch>
         </div>

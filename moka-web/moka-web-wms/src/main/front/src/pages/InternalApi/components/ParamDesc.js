@@ -49,11 +49,11 @@ const ParamDesc = ({ className, onChange, onDelete, onAdd, index, validateParamN
                 {/* 추가/삭제 버튼 */}
                 <div className="flex-shrink-0">
                     {index === 0 ? (
-                        <Button variant="outline-neutral" onClick={onAdd}>
+                        <Button variant="outline-positive" onClick={onAdd}>
                             <MokaIcon iconName="fal-plus" />
                         </Button>
                     ) : (
-                        <Button variant="outline-neutral" onClick={() => onDelete(index)}>
+                        <Button variant="outline-negative" onClick={() => onDelete(index)}>
                             <MokaIcon iconName="fal-minus" />
                         </Button>
                     )}

@@ -67,7 +67,7 @@ const DeployServerEdit = ({ match }) => {
             isInvalid = isInvalid || true;
         }
         // 암호 체크
-        if (!!REQUIRED_REGEX.test(obj.accessPwd)) {
+        if (!REQUIRED_REGEX.test(obj.accessPwd)) {
             errList.push({
                 field: 'accessPwd',
                 reason: '로그인 암호를 입력하세요',
@@ -86,8 +86,8 @@ const DeployServerEdit = ({ match }) => {
         if (validate(data)) {
             dispatch(
                 saveDistributeServer({
-                    job: data,
-                    jobSeq: serverSeq ? Number(serverSeq) : null,
+                    server: data,
+                    serverSeq: serverSeq ? Number(serverSeq) : null,
                     callback: ({ header }) => {
                         if (header.success) {
                             toast.success(header.message);

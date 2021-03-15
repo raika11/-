@@ -2,6 +2,24 @@ import qs from 'qs';
 import instance from '@store/commons/axios';
 
 /**
+ * 작업 실행 통계 목록 조회
+ */
+export const getJobStatistic = ({ search }) => {
+    return instance.get(`/api/schedule-server/job-statistic?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+/**
+ * 작업 실행 현황 목록 조회
+ */
+export const getJobStatisticSearch = ({ search }) => {
+    return instance.get(`/api/schedule-server/job-statistic/search?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+/**
  * 배포 서버 목록 조회(검색 조건 코드)
  */
 export const getDistributeServerCode = () => {

@@ -5,43 +5,14 @@ import * as act from './scheduleAction';
 import * as api from './scheduleApi';
 
 /**
- * 작업 목록 > 먼저 스케줄 작업 목록, 사용 중인 배포서버 목록 조회
+ * 작업 실행 통계 목록 조회
  */
-// function* get({ payload: { reporter, callback } }) {
-//     const ACTION = reporterAction.SAVE_REPORTER;
-//     let callbackData = {};
+const getJobStatistic = callApiAfterActions(act.GET_JOB_STATISTIC_LIST, api.getJobStatistic, (state) => state.schedule.runState);
 
-//     yield put(startLoading(ACTION));
-
-//     try {
-//         // 기자 데이터
-//         const response = yield call(reporterAPI.putReporter, { reporter });
-//         callbackData = response.data;
-
-//         if (response.data.header.success) {
-//             yield put({
-//                 type: reporterAction.GET_REPORTER_SUCCESS,
-//                 payload: response.data,
-//             });
-
-//             // 목록 다시 검색
-//             yield put({ type: reporterAction.GET_REPORTER_LIST });
-//         }
-//     } catch (e) {
-//         callbackData = errorResponse(e);
-
-//         yield put({
-//             type: reporterAction.GET_REPORTER_FAILURE,
-//             payload: callbackData,
-//         });
-//     }
-
-//     if (typeof callback === 'function') {
-//         yield call(callback, callbackData);
-//     }
-
-//     yield put(finishLoading(ACTION));
-// }
+/**
+ * 작업 실행 현황 목록 조회
+ */
+const getJobStatisticSearch = callApiAfterActions(act.GET_JOB_STATISTIC_SEARCH_LIST, api.getJobStatisticSearch, (state) => state.schedule.runState);
 
 /**
  * 배포 서버 목록 조회(검색 조건 코드)
@@ -198,6 +169,8 @@ function* deleteServer({ payload: { serverSeq, callback } }) {
 }
 
 export default function* scheduleSaga() {
+    yield takeLatest(act.GET_JOB_STATISTIC_LIST, getJobStatistic);
+    yield takeLatest(act.GET_JOB_STATISTIC_SEARCH_LIST, getJobStatisticSearch);
     yield takeLatest(act.GET_DISTRIBUTE_SERVER_CODE, getDistributeServerCode);
     yield takeLatest(act.GET_JOB_LIST, getJobList);
     yield takeLatest(act.GET_JOB, getJob);

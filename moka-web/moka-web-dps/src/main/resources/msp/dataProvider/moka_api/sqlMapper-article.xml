@@ -207,6 +207,18 @@
       ) }
   </select>
 
+  <!--columnist-->
+  <select id="columnist" parameterType="map" resultType="map" resultMap="map"
+    statementType="CALLABLE">
+    {call UPU_COLUMNIST_LIST_SEL(
+      #{name, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
   <!--jpod 채널-->
   <select id="jpodChannel" parameterType="map" resultType="map" resultMap="map"
     statementType="CALLABLE">

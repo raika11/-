@@ -11,7 +11,7 @@ import { DB_DATEFORMAT } from '@/constants';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { invalidListToError } from '@/utils/convertUtil';
 import { getBoSchjob } from '@/store/codeMgt';
-import { initialState, getJob, clearJob, saveJob, deleteJob } from '@/store/schedule';
+import { initialState, getJob, clearJob, saveJob, deleteJob, getDeleteJobList } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 작업 목록 등록, 수정
@@ -98,7 +98,6 @@ const WorkEdit = ({ match }) => {
      */
     const handleClickSave = () => {
         if (validate(data)) {
-            console.log(data);
             let temp = {
                 ...data,
                 ftpPassive: data.sendType === 'FTP' ? data.ftpPassive : 'N',
@@ -117,9 +116,6 @@ const WorkEdit = ({ match }) => {
                     },
                 }),
             );
-            // console.log(temp);
-        } else {
-            console.log(error);
         }
     };
 
@@ -136,6 +132,7 @@ const WorkEdit = ({ match }) => {
                         callback: ({ header }) => {
                             if (header.success) {
                                 toast.success('삭제되었습니다.');
+                                dispatch(getDeleteJobList());
                                 history.push(`${match.path}`);
                             } else {
                                 messageBox.alert(header.message);

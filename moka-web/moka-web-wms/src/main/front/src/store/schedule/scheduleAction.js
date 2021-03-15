@@ -39,7 +39,7 @@ export const getJob = createAction(GET_JOB, (jobSeq) => jobSeq);
 export const [GET_DELETE_JOB_LIST, GET_DELETE_JOB_LIST_SUCCESS, GET_DELETE_JOB_LIST_FAILURE] = createRequestActionTypes('schedule/GET_DELETE_JOB_LIST');
 export const getDeleteJobList = createAction(GET_DELETE_JOB_LIST, (...actions) => actions);
 export const [GET_DELETE_JOB, GET_DELETE_JOB_SUCCESS, GET_DELETE_JOB_FAILURE] = createRequestActionTypes('schedule/GET_DELETE_JOB');
-export const getDeleteJob = createAction(GET_DELETE_JOB, (seqNo) => seqNo);
+export const getDeleteJob = createAction(GET_DELETE_JOB, (jobSeq) => jobSeq);
 export const [GET_DISTRIBUTE_SERVER_LIST, GET_DISTRIBUTE_SERVER_LIST_SUCCESS, GET_DISTRIBUTE_SERVER_LIST_FAILURE] = createRequestActionTypes('schedule/GET_DISTRIBUTE_SERVER_LIST');
 export const getDistributeServerList = createAction(GET_DISTRIBUTE_SERVER_LIST, (...actions) => actions);
 export const [GET_DISTRIBUTE_SERVER, GET_DISTRIBUTE_SERVER_SUCCESS, GET_DISTRIBUTE_SERVER_FAILURE] = createRequestActionTypes('schedule/GET_DISTRIBUTE_SERVER');
@@ -50,6 +50,8 @@ export const getDistributeServer = createAction(GET_DISTRIBUTE_SERVER, (serverSe
  */
 export const SAVE_JOB = 'schedule/POST_JOB';
 export const saveJob = createAction(SAVE_JOB, ({ job, jobSeq, callback }) => ({ job, jobSeq, callback }));
+export const PUT_RECOVER_JOB = 'schedule/PUT_RECOVER_JOB';
+export const putRecoverJob = createAction(PUT_RECOVER_JOB, ({ jobSeq, callback }) => ({ jobSeq, callback }));
 export const SAVE_DISTRIBUTE_SERVER = 'schedule/SAVE_DISTRIBUTE_SERVER';
 export const saveDistributeServer = createAction(SAVE_DISTRIBUTE_SERVER, ({ server, serverSeq, callback }) => ({ server, serverSeq, callback }));
 

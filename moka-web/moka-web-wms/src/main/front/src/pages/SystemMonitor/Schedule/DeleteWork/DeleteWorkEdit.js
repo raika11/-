@@ -10,6 +10,7 @@ import { MokaInputLabel } from '@/components';
 import { messageBox } from '@/utils/toastUtil';
 import { DB_DATEFORMAT } from '@/constants';
 import { getDeleteJob } from '@/store/schedule';
+import AddJobModal from '../modals/AddJobModal';
 
 /**
  * 스케줄 서버 관리 > 삭제 작업 조회
@@ -17,15 +18,22 @@ import { getDeleteJob } from '@/store/schedule';
 const DeleteWorkEdit = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { seqNo } = useParams();
+    const { jobSeq } = useParams();
     const deleteJob = useSelector((store) => store.schedule.deleteWork.deleteJob);
     const [data, setData] = useState({});
+    const [addJobModal, setAddJobModal] = useState(false);
 
     /**
      * 복원 버튼
      */
     const handleClickRestore = () => {
-        messageBox.confirm('작업을 복원하시겠습니까?', () => {});
+        messageBox.confirm(
+            '작업을 복원하시겠습니까?',
+            () => {
+                setAddJobModal(true);
+            },
+            () => {},
+        );
     };
 
     /**
@@ -40,10 +48,10 @@ const DeleteWorkEdit = ({ match }) => {
     }, [deleteJob]);
 
     useEffect(() => {
-        if (seqNo) {
-            dispatch(getDeleteJob(seqNo));
+        if (jobSeq) {
+            dispatch(getDeleteJob(jobSeq));
         }
-    }, [dispatch, seqNo]);
+    }, [dispatch, jobSeq]);
 
     return (
         <>
@@ -96,7 +104,7 @@ const DeleteWorkEdit = ({ match }) => {
                     <MokaInputLabel label="설명" className="mb-2" name="jobDesc" value={data.jobDesc} inputProps={{ readOnly: true }} />
                     <MokaInputLabel
                         label="삭제 정보"
-                        value={`${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember?.memberNm}(${data.regMember?.memberNm})`}
+                        value={data.regDt ? `${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember?.memberNm}(${data.regMember?.memberNm})` : ''}
                         inputProps={{ readOnly: true }}
                         onChange={(e) => {
                             console.log(e.target.value);
@@ -112,6 +120,7 @@ const DeleteWorkEdit = ({ match }) => {
                     취소
                 </Button>
             </Card.Footer>
+            <AddJobModal show={addJobModal} onHide={() => setAddJobModal(false)} job={data} />
         </>
     );
 };

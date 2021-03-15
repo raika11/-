@@ -22,8 +22,7 @@ const DeleteWorkAgGrid = ({ match }) => {
      */
     const handleRowClicked = useCallback(
         (row) => {
-            // dispatch(getDeleteJob(row.seqNo));
-            history.push(`${match.path}/work-delete/${row.seqNo}`);
+            history.push(`${match.path}/work-delete/${row.jobSeq}`);
         },
         [history, match.path],
     );
@@ -48,13 +47,13 @@ const DeleteWorkAgGrid = ({ match }) => {
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={list}
-            onRowNodeId={(row) => row.seqNo}
+            onRowNodeId={(row) => row.jobSeq}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}
             page={search.page}
             size={search.size}
-            selected={deleteJob.seqNo}
+            selected={deleteJob.jobSeq}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );

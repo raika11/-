@@ -67,8 +67,17 @@ export const getDeleteJobList = ({ search }) => {
 /**
  * 삭제 작업 상세 조회
  */
-export const getDeleteJob = (seqNo) => {
-    return instance.get(`/api/schedule-server/job-deleted/${seqNo}`).catch((err) => {
+export const getDeleteJob = (jobSeq) => {
+    return instance.get(`/api/schedule-server/job-deleted/${jobSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+/**
+ * 삭제된 작업 복원
+ */
+export const putRecoverJob = (jobSeq) => {
+    return instance.put(`/api/schedule-server/job-deleted/${jobSeq}/recover`).catch((err) => {
         throw err;
     });
 };

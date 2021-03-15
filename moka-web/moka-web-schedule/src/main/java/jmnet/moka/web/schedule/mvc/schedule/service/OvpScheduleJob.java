@@ -107,7 +107,7 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
                         .build());
             }
 
-            boolean success = rssFileUpload(generateNewsbriefingByGoogle(rssList));
+            boolean success = stringFileUpload(generateNewsbriefingByGoogle(rssList));
             log.debug("file upload : {}", success);
 
             //AbstractSchduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력

@@ -126,6 +126,11 @@ const getDeleteJobList = callApiAfterActions(act.GET_DELETE_JOB_LIST, api.getDel
 const getDeleteJob = createRequestSaga(act.GET_DELETE_JOB, api.getDeleteJob);
 
 /**
+ * 삭제 작업 상세 조회
+ */
+const putRecoverJob = createRequestSaga(act.PUT_RECOVER_JOB, api.putRecoverJob);
+
+/**
  * 배포 서버 목록 조회
  */
 const getDistributeServerList = callApiAfterActions(act.GET_DISTRIBUTE_SERVER_LIST, api.getDistributeServerList, (state) => state.schedule.deployServer);
@@ -200,6 +205,7 @@ export default function* scheduleSaga() {
     yield takeLatest(act.DELETE_JOB, deleteJob);
     yield takeLatest(act.GET_DELETE_JOB_LIST, getDeleteJobList);
     yield takeLatest(act.GET_DELETE_JOB, getDeleteJob);
+    yield takeLatest(act.PUT_RECOVER_JOB, putRecoverJob);
     yield takeLatest(act.GET_DISTRIBUTE_SERVER_LIST, getDistributeServerList);
     yield takeLatest(act.GET_DISTRIBUTE_SERVER, getDistributeServer);
     yield takeLatest(act.SAVE_DISTRIBUTE_SERVER, saveDistributeServer);

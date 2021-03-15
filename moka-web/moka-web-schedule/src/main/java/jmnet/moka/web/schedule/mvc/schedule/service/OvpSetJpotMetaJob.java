@@ -18,7 +18,7 @@ import java.util.Date;
 
 /**
  * <pre>
- * 브라이트 코드에서 analytic 정보를 조회하여 jpod 메타데이터 입력 및 수정
+ * 브라이트 코브에서 analytic 정보를 조회하여 jpod 메타데이터 입력 및 수정
  * Project : moka
  * Package : jmnet.moka.web.schedule.mvc.schedule.service
  * ClassName : OvpSetJpotMetaJob
@@ -75,6 +75,7 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
                 param.setPlayTime((Long) tmp.get("video_seconds_viewed"));
                 param.setCompleteCnt((Long) tmp.get("video_engagement_100"));
 
+                //데이터 갱신 procedure 실행
                 int result = ovpSetJpotMetaJobMapper.findOne(param);
                 log.debug("execute procedure result : {}", result);
 

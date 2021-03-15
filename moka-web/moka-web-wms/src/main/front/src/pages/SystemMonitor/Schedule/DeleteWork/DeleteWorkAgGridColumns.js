@@ -5,7 +5,7 @@ import WorkDelRenderer from '../components/WorkDelRenderer';
 export default [
     {
         headerName: '번호',
-        field: 'seqNo',
+        field: 'jobSeq',
         cellStyle: { display: 'flex', alignItems: 'center' },
         width: 45,
     },

@@ -126,15 +126,6 @@ const MokaIconTabs = forwardRef((props, ref) => {
     const [isExpand, setIsExpand] = useState(true);
     const currentHotkeys = hasHotkeys ? ICON_TAB_HOT_KEYS.filter((d, i) => i < tabs.length) : [];
 
-    // 핫키로 탭 변경
-    useHotkeys(
-        currentHotkeys.join(','),
-        (event, handler) => {
-            handleSelect(currentHotkeys.indexOf(handler.shortcut));
-        },
-        [currentHotkeys, handleSelect],
-    );
-
     /**
      * 버튼 선택 콜백
      * @param {any} eventKey 이벤트키
@@ -184,6 +175,15 @@ const MokaIconTabs = forwardRef((props, ref) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [parentKey]);
+
+    // 핫키로 탭 변경
+    useHotkeys(
+        currentHotkeys.join(','),
+        (event, handler) => {
+            handleSelect(currentHotkeys.indexOf(handler.shortcut));
+        },
+        [currentHotkeys, handleSelect],
+    );
 
     return (
         <div ref={ref} className={clsx('tab', 'icon-toggle-tab', 'd-flex', tabNavPlacement, className)} style={{ height }}>

@@ -20,7 +20,7 @@ const DeleteWork = (props) => {
             </div>
 
             {/* 삭제 작업 조회 */}
-            <Route path={[`${match.path}/work-delete/:seqNo`]}>
+            <Route path={[`${match.path}/work-delete/:jobSeq`]}>
                 <div className="flex-fill">
                     <Suspense>
                         <DeleteWorkEdit match={match} />

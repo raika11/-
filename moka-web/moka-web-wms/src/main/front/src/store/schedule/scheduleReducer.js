@@ -56,7 +56,7 @@ export const initialState = {
         total: 0,
         error: null,
         search: {
-            sort: 'seqNo,desc',
+            sort: 'jobSeq,desc',
             page: 0,
             size: PAGESIZE_OPTIONS[0],
             searchType: '',

@@ -2,12 +2,14 @@ package jmnet.moka.web.push;
 
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import jmnet.moka.web.push.config.PropertyHolder;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.AbstractEnvironment;
 
 
+@MapperScan(basePackages = "jmnet.moka.web.push.mvc.**.mapper")
 @SpringBootApplication
 @EnableEncryptableProperties
 public class MokaPushApplication {

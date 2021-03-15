@@ -160,6 +160,12 @@
       <scope>compile</scope>
     </dependency>
 
+    <dependency>
+      <groupId>jmnet.moka.common</groupId>
+      <artifactId>moka-common-data-mybatis</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
   </dependencies>
 
   <build>

@@ -129,12 +129,12 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
     public abstract void invoke();
 
     /**
-     * rss 문자열을 받아 ftp 서버 / nd 로 전송한다.
+     * 문자열을 받아 ftp 서버 / nd 로 전송한다.
      *
      * @param rss
      * @return
      */
-    protected boolean rssFileUpload(String rss) {
+    protected boolean stringFileUpload(String rss) {
         /**
          * todo 2. ftp 또는 NAS에 파일 저장하는 기능 구현 필요
          * 1. sendType을 통해 ftp인지 네트워크 드라이브인지 판단
@@ -162,12 +162,12 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
 
     /**
-     * rss 문자열을 받아 파일 생성 + FTP 서버에 업로드실행
+     * 문자열을 받아 파일 생성 + FTP 서버에 업로드실행
      *
-     * @param rss
+     * @param content
      * @return true/false
      */
-    private boolean uploadFtpString(String rss){
+    private boolean uploadFtpString(String content){
         FileWriter fw = null;
         BufferedWriter bw = null;
         FileInputStream fis = null;
@@ -190,24 +190,25 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
                         mokaCrypt.decrypt(scheduleInfo.getGenTarget().getAccessPwd()));
                 log.debug("ftp login : {}", loginResponse);
 
+                //업로드 위치 설정
                 ftpClient.changeWorkingDirectory(scheduleInfo.getTargetPath());
                 ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
                 //현재 임시파일 저장공간 지정이 없는 관계로 현재 패키지 위치에서 생성/삭제
                 String tempPath = AbstractScheduleJob.class.getResource("").getPath();
-                File tempFile = File.createTempFile("temp",".rss", new File(tempPath));
+                File tempFile = File.createTempFile("temp",".txt", new File(tempPath));
                 //File tempFile = File.createTempFile("test",".rss", new File("c:\\Temp"));
 
-                //임시파일에 RSS 스트링 데이터 입력
+                //임시파일에 스트링 데이터 입력
                 fw = new FileWriter(tempFile);
                 bw = new BufferedWriter(fw);
-                bw.write(rss);
+                bw.write(content);
                 bw.flush();
 
                 bw.close();
                 fw.close();
 
-                //임시파일을 FTP에 업로드
+                //설정된 파일 명으로 임시파일을 FTP에 업로드
                 fis = new FileInputStream(tempFile);
                 boolean uploadResponse = ftpClient.storeFile(scheduleInfo.getTargetFileName(), fis);
                 log.debug("ftp upload : {}", uploadResponse);

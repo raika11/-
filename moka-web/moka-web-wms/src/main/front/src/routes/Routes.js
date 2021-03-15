@@ -38,7 +38,7 @@ const Routes = () => {
     return (
         <ScrollToTop>
             <Switch>
-                {routes.map(({ path, layout: Layout, component: Component, name, nonResponsive, side, ...rest }) => (
+                {routes.map(({ path, component: Component, name, nonResponsive, side, ...rest }) => (
                     <Route
                         key={name}
                         path={path}

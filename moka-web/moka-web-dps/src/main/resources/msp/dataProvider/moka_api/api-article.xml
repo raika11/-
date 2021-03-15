@@ -138,13 +138,30 @@
     </keys>
   </api>
 
-  <!--기자목록-->
+  <!--기자 목록-->
   <api id="reporter">
-    <description>컬럼니스트 목록을 조회한다.</description>
+    <description>기자 목록을 조회한다.</description>
     <parameter>
       <name desc="기자명">.{0,1000}</name>
     </parameter>
     <request dmlType="sp" setNames="_DATA">dps.article.reporter</request>
+    <request type="script" resultName="_TOTAL">
+      var result = $ac.getAllResult();
+      result.get("PARAM_MAP").get("total");
+    </request>
+    <keys>
+      name
+      #paging
+    </keys>
+  </api>
+
+  <!--컬럼니스트 목록-->
+  <api id="columnist">
+    <description>컬럼니스트 목록을 조회한다.</description>
+    <parameter>
+      <name desc="컬럼니스트명">.{0,1000}</name>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.article.columnist</request>
     <request type="script" resultName="_TOTAL">
       var result = $ac.getAllResult();
       result.get("PARAM_MAP").get("total");

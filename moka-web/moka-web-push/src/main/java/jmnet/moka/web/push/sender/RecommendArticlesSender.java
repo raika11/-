@@ -23,10 +23,10 @@ import java.util.*;
 
 /**
  * <pre>
- * 푸시 전송 속보 Sender
+ * 푸시 전송 추천 기사 Sender
  * Project : moka
  * Package : jmnet.moka.web.push.sender
- * ClassName : SenderT
+ * ClassName : RecommendArticlesSender
  * Created : 2021-02-08 ince
  * </pre>
  *
@@ -35,7 +35,7 @@ import java.util.*;
  */
 @Slf4j
 @Service
-public class SenderT extends AbstractPushSender {
+public class RecommendArticlesSender extends AbstractPushSender {
 
     private final PushAppService pushAppService;
 
@@ -50,7 +50,7 @@ public class SenderT extends AbstractPushSender {
     @Autowired
     protected ModelMapper modelMapper;
 
-    public SenderT(PushAppService pushAppService, PushContentsService pushContentsService, PushContentsProcService pushContentsProcService, PushAppTokenService pushAppTokenService, PushAppTokenHistService pushAppTokenHistService, PushTokenSendHistService pushTokenSendHistService) {
+    public RecommendArticlesSender(PushAppService pushAppService, PushContentsService pushContentsService, PushContentsProcService pushContentsProcService, PushAppTokenService pushAppTokenService, PushAppTokenHistService pushAppTokenHistService, PushTokenSendHistService pushTokenSendHistService) {
         this.pushAppService = pushAppService;
         this.pushContentsService = pushContentsService;
         this.pushContentsProcService = pushContentsProcService;
@@ -135,7 +135,7 @@ public class SenderT extends AbstractPushSender {
     }
     @Override
     protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx, int tokenCnt) throws Exception {
-        log.debug("속보 - 푸시 전송을 위한 작업 처리 :findAllToken  {}", pageIdx);
+        log.debug("추천 기사 - 푸시 전송을 위한 작업 처리 :findAllToken  {}", pageIdx);
 
         /**
          * TODO 3. 토큰 목록 조회
@@ -152,19 +152,19 @@ public class SenderT extends AbstractPushSender {
 
         for (PushAppTokenDTO pushAppToken : tokenDTOList) {
             try {
-                    log.debug("[ 푸시 앱 토큰 이력 등록 ]");
-                    PushTokenSendHistDTO pushTokenSendHistDTO = new PushTokenSendHistDTO();
+                log.debug("[ 푸시 앱 토큰 이력 등록 ]");
+                PushTokenSendHistDTO pushTokenSendHistDTO = new PushTokenSendHistDTO();
 
-                    PushTokenSendHist pushTokenSendHist = modelMapper.map(pushTokenSendHistDTO, PushTokenSendHist.class);
+                PushTokenSendHist pushTokenSendHist = modelMapper.map(pushTokenSendHistDTO, PushTokenSendHist.class);
 
-                    pushTokenSendHist.setContentSeq(contentSeq);
-                    pushTokenSendHist.setTokenSeq(pushAppToken.getTokenSeq());
-                    pushTokenSendHist.setAppSeq(pushAppToken.getAppSeq().intValue());
-                    pushTokenSendHist.setSendYn("N");
-                    pushTokenSendHist.setRegDt(McpDate.now());
+                pushTokenSendHist.setContentSeq(contentSeq);
+                pushTokenSendHist.setTokenSeq(pushAppToken.getTokenSeq());
+                pushTokenSendHist.setAppSeq(pushAppToken.getAppSeq().intValue());
+                pushTokenSendHist.setSendYn("N");
+                pushTokenSendHist.setRegDt(McpDate.now());
 
-                    insertPushTokenSendHist(pushTokenSendHist);
-                    log.debug("[SUCCESS TO INSERT PUSH TOKEN SEND HIST]");
+                insertPushTokenSendHist(pushTokenSendHist);
+                log.debug("[SUCCESS TO INSERT PUSH TOKEN SEND HIST]");
 
             } catch (Exception e) {
                 log.error("[FAIL TO INSERT PUSH TOKEN SEND HIST]", e);
@@ -173,17 +173,17 @@ public class SenderT extends AbstractPushSender {
 
             log.debug("[ 푸시 토큰 전송 이력 등록 ]");
             try {
-                    pushAppTokenHist.setTokenSeq(pushAppToken.getTokenSeq());
-                    pushAppTokenHist.setAppSeq(pushAppToken.getAppSeq().intValue());
-                    pushAppTokenHist.setBadge(pushAppToken.getBadge());
-                    pushAppTokenHist.setMemId(pushAppToken.getMemId());
-                    pushAppTokenHist.setToken(pushAppToken.getToken());
-                    pushAppTokenHist.setInsDt(McpDate.now());
-                    pushAppTokenHist.setRegDt(McpDate.now());
-                    pushAppTokenHist.setToken(pushAppToken.getToken());
+                pushAppTokenHist.setTokenSeq(pushAppToken.getTokenSeq());
+                pushAppTokenHist.setAppSeq(pushAppToken.getAppSeq().intValue());
+                pushAppTokenHist.setBadge(pushAppToken.getBadge());
+                pushAppTokenHist.setMemId(pushAppToken.getMemId());
+                pushAppTokenHist.setToken(pushAppToken.getToken());
+                pushAppTokenHist.setInsDt(McpDate.now());
+                pushAppTokenHist.setRegDt(McpDate.now());
+                pushAppTokenHist.setToken(pushAppToken.getToken());
 
-                    insertPushAppTokenHist(pushAppTokenHist);
-                    //updatePushAppTokenHist(pushAppTokenHist);
+                insertPushAppTokenHist(pushAppTokenHist);
+                //updatePushAppTokenHist(pushAppTokenHist);
                 log.debug("[SUCCESS TO INSERT PUSH TOKEN HIST]");
             } catch (Exception e) {
                 log.error("[FAIL TO INSERT PUSH TOKEN HIST]", e);
@@ -246,7 +246,7 @@ public class SenderT extends AbstractPushSender {
     @Override
     protected PushResponseMessage sendMessage(List<PushAppToken> pushTokens, FcmMessage pushMessage) throws Exception {
 
-        log.info("[ SenderT PushResponseMessage sendMessage ]");
+        log.info("[ RecommendArticlesSender PushResponseMessage sendMessage ]");
 
         PushResponseMessage sendMessage = new PushResponseMessage();
 
@@ -332,7 +332,7 @@ public class SenderT extends AbstractPushSender {
             }
         }
 
-            //pushSend(PushApp pushApp, FcmMessagnulle fcmMessage);
+        //pushSend(PushApp pushApp, FcmMessagnulle fcmMessage);
 
         return sendMessage;
     }
@@ -348,7 +348,7 @@ public class SenderT extends AbstractPushSender {
     protected PushHttpResponse pushSend(String token, PushApp pushApp, FcmMessage fcmMessage)
     //protected PushHttpResponse pushSend(List<PushAppToken> pushToken, PushApp pushApp, FcmMessage fcmMessage)
             throws Exception {
-        log.info("[ SenderT pushSend ] "+token);
+        log.info("[ RecommendArticlesSender pushSend ] "+token);
 
         PushAppTokenDTO pushAppTokenItem = new PushAppTokenDTO();
         pushAppTokenItem.setToken(token);

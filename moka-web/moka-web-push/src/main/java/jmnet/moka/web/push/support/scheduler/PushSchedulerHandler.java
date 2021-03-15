@@ -108,6 +108,7 @@ public class PushSchedulerHandler {
             if (McpString.isNotEmpty(pushSchedulerJob.getClassName())) {
                 Runnable r = getRunnable(pushSchedulerJob);
                 ScheduledFuture<?> scheduledFuture = taskScheduler.schedule(r, new CronTrigger(pushSchedulerJob.getTerm()));
+                log.info("pushSchedulerJob.getName()>>>"+pushSchedulerJob.getName());
                 scheduleMap.put(pushSchedulerJob.getName(), scheduledFuture);
                 result = true;
             }

@@ -108,19 +108,16 @@ public class PushSenderHandler {
     public boolean addPushJob(PushContents pushItem, int appSeq) {
         boolean result = false;
 
-        log.debug("[ addPushJob ]");
-
         String pushType = pushItem.getPushType();
 
-        if(pushType.equals("T")){   pushItem.setPushType("senderT");    }
-        if(pushType.equals("S")){   pushItem.setPushType("senderS");    }
-        if(pushType.equals("R")){   pushItem.setPushType("senderR");    }
-        if(pushType.equals("N")){   pushItem.setPushType("senderN");    }
+        log.debug("[ addPushJob ] pushType="+pushType);
+
+        if(pushType.equals("T")){   pushItem.setPushType("NewsFlashSender");            }
+        if(pushType.equals("S")){   pushItem.setPushType("RecommendArticlesSender");    }
+        if(pushType.equals("R")){   pushItem.setPushType("PreviewTodaySender");         }
+        if(pushType.equals("N")){   pushItem.setPushType("NewsRoomLetterSender");       }
 
         if (scheduleMap.containsKey(pushItem.getPushType())) {// 작업 유형 존재할 경우 실행
-           // System.out.println("getContentSeq   ="+pushItem.getContentSeq());
-          // System.out.println("appSeq          ="+appSeq);
-           // System.out.println("getRsvDt        ="+pushItem.getRsvDt());
             pushSendJobTaskExecutor.execute(() -> scheduleMap
                     .get(pushItem.getPushType())
                     .doTask(pushItem, appSeq));

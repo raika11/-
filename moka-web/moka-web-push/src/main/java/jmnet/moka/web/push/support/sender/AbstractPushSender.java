@@ -196,14 +196,13 @@ public abstract class AbstractPushSender implements Sender {
                     AtomicInteger currentPage = new AtomicInteger(1);
 
 
-                futureMap.put(completionService.submit(() -> {
+                    futureMap.put(completionService.submit(() -> {
 
                         int tokenRstIdx = 0;
-                        //int pageIdx = 1;
-                         while (lastTokenSeq >= (tokenRstIdx = tokenIdx.getAndAdd(tokenCnt))) {
-                             log.info("lastTokenSeq ="+ lastTokenSeq);
-                             log.info("tokenRstIdx  ="+ tokenRstIdx);
-                             log.info("tokenCnt     ="+ tokenCnt);
+
+                        while (lastTokenSeq >= (tokenRstIdx = tokenIdx.getAndAdd(tokenCnt))) {
+
+                             //log.info("lastTokenSeq ="+ lastTokenSeq+ "tokenRstIdx  ="+ tokenRstIdx+ "tokenCnt     ="+ tokenCnt);
 
                              /**
                               * TODO 6. 앱별 푸시 쓰레드에서 각 대상 토큰 목록 조회, page 처리 필요
@@ -212,7 +211,7 @@ public abstract class AbstractPushSender implements Sender {
                               */
                              log.debug(Thread
                                      .currentThread()
-                                     .getName() + " appSeq : {},  pageIdx : {}", appSeq, tokenRstIdx);
+                                     .getName() + " appSeq : {},  tokenRstIdx : {},  lastTokenSeq : {}", appSeq, tokenRstIdx, lastTokenSeq);
                            // log.info("lastTokenSeq="+lastTokenSeq + ": pageIdx="+pageIdx+": tokenCnt ="+tokenIdx.getAndAdd(tokenCnt));
 
                             try {

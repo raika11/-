@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,10 +28,6 @@ public class PushContentsProcServiceImpl implements PushContentsProcService{
 
     @Override
     public Optional<PushContentsProc> findPushContentsProcById(PushContentsProcPK pushContentsProcPK) {
-
-        System.out.println("=====================================================");
-        System.out.println("ContentSeq  ="+pushContentsProcPK.getContentSeq());
-        System.out.println("AppSeq      ="+pushContentsProcPK.getAppSeq());
 
         return pushContentsProcRepository.findById(pushContentsProcPK);
     }

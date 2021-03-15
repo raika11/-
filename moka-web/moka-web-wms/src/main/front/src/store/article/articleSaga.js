@@ -1,7 +1,8 @@
 import { takeEvery, takeLatest, put, call, select } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { createRequestSaga, errorResponse } from '../commons/saga';
-
+import * as articleSourceApi from '@store/articleSource/articleSourceApi';
+import * as articleSourceAct from '@store/articleSource/articleSourceAction';
 import * as act from './articleAction';
 import * as api from './articleApi';
 
@@ -14,17 +15,38 @@ const getArticleList = createRequestSaga(act.GET_ARTICLE_LIST, api.getArticleLis
  * 등록 기사 목록 조회(모달)
  */
 function* getArticleListModal({ payload }) {
-    const { search, type = 'article', callback } = payload;
+    const { search: payloadSearch, type = 'JOONGANG', getSourceList = false, callback } = payload;
     const ACTION = act.GET_ARTICLE_LIST_MODAL;
-    let callbackData;
+    let callbackData,
+        search = payloadSearch;
 
     yield put(startLoading(ACTION));
     try {
+        if (getSourceList) {
+            // 매체 먼저 조회
+            const sApi = type === 'DESKING' ? articleSourceApi.getDeskingSourceList : articleSourceApi.getTypeSourceList;
+            const sAct = type === 'DESKING' ? articleSourceAct.GET_DESKING_SOURCE_LIST_SUCCESS : articleSourceAct.GET_TYPE_SOURCE_LIST_SUCCESS;
+            const sourceResponse = yield call(sApi, { type });
+            if (sourceResponse.data.header.success) {
+                yield put({ type: sAct, payload: { ...sourceResponse.data, payload } });
+                const sourceList = (sourceResponse.data.body.list || []).map((s) => s.sourceCode).join(',');
+                search = { ...search, sourceList };
+            } else {
+                callbackData = errorResponse({ ...sourceResponse.data });
+                if (typeof callback === 'function') {
+                    yield call(callback, callbackData);
+                }
+
+                yield put(finishLoading(ACTION));
+                return;
+            }
+        }
+
         const response =
-            type === 'bulk'
-                ? yield call(api.getBulkArticleList, { search })
-                : type === 'service'
+            type === 'DESKING'
                 ? yield call(api.getServiceArticleList, { search })
+                : type === 'BULK'
+                ? yield call(api.getBulkArticleList, { search })
                 : yield call(api.getArticleList, { search });
         callbackData = response.data;
     } catch (e) {
@@ -32,7 +54,7 @@ function* getArticleListModal({ payload }) {
     }
 
     if (typeof callback === 'function') {
-        yield call(callback, callbackData);
+        yield call(callback, { ...callbackData, search });
     }
 
     yield put(finishLoading(ACTION));

@@ -15,9 +15,9 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
     const [previewContent, setPreviewContent] = useState(null);
     const loading = useSelector(({ loading }) => loading[PREVIEW_AREA_MODAL]);
     const area = useSelector(({ desking }) => desking.area);
+    const [maxSize, setMaxSize] = useState([530, 530]);
     const iframeRef = useRef(null);
     const flexableRef = useRef(null);
-    const [maxSize, setMaxSize] = useState([530, 530]);
 
     /**
      * 전체화면 미리보기

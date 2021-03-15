@@ -185,20 +185,24 @@ const ArticleList = (props) => {
     );
 
     useEffect(() => {
-        // 기사 처음 로드 + 매체도 조회 (매체가 변경되는 경우 이 effect를 탄다)
         const type = !!isNaverChannel ? 'BULK' : 'DESKING';
-        setType(type);
-        const ns = { masterCode: selectedComponent.schCodeId || null };
+        const masterCode = selectedComponent.schCodeId || null;
+        const ns = { masterCode };
 
-        if (previous.current.type === type && previous.current.schCodeId !== selectedComponent.schCodeId) {
-            getArticleList({ getSourceList: false, type, search: ns });
-        } else if (previous.current.type !== type) {
-            getArticleList({ getSourceList: true, type, search: ns });
-            previous.current = type;
+        if (show) {
+            // 기사 처음 로드 + 매체도 조회 (매체가 변경되는 경우 이 effect를 탄다)
+            setType(type);
+            if (previous.current.type === type && previous.current.schCodeId !== masterCode) {
+                getArticleList({ getSourceList: false, type, search: ns });
+                previous.current.schCodeId = masterCode;
+            } else if (previous.current.type !== type) {
+                getArticleList({ getSourceList: true, type, search: ns });
+                previous.current.type = type;
+                previous.current.schCodeId = masterCode;
+            }
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isNaverChannel, selectedComponent.schCodeId]);
+    }, [show, isNaverChannel, selectedComponent.schCodeId]);
 
     return (
         <div className={clsx('d-flex flex-column h-100', className)}>

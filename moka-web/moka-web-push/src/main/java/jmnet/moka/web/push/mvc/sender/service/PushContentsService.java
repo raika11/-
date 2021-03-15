@@ -43,7 +43,7 @@ public interface PushContentsService {
      * @param pushContents 작업
      * @return 작업
      */
-    PushContents saveDelYn(PushContents pushContents);
+    PushContents saveUsedYn(PushContents pushContents);
 
     /**
      * 푸시 컨텐츠 조회

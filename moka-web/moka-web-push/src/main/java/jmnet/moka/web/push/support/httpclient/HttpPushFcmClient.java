@@ -103,6 +103,7 @@ public class HttpPushFcmClient implements HttpPushClient {
                             return;
                         } finally {
                             if (response != null) {
+                                log.info("finally response="+response);
                                 response
                                         .body()
                                         .close();

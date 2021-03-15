@@ -1,5 +1,6 @@
 package jmnet.moka.web.push.mvc.sender.dto;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class PushSendDTO {
     /**
      * 앱 일련번호
      */
-    @ApiModelProperty(value = "앱 일련번호", required = true)
+    @ApiModelProperty(value = "앱 일련번호")
     private Long jobSeq;
 
     @Builder.Default
@@ -46,7 +47,6 @@ public class PushSendDTO {
     @ApiModelProperty(value = "출고예약(요청일자)")
     //@DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
     //private Date reserveDt;
-    @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
     private String reserveDt;
 
     /**

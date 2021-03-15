@@ -112,10 +112,11 @@ public class PushSenderHandler {
 
         log.debug("[ addPushJob ] pushType="+pushType);
 
-        if(pushType.equals("T")){   pushItem.setPushType("NewsFlashSender");            }
-        if(pushType.equals("S")){   pushItem.setPushType("RecommendArticlesSender");    }
-        if(pushType.equals("R")){   pushItem.setPushType("PreviewTodaySender");         }
-        if(pushType.equals("N")){   pushItem.setPushType("NewsRoomLetterSender");       }
+        if(pushType.equals("T")){   pushItem.setPushType("newsFlashSender");            }
+        if(pushType.equals("S")){   pushItem.setPushType("recommendArticlesSender");    }
+        if(pushType.equals("R")){   pushItem.setPushType("previewTodaySender");         }
+        if(pushType.equals("N")){   pushItem.setPushType("newsRoomLetterSender");       }
+        if(pushType.equals("E")){   pushItem.setPushType("exampleSender");              }
 
         if (scheduleMap.containsKey(pushItem.getPushType())) {// 작업 유형 존재할 경우 실행
             pushSendJobTaskExecutor.execute(() -> scheduleMap
@@ -136,7 +137,7 @@ public class PushSenderHandler {
         // TODO 1. 예약 작업 테이블에 del_yn을 'N'으로 변경
 
         try {
-            PushContents returnValue = pushContentsService.saveDelYn(pushContents);
+            PushContents returnValue = pushContentsService.saveUsedYn(pushContents);
             log.debug("[SUCCESS TO INSERT PUSH CONTENTS]");
         } catch (Exception e) {
             log.error("[FAIL TO INSERT PUSH CONTENTS]", e);

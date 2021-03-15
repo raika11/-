@@ -32,7 +32,7 @@ public class PushContentsServiceImpl implements PushContentsService{
         return pushContentsRepository.findByRelContentId(search.getRelContentId(), search.getPageable());
     }
     @Override
-    public PushContents saveDelYn(PushContents pushContents) {
+    public PushContents saveUsedYn(PushContents pushContents) {
         return pushContentsRepository.save(pushContents);
     }
 

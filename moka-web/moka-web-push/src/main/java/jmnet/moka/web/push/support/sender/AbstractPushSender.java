@@ -57,7 +57,7 @@ public abstract class AbstractPushSender implements Sender {
     @Override
     public void doTask(PushContents pushItem, Integer appSeq) {
 
-        log.debug(" AbstractPushSender [doTask] ");
+        log.debug(" AbstractPushSender [doTask] "+ pushItem.getPushType());
 
         try {
             //예약일시 체크
@@ -218,11 +218,10 @@ public abstract class AbstractPushSender implements Sender {
                                 List<PushAppToken> pushApplist = findAllToken(pushType, contentSeq, appSeq, lastTokenSeq, currentPage.getAndAdd(1), tokenCnt);
 
                                 log.info("[ 토큰 푸시 메세지 발송 Start ] ");
-                                log.info("pushApplist.get(0).getTokenSeq()  ="+ pushApplist.get(0).getTokenSeq());
-                                log.info("pushApplist.get(0).getTokenSeq()  ="+ pushApplist.get(0).getToken());
 
                                 PushResponseMessage response = sendMessage(pushApplist, pushMessage);
 
+                                log.info("###################################################################");
                                 log.info("getMulticastId  ="+ response.getMulticastId());
                                 log.info("getSuccess      ="+ response.getSuccess());
                                 log.info("getFailure      ="+ response.getFailure());
@@ -239,12 +238,6 @@ public abstract class AbstractPushSender implements Sender {
                                 log.error(String.valueOf(e));
                                 throw new Exception(e);
                             }
-                            /**
-                             * TODO 7. 에러 발생한 토큰 삭제 및 메시지 발송 완료 된 토큰 이력 정보 update
-                             */
-                            //   deleteTokens(pushTokens);
-
-
                         }
                         return true;
                     }), appSeq);

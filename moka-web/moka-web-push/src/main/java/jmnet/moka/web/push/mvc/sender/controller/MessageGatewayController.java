@@ -129,6 +129,7 @@ public class MessageGatewayController {
         contentsItem.setRelContentId(relContentId);
         contentsItem.setPushType(sendDTO.getPushType());
         contentsItem.setIconType(sendDTO.getIconType());
+        //contentsItem.setRsvDt(sendDTO.getReserveDt());
         contentsItem.setRsvDt(McpDate.date("yyyyMMdd", sendDTO.getReserveDt().toString()));
 
         contentsItem.setPicYn(sendDTO.getPicYn());
@@ -221,7 +222,7 @@ public class MessageGatewayController {
                 .build();
         boolean success = pushSenderHandler.addPushJob(pushItem,appSeq);
 
-        log.debug("푸시 전송 Job 추가");
+        log.debug("푸시 전송 Job 추가 success:"+success);
 
         ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
 

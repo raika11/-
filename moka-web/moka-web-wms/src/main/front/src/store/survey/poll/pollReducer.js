@@ -39,7 +39,7 @@ export const initialState = {
         size: 20,
         searchType: 'title',
         keyword: '',
-        pollGroup: 'A',
+        pollGroup: '',
         pollCategory: '',
         startDt: '',
         endDt: '',

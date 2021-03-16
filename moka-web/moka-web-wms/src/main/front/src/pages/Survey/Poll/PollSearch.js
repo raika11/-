@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Col } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
-import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
 import Button from 'react-bootstrap/Button';
 import commonUtil from '@utils/commonUtil';
 import produce from 'immer';
@@ -54,6 +52,9 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                         }}
                         value={options.pollGroup}
                     >
+                        <option key="0" value="">
+                            그룹
+                        </option>
                         {codes.pollGroup.map((option) => (
                             <option key={option.key} value={option.key}>
                                 {option.value}
@@ -109,10 +110,6 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                         name="startDt"
                         value={options.startDt}
                         onChange={(param) => {
-                            let selectDate = param._d;
-                            if (selectDate) {
-                                selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                            }
                             handleChangeValue('startDt', param);
                         }}
                         inputProps={{ timeFormat: null, timeDefault: 'start' }}
@@ -125,10 +122,6 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                         name="endDt"
                         value={options.endDt}
                         onChange={(param) => {
-                            let selectDate = param._d;
-                            if (selectDate) {
-                                selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                            }
                             handleChangeValue('endDt', param);
                         }}
                         closeOnSelect={true}

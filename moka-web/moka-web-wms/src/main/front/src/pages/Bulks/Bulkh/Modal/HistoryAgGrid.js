@@ -50,7 +50,7 @@ const HistoryAgGrid = () => {
 
     return (
         <>
-            <MokaCard width={430} height={650} loading={null} header={false} className={'custom-scroll mr-gutter flex-fill'}>
+            <MokaCard width={430} height={650} loading={null} header={false} className="custom-scroll mr-gutter flex-fill no-shadow">
                 <MokaTable
                     agGridHeight={550}
                     columnDefs={historyColumnDefs}

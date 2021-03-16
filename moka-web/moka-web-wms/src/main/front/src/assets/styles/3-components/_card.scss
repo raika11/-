@@ -5,6 +5,9 @@
     background-color:$body-bg;
     box-shadow: none;
   }
+  &.no-shadow {
+    box-shadow: none;
+  }
 }
 
 .card-header {

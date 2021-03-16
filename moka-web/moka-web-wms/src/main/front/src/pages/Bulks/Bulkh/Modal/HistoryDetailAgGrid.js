@@ -45,7 +45,7 @@ const HistoryDetailAgGrid = () => {
                 height={670}
                 loading={loading}
                 header={false}
-                className={'custom-scroll mr-gutter flex-fill'}
+                className="custom-scroll mr-gutter flex-fill no-shadow"
                 footer
                 footerAs={
                     <>

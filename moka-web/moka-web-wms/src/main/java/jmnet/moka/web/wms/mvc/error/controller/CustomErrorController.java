@@ -61,9 +61,11 @@ public class CustomErrorController extends BasicErrorController {
         // org.springframework.boot.autoconfigure.web.DefaultErrorAttributes의 속성을 참고한다.
         else if (errorValue == 403) {
             //            return new ModelAndView(prefix + "403.html", this.getStatus(request));
-            errorPath = prefix + "403.html";
+            //            errorPath = prefix + "403.html";
+            errorPath = "redirect:/403";
         } else if (errorValue == 404) {
-            errorPath = prefix + "404.html";
+            //            errorPath = prefix + "404.html";
+            errorPath = "redirect:/404";
         } else if (errorValue >= 400 && errorValue < 500) {
             errorPath = prefix + "400.html";
         } else if (errorValue >= 500) {

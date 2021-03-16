@@ -60,7 +60,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private String sessionRegistryType;
 
     @Value("${tps.upload.path.url}")
-    private String urlPathPrefix;
+    private String uploadPathPrefix;
 
     @Value("${inbound.ips}")
     private String[] inboundIps;
@@ -146,8 +146,9 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
             // home, react 소스, 미리보기, 템플릿 이미지 허용
-            .antMatchers("/", TpsConstants.HEALTH_PAGE, "/preview/**", "/moka_storage/**", "/" + urlPathPrefix + "/**", "/swagger-ui.html",
-                    "/swagger-resources/**", "/v2/api-docs", "/api/user/test-login", "/api/member-join/**", "/api/app/image-proxy", "/font/**")
+            .antMatchers("/", TpsConstants.HEALTH_PAGE, "/preview/**", "/moka_storage/**", "/" + uploadPathPrefix + "/**", "/swagger-ui.html",
+                    "/swagger-resources/**", "/v2/api-docs", "/api/user/test-login", "/api/member-join/**", "/api/app/image-proxy",
+                    "/font/**", "/403", "/404")
             .permitAll()
             // react 서버렌더링 허용
             .antMatchers(reactRoutes)

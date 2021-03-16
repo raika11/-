@@ -156,6 +156,12 @@
         }
     }
 
+    .ag-checkbox-input-wrapper {
+        &.ag-checked::after {
+            color: $gray-800;
+        }
+    }
+
     .ag-icon-grip {
         transform: rotate(90deg);
     }

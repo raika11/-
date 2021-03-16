@@ -166,7 +166,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                         </Col>
                     </Col>
                     <Col xs={2} className="p-0 pt-1">
-                        <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={handleClickHistoryModalButton}>
+                        <Button variant="outline-neutral" size="md" style={{ width: '72px', height: '31px' }} onClick={handleClickHistoryModalButton}>
                             편집정보
                         </Button>
                     </Col>

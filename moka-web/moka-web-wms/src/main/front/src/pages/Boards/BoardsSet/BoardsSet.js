@@ -8,8 +8,8 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import useBreakpoint from '@hooks/useBreakpoint';
 import { initialState, getSetmenuBoardsList, changeSetMenuSearchOption } from '@store/board';
-import BoardsList from './Component/BoardsList';
-import BoardsEdit from './Component/BoardsEdit';
+import BoardsList from './BoardsList';
+import BoardsEdit from './BoardsEdit';
 
 /**
  * 게시판 관리 > 전체 게시판

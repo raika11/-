@@ -6,7 +6,7 @@ import { MokaEditorCore } from '@/components/MokaEditor';
 import { useSelector } from 'react-redux';
 
 // import MokaEditor from '@/components/MokaEditor/MokaEditorCore';
-import FileExtSelector from './FileExtSelector';
+import FileExtSelector from './components/FileExtSelector';
 
 const BoardsForm = ({ loading, channeltype_list, boardInfoData, formInputOnChange, inputfieldDisabled }) => {
     const { boardinfo } = useSelector((store) => ({

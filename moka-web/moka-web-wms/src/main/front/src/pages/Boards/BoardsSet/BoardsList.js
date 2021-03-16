@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MokaCard } from '@components';
 import Search from './BoardsListSearch';
-import AgGrid from '../BoardsSetAgGrid';
+import AgGrid from './BoardsSetAgGrid';
 
 /**
  * 게시판 관리 > 전체 게시판 리스트

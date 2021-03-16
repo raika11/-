@@ -5,7 +5,7 @@ import { MokaTable } from '@components';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 import { changeSetMenuSearchOption, GET_SETMENU_BOARD_LIST } from '@store/board';
 import { ColumnDefs } from './BoardsSetGridColumns';
-import ButtonRenderer from './ButtonRenderer';
+import ButtonRenderer from './components/ButtonRenderer';
 
 /**
  * 게시판 관리 > 전체 게시판 AgGrid

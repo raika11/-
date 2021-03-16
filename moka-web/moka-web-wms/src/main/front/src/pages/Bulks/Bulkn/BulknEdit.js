@@ -404,7 +404,7 @@ ${bulkArticleRow
                         </Col>
                     </Form.Row>
 
-                    <hr className="divider" />
+                    <hr />
                 </div>
             ))}
             {/*<SpecialCharModal show={modalMShow} onHide={() => setModalMShow(false)} onClickSave={null} />*/}

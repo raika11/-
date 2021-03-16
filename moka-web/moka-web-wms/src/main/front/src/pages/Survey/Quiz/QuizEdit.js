@@ -779,7 +779,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                     })}
                 </DndProvider>
 
-                <Form.Row className="mb-2 p-2" style={{ backgroundColor: '#F5F9FC' }}>
+                <div className="mb-2 p-2 card body-bg">
                     <Form.Row className="w-100 justify-content-between">
                         <Col xs={9}>
                             <Form.Row>
@@ -826,7 +826,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                             </Form.Row>
                         </Col>
                     </Form.Row>
-                </Form.Row>
+                </div>
             </Form>
             <QuestionSearchModal
                 show={questionSearchModalState}

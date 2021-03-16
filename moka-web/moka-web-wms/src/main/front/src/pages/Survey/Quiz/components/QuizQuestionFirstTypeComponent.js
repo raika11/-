@@ -103,7 +103,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
 
     return (
         <>
-            <div className="mb-2 p-2" style={{ backgroundColor: '#F5F9FC' }}>
+            <div className="mb-2 p-2 card body-bg">
                 {/* <div className="mb-2 p-2 bg-gray-150"> */}
                 <Form.Row>
                     <div className="d-felx m-0 pr-2">

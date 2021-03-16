@@ -196,7 +196,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
 
     return (
         <>
-            <div className="mb-2 p-2" style={{ backgroundColor: '#F5F9FC' }}>
+            <div className="mb-2 p-2 card body-bg">
                 {/* <div className="mb-2 p-2" style={{ backgroundColor: '#F5F9FC' }}> */}
                 {/* 질문. */}
                 <Form.Row>

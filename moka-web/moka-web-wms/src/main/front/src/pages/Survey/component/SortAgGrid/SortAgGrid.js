@@ -194,28 +194,6 @@ const SortAgGrid = ({ SearchForm }) => {
             </Form.Group>
         </>
     );
-
-    // return (
-    //     <>
-    //         <div className="ag-theme-moka-dnd-grid w-100">
-    //             <AgGridReact
-    //                 immutableData
-    //                 onGridReady={onGridReady}
-    //                 rowData={rowData}
-    //                 getRowNodeId={(params) => params.item.ordNo}
-    //                 columnDefs={columnDefs}
-    //                 localeText={{ noRowsToShow: '편집기사가 없습니다.', loadingOoo: '조회 중입니다..' }}
-    //                 onRowDragEnd={handleDragEnd}
-    //                 animateRows
-    //                 rowDragManaged
-    //                 suppressRowClickSelection
-    //                 suppressMoveWhenRowDragging
-    //                 headerHeight={0}
-    //                 rowHeight={100}
-    //             />
-    //         </div>
-    //     </>
-    // );
 };
 
 export default SortAgGrid;

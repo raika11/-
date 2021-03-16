@@ -63,8 +63,8 @@ const ItemRenderer = forwardRef((props, ref) => {
     return (
         <div className="h-100 w-100 d-flex py-1">
             <div className="flex-fill">
-                <MokaInputLabel name="title" label="타이틀" onChange={handleChangeBulkinputBox} value={item.title} className="mb-1" />
-                <MokaInputLabel name="url" label="URL" onChange={handleChangeBulkinputBox} value={item.url} />
+                <MokaInputLabel name="title" label="타이틀" labelWidth={35} onChange={handleChangeBulkinputBox} value={item.title} className="mb-1" />
+                <MokaInputLabel name="url" label="URL" labelWidth={35} onChange={handleChangeBulkinputBox} value={item.url} />
             </div>
             <div className="h-100" style={{ width: 23 }}>
                 <MokaTableEditCancleButton onClick={handleClickCancle} />

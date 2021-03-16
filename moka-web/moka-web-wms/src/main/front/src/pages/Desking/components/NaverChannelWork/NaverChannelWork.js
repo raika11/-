@@ -34,17 +34,23 @@ const propTypes = {
      * 편집영역에서 설정한 컴포넌트별 deskingPart
      */
     deskingPart: PropTypes.string,
+    /**
+     * 임시저장 전 전송 시 실패 메세지
+     * @default
+     */
+    saveFailMsg: PropTypes.string,
 };
 const defaultProps = {
     component: {},
     agGridIndex: 0,
+    saveFailMsg: '',
 };
 
 /**
  * 네이버채널에서만 쓰는 컴포넌트 워크
  */
 const NaverChannelWork = (props) => {
-    const { component, componentWorkList, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
+    const { component, componentWorkList, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart, saveFailMsg } = props;
     const dispatch = useDispatch();
     const workStatus = useSelector(({ desking }) => desking.workStatus);
     const [workTemplateSeq, setWorkTemplateSeq] = useState(null);
@@ -97,6 +103,7 @@ const NaverChannelWork = (props) => {
                 componentAgGridInstances={componentAgGridInstances}
                 workStatus={workStatus[component.seq]}
                 workTemplateSeq={workTemplateSeq}
+                saveFailMsg={saveFailMsg}
                 setLoading={setLoading}
             />
 

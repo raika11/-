@@ -36,17 +36,23 @@ const propTypes = {
      * 편집영역에서 설정한 컴포넌트별 deskingPart
      */
     deskingPart: PropTypes.string,
+    /**
+     * 임시저장 전 전송 시 실패 메세지
+     * @default
+     */
+    saveFailMsg: PropTypes.string,
 };
 const defaultProps = {
     component: {},
     agGridIndex: 0,
+    saveFailMsg: '',
 };
 
 /**
  * 가장 기본이 되는 데스킹 워크
  */
 const ComponentWork = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart, saveFailMsg } = props;
     // const { editFormPart } = props;
     const dispatch = useDispatch();
     const workStatus = useSelector(({ desking }) => desking.workStatus);
@@ -160,6 +166,7 @@ const ComponentWork = (props) => {
                 workStatus={workStatus[component.seq]}
                 setLoading={setLoading}
                 onSaveDummy={handleClickPost}
+                saveFailMsg={saveFailMsg}
                 deskingPart={deskingPart}
                 // handleForm={() => setFormShow(true)}
             />

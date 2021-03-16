@@ -19,7 +19,7 @@ import { EditDeskingWorkModal, RegisterModal, EditListNumberModal, EditHtmlModal
  * 컴포넌트 워크의 버튼 그룹 컴포넌트
  */
 const ButtonGroup = (props) => {
-    const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus, deskingPart, setLoading, onSaveDummy } = props;
+    const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus, deskingPart, setLoading, onSaveDummy, saveFailMsg } = props;
     const dispatch = useDispatch();
     // const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [viewN, setViewN] = useState(false);
@@ -49,7 +49,7 @@ const ButtonGroup = (props) => {
      */
     const handleClickPublish = useCallback(() => {
         if (workStatus === 'work' || workStatus === 'publish') {
-            messageBox.alert('임시저장되지 않았습니다.');
+            messageBox.alert(saveFailMsg);
             return;
         }
         messageBox.confirm('전송하시겠습니까?', () => {
@@ -69,7 +69,7 @@ const ButtonGroup = (props) => {
                 }),
             );
         });
-    }, [workStatus, component.seq, setLoading, dispatch, areaSeq]);
+    }, [workStatus, saveFailMsg, setLoading, dispatch, component.seq, areaSeq]);
 
     /**
      * 임시저장

@@ -15,7 +15,7 @@ import { RegisterModal } from '@pages/Desking/modals';
  * 네이버스탠드 컴포넌트 워크의 버튼 그룹 컴포넌트
  */
 const ButtonGroup = (props) => {
-    const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus, setLoading } = props;
+    const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus, setLoading, saveFailMsg } = props;
     const dispatch = useDispatch();
     const [iconButton, setIconButton] = useState([]);
     const [modalShow, setModalShow] = useState({
@@ -37,7 +37,7 @@ const ButtonGroup = (props) => {
      */
     const handleClickPublish = useCallback(() => {
         if (workStatus === 'work' || workStatus === 'publish') {
-            messageBox.alert('임시저장되지 않았습니다.');
+            messageBox.alert(saveFailMsg);
             return;
         }
         messageBox.confirm('전송하시겠습니까?', () => {
@@ -57,7 +57,7 @@ const ButtonGroup = (props) => {
                 }),
             );
         });
-    }, [workStatus, component.seq, setLoading, dispatch, areaSeq]);
+    }, [workStatus, saveFailMsg, setLoading, dispatch, component.seq, areaSeq]);
 
     /**
      * 임시저장

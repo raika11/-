@@ -1,6 +1,7 @@
 import React, { useImperativeHandle, forwardRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
+import toast from '@utils/toastUtil';
 import { MokaIcon, MokaModal } from '@components';
 
 const GroupNumberRenderer = forwardRef((params, ref) => {
@@ -37,6 +38,8 @@ const GroupNumberRenderer = forwardRef((params, ref) => {
                         e.stopPropagation();
                         if (e.currentTarget.dataset['ovp'] === 'Y') {
                             setPreviewOn(true);
+                        } else {
+                            toast.warning('유투브 영상은 미리보기가 지원되지 않습니다');
                         }
                     }}
                 >

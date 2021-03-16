@@ -17,6 +17,7 @@ const ComponentWorkList = (props) => {
     const { area, isNaverChannel, isNaverStand } = useSelector(({ desking }) => desking);
     const { list: componentWorkList, workStatus } = useSelector(({ desking }) => desking);
     const channelTpRows = useSelector(({ codeMgt }) => codeMgt.channelTpRows);
+    const saveFailMsg = '편집된 정보가 있습니다. 임시저장 버튼을 클릭후\n전송 버튼을 클릭하여 주세요';
 
     // state
     const [disabledList, setDisabledList] = useState([]); // 비활성영역 리스트
@@ -92,12 +93,24 @@ const ComponentWorkList = (props) => {
                         editFormPart={editFormPart}
                         agGridIndex={targetIdx}
                         componentWorkList={componentWorkList}
+                        saveFailMsg={saveFailMsg}
                         {...props}
                     />
                 );
             } else if (isNaverStand) {
                 // 네이버스탠드 예외처리
-                return <NaverStandWork key={key} deskingPart={areaComp.deskingPart} area={area} areaSeq={area.areaSeq} component={component} agGridIndex={targetIdx} {...props} />;
+                return (
+                    <NaverStandWork
+                        key={key}
+                        deskingPart={areaComp.deskingPart}
+                        area={area}
+                        areaSeq={area.areaSeq}
+                        component={component}
+                        agGridIndex={targetIdx}
+                        saveFailMsg={saveFailMsg}
+                        {...props}
+                    />
+                );
             } else {
                 return (
                     <ComponentWork
@@ -108,6 +121,7 @@ const ComponentWorkList = (props) => {
                         component={component}
                         editFormPart={editFormPart}
                         agGridIndex={targetIdx}
+                        saveFailMsg={saveFailMsg}
                         {...props}
                     />
                 );

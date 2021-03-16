@@ -604,6 +604,10 @@ body {
 * ---------------------- */
 .component-work {
     position: relative;
+    
+    &:nth-child(1) {
+        border-top: unset !important;
+    }
 
     &.work {
         .component-title {

@@ -1,1 +1,1 @@
-export { default as BoardsSetGrid } from './BoardsSetGrid';
+export { default as BoardsSetAgGrid } from './BoardsSetAgGrid';

@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { ColumnDefs } from './BoardsSetGridColumns';
+import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
 import { DISPLAY_PAGE_NUM } from '@/constants';
-import { useDispatch, useSelector } from 'react-redux';
 import { changeSetMenuSearchOption, GET_SETMENU_BOARD_LIST } from '@store/board';
-import { useHistory, useParams } from 'react-router-dom';
+import { ColumnDefs } from './BoardsSetGridColumns';
 import ButtonRenderer from './ButtonRenderer';
 
-const BulkhHotClicAgGrid = () => {
+/**
+ * 게시판 관리 > 전체 게시판 AgGrid
+ */
+const BoardsSetAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const params = useParams();
@@ -69,12 +72,11 @@ const BulkhHotClicAgGrid = () => {
         <>
             <MokaTable
                 className="flex-fill overflow-hidden"
-                // agGridHeight={650}
                 columnDefs={ColumnDefs}
                 rowData={rowData}
                 // rowHeight={40}
                 onRowNodeId={(data) => data.boardId}
-                onRowClicked={(e) => handleRowClicked(e)}
+                onRowClicked={handleRowClicked}
                 loading={loading}
                 total={total}
                 page={page}
@@ -91,4 +93,4 @@ const BulkhHotClicAgGrid = () => {
     );
 };
 
-export default BulkhHotClicAgGrid;
+export default BoardsSetAgGrid;

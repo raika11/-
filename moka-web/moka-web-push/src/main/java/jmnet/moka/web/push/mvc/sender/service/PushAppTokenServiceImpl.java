@@ -1,18 +1,16 @@
 package jmnet.moka.web.push.mvc.sender.service;
 
+import java.util.List;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.mvc.sender.repository.PushAppTokenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @Slf4j
-public class PushAppTokenServiceImpl implements PushAppTokenService{
+public class PushAppTokenServiceImpl implements PushAppTokenService {
 
     private final PushAppTokenRepository pushAppTokenRepository;
     private final ModelMapper modelMapper;
@@ -23,9 +21,10 @@ public class PushAppTokenServiceImpl implements PushAppTokenService{
     }
 
     @Override
-    public Page<PushAppToken> findPushAppToken(Integer appSeq, Pageable pageable) {
+    public List<PushAppToken> findPushAppToken(Integer appSeq, Pageable pageable) {
         return pushAppTokenRepository.findAllByAppSeq(appSeq, pageable);
     }
+
 
     @Override
     public List<PushAppToken> findByAppSeqAsc(Integer appSeq) {
@@ -51,7 +50,7 @@ public class PushAppTokenServiceImpl implements PushAppTokenService{
     public void deletePushAppToken(List<PushAppToken> pushTokens) {
         for (PushAppToken pushToken : pushTokens) {
             long tokenSeq = pushToken.getTokenSeq();
-            log.info("tokenSeq="+tokenSeq);
+            log.info("tokenSeq=" + tokenSeq);
 
             //pushAppTokenRepository.deleteById(tokenSeq.intValue());
         }

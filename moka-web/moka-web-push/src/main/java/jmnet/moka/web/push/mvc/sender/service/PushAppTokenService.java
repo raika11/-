@@ -1,16 +1,11 @@
 package jmnet.moka.web.push.mvc.sender.service;
 
+import java.util.List;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Optional;
-
 /**
- * 작업 Service
- * 2021. 2. 18.
- *
+ * 작업 Service 2021. 2. 18.
  */
 public interface PushAppTokenService {
 
@@ -20,7 +15,7 @@ public interface PushAppTokenService {
      * @param appSeq 토큰 일련번호
      * @return 토큰 목록 조회 결과
      */
-    Page<PushAppToken> findPushAppToken(Integer appSeq, Pageable pageable);
+    List<PushAppToken> findPushAppToken(Integer appSeq, Pageable pageable);
 
     /**
      * 최소 토큰 일련번호 조회
@@ -29,6 +24,7 @@ public interface PushAppTokenService {
      * @return 토큰 일련번호
      */
     List<PushAppToken> findByAppSeqAsc(Integer appSeq);
+
     /**
      * 최대 토큰 일련번호 조회
      *

@@ -1,6 +1,11 @@
 package jmnet.moka.web.push.support.sender;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
@@ -9,11 +14,27 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.web.push.mvc.sender.entity.*;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.exception.NoDataException;
+import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.web.push.mvc.sender.entity.PushApp;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppTokenHist;
+import jmnet.moka.web.push.mvc.sender.entity.PushContents;
+import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
+import jmnet.moka.web.push.mvc.sender.entity.PushTokenSendHist;
+import jmnet.moka.web.push.mvc.sender.service.PushContentsService;
+import jmnet.moka.web.push.mvc.sender.service.PushTokenSendHistService;
+import jmnet.moka.web.push.mvc.sender.vo.PushTokenBatchVO;
 import jmnet.moka.web.push.support.NamingThreadFactory;
+import jmnet.moka.web.push.support.code.FcmErrorType;
 import jmnet.moka.web.push.support.code.StatusFlagType;
+import jmnet.moka.web.push.support.httpclient.PushHttpClientBuilder;
 import jmnet.moka.web.push.support.message.FcmMessage;
+import jmnet.moka.web.push.support.message.FcmResponseResultItem;
 import jmnet.moka.web.push.support.message.PushHttpResponse;
 import jmnet.moka.web.push.support.message.PushResponseMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +64,12 @@ public abstract class AbstractPushSender implements Sender {
     @Autowired
     protected ModelMapper modelMapper;
 
+    @Autowired
+    protected PushContentsService pushContentsService;
+
+    @Autowired
+    protected PushTokenSendHistService pushTokenSendHistService;
+
     protected String success;
     protected StringBuffer scheduleDesc;
 
@@ -57,12 +84,12 @@ public abstract class AbstractPushSender implements Sender {
     @Override
     public void doTask(PushContents pushItem, Integer appSeq) {
 
-        log.debug(" AbstractPushSender [doTask] "+ pushItem.getPushType());
+        log.debug(" AbstractPushSender [doTask] " + pushItem.getPushType());
 
         try {
             //예약일시 체크
             if (pushItem.getRsvDt() != null) {
-                log.info("McpDate.term(pushItem.getRsvDt())="+McpDate.term(pushItem.getRsvDt()));
+                log.info("McpDate.term(pushItem.getRsvDt())=" + McpDate.term(pushItem.getRsvDt()));
                 //Thread.sleep(McpDate.term(pushItem.getRsvDt()));
             }
 
@@ -71,22 +98,18 @@ public abstract class AbstractPushSender implements Sender {
              *  - 데이터 존재 여부 삭제 상태 체크
              *  - status_flag 체크
              */
-            PushContents contents = findPushContents(pushItem.getContentSeq(), appSeq);
+            PushContents contents = findPushContents(pushItem.getContentSeq());
 
             if (contents != null && contents
                     .getAppProcs()
                     .size() > 0) {
-                /**
-                 *  TODO 2. 푸시 메세지 생성
-                 *  - 각 업무마다 프로세스 차이 존재
-                 */
-                FcmMessage pushMessage = makePushMessage(pushItem.getContentSeq(), appSeq);
+
 
                 /**
                  *  TODO 3. 전송 시작
                  *  - 각 업무마다 프로세스 차이 존재
                  */
-                send(contents, pushMessage);
+                send(contents);
             }
 
         } catch (Exception ex) {
@@ -102,41 +125,29 @@ public abstract class AbstractPushSender implements Sender {
      * @param pushItemSeq 푸시 일련번호
      * @return 푸시 컨텐츠 정보
      */
-    protected PushContents findPushContents(Long pushItemSeq, int appSeq) {
-        log.info("pushItemSeq ="+pushItemSeq);
-        log.info("appSeq      ="+appSeq);
+    protected PushContents findPushContents(Long pushItemSeq)
+            throws NoDataException {
+        log.info("pushItemSeq =" + pushItemSeq);
 
-        Set<PushContentsProc> procs = new HashSet<>();
-        procs.add(PushContentsProc
-                .builder()
-                .id(PushContentsProcPK
-                        .builder()
-                        .appSeq(appSeq)
-                        .contentSeq(pushItemSeq)
-                        .build())
-                .build());
-        return PushContents
-                .builder()
-                .contentSeq(pushItemSeq)
-                .appProcs(procs)
-                .build();
+        return pushContentsService
+                .findPushContentsBySeq(pushItemSeq)
+                .orElseThrow(() -> new NoDataException());
     }
 
     /**
      * 각 Job별 기능 구현
      */
-    protected abstract FcmMessage makePushMessage(Long pushItemSeq, int appSeq);
+    protected abstract FcmMessage makePushMessage(PushContents contents, PushApp appSeq);
 
     /**
      * 푸시 메시지 발송을 시작한다.
      *
-     * @param contents    푸시 컨텐츠
-     * @param pushMessage 푸시 메시지
+     * @param contents 푸시 컨텐츠
      */
-    protected void send(PushContents contents, FcmMessage pushMessage) {
+    protected void send(PushContents contents) {
 
-        int tokenCnt = 1000;
-        int threadPoolCnt = 10;
+        int tokenCnt = pushSenderJob.getTokenCnt();
+        int threadPoolCnt = pushSenderJob.getThreadPoolCnt();
 
         long contentSeq = contents.getContentSeq();
         String pushType = contents.getPushType();
@@ -145,56 +156,59 @@ public abstract class AbstractPushSender implements Sender {
         executorService = null;
         CompletionService<Boolean> completionService = null;
 
-        int maxThreadPoolCnt = contents
-                .getAppProcs()
-                //.size() * pushSenderJob.getThreadPoolCnt();
-                .size() * threadPoolCnt;
+        int maxThreadPoolCnt = contents.getAppProcs()
+                                       //.size() * pushSenderJob.getThreadPoolCnt();
+                                       .size() * threadPoolCnt;
         executorService = Executors.newFixedThreadPool(maxThreadPoolCnt, new NamingThreadFactory(this
                 .getClass()
                 .getName()));
         completionService = new ExecutorCompletionService<>(executorService);
 
-        log.info("maxThreadPoolCnt="+maxThreadPoolCnt);
+        log.info("maxThreadPoolCnt=" + maxThreadPoolCnt);
 
         Map<Future<Boolean>, Integer> futureMap = new HashMap<>();
         try {
             for (PushContentsProc proc : contents.getAppProcs()) {
-                int appSeq = proc
-                        .getId()
-                        .getAppSeq();
+                /**
+                 *  TODO 2. 푸시 메세지 생성
+                 *  - 각 업무마다 프로세스 차이 존재
+                 */
+                FcmMessage pushMessage = makePushMessage(contents, proc.getPushApp());
+                PushApp pushApp = proc.getPushApp();
+                int appSeq = pushApp.getAppSeq();
                 Long seq = proc
                         .getId()
                         .getContentSeq();
 
                 log.info("[ futureMap PushContentsProc ]");
-                log.info("contentSeq  ="+seq);
-                log.info("appSeq      ="+appSeq);
+                log.info("contentSeq  =" + seq);
+                log.info("appSeq      =" + appSeq);
+
+                /**
+                 * TODO 4. 앱별 최대 토큰 일련번호 조회
+                 * - 페이징 처리를 위한 max값
+                 */
+
+                Long firstTokenSeq = findFirstTokenSeq(appSeq);
+                Long lastTokenSeq = findLastTokenSeq(appSeq);
+                log.info("firstTokenSeq   =" + firstTokenSeq);
+                log.info("lastTokenSeq    =" + lastTokenSeq);
 
                 AtomicInteger tokenIdx = new AtomicInteger();
 
-                log.info("tokenIdx="+tokenIdx);
-
+                log.info("tokenIdx=" + tokenIdx);
+                // 현재 페이지
+                AtomicInteger currentPage = new AtomicInteger(0);
                 for (int i = 0; i < threadPoolCnt; i++) {
 
                     //for (int i = 0; i < pushSenderJob.getThreadPoolCnt(); i++) {
-                    /**
-                     * TODO 4. 앱별 최대 토큰 일련번호 조회
-                     * - 페이징 처리를 위한 max값 
-                     */
 
-                    Long firstTokenSeq = findFirstTokenSeq(appSeq);
-                    Long lastTokenSeq = findLastTokenSeq(appSeq);
-                    log.info("firstTokenSeq   ="+firstTokenSeq);
-                    log.info("lastTokenSeq    ="+lastTokenSeq);
 
                     /**
                      * TODO 5. 앱별 푸시 쓰레드 생성
                      */
 
                     int size = tokenCnt;
-                    // 현재 페이지
-                    AtomicInteger currentPage = new AtomicInteger(1);
-
 
                     futureMap.put(completionService.submit(() -> {
 
@@ -202,34 +216,45 @@ public abstract class AbstractPushSender implements Sender {
 
                         while (lastTokenSeq >= (tokenRstIdx = tokenIdx.getAndAdd(tokenCnt))) {
 
-                             //log.info("lastTokenSeq ="+ lastTokenSeq+ "tokenRstIdx  ="+ tokenRstIdx+ "tokenCnt     ="+ tokenCnt);
+                            //log.info("lastTokenSeq ="+ lastTokenSeq+ "tokenRstIdx  ="+ tokenRstIdx+ "tokenCnt     ="+ tokenCnt);
 
-                             /**
-                              * TODO 6. 앱별 푸시 쓰레드에서 각 대상 토큰 목록 조회, page 처리 필요
-                              * - page별로 멀티쓰레드 생성하여 동시 발송 될 수 있도록 처리
-                              * - 조회와 동시에 토큰별 이력 테이블에 이력 정보 insert 처리
-                              */
-                             log.debug(Thread
-                                     .currentThread()
-                                     .getName() + " appSeq : {},  tokenRstIdx : {},  lastTokenSeq : {}", appSeq, tokenRstIdx, lastTokenSeq);
-                           // log.info("lastTokenSeq="+lastTokenSeq + ": pageIdx="+pageIdx+": tokenCnt ="+tokenIdx.getAndAdd(tokenCnt));
+                            /**
+                             * TODO 6. 앱별 푸시 쓰레드에서 각 대상 토큰 목록 조회, page 처리 필요
+                             * - page별로 멀티쓰레드 생성하여 동시 발송 될 수 있도록 처리
+                             * - 조회와 동시에 토큰별 이력 테이블에 이력 정보 insert 처리
+                             */
+                            log.debug(Thread
+                                    .currentThread()
+                                    .getName() + " appSeq : {},  tokenRstIdx : {},  lastTokenSeq : {}", appSeq, tokenRstIdx, lastTokenSeq);
+                            // log.info("lastTokenSeq="+lastTokenSeq + ": pageIdx="+pageIdx+": tokenCnt ="+tokenIdx.getAndAdd(tokenCnt));
 
                             try {
-                                List<PushAppToken> pushApplist = findAllToken(pushType, contentSeq, appSeq, lastTokenSeq, currentPage.getAndAdd(1), tokenCnt);
+                                List<PushAppToken> pushTokens =
+                                        findAllToken(pushType, contentSeq, appSeq, lastTokenSeq, currentPage.getAndAdd(1), tokenCnt);
 
                                 log.info("[ 토큰 푸시 메세지 발송 Start ] ");
+                                // 발송전 등록
+                                insertPushAppTokenSendHist(appSeq, contentSeq, pushTokens);
 
-                                PushResponseMessage response = sendMessage(pushApplist, pushMessage);
+                                PushResponseMessage response = sendMessage(pushTokens, pushMessage, pushApp);
 
                                 log.info("###################################################################");
-                                log.info("getMulticastId  ="+ response.getMulticastId());
-                                log.info("getSuccess      ="+ response.getSuccess());
-                                log.info("getFailure      ="+ response.getFailure());
-                                log.info("getCanonicalIds ="+ response.getCanonicalIds());
-                                log.info("getMessageId    ="+ response.getResults().get(0).getMessageId());
-                                log.info("getError        ="+ response.getResults().get(0).getError());
+                                log.info("getMulticastId  =" + response.getMulticastId());
+                                log.info("getSuccess      =" + response.getSuccess());
+                                log.info("getFailure      =" + response.getFailure());
+                                log.info("getCanonicalIds =" + response.getCanonicalIds());
+                                log.info("getMessageId    =" + response
+                                        .getResults()
+                                        .get(0)
+                                        .getMessageId());
+                                log.info("getError        =" + response
+                                        .getResults()
+                                        .get(0)
+                                        .getError());
 
-                                if(pushApplist.isEmpty()) {
+                                updatePushAppTokenSendHist(appSeq, contentSeq, pushTokens, response);
+
+                                if (pushTokens.isEmpty()) {
                                     log.info("최대 페이지까지 조회되었습니다.");
                                     break;
                                 }
@@ -276,7 +301,7 @@ public abstract class AbstractPushSender implements Sender {
                         .getId()
                         .getAppSeq();
 
-                log.info("appSeq="+appSeq);
+                log.info("appSeq=" + appSeq);
 
                 if (errorSendingSet.contains(appSeq)) {
                     updateFailed(contents.getContentSeq(), appSeq);
@@ -292,7 +317,7 @@ public abstract class AbstractPushSender implements Sender {
                         .getId()
                         .getAppSeq();
 
-                log.info("appSeq="+appSeq);
+                log.info("appSeq=" + appSeq);
                 updateFailed(contents.getContentSeq(), appSeq);
             }
         } catch (Exception e) {
@@ -302,7 +327,7 @@ public abstract class AbstractPushSender implements Sender {
                         .getId()
                         .getAppSeq();
 
-                log.info("appSeq="+appSeq);
+                log.info("appSeq=" + appSeq);
                 updateFailed(contents.getContentSeq(), appSeq);
             }
         } finally {
@@ -327,7 +352,8 @@ public abstract class AbstractPushSender implements Sender {
      * @param pageIdx 페이지 Index
      * @return
      */
-    protected abstract List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx, int tokenCnt) throws Exception;
+    protected abstract List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx, int tokenCnt)
+            throws Exception;
 
     /**
      * 진행중 상태로 업데이트한다.
@@ -337,8 +363,8 @@ public abstract class AbstractPushSender implements Sender {
      */
     protected void updateProcessing(final long jobKey, final Integer appSeq) {
         log.info("[ updateProcessing 진행중 상태로 업데이트한다. ]");
-        log.info("jobKey="+jobKey);
-        log.info("appSeq="+appSeq);
+        log.info("jobKey=" + jobKey);
+        log.info("appSeq=" + appSeq);
         log.debug("{} send failed pushSeq: {} appSeq: {}", Thread
                 .currentThread()
                 .getName(), jobKey, appSeq);
@@ -355,8 +381,8 @@ public abstract class AbstractPushSender implements Sender {
      */
     protected void updateFailed(final long jobKey, final Integer appSeq) {
         log.info("[ updateFailed 실패 상태로 업데이트한다. ]");
-        log.info("jobKey="+jobKey);
-        log.info("appSeq="+appSeq);
+        log.info("jobKey=" + jobKey);
+        log.info("appSeq=" + appSeq);
         log.debug("{} send failed pushSeq: {} appSeq: {}", Thread
                 .currentThread()
                 .getName(), jobKey, appSeq);
@@ -371,8 +397,8 @@ public abstract class AbstractPushSender implements Sender {
      */
     protected void updateDone(final long jobKey, final Integer appSeq) {
         log.info("[ updateDone 완료 상태로 업데이트한다. ]");
-        log.info("jobKey="+jobKey);
-        log.info("appSeq="+appSeq);
+        log.info("jobKey=" + jobKey);
+        log.info("appSeq=" + appSeq);
 
         log.debug("{} send done pushSeq: {} appSeq: {}", Thread
                 .currentThread()
@@ -399,6 +425,7 @@ public abstract class AbstractPushSender implements Sender {
      * @return 토큰 목록
      */
     protected abstract Long findFirstTokenSeq(Integer appSeq);
+
     /**
      * 앱별 최대 토큰 일련번호 조회
      *
@@ -424,13 +451,85 @@ public abstract class AbstractPushSender implements Sender {
      * @param pushMessage 푸시 메시지
      * @return 전송 결과
      */
-    protected abstract PushResponseMessage sendMessage(List<PushAppToken> pushTokens, FcmMessage pushMessage) throws Exception;
+    protected PushResponseMessage sendMessage(List<PushAppToken> pushTokens, FcmMessage pushMessage, PushApp pushApp)
+            throws Exception {
+
+        log.info("[ RecommendArticlesSender PushResponseMessage sendMessage ]");
+
+        PushResponseMessage pushResponseMessage = new PushResponseMessage();
+
+        try {
+            /**
+             * FCM에 푸시 요청
+             */
+            PushHttpResponse response = pushSend(pushTokens, pushApp, pushMessage);
+
+            String multicastId = null;
+            int statusCode = response.getStatusCode();
+            int success = 0;
+            int failure = 0;
+            int canonicalIds = 0;
+            List<FcmResponseResultItem> results;
+
+            log.info("StatusCode   =" + response.getStatusCode());
+            log.info("Headers      =" + response.getHeaders());
+            log.info("Message      =" + response.getMessage());
+            log.info("Body         =" + response
+                    .getBody()
+                    .toString());
+
+            pushResponseMessage = ResourceMapper
+                    .getDefaultObjectMapper()
+                    .readValue(response.getBody(), PushResponseMessage.class);
+            AtomicInteger idx = new AtomicInteger(0);
+            for (FcmResponseResultItem item : pushResponseMessage.getResults()) {
+                item.setRegistrationId(pushTokens
+                        .get(idx.getAndAdd(1))
+                        .getToken());
+            }
+
+        } catch (Exception e) {
+            log.error("[FAIL TO SendMessage]", e);
+            throw new Exception(e);
+        }
+        return pushResponseMessage;
+    }
+
+    /**
+     * FCM에 푸시 요청
+     *
+     * @param pushApp    앱정보
+     * @param fcmMessage fcm message 정보
+     * @return 전송 결과
+     * @throws Exception 오류 처리
+     */
+    protected PushHttpResponse pushSend(List<PushAppToken> pushToken, PushApp pushApp, FcmMessage fcmMessage)
+            throws Exception {
+
+        List<String> registration_ids = pushToken
+                .stream()
+                .map(PushAppToken::getToken)
+                .collect(Collectors.toList());
+
+
+
+        fcmMessage.setRegistration_ids(registration_ids);
+
+        /**
+         * TODO 14. FCM 전송 로직 구현
+         */
+        return new PushHttpClientBuilder()
+                .setPushApp(pushApp)
+                .build()
+                .push(null, fcmMessage);
+    }
 
     /**
      * 푸시 메시지별 토큰의 전송 이력 정보를 등록한다.
      */
     protected void insertPushTokenSendHist(PushTokenSendHist pushTokenSendHist) {
     }
+
     /**
      * 푸시 메시지별 토큰의 이력 정보를 등록한다.
      */
@@ -461,15 +560,90 @@ public abstract class AbstractPushSender implements Sender {
          */
     }
 
+
     /**
-     * FCM에 푸시 요청
-     *
-     * @param pushApp     앱정보
-     * @param fcmMessage fcm message 정보
-     * @return 전송 결과
-     * @throws Exception 오류 처리
+     * 푸시 메시지별 토큰의 전송 이력 정보를 등록한다.
      */
-    protected PushHttpResponse pushSend(List<PushAppToken> pushTokens, PushApp pushApp, FcmMessage fcmMessage) throws Exception {
-        return null;
+    protected void insertPushAppTokenSendHist(Integer appSeq, Long contentSeq, List<PushAppToken> pushTokens)
+            throws Exception {
+        String tokens = pushTokens
+                .stream()
+                .map(pushAppToken -> String.valueOf(pushAppToken.getTokenSeq()))
+                .reduce((result, tokenSeq) -> result + "," + String.valueOf(tokenSeq))
+                .get();
+
+        try {
+            pushTokenSendHistService.insertPushTokenSendHistBatch(PushTokenBatchVO
+                    .builder()
+                    .appSeq(appSeq)
+                    .contentsSeq(contentSeq)
+                    .tokenSeqs(tokens)
+                    .build());
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT PUSH TOKEN SEND HIST]", e);
+            throw new Exception("푸시 앱 토큰 전송 이력이 등록 되지 않습니다.", e);
+        }
+    }
+
+    /**
+     * 푸시 메시지별 토큰의 이력 정보를 갱신한다.
+     */
+    protected void updatePushAppTokenSendHist(Integer appSeq, Long contentSeq, List<PushAppToken> pushTokens, PushResponseMessage response)
+            throws Exception {
+
+        List<Long> errorTokens = new ArrayList<>();
+
+        response
+                .getResults()
+                .forEach(item -> {
+                    if (FcmErrorType.isError(item.getError())) {
+                        pushTokens.removeIf(pushAppToken -> {
+                            errorTokens.add(pushAppToken.getTokenSeq());
+                            return pushAppToken
+                                    .getToken()
+                                    .equals(item.getRegistrationId());
+                        });
+                    }
+                });
+
+        // 성공한 토큰은 SEND_YN을 Y으로 수정한다.
+        if (pushTokens != null && pushTokens.size() > 0) {
+            try {
+                String tokens = pushTokens
+                        .stream()
+                        .map(pushAppToken -> String.valueOf(pushAppToken.getTokenSeq()))
+                        .reduce((result, tokenSeq) -> {
+                            return result + "," + String.valueOf(tokenSeq);
+                        })
+                        .get();
+
+                pushTokenSendHistService.updatePushTokenSendHistBatch(PushTokenBatchVO
+                        .builder()
+                        .appSeq(appSeq)
+                        .contentsSeq(contentSeq)
+                        .tokenSeqs(tokens)
+                        .sendYn(MokaConstants.YES)
+                        .build());
+            } catch (Exception e) {
+                log.error("[FAIL TO UPDATE PUSH TOKEN SEND HIST]", e);
+                throw new Exception("푸시 앱 토큰 전송 이력이 수정 되지 않습니다.", e);
+            }
+        }
+
+        // 오류가 발생한 토큰은 SEND_YN을 N으로 수정한다.
+        if (errorTokens.size() > 0) {
+            try {
+                pushTokenSendHistService.updatePushTokenSendHistBatch(PushTokenBatchVO
+                        .builder()
+                        .appSeq(appSeq)
+                        .contentsSeq(contentSeq)
+                        .tokenSeqs(McpString.collectionToDelimitedString(errorTokens, ","))
+                        .sendYn(MokaConstants.NO)
+                        .build());
+            } catch (Exception e) {
+                log.error("[FAIL TO UPDATE PUSH TOKEN SEND HIST]", e);
+                throw new Exception("푸시 앱 토큰 전송 이력이 수정 되지 않습니다.", e);
+            }
+        }
     }
 }

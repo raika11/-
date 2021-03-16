@@ -1,25 +1,43 @@
 package jmnet.moka.web.push.sender;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.web.push.mvc.sender.dto.*;
-import jmnet.moka.web.push.mvc.sender.entity.*;
-import jmnet.moka.web.push.mvc.sender.service.*;
+import jmnet.moka.web.push.mvc.sender.dto.PushAppTokenDTO;
+import jmnet.moka.web.push.mvc.sender.dto.PushContentSeqSearchDTO;
+import jmnet.moka.web.push.mvc.sender.dto.PushTokenSendHistDTO;
+import jmnet.moka.web.push.mvc.sender.entity.PushApp;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppTokenHist;
+import jmnet.moka.web.push.mvc.sender.entity.PushContents;
+import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
+import jmnet.moka.web.push.mvc.sender.entity.PushContentsProcPK;
+import jmnet.moka.web.push.mvc.sender.entity.PushTokenSendHist;
+import jmnet.moka.web.push.mvc.sender.service.PushAppService;
+import jmnet.moka.web.push.mvc.sender.service.PushAppTokenHistService;
+import jmnet.moka.web.push.mvc.sender.service.PushAppTokenService;
+import jmnet.moka.web.push.mvc.sender.service.PushContentsProcService;
+import jmnet.moka.web.push.mvc.sender.service.PushContentsService;
+import jmnet.moka.web.push.mvc.sender.service.PushTokenSendHistService;
 import jmnet.moka.web.push.support.code.FcmErrorType;
 import jmnet.moka.web.push.support.code.StatusFlagType;
 import jmnet.moka.web.push.support.httpclient.PushHttpClientBuilder;
-import jmnet.moka.web.push.support.message.*;
+import jmnet.moka.web.push.support.message.FcmMessage;
+import jmnet.moka.web.push.support.message.FcmResponseResultItem;
+import jmnet.moka.web.push.support.message.Notification;
+import jmnet.moka.web.push.support.message.PushHttpResponse;
+import jmnet.moka.web.push.support.message.PushResponseMessage;
 import jmnet.moka.web.push.support.sender.AbstractPushSender;
 import lombok.extern.slf4j.Slf4j;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 /**
  * <pre>
@@ -50,7 +68,9 @@ public class PreviewTodaySender extends AbstractPushSender {
     @Autowired
     protected ModelMapper modelMapper;
 
-    public PreviewTodaySender(PushAppService pushAppService, PushContentsService pushContentsService, PushContentsProcService pushContentsProcService, PushAppTokenService pushAppTokenService, PushAppTokenHistService pushAppTokenHistService, PushTokenSendHistService pushTokenSendHistService) {
+    public PreviewTodaySender(PushAppService pushAppService, PushContentsService pushContentsService, PushContentsProcService pushContentsProcService,
+            PushAppTokenService pushAppTokenService, PushAppTokenHistService pushAppTokenHistService,
+            PushTokenSendHistService pushTokenSendHistService) {
         this.pushAppService = pushAppService;
         this.pushContentsService = pushContentsService;
         this.pushContentsProcService = pushContentsProcService;
@@ -60,35 +80,25 @@ public class PreviewTodaySender extends AbstractPushSender {
     }
 
     @Override
-    public FcmMessage makePushMessage(Long pushItemSeq, int appSeq) {
-        long contentSeq = pushItemSeq;
-        log.debug("[FcmMessage makePushMessage] pushItemSeq=", pushItemSeq);
+    public FcmMessage makePushMessage(PushContents pushContents, PushApp pushApp) {
+        long contentSeq = pushContents.getContentSeq();
+        log.debug("[FcmMessage makePushMessage] pushItemSeq=", contentSeq);
 
         PushContentSeqSearchDTO searchContentSeq = new PushContentSeqSearchDTO();
 
-        searchContentSeq.setContentSeq(pushItemSeq);
         String pushType = null;
         String title = null;
         String content = null;
         String pushImgUrl = null;
-        try{
-            Page<PushContents> returnValue1 = pushContentsService.findAllByContentSeq(searchContentSeq);
-
-            List<PushContentsDTO> dtoList1 = modelMapper.map(returnValue1.getContent(), PushContentsDTO.TYPE);
-
-            for (PushContentsDTO pushContents : dtoList1) {
-                pushType = pushContents.getPushType();
-                title = pushContents.getTitle();
-                content = pushContents.getContent();
-                pushImgUrl = pushContents.getPushImgUrl();
-            }
+        try {
+            title = pushContents.getTitle();
+            content = pushContents.getContent();
+            pushImgUrl = pushContents.getPushImgUrl();
         } catch (Exception e) {
             log.debug(e.toString());
         }
 
-        Optional<PushApp> pushApp = pushAppService.findByAppSeq(appSeq);
-
-        if(pushApp.equals("iOS")){
+        if (pushApp.equals("iOS")) {
             Notification notification = new Notification();
             notification.setTitle(title);
             notification.setBody(content);
@@ -98,24 +108,32 @@ public class PreviewTodaySender extends AbstractPushSender {
             notification.setKey3(153);
             notification.setImage_url(pushImgUrl);
 
-            return FcmMessage.builder().notification(notification).build();
-        }else{
+            return FcmMessage
+                    .builder()
+                    .notification(notification)
+                    .build();
+        } else {
             Map<String, String> data = new HashMap<>();
-            data.put("key1",title);
-            data.put("key2",content);
-            data.put("key3","http://dn.joongdo.co.kr");
-            data.put("img_name",pushImgUrl);
+            data.put("key1", title);
+            data.put("key2", content);
+            data.put("key3", "http://dn.joongdo.co.kr");
+            data.put("img_name", pushImgUrl);
 
-            return FcmMessage.builder().data(data).build();
+            return FcmMessage
+                    .builder()
+                    .data(data)
+                    .build();
         }
     }
 
     @Override
     protected Long findFirstTokenSeq(Integer appSeq) {
         List<PushAppToken> appTokenList = pushAppTokenService.findByAppSeqAsc(appSeq);
-        Long tokenSeq  = 0L;
+        Long tokenSeq = 0L;
 
-        tokenSeq = appTokenList.get(0).getTokenSeq();
+        tokenSeq = appTokenList
+                .get(0)
+                .getTokenSeq();
 
         return tokenSeq;
     }
@@ -127,36 +145,45 @@ public class PreviewTodaySender extends AbstractPushSender {
          * - 페이징 처리에 사용
          */
         List<PushAppToken> appTokenList = pushAppTokenService.findByAppSeqDesc(appSeq);
-        Long tokenSeq  = 0L;
+        Long tokenSeq = 0L;
 
-        tokenSeq = appTokenList.get(0).getTokenSeq();
+        tokenSeq = appTokenList
+                .get(0)
+                .getTokenSeq();
 
         return tokenSeq;
     }
+
     @Override
-    protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx, int tokenCnt) throws Exception {
+    protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx, int tokenCnt)
+            throws Exception {
         log.debug("속보 - 푸시 전송을 위한 작업 처리 :findAllToken  {}", pageIdx);
 
         /**
          * TODO 3. 토큰 목록 조회
          */
-        Page<PushAppToken> pushAppTokenlist = pushAppTokenService.findPushAppToken(appSeq, PageRequest.of(pageIdx, tokenCnt));
+        List<PushAppToken> pushAppTokenlist = pushAppTokenService.findPushAppToken(appSeq, PageRequest.of(pageIdx, tokenCnt));
 
-        int totalPages = pushAppTokenlist.getTotalPages();
+        //int totalPages = pushAppTokenlist.getTotalPages();
 
-        List<PushAppTokenDTO> tokenDTOList = modelMapper.map(pushAppTokenlist.getContent(), PushAppTokenDTO.TYPE);
-        List<PushAppToken> returnValue = pushAppTokenlist.getContent();
+        List<PushAppTokenDTO> tokenDTOList = modelMapper.map(pushAppTokenlist, PushAppTokenDTO.TYPE);
+        List<PushAppToken> returnValue = pushAppTokenlist;
 
         String chkToken = "";
-        for (int i=0; i<tokenDTOList.size();i++) {
-            if(i == 0){
-                chkToken = tokenDTOList.get(i).getTokenSeq().toString();
-            }else{
-                chkToken = chkToken + "," + tokenDTOList.get(i).getTokenSeq();
+        for (int i = 0; i < tokenDTOList.size(); i++) {
+            if (i == 0) {
+                chkToken = tokenDTOList
+                        .get(i)
+                        .getTokenSeq()
+                        .toString();
+            } else {
+                chkToken = chkToken + "," + tokenDTOList
+                        .get(i)
+                        .getTokenSeq();
             }
         }
 
-        log.info("chkToken="+chkToken);
+        log.info("chkToken=" + chkToken);
 
         for (PushAppTokenDTO pushAppToken : tokenDTOList) {
             try {
@@ -167,7 +194,9 @@ public class PreviewTodaySender extends AbstractPushSender {
 
                 pushTokenSendHist.setContentSeq(contentSeq);
                 pushTokenSendHist.setTokenSeq(pushAppToken.getTokenSeq());
-                pushTokenSendHist.setAppSeq(pushAppToken.getAppSeq().intValue());
+                pushTokenSendHist.setAppSeq(pushAppToken
+                        .getAppSeq()
+                        .intValue());
                 pushTokenSendHist.setSendYn("N");
                 pushTokenSendHist.setRegDt(McpDate.now());
 
@@ -178,9 +207,7 @@ public class PreviewTodaySender extends AbstractPushSender {
                 log.error("[FAIL TO INSERT PUSH TOKEN SEND HIST]", e);
                 throw new Exception("푸시 앱 토큰 전송 이력이 등록 되지 않습니다.", e);
             }
-            if(pageIdx > totalPages){
-                returnValue = Collections.emptyList();
-            }
+
         }
         return returnValue;
     }
@@ -190,11 +217,13 @@ public class PreviewTodaySender extends AbstractPushSender {
         log.debug(" [ 푸시 토큰 전송 이력 생성 로직 구현 ] :insertPushTokenSendHist");
         PushTokenSendHist returnValue = pushTokenSendHistService.savePushTokenSendHist(pushTokenSendHist);
     }
+
     @Override
     protected void insertPushAppTokenHist(PushAppTokenHist pushAppTokenHist) {
         log.debug(" [ 푸시 토큰 이력 생성 로직 구현 ] :insertPushAppTokenHist");
         PushAppTokenHist returnValue = pushAppTokenHistService.savePushAppTokenHist(pushAppTokenHist);
     }
+
     @Override
     protected void updatePushAppTokenHist(PushAppTokenHist pushAppTokenHist) {
         log.debug(" [ 푸시 토큰 이력 갱신 로직 구현 ] :updatePushAppTokenHist");
@@ -216,13 +245,27 @@ public class PreviewTodaySender extends AbstractPushSender {
                 .builder()
                 .id(pushContentsProcPK)
                 .statusFlag(status.getValue())
-                .targetCnt(pushContentsProc.get().getTargetCnt())
-                .sendCnt(pushContentsProc.get().getSendCnt())
-                .rcvCnt(pushContentsProc.get().getRcvCnt())
-                .openCnt(pushContentsProc.get().getOpenCnt())
-                .lastTokenSeq(pushContentsProc.get().getLastTokenSeq())
-                .startDt(pushContentsProc.get().getStartDt())
-                .endDt(pushContentsProc.get().getEndDt())
+                .targetCnt(pushContentsProc
+                        .get()
+                        .getTargetCnt())
+                .sendCnt(pushContentsProc
+                        .get()
+                        .getSendCnt())
+                .rcvCnt(pushContentsProc
+                        .get()
+                        .getRcvCnt())
+                .openCnt(pushContentsProc
+                        .get()
+                        .getOpenCnt())
+                .lastTokenSeq(pushContentsProc
+                        .get()
+                        .getLastTokenSeq())
+                .startDt(pushContentsProc
+                        .get()
+                        .getStartDt())
+                .endDt(pushContentsProc
+                        .get()
+                        .getEndDt())
                 .build());
     }
 
@@ -232,7 +275,8 @@ public class PreviewTodaySender extends AbstractPushSender {
     }
 
     @Override
-    protected PushResponseMessage sendMessage(List<PushAppToken> pushTokens, FcmMessage pushMessage) throws Exception {
+    protected PushResponseMessage sendMessage(List<PushAppToken> pushTokens, FcmMessage pushMessage, PushApp pushApp)
+            throws Exception {
 
         log.info("[ PreviewTodaySender PushResponseMessage sendMessage ]");
 
@@ -245,19 +289,7 @@ public class PreviewTodaySender extends AbstractPushSender {
             int appSeq = pushToken.getAppSeq();
 
             try {
-                Optional<PushApp> pushAppOld = pushAppService.findByAppSeq(appSeq);
-
-                PushApp pushApp = PushApp
-                        .builder()
-                        .appSeq(pushAppOld.get().getAppSeq())
-                        .appDiv(pushAppOld.get().getAppDiv())
-                        .appOs(pushAppOld.get().getAppOs())
-                        .devDiv(pushAppOld.get().getDevDiv())
-                        .appName(pushAppOld.get().getAppName())
-                        .apiKey(pushAppOld.get().getApiKey())
-                        .fcmKey(pushAppOld.get().getApiKey())
-                        .build();
-
+                
                 /**
                  * FCM에 푸시 요청
                  */
@@ -270,15 +302,23 @@ public class PreviewTodaySender extends AbstractPushSender {
                 int canonicalIds = 0;
                 List<FcmResponseResultItem> results;
 
-                log.info("PushToken    =" + response.getPushToken().getToken());
+                log.info("PushToken    =" + response
+                        .getPushToken()
+                        .getToken());
                 log.info("StatusCode   =" + response.getStatusCode());
                 log.info("Headers      =" + response.getHeaders());
                 log.info("Message      =" + response.getMessage());
-                log.info("Body         =" + response.getBody().toString());
+                log.info("Body         =" + response
+                        .getBody()
+                        .toString());
 
                 JSONParser p = new JSONParser();
                 JSONObject obj = (JSONObject) p.parse(response.getBody());
-                JSONObject objRst = (JSONObject) p.parse(obj.get("results").toString().replace("[", "").replace("]", ""));
+                JSONObject objRst = (JSONObject) p.parse(obj
+                        .get("results")
+                        .toString()
+                        .replace("[", "")
+                        .replace("]", ""));
                 log.info("objRst=" + objRst);
 
                 List<FcmResponseResultItem> getResults = new ArrayList<>();
@@ -286,27 +326,39 @@ public class PreviewTodaySender extends AbstractPushSender {
                 FcmResponseResultItem resultItem = new FcmResponseResultItem();
 
                 if (obj.get("multicast_id") != null) {
-                    multicastId = obj.get("multicast_id").toString();
+                    multicastId = obj
+                            .get("multicast_id")
+                            .toString();
                     sendMessage.setMulticastId(multicastId);
                 }
                 if (obj.get("success") != null) {
-                    success = Integer.valueOf(obj.get("success").toString());
+                    success = Integer.valueOf(obj
+                            .get("success")
+                            .toString());
                     sendMessage.setSuccess(success);
                     if (success != 0 && failure == 0) {
-                        resultItem.setMessageId(objRst.get("message_id").toString());
+                        resultItem.setMessageId(objRst
+                                .get("message_id")
+                                .toString());
                     }
                 }
                 if (obj.get("failure") != null) {
-                    failure = Integer.valueOf(obj.get("failure").toString());
+                    failure = Integer.valueOf(obj
+                            .get("failure")
+                            .toString());
                     sendMessage.setFailure(failure);
 
                     if (success == 0 && failure != 0) {
-                        resultItem.setError(FcmErrorType.getType(response.getStatusCode(), objRst.get("error").toString()));
+                        resultItem.setError(FcmErrorType.getType(response.getStatusCode(), objRst
+                                .get("error")
+                                .toString()));
                     }
                     getResults.add(0, resultItem);
                 }
                 if (obj.get("canonical_ids") != null) {
-                    canonicalIds = Integer.valueOf(obj.get("canonical_ids").toString());
+                    canonicalIds = Integer.valueOf(obj
+                            .get("canonical_ids")
+                            .toString());
                     sendMessage.setCanonicalIds(canonicalIds);
                 }
                 ;
@@ -328,7 +380,7 @@ public class PreviewTodaySender extends AbstractPushSender {
     /**
      * FCM에 푸시 요청
      *
-     * @param pushApp     앱정보
+     * @param pushApp    앱정보
      * @param fcmMessage fcm message 정보
      * @return 전송 결과
      * @throws Exception 오류 처리
@@ -336,7 +388,7 @@ public class PreviewTodaySender extends AbstractPushSender {
     protected PushHttpResponse pushSend(String token, PushApp pushApp, FcmMessage fcmMessage)
     //protected PushHttpResponse pushSend(List<PushAppToken> pushToken, PushApp pushApp, FcmMessage fcmMessage)
             throws Exception {
-        log.info("[ PreviewTodaySender pushSend ] "+token);
+        log.info("[ PreviewTodaySender pushSend ] " + token);
 
         PushAppTokenDTO pushAppTokenItem = new PushAppTokenDTO();
         pushAppTokenItem.setToken(token);
@@ -345,12 +397,12 @@ public class PreviewTodaySender extends AbstractPushSender {
 
         List<String> registration_ids = new ArrayList<String>();
 
-        if(token.contains("f_DLCVY-ThuTc5YlVHe37o:")){
+        if (token.contains("f_DLCVY-ThuTc5YlVHe37o:")) {
             token = token.split("f_DLCVY-ThuTc5YlVHe37o:")[1];
             token = "f_DLCVY-ThuTc5YlVHe37o:" + token;
         }
 
-        log.info("token="+token);
+        log.info("token=" + token);
 
         registration_ids.add(token);
 

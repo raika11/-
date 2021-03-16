@@ -26,15 +26,15 @@ public class PushContentsProcPK implements Serializable {
 
     /**
      * 콘텐트 일련번호
-    */
+     */
     @Column(name = "CONTENT_SEQ", nullable = false)
     private Long contentSeq;
 
 
     /**
-     *  앱 일련번호
+     * 앱 일련번호
      */
     @Column(name = "APP_SEQ", nullable = false)
-    private int appSeq;
+    private Integer appSeq;
 
 }

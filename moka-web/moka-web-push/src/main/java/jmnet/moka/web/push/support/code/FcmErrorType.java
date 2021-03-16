@@ -19,63 +19,60 @@ public enum FcmErrorType {
     /**
      * 누락된 등록 토큰
      */
-    MISSING_REGISTRATION(200, "MissingRegistration"),
+    MissingRegistration(200, "MissingRegistration"),
     /**
      * 잘못된 등록 토큰
      */
-    INVALID_REGISTRATION(200, "InvalidRegistration"),
+    InvalidRegistration(200, "InvalidRegistration"),
     /**
      * 등록되지 않은 기기
      */
-    NOT_REGISTERED(200, "NotRegistered"),
+    NotRegistered(200, "NotRegistered"),
     /**
      * 잘못된 패키지 이름
      */
-    INVALID_PACKAGE_NAME(200, "InvalidPackageName"),
+    InvalidPackageName(200, "InvalidPackageName"),
     /**
      * 일치하지 않는 발신자
      */
-    MISMATCH_SENDER_ID(200, "MismatchSenderId"),
+    MismatchSenderId(200, "MismatchSenderId"),
     /**
      * 잘못된 매개변수
      */
-    INVALID_PARAMETERS(200, "InvalidParameters"),
+    InvalidParameters(200, "InvalidParameters"),
     /**
      * 너무 큰 메시지
      */
-    MESSAGE_TOO_BIG(200, "MessageTooBig"),
+    MessageTooBig(200, "MessageTooBig"),
     /**
      * 잘못된 데이터 키
      */
-    INVALID_DATA_KEY(200, "InvalidDataKey"),
+    InvalidDataKey(200, "InvalidDataKey"),
     /**
      * 잘못된 수명
      */
-    INVALID_TTL(200, "InvalidTtl"),
+    InvalidTtl(200, "InvalidTtl"),
     /**
      * 기기 메시지 비율 초과
      */
-    DEVICE_MESSAGE_RATE_EXCEEDED(200, "DeviceMessageRateExceeded"),
+    DeviceMessageRateExceeded(200, "DeviceMessageRateExceeded"),
     /**
      * 주제 메시지 비율 초과
      */
-    TOPICS_MESSAGE_RATE_EXCEEDED(200, "TopicsMessageRateExceeded"),
+    TopicsMessageRateExceeded(200, "TopicsMessageRateExceeded"),
     /**
      * 잘못된 APN 인증 정보
      */
-    INVALID_APNS_CREDENTIAL(200, "InvalidApnsCredential"),
-    /**
-     * 전송자ID가 틀림
-     */
-    SENDER_ID_MISMATCH(200, "MismatchSenderId"),
+    InvalidApnsCredential(200, "InvalidApnsCredential"),
+
     /**
      * 시간 초과 5XX, 200
      */
-    UNAVAILABLE(503, "Unavailable"),
+    Unavailable(503, "Unavailable"),
     /**
      * 내부 서버 오류 500, 200
      */
-    INTERNAL_SERVER_ERROR(500, "InternalServerError"),
+    InternalServerError(500, "InternalServerError"),
     /**
      * 인증 오류
      */
@@ -172,8 +169,8 @@ public enum FcmErrorType {
      * @return 디바이스 토큰 삭제 여부
      */
     public static boolean isDeviceDelete(final int returnCode, final String message) {
-        return (INVALID_REGISTRATION.errorCode == returnCode && INVALID_REGISTRATION.errorMessage.equals(message)) || (
-                NOT_REGISTERED.errorCode == returnCode && NOT_REGISTERED.errorMessage.equals(message));
+        return (InvalidRegistration.errorCode == returnCode && InvalidRegistration.errorMessage.equals(message)) || (
+                NotRegistered.errorCode == returnCode && NotRegistered.errorMessage.equals(message));
     }
 
     /**
@@ -183,7 +180,7 @@ public enum FcmErrorType {
      * @return 디바이스 토큰 삭제 여부
      */
     public static boolean isDeviceDelete(FcmErrorType fcmErrorType) {
-        return fcmErrorType == INVALID_REGISTRATION || fcmErrorType == NOT_REGISTERED;
+        return fcmErrorType == InvalidRegistration || fcmErrorType == NotRegistered;
     }
 
     /**
@@ -194,8 +191,8 @@ public enum FcmErrorType {
      * @return 재시도 여부
      */
     public static boolean isRetryError(final int returnCode, final String message) {
-        return (INTERNAL_SERVER_ERROR.errorCode == returnCode && INTERNAL_SERVER_ERROR.errorMessage.equals(message)) || (
-                UNAVAILABLE.errorCode == returnCode && UNAVAILABLE.errorMessage.equals(message));
+        return (InternalServerError.errorCode == returnCode && InternalServerError.errorMessage.equals(message)) || (
+                Unavailable.errorCode == returnCode && Unavailable.errorMessage.equals(message));
     }
 
     /**
@@ -209,9 +206,9 @@ public enum FcmErrorType {
         FcmErrorType fcmErrorType = null;
 
         if (returnCode > 500) {
-            fcmErrorType = FcmErrorType.UNAVAILABLE;
+            fcmErrorType = FcmErrorType.Unavailable;
         } else if (returnCode == 500) {
-            fcmErrorType = FcmErrorType.INTERNAL_SERVER_ERROR;
+            fcmErrorType = FcmErrorType.InternalServerError;
         } else {
             for (FcmErrorType type : FcmErrorType.values()) {
                 if ((message != null && message.equals(type.errorMessage)) || (returnCode == type.errorCode && type.errorMessage == null)) {

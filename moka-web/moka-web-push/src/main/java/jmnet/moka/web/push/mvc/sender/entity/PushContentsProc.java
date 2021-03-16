@@ -36,6 +36,10 @@ public class PushContentsProc implements Serializable {
     @EmbeddedId
     private PushContentsProcPK id;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "APP_SEQ", insertable = false, updatable = false)
+    private PushApp pushApp;
+
     /**
      * 전송 상태
      */

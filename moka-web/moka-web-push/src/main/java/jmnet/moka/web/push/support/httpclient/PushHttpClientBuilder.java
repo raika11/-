@@ -49,6 +49,6 @@ public class PushHttpClientBuilder {
                 builder.connectionPool(connectionPool);
             }
         }
-        return new HttpPushFcmClient(pushApp.getFcmKey());
+        return new HttpPushFcmClient(pushApp.getApiKey());
     }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.web.push.mvc.sender.mapper.PushTokenSendHistMapper">
+
+
+  <insert id="insertPushTokenSendHist" parameterType="PushTokenBatchVO"
+    statementType="CALLABLE">
+    { call UPA_PUSH_APP_TOKEN_HIST_INS(
+    'I',
+    #{appSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+    #{contentsSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{tokenSeqs, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+    ''
+    )}
+  </insert>
+
+  <insert id="updatePushTokenSendHist" parameterType="PushTokenBatchVO"
+    statementType="CALLABLE">
+    { call UPA_PUSH_APP_TOKEN_HIST_INS(
+    'U',
+    #{appSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+    #{contentsSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{tokenSeqs, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+    #{sendYn, mode=IN, jdbcType=CHAR, javaType=java.lang.String}
+    )}
+  </insert>
+</mapper>

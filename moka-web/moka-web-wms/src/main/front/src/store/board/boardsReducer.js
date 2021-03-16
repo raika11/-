@@ -64,12 +64,14 @@ export const initialState = {
         total: 0,
         list: [],
         search: {
-            page: 0,
             sort: 'boardId,desc',
+            page: 0,
             size: PAGESIZE_OPTIONS[0],
-            usedYn: '',
             searchType: '',
             keyword: '',
+            useTotal: '',
+            usedYn: '',
+            channelType: '',
         },
         boardinfo: {
             boardType: '',
@@ -141,9 +143,9 @@ export const initialState = {
 
 export default handleActions(
     {
-        // 전체 초기화.
+        // 스토어 초기화
         [CLEAR_STORE]: () => initialState,
-        // 구분값 제외 초기화.
+        // 구분값을 제외한 나머지 초기화
         [INITIALIZE_PARAMS]: (state, { payload: { pagePathName, boardType, gubun } }) => {
             return produce(state, (draft) => {
                 draft.pagePathName = pagePathName;
@@ -151,75 +153,75 @@ export default handleActions(
                 draft.gubun = gubun;
             });
         },
-        // 게시판 등록시 사용할 채널 타입 리스트 처리.
+        // 게시판 등록시 사용할 채널 타입 리스트 처리
         [GET_BOARD_CHANNELTYPE_LIST_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.channeltype_list = payload;
             });
         },
-        // set 메뉴 검색 옵션 처리.
+        // set 메뉴 검색 옵션 처리
         [CHANGE_SETMENU_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.setmenu.search = payload;
             });
         },
-        // 게시판 검색 옵션 클리어.
+        // 게시판 검색 옵션 클리어
         [CLEAR_SETMENU_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.setmenu.search = initialState.setmenu.search;
             });
         },
-        // list 메뉴 검색 옵션 처리.
+        // list 메뉴 검색 옵션 처리
         [CHANGE_LISTMENU_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.listmenu.contentsList.search = payload;
             });
         },
-        // 게기판 게시글 검색 옵션 클리어.
+        // 게기판 게시글 검색 옵션 클리어
         [CLEAR_LISTMENU_SEARCH_OPTION]: (state) => {
             return produce(state, (draft) => {
                 draft.listmenu.contentsList.search = initialState.listmenu.contentsList.search;
             });
         },
-        // 리스트 조회 성공.
+        // 리스트 조회 성공
         [GET_SETMENU_BOARD_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.setmenu.list = body.list;
                 draft.setmenu.total = body.totalCnt;
             });
         },
-        // 상세 조회 성공.
+        // 상세 조회 성공
         [GET_SETMENU_BOARD_INFO_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.setmenu.boardinfo = body;
             });
         },
-        // 게시판 설정 정보 처리.
+        // 게시판 설정 정보 처리
         [CLEAR_SETMENU_BOARD_INFO]: (state) => {
             return produce(state, (draft) => {
                 draft.setmenu.boardinfo = initialState.setmenu.boardinfo;
             });
         },
-        // Tree 메뉴 리스트 정상 처리.
+        // Tree 메뉴 리스트 정상 처리
         [GET_GROUP_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.listmenu.groupList = body;
             });
         },
-        // 트리메뉴에서 게시판 클릭 처리. ( 하위 페이지에서 옵션 처리 하기 위해.)
+        // 트리메뉴에서 게시판 클릭 처리( 하위 페이지에서 옵션 처리 하기 위해)
         [GET_LISTMENU_SELECT_BOARD_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.listmenu.selectboard = body;
             });
         },
-        // 리스트 조회 성공.
+        // 리스트 조회 성공
         [GET_LISTMENU_CONTENTS_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.listmenu.contentsList.list = body.list;
                 draft.listmenu.contentsList.total = body.totalCnt;
             });
         },
-        // 게시판 게시글 정보 처리.
+        // 게시판 게시글 정보 처리
         [GET_LISTMENU_CONTENTS_INFO_SUCCESS]: (state, { payload: { body } }) => {
             const { boardSeq, parentBoardSeq } = body;
             if (boardSeq === parentBoardSeq) {
@@ -234,14 +236,14 @@ export default handleActions(
                 });
             }
         },
-        // 선택한 게시글 정보 클리어 처리.
+        // 선택한 게시글 정보 클리어 처리
         [CLEAR_LISTMENU_CONTENTSINFO]: (state) => {
             return produce(state, (draft) => {
                 draft.listmenu.contents = initialState.listmenu.contents;
             });
         },
 
-        // Tree 메뉴 리스트 정상 처리.
+        // Tree 메뉴 리스트 정상 처리
         [CHANGE_LISTMENU_CONTENT]: (state, { payload: { content } }) => {
             return produce(state, (draft) => {
                 draft.listmenu.contents.info.content = content;

@@ -1,16 +1,20 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
-import { Container, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
+import clsx from 'clsx';
+import { Container, Col, Row } from 'react-bootstrap';
 import BoardsGroupTree from './BoardsGroupTree/BoardsGroupTree';
 import BoardsContentsList from './BoardsContentsList/BoardsContentsList';
 import BoardsEdit from './BoardsEdit/BoardsEdit';
-import clsx from 'clsx';
 import useBreakpoint from '@hooks/useBreakpoint';
 
+/**
+ * 게시판
+ */
 const BoardsList = ({ match, displayName }) => {
     const matchPoints = useBreakpoint();
+
     // 공통 구분값 URL
     const { pagePathName } = useSelector((store) => ({
         pagePathName: store.board.pagePathName,
@@ -30,11 +34,11 @@ const BoardsList = ({ match, displayName }) => {
                     <Switch>
                         <Route
                             path={[
-                                `/${pagePathName}/:boardId/:parentBoardSeq/:reply/:boardSeq`,
-                                `/${pagePathName}/:boardId/:boardSeq/:reply`,
-                                `/${pagePathName}/:boardId/:boardSeq`,
-                                `/${pagePathName}/:boardId`,
                                 `/${pagePathName}`,
+                                `/${pagePathName}/:boardId`,
+                                `/${pagePathName}/:boardId/:boardSeq`,
+                                `/${pagePathName}/:boardId/:boardSeq/:reply`,
+                                `/${pagePathName}/:boardId/:parentBoardSeq/:reply/:boardSeq`,
                             ]}
                             exact
                             render={() => <BoardsGroupTree />}
@@ -47,10 +51,10 @@ const BoardsList = ({ match, displayName }) => {
                     <Switch>
                         <Route
                             path={[
-                                `/${pagePathName}/:boardId/:parentBoardSeq/:reply/:boardSeq`,
-                                `/${pagePathName}/:boardId/:boardSeq/:reply`,
-                                `/${pagePathName}/:boardId/:boardSeq`,
                                 `/${pagePathName}/:boardId`,
+                                `/${pagePathName}/:boardId/:boardSeq`,
+                                `/${pagePathName}/:boardId/:boardSeq/:reply`,
+                                `/${pagePathName}/:boardId/:parentBoardSeq/:reply/:boardSeq`,
                             ]}
                             exact
                             render={() => <BoardsContentsList />}
@@ -63,10 +67,10 @@ const BoardsList = ({ match, displayName }) => {
                     <Switch>
                         <Route
                             path={[
-                                `/${pagePathName}/:boardId/:parentBoardSeq/:reply/:boardSeq`,
-                                `/${pagePathName}/:boardId/:boardSeq/:reply`,
-                                `/${pagePathName}/:boardId/:boardSeq`,
                                 `/${pagePathName}/:boardId/add`,
+                                `/${pagePathName}/:boardId/:boardSeq`,
+                                `/${pagePathName}/:boardId/:boardSeq/:reply`,
+                                `/${pagePathName}/:boardId/:parentBoardSeq/:reply/:boardSeq`,
                             ]}
                             exact
                             render={() => <BoardsEdit />}

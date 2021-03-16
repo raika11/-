@@ -1,7 +1,9 @@
 import { createAction } from 'redux-actions';
 import { createRequestActionTypes } from '@store/commons/saga';
 
-// 구분값 처리.
+/**
+ * 구분값 처리
+ */
 export const INITIALIZE_PARAMS = 'board/INITIALIZE_PARAMS';
 export const initializeParams = createAction(INITIALIZE_PARAMS);
 

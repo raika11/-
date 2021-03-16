@@ -1,14 +1,19 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet';
-import { Container, Col, Row } from 'react-bootstrap';
 import { Switch, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { initialState, getSetmenuBoardsList, changeSetMenuSearchOption } from '@store/board';
+import { Helmet } from 'react-helmet';
 import clsx from 'clsx';
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import useBreakpoint from '@hooks/useBreakpoint';
+import { initialState, getSetmenuBoardsList, changeSetMenuSearchOption } from '@store/board';
 import BoardsList from './Component/BoardsList';
 import BoardsEdit from './Component/BoardsEdit';
 
+/**
+ * 게시판 관리 > 전체 게시판
+ */
 const BoardsSet = ({ match, displayName }) => {
     const matchPoints = useBreakpoint();
     const dispatch = useDispatch();
@@ -18,8 +23,8 @@ const BoardsSet = ({ match, displayName }) => {
         boardType: store.board.boardType,
     }));
 
-    // store boardType 값이 변경 되면 검색 옵션 처리후 리스트를 가지고 옵니다.
     useEffect(() => {
+        // store boardType 값이 변경 되면 검색 옵션 처리후 리스트를 가지고 옵니다.
         if (boardType) {
             const tmpSearchOption = {
                 ...initialState.setmenu.search,

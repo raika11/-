@@ -1,16 +1,26 @@
 import React, { Suspense, useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { clearStore, initializeParams, getBoardChannelTypeList } from '@store/board';
 const BoardsSet = React.lazy(() => import('./BoardsSet'));
 const BoardsList = React.lazy(() => import('./BoardsList'));
 
+const initpagesParams = {
+    pagePathName: '', // 라우터 명
+    gubun: '',
+};
+
+/**
+ * 게시판 관리 분기(전체 게시판, 게시글 관리)
+ */
 const Boards = ({ match, displayName }) => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const pathName = useRef(match.path);
     const [pagesParams, setPagesParams] = useState(initpagesParams);
 
     useEffect(() => {
-        // 라우터로 기본 공통 구분값 설정.
+        // 라우터로 기본 공통 구분값 설정
         const initPageParams = ({ path }) => {
             const pathName = path.split('/').reverse()[0];
             switch (pathName) {
@@ -43,8 +53,7 @@ const Boards = ({ match, displayName }) => {
                     });
                     break;
                 default:
-                    // 없는 데이터 처리는 어떻게?
-                    console.log('경로에서 페이지 데이터를 가지고 오지 못했습니다.');
+                    history.push(`${pathName}/404`);
             }
         };
 
@@ -53,10 +62,10 @@ const Boards = ({ match, displayName }) => {
             pathName.current = match.path;
             initPageParams(match);
         }
-    }, [match, pagesParams]);
+    }, [history, match, pagesParams]);
 
-    // 파라미터가 변경 되면 store에 등록.
     useEffect(() => {
+        // 파라미터가 변경 되면 store에 등록.
         const storeInit = ({ pagePathName }) => {
             if (pagePathName !== '') {
                 dispatch(initializeParams(pagesParams));
@@ -82,11 +91,6 @@ const Boards = ({ match, displayName }) => {
             <BoardsList match={match} displayName={displayName} />
         </Suspense>
     );
-};
-
-const initpagesParams = {
-    pagePathName: '', // 라우터 명.
-    gubun: '',
 };
 
 export default Boards;

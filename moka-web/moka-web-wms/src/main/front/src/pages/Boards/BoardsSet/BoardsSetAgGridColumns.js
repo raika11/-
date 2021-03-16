@@ -1,4 +1,4 @@
-export const ColumnDefs = [
+export const columnDefs = [
     {
         headerName: '번호',
         field: 'boardId',

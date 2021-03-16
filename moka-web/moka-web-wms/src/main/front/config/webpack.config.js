@@ -259,10 +259,10 @@ module.exports = function (webpackEnv) {
             // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
             splitChunks: {
                 chunks: 'all',
-                minSize: 20000,
-                // name: false,
+                maxInitialRequests: Infinity,
                 cacheGroups: {
                     moka: { test: /[\\/]node_modules[\\/]((\@moka).*)[\\/]/, name: "moka", chunks: "all", priority: 10, enforce: true },
+                    moment: { test: /[\\/]node_modules[\\/]((moment).*)[\\/]/, name: "moment", chunks: "all", priority: 10 },
                     react: { test: /[\\/]node_modules[\\/]((react).*)[\\/]/, name: "react", chunks: "all", priority: 10 },
                     vender: { test: /[\\/]node_modules[\\/]/, name: "vender", chunks: "all", reuseExistingChunk: true }
                 }

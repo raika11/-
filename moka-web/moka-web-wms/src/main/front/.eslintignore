@@ -1,4 +1,5 @@
 config/*
+./config/webpack.config.js
 node_modules/*
 src/serviceWorker.js
 src/assets/styles/*

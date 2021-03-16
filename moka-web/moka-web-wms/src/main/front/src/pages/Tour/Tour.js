@@ -1,11 +1,14 @@
 import React, { Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const TourList = React.lazy(() => import('./TourList'));
 const TourMonth = React.lazy(() => import('./TourMonth'));
+const TourList = React.lazy(() => import('./TourList'));
 const TourMsgSet = React.lazy(() => import('./TourMsgSet'));
 const TourSet = React.lazy(() => import('./TourSet'));
 
+/**
+ * 견학
+ */
 const Tour = ({ match, ...rest }) => {
     const history = useHistory();
     if (match.path === '/tour-month') {
@@ -33,7 +36,7 @@ const Tour = ({ match, ...rest }) => {
             </Suspense>
         );
     } else {
-        history.push('/404');
+        history.push(`${match.path}/404`);
     }
 };
 

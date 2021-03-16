@@ -1,5 +1,5 @@
 import React from 'react';
-import { MokaInputLabel } from '@components';
+import { MokaInput } from '@components';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { useDispatch } from 'react-redux';
 import { changeBulkused, getBulkList } from '@store/bulks';
@@ -48,17 +48,13 @@ const ServiceRenderer = ({ bulkartSeq, usedYn, status }) => {
 
     return (
         <div className="d-flex align-items-center h-100">
-            <MokaInputLabel
+            <MokaInput
                 as="switch"
                 name={`usedYn_${bulkartSeq}`}
                 id={`usedYn_${bulkartSeq}`}
                 className="mt-2"
-                // variant="positive"
-                // labelWidth={87}
-                // label="사용여부"
-                inputProps={{ checked: usedYn === 'Y' }}
+                inputProps={{ checked: usedYn === 'Y', custom: true, readOnly: usedYn === 'Y' ? true : false }}
                 onChange={(e) => handleOnchange(e.target.checked)}
-                disabled={usedYn === 'Y' ? true : false}
             />
         </div>
     );

@@ -319,15 +319,8 @@ const TourListEdit = ({ match }) => {
                 />
                 <Form.Row className="mb-2">
                     <Col xs={6} className="px-0">
-                        <MokaInputLabel
-                            label="비밀번호\n(4자리)"
-                            inputProps={{ readOnly: true }}
-                            className="mb-0 mr-2"
-                            name="writerPwd"
-                            type="password"
-                            value={temp.writerPwd}
-                            onChange={handleChangeValue}
-                        />
+                        <MokaInputLabel label="비밀번호\n(4자리)" inputProps={{ readOnly: true }} className="mb-0 mr-2" name="writerPwd" type="password" value="****" />
+                        <MokaInput inputProps={{ readOnly: true }} name="writerPwd" type="hidden" value={temp.writerPwd} />
                     </Col>
                     <Col xs={6} className="px-0 d-flex align-items-center">
                         <Button variant="negative" size="sm" onClick={handleClickReset}>

@@ -44,7 +44,7 @@ public class PushSenderHandler {
     /**
      * 스케줄 설정 정보 파일
      */
-    private final String RESOURCE_PATH = ".json";
+    private final String RESOURCE_PATH = "sender-info.json";
 
     @Autowired
     public Executor pushSendJobTaskExecutor;
@@ -110,13 +110,23 @@ public class PushSenderHandler {
 
         String pushType = pushItem.getPushType();
 
-        log.debug("[ addPushJob ] pushType="+pushType);
+        log.debug("[ addPushJob ] pushType=" + pushType);
 
-        if(pushType.equals("T")){   pushItem.setPushType("newsFlashSender");            }
-        if(pushType.equals("S")){   pushItem.setPushType("recommendArticlesSender");    }
-        if(pushType.equals("R")){   pushItem.setPushType("previewTodaySender");         }
-        if(pushType.equals("N")){   pushItem.setPushType("newsRoomLetterSender");       }
-        if(pushType.equals("E")){   pushItem.setPushType("exampleSender");              }
+        if (pushType.equals("T")) {
+            pushItem.setPushType("newsFlashSender");
+        }
+        if (pushType.equals("S")) {
+            pushItem.setPushType("recommendArticlesSender");
+        }
+        if (pushType.equals("R")) {
+            pushItem.setPushType("previewTodaySender");
+        }
+        if (pushType.equals("N")) {
+            pushItem.setPushType("newsRoomLetterSender");
+        }
+        if (pushType.equals("E")) {
+            pushItem.setPushType("exampleSender");
+        }
 
         if (scheduleMap.containsKey(pushItem.getPushType())) {// 작업 유형 존재할 경우 실행
             pushSendJobTaskExecutor.execute(() -> scheduleMap
@@ -132,7 +142,8 @@ public class PushSenderHandler {
      *
      * @param pushContents 작업 일련번호
      */
-    public boolean removeReservePushJob(PushContents pushContents) throws Exception {
+    public boolean removeReservePushJob(PushContents pushContents)
+            throws Exception {
 
         // TODO 1. 예약 작업 테이블에 del_yn을 'N'으로 변경
 
@@ -143,7 +154,6 @@ public class PushSenderHandler {
             log.error("[FAIL TO INSERT PUSH CONTENTS]", e);
             throw new Exception("예약 작업 테이블에 del_yn 변경이 되지 않았습니다.", e);
         }
-
 
 
 

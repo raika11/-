@@ -168,15 +168,11 @@ module.exports = function (webpackEnv) {
             pathinfo: isEnvDevelopment,
             // There will be one main bundle, and one file per asynchronous chunk.
             // In development, it does not produce real files.
-            filename: isEnvProduction
-                ? `static/js/[name].[contenthash:8].${buildDatetime}.js`
-                : isEnvDevelopment && `static/js/bundle.${buildDatetime}.js`,
+            filename: `static/js/bundle.[name].${buildDatetime}.js`,
             // TODO: remove this when upgrading to webpack 5
             futureEmitAssets: true,
             // There are also additional JS chunk files if you use code splitting.
-            chunkFilename: isEnvProduction
-                ? `static/js/[name].[contenthash:8].${buildDatetime}.chunk.js`
-                : isEnvDevelopment && `static/js/[name].${buildDatetime}.chunk.js`,
+            chunkFilename: `static/js/bundle.[name].${buildDatetime}.chunk.js`,
             // webpack uses `publicPath` to determine where the app is being served from.
             // It requires a trailing slash, or the file assets will get an incorrect path.
             // We inferred the "public path" (such as / or /my-project) from homepage.
@@ -263,7 +259,13 @@ module.exports = function (webpackEnv) {
             // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
             splitChunks: {
                 chunks: 'all',
-                name: false
+                maxInitialRequests: Infinity,
+                cacheGroups: {
+                    moka: { test: /[\\/]node_modules[\\/]((\@moka).*)[\\/]/, name: "moka", chunks: "all", priority: 10, enforce: true },
+                    moment: { test: /[\\/]node_modules[\\/]((moment).*)[\\/]/, name: "moment", chunks: "all", priority: 10 },
+                    react: { test: /[\\/]node_modules[\\/]((react).*)[\\/]/, name: "react", chunks: "all", priority: 10 },
+                    vender: { test: /[\\/]node_modules[\\/]/, name: "vender", chunks: "all", reuseExistingChunk: true }
+                }
             },
             // Keep the runtime chunk separated to enable long term caching
             // https://twitter.com/wSokra/status/969679223278505985
@@ -501,7 +503,8 @@ module.exports = function (webpackEnv) {
                     ]
                 }
             ]
-        },plugins: [
+        },
+        plugins: [
             // A plugin to simplify loading the Monaco Editor with webpack.
             new MonacoWebpackPlugin({
                 languages: ['html', 'css', 'javascript', 'json', 'xml'],

@@ -5,12 +5,10 @@ import jmnet.moka.web.push.mvc.sender.repository.PushAppTokenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -53,7 +51,7 @@ public class PushAppTokenServiceImpl implements PushAppTokenService{
     public void deletePushAppToken(List<PushAppToken> pushTokens) {
         for (PushAppToken pushToken : pushTokens) {
             long tokenSeq = pushToken.getTokenSeq();
-            System.out.println("tokenSeq="+tokenSeq);
+            log.info("tokenSeq="+tokenSeq);
 
             //pushAppTokenRepository.deleteById(tokenSeq.intValue());
         }

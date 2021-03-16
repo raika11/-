@@ -15,8 +15,6 @@ import { clearSelectArticleList, selectArticleListChange, selectArticleItemChang
 import toast, { messageBox } from '@utils/toastUtil';
 import SortAgGrid from '@pages/Survey/component/SortAgGrid';
 
-// 진행 기본 3명을 보여주기 위해 기본 init 데이터로 배열 3개를 추가 해줌.
-// const reporterCountConst = [0, 1, 2];
 const reporterCountConst = 3;
 // 진행자 선택 삭제시에 필요한 Object
 const reporterInit = {
@@ -763,6 +761,7 @@ const ChannelEdit = (props) => {
                         <MokaInputLabel label={`태그`} id="keywords" name="keywords" placeholder="" value={editData.keywords} onChange={handleEditDataChange} />
                     </Col>
                 </Form.Row>
+                <hr className="divider" />
                 {/* 팟캐스트 구분( 오디오, 비디오 ) */}
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100 align-items-center">
@@ -799,7 +798,7 @@ const ChannelEdit = (props) => {
                         </Col>
                     </div>
                 </Form.Row>
-                <hr className="divider" />
+
                 {/* 팟캐스트 파일 등록. */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel as="none" label="url" />
@@ -1083,16 +1082,9 @@ const ChannelEdit = (props) => {
                         </Form.Row>
                     );
                 })}
-                <hr className="divider" />
-                {/* <Form.Row className="mb-2">
-                    <MokaInputLabel label={`관련기사`} labelWidth={95} as="none" />
-                    <Button xs={12} variant="searching" className="mb-0" onClick={() => handleClickArticleButton()}>
-                        검색
-                    </Button>
-                </Form.Row> */}
+                {/* 관련 기사 AgGrid */}
                 <SortAgGrid SearchForm={sortGridSearchFrom} />
             </Form>
-            {/* <ArticleAgGrid /> */}
             {/* 팟티 에피소드 검색 */}
             <PodtyEpisodeModal
                 show={podtyEpisodeModalState}

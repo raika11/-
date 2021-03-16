@@ -44,7 +44,7 @@ public class PushSenderHandler {
     /**
      * 스케줄 설정 정보 파일
      */
-    private final String RESOURCE_PATH = ".json";
+    private final String RESOURCE_PATH = "sender-info.json";
 
     @Autowired
     public Executor pushSendJobTaskExecutor;
@@ -108,19 +108,27 @@ public class PushSenderHandler {
     public boolean addPushJob(PushContents pushItem, int appSeq) {
         boolean result = false;
 
-        log.debug("[ addPushJob ]");
-
         String pushType = pushItem.getPushType();
 
-        if(pushType.equals("T")){   pushItem.setPushType("senderT");    }
-        if(pushType.equals("S")){   pushItem.setPushType("senderS");    }
-        if(pushType.equals("R")){   pushItem.setPushType("senderR");    }
-        if(pushType.equals("N")){   pushItem.setPushType("senderN");    }
+        log.debug("[ addPushJob ] pushType=" + pushType);
+
+        if (pushType.equals("T")) {
+            pushItem.setPushType("newsFlashSender");
+        }
+        if (pushType.equals("S")) {
+            pushItem.setPushType("recommendArticlesSender");
+        }
+        if (pushType.equals("R")) {
+            pushItem.setPushType("previewTodaySender");
+        }
+        if (pushType.equals("N")) {
+            pushItem.setPushType("newsRoomLetterSender");
+        }
+        if (pushType.equals("E")) {
+            pushItem.setPushType("exampleSender");
+        }
 
         if (scheduleMap.containsKey(pushItem.getPushType())) {// 작업 유형 존재할 경우 실행
-           // System.out.println("getContentSeq   ="+pushItem.getContentSeq());
-          // System.out.println("appSeq          ="+appSeq);
-           // System.out.println("getRsvDt        ="+pushItem.getRsvDt());
             pushSendJobTaskExecutor.execute(() -> scheduleMap
                     .get(pushItem.getPushType())
                     .doTask(pushItem, appSeq));
@@ -134,18 +142,18 @@ public class PushSenderHandler {
      *
      * @param pushContents 작업 일련번호
      */
-    public boolean removeReservePushJob(PushContents pushContents) throws Exception {
+    public boolean removeReservePushJob(PushContents pushContents)
+            throws Exception {
 
         // TODO 1. 예약 작업 테이블에 del_yn을 'N'으로 변경
 
         try {
-            PushContents returnValue = pushContentsService.saveDelYn(pushContents);
+            PushContents returnValue = pushContentsService.saveUsedYn(pushContents);
             log.debug("[SUCCESS TO INSERT PUSH CONTENTS]");
         } catch (Exception e) {
             log.error("[FAIL TO INSERT PUSH CONTENTS]", e);
             throw new Exception("예약 작업 테이블에 del_yn 변경이 되지 않았습니다.", e);
         }
-
 
 
 

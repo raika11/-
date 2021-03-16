@@ -1,21 +1,20 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
+import { initialState, getJobStatisticSearchList, changeRunStateSearchOption, clearRunStateSearch } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 작업 실행상태 검색
  */
-const RunStateSearch = () => {
-    const [search, setSearch] = useState({
-        group: 'all',
-        cycle: 'all',
-        type: 'all',
-        server: 'all',
-        state: 'all',
-        searchType: 'all',
-        keyword: '',
-    });
+const RunStateSearch = ({ match }) => {
+    const dispatch = useDispatch();
+    const storeSearch = useSelector((store) => store.schedule.runState.search);
+    const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
+    const deployServerCode = useSelector((store) => store.schedule.work.deployServerCode);
+    const [search, setSearch] = useState(initialState.runState.search);
 
     const handleChangeValue = useCallback(
         (e) => {
@@ -25,67 +24,103 @@ const RunStateSearch = () => {
         [search],
     );
 
-    const handleClickReset = () => {
-        setSearch({ ...search, group: 'all', cycle: 'all', type: 'all', server: 'all', state: 'all', searchType: 'all', keyword: '' });
+    const handleClickSearch = () => {
+        dispatch(
+            getJobStatisticSearchList(
+                changeRunStateSearchOption({
+                    ...search,
+                    page: 0,
+                }),
+            ),
+        );
     };
+
+    const handleClickReset = () => {
+        dispatch(clearRunStateSearch());
+    };
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     return (
         <Form className="mb-14">
-            <Form.Row className="mb-2 align-items-center justify-content-between">
+            <Form.Row className="mb-2">
                 {/* 기타코드에서 가져옴 'GEN_CATE' */}
-                <MokaInput as="select" name="group" className="mr-2" value={search.group} onChange={handleChangeValue}>
-                    <option value="all">분류 전체</option>
-                </MokaInput>
-                <MokaInput as="select" name="cycle" className="mr-2" value={search.cycle} onChange={handleChangeValue}>
-                    <option value="all">주기 전체</option>
-                    <option value="30s">30초</option>
-                    <option value="1m">1분</option>
-                    <option value="2m">2분</option>
-                    <option value="5m">5분</option>
-                    <option value="10m">10분</option>
-                    <option value="20m">20분</option>
-                    <option value="30m">30분</option>
-                    <option value="1h">1시간</option>
-                    <option value="12h">12시간</option>
-                    <option value="24h">24시간</option>
-                </MokaInput>
-                <MokaInput as="select" name="type" className="mr-2" value={search.type} onChange={handleChangeValue}>
-                    <option value="all">타입 전체</option>
-                    <option value="ftp">FTP</option>
-                    <option value="copyNetwork">네트워크 복사</option>
-                </MokaInput>
-                <MokaInput as="select" name="server" className="mr-2" value={search.server} onChange={handleChangeValue}>
-                    <option value="all">배포 서버 전체</option>
-                </MokaInput>
-                <MokaInput as="select" name="state" value={search.state} onChange={handleChangeValue}>
-                    <option value="all">상태 전체</option>
-                    <option value="success">성공</option>
-                    <option value="fail">실패</option>
-                </MokaInput>
+                <Col xs={2} className="p-0 pr-2">
+                    <MokaInput as="select" name="category" value={search.category} onChange={handleChangeValue}>
+                        <option value="">분류 전체</option>
+                        {genCateRows &&
+                            genCateRows.map((c) => (
+                                <option key={c.id} value={c.id}>
+                                    {c.name}
+                                </option>
+                            ))}
+                    </MokaInput>
+                </Col>
+                <Col xs={2} className="p-0 pr-2">
+                    <MokaInput as="select" name="period" value={search.period} onChange={handleChangeValue}>
+                        <option value="">주기 전체</option>
+                        <option value="30">30초</option>
+                        <option value="60">1분</option>
+                        <option value="120">2분</option>
+                        <option value="300">5분</option>
+                        <option value="600">10분</option>
+                        <option value="1200">20분</option>
+                        <option value="1800">30분</option>
+                        <option value="3600">1시간</option>
+                        <option value="43200">12시간</option>
+                        <option value="86400">24시간</option>
+                        <option value="p">상시</option>
+                    </MokaInput>
+                </Col>
+                <Col xs={2} className="p-0 pr-2">
+                    <MokaInput as="select" name="sendType" value={search.sendType} onChange={handleChangeValue}>
+                        <option value="">타입 전체</option>
+                        <option value="FTP">FTP</option>
+                        <option value="ND">네트워크 복사</option>
+                    </MokaInput>
+                </Col>
+                <Col xs={4} className="p-0 pr-2">
+                    <MokaInput as="select" name="serverSeq" value={search.serverSeq} onChange={handleChangeValue}>
+                        <option value="">배포 서버 전체</option>
+                        {deployServerCode &&
+                            deployServerCode.map((s) => (
+                                <option key={s.serverSeq} value={s.serverSeq}>
+                                    {s.serverNm}
+                                </option>
+                            ))}
+                    </MokaInput>
+                </Col>
+                <Col xs={2} className="p-0">
+                    <MokaInput as="select" name="genResult" value={search.genResult} onChange={handleChangeValue}>
+                        <option value="">상태 전체</option>
+                        <option value="200">성공</option>
+                        <option value="500">실패</option>
+                    </MokaInput>
+                </Col>
             </Form.Row>
-            <div className="d-flex align-items-center justify-content-between">
-                <div className="d-flex">
-                    <div className="mr-2" style={{ width: 100 }}>
-                        <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                            <option value="all">전체</option>
-                            <option value="url">URL</option>
-                            <option value="route">배포 경로</option>
-                            <option value="desc">설명</option>
-                        </MokaInput>
-                    </div>
-                    <div style={{ width: 350 }}>
-                        <MokaInput name="keyword" value={search.keyword} onChange={handleChangeValue} />
-                    </div>
-                </div>
-                <div className="d-flex">
-                    <Button variant="searching" className="mr-1">
+            <Form.Row>
+                <Col xs={2} className="p-0 pr-2">
+                    <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                        <option value="">전체</option>
+                        <option value="keyword1">패키지명</option>
+                        <option value="keyword2">배포 경로</option>
+                        <option value="keyword3">설명</option>
+                    </MokaInput>
+                </Col>
+                <Col xs={6} className="p-0">
+                    <MokaInput name="keyword" value={search.keyword} onChange={handleChangeValue} />
+                </Col>
+                <Col xs={4} className="p-0 d-flex justify-content-end">
+                    <Button variant="searching" className="mr-1" onClick={handleClickSearch}>
                         검색
                     </Button>
-                    <Button variant="outline-neutral" onClick={handleClickReset}>
+                    <Button variant="negative" onClick={handleClickReset}>
                         초기화
                     </Button>
-                </div>
-            </div>
+                </Col>
+            </Form.Row>
         </Form>
     );
 };

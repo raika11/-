@@ -7,6 +7,26 @@ import { PAGESIZE_OPTIONS } from '@/constants';
  * initialState
  */
 export const initialState = {
+    runState: {
+        statisticList: [],
+        runStateList: [],
+        statisticTotal: 0,
+        runStateTotal: 0,
+        error: null,
+        search: {
+            sort: 'jobSeq,desc',
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            searchType: '',
+            keyword: '',
+            useTotal: '',
+            category: '',
+            period: '',
+            sendType: '',
+            serverSeq: '',
+            genResult: '',
+        },
+    },
     work: {
         list: [],
         total: 0,
@@ -131,6 +151,11 @@ export default handleActions(
         /**
          * 검색조건 변경
          */
+        [act.CHANGE_RUN_STATE_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.runState.search = payload;
+            });
+        },
         [act.CHANGE_WORK_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.work.search = payload;
@@ -150,6 +175,11 @@ export default handleActions(
          * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,
+        [act.CLEAR_RUN_STATE_SEARCH]: (state) => {
+            return produce(state, (draft) => {
+                draft.runState.search = initialState.runState.search;
+            });
+        },
         [act.CLEAR_WORK_SEARCH]: (state) => {
             return produce(state, (draft) => {
                 draft.work.search = initialState.work.search;
@@ -173,6 +203,40 @@ export default handleActions(
         [act.CLEAR_SERVER]: (state) => {
             return produce(state, (draft) => {
                 draft.deployServer.server = initialState.deployServer.server;
+            });
+        },
+        /**
+         * 작업 실행 통계 목록 조회
+         */
+        [act.GET_JOB_STATISTIC_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.runState.statisticList = body.list;
+                draft.runState.statisticTotal = body.totalCnt;
+                draft.runState.error = initialState.runState.error;
+            });
+        },
+        [act.GET_JOB_STATISTIC_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.runState.statisticList = initialState.runState.statisticList;
+                draft.runState.statisticTotal = initialState.runState.statisticTotal;
+                draft.runState.error = payload;
+            });
+        },
+        /**
+         * 작업 실행 현황 목록 조회
+         */
+        [act.GET_JOB_STATISTIC_SEARCH_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.runState.runStateList = body.list;
+                draft.runState.runStateTotal = body.totalCnt;
+                draft.runState.error = initialState.runState.error;
+            });
+        },
+        [act.GET_JOB_STATISTIC_SEARCH_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.runState.runStateList = initialState.runState.runStateList;
+                draft.runState.runStateTotal = initialState.runState.runStateTotal;
+                draft.runState.error = payload;
             });
         },
         /**

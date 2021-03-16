@@ -57,7 +57,7 @@ public abstract class AbstractPushSender implements Sender {
     @Override
     public void doTask(PushContents pushItem, Integer appSeq) {
 
-        log.debug(" AbstractPushSender [doTask] ");
+        log.debug(" AbstractPushSender [doTask] "+ pushItem.getPushType());
 
         try {
             //예약일시 체크
@@ -196,14 +196,13 @@ public abstract class AbstractPushSender implements Sender {
                     AtomicInteger currentPage = new AtomicInteger(1);
 
 
-                futureMap.put(completionService.submit(() -> {
+                    futureMap.put(completionService.submit(() -> {
 
                         int tokenRstIdx = 0;
-                        //int pageIdx = 1;
-                         while (lastTokenSeq >= (tokenRstIdx = tokenIdx.getAndAdd(tokenCnt))) {
-                             log.info("lastTokenSeq ="+ lastTokenSeq);
-                             log.info("tokenRstIdx  ="+ tokenRstIdx);
-                             log.info("tokenCnt     ="+ tokenCnt);
+
+                        while (lastTokenSeq >= (tokenRstIdx = tokenIdx.getAndAdd(tokenCnt))) {
+
+                             //log.info("lastTokenSeq ="+ lastTokenSeq+ "tokenRstIdx  ="+ tokenRstIdx+ "tokenCnt     ="+ tokenCnt);
 
                              /**
                               * TODO 6. 앱별 푸시 쓰레드에서 각 대상 토큰 목록 조회, page 처리 필요
@@ -212,18 +211,17 @@ public abstract class AbstractPushSender implements Sender {
                               */
                              log.debug(Thread
                                      .currentThread()
-                                     .getName() + " appSeq : {},  pageIdx : {}", appSeq, tokenRstIdx);
+                                     .getName() + " appSeq : {},  tokenRstIdx : {},  lastTokenSeq : {}", appSeq, tokenRstIdx, lastTokenSeq);
                            // log.info("lastTokenSeq="+lastTokenSeq + ": pageIdx="+pageIdx+": tokenCnt ="+tokenIdx.getAndAdd(tokenCnt));
 
                             try {
                                 List<PushAppToken> pushApplist = findAllToken(pushType, contentSeq, appSeq, lastTokenSeq, currentPage.getAndAdd(1), tokenCnt);
 
                                 log.info("[ 토큰 푸시 메세지 발송 Start ] ");
-                                log.info("pushApplist.get(0).getTokenSeq()  ="+ pushApplist.get(0).getTokenSeq());
-                                log.info("pushApplist.get(0).getTokenSeq()  ="+ pushApplist.get(0).getToken());
 
                                 PushResponseMessage response = sendMessage(pushApplist, pushMessage);
 
+                                log.info("###################################################################");
                                 log.info("getMulticastId  ="+ response.getMulticastId());
                                 log.info("getSuccess      ="+ response.getSuccess());
                                 log.info("getFailure      ="+ response.getFailure());
@@ -240,12 +238,6 @@ public abstract class AbstractPushSender implements Sender {
                                 log.error(String.valueOf(e));
                                 throw new Exception(e);
                             }
-                            /**
-                             * TODO 7. 에러 발생한 토큰 삭제 및 메시지 발송 완료 된 토큰 이력 정보 update
-                             */
-                            //   deleteTokens(pushTokens);
-
-
                         }
                         return true;
                     }), appSeq);

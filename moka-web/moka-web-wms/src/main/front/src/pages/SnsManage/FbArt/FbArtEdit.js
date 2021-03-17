@@ -147,18 +147,21 @@ const FbArtEdit = () => {
                     </Col>
                 </Row>*/}
 
-                <Row className="m-0 mb-2">
-                    <Col xs={12} className="p-0 pr-12 d-flex align-items-center">
-                        <Form.Label className="mb-0 h4 font-weight-bold color-gray-800 mr-12" style={{ width: '70px' }}>
-                            원본 기사
-                        </Form.Label>
-                        <span className="ft-12 text-neutral">ID {edit.totalId}</span>
-                    </Col>
-                </Row>
-
                 <Row className="m-0">
                     <Col xs={4} className="p-0 pr-12">
-                        <MokaImage width={155} img={edit.article.imgUrl} />
+                        <Row>
+                            <Col xs={12} className="pr-0">
+                                <Form.Label className="mb-0 h4 font-weight-bold color-gray-800 mr-12" style={{ width: '70px' }}>
+                                    원본 기사
+                                </Form.Label>
+                                <span className="ft-12 text-neutral">ID {edit.totalId}</span>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={12}>
+                                <MokaImage width={155} img={edit.article.imgUrl} />
+                            </Col>
+                        </Row>
                     </Col>
                     <Col xs={8} className="p-0">
                         {/*<MokaInput value={edit.article.title} inputProps={{ plaintext: true }} className="font-weight-bold pt-0" disabled />*/}

@@ -338,7 +338,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                             <span className="ft-14 user-select-text">{temp.pressDateText}</span>
                         </div>
 
-                        <Button variant="outline-neutral flex-shrink-0" onClick={() => setHistoryModalShow(true)} size="sm">
+                        <Button variant="outline-neutral flex-shrink-0" onClick={() => setHistoryModalShow(true)}>
                             작업정보
                         </Button>
                         {/* 작업정보 모달 */}
@@ -377,7 +377,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         />
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
-                        <Button variant="outline-neutral" className="w-100" size="sm" onClick={() => setCodeModalShow(true)}>
+                        <Button variant="outline-neutral" className="w-100" onClick={() => setCodeModalShow(true)}>
                             통합분류표
                         </Button>
 

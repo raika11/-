@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
@@ -27,50 +27,110 @@ const ComponentWorkList = (props) => {
     /**
      * 페이지 미리보기
      */
-    const handleClickPreview = () => {
+    const handleClickPreview = useCallback(() => {
         if (area.page?.pageSeq) {
             window.open(`${API_BASE_URL}/preview/desking/page?pageSeq=${area.page.pageSeq}&areaSeq=${area.areaSeq}`, '페이지미리보기');
         }
-    };
+    }, [area]);
 
     /**
      * 비활성 영역의 셀렉트 option => 컴포넌트워크 값은 변동 X, status만 work로 변경한다!
      */
-    const handleChangeDisabled = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+    const handleChangeDisabled = useCallback(
+        (e) => {
+            e.preventDefault();
+            e.stopPropagation();
 
-        dispatch(
-            changeWorkStatus({
-                componentWorkSeq: Number(e.target.value),
-                status: 'work',
-            }),
-        );
-    };
+            dispatch(
+                changeWorkStatus({
+                    componentWorkSeq: Number(e.target.value),
+                    status: 'work',
+                }),
+            );
+        },
+        [dispatch],
+    );
 
     /**
      * 네이버채널 > 템플릿변경
      */
-    const handleChangeTemplate = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+    const handleChangeTemplate = useCallback(
+        (e) => {
+            e.preventDefault();
+            e.stopPropagation();
 
-        const { value } = e.target;
-        const { workseq } = e.target.dataset;
-        if (workseq === '') return;
+            const { value } = e.target;
+            const { workseq } = e.target.dataset;
+            if (workseq === '') return;
 
-        dispatch(
-            putComponentWorkTemplate({
-                componentWorkSeq: Number(workseq),
-                templateSeq: Number(value),
-            }),
-        );
-    };
+            dispatch(
+                putComponentWorkTemplate({
+                    componentWorkSeq: Number(workseq),
+                    templateSeq: Number(value),
+                }),
+            );
+        },
+        [dispatch],
+    );
+
+    /**
+     * 컴포넌트 워크의 타이틀 생성
+     */
+    const renderTitle = useCallback(() => {
+        if (isNaverChannel) {
+            // 네이버채널 예외처리
+            return (
+                <div style={{ width: 230 }}>
+                    <MokaInputLabel
+                        label="타입선택"
+                        labelWidth={50}
+                        as="select"
+                        labelClassName="ml-0"
+                        className="h-100 mb-0"
+                        value={componentWorkList.length > 0 ? componentWorkList[0].templateSeq : null}
+                        inputProps={{ size: 'sm', 'data-workseq': componentWorkList.length > 0 ? componentWorkList[0].seq : '' }}
+                        onChange={handleChangeTemplate}
+                    >
+                        <option hidden>템플릿 선택</option>
+                        {channelTpRows &&
+                            channelTpRows.map((code) => (
+                                <option key={code.id} value={code.id}>
+                                    {code.name}
+                                </option>
+                            ))}
+                    </MokaInputLabel>
+                </div>
+            );
+        } else if (isNaverStand) {
+            // 네이버스탠드 예외처리
+            return null;
+        } else {
+            return (
+                <React.Fragment>
+                    <div style={{ width: 170 }}>
+                        <MokaInput as="select" className="h-100" value={null} inputProps={{ size: 'sm' }} onChange={handleChangeDisabled}>
+                            <option value="" disabled>
+                                비활성 영역 보기
+                            </option>
+                            {disabledList.map((work) => (
+                                <option key={work.seq} value={work.seq}>
+                                    {work.componentName}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </div>
+                    <Button variant="outline-neutral" size="sm" className="flex-shrink-0" onClick={handleClickPreview}>
+                        페이지 미리보기
+                    </Button>
+                </React.Fragment>
+            );
+        }
+    }, [channelTpRows, componentWorkList, disabledList, handleChangeDisabled, handleChangeTemplate, handleClickPreview, isNaverChannel, isNaverStand]);
 
     /**
      * 컴포넌트 워크 render
      */
-    const render = React.useCallback(
+    const renderList = useCallback(
         (areaComp) => {
             const { componentSeq, editFormPart } = areaComp.component;
             const targetIdx = componentWorkList.findIndex((comp) => comp.componentSeq === componentSeq);
@@ -172,51 +232,11 @@ const ComponentWorkList = (props) => {
                 bodyClassName="p-0 mt-0 overflow-hidden"
             >
                 <div className="d-flex justify-content-between p-2 border-bottom" style={{ height: 45 }}>
-                    {isNaverChannel ? (
-                        // 네이버채널 예외처리
-                        <div style={{ width: 230 }}>
-                            <MokaInputLabel
-                                label="타입선택"
-                                labelWidth={47}
-                                as="select"
-                                labelClassName="ml-0"
-                                className="h-100 mb-0"
-                                value={componentWorkList.length > 0 ? componentWorkList[0].templateSeq : null}
-                                inputProps={{ size: 'sm', 'data-workseq': componentWorkList.length > 0 ? componentWorkList[0].seq : '' }}
-                                onChange={handleChangeTemplate}
-                            >
-                                <option hidden>템플릿 선택</option>
-                                {channelTpRows &&
-                                    channelTpRows.map((code) => (
-                                        <option key={code.id} value={code.id}>
-                                            {code.name}
-                                        </option>
-                                    ))}
-                            </MokaInputLabel>
-                        </div>
-                    ) : (
-                        <React.Fragment>
-                            <div style={{ width: 170 }}>
-                                <MokaInput as="select" className="h-100" value={null} inputProps={{ size: 'sm' }} onChange={handleChangeDisabled}>
-                                    <option value="" disabled>
-                                        비활성 영역 보기
-                                    </option>
-                                    {disabledList.map((work) => (
-                                        <option key={work.seq} value={work.seq}>
-                                            {work.componentName}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                            </div>
-                            <Button variant="outline-neutral" size="sm" className="flex-shrink-0" onClick={handleClickPreview}>
-                                페이지 미리보기
-                            </Button>
-                        </React.Fragment>
-                    )}
+                    {renderTitle()}
                 </div>
 
                 <div className="custom-scroll scrollable overflow-x-hidden" style={{ height: 'calc(100% - 45px)' }}>
-                    {leftList.map((areaComp) => render(areaComp))}
+                    {leftList.map((areaComp) => renderList(areaComp))}
                 </div>
             </MokaCard>
 
@@ -226,7 +246,7 @@ const ComponentWorkList = (props) => {
                     <div className="d-flex justify-content-end p-2 border-bottom" style={{ height: 45 }}></div>
 
                     <div className="custom-scroll scrollable overflow-x-hidden" style={{ height: 'calc(100% - 45px)' }}>
-                        {rightList.map((areaComp) => render(areaComp))}
+                        {rightList.map((areaComp) => renderList(areaComp))}
                     </div>
                 </MokaCard>
             )}

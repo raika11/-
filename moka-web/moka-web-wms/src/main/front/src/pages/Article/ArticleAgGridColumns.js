@@ -5,7 +5,7 @@ import TitleRenderer from './components/TitleRenderer';
 
 export default [
     {
-        headerName: '매체/분류',
+        headerName: '        매체/분류',
         field: 'source',
         width: 150,
         wrapText: true,

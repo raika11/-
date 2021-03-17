@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MokaCard } from '@components';
-import { Col, Row, Card } from 'react-bootstrap';
-import HotClickAgGrid from '@pages/Bulks/Bulkh/HotClickGrid/HotClickAgGrid';
 import clsx from 'clsx';
-import Button from 'react-bootstrap/Button';
-import BulkhHistoryModal from '@pages/Bulks/Bulkh/Modal/BulkhHistoryModal';
-import { getHotClickTitle, saveHotClick, getHotclickList, saveHotClickResend, GET_HOTCLICK_LIST, clearHotclicklist } from '@store/bulks';
+import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import toast, { messageBox } from '@/utils/toastUtil';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
-import moment from 'moment';
+import { Col, Card, Button } from 'react-bootstrap';
+import { MokaCard } from '@components';
+import HotClickAgGrid from '@pages/Bulks/Bulkh/HotClickGrid/HotClickAgGrid';
+import BulkhHistoryModal from '@pages/Bulks/Bulkh/Modal/BulkhHistoryModal';
+import { getHotClickTitle, saveHotClick, getHotclickList, saveHotClickResend, GET_HOTCLICK_LIST } from '@store/bulks';
+import toast, { messageBox } from '@/utils/toastUtil';
 
+/**
+ * 아티클핫클릭 리스트
+ */
 const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstances }) => {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -152,25 +154,24 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
             className="flex-fill h-100 mr-gutter"
             bodyClassName="scrollable d-flex flex-column"
             titleAs={
-                <Row>
-                    <Col className="justify-content-start" xs={3}>
-                        {/* <MokaInputLabel label="아티클 핫클릭" labelWidth={90} className="h5" as="none" /> */}
+                <div className="d-flex">
+                    <Col xs={3} className="p-0">
                         <Card.Title as="h2" className={clsx({ 'd-none': false }, 'mb-0')}>
                             {`아티클 핫클릭`}
                         </Card.Title>
                     </Col>
-                    <Col xs={7}>
-                        <Col className="align-self-top text-right p-0">{topTitleItem.send}</Col>
-                        <Col className="align-self-bottom text-right p-0">
-                            <span className={clsx('', topTitleItem.isWait && 'text-danger')}>{topTitleItem.wait}</span>
-                        </Col>
+                    <Col xs={9} className="p-0 d-flex">
+                        <div className="flex-fill text-right">
+                            <p className="mb-0">{topTitleItem.send}</p>
+                            <p className={clsx('mb-0', topTitleItem.isWait && 'text-danger')}>{topTitleItem.wait}</p>
+                        </div>
+                        <div className="ml-2 flex-shrink-0">
+                            <Button variant="outline-secondary" className="w-auto h-auto" onClick={handleClickHistoryModalButton}>
+                                편집정보
+                            </Button>
+                        </div>
                     </Col>
-                    <Col xs={2} className="p-0 pt-1">
-                        <Button variant="outline-secondary" size="md" style={{ width: '72px', height: '31px' }} onClick={handleClickHistoryModalButton}>
-                            편집정보
-                        </Button>
-                    </Col>
-                </Row>
+                </div>
             }
             footer
             footerClassName="justify-content-center"

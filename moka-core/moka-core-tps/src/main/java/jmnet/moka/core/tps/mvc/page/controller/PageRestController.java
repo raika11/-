@@ -470,4 +470,53 @@ public class PageRestController extends AbstractCommonController {
         return returnValue;
     }
 
+    /**
+     * 페이지 등록
+     *
+     * @param pageSeq 등록할 페이지순번
+     * @return
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            기타예외
+     */
+    @ApiOperation(value = "관련컴포넌트 활성화")
+    @PostMapping("/{pageSeq}/viewcp")
+    public ResponseEntity<?> postPage(
+            @ApiParam("페이지SEQ(필수)") @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq)
+            throws InvalidDataException, Exception {
+
+        Page page = pageService
+                .findPageBySeq(pageSeq)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
+        try {
+            // 등록
+            pageService.updateViewComponent(page);
+
+            // 결과리턴
+            PageDTO dto = modelMapper.map(page, PageDTO.class);
+            if (page.getParent() != null) {
+                ParentPageDTO parentDto = modelMapper.map(page.getParent(), ParentPageDTO.class);
+                dto.setParent(parentDto);
+            }
+
+            // purge 날림!!  성공실패여부는 리턴하지 않는다.
+            purge(dto);
+
+            String message = msg("tps.page.success.view-component");
+            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, message);
+            tpsLogger.success(ActionType.UPDATE, true);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE COMPONENT IN PAGE]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO UPDATE COMPONENT IN PAGE]", e, true);
+            throw new Exception(msg("tps.page.error.view-component"), e);
+        }
+
+    }
+
+
 }

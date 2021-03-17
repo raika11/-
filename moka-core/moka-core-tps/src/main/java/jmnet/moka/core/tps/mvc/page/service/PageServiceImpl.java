@@ -16,9 +16,13 @@ import jmnet.moka.core.common.template.ParsedItemDTO;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.common.dto.ItemDTO;
+import jmnet.moka.core.tps.mvc.component.dto.ComponentSearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
+import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
 import jmnet.moka.core.tps.mvc.page.dto.PageNode;
 import jmnet.moka.core.tps.mvc.page.dto.PageSearchDTO;
@@ -497,6 +501,47 @@ public class PageServiceImpl implements PageService {
                 }
             } else {
                 pageRelRepository.updateRelDatasets(newComponent, orgComponent);
+            }
+        }
+    }
+
+    @Override
+    public void updateViewComponent(Page page)
+            throws Exception {
+        // 관련 컴포넌트 모두 조회
+        ComponentSearchDTO search = ComponentSearchDTO
+                .builder()
+                .domainId(page
+                        .getDomain()
+                        .getDomainId())
+                .build();
+        search.setSearchType("pageSeq");
+        search.setKeyword(page
+                .getPageSeq()
+                .toString());
+        search.setUseTotal(MokaConstants.NO);
+        search.setSize(99999);
+        List<ComponentVO> list = componentService.findAllComponent(search);
+
+        for (ComponentVO componentVO : list) {
+            // VIEW_YN = N인 컴포넌트를 Y로 업데이트
+            if (componentVO
+                    .getViewYn()
+                    .equals(MokaConstants.NO)) {
+
+                Optional<Component> component = componentService.findComponentBySeq(componentVO.getComponentSeq());
+
+                if (component.isPresent()) {
+                    component
+                            .get()
+                            .setViewYn(MokaConstants.YES);
+                    HistPublishDTO histPublishDTO = HistPublishDTO
+                            .builder()
+                            .status(EditStatusCode.PUBLISH)
+                            .approvalYn(MokaConstants.YES)
+                            .build();
+                    componentService.updateComponent(component.get(), histPublishDTO);
+                }
             }
         }
     }

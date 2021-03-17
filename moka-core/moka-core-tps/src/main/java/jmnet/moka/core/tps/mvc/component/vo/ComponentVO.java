@@ -67,4 +67,11 @@ public class ComponentVO implements Serializable {
     @Column(name = "DATA_TYPE")
     @Builder.Default
     private String dataType = TpsConstants.DATATYPE_NONE;
+
+    /**
+     * 노출여부
+     */
+    @Column(name = "VIEW_YN")
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
 }

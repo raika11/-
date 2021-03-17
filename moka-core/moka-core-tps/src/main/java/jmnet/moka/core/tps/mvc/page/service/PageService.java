@@ -122,4 +122,12 @@ public interface PageService {
      * @param orgComponent 원본 컴포넌트
      */
     public void updatePageRelItems(Component newComponent, Component orgComponent);
+
+    /**
+     * 해당페이지에 해당하는 모든 컴포넌트를 활성화
+     *
+     * @param page 페이지
+     */
+    void updateViewComponent(Page page)
+            throws Exception;
 }

@@ -219,8 +219,8 @@ const PackageEdit = () => {
             footerClassName="justify-content-center"
             footer
             footerButtons={[
-                { text: '종료', variant: 'negative', className: 'mr-2' },
-                { text: seqNo ? '수정' : '생성', variant: 'positive', className: 'mr-2' },
+                { text: '종료', variant: 'negative', className: 'mr-1' },
+                { text: seqNo ? '수정' : '생성', variant: 'positive', className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancel },
             ]}
         >

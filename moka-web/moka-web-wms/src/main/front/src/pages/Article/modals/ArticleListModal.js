@@ -55,23 +55,28 @@ const ArticleListModal = (props) => {
      * 입력값 변경
      * @param {object} e Event
      */
-    const handleChangeValue = (e) => {
-        const { name, value } = e.target;
+    const handleChangeValue = useCallback(
+        (e) => {
+            const { name, value } = e.target;
 
-        if (name === 'period') {
-            // 기간 설정
-            const { number, date } = e.target.selectedOptions[0].dataset;
-            setPeriod([Number(number), date]);
+            if (name === 'period') {
+                // 기간 설정
+                const { number, date } = e.target.selectedOptions[0].dataset;
+                setPeriod([Number(number), date]);
 
-            // startServiceDay, endServiceDay 변경
-            const nd = new Date();
-            const startServiceDay = moment(nd).subtract(Number(number), date).startOf('day');
-            const endServiceDay = moment(nd);
-            setSearch({ ...search, startServiceDay, endServiceDay });
-        } else {
-            setSearch({ ...search, [name]: value });
-        }
-    };
+                // startServiceDay, endServiceDay 변경
+                const nd = new Date();
+                const startServiceDay = moment(nd).subtract(Number(number), date).startOf('day');
+                const endServiceDay = moment(nd);
+                setSearch({ ...search, startServiceDay, endServiceDay });
+            } else {
+                setSearch({ ...search, [name]: value });
+            }
+
+            if (valError.sourceList) setValError({ ...valError, sourceList: false });
+        },
+        [search, valError],
+    );
 
     /**
      * validate
@@ -276,7 +281,7 @@ const ArticleListModal = (props) => {
                         value={search.sourceList}
                         className="mr-2"
                         width={390}
-                        onChange={(value) => setSearch({ ...search, sourceList: value })}
+                        onChange={(value) => handleChangeValue({ target: { name: 'sourceList', value } })}
                         isInvalid={valError.sourceList}
                         sourceType="JOONGANG"
                     />

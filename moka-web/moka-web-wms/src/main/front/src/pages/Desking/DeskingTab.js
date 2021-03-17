@@ -20,7 +20,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                 height={817}
                 className="flex-fill h-100"
                 tabContentClass="flex-fill position-relative"
-                hasHotkeys={true}
+                hasHotkeys
                 tabs={[
                     /**
                      * 미리보기

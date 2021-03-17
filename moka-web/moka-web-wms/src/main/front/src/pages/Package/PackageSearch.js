@@ -51,7 +51,7 @@ const PackageSearch = () => {
         <Form>
             <Form.Row className="mb-2">
                 <Col xs={12} className="p-0 d-flex">
-                    <div style={{ width: 140 }} className="mr-2">
+                    <div style={{ width: 355 }} className="mr-2">
                         <CodeAutocomplete name="masterCode" placeholder="카테고리 선택" value={search.masterCode} onChange={handleChangeValue} />
                     </div>
                     <div style={{ width: 120 }} className="mr-2">
@@ -76,7 +76,7 @@ const PackageSearch = () => {
                             <option value="N">비구독 상품</option>
                         </MokaInput>
                     </div>
-                    <div style={{ width: 120 }} className="mr-2">
+                    <div style={{ width: 120 }}>
                         <MokaInput as="select" className="mr-2" name="expoYn" value={search.expoYn} onChange={handleChangeValue}>
                             <option value="all">전체</option>
                             <option value="Y">노출</option>

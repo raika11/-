@@ -170,7 +170,7 @@ const FbArtEdit = () => {
                 </Row>
             </div>
 
-            <hr className="divider my-24" />
+            <hr className="my-24" />
 
             {/* 페이스북 메타 정보 */}
             {/*<div>

@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Figure from 'react-bootstrap/Figure';
 import { ACCEPTED_IMAGE_TYPES } from '@/constants';
 import { MokaAlert, MokaIcon } from '@components';
+import img_logo from '@assets/images/img_logo@3x.png';
 
 const propTypes = {
     /**
@@ -64,6 +65,11 @@ const propTypes = {
      * @default
      */
     deleteButton: PropTypes.bool,
+
+    /**
+     * 에러 이미지 사용
+     */
+    isUsedDefaultImage: PropTypes.bool,
 };
 const defaultProps = {
     width: 171,
@@ -76,6 +82,7 @@ const defaultProps = {
     alt: '이미지',
     selectAccept: [],
     deleteButton: false,
+    isUsedDefaultImage: false,
 };
 
 /**
@@ -83,7 +90,7 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = forwardRef((props, ref) => {
-    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton } = props;
+    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton, isUsedDefaultImage } = props;
 
     // state
     const [imgSrc, setImgSrc] = useState(null);
@@ -121,6 +128,23 @@ const MokaImageInput = forwardRef((props, ref) => {
         alertProps.body = '이미지파일만 등록할 수 있습니다';
     };
 
+    const handleErrorImage = (e) => {
+        if (isUsedDefaultImage) {
+            e.target.src = img_logo;
+            wrapRef.current.classList.add('onerror-image-wrap');
+            e.target.classList.add('onerror-image');
+        }
+    };
+
+    const handleLoadImage = (e) => {
+        if (isUsedDefaultImage) {
+            if (e.target.src.replace(window.location.origin, '') !== img_logo) {
+                wrapRef.current.classList.remove('onerror-image-wrap');
+                e.target.classList.remove('onerror-image');
+            }
+        }
+    };
+
     /**
      * input의 file 삭제하는 함수
      */
@@ -130,6 +154,10 @@ const MokaImageInput = forwardRef((props, ref) => {
         }
         if (inputRef.current) {
             inputRef.current.value = null;
+        }
+
+        if (isUsedDefaultImage && imgRef.current) {
+            imgRef.current.classList.remove('onerror-image');
         }
         imageHide();
         setAlert(false);
@@ -222,7 +250,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         as="div"
                     >
                         {/* 이미지 미리보기 */}
-                        <Figure.Image className="center-image" alt={alt} src={imgSrc} ref={imgRef} />
+                        <Figure.Image className="center-image" alt={alt} src={imgSrc} ref={imgRef} onLoad={handleLoadImage} onError={handleErrorImage} />
 
                         {/* 파일 삭제 버튼 */}
                         {deleteButton && imgSrc && (

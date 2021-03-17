@@ -383,7 +383,7 @@ const SnsMetaEdit = () => {
                                 }
                             />
                             <div className="d-flex flex-column flex-fill">
-                                <MokaImageInput className="mb-1 input-border" img={edit.fb.imgUrl} width={192} height={108} deleteButton={true} />
+                                <MokaImageInput className="mb-1 input-border" img={edit.fb.imgUrl} width={192} height={108} deleteButton={true} isUsedDefaultImage={true} />
                                 <p className="text-danger mb-0">1200*628 이미지 용량 제한: 1MB.</p>
                             </div>
                         </div>
@@ -533,7 +533,7 @@ const SnsMetaEdit = () => {
                                 }
                             />
                             <div className="d-flex flex-column flex-fill">
-                                <MokaImageInput className="mb-1 input-border" img={edit.tw.imgUrl} width={192} height={108} deleteButton={true} />
+                                <MokaImageInput className="mb-1 input-border" img={edit.tw.imgUrl} width={192} height={108} deleteButton={true} isUsedDefaultImage={true} />
                                 <p className="text-danger mb-0">1200*628 이미지 용량 제한: 1MB.</p>
                             </div>
                         </div>

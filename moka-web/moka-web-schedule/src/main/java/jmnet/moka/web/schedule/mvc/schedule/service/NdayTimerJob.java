@@ -51,7 +51,7 @@ public class NdayTimerJob extends AbstractScheduleJob {
         String strNHour24 = format6.format(date);
         String strNMinute = format7.format(date);
         String strNSecond = format8.format(date);
-        String strNHour12 = format9.format(date);
+        int strNHour12 = Integer.parseInt(format9.format(date));
         String strNweekdayK = format10.format(date);
         String hsTime = format11.format(date);
         String ymdhm = format12.format(date);
@@ -81,7 +81,7 @@ public class NdayTimerJob extends AbstractScheduleJob {
         boolean success = stringFileUpload(stringBuffer.toString());
         log.debug("file upload : {}", success);
 
-        //AbstractSchduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
+        //AbstractScheduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
         //임시로 성공/실패만 입력 + 그외 입력값은 입력정의 필요
         setFinish(success);
 

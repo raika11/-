@@ -85,7 +85,7 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
                 }
             }
 
-            //AbstractSchduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
+            //AbstractScheduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
             //임시로 성공/실패만 입력 + 그외 입력값은 입력정의 필요
             setFinish(success);
 

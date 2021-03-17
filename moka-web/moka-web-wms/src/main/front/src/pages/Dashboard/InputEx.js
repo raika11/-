@@ -124,6 +124,8 @@ const InputEx = () => {
 
             <MokaInputLabel label="우측" as="dateTimePicker" value={temp.date} className="mb-2" inputClassName="right" onChange={handleChangeDate} />
 
+            <MokaInputLabel label="탑" as="dateTimePicker" value={temp.date} className="mb-2" inputClassName="top" onChange={handleChangeDate} />
+
             <MokaInputLabel label="중앙 Fixed" as="dateTimePicker" value={temp.date} className="mb-2" inputClassName="center-fixed" onChange={handleChangeDate} />
 
             <hr className="divider" />

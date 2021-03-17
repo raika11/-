@@ -30,22 +30,20 @@ export default [
         tooltipField: 'title',
         cellRendererFramework: ({ value }) => {
             return (
-                <>
-                    <div
-                        style={{
-                            boxSizing: 'border-box',
-                            whiteSpace: 'normal',
-                            lineHeight: '20px',
-                            fontSize: '14px',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                        }}
-                    >
-                        {value}
-                    </div>
-                </>
+                <div
+                    style={{
+                        boxSizing: 'border-box',
+                        whiteSpace: 'normal',
+                        lineHeight: '20px',
+                        fontSize: '14px',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                    }}
+                >
+                    {value}
+                </div>
             );
         },
         cellStyle: {
@@ -59,7 +57,7 @@ export default [
     {
         headerName: '사용',
         field: 'usedYn',
-        width: 64,
+        width: 43,
         cellRenderer: 'usedYnRenderer',
     },
     {

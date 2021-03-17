@@ -28,6 +28,10 @@
     &.right .rdtPicker {
         right: 0px;
     }
+
+    &.top .rdtPicker {
+        bottom: 34px;
+    }
 }
 
 .rdtOpen .rdtPicker {

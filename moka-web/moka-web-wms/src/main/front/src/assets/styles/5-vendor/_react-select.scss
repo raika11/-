@@ -17,6 +17,8 @@
         padding: 3px $input-padding-x 1px $input-padding-x;
 
         .react-select__placeholder {
+            @include font-size(14px);
+            color: $gray-500;
             margin: 0px;
         }
 

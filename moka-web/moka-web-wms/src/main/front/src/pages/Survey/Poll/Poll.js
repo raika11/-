@@ -61,7 +61,7 @@ const Poll = ({ match }) => {
 
                 {/* 리스트 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
-                    <MokaCard className="w-100" title="투표 관리">
+                    <MokaCard className="w-100" title="투표 관리" bodyClassName="d-flex flex-column">
                         <Suspense fallback={<MokaLoader />}>
                             <PollList onDelete={handleClickDelete} />
                         </Suspense>

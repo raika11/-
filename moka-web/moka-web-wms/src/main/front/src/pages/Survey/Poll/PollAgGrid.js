@@ -50,7 +50,6 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
                 columnDefs={columnDefs}
                 onRowNodeId={(row) => row.id}
                 headerHeight={50}
-                agGridHeight={585}
                 rowData={rowData}
                 page={searchOptions.page}
                 size={searchOptions.size}
@@ -60,7 +59,7 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
                 onChangeSearchOption={handleChangeSearchOptions}
                 onRowClicked={handleClickRow}
                 selected={selected}
-                className="ag-grid-align-center"
+                className="ag-grid-align-center flex-fill custom-scroll"
                 preventRowClickCell={['delete', 'preview']}
             />
             <PollPreviewModal pollSeq={previewId} show={previewModalShow} onHide={() => setPreviewModalShow(false)} />

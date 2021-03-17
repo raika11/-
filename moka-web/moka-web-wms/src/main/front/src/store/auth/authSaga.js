@@ -5,6 +5,7 @@ import * as api from './authApi';
 import * as domainApi from '../domain/domainApi';
 import * as authAction from './authAction';
 import { AUTHORIZATION, SIGNIN_MEMBER_ID, SIGNIN_MEMBER_ID_SAVE } from '@/constants';
+import commonUtil from '@utils/commonUtil';
 
 /**
  * 로그인
@@ -126,7 +127,12 @@ export function* getUserMenuTree({ payload: { pathName } }) {
             const menuById = {};
             menuPaths['/404'] = '';
             menuPaths['/403'] = '';
-            getOpenMenuParentMenuId(response.data.body.children, pathName, menuById, menuOpens, menuPaths);
+            if (commonUtil.isEmpty(response.data.body)) {
+                response.data.body = {};
+            } else {
+                getOpenMenuParentMenuId(response.data.body.children, pathName, menuById, menuOpens, menuPaths);
+            }
+
             response.data.body.menuPaths = menuPaths;
             response.data.body.menuOpens = menuOpens;
             response.data.body.menuById = menuById;

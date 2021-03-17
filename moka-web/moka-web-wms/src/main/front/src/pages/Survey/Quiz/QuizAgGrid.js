@@ -104,6 +104,7 @@ const QuizAgGrid = () => {
                 total={total}
                 displayPageNum={DISPLAY_PAGE_NUM}
                 onChangeSearchOption={handleChangeSearchOption}
+                className="flex-fill custom-scroll"
                 selected={quizInfo.quizSeq}
             />
         </>

@@ -97,7 +97,7 @@ const PodCastModal = (props) => {
                 onHide={handleClickHide}
                 title={`브라이트 코브 등록`}
                 size="xl"
-                bodyClassName="overflow-x-hidden custom-scroll"
+                bodyClassName="overflow-x-hidden custom-scroll d-flex flex-column"
                 footerClassName="d-flex justify-content-center"
                 draggable
             >

@@ -275,9 +275,9 @@ const SnsMetaEdit = () => {
         >
             <Form>
                 {/* 페이스북 */}
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-2 align-items-center">
                     <MokaInputLabel label="Facebook" className="m-0 h5" as="none" />
-                    <div className="d-flex">
+                    <div>
                         <Button variant="outline-neutral" size="sm" className="mr-1" onClick={handleClickFbTokenModalShow}>
                             토큰 관리
                         </Button>
@@ -447,9 +447,9 @@ const SnsMetaEdit = () => {
                 <hr className="divider color-gray-300" />
 
                 {/* 트위터 */}
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-2 align-items-center">
                     <MokaInputLabel label="Twitter" className="m-0 h5" as="none" />
-                    <div className="d-flex">
+                    <div>
                         <Button variant="outline-tw" size="sm" className="mr-1" onClick={() => handleClickPublish('tw')}>
                             TW 전송
                         </Button>

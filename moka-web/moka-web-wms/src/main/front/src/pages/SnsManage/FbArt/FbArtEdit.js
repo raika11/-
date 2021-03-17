@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Form, Col, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { DB_DATEFORMAT, snsNames } from '@/constants';
@@ -143,8 +143,10 @@ const FbArtEdit = () => {
                     <span className="ft-12 text-neutral">ID {edit.totalId}</span>
                 </Col>
                 <Col xs={8} className="p-0">
-                    <div className="flex-fill font-weight-bold p-0 form-control-plaintext" title={edit.article.title}>
-                        {edit.article.title}
+                    <div className="flex-fill form-control-plaintext text-truncate">
+                        <OverlayTrigger overlay={<Tooltip id="title-overlay">{edit.article.title}</Tooltip>}>
+                            <span className="font-weight-bold">{edit.article.title}</span>
+                        </OverlayTrigger>
                     </div>
                 </Col>
             </div>

@@ -34,7 +34,7 @@ const JaJopan = ({ match, displayName }) => {
 
             <Row className="m-0">
                 <Col
-                    sm={layout.sidebarIsOpen === true ? 5 : 4}
+                    sm={layout.sidebarIsOpen ? 5 : 4}
                     // md={7}
                     // clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })
                     className="p-0 pr-gutter"
@@ -53,7 +53,7 @@ const JaJopan = ({ match, displayName }) => {
                 </Col> */}
                 {/* )} */}
                 {view && (
-                    <Col sm={layout.sidebarIsOpen === true ? 7 : 8} className="p-0">
+                    <Col sm={layout.sidebarIsOpen ? 7 : 8} className="p-0">
                         <JaJopanEdit match={match} />
                     </Col>
                 )}

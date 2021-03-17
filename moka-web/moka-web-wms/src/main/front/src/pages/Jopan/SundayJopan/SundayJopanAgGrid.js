@@ -35,9 +35,7 @@ const SundayJopanAgGrid = ({ match, setView }) => {
     /**
      * 목록 Row클릭
      */
-    const handleRowClicked = useCallback((row) => {
-        console.log(row);
-    }, []);
+    const handleRowClicked = useCallback((row) => {}, []);
 
     /**
      * 보기 버튼 클릭

@@ -95,7 +95,7 @@ const ReporterEdit = ({ match }) => {
 
     return (
         <>
-            <hr className="divider mt-0" />
+            <hr className="mt-0" />
 
             <div className="d-flex align-items-center">
                 {/* 기자 이미지 */}
@@ -159,7 +159,7 @@ const ReporterEdit = ({ match }) => {
                 </div>
             </div>
 
-            <hr className="divider" />
+            <hr />
 
             <Form>
                 <Form.Row className="mb-2">

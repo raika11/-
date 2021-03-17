@@ -289,6 +289,9 @@ body {
 /* -----------------------
 * divider
 * ---------------------- */
+hr {
+    border-top: 1px solid $gray-300;
+}
 .divider {
     display: block;
     width: 100%;

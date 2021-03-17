@@ -4,8 +4,8 @@
 }
 
 .navbar-brand {
+  @include font-size($navbar-brand-font-size);
   font-weight: $navbar-brand-font-weight;
-  font-size: $navbar-brand-font-size;
   padding: $navbar-brand-padding-y $navbar-brand-padding-x;
   color: $navbar-brand-color;
   display: block;
@@ -23,9 +23,9 @@
 
 .nav-icon,
 .nav-flag {
+  @include font-size(1.5rem);
   padding: .1rem .8rem;
   display: block;
-  font-size: 1.5rem;
   color: $gray-600;
   transition: $transition-appearance-fast;
   line-height: 1.4;
@@ -48,6 +48,7 @@
 
 .nav-item {
   .indicator {
+    @include font-size(0.675rem);
     background: $primary;
     box-shadow: $box-shadow;
     border-radius: 50%;
@@ -60,7 +61,6 @@
     right: -8px;
     text-align: center;
     transition: top .1s ease-out;
-    font-size: 0.675rem;
     color: $white;
   }
 

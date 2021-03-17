@@ -42,7 +42,7 @@
 
   // Placeholder font-size
   &::placeholder {
-    font-size: $input-btn-font-size;
+    @include font-size($input-btn-font-size);
   }
 }
 

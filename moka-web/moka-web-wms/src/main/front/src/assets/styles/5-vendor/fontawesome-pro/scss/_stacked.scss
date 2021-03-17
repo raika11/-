@@ -23,7 +23,7 @@
 }
 
 .#{$fa-css-prefix}-stack-2x {
-  font-size: 2em;
+  @include font-size(2em);
 }
 
 .#{$fa-css-prefix}-inverse {

@@ -4,17 +4,56 @@
 // Variables
 @import '1-variables/app';
 
-// Bootstrap
-@import 'bootstrap/scss/bootstrap';
+// Bootstrap (functions, variables, mixins)
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
 
 // Theme mixins
+@import '2-mixins/font_size';
 @import '2-mixins/button';
 @import '2-mixins/forms';
 @import '2-mixins/modal';
 @import '2-mixins/switch';
 @import '2-mixins/tabs';
-@import '2-mixins/wizard';
 @import '2-mixins/custom_mixin';
+
+// Bootstrap (bootstrap/scss/bootstrap 파일 분리)
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+@import 'bootstrap/scss/type';
+@import 'bootstrap/scss/images';
+@import 'bootstrap/scss/code';
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/tables';
+@import 'bootstrap/scss/forms';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/transitions';
+@import 'bootstrap/scss/dropdown';
+@import 'bootstrap/scss/button-group';
+@import 'bootstrap/scss/input-group';
+@import 'bootstrap/scss/custom-forms';
+@import 'bootstrap/scss/nav';
+@import 'bootstrap/scss/navbar';
+@import 'bootstrap/scss/card';
+@import 'bootstrap/scss/breadcrumb';
+@import 'bootstrap/scss/pagination';
+@import 'bootstrap/scss/badge';
+@import 'bootstrap/scss/jumbotron';
+@import 'bootstrap/scss/alert';
+@import 'bootstrap/scss/progress';
+@import 'bootstrap/scss/media';
+@import 'bootstrap/scss/list-group';
+@import 'bootstrap/scss/close';
+@import 'bootstrap/scss/toasts';
+@import 'bootstrap/scss/modal';
+@import 'bootstrap/scss/tooltip';
+@import 'bootstrap/scss/popover';
+@import 'bootstrap/scss/carousel';
+@import 'bootstrap/scss/spinners';
+@import 'bootstrap/scss/utilities';
+@import 'bootstrap/scss/print';
+// @import 'bootstrap/scss/bootstrap';
 
 // Theme components
 @import '3-components/accordion';
@@ -61,7 +100,7 @@
 @import '4-utilities/close';
 
 // 3rd party plugins
-@import "@fullcalendar/bootstrap/main";
+@import '@fullcalendar/bootstrap/main';
 
 // 3rd party plugin styles
 @import '5-vendor/perfect-scrollbar';

@@ -60,12 +60,12 @@
     padding-top: 0;
 }
 .rc-tree-header {
+    @include font-size(13px);
     border-top: solid 1px;
     border-bottom: solid 2px;
     border-color: #E1E3EB;
     margin-left: 0;
     margin-right: 0;
     margin-bottom:10px;
-    font-size: 13px;
     padding: 10px 0 5px 0;
 }

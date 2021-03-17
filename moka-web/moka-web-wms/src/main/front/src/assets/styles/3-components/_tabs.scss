@@ -45,7 +45,7 @@
 }
 
 .tab-title {
-  font-size: $font-size-lg;
+  @include font-size($font-size-lg);
 }
 
 .tab-vertical .nav-tabs {

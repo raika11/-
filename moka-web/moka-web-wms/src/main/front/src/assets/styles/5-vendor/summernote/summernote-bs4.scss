@@ -1,5 +1,5 @@
 @import 'summernote-icons.scss';
-@import "elements.scss";
+@import 'elements.scss';
 @import 'summernote-common.scss';
 
 .note-toolbar {
@@ -7,9 +7,9 @@
 }
 
 .note-btn-group .note-btn {
+  @include font-size(13px);
   border-color: $border-color;
   padding: 0.28rem 0.65rem;
-  font-size: 13px;
 }
 
 .note-btn>span.note-icon-caret:nth-child(2) {

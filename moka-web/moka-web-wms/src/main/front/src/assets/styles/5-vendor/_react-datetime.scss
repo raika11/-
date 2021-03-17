@@ -121,7 +121,7 @@
 }
 .rdtPicker th.rdtNext,
 .rdtPicker th.rdtPrev {
-    font-size: 21px;
+    @include font-size(21px);
     vertical-align: top;
 }
 
@@ -205,8 +205,8 @@ td.rdtYear:hover {
     background: #eee;
 }
 .rdtCounter .rdtCount {
+    @include font-size(1.2em);
     height: 20%;
-    font-size: 1.2em;
     line-height: 21px;
 }
 
@@ -217,8 +217,8 @@ td.rdtYear:hover {
 }
 
 .rdtMilli input {
+    @include font-size(1.2em);
     width: 100%;
-    font-size: 1.2em;
     margin-top: 37px;
 }
 

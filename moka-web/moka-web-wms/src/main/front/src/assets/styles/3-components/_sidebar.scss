@@ -51,10 +51,10 @@ a.sidebar-link {
 
   i,
   svg {
+    @include font-size(1rem);
     margin-right: .75rem;
     color: $sidebar-link-icon-color;
     opacity: .5;
-    font-size: 1rem;
   }
 }
 
@@ -163,8 +163,8 @@ a.sidebar-link {
 
 // Sidebar brand
 .sidebar-brand {
+  @include font-size($sidebar-brand-font-size);
   font-weight: $sidebar-brand-font-weight;
-  font-size: $sidebar-brand-font-size;
   padding: $sidebar-brand-padding-y $sidebar-brand-padding-x;
   color: $sidebar-brand-color;
   display: block;
@@ -247,19 +247,19 @@ a.sidebar-link {
 
 // Sidebar header
 .sidebar-header {
+  @include font-size($sidebar-header-font-size);
   background: transparent;
   color: $sidebar-header-color;
   padding: $sidebar-header-padding;
-  font-size: $sidebar-header-font-size;
   text-transform: $sidebar-header-text-transform;
 }
 
 // Sidebar bottom
 .sidebar-bottom {
+  @include font-size(0.8rem);
   transition: $sidebar-transition;
   padding: $spacer;
   width: inherit;
-  font-size: 0.8rem;
   bottom: 0;
   left: 0;
   position: fixed;

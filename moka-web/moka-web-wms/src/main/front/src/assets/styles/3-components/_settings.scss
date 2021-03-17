@@ -84,7 +84,7 @@
 
 .settings-title {
   padding: $spacer*1.35 $spacer*1.5;
-  font-size: .875rem;
+  @include font-size(.875rem);
 
   h4 {
     margin-bottom: 0;

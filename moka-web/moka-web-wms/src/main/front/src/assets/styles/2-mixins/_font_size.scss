@@ -1,0 +1,29 @@
+/**
+* node_modules/bootstrap/scss/vendor/_rfs.scss의 font-size 재정의
+* - letter-spacing
+*/
+@mixin font-size($fs, $important: false) {
+    @include rfs($fs, $important);
+
+    // Cache $fs unit
+    $fs-unit: if(type-of($fs) == "number", unit($fs), false);
+
+    // If $fs isn't a number (like inherit) or $fs has a unit (not px or rem, like 1.5em) or $ is 0, just print the value
+    @if not $fs-unit or $fs-unit != "" and $fs-unit != "px" and $fs-unit != "rem" or $fs == 0 {
+    } @else {
+        @if $fs-unit == "px" {
+            $fs: $fs / ($fs * 0 + 1);
+        }
+          @else if $fs-unit == "rem" {
+            $fs: $fs / ($fs * 0 + 1 / $rfs-rem-value);
+        }
+
+        @if $fs <= 12 {
+            letter-spacing: 0;
+        } @else if $fs <= 14 {
+            letter-spacing: -0.5px;
+        } @else if $fs <= 16 {
+            letter-spacing: -1px;
+        }
+    }
+}

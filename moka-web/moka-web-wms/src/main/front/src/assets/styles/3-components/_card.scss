@@ -19,7 +19,7 @@
     height: 24px;
 
     svg { 
-      font-size: 17px;
+      @include font-size(17px);
     }
   }
   &.transparent {

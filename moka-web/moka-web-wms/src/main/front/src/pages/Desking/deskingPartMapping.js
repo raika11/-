@@ -3,26 +3,26 @@ import { REQUIRED_REGEX } from '@utils/regexUtil';
 
 // 편집영역에서 사용하는 partList
 export const deskingPartList = [
-    { index: 0, title: '약물', id: 'SPECIAL_CHAR' },
-    { index: 1, title: '이미지', id: 'THUMB_FILE_NAME' },
-    { index: 2, title: '아이콘', id: 'ICON_FILE_NAME' },
-    { index: 3, title: 'Box 제목', id: 'NAMEPLATE' },
-    { index: 4, title: 'Box URL', id: 'NAMEPLATE_URL' },
-    { index: 5, title: '말머리', id: 'TITLE_PREFIX' },
-    { index: 6, title: '제목/부제위치', id: 'TITLE_LOC' },
-    { index: 7, title: '제목', id: 'TITLE' },
-    { index: 8, title: '부제', id: 'SUB_TITLE' },
-    { index: 9, title: '리드문', id: 'BODY_HEAD' },
-    { index: 10, title: 'URL', id: 'LINK_URL' },
-    { index: 11, title: '영상', id: 'VOD_URL' },
-];
+    { title: '약물', id: 'SPECIAL_CHAR' },
+    { title: '이미지', id: 'THUMB_FILE_NAME' },
+    { title: '아이콘', id: 'ICON_FILE_NAME' },
+    { title: 'Box 제목', id: 'NAMEPLATE' },
+    { title: 'Box URL', id: 'NAMEPLATE_URL' },
+    { title: '말머리', id: 'TITLE_PREFIX' },
+    { title: '제목/부제위치', id: 'TITLE_LOC' },
+    { title: '제목', id: 'TITLE' },
+    { title: '부제', id: 'SUB_TITLE' },
+    { title: '리드문', id: 'BODY_HEAD' },
+    { title: 'URL', id: 'LINK_URL' },
+    { title: '영상', id: 'VOD_URL' },
+].map((part, index) => ({ ...part, index }));
 
 // 제목의 폰트 사이즈 리스트 (편집영역에서 사용)
 export const fontSizeList = [
-    { index: 0, title: 'Image type1-기본', id: CODETYPE_DS_FONT_IMGD },
-    { index: 1, title: 'Vod type1-기본', id: CODETYPE_DS_FONT_VODD },
-    { index: 2, title: 'Image type1-와이드', id: CODETYPE_DS_FONT_IMGW },
-];
+    { title: 'Image type1-기본', id: CODETYPE_DS_FONT_IMGD },
+    { title: 'Vod type1-기본', id: CODETYPE_DS_FONT_VODD },
+    { title: 'Image type1-와이드', id: CODETYPE_DS_FONT_IMGW },
+].map((size, index) => ({ ...size, index }));
 export const fontSizeObj = fontSizeList.reduce((all, ft) => ({ ...all, [ft.id]: ft }), {});
 
 // regex가 여러개일 때 리스트로 변경 -> 추후 필요시 작업

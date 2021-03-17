@@ -5,9 +5,8 @@ body {
     height: 100vh;
     overflow: hidden;
     overflow-x: auto;
-    letter-spacing: -0.5px;
     color: $gray-600;
-    font-size: 13px;
+    @include font-size(13px);
 }
 
 .custom-scroll {
@@ -89,7 +88,7 @@ body {
             margin-bottom: 45px !important;
         }
         label{
-            font-size: 1.5em;
+            @include font-size(1.5em);
             color: $white;
         }
         input{
@@ -122,12 +121,12 @@ body {
         margin-bottom: 40px;
         button{
             padding: 13px !important;
-            font-size: 15px;
+            @include font-size(15px);
         }
     }
 
     .etc-btn {
-        font-size: 15px;
+        @include font-size(15px);
         label{
             cursor: pointer;
             span{
@@ -496,7 +495,7 @@ hr {
 }
 
 .prepend-link-text {
-    font-size: 12px;
+    @include font-size(12px);
     padding: 0.25rem 0.5rem;
     height: 100%;
     border-top-right-radius: 0;
@@ -545,7 +544,7 @@ hr {
 .monaco-hover .hover-row {
     font-family: 'Noto Sans KR';
     padding: 0px 4px;
-    font-size: 13px;
+    @include font-size(13px);
 }
 
 .monaco-editor .monaco-findInput {
@@ -561,7 +560,7 @@ hr {
     justify-content: center;
     width: 16px;
     height: 16px;
-    font-size: 12px;
+    @include font-size(12px);
 
     @each $number, $color in $group-colors {
         &[data-group-number="#{$number}"] {

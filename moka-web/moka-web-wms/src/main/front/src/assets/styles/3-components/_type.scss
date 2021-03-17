@@ -18,11 +18,11 @@ h6, .h6 {
 }
 
 .text-sm {
-  font-size: $font-size-sm;
+  @include font-size($font-size-sm);
 }
 
 .text-lg {
-  font-size: $font-size-lg;
+  @include font-size($font-size-lg);
 }
 
 b, strong {

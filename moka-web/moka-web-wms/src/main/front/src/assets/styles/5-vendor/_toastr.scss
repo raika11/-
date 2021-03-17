@@ -67,10 +67,9 @@
             box-shadow: none;
 
             .message {
+                @include font-size(14px);
                 line-height: 1.71;
                 color: $gray-800;
-                letter-spacing: -1.05px;
-                font-size: 14px;
             }
         }
 

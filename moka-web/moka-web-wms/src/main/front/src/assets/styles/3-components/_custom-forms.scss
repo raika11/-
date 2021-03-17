@@ -11,7 +11,7 @@
 }
 
 .custom-control-label {
-    font-size: 12px;
+    @include font-size(12px);
 }
 
 .custom-checkbox {

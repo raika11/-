@@ -1,9 +1,9 @@
 .font-size-lg {
-  font-size: $font-size-lg;
+  @include font-size($font-size-lg);
 }
 
 .font-size-sm {
-  font-size: $font-size-lg;
+  @include font-size($font-size-lg);
 }
 
 .hover-underline {
@@ -14,9 +14,9 @@
 
 $font-sizes: 9, 10, 11, 12, 13, 14, 15, 16;
 @each $size in $font-sizes {
-    .ft-#{$size} {
-        font-size: #{$size}px;
-    }
+  .ft-#{$size} {
+    @include font-size($size);
+  }
 }
 
 .pre {

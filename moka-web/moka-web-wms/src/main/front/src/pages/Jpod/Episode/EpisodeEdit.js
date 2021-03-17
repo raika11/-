@@ -761,7 +761,7 @@ const ChannelEdit = (props) => {
                         <MokaInputLabel label={`태그`} id="keywords" name="keywords" placeholder="" value={editData.keywords} onChange={handleEditDataChange} />
                     </Col>
                 </Form.Row>
-                <hr className="divider" />
+                <hr />
                 {/* 팟캐스트 구분( 오디오, 비디오 ) */}
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100 align-items-center">
@@ -917,7 +917,7 @@ const ChannelEdit = (props) => {
                         </Form.Row>
                     </>
                 )}
-                <hr className="divider" />
+                <hr />
                 {/* 진행자( 고정 패널 ) */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`출연진(고정패널)`} as="none" />
@@ -1000,7 +1000,7 @@ const ChannelEdit = (props) => {
                         </Form.Row>
                     );
                 })}
-                <hr className="divider" />
+                <hr />
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`출연진(게스트)`} as="none" />
                     <Button

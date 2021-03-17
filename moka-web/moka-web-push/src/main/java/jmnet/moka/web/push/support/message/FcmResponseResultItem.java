@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <pre>
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
+@ToString
 public class FcmResponseResultItem {
     /**
      * 메시지 고유 ID

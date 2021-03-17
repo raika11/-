@@ -3,6 +3,7 @@
  */
 package jmnet.moka.web.push.support.message;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
@@ -31,6 +32,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PushHttpResponse {
 
 

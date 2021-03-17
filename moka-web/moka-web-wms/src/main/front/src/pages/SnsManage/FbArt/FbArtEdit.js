@@ -159,7 +159,7 @@ const FbArtEdit = () => {
                         </Row>
                         <Row>
                             <Col xs={12}>
-                                <MokaImage width={155} img={edit.article.imgUrl} />
+                                <MokaImage width={160} height={90} img={edit.article.imgUrl} />
                             </Col>
                         </Row>
                     </Col>

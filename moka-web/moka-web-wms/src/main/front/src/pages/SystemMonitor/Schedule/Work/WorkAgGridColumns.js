@@ -1,4 +1,5 @@
 import React from 'react';
+// import WorkServerSeqRenderer from '../components/WorkServerSeqRenderer';
 import WorkDescRenderer from '../components/WorkDescRenderer';
 import WorkStateRenderer from '../components/WorkStateRenderer';
 
@@ -20,6 +21,9 @@ export default [
         field: 'category',
         cellStyle: { display: 'flex', alignItems: 'center' },
         width: 50,
+        // cellRendererFramework: (params) => {
+        //     return <WorkServerSeqRenderer {...params} serverSeq={params.data.serverSeq} />;
+        // },
     },
     {
         headerName: '주기',

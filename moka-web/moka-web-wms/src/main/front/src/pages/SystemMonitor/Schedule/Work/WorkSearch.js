@@ -94,7 +94,7 @@ const WorkSearch = ({ match }) => {
                             <option value="3600">1시간</option>
                             <option value="43200">12시간</option>
                             <option value="86400">24시간</option>
-                            <option value="p">상시</option>
+                            <option value="0">상시</option>
                         </MokaInput>
                     </Col>
                     <Col xs={2} className="p-0 pr-2">

@@ -21,10 +21,12 @@ public interface PushAppService {
 
 
     /**
-     * 대상 토큰 일련번호로 App 조회
+     * 앱 일련번호 조회
      *
-     * @param appSeq 토큰 ID
-     * @return 가장 큰 토큰 일련번호
+     * @param AppOs
+     * @param AppDiv
+     * @param DevDiv
+     * @return 앱 일련번호 조회
      */
-    <PushApp> Optional<jmnet.moka.web.push.mvc.sender.entity.PushApp> findByAppSeq(Integer appSeq);
+    Optional<PushApp> findById(String AppOs, String AppDiv, String DevDiv);
 }

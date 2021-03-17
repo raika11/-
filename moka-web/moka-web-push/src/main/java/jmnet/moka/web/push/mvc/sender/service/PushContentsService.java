@@ -76,4 +76,11 @@ public interface PushContentsService {
      */
     Page<PushContents> findAllByContentSeq(PushContentSeqSearchDTO search);
 
+    /**
+     * 푸시 컨텐츠 조회
+     *
+     * @param relContentId 일련번호
+     * @return 컨텐츠 정보
+     */
+    Optional<PushContents> findByRelContentId(Long relContentId);
 }

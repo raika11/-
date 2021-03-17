@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
  * 작업 Repository 2021. 2. 18.
  */
 @Repository
-public interface PushAppRepository extends JpaRepository<PushApp, Integer>, PushAppRepositorySupport {
+public interface PushAppRepository extends JpaRepository<PushApp, Long>, PushAppRepositorySupport {
 
 }

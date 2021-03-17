@@ -21,7 +21,7 @@ public class PushAppServiceImpl implements PushAppService {
     }
 
     @Override
-    public Optional<PushApp> findByAppSeq(Integer appSeq) {
-        return pushAppRepository.findAllByAppSeq(appSeq);
+    public Optional<PushApp> findById(String AppOs, String AppDiv, String DevDiv) {
+        return pushAppRepository.findByAppOsAndAppDivAndDevDiv(AppOs, AppDiv, DevDiv);
     }
 }

@@ -2,7 +2,7 @@
   "T": {
     "className": "jmnet.moka.web.push.sender.NewsFlashSender",
     "pushTitle": "속보",
-    "tokenCnt": 100,
+    "tokenCnt": 1000,
     "threadPoolCnt": 10
   },
   "S": {

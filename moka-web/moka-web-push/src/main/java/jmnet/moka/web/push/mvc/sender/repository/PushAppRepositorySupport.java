@@ -18,4 +18,13 @@ public interface PushAppRepositorySupport {
      */
     Optional<PushApp> findAllByAppSeq(Integer appSeq);
 
+    /**
+     * 특정작업 존재여부 확인 - 앱 일련번호
+     *
+     * @param AppOs
+     * @param AppDiv
+     * @param DevDiv
+     * @return 작업
+     */
+    Optional<PushApp> findByAppOsAndAppDivAndDevDiv(String AppOs, String AppDiv, String DevDiv);
 }

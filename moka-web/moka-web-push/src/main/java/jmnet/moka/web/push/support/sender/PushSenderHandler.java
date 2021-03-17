@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.web.push.common.AbstractCommonController;
 import jmnet.moka.web.push.config.PropertyHolder;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.service.PushContentsService;
@@ -35,7 +36,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class PushSenderHandler {
+public class PushSenderHandler extends AbstractCommonController {
 
 
     @Autowired
@@ -110,24 +111,6 @@ public class PushSenderHandler {
 
         String pushType = pushItem.getPushType();
 
-        log.debug("[ addPushJob ] pushType=" + pushType);
-
-        if (pushType.equals("T")) {
-            pushItem.setPushType("newsFlashSender");
-        }
-        if (pushType.equals("S")) {
-            pushItem.setPushType("recommendArticlesSender");
-        }
-        if (pushType.equals("R")) {
-            pushItem.setPushType("previewTodaySender");
-        }
-        if (pushType.equals("N")) {
-            pushItem.setPushType("newsRoomLetterSender");
-        }
-        if (pushType.equals("E")) {
-            pushItem.setPushType("exampleSender");
-        }
-
         if (scheduleMap.containsKey(pushItem.getPushType())) {// 작업 유형 존재할 경우 실행
             pushSendJobTaskExecutor.execute(() -> scheduleMap
                     .get(pushItem.getPushType())
@@ -138,25 +121,21 @@ public class PushSenderHandler {
     }
 
     /**
-     * 예약 작업 제거
+     * 예약 작업 제거(예약 작업 테이블에 del_yn을 'N'으로 변경)
      *
      * @param pushContents 작업 일련번호
      */
     public boolean removeReservePushJob(PushContents pushContents)
             throws Exception {
 
-        // TODO 1. 예약 작업 테이블에 del_yn을 'N'으로 변경
-
         try {
             PushContents returnValue = pushContentsService.saveUsedYn(pushContents);
-            log.debug("[SUCCESS TO INSERT PUSH CONTENTS]");
+            String message = msg("wpush.contents.success.update.usedYn");
+            log.debug(message);
         } catch (Exception e) {
-            log.error("[FAIL TO INSERT PUSH CONTENTS]", e);
-            throw new Exception("예약 작업 테이블에 del_yn 변경이 되지 않았습니다.", e);
+            String message = msg("wpush.contents.error.update.usedYn");
+            throw new Exception(message, e);
         }
-
-
-
         return false;
     }
 
@@ -169,6 +148,4 @@ public class PushSenderHandler {
     public boolean existPushType(String pushType) {
         return scheduleMap != null && scheduleMap.containsKey(pushType);
     }
-
-
 }

@@ -20,6 +20,11 @@ public class PushContentsServiceImpl implements PushContentsService {
     private PushContentsRepository pushContentsRepository;
 
     @Override
+    public Optional<PushContents> findByRelContentId(Long relContentId) {
+        return pushContentsRepository.findByRelContentId(relContentId);
+    }
+
+    @Override
     public boolean isValidData(PushAppSearchDTO search) {
         Long relContentId = search.getRelContentId();
         return pushContentsRepository

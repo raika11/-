@@ -32,7 +32,7 @@ const Row = ({ data, onRowClicked, selected, lastRow }) => {
             }}
         >
             {/* 좌측 이미지 */}
-            <MokaImage className="mr-3 flex-shrink-0 border" width={120} height={98} img={data.imgUrl || '//pds.joins.com/news/search_direct_link/000.jpg'} inputBorder={false} />
+            <MokaImage className="mr-3 flex-shrink-0 border" width={120} height={80} img={data.imgUrl || '//pds.joins.com/news/search_direct_link/000.jpg'} inputBorder={false} />
 
             {/* 우측 컨텐츠 */}
             <div className="flex-fill overflow-hidden color-searching" style={{ fontSize: '14px' }}>
@@ -41,6 +41,7 @@ const Row = ({ data, onRowClicked, selected, lastRow }) => {
                     <a
                         target="_blank"
                         href={data.linkUrl}
+                        className="color-gray-800"
                         rel="noopener noreferrer"
                         onClick={(e) => {
                             e.preventDefault();

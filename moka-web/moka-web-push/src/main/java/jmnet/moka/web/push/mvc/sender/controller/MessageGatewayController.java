@@ -2,15 +2,14 @@ package jmnet.moka.web.push.mvc.sender.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.web.push.common.AbstractCommonController;
-import jmnet.moka.web.push.mvc.sender.dto.*;
-import jmnet.moka.web.push.mvc.sender.entity.PushApp;
+import jmnet.moka.web.push.mvc.sender.dto.PushAppSearchDTO;
+import jmnet.moka.web.push.mvc.sender.dto.PushSendDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
 import jmnet.moka.web.push.mvc.sender.entity.PushContentsProcPK;
@@ -21,7 +20,6 @@ import jmnet.moka.web.push.support.sender.PushSenderHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.List;
 
 
 /**
@@ -66,24 +63,7 @@ public class MessageGatewayController extends AbstractCommonController {
         this.pushContentsProcService = pushContentsProcService;
     }
 
-    public static String UsedYn = MokaConstants.YES;        //노출유무
-    public static String PushYn = MokaConstants.NO;         //푸시상태
-    public static String SendEmailYn = MokaConstants.NO;    //메일 발송 여부 ( Y:발송, N:발송안함 )
-    public static String PicYn = MokaConstants.NO;          //레터에서 편집자 사진 노출여부(Y/N)
-    public static String RegId = "ssc01";                   //등록자
-    public static String StatusFlag = "0";                  //전송 상태
-
-    public static Integer AppSeq;
-    public static String AppOs;
-    public static String AppDiv;
-    public static String DevDiv;
-    public static Long relContentId;
-
-    public static Long contentSeq;
-
-    public static int chkAppSeq;
-    public static Long cnt;
-    public static Long deleteYn = 0L;
+    public static Integer APP_SEQ;
 
     /**
      * 신규 Job 추가
@@ -97,124 +77,61 @@ public class MessageGatewayController extends AbstractCommonController {
     public ResponseEntity<?> postJob(@Valid PushSendDTO sendDTO)
             throws Exception {
 
-        AppOs  = sendDTO.getPushApps().get(0).getAppOs();
-        AppDiv = sendDTO.getPushApps().get(0).getDevDiv();
-        DevDiv = sendDTO.getPushApps().get(0).getAppDiv();
+        for (String param : sendDTO.getAppSeq()) {
 
-        //푸시기사 일련번호(관련 콘텐트ID)
-        relContentId = sendDTO.getRelContentId();
+            APP_SEQ =  Integer.parseInt(param);
 
-        //앱 정보
-        PushAppSearchDTO checkItem = new PushAppSearchDTO();
-        checkItem.setAppOs(AppOs);
-        checkItem.setDevDiv(DevDiv);
-        checkItem.setAppDiv(AppDiv);
+            /** Check if there is AppSeq    */
+            PushAppSearchDTO checkItem = new PushAppSearchDTO();
+            checkItem.setAppSeq(APP_SEQ);
 
-        if(sendDTO.getJobSeq() == null){
-            log.debug("{} chkAppSeq AppOs: {} AppDiv: {} DevDiv: {}", AppOs, AppDiv, DevDiv);
-
-            PushApp pushApp = pushAppService
-                    .findById(AppOs, AppDiv, DevDiv)
-                    .orElseThrow(() -> {
-                        return new NoDataException(msg("wpush.error.notnull.appPushInfo"));
-                    });
-
-            chkAppSeq = pushApp.getAppSeq();
-            AppSeq = chkAppSeq;
-        }else{
-            AppSeq = sendDTO.getJobSeq().intValue();
+            if (!pushAppService.isValidData(checkItem)) {
+                String message = msg("wpush.error.notnull.appPushInfo");
+                throw new InvalidDataException(message);
+            }
         }
 
-        checkItem.setAppSeq(AppSeq);
-
-        /**
-         *  TB_PUSH_CONTENTS에 푸시 정보 등록
-         */
-        checkItem.setRelContentId(relContentId);
-
-        //등록불가 작업인지 확인(기존데이터와 contentSeq 가 동일하면 등록불가)
-        if (pushContentsService.isValidData(checkItem)) {
-            String message = msg("common.error.dup.content");
-            throw new InvalidDataException(message);
-        }
-
+        /** Insert to TB_PUSH_CONTENTS the PushContent Info */
         try {
-            pushContentsService.savePushContents(PushContents
-                    .builder()
-                    .relContentId(relContentId)
-                    .pushType(sendDTO.getPushType())
-                    .iconType(sendDTO.getIconType())
-                    .rsvDt(sendDTO.getReserveDt())
-                    .picYn(sendDTO.getPicYn())
-                    .sendEmail(sendDTO.getSendEmail())
-                    .repId(sendDTO.getRepId())
-                    .relUrl(sendDTO.getRelUrl())
-                    .imgUrl(sendDTO.getImgUrl())
-                    .pushImgUrl(sendDTO.getPushUrl())
-                    .title(sendDTO.getTitle())
-                    .subTitle(sendDTO.getTitle())
-                    .content(sendDTO.getContent())
-                    .usedYn(UsedYn)
-                    .pushYn(PushYn)
-                    .sendEmail(SendEmailYn)
-                    .picYn(PicYn)
-                    .regId(RegId)
-                    .modId(RegId)
-                    .regDt(McpDate.now())
-                    .modDt(McpDate.now())
-                    .build());
+            PushContents pushContents = modelMapper.map(sendDTO, PushContents.class);
+            pushContentsService.savePushContents(pushContents);
         } catch (Exception e) {
             String message = msg("wpush.contents.error.insert");
             throw new Exception(message, e);
         }
 
-        /**
-         * TB_PUSH_CONTENTS_PROC에 앱별 푸시 상태 정보 등록
-         * - status_flag = '0'
-         * */
-        try {
+        PushContents pushContents = new PushContents();
 
-            PushContents pushContents = pushContentsService
-                    .findByRelContentId(relContentId)
-                    .orElseThrow(() -> {
-                        return new NoDataException(msg("wpush.contentsProc.error.notnull"));
-                    });
-            contentSeq = pushContents.getContentSeq();
-            cnt = 0L;
+        for (String param : sendDTO.getAppSeq()) {
+            APP_SEQ = Integer.parseInt(param);
 
-            PushContentsProcPK pushContentsProcPK = PushContentsProcPK
-                    .builder()
-                    .contentSeq(contentSeq)
-                    .appSeq(AppSeq.intValue())
-                    .build();
+            /** Insert to TB_PUSH_CONTENTS_PROC the PushContentProc Info    */
+            try {
+                pushContents = pushContentsService
+                        .findByRelContentId(sendDTO.getRelContentId())
+                        .orElseThrow(() -> {
+                            return new NoDataException(msg("wpush.contentsProc.error.notnull"));
+                        });
 
-            pushContentsProcService.savePushContentsProc(PushContentsProc
-                    .builder()
-                    .id(pushContentsProcPK)
-                    .statusFlag(StatusFlag)
-                    .targetCnt(cnt)
-                    .sendCnt(cnt)
-                    .rcvCnt(cnt)
-                    .openCnt(cnt)
-                    .lastTokenSeq(cnt)
-                    .build());
-        } catch (Exception e) {
-            String message = msg("wpush.contentsProc.error.insert");
-            throw new Exception(message, e);
+                PushContentsProcPK pushContentsProcPK = PushContentsProcPK
+                        .builder()
+                        .contentSeq(pushContents.getContentSeq())
+                        .appSeq(APP_SEQ)
+                        .build();
+
+                PushContentsProc pushContentsProc = new PushContentsProc();
+                pushContentsProc.setId(pushContentsProcPK);
+                pushContentsProcService.savePushContentsProc(pushContentsProc);
+
+            } catch (Exception e) {
+                String message = msg("wpush.contentsProc.error.insert");
+                throw new Exception(message, e);
+            }
         }
 
         /** Push request to pushSenderHandler */
-        PushContents pushItem = PushContents
-                .builder()
-                .pushType(sendDTO.getPushType())
-                .contentSeq(contentSeq)
-                .rsvDt(sendDTO.getReserveDt())
-                .build();
-        boolean success = pushSenderHandler.addPushJob(pushItem,AppSeq);
-
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
-
-        //ResultDTO<Boolean> resultDto = new ResultDTO<>();
+        boolean success = pushSenderHandler.addPushJob(pushContents);
+        ResultDTO<Boolean> resultDto = resultDto = new ResultDTO<>(success, "success");
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -231,10 +148,9 @@ public class MessageGatewayController extends AbstractCommonController {
                                        @ApiParam("Task 일련번호") @PathVariable("jobTaskSeq")
                                        @Min(value = 0, message = "wpush.common.error.min.seq") Long jobTaskSeq)
             throws Exception {
-        /**
-         * 요청한 취소 정보가 취소 가능한 작업인지 확인
-         */
-        //Long deleteYn = pushContentsService.countByContentSeqAndPushYn(jobTaskSeq, PushYn);
+
+        /** Check if the requested cancellation information is a cancelable operation */
+        Long deleteYn = pushContentsService.countByContentSeqAndPushYn(jobTaskSeq, MokaConstants.NO);
 
         if(deleteYn == 0){
             String message = msg("wpush.error.send.cancel.no-data");
@@ -246,12 +162,13 @@ public class MessageGatewayController extends AbstractCommonController {
                         .orElseThrow(() -> {
                             return new NoDataException(msg("wpush.contents.error.notnull"));
                         });
-                // 예약 취소 상태 처리 값 셋팅
+
                 pushContents.setUsedYn(MokaConstants.NO);
 
                 boolean success = pushSenderHandler.removeReservePushJob(pushContents);
                 ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
                 return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
             } catch (Exception e) {
                 String message = msg("wpush.error.send.cancel");
                 throw new Exception(message);

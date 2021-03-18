@@ -106,7 +106,7 @@ public class PushSenderHandler extends AbstractCommonController {
      *
      * @param pushItem job 정보
      */
-    public boolean addPushJob(PushContents pushItem, int appSeq) {
+    public boolean addPushJob(PushContents pushItem) {
         boolean result = false;
 
         String pushType = pushItem.getPushType();
@@ -114,7 +114,7 @@ public class PushSenderHandler extends AbstractCommonController {
         if (scheduleMap.containsKey(pushItem.getPushType())) {// 작업 유형 존재할 경우 실행
             pushSendJobTaskExecutor.execute(() -> scheduleMap
                     .get(pushItem.getPushType())
-                    .doTask(pushItem, appSeq));
+                    .doTask(pushItem));
             result = true;
         }
         return result;

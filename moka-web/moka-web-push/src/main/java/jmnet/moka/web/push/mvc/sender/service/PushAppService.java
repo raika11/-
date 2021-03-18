@@ -17,7 +17,7 @@ public interface PushAppService {
      * @param search 작업 정보
      * @return 중복여부
      */
-    Optional<PushApp> isValidData(PushAppSearchDTO search);
+    boolean isValidData(PushAppSearchDTO search);
 
 
     /**

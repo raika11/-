@@ -17,7 +17,6 @@ import jmnet.moka.web.push.support.sender.AbstractPushSender;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,7 +24,7 @@ import org.springframework.stereotype.Service;
  * 푸시 전송 뉴스룸레터 Sender
  * Project : moka
  * Package : jmnet.moka.web.push.sender
- * ClassName : RecommendArticlesSender
+ * ClassName : NewsRoomLetterSender
  * Created : 2021-02-08 ince
  * </pre>
  *
@@ -95,23 +94,23 @@ public class NewsRoomLetterSender extends AbstractPushSender {
 
 
     @Override
-    protected PushAppTokenStatus findAppTokenStatus(Integer appSeq, Long contentSeq) {
-        return null;
-    }
-
-
-    @Override
-    protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx, int tokenCnt)
+    protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long startTokenSeq, int pageIdx, int tokenCnt)
             throws Exception {
-        log.debug("NewsRoomLetterSender :findAllToken  {}", pageIdx);
-
-        /** 토큰 목록 조회 */
-        return pushAppTokenService.findPushAppToken(appSeq, PageRequest.of(pageIdx, tokenCnt));
+        return pushAppTokenService.findPushAppToken(appSeq, startTokenSeq, (startTokenSeq + tokenCnt) - 1);
     }
 
     @Override
     protected List<PushAppToken> findAllToken(PushAppTokenSearchDTO pushAppTokenSearch)
             throws Exception {
-        return null;
+        return pushAppTokenService.findPushAppToken(pushAppTokenSearch);
     }
+
+
+    @Override
+    protected PushAppTokenStatus findAppTokenStatus(Integer appSeq, Long contentSeq) {
+        return pushAppTokenService.findPushAppTokenStatus(appSeq);
+    }
+
+
+
 }

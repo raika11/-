@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.quiz.dto;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import jmnet.moka.core.tps.common.code.DeviceTypeCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
@@ -56,6 +57,13 @@ public class QuizVoteDTO implements Serializable {
     private String memId;
 
     /**
+     * 회원일련번호
+     */
+    @ApiModelProperty(value = "회원일련번호")
+    @Min(value = 0, message = "{tps.quiz-vote.error.min.memSeq}")
+    private Long memSeq;
+
+    /**
      * 로그인SITE(소셜로그인경로포함)
      */
     @ApiModelProperty(value = "로그인SITE(소셜로그인경로포함)")
@@ -63,7 +71,14 @@ public class QuizVoteDTO implements Serializable {
     private String loginSite;
 
     /**
-     * PC아이디
+     * 로그인TYPE(소셜로그인경로포함)
+     */
+    @ApiModelProperty(value = "로그인TYPE(소셜로그인경로포함)")
+    @Size(max = 8, message = "{tps.quiz-vote.error.size.loginType}")
+    private String loginType;
+
+    /**
+     * PC아이디 LOGIN_SITE
      */
     @ApiModelProperty(value = "PC아이디")
     @Size(max = 100, message = "{tps.quiz-vote.error.size.pcId}")

@@ -134,6 +134,7 @@ public class BoardRestController extends AbstractCommonController {
      *
      * @param boardId  게시판 일련번호
      * @param boardSeq 게시판아이디 (필수)
+     * @param boardSeq 게시판아이디 (필수)
      * @return 게시판정보
      * @throws NoDataException 게시판 정보가 없음
      */
@@ -460,7 +461,7 @@ public class BoardRestController extends AbstractCommonController {
             tpsLogger.success(ActionType.DELETE);
 
             // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.common.success.delete"));
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -484,9 +485,9 @@ public class BoardRestController extends AbstractCommonController {
             @ApiParam("게시물 순서번호") @RequestParam("ordNo") @Min(value = 0, message = "{tps.board.error.min.ordNo}") Integer ordNo) {
 
         if (boardService.updateOrdNo(boardSeq, ordNo) > 0) {
-            return new ResponseEntity<>(new ResultDTO<>(true), HttpStatus.OK);
+            return new ResponseEntity<>(new ResultDTO<>(true, msg("tps.board.success.change-order")), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new ResultDTO<>(false), HttpStatus.OK);
+            return new ResponseEntity<>(new ResultDTO<>(false, msg("tps.board.error.change-order")), HttpStatus.OK);
         }
     }
 

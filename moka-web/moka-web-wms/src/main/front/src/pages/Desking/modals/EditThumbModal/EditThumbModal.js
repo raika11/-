@@ -247,26 +247,32 @@ const EditThumbModal = (props) => {
             draggable
         >
             <DndProvider backend={HTML5Backend}>
-                <MokaCardTabs
-                    height={480}
-                    className="shadow-none w-100"
-                    tabs={[
-                        // 아카이브 탭
-                        <div className="d-flex h-100 flex-column">
-                            <ArchiveSearch />
-                            <ArchiveTable onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
-                        </div>,
+                {/* totalId가 있을 때에만 탭으로 노출 */}
+                {!totalId ? (
+                    <div className="d-flex px-card pb-card w-100 flex-column" style={{ height: 480 }}>
+                        <ArchiveSearch />
+                        <ArchiveTable onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
+                    </div>
+                ) : (
+                    <MokaCardTabs
+                        height={480}
+                        className="shadow-none w-100"
+                        tabs={[
+                            // 아카이브 탭
+                            <div className="d-flex h-100 flex-column">
+                                <ArchiveSearch />
+                                <ArchiveTable onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
+                            </div>,
 
-                        // 본문 소재 탭
-                        totalId && (
+                            // 본문 소재 탭
                             <div className="d-flex h-100 flex-column">
                                 <ArticleImageList totalId={totalId} onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
-                            </div>
-                        ),
-                    ].filter((a) => a)}
-                    tabNavs={['아카이브', totalId && '본문 소재 리스트'].filter((a) => a)}
-                    fill
-                />
+                            </div>,
+                        ]}
+                        tabNavs={['아카이브', '본문 소재 리스트']}
+                        fill
+                    />
+                )}
                 <div className={clsx('deskthumb-gif-list d-flex justify-content-between overflow-hidden', { collapse: collapse })} style={{ backgroundColor: 'F4F5F6' }}>
                     {/* 대표사진 */}
                     <div className="deskthumb-main d-flex justify-content-center align-items-center" style={{ width: 202 }}>

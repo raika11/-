@@ -109,8 +109,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                     <MokaInput
                         as="imageFile"
                         inputProps={{
-                            width: '100%',
-                            height: 160,
+                            width: 200,
                             img: special.imgUrl,
                             deleteButton: true,
                             setFileValue: handleFileValue,
@@ -236,35 +235,36 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                             <p className="m-0 ft-12 text-neutral">*'" 포함 특수문자 사용금지</p>
                         </div>
                     </Form.Row>
+                </Col>
+            </Form.Row>
 
-                    {/* 서비스시작일/서비스종료일 */}
-                    <Form.Row className="mb-2">
-                        <Col xs={6} className="p-0 pr-10">
-                            <MokaInputLabel
-                                label="서비스 시작일"
-                                as="dateTimePicker"
-                                name="pageSdate"
-                                inputProps={{ timeFormat: null }}
-                                value={special.pageSdate}
-                                onChange={handleChangeSdate}
-                                isInvalid={error.pageSdate}
-                                // invalidMessage={error.pageSdateMessage}
-                            />
-                        </Col>
-                        <Col xs={6} className="p-0 pl-10">
-                            <MokaInputLabel
-                                label="서비스 종료일"
-                                as="dateTimePicker"
-                                name="pageEdate"
-                                inputProps={{ timeFormat: null }}
-                                inputClassName="right"
-                                value={special.pageEdate}
-                                onChange={handleChangeEdate}
-                                isInvalid={error.pageEdate}
-                                invalidMessage={error.pageEdateMessage}
-                            />
-                        </Col>
-                    </Form.Row>
+            {/* 서비스시작일/서비스종료일 */}
+            <Form.Row className="mb-2">
+                <Col xs={6} className="p-0 pr-10">
+                    <MokaInputLabel
+                        label="서비스 시작일"
+                        as="dateTimePicker"
+                        name="pageSdate"
+                        inputProps={{ timeFormat: null }}
+                        value={special.pageSdate}
+                        onChange={handleChangeSdate}
+                        isInvalid={error.pageSdate}
+                        // invalidMessage={error.pageSdateMessage}
+                    />
+                </Col>
+                <Col xs={6} className="p-0 pl-10">
+                    <MokaInputLabel
+                        label="서비스 종료일"
+                        labelWidth={76}
+                        as="dateTimePicker"
+                        name="pageEdate"
+                        inputProps={{ timeFormat: null }}
+                        inputClassName="right"
+                        value={special.pageEdate}
+                        onChange={handleChangeEdate}
+                        isInvalid={error.pageEdate}
+                        invalidMessage={error.pageEdateMessage}
+                    />
                 </Col>
             </Form.Row>
 

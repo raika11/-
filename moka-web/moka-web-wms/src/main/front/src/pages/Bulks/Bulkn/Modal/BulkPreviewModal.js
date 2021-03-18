@@ -156,7 +156,7 @@ const BulkPreviewModal = () => {
             show={mokaModalShow}
             onHide={hidePreviewModel}
             title="네이버 벌크 문구 미리보기"
-            size="xl"
+            size="md"
             width={700}
             height={450}
             draggable
@@ -164,7 +164,7 @@ const BulkPreviewModal = () => {
         >
             <MokaCardTabs
                 width={840}
-                className="w-100"
+                className="w-100 shadow-none"
                 onSelectNav={(idx) => setNavIdx(idx)}
                 fill
                 tabs={createTabs()}

@@ -28,7 +28,7 @@ export const ColumnDefs = [
     {
         headerName: '보기',
         field: 'preview',
-        width: 77,
+        width: 80,
         cellRendererFramework: ({ value }) => <PreviewRenderer {...value} />,
     },
 ];

@@ -1014,7 +1014,7 @@ const ChannelEdit = ({ match }) => {
                                     삭제
                                 </Button> */}
                                     <Button
-                                        className="mt-0"
+                                        className="mt-1"
                                         size="sm"
                                         variant="gray-700"
                                         onClick={(e) => {
@@ -1076,7 +1076,7 @@ const ChannelEdit = ({ match }) => {
                                         삭제
                                     </Button> */}
                                         <Button
-                                            className="mt-0"
+                                            className="mt-1"
                                             size="sm"
                                             variant="gray-700"
                                             onClick={(e) => {
@@ -1142,7 +1142,7 @@ const ChannelEdit = ({ match }) => {
                                         삭제
                                     </Button> */}
                                         <Button
-                                            className="mt-0"
+                                            className="mt-1"
                                             size="sm"
                                             variant="gray-700"
                                             onClick={(e) => {

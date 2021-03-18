@@ -33,6 +33,7 @@ const CommentAgGrid = (props) => {
 
     // https://www.ag-grid.com/javascript-grid-row-height/
     // 높이를 가변으로 할떄 ag-grid 가이드.
+
     return (
         <>
             <div className={clsx('ag-theme-moka-grid position-relative overflow-hidden flex-fill ag-grid-comment', { 'ag-header-no': false })}>

@@ -147,7 +147,9 @@ public enum FcmErrorType {
 
     public static boolean isError(FcmErrorType fcmError) {
         boolean error = false;
-
+        if (fcmError == null) {
+            return error;
+        }
         for (FcmErrorType type : FcmErrorType.values()) {
             if ((type.errorCode != 0 && type.errorCode == fcmError.errorCode && type.errorMessage != null && type.errorMessage.equals(
                     fcmError.errorMessage)) || (type.errorCode == fcmError.errorCode && type.errorMessage == null) || (type.errorCode == 0 && (

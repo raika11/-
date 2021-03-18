@@ -1,34 +1,52 @@
 package jmnet.moka.web.push.mvc.sender.repository;
 
+import java.util.List;
+import jmnet.moka.web.push.mvc.sender.dto.PushAppTokenSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppTokenStatus;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
 /**
- * 작업 Repository
- * 2021. 2. 18.
- *
+ * 작업 Repository 2021. 2. 18.
  */
 @Repository
 public interface PushAppTokenRepositorySupport {
 
-    /**
-     * 처음 토큰 조회
-     *
-     * @param appSeq   검색조건
-     * @return 작업
-     */
-    List<PushAppToken> findFirstByAppSeqOrderByTokenSeqAsc(Integer appSeq);
+
 
     /**
-     * 마지막 토큰 조회
+     * 범위에 해당하는 토큰 목록 조회
      *
-     * @param appSeq   검색조건
+     * @param appSeq 검색조건
      * @return 작업
      */
-    List<PushAppToken> findFirstByAppSeqOrderByTokenSeqDesc(Integer appSeq);
+    List<PushAppToken> findAllByAppScope(Integer appSeq, long start, long limit);
+
+    /**
+     * 범위에 해당하는 토큰 목록 조회
+     *
+     * @param appSeq 검색조건
+     * @return 작업
+     */
+    List<PushAppToken> findAllByAppScope(Integer appSeq, long lastTokenSeq, Pageable pageable);
+
+    /**
+     * 범위에 해당하는 토큰 목록 조회
+     *
+     * @param pushAppTokenSearch 검색조건
+     * @return 작업
+     */
+    List<PushAppToken> findAllByAppScope(PushAppTokenSearchDTO pushAppTokenSearch);
+
+
+    /**
+     * 조회 대상의 토큰 총건수, 최대토큰일련번호, 최소토큰 일련번호 조회
+     *
+     * @param appSeq 앱 일련번호
+     * @return
+     */
+    PushAppTokenStatus countAllByAppScope(Integer appSeq);
+
+
 }

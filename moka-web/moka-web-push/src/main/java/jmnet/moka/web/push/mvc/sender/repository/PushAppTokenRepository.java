@@ -20,6 +20,22 @@ public interface PushAppTokenRepository extends JpaRepository<PushAppToken, Inte
      */
     List<PushAppToken> findAllByAppSeq(Integer appSeq, Pageable pageable);
 
+    /**
+     * 처음 토큰 조회
+     *
+     * @param appSeq 검색조건
+     * @return 작업
+     */
+    List<PushAppToken> findFirstByAppSeqOrderByTokenSeqAsc(Integer appSeq);
+
+    /**
+     * 마지막 토큰 조회
+     *
+     * @param appSeq 검색조건
+     * @return 작업
+     */
+    List<PushAppToken> findFirstByAppSeqOrderByTokenSeqDesc(Integer appSeq);
+
 
     /**
      * 대상 토큰 목록 조회

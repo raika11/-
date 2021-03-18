@@ -3,9 +3,11 @@ package jmnet.moka.web.push.sender;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jmnet.moka.web.push.mvc.sender.dto.PushAppTokenSearchDTO;
 import jmnet.moka.web.push.mvc.sender.dto.PushContentSeqSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushApp;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppTokenStatus;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.service.PushAppTokenService;
 import jmnet.moka.web.push.mvc.sender.service.PushTokenSendHistService;
@@ -15,7 +17,6 @@ import jmnet.moka.web.push.support.sender.AbstractPushSender;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -91,112 +92,23 @@ public class RecommendArticlesSender extends AbstractPushSender {
         }
     }
 
-    @Override
-    protected Long findFirstTokenSeq(Integer appSeq) {
-        List<PushAppToken> appTokenList = pushAppTokenService.findByAppSeqAsc(appSeq);
-        Long tokenSeq = 0L;
-
-        tokenSeq = appTokenList
-                .get(0)
-                .getTokenSeq();
-
-        return tokenSeq;
-    }
 
     @Override
-    protected Long findLastTokenSeq(Integer appSeq) {
-        /**
-         * TODO 2. 대상 토큰 중 가장 큰 토큰 일련번호 조회
-         * - 페이징 처리에 사용
-         */
-        List<PushAppToken> appTokenList = pushAppTokenService.findByAppSeqDesc(appSeq);
-        Long tokenSeq = 0L;
-
-        tokenSeq = appTokenList
-                .get(0)
-                .getTokenSeq();
-
-        return tokenSeq;
-    }
-
-    @Override
-    protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long lastTokenSeq, int pageIdx, int tokenCnt)
+    protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long startTokenSeq, int pageIdx, int tokenCnt)
             throws Exception {
-        log.debug("속보 - 푸시 전송을 위한 작업 처리 :findAllToken  {}", pageIdx);
+        return pushAppTokenService.findPushAppToken(appSeq, startTokenSeq, (startTokenSeq + tokenCnt) - 1);
+    }
 
-        /**
-         * TODO 3. 토큰 목록 조회
-         */
-        return pushAppTokenService.findPushAppToken(appSeq, PageRequest.of(pageIdx, tokenCnt));
+    @Override
+    protected List<PushAppToken> findAllToken(PushAppTokenSearchDTO pushAppTokenSearch)
+            throws Exception {
+        return pushAppTokenService.findPushAppToken(pushAppTokenSearch);
+    }
 
-        //int totalPages = pushAppTokenlist.getTotalPages();
 
-        //List<PushAppTokenDTO> tokenDTOList = modelMapper.map(pushAppTokenlist, PushAppTokenDTO.TYPE);
-        //List<PushAppToken> returnValue = pushAppTokenlist;
-
-        /*String chkToken = "";
-        for (int i = 0; i < tokenDTOList.size(); i++) {
-            if (i == 0) {
-                chkToken = tokenDTOList
-                        .get(i)
-                        .getTokenSeq()
-                        .toString();
-            } else {
-                chkToken = chkToken + "," + tokenDTOList
-                        .get(i)
-                        .getTokenSeq();
-            }
-        }
-
-        log.info("chkToken=" + chkToken);
-
-        for (PushAppTokenDTO pushAppToken : tokenDTOList) {
-            try {
-                log.debug("[ 푸시 앱 토큰 전송 이력 등록 ]");
-                PushTokenSendHistDTO pushTokenSendHistDTO = new PushTokenSendHistDTO();
-
-                PushTokenSendHist pushTokenSendHist = modelMapper.map(pushTokenSendHistDTO, PushTokenSendHist.class);
-
-                pushTokenSendHist.setContentSeq(contentSeq);
-                pushTokenSendHist.setTokenSeq(pushAppToken.getTokenSeq());
-                pushTokenSendHist.setAppSeq(pushAppToken
-                        .getAppSeq()
-                        .intValue());
-                pushTokenSendHist.setSendYn("N");
-                pushTokenSendHist.setRegDt(McpDate.now());
-
-                insertPushTokenSendHist(pushTokenSendHist);
-                log.debug("[SUCCESS TO INSERT PUSH TOKEN SEND HIST]");
-
-            } catch (Exception e) {
-                log.error("[FAIL TO INSERT PUSH TOKEN SEND HIST]", e);
-                throw new Exception("푸시 앱 토큰 전송 이력이 등록 되지 않습니다.", e);
-            }
-            if (pageIdx > totalPages) {
-                returnValue = Collections.emptyList();
-            }
-        }*/
-        /*
-        String tokens = pushAppTokenlist
-                .stream()
-                .map(pushAppToken -> String.valueOf(pushAppToken.getTokenSeq()))
-                .reduce((result, tokenSeq) -> result + "," + String.valueOf(tokenSeq))
-                .get();
-
-        try {
-            pushTokenSendHistService.insertPushTokenSendHistBatch(PushTokenBatchVO
-                    .builder()
-                    .appSeq(appSeq)
-                    .contentsSeq(contentSeq)
-                    .tokenSeqs(tokens)
-                    .build());
-        } catch (Exception e) {
-            log.error("[FAIL TO INSERT PUSH TOKEN SEND HIST]", e);
-            throw new Exception("푸시 앱 토큰 전송 이력이 등록 되지 않습니다.", e);
-        }
-
-        return pushAppTokenlist;
-         */
+    @Override
+    protected PushAppTokenStatus findAppTokenStatus(Integer appSeq, Long contentSeq) {
+        return pushAppTokenService.findPushAppTokenStatus(appSeq);
     }
 
 

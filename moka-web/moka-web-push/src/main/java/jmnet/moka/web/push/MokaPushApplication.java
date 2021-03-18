@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.AbstractEnvironment;
 
 
-@MapperScan(basePackages = "jmnet.moka.web.push.mvc.**.mapper")
 @SpringBootApplication
+@MapperScan(basePackages = "jmnet.moka.web.push.mvc.**.mapper")
 @EnableEncryptableProperties
 public class MokaPushApplication {
 

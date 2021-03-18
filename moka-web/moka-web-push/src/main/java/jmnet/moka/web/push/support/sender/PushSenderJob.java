@@ -1,9 +1,11 @@
 package jmnet.moka.web.push.support.sender;
 
 import jmnet.moka.web.push.support.PushJob;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -23,7 +25,17 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @SuperBuilder
+@ToString
 public class PushSenderJob extends PushJob {
-    int tokenCnt = 1000;
-    int threadPoolCnt = 10;
+    /**
+     * 1회 fcm 발송 토큰 최대 건수
+     */
+    @Builder.Default
+    Integer tokenCnt = 100;
+
+    /**
+     * 쓰레드 풀 생성 갯수
+     */
+    @Builder.Default
+    Integer threadPoolCnt = 10;
 }

@@ -68,4 +68,10 @@ export default [
         width: 65,
         cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a86400} stateB={row.data.b86400} />,
     },
+    {
+        headerName: '상시',
+        field: '',
+        width: 65,
+        // cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a86400} stateB={row.data.b86400} />,
+    },
 ];

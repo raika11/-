@@ -17,7 +17,9 @@ const RunStateSearchAgGrid = () => {
     /**
      * 테이블 row 클릭
      */
-    const handleRowClicked = useCallback((row) => {}, []);
+    const handleRowClicked = useCallback((row) => {
+        console.log(row);
+    }, []);
 
     /**
      * 테이블에서 검색옵션 변경하는 경우

@@ -9,7 +9,7 @@ import { DB_DATEFORMAT } from '@/constants';
  */
 const WorkStateRenderer = forwardRef(({ data }, ref) => {
     useImperativeHandle(ref, () => ({
-        refresh: () => true,
+        refresh: () => false,
     }));
 
     return (

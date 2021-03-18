@@ -1,7 +1,9 @@
 package jmnet.moka.web.push.mvc.sender.service;
 
 import java.util.List;
+import jmnet.moka.web.push.mvc.sender.dto.PushAppTokenSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppTokenStatus;
 import jmnet.moka.web.push.mvc.sender.repository.PushAppTokenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -23,6 +25,26 @@ public class PushAppTokenServiceImpl implements PushAppTokenService {
     @Override
     public List<PushAppToken> findPushAppToken(Integer appSeq, Pageable pageable) {
         return pushAppTokenRepository.findAllByAppSeq(appSeq, pageable);
+    }
+
+    @Override
+    public List<PushAppToken> findPushAppToken(Integer appSeq, long lastTokenSeq, Pageable pageable) {
+        return pushAppTokenRepository.findAllByAppScope(appSeq, lastTokenSeq, pageable);
+    }
+
+    @Override
+    public List<PushAppToken> findPushAppToken(PushAppTokenSearchDTO pushAppTokenSearch) {
+        return pushAppTokenRepository.findAllByAppScope(pushAppTokenSearch);
+    }
+
+    @Override
+    public PushAppTokenStatus findPushAppTokenStatus(Integer appSeq) {
+        return pushAppTokenRepository.countAllByAppScope(appSeq);
+    }
+
+    @Override
+    public List<PushAppToken> findPushAppToken(Integer appSeq, long start, long limit) {
+        return pushAppTokenRepository.findAllByAppScope(appSeq, start, limit);
     }
 
 

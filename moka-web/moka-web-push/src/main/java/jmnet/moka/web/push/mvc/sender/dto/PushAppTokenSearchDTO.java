@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jmnet.moka.common.data.support.SearchDTO;
-import lombok.*;
-
 import java.lang.reflect.Type;
 import java.util.List;
+import jmnet.moka.common.data.support.SearchDTO;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -45,6 +48,26 @@ public class PushAppTokenSearchDTO extends SearchDTO {
      * 앱 일련번호
      */
     @ApiModelProperty("앱 일련번호")
-    private Long appSeq;
+    private Integer appSeq;
+
+    /**
+     * 푸시 유형
+     */
+    private String pushType;
+
+    /**
+     * 컨텐츠 일련번호
+     */
+    private Long contentSeq;
+
+    /**
+     * 최대 토큰 일련번호
+     */
+    private Long lastTokenSeq;
+
+    /**
+     * 최소 토큰 일련번호
+     */
+    private Long firstTokenSeq;
 
 }

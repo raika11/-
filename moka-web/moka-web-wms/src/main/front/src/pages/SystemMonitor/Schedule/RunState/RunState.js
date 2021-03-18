@@ -10,7 +10,7 @@ const RunState = ({ match }) => {
     return (
         <div className="h-100 d-flex">
             {/* 작업 실행 상태 현황 */}
-            <div className="mr-gutter" style={{ width: 752 }}>
+            <div className="mr-gutter" style={{ width: 900 }}>
                 <Suspense>
                     <RunStateList />
                 </Suspense>

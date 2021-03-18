@@ -90,7 +90,7 @@ public class DefaultHandler extends AbstractHandler {
 
             } else {
                 // command일 경우 CommandController가 처리하도록 한다.
-                if ( requestPath.startsWith(MokaConstants.MERGE_COMMAND_PREFIX)) {
+                if (requestPath.startsWith(MokaConstants.MERGE_COMMAND_PREFIX)) {
                     return null;
                 }
                 // 에러페이지로 보낸다
@@ -108,8 +108,8 @@ public class DefaultHandler extends AbstractHandler {
         } catch (TemplateMergeException e) {
             logger.warn("Page Item not found: {} {}", domainId, requestPath);
             actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
-                    (long)request.getAttribute(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
-                    String.format("Page Item not found:%s %s",domainId, requestPath));
+                    (long) request.getAttribute(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    String.format("Page Item not found:%s %s", domainId, requestPath));
         }
         return null;
     }
@@ -143,8 +143,8 @@ public class DefaultHandler extends AbstractHandler {
         } catch (TemplateLoadException | TemplateParseException | TemplateMergeException e) {
             logger.error("MergeItem Find Fail: {} {}", domainId, requestPath, e);
             actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
-                    (long)request.getAttribute(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
-                    String.format("Page Item not found:%s %s",domainId, requestPath));
+                    (long) request.getAttribute(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    String.format("Page Item not found:%s %s", domainId, requestPath));
             return false;
         }
     }
@@ -244,7 +244,10 @@ public class DefaultHandler extends AbstractHandler {
         // Path Parameter 방식 URI에 대한 처리: 마지막 경로를 파라미터로 넣어준다.
         if (item instanceof PageItem) {
             // cache로 설정할 category를 추가한다.
-            httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, item.getString(ItemConstants.PAGE_CATEGORY));
+            String category = item.getString(ItemConstants.PAGE_CATEGORY);
+            if (category != null) {
+                httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, item.getString(ItemConstants.PAGE_CATEGORY));
+            }
             // 경로 파라미터 처리
             processPathParam(mergeContext, (PageItem) item, httpParamMap);
         }
@@ -254,12 +257,12 @@ public class DefaultHandler extends AbstractHandler {
         // Http 쿠기 설정
         mergeContext.set(MokaConstants.MERGE_CONTEXT_COOKIE, HttpHelper.getCookieMap(request));
 
-//  브라우저 사이즈 체크 ( 좀 더 상위에서 처리하게 해야함 )
-//        Map<String,String> cookieMap = HttpHelper.getCookieMap(request);
-//        if ( !cookieMap.containsKey("moka_width") && !((String) mergeContext.get(MokaConstants.MERGE_PATH)).equals("/responsive/js")) {
-//            mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, MokaConstants.ITEM_PAGE);
-//            mergeContext.set(MokaConstants.MERGE_ITEM_ID, "80");
-//        }
+        //  브라우저 사이즈 체크 ( 좀 더 상위에서 처리하게 해야함 )
+        //        Map<String,String> cookieMap = HttpHelper.getCookieMap(request);
+        //        if ( !cookieMap.containsKey("moka_width") && !((String) mergeContext.get(MokaConstants.MERGE_PATH)).equals("/responsive/js")) {
+        //            mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, MokaConstants.ITEM_PAGE);
+        //            mergeContext.set(MokaConstants.MERGE_ITEM_ID, "80");
+        //        }
 
         model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
         return this.viewName;
@@ -267,8 +270,9 @@ public class DefaultHandler extends AbstractHandler {
 
     /**
      * 경로 파라미터를 처리한다.
+     *
      * @param mergeContext 컨텍스트
-     * @param pageItem 페이지 아이템
+     * @param pageItem     페이지 아이템
      * @param httpParamMap 파라미터 맵
      */
     private void processPathParam(MergeContext mergeContext, PageItem pageItem, HttpParamMap httpParamMap) {

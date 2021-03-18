@@ -136,7 +136,10 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
         // 카테고리 설정
         HttpParamMap httpParamMap = (HttpParamMap) mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
-        httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, pageItem.getString(ItemConstants.PAGE_CATEGORY));
+        String category = pageItem.getString(ItemConstants.PAGE_CATEGORY);
+        if (category != null) {
+            httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, pageItem.getString(ItemConstants.PAGE_CATEGORY));
+        }
         this.setCodesAndMenus(pageItem.getString(ItemConstants.PAGE_DOMAIN_ID), pageItem, mergeContext);
         return mergeContext;
     }

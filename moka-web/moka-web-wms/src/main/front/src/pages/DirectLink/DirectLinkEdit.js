@@ -322,6 +322,7 @@ const DirectLinkEdit = ({ history, match }) => {
             className="flex-fill"
             title={`사이트 바로 가기 ${linkSeq ? '수정' : '등록'}`}
             loading={loading}
+            bodyClassName="overflow-visible"
             footer
             footerButtons={[
                 { text: linkSeq ? '수정' : '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
@@ -405,6 +406,7 @@ const DirectLinkEdit = ({ history, match }) => {
                         value={temp.viewSdate}
                         onChange={handleSDate}
                         className="mr-1"
+                        inputClassName="top"
                         inputProps={{ timeFormat: null }}
                         disabled={dateDisabled}
                     />
@@ -415,7 +417,7 @@ const DirectLinkEdit = ({ history, match }) => {
                         value={temp.viewEdate}
                         onChange={handleEDate}
                         className="ml-1"
-                        inputClassName="right"
+                        inputClassName="right top"
                         inputProps={{ timeFormat: null }}
                         disabled={dateDisabled}
                     />

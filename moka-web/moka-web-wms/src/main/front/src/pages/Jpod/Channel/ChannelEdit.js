@@ -939,7 +939,7 @@ const ChannelEdit = ({ match }) => {
                                                 />
                                                 {/* </div> */}
                                                 <div style={{ width: '70px' }}>
-                                                    <Button variant="searching" size="md" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
+                                                    <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
                                                         삭제
                                                     </Button>
                                                 </div>

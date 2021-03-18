@@ -149,6 +149,20 @@ public abstract class AbstractPushSender implements Sender {
     protected abstract FcmMessage makePushMessage(PushContents contents, PushApp appSeq);
 
     /**
+     * 페이지 번호의 동기화 유지
+     *
+     * @param integer 페이지 번호
+     * @return 증가된 페이지 번호
+     */
+    private int getSyncPage(AtomicInteger integer) {
+        int page = 0;
+        synchronized (AbstractPushSender.class) {
+            page = integer.getAndAdd(1);
+        }
+        return page;
+    }
+
+    /**
      * 푸시 메시지 발송을 시작한다.
      *
      * @param contents 푸시 컨텐츠
@@ -223,7 +237,7 @@ public abstract class AbstractPushSender implements Sender {
                         int page = 0;
                         try {
                             HttpPushClient pushClient = new PushHttpClientBuilder().build(propertyHolder.getFcmUrl(), pushApp.getApiKey());
-                            while ((page = currentPage.getAndAdd(1)) < totalPageCnt) {
+                            while ((page = getSyncPage(currentPage)) < totalPageCnt) {
                                 sendCnt += proccessSendJob(pushClient, pushApp, pushMessage, tokenStatus, page, contentSeq, pushType, tokenCnt);
                             }
                         } catch (Exception e) {

@@ -249,7 +249,7 @@ const MokaCard = forwardRef((props, ref) => {
                     )}
                 </Card.Footer>
             ) : (
-                footer && footerAs(<Card.Footer className={footerClassName}>{footerAs}</Card.Footer>)
+                footer && footerAs && <Card.Footer className={footerClassName}>{footerAs}</Card.Footer>
             )}
         </Card>
     );

@@ -332,23 +332,22 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
             />
 
             {/* 페이지 설명 */}
-            <MokaInputLabel
-                label={
-                    <>
-                        페이지 설명
-                        <br />
-                        <span className="text-neutral">*'" 포함 특수문자 사용금지</span>
-                    </>
-                }
-                as="textarea"
-                className="mb-2"
-                inputProps={{ rows: 3 }}
-                name="pageDesc"
-                value={special.pageDesc}
-                onChange={handleChangeValue}
-                isInvalid={error.pageDesc}
-                // invalidMessage={error.pageDescMessage}
-            />
+            <Form.Row className="mb-2">
+                <MokaInputLabel label="페이지 설명" as="none" />
+                <div className="w-100 d-flex flex-column">
+                    <MokaInput
+                        inputProps={{ rows: 3 }}
+                        as="textarea"
+                        name="pageDesc"
+                        className="mb-1"
+                        value={special.pageDesc}
+                        onChange={handleChangeValue}
+                        isInvalid={error.pageDesc}
+                        // invalidMessage={error.pageDescMessage}
+                    />
+                    <p className="m-0 ft-12 text-neutral">*'" 포함 특수문자 사용금지</p>
+                </div>
+            </Form.Row>
 
             {/* 부서명 */}
             <Form.Row className="mb-2">

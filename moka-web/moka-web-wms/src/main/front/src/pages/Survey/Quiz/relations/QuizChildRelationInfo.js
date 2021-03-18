@@ -27,7 +27,6 @@ const QuizChildRelationInfo = ({ HandleSave }) => {
                 title="관련 정보"
                 className="w-100"
                 footer
-                footerClassName="justify-content-center"
                 footerButtons={[
                     { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' },
                     { text: '취소', variant: 'negative', onClick: () => history.push('/quiz'), className: 'mr-05' },

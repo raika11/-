@@ -147,7 +147,6 @@ const AddComponentModal = (props) => {
                 { text: '저장', variant: 'positive', onClick: handleSave },
                 { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
-            footerClassName="justify-content-center"
             centered
             draggable
         >

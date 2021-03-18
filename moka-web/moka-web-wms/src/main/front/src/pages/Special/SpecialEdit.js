@@ -228,13 +228,12 @@ const SpecialEdit = ({ match }) => {
                     <p className="m-0 pl-2 text-positive">(등록 완료 후 스크립트 오류 체크 꼭 해주세요)</p>
                 </div>
             }
-            footerClassName="justify-content-center"
+            footer
             footerButtons={[
                 { text: special.seqNo ? '수정' : '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
                 special.seqNo && { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancle },
-            ].filter((a) => a)}
-            footer
+            ].filter(Boolean)}
         >
             <SpecialEditForm special={temp} onChange={setTemp} ptRows={ptRows} error={error} setError={setError} depts={depts} />
         </MokaCard>

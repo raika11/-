@@ -101,12 +101,11 @@ const CodeMappingEdit = (props) => {
             className="h-100 w-100 shadow-none"
             bodyClassName="d-flex flex-column"
             footer
-            footerClassName="pb-0 d-flex justify-content-center"
             footerButtons={[
                 { text: temp.seqNo ? '수정' : '저장', onClick: handleClickSave, variant: 'positive', className: 'mr-1' },
                 temp.seqNo && { text: '삭제', onClick: handleClickDelete, variant: 'negative', className: 'mr-1' },
                 { text: '취소', onClick: handleClickCancle, variant: 'negative' },
-            ].filter((a) => a)}
+            ].filter(Boolean)}
         >
             <p className="mb-2" style={{ marginLeft: 90 }}>
                 변환 코드 추가: (대소문자 구분합니다)

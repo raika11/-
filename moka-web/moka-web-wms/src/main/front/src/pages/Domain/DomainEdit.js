@@ -219,7 +219,6 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                 headerClassName="d-flex justify-content-between align-item-center"
                 loading={loading}
                 footer
-                footerClassName="justify-content-center"
                 footerButtons={[
                     {
                         text: paramId ? '수정' : '저장',
@@ -238,7 +237,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                         variant: 'negative',
                         onClick: handleClickCancle,
                     },
-                ].filter((a) => a)}
+                ].filter(Boolean)}
             >
                 {/* 사용여부 */}
                 <MokaInputLabel label="사용여부" className="mb-2" as="switch" id="domain-usedYn" name="usedYn" ref={register} required uncontrolled />

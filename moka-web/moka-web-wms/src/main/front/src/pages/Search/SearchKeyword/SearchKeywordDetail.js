@@ -66,7 +66,6 @@ const SearchKeywordDetail = ({ match }) => {
             title="검색 로그 상세 현황"
             bodyClassName="d-flex flex-column"
             footer
-            footerClassName="justify-content-center"
             footerButtons={[
                 {
                     text: '취소',

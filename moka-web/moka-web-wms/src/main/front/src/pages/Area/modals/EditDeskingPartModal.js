@@ -109,7 +109,6 @@ const EditDeskingPartModal = (props) => {
                 { text: '저장', variant: 'positive', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleClickCancle },
             ]}
-            footerClassName="d-flex align-items-center justify-content-center"
             draggable
             centered
         >

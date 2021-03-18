@@ -194,7 +194,6 @@ const EditDeskingWorkModal = (props) => {
                 { variant: 'positive', text: isDummy ? '저장' : '수정', onClick: handleClickSave },
                 { variant: 'negative', text: '취소', onClick: handleHide },
             ]}
-            footerClassName="d-flex justify-content-center"
             bodyClassName="custom-scroll"
             loading={loading}
             draggable

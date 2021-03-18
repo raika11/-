@@ -167,7 +167,6 @@ const CdnArticleEdit = ({ match }) => {
         <MokaCard
             className="flex-fill"
             title={`트래픽 분산(기사) ${totalId ? '수정' : '등록'}`}
-            footerClassName="d-flex justify-content-center"
             loading={loading}
             footer
             footerButtons={[

@@ -235,9 +235,9 @@ const MokaCard = forwardRef((props, ref) => {
 
             {/* 푸터 버튼 */}
             {footer && (
-                <Card.Footer className={clsx('d-flex', footerClassName)}>
+                <>
                     {footerButtons.length > 0 ? (
-                        <>
+                        <Card.Footer className={clsx('d-flex align-items-center justify-content-center', footerClassName)}>
                             {footerButtons.map(({ variant, text, useAuth, ...rest }, idx) =>
                                 useAuth ? (
                                     <AuthButton key={`${text}-${idx}`} variant={variant} {...rest}>
@@ -249,11 +249,11 @@ const MokaCard = forwardRef((props, ref) => {
                                     </Button>
                                 ),
                             )}
-                        </>
+                        </Card.Footer>
                     ) : (
-                        footerAs
+                        <Card.Footer className={footerClassName}>{footerAs}</Card.Footer>
                     )}
-                </Card.Footer>
+                </>
             )}
         </Card>
     );

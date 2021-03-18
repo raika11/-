@@ -159,13 +159,12 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
             title="수신기사"
             className="flex-fill"
             footer
-            footerClassName="d-flex justify-content-center"
             footerButtons={[
                 { variant: 'outline-neutral', text: '미리보기', className: 'mr-1', onClick: handlePCPreview },
                 // { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-1', onClick: handleMobilePreview },
                 registerable === 'Y' && { variant: 'positive', text: '기사등록', className: 'mr-1', onClick: onRegister },
                 { variant: 'negative', text: '취소', onClick: onCancle },
-            ].filter((a) => a)}
+            ].filter(Boolean)}
             loading={loading}
         >
             <Form className="d-flex flex-column h-100">

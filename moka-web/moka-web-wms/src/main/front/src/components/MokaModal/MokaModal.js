@@ -104,10 +104,10 @@ const propTypes = {
     loading: PropTypes.bool,
     /**
      * 모달 사이즈
-     * sm) max-width = 400 ==> 토스트와 동일한 버튼 형태
-     * md) max-width = 600 ==> 토스트와 동일한 버튼 형태
-     * lg) max-width = 900
-     * xl) max-width = 1200
+     * @desc sm) max-width = 400 ==> 토스트와 동일한 버튼 형태
+     * @desc md) max-width = 600 ==> 토스트와 동일한 버튼 형태
+     * @desc lg) max-width = 900
+     * @desc xl) max-width = 1200
      */
     size: PropTypes.oneOf(['sm', 'md', 'lg', 'xl']),
 };
@@ -216,6 +216,7 @@ const MokaModal = (props) => {
                 <Modal.Footer
                     className={clsx(footerClassName, {
                         'toast-footer': toastFooter,
+                        'd-flex justify-content-center align-items-center': !toastFooter,
                     })}
                     style={footerStyle}
                 >

@@ -243,7 +243,6 @@ const EditThumbModal = (props) => {
             ]}
             dialogClassName="fixed-modal"
             bodyClassName="p-0 overflow-x-hidden custom-scroll"
-            footerClassName="d-flex justify-content-center"
             draggable
         >
             <DndProvider backend={HTML5Backend}>

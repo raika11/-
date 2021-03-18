@@ -294,7 +294,6 @@ const ColumnistEdit = ({ match }) => {
             className="w-100 flex-fill"
             loading={loading}
             footer
-            footerClassName="justify-content-center"
             footerButtons={[
                 {
                     text: `${columnist && columnist.seqNo && columnist.seqNo !== '' ? '수정' : '저장'}`,

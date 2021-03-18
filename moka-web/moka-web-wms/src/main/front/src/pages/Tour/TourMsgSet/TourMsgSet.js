@@ -95,7 +95,6 @@ const MessageSettings = ({ displayName }) => {
                     { text: '수정', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
                     { text: '취소', variant: 'negative', onClick: handleClickCancel },
                 ]}
-                footerClassName="justify-content-center"
             >
                 <Container className="p-0">
                     <Row className="m-0">

@@ -185,7 +185,6 @@ const DatsetListModal = (props) => {
                 { text: '등록', variant: 'positive', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleClickCancle },
             ]}
-            footerClassName="justify-content-center"
             draggable
             centered
         >

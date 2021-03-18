@@ -149,7 +149,6 @@ const TourSetEdit = () => {
                     onClick: handleClickCancel,
                 },
             ]}
-            footerClassName="justify-content-center"
         >
             <Form>
                 <Form.Row className="mb-2">

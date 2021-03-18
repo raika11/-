@@ -184,7 +184,6 @@ const TourListEdit = ({ match }) => {
         <MokaCard
             className="flex-fill"
             title="견학 신청서"
-            footerClassName="justify-content-center"
             footer
             footerButtons={[
                 {

@@ -41,7 +41,6 @@ const EditListNumberModal = (props) => {
                 { variant: 'positive', text: '저장', onClick: handleSave },
                 { variant: 'negative', text: '취소', onClick: onHide },
             ]}
-            footerClassName="d-flex justify-content-center"
             draggable
             centered
         >

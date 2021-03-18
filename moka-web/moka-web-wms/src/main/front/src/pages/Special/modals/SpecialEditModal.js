@@ -41,7 +41,6 @@ const SpecialEditModal = (props) => {
                 },
             ]}
             bodyClassName="px-5"
-            footerClassName="justify-content-center"
             draggable
         >
             <Form>

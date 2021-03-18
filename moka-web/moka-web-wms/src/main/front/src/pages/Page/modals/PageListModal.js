@@ -183,7 +183,6 @@ const PageListModal = (props) => {
                 { text: '등록', variant: 'positive', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleClickCancle },
             ]}
-            footerClassName="justify-content-center"
             draggable
         >
             <Form.Row className="mb-14">

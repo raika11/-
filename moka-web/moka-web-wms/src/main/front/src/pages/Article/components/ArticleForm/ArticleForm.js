@@ -315,7 +315,6 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
             title="등록 기사"
             className={clsx('flex-fill', { 'w-100': !inRcv })}
             footer
-            footerClassName="d-flex justify-content-center"
             footerButtons={[
                 { variant: 'outline-neutral', text: '미리보기', className: 'mr-1', onClick: handlePCPreview },
                 // { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-1', onClick: handleMobilePreview },

@@ -109,7 +109,6 @@ const ChangeArtGroupModal = (props) => {
             loading={loading}
             onHide={handleHide}
             bodyClassName="relative"
-            footerClassName="d-flex justify-content-center"
             buttons={[
                 {
                     text: '저장',

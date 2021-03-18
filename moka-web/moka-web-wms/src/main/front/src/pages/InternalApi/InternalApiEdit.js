@@ -286,7 +286,6 @@ const InternalApiEdit = ({ match }) => {
             title={seqNo ? 'API 정보 수정' : 'API 정보 등록'}
             loading={loading}
             className="flex-fill"
-            footerClassName="justify-content-center"
             footer
             footerButtons={[
                 { text: seqNo ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },

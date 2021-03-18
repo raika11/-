@@ -68,7 +68,6 @@ const CopyModal = (props) => {
                 { text: '저장', variant: 'positive', onClick: handleCopy },
                 { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
-            footerClassName="justify-content-center"
             draggable
             centered
         >

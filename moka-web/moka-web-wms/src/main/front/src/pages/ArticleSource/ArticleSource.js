@@ -82,7 +82,6 @@ const ArticleSource = (props) => {
                                     { text: params?.sourceCode ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
                                     { text: '취소', variant: 'negative', onClick: handleClickCancel },
                                 ]}
-                                footerClassName="justify-content-center"
                             >
                                 <ArticleSourceEdit match={match} ref={editRef} />
                             </MokaCard>

@@ -18,7 +18,6 @@ const ComponentWorkForm = (props) => {
             title={editFormPart?.partTitle}
             headerClassName="border-bottom"
             footer
-            footerClassName="d-flex justify-content-center border-top"
             footerButtons={[
                 { text: '저장', variant: 'positive', className: 'mr-2' },
                 { text: '임시저장', variant: 'positive', className: 'mr-2' },

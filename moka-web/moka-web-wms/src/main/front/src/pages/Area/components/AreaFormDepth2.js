@@ -424,7 +424,6 @@ const AreaFormDepth2 = (props) => {
             className="flex-fill"
             loading={loading}
             footer
-            footerClassName="justify-content-center"
             footerButtons={[
                 {
                     text: temp.areaSeq ? '수정' : '저장',
@@ -437,7 +436,7 @@ const AreaFormDepth2 = (props) => {
                     variant: 'negative',
                     onClick: handleClickDelete,
                 },
-            ].filter((a) => a)}
+            ].filter(Boolean)}
         >
             <div>
                 {/* 사용여부 */}

@@ -323,12 +323,11 @@ const DirectLinkEdit = ({ history, match }) => {
             title={`사이트 바로 가기 ${linkSeq ? '수정' : '등록'}`}
             loading={loading}
             footer
-            footerClassName="justify-content-center"
             footerButtons={[
                 { text: linkSeq ? '수정' : '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
                 linkSeq && { text: '삭제', variant: 'negative', onClick: handleDelete, className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: handleCancle },
-            ].filter((a) => a)}
+            ].filter(Boolean)}
         >
             <Form className="mb-gutter">
                 {/* 사용여부 */}

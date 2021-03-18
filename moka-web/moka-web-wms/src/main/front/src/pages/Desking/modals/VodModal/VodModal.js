@@ -94,7 +94,6 @@ const VodModal = (props) => {
             title="동영상 URL 선택"
             show={show}
             onHide={handleHide}
-            footerClassName="d-flex justify-content-center"
             bodyClassName="p-0"
             buttons={[
                 { text: '등록', onClick: handleSave, variant: 'positive' },

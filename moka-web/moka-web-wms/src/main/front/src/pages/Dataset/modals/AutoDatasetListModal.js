@@ -31,7 +31,6 @@ const AutoDatasetListModal = (props) => {
                     onClick: onHide,
                 },
             ]}
-            footerClassName="justify-content-center"
             draggable
         >
             <Form>

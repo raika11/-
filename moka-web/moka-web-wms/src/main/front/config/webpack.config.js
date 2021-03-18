@@ -261,7 +261,7 @@ module.exports = function (webpackEnv) {
                 chunks: 'all',
                 maxInitialRequests: Infinity,
                 cacheGroups: {
-                    moka: { test: /[\\/]node_modules[\\/]((\@moka).*)[\\/]/, name: "moka", chunks: "all", priority: 10, enforce: true },
+                    monaco: { test: /[\\/]node_modules[\\/]\@moka[\\/]monaco-editor/, name: "monaco", chunks: "all", priority: 10, enforce: true },
                     moment: { test: /[\\/]node_modules[\\/]((moment).*)[\\/]/, name: "moment", chunks: "all", priority: 10 },
                     react: { test: /[\\/]node_modules[\\/]((react).*)[\\/]/, name: "react", chunks: "all", priority: 10 },
                     vender: { test: /[\\/]node_modules[\\/]/, name: "vender", chunks: "all", reuseExistingChunk: true }
@@ -509,14 +509,14 @@ module.exports = function (webpackEnv) {
             new MonacoWebpackPlugin({
                 languages: ['html', 'css', 'javascript', 'json', 'xml'],
                 features: [
-                    'accessibilityHelp',
+                    // 'accessibilityHelp',
                     'bracketMatching',
                     'caretOperations',
                     'clipboard',
                     'codeAction',
                     'codelens',
                     'colorDetector',
-                    'comment',
+                    // 'comment',
                     'contextmenu',
                     'coreCommands',
                     'cursorUndo',
@@ -541,7 +541,7 @@ module.exports = function (webpackEnv) {
                     // 'referenceSearch',
                     'rename',
                     // 'smartSelect',
-                    'snippets',
+                    // 'snippets',
                     'suggest',
                     // 'toggleHighContrast',
                     // 'toggleTabFocusMode',

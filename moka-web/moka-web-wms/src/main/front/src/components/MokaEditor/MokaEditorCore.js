@@ -4,8 +4,7 @@ import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 import defaultOptions from './options';
 import { MokaIcon } from '@components';
-import { propTypes as monacoProps } from './MonacoEditor';
-const MonacoEditor = React.lazy(() => import('./MonacoEditor'));
+import MonacoEditor, { propTypes as monacoProps } from './MonacoEditor';
 let errorDecoId = 0;
 
 export const propTypes = {

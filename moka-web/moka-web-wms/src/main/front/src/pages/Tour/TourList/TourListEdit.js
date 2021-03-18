@@ -323,7 +323,7 @@ const TourListEdit = ({ match }) => {
                         <MokaInput inputProps={{ readOnly: true }} name="writerPwd" type="hidden" value={temp.writerPwd} />
                     </Col>
                     <Col xs={6} className="px-0 d-flex align-items-center">
-                        <Button variant="negative" size="sm" onClick={handleClickReset}>
+                        <Button variant="negative" onClick={handleClickReset}>
                             비밀번호 초기화
                         </Button>
                     </Col>

@@ -209,19 +209,9 @@ const EditGrpModal = ({ show, onHide, grpCd }) => {
                 onChange={handleChangeValue}
                 disabled={grpCd ? true : false}
                 isInvalid={error.grpCd}
-                invalidMessage={error.grpCdMessage}
                 required
             />
-            <MokaInputLabel
-                label="그룹명"
-                className="mb-2"
-                value={grp.cdNm}
-                name="cdNm"
-                onChange={handleChangeValue}
-                isInvalid={error.cdNm}
-                invalidMessage={error.cdNmMessage}
-                required
-            />
+            <MokaInputLabel label="그룹명" className="mb-2" value={grp.cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={error.cdNm} required />
         </MokaModal>
     );
 };

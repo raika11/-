@@ -384,7 +384,6 @@ const PageEdit = ({ onDelete }) => {
                         placeholder="서비스명을 입력하세요"
                         required
                         isInvalid={error.pageServiceName}
-                        invalidMessage={error.pageServiceNameMessage}
                         disabled={!btnDisabled || (temp.parent && temp.parent.pageSeq === null)}
                     />
                 </Form.Row>
@@ -399,7 +398,6 @@ const PageEdit = ({ onDelete }) => {
                             onChange={handleChangeValue}
                             placeholder="표출명을 입력하세요"
                             isInvalid={error.pageDisplayName}
-                            invalidMessage={error.pageDisplayNameMessage}
                         />
                     </Col>
                     <Col xs={4} className="px-0 pl-20">
@@ -481,7 +479,6 @@ const PageEdit = ({ onDelete }) => {
                     onChange={handleChangeValue}
                     placeholder="파라미터명을 입력하세요"
                     isInvalid={error.urlParam}
-                    invalidMessage={error.urlParamMessage}
                 />
 
                 {/* 카테고리 */}

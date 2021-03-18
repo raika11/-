@@ -4,6 +4,7 @@ import java.util.List;
 import jmnet.moka.web.push.mvc.sender.dto.PushAppTokenSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppTokenStatus;
+import jmnet.moka.web.push.mvc.sender.mapper.PushTokenMapper;
 import jmnet.moka.web.push.mvc.sender.repository.PushAppTokenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,10 +17,12 @@ public class PushAppTokenServiceImpl implements PushAppTokenService {
 
     private final PushAppTokenRepository pushAppTokenRepository;
     private final ModelMapper modelMapper;
+    private final PushTokenMapper pushTokenMapper;
 
-    public PushAppTokenServiceImpl(PushAppTokenRepository pushAppTokenRepository, ModelMapper modelMapper) {
+    public PushAppTokenServiceImpl(PushAppTokenRepository pushAppTokenRepository, ModelMapper modelMapper, PushTokenMapper pushTokenMapper) {
         this.pushAppTokenRepository = pushAppTokenRepository;
         this.modelMapper = modelMapper;
+        this.pushTokenMapper = pushTokenMapper;
     }
 
     @Override
@@ -69,13 +72,8 @@ public class PushAppTokenServiceImpl implements PushAppTokenService {
     //}
 
     @Override
-    public void deletePushAppToken(List<PushAppToken> pushTokens) {
-        for (PushAppToken pushToken : pushTokens) {
-            long tokenSeq = pushToken.getTokenSeq();
-            log.info("tokenSeq=" + tokenSeq);
-
-            //pushAppTokenRepository.deleteById(tokenSeq.intValue());
-        }
+    public void deletePushAppToken(String pushTokenSeqs) {
+        pushTokenMapper.deletePushTokens(pushTokenSeqs);
     }
 
 }

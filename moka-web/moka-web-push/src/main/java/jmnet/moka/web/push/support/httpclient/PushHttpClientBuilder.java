@@ -34,12 +34,8 @@ public class PushHttpClientBuilder {
         return builder;
     }
 
-    public PushHttpClientBuilder setPushApp(PushApp pushApp) {
-        this.pushApp = pushApp;
-        return this;
-    }
 
-    public HttpPushClient build() {
+    public HttpPushClient build(String apiUrl, String apiKey) {
         synchronized (PushHttpClientBuilder.class) {
             if (builder == null) {
                 builder = createDefaultOkHttpClientBuilder();
@@ -49,6 +45,6 @@ public class PushHttpClientBuilder {
                 builder.connectionPool(connectionPool);
             }
         }
-        return new HttpPushFcmClient(pushApp.getApiKey());
+        return new HttpPushFcmClient(apiUrl, apiKey);
     }
 }

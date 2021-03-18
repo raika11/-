@@ -77,10 +77,11 @@ public interface PushAppTokenService {
     List<PushAppToken> findByTokenSeq(Long lastTokenSeq);
 
 
+
     /**
      * 대상 토큰 목록 삭제
      *
-     * @param pushTokens 에피소드 정보
+     * @param pushTokenSeqs 토큰 목록 문자열
      */
-    void deletePushAppToken(List<PushAppToken> pushTokens);
+    void deletePushAppToken(String pushTokenSeqs);
 }

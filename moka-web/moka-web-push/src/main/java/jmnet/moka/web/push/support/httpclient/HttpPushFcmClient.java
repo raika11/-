@@ -3,7 +3,6 @@ package jmnet.moka.web.push.support.httpclient;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.web.push.config.PropertyHolder;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.support.message.FcmMessage;
 import jmnet.moka.web.push.support.message.PushHttpResponse;
@@ -21,7 +20,6 @@ import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * <pre>
@@ -39,15 +37,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class HttpPushFcmClient implements HttpPushClient {
     private static final Logger logger = LoggerFactory.getLogger(AbstractPushSender.class);
 
-    @Autowired
-    private PropertyHolder propertyHolder;
-
     private static final MediaType mediaType = MediaType.parse("application/json");
     protected final OkHttpClient client;
     private String apiKey;
+    private String apiUrl;
 
-    public HttpPushFcmClient(String apiKey) {
+    public HttpPushFcmClient(String apiUrl, String apiKey) {
         this.apiKey = apiKey;
+        this.apiUrl = apiUrl;
         client = PushHttpClientBuilder
                 .createDefaultOkHttpClientBuilder()
                 .build();
@@ -68,7 +65,7 @@ public class HttpPushFcmClient implements HttpPushClient {
             return new PushHttpResponse(null, -1, null, t.getMessage(), null);
         } finally {
             if (response != null) {
-                log.info("finally response="+response);
+                log.info("finally response=" + response);
                 response
                         .body()
                         .close();
@@ -103,7 +100,7 @@ public class HttpPushFcmClient implements HttpPushClient {
                             return;
                         } finally {
                             if (response != null) {
-                                log.info("finally response="+response);
+                                log.info("finally response=" + response);
                                 response
                                         .body()
                                         .close();
@@ -122,7 +119,6 @@ public class HttpPushFcmClient implements HttpPushClient {
 
     protected final Request buildRequest(FcmMessage fcmMessage)
             throws IOException {
-        String fcmUrl = "https://fcm.googleapis.com/fcm/send";
         log.info("[ Request buildRequest ]");
 
         byte[] message = ResourceMapper
@@ -130,23 +126,22 @@ public class HttpPushFcmClient implements HttpPushClient {
                 .writeValueAsString(fcmMessage)
                 .getBytes(Charset.forName("UTF-8"));
 
-        Request.Builder rb = new Request.Builder()
-                .url(fcmUrl)
-                //.url(propertyHolder.getFcmUrl())
-                .post(new RequestBody() {
+        Request.Builder rb = new Request.Builder().url(apiUrl)
+                                                  //.url(propertyHolder.getFcmUrl())
+                                                  .post(new RequestBody() {
 
-                    @Override
-                    public MediaType contentType() {
-                        return mediaType;
-                    }
+                                                      @Override
+                                                      public MediaType contentType() {
+                                                          return mediaType;
+                                                      }
 
-                    @Override
-                    public void writeTo(BufferedSink sink)
-                            throws IOException {
-                        sink.write(message);
-                    }
-                })
-                .header("content-length", message.length + "");
+                                                      @Override
+                                                      public void writeTo(BufferedSink sink)
+                                                              throws IOException {
+                                                          sink.write(message);
+                                                      }
+                                                  })
+                                                  .header("content-length", message.length + "");
 
         rb.header(HttpHeaders.AUTHORIZATION, new StringBuilder("key=")
                 .append(apiKey)

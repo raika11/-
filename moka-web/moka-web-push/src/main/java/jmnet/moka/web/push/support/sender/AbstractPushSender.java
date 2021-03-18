@@ -17,12 +17,14 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.web.push.config.PropertyHolder;
 import jmnet.moka.web.push.mvc.sender.dto.PushAppTokenSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushApp;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppTokenStatus;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
+import jmnet.moka.web.push.mvc.sender.service.PushAppTokenService;
 import jmnet.moka.web.push.mvc.sender.service.PushContentsProcService;
 import jmnet.moka.web.push.mvc.sender.service.PushContentsService;
 import jmnet.moka.web.push.mvc.sender.service.PushTokenSendHistService;
@@ -30,6 +32,7 @@ import jmnet.moka.web.push.mvc.sender.vo.PushTokenBatchVO;
 import jmnet.moka.web.push.support.NamingThreadFactory;
 import jmnet.moka.web.push.support.code.FcmErrorType;
 import jmnet.moka.web.push.support.code.StatusFlagType;
+import jmnet.moka.web.push.support.httpclient.HttpPushClient;
 import jmnet.moka.web.push.support.httpclient.PushHttpClientBuilder;
 import jmnet.moka.web.push.support.message.FcmMessage;
 import jmnet.moka.web.push.support.message.FcmResponseResultItem;
@@ -66,10 +69,16 @@ public abstract class AbstractPushSender implements Sender {
     protected PushContentsService pushContentsService;
 
     @Autowired
+    protected PushAppTokenService pushAppTokenService;
+
+    @Autowired
     protected PushContentsProcService pushContentsProcService;
 
     @Autowired
     protected PushTokenSendHistService pushTokenSendHistService;
+
+    @Autowired
+    private PropertyHolder propertyHolder;
 
 
     protected String success;
@@ -211,62 +220,17 @@ public abstract class AbstractPushSender implements Sender {
 
                     futureMap.put(completionService.submit(() -> {
                         long sendCnt = 0;
-                        while (currentPage.getAndAdd(1) < totalPageCnt) {
-                            int page = currentPage.get();
-
-                            /**
-                             * TODO 6. 앱별 푸시 쓰레드에서 각 대상 토큰 목록 조회, page 처리 필요
-                             * - page별로 멀티쓰레드 생성하여 동시 발송 될 수 있도록 처리
-                             * - 조회와 동시에 토큰별 이력 테이블에 이력 정보 insert 처리
-                             */
-                            try {
-                                PushAppTokenSearchDTO searchDTO = PushAppTokenSearchDTO
-                                        .builder()
-                                        .appSeq(appSeq)
-                                        .contentSeq(contentSeq)
-                                        .firstTokenSeq(tokenStatus.getFirstTokenSeq())
-                                        .lastTokenSeq(tokenStatus.getLastTokenSeq())
-                                        .pushType(pushType)
-                                        .build();
-                                searchDTO.setPage(page);
-                                searchDTO.setSize(tokenCnt);
-                                log.debug("thread id : {} - findAllToken start appSeq : {},  currentPage : {}", Thread
-                                        .currentThread()
-                                        .getName(), appSeq, page);
-                                final List<PushAppToken> pushTokens = findAllToken(searchDTO);
-                                log.debug("thread id : {} - findAllToken end appSeq : {},  currentPage : {}", Thread
-                                        .currentThread()
-                                        .getName(), appSeq, page);
-
-                                if (pushTokens != null && pushTokens.size() > 0) {
-                                    log.debug("thread id : {} - insertToken start appSeq : {},  currentPage : {}", Thread
-                                            .currentThread()
-                                            .getName(), appSeq, page);
-                                    insertPushAppTokenSendHist(appSeq, contentSeq, pushTokens);
-                                    log.debug("thread id : {} - insertToken end appSeq : {},  currentPage : {}", Thread
-                                            .currentThread()
-                                            .getName(), appSeq, page);
-                                    log.debug("thread id : {} - sendMessage start appSeq : {},  currentPage : {}", Thread
-                                            .currentThread()
-                                            .getName(), appSeq, page);
-                                    PushResponseMessage response = sendMessage(pushTokens, pushMessage, pushApp);
-                                    sendCnt += response.getSuccess();
-                                    log.debug("thread id : {} - sendMessage end appSeq : {},  currentPage : {}", Thread
-                                            .currentThread()
-                                            .getName(), appSeq, page);
-                                    log.debug("thread id : {} - updateToken start appSeq : {},  currentPage : {}", Thread
-                                            .currentThread()
-                                            .getName(), appSeq, page);
-                                    updatePushAppTokenSendHist(appSeq, contentSeq, pushTokens, response);
-                                    log.debug("thread id : {} - updateToken end appSeq : {},  currentPage : {}", Thread
-                                            .currentThread()
-                                            .getName(), appSeq, page);
-                                }
-
-                            } catch (Exception e) {
-                                log.error("SENDER ERROR", e);
-                                throw new Exception(e);
+                        int page = 0;
+                        try {
+                            HttpPushClient pushClient = new PushHttpClientBuilder().build(propertyHolder.getFcmUrl(), pushApp.getApiKey());
+                            while ((page = currentPage.getAndAdd(1)) < totalPageCnt) {
+                                sendCnt += proccessSendJob(pushClient, pushApp, pushMessage, tokenStatus, page, contentSeq, pushType, tokenCnt);
                             }
+                        } catch (Exception e) {
+                            log.debug("thread id : {} - send start appSeq : {},  currentPage : {}", Thread
+                                    .currentThread()
+                                    .getName(), appSeq, page);
+                            throw e;
                         }
                         return sendCnt;
                     }), appSeq);
@@ -307,9 +271,6 @@ public abstract class AbstractPushSender implements Sender {
                     pushContentsProcService.savePushContentsProc(proc);
                 }
             }
-
-            updateDone(contents);
-
         } catch (InterruptedException e) {
             //updateFailed(contents.getContentSeq(), null);
             for (PushContentsProc proc : contents.getAppProcs()) {
@@ -332,6 +293,8 @@ public abstract class AbstractPushSender implements Sender {
             }
         } finally {
             try {
+                updateDone(contents);
+
                 executorService.awaitTermination(500, TimeUnit.MILLISECONDS);
 
                 if (!executorService.isTerminated()) {
@@ -344,6 +307,83 @@ public abstract class AbstractPushSender implements Sender {
                 log.debug(e.toString());
             }
         }
+    }
+
+    /**
+     * 쓰레드 내부에서 페이징 한 토큰을 전송 이력에 저장 -> 전송 -> 전송 결과 저장 처리
+     *
+     * @param pushClient  httpClient
+     * @param pushApp     app 정보
+     * @param pushMessage 푸시메시지
+     * @param tokenStatus 토큰상태정보
+     * @param page        페이지번호
+     * @param contentSeq  컨텐츠 일련번호
+     * @param pushType    푸시 유형
+     * @param tokenCnt    토큰 조회 건수
+     * @return 성공건수
+     * @throws Exception 에러처리
+     */
+    private int proccessSendJob(HttpPushClient pushClient, PushApp pushApp, FcmMessage pushMessage, PushAppTokenStatus tokenStatus, int page,
+            Long contentSeq, String pushType, int tokenCnt)
+            throws Exception {
+
+
+        /**
+         * TODO 6. 앱별 푸시 쓰레드에서 각 대상 토큰 목록 조회, page 처리 필요
+         * - page별로 멀티쓰레드 생성하여 동시 발송 될 수 있도록 처리
+         * - 조회와 동시에 토큰별 이력 테이블에 이력 정보 insert 처리
+         */
+        int successCnt = 0;
+        Integer appSeq = pushApp.getAppSeq();
+        try {
+            PushAppTokenSearchDTO searchDTO = PushAppTokenSearchDTO
+                    .builder()
+                    .appSeq(pushApp.getAppSeq())
+                    .contentSeq(contentSeq)
+                    .firstTokenSeq(tokenStatus.getFirstTokenSeq())
+                    .lastTokenSeq(tokenStatus.getLastTokenSeq())
+                    .pushType(pushType)
+                    .build();
+            searchDTO.setPage(page);
+            searchDTO.setSize(tokenCnt);
+            log.debug("thread id : {} - findAllToken start appSeq : {},  currentPage : {}", Thread
+                    .currentThread()
+                    .getName(), appSeq, page);
+            final List<PushAppToken> pushTokens = findAllToken(searchDTO);
+            log.debug("thread id : {} - findAllToken end appSeq : {},  currentPage : {}", Thread
+                    .currentThread()
+                    .getName(), appSeq, page);
+
+            if (pushTokens != null && pushTokens.size() > 0) {
+                log.debug("thread id : {} - insertToken start appSeq : {},  currentPage : {}", Thread
+                        .currentThread()
+                        .getName(), appSeq, page);
+                insertPushAppTokenSendHist(appSeq, contentSeq, pushTokens);
+                log.debug("thread id : {} - insertToken end appSeq : {},  currentPage : {}", Thread
+                        .currentThread()
+                        .getName(), appSeq, page);
+                log.debug("thread id : {} - sendMessage start appSeq : {},  currentPage : {}", Thread
+                        .currentThread()
+                        .getName(), appSeq, page);
+                PushResponseMessage response = sendMessage(pushClient, pushTokens, pushMessage, pushApp);
+                successCnt = response.getSuccess();
+                log.debug("thread id : {} - sendMessage end appSeq : {},  currentPage : {}", Thread
+                        .currentThread()
+                        .getName(), appSeq, page);
+                log.debug("thread id : {} - updateToken start appSeq : {},  currentPage : {}", Thread
+                        .currentThread()
+                        .getName(), appSeq, page);
+                updatePushAppToken(appSeq, contentSeq, pushTokens, response);
+                log.debug("thread id : {} - updateToken end appSeq : {},  currentPage : {}", Thread
+                        .currentThread()
+                        .getName(), appSeq, page);
+            }
+
+        } catch (Exception e) {
+            log.error("SENDER ERROR", e);
+            throw e;
+        }
+        return successCnt;
     }
 
     /**
@@ -441,7 +481,7 @@ public abstract class AbstractPushSender implements Sender {
      * @param pushMessage 푸시 메시지
      * @return 전송 결과
      */
-    protected PushResponseMessage sendMessage(List<PushAppToken> pushTokens, FcmMessage pushMessage, PushApp pushApp)
+    protected PushResponseMessage sendMessage(HttpPushClient pushClient, List<PushAppToken> pushTokens, FcmMessage pushMessage, PushApp pushApp)
             throws Exception {
 
         log.info("[ RecommendArticlesSender PushResponseMessage sendMessage ]");
@@ -452,7 +492,7 @@ public abstract class AbstractPushSender implements Sender {
             /**
              * FCM에 푸시 요청
              */
-            PushHttpResponse response = pushSend(pushTokens, pushApp, pushMessage);
+            PushHttpResponse response = pushSend(pushClient, pushTokens, pushApp, pushMessage);
 
             String multicastId = null;
             int statusCode = response.getStatusCode();
@@ -506,7 +546,7 @@ public abstract class AbstractPushSender implements Sender {
      * @return 전송 결과
      * @throws Exception 오류 처리
      */
-    protected PushHttpResponse pushSend(List<PushAppToken> pushToken, PushApp pushApp, FcmMessage fcmMessage)
+    protected PushHttpResponse pushSend(HttpPushClient pushClient, List<PushAppToken> pushToken, PushApp pushApp, FcmMessage fcmMessage)
             throws Exception {
 
         List<String> registration_ids = pushToken
@@ -521,10 +561,7 @@ public abstract class AbstractPushSender implements Sender {
         /**
          * TODO 14. FCM 전송 로직 구현
          */
-        return new PushHttpClientBuilder()
-                .setPushApp(pushApp)
-                .build()
-                .push(null, fcmMessage);
+        return pushClient.push(null, fcmMessage);
     }
 
     /**
@@ -553,13 +590,13 @@ public abstract class AbstractPushSender implements Sender {
     }
 
     /**
-     * 푸시 메시지별 토큰의 이력 정보를 갱신한다.
+     * 푸시 메시지별 토큰의 이력 정보를 갱신한다. 실패한 토큰만 sendYn을 N으로 변경
      */
-    protected void updatePushAppTokenSendHist(Integer appSeq, Long contentSeq, List<PushAppToken> pushTokens, PushResponseMessage response)
+    protected void updatePushAppToken(Integer appSeq, Long contentSeq, List<PushAppToken> pushTokens, PushResponseMessage response)
             throws Exception {
 
         final List<Long> errorTokens = new ArrayList<>();
-        final List<Long> successTokens = new ArrayList<>();
+        final List<Long> deleteTokens = new ArrayList<>();
         try {
             int itemSize = response
                     .getResults()
@@ -569,36 +606,36 @@ public abstract class AbstractPushSender implements Sender {
                         .getResults()
                         .get(i);
                 if (FcmErrorType.isError(item.getError())) {
-                    errorTokens.add(pushTokens
-                            .stream()
-                            .filter(pushToken -> pushToken.getTokenSeq() == Integer.parseInt(item.getMessageId()))
-                            .findFirst()
-                            .get()
-                            .getTokenSeq());
-                } else {
-                    successTokens.add(pushTokens
-                            .stream()
-                            .filter(pushToken -> pushToken.getTokenSeq() == Integer.parseInt(item.getMessageId()))
-                            .findFirst()
-                            .get()
-                            .getTokenSeq());
+                    errorTokens.add(Long.parseLong(item.getMessageId()));
+                }
+                if (FcmErrorType.isDeviceDelete(item.getError())) {
+                    deleteTokens.add(Long.parseLong(item.getMessageId()));
                 }
             }
         } catch (Exception ex) {
             log.error("[FAIL TO UPDATE PUSH TOKEN SEND HIST]", ex);
         }
+        // 푸시 컨텐츠의 토큰별 전송 오류 이력 수정
+        updatePushAppTokenSendHist(errorTokens, appSeq, contentSeq);
 
+        // InvalidRegistration or NotRegistered 토큰 삭제 처리
+        if (propertyHolder.isErrorTokenDelete()) {
+            deletePushAppToken(deleteTokens);
+        }
+
+    }
+
+    /**
+     * 에러난 푸시 토큰 삭제 처리 푸시 토큰 이력 등록 -> 푸시 토큰 설정 정보 이력 등록 -> 푸시 토큰 설정 정보 삭제 -> 푸시 토큰 삭제
+     *
+     * @param deleteTokens 삭제 할 토큰 일련번호 목록
+     */
+    protected void deletePushAppToken(final List<Long> deleteTokens) {
         try {
-            // 성공한 토큰은 SEND_YN을 Y으로 수정한다.
-            if (pushTokens != null && pushTokens.size() > 0) {
+            // 오류가 발생한 토큰은 삭제 처리한다.
+            if (deleteTokens != null && deleteTokens.size() > 0) {
                 try {
-                    pushTokenSendHistService.updatePushTokenSendHistBatch(PushTokenBatchVO
-                            .builder()
-                            .appSeq(appSeq)
-                            .contentsSeq(contentSeq)
-                            .tokenSeqs(McpString.collectionToDelimitedString(successTokens, ","))
-                            .sendYn(MokaConstants.YES)
-                            .build());
+                    pushAppTokenService.deletePushAppToken(McpString.collectionToDelimitedString(deleteTokens, ","));
                 } catch (Exception e) {
                     log.error("[FAIL TO UPDATE PUSH TOKEN SEND HIST]", e);
                     throw new Exception("푸시 앱 토큰 전송 이력이 수정 되지 않습니다.", e);
@@ -607,6 +644,16 @@ public abstract class AbstractPushSender implements Sender {
         } catch (Exception ex) {
             log.error("[FAIL TO UPDATE PUSH TOKEN SEND HIST]", ex);
         }
+    }
+
+    /**
+     * 전송 이력 정보 수정
+     *
+     * @param errorTokens 오류 발생 토큰 일련번호
+     * @param appSeq      앱 일련번호
+     * @param contentSeq  컨텐츠 일련번호
+     */
+    protected void updatePushAppTokenSendHist(final List<Long> errorTokens, Integer appSeq, Long contentSeq) {
         try {
             // 오류가 발생한 토큰은 SEND_YN을 N으로 수정한다.
             if (errorTokens != null && errorTokens.size() > 0) {

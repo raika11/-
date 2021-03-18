@@ -15,9 +15,11 @@ import jmnet.moka.web.push.mvc.sender.vo.PushTokenBatchVO;
  * @author ince
  * @since 2021-03-16 09:37
  */
-public interface PushTokenSendHistMapper extends BaseMapper<PushTokenBatchVO, PushTokenBatchVO> {
+public interface PushTokenMapper extends BaseMapper<PushTokenBatchVO, PushTokenBatchVO> {
 
     int insertPushTokenSendHist(PushTokenBatchVO pushTokenBatch);
 
     int updatePushTokenSendHist(PushTokenBatchVO pushTokenBatch);
+
+    int deletePushTokens(String pushTokenSeqs);
 }

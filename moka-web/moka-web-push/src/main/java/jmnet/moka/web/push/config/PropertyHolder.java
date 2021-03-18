@@ -28,11 +28,21 @@ public class PropertyHolder {
     @Value("${fcm.url:https://fcm.googleapis.com/fcm/send}")
     private String fcmUrl;
 
+    @Value("${error.token.delete:true}")
+    private boolean isErrorTokenDelete;
+
     /**
      * @return the fcmUrl
      */
     public String getFcmUrl() {
         return fcmUrl;
+    }
+
+    /**
+     * @return the isErrorTokenDelete
+     */
+    public boolean isErrorTokenDelete() {
+        return isErrorTokenDelete;
     }
 
     /**

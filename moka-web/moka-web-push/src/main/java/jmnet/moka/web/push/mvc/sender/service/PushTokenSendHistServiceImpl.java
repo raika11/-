@@ -1,7 +1,7 @@
 package jmnet.moka.web.push.mvc.sender.service;
 
 import jmnet.moka.web.push.mvc.sender.entity.PushTokenSendHist;
-import jmnet.moka.web.push.mvc.sender.mapper.PushTokenSendHistMapper;
+import jmnet.moka.web.push.mvc.sender.mapper.PushTokenMapper;
 import jmnet.moka.web.push.mvc.sender.repository.PushTokenSendHistRepository;
 import jmnet.moka.web.push.mvc.sender.vo.PushTokenBatchVO;
 import lombok.extern.slf4j.Slf4j;
@@ -14,13 +14,13 @@ public class PushTokenSendHistServiceImpl implements PushTokenSendHistService {
 
     private final PushTokenSendHistRepository pushTokenSendHistRepository;
     private final ModelMapper modelMapper;
-    private final PushTokenSendHistMapper pushTokenSendHistMapper;
+    private final PushTokenMapper pushTokenMapper;
 
     public PushTokenSendHistServiceImpl(PushTokenSendHistRepository pushTokenSendHistRepository, ModelMapper modelMapper,
-            PushTokenSendHistMapper pushTokenSendHistMapper) {
+            PushTokenMapper pushTokenMapper) {
         this.pushTokenSendHistRepository = pushTokenSendHistRepository;
         this.modelMapper = modelMapper;
-        this.pushTokenSendHistMapper = pushTokenSendHistMapper;
+        this.pushTokenMapper = pushTokenMapper;
     }
 
     @Override
@@ -30,11 +30,11 @@ public class PushTokenSendHistServiceImpl implements PushTokenSendHistService {
 
     @Override
     public int insertPushTokenSendHistBatch(PushTokenBatchVO pushTokenBatch) {
-        return pushTokenSendHistMapper.insertPushTokenSendHist(pushTokenBatch);
+        return pushTokenMapper.insertPushTokenSendHist(pushTokenBatch);
     }
 
     @Override
     public int updatePushTokenSendHistBatch(PushTokenBatchVO pushTokenBatch) {
-        return pushTokenSendHistMapper.updatePushTokenSendHist(pushTokenBatch);
+        return pushTokenMapper.updatePushTokenSendHist(pushTokenBatch);
     }
 }

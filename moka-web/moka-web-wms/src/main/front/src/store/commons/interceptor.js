@@ -1,9 +1,9 @@
 import axios from './axios';
 import { setLocalItem, getLocalItem } from '@utils/storageUtil';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { AUTHORIZATION } from '@/constants';
 //import { auth } from '@store/auth/index';
-import { logout } from '@store/auth/authAction';
+import { logout } from '@store/auth';
 
 export default {
     setupInterceptors: (store) => {
@@ -27,14 +27,18 @@ export default {
         const onRequest = (config) => {
             if (config.url !== '/loginJwt' && config.url.indexOf('/member-join') < 0) {
                 const token = getLocalItem(AUTHORIZATION);
-                const menuId = store.getState().auth.latestMenuId;
-                if (token) {
+                if (!token) {
+                    // 인증 토큰 없음
+                    messageBox.alert('로그인 정보가 없습니다.\n로그인 페이지로 이동합니다.', () => {
+                        window.location.reload();
+                    });
+                    return null;
+                } else {
+                    const menuId = store.getState().auth.latestMenuId;
                     config.headers['x-menuid'] = menuId;
                     config.headers[AUTHORIZATION] = token;
                     return config;
                 }
-                goToLogin('로그인 정보가 없습니다.\n로그인 페이지로 이동합니다.');
-                return null;
             }
             return config;
         };
@@ -48,9 +52,7 @@ export default {
 
         /** 응답 실패 */
         const onFail = (error) => {
-            if (typeof error.response === 'undefined') {
-                toast.error('네트워크가 불안정 합니다. 다시 시도해 주세요.');
-            } else {
+            if (typeof error.response !== 'undefined') {
                 const header = error.response.data.header;
                 toast.error(header.message);
                 const errorCode = error.response.status;

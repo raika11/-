@@ -261,7 +261,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                                 value={special.pageEdate}
                                 onChange={handleChangeEdate}
                                 isInvalid={error.pageEdate}
-                                // invalidMessage={error.pageEdateMessage}
+                                invalidMessage={error.pageEdateMessage}
                             />
                         </Col>
                     </Form.Row>

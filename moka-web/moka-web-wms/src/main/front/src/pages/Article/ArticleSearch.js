@@ -66,6 +66,7 @@ const ArticleSearch = ({ ja, sun }) => {
     const handleChangeSDate = (date) => {
         if (typeof date === 'object') {
             setSearch({ ...search, startServiceDay: date });
+            if (error.startServiceDay) setError({ ...error, startServiceDay: false });
         } else if (date === '') {
             setSearch({ ...search, startServiceDay: null });
         }
@@ -78,6 +79,7 @@ const ArticleSearch = ({ ja, sun }) => {
     const handleChangeEDate = (date) => {
         if (typeof date === 'object') {
             setSearch({ ...search, endServiceDay: date });
+            if (error.endServiceDay) setError({ ...error, endServiceDay: false });
         } else if (date === '') {
             setSearch({ ...search, endServiceDay: null });
         }
@@ -116,6 +118,16 @@ const ArticleSearch = ({ ja, sun }) => {
             toast.warning('매체를 하나 이상 선택하세요');
         }
 
+        if (!ns.startServiceDay) {
+            isInvalid = isInvalid || true;
+            setError({ ...error, startServiceDay: true });
+        }
+
+        if (!ns.endServiceDay) {
+            isInvalid = isInvalid || true;
+            setError({ ...error, endServiceDay: true });
+        }
+
         return !isInvalid;
     };
 
@@ -123,11 +135,14 @@ const ArticleSearch = ({ ja, sun }) => {
      * 검색
      */
     const handleSearch = () => {
+        const startServiceDay = search.startServiceDay && search.startServiceDay.isValid() ? moment(search.startServiceDay).format(DB_DATEFORMAT) : null;
+        const endServiceDay = search.endServiceDay && search.endServiceDay.isValid() ? moment(search.endServiceDay).format(DB_DATEFORMAT) : null;
+
         let ns = {
             ...search,
             sourceList,
-            startServiceDay: moment(search.startServiceDay).format(DB_DATEFORMAT),
-            endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
+            startServiceDay,
+            endServiceDay,
             page: 0,
         };
 
@@ -226,6 +241,7 @@ const ArticleSearch = ({ ja, sun }) => {
                         inputProps={{ timeFormat: null, timeDefault: 'start' }}
                         onChange={handleChangeSDate}
                         value={search.startServiceDay}
+                        isInvalid={error.startServiceDay}
                     />
                     <MokaInput
                         as="dateTimePicker"
@@ -233,6 +249,7 @@ const ArticleSearch = ({ ja, sun }) => {
                         inputProps={{ timeFormat: null, timeDefault: 'end' }}
                         onChange={handleChangeEDate}
                         value={search.endServiceDay}
+                        isInvalid={error.endServiceDay}
                     />
                 </Col>
 

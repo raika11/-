@@ -83,7 +83,7 @@ const SundayJopanSearch = () => {
                         <option value="all">섹션 전체</option>
                         {pressCate61Rows &&
                             pressCate61Rows.map((code) => (
-                                <option key={code.id} value={code.id}>
+                                <option key={code.id} value={code.cdNmEtc1}>
                                     {code.name}
                                 </option>
                             ))}

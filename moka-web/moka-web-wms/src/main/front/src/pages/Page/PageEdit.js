@@ -244,7 +244,7 @@ const PageEdit = ({ onDelete }) => {
                 content: pageBody,
                 callback: ({ header, body }) => {
                     if (header.success) {
-                        const item = produce(page, (draft) => {
+                        const item = produce(temp, (draft) => {
                             draft.pageBody = pageBody;
                         });
                         commonUtil.newTabPreview(`${API_BASE_URL}/preview/page`, item);
@@ -254,13 +254,13 @@ const PageEdit = ({ onDelete }) => {
                 },
             }),
         );
-    }, [dispatch, page, pageBody]);
+    }, [dispatch, temp, pageBody]);
 
     /**
      * HTML검사(W3C) 팝업 : syntax체크 -> 머지결과 -> HTML검사
      */
     const handleClickW3COpen = useCallback(() => {
-        const tempPage = produce(page, (draft) => {
+        const tempPage = produce(temp, (draft) => {
             draft.pageBody = pageBody;
         });
 
@@ -276,7 +276,7 @@ const PageEdit = ({ onDelete }) => {
             },
         };
         dispatch(w3cPage(option));
-    }, [dispatch, page, pageBody]);
+    }, [dispatch, temp, pageBody]);
 
     /**
      * page url 클릭

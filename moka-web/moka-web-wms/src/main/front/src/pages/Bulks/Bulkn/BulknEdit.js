@@ -300,12 +300,12 @@ ${bulkArticleRow
             footerClassName="justify-content-center"
             footer
             footerButtons={[
-                { text: 'W3C 검사', variant: 'outline-neutral', onClick: () => handleClickW3ccheck(), className: 'mr-05' },
-                { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' }, // , useAuth: true
-                { text: '임시저장', variant: 'positive', onClick: () => handleClickTempSaveButton(), className: 'mr-05', disabled: tempButton === true ? true : false }, //useAuth: true
+                { text: 'W3C 검사', variant: 'outline-neutral', onClick: () => handleClickW3ccheck(), className: 'mr-1' },
+                { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-1' }, // , useAuth: true
+                { text: '임시저장', variant: 'positive', onClick: () => handleClickTempSaveButton(), className: 'mr-1', disabled: tempButton === true ? true : false }, //useAuth: true
                 // { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-05' },
-                { text: '미리보기', variant: 'outline-neutral', onClick: (e) => handlePreviewModalButton(e), className: 'mr-05' },
-                { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton(), className: 'mr-05' },
+                { text: '미리보기', variant: 'outline-neutral', onClick: (e) => handlePreviewModalButton(e), className: 'mr-1' },
+                { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton() },
             ]}
         >
             {/* select box 로 변경. */}

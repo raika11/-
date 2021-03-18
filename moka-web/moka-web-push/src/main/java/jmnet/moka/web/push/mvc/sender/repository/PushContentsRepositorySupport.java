@@ -58,4 +58,11 @@ public interface PushContentsRepositorySupport {
      */
     Page<PushContents> findAllByContentSeq(Long contentSeq, Pageable pageable);
 
+    /**
+     * 특정작업 존재여부 확인 - 앱 일련번호
+     *
+     * @param contentSeq, pushYn   검색조건
+     * @return 작업
+     */
+    Long countByContentSeqAndPushYn(Long contentSeq, String pushYn);
 }

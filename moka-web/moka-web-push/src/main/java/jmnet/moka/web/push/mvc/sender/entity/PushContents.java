@@ -13,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,13 +48,13 @@ public class PushContents implements Serializable {
      *  노출유무
      */
     @Column(name = "USED_YN")
-    private String usedYn;
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 푸시상태
      */
     @Column(name = "PUSH_YN")
-    private String pushYn;
+    private String pushYn = MokaConstants.NO;
 
     /**
      * 푸시종류(속보:T, 추천기사:S, 미리보는오늘:R, 뉴스룸레터:N)
@@ -69,13 +72,13 @@ public class PushContents implements Serializable {
      * 레터에서 편집자 사진 노출여부(Y/N)
      */
     @Column(name = "PIC_YN")
-    private String picYn;
+    private String picYn = MokaConstants.NO;
 
     /**
      * 메일 발송 여부 ( Y:발송, N:발송안함 )
      */
     @Column(name = "SEND_EMAIL")
-    private String sendEmail;
+    private String sendEmail = MokaConstants.NO;
 
     /**
      * 출고예약
@@ -93,19 +96,19 @@ public class PushContents implements Serializable {
      * 등록일시
      */
     @Column(name = "REG_DT")
-    private Date regDt;
+    private Date regDt = McpDate.now();
 
     /**
      * 등록자 아이디
      */
     @Column(name = "REG_ID")
-    private String regId;
+    private String regId = "ssc01";
 
     /**
      * 수정일시
      */
     @Column(name = "MOD_DT")
-    private Date modDt;
+    private Date modDt = McpDate.now();
 
     /**
      * 수정자 아이디

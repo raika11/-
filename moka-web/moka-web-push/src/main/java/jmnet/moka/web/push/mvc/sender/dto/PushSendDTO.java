@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -35,19 +36,15 @@ public class PushSendDTO {
     /**
      * 앱 일련번호
      */
-    @ApiModelProperty(value = "앱 일련번호")
-    @Min(value = 0, message = "{wpush.common.error.min.seq}")
-    private Long jobSeq;
-
-    @Builder.Default
-    private List<PushAppDTO> pushApps = new ArrayList<>();
+    @ApiModelProperty(value = "앱 일련번호", required = true)
+    private String[] appSeq;
 
     /**
      * 요청일자
      */
     @ApiModelProperty(value = "출고예약(요청일자)")
     @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
-    private Date reserveDt;
+    private Date rsvDt;
 
     /**
      * 푸시기사 일련번호

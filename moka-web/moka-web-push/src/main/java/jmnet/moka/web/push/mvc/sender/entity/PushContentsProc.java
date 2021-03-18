@@ -44,37 +44,37 @@ public class PushContentsProc implements Serializable {
      * 전송 상태
      */
     @Column(name = "STATUS_FLAG")
-    private String statusFlag;
+    private String statusFlag = "0";
 
     /**
      * 대상 디바이스 건수
      */
     @Column(name = "TARGET_CNT")
-    private Long targetCnt;
+    private Long targetCnt = 0L;
 
     /**
      * 발송 건수
      */
     @Column(name = "SEND_CNT")
-    private Long sendCnt;
+    private Long sendCnt = 0L;
 
     /**
      * 수신 건수
      */
     @Column(name = "RCV_CNT")
-    private Long rcvCnt;
+    private Long rcvCnt = 0L;
 
     /**
      * 오픈 건수
      */
     @Column(name = "OPEN_CNT")
-    private Long openCnt;
+    private Long openCnt = 0L;
 
     /**
      * 최대 발송 토큰 일련번호
      */
     @Column(name = "LAST_TOKEN_SEQ")
-    private Long lastTokenSeq;
+    private Long lastTokenSeq = 0L;
 
     /**
      * 시작일시

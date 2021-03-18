@@ -66,4 +66,8 @@ public class PushContentsServiceImpl implements PushContentsService {
     public Page<PushContents> findAllByContentSeq(PushContentSeqSearchDTO search) {
         return pushContentsRepository.findAllByContentSeq(search.getContentSeq(), search.getPageable());
     }
+    @Override
+    public Long countByContentSeqAndPushYn(Long contentSeq, String pushYn) {
+        return pushContentsRepository.countByContentSeqAndPushYn(contentSeq, pushYn);
+    }
 }

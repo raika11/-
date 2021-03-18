@@ -28,5 +28,5 @@ public interface Sender {
      *
      * @param pushItem 예약 정보
      */
-    void doTask(PushContents pushItem, Integer appSeq);
+    void doTask(PushContents pushItem);
 }

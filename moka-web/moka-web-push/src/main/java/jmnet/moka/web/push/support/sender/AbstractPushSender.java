@@ -84,7 +84,7 @@ public abstract class AbstractPushSender implements Sender {
 
 
     @Override
-    public void doTask(PushContents pushItem, Integer appSeq) {
+    public void doTask(PushContents pushItem) {
 
         log.debug(" AbstractPushSender [doTask] " + pushItem.getPushType());
 

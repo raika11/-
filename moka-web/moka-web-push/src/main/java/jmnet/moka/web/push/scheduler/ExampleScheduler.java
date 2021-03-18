@@ -140,7 +140,7 @@ public class ExampleScheduler extends AbstractScheduler {
                     .pushType(dtoList.get(i).getPushType())
                     .contentSeq(dtoList.get(i).getContentSeq().longValue())
                     .build();
-            boolean success = pushSenderHandler.addPushJob(pushItem, appSeq);
+            boolean success = pushSenderHandler.addPushJob(pushItem);
         }
     }
 }

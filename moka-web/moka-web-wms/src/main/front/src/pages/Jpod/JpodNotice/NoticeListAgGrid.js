@@ -67,8 +67,8 @@ const NoticeListAgGrid = ({ match }) => {
     }, []);
 
     useEffect(() => {
-        setRowData([]);
-        const inirGridRow = (data) => {
+        const initGridRow = (data) => {
+            console.log(data);
             setRowData(
                 data.map((element) => {
                     let regDt = element.regDt && element.regDt.length > 10 ? element.regDt.substr(0, 10) : element.regDt;
@@ -80,13 +80,13 @@ const NoticeListAgGrid = ({ match }) => {
                         regName: element.regName,
                         regDt: regDt,
                         viewCnt: element.viewCnt,
-                        chnlNm: element.jpodChannel.chnlNm,
+                        chnlNm: element.jpodChannel ? element.jpodChannel.chnlNm : '',
                     };
                 }),
             );
         };
 
-        inirGridRow(list);
+        initGridRow(list);
     }, [list]);
 
     return (

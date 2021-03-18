@@ -703,12 +703,12 @@ const ChannelEdit = ({ match }) => {
                         </Col>
                     </Form.Row>
                     {editData.episodeStat && (
-                        <Form.Row className="mb-2">
-                            <div className="pl-2" style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}></div>
-                            {/* <Col className="p-0">* 등록된 에피소드: 사용(201) | 중지(1) * 마지막 회차 정보 : E.99</Col> */}
-                            <Col className="p-0">{`* 등록된 에피소드: 사용(${editData.episodeStat.usedCnt ? editData.episodeStat.usedCnt : 0}) | 중지(${
-                                editData.episodeStat.unusedCnt ? editData.episodeStat.unusedCnt : 0
-                            }) * 마지막 회차 정보 : ${editData.episodeStat.lastEpsoNo ? editData.episodeStat.lastEpsoNo : ``}`}</Col>
+                        <Form.Row className="mb-0">
+                            <Col className="p-0" style={{ marginLeft: '80px' }}>{`* 등록된 에피소드: 사용(${
+                                editData.episodeStat.usedCnt ? editData.episodeStat.usedCnt : 0
+                            }) | 중지(${editData.episodeStat.unusedCnt ? editData.episodeStat.unusedCnt : 0}) * 마지막 회차 정보 : ${
+                                editData.episodeStat.lastEpsoNo ? editData.episodeStat.lastEpsoNo : ``
+                            }`}</Col>
                         </Form.Row>
                     )}
 
@@ -742,10 +742,10 @@ const ChannelEdit = ({ match }) => {
                     </Form.Row>
 
                     {editData.seasonNm && (
-                        <Form.Row className="mb-2">
-                            <div className="pl-2" style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}></div>
-                            {/* <Col className="p-0">* 등록된 에피소드: 사용(201) | 중지(1) * 마지막 회차 정보 : E.99</Col> */}
-                            <Col className="p-0">* {`${editData.seasonNm} ${editData.seasonCnt}`}</Col>
+                        <Form.Row className="mb-0">
+                            <Col className="p-0" style={{ marginLeft: '80px' }}>
+                                * {`${editData.seasonNm} ${editData.seasonCnt}`}
+                            </Col>
                         </Form.Row>
                     )}
 
@@ -766,7 +766,7 @@ const ChannelEdit = ({ match }) => {
                             />
                         </Col>
                     </Form.Row>
-                    <Form.Row className="mb-2">
+                    <Form.Row className="mb-2 justify-content-between">
                         {/* 개설일 */}
                         <Col xs={5} className="p-0 pr-2">
                             <MokaInputLabel
@@ -939,7 +939,7 @@ const ChannelEdit = ({ match }) => {
                                                 />
                                                 {/* </div> */}
                                                 <div style={{ width: '70px' }}>
-                                                    <Button variant="searching" size="sm" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
+                                                    <Button variant="searching" size="md" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
                                                         삭제
                                                     </Button>
                                                 </div>

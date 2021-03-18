@@ -212,8 +212,7 @@ const EditDtlModal = ({ show, onHide, seqNo, grpCd, grp }) => {
                     variant: 'negative',
                     onClick: handleHide,
                 },
-            ].filter((a) => a)}
-            footerClassName="justify-content-center"
+            ].filter(Boolean)}
             centered
             loading={loading}
         >

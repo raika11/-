@@ -228,7 +228,6 @@ const SpecialEdit = ({ match }) => {
                     <p className="m-0 pl-2 text-positive">(등록 완료 후 스크립트 오류 체크 꼭 해주세요)</p>
                 </div>
             }
-            footer
             footerButtons={[
                 { text: special.seqNo ? '수정' : '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
                 special.seqNo && { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'mr-1' },

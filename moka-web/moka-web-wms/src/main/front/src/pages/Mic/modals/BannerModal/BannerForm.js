@@ -44,7 +44,6 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, setError }) => {
             className="shadow-none w-100 h-100"
             headerClassName="pt-0"
             bodyClassName="pr-0"
-            footerClassName="justify-content-center pb-0 mr-0"
             footer
             footerButtons={[
                 { text: temp.bnnrSeq ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: () => onSave(temp) },

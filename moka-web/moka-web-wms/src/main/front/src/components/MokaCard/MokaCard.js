@@ -233,27 +233,23 @@ const MokaCard = forwardRef((props, ref) => {
             {/* 카드 본문 */}
             <Card.Body className={clsx('custom-scroll', bodyClassName)}>{children}</Card.Body>
 
-            {/* 푸터 버튼 */}
-            {footer && (
-                <>
-                    {footerButtons.length > 0 ? (
-                        <Card.Footer className={clsx('d-flex align-items-center justify-content-center', footerClassName)}>
-                            {footerButtons.map(({ variant, text, useAuth, ...rest }, idx) =>
-                                useAuth ? (
-                                    <AuthButton key={`${text}-${idx}`} variant={variant} {...rest}>
-                                        {text}
-                                    </AuthButton>
-                                ) : (
-                                    <Button key={`${text}-${idx}`} variant={variant} {...rest}>
-                                        {text}
-                                    </Button>
-                                ),
-                            )}
-                        </Card.Footer>
-                    ) : (
-                        <Card.Footer className={footerClassName}>{footerAs}</Card.Footer>
+            {/* 푸터 */}
+            {footerButtons.length > 0 ? (
+                <Card.Footer className={clsx('d-flex align-items-center justify-content-center', footerClassName)}>
+                    {footerButtons.map(({ variant, text, useAuth, ...rest }, idx) =>
+                        useAuth ? (
+                            <AuthButton key={`${text}-${idx}`} variant={variant} {...rest}>
+                                {text}
+                            </AuthButton>
+                        ) : (
+                            <Button key={`${text}-${idx}`} variant={variant} {...rest}>
+                                {text}
+                            </Button>
+                        ),
                     )}
-                </>
+                </Card.Footer>
+            ) : (
+                footer && footerAs(<Card.Footer className={footerClassName}>{footerAs}</Card.Footer>)
             )}
         </Card>
     );

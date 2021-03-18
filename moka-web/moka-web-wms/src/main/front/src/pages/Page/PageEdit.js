@@ -247,7 +247,7 @@ const PageEdit = ({ onDelete }) => {
                         const item = produce(page, (draft) => {
                             draft.pageBody = pageBody;
                         });
-                        commonUtil.popupPreview(`${API_BASE_URL}/preview/page`, item);
+                        commonUtil.newTabPreview(`${API_BASE_URL}/preview/page`, item);
                     } else {
                         toast.fail(header.message || '미리보기에 실패하였습니다');
                     }
@@ -269,7 +269,7 @@ const PageEdit = ({ onDelete }) => {
             page: tempPage,
             callback: ({ header, body }) => {
                 if (header.success) {
-                    commonUtil.popupPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
+                    commonUtil.newTabPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
                 } else {
                     toast.fail(header.message || 'W3C검사에 실패했습니다');
                 }

@@ -289,17 +289,9 @@ const setDefaultValue = (value, defaultValue = '') => {
 };
 
 /**
- * 미리보기 팝업 기능
+ * 미리보기 데이터 셋팅
  */
-const popupPreview = (targetUrl, params, enctype = null) => {
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.action = targetUrl;
-    form.target = '_blank';
-    if (enctype !== null) {
-        form.enctype = 'multipart/form-data';
-    }
-
+const setPreviewData = (form, data) => {
     const addField = (fieldName, fieldValue) => {
         const hiddenField = document.createElement('input');
         hiddenField.type = 'hidden';
@@ -335,7 +327,42 @@ const popupPreview = (targetUrl, params, enctype = null) => {
         }
     };
 
-    addObject(undefined, params);
+    addObject(undefined, data);
+};
+
+/**
+ * 아티클페이지 미리보기 window.open
+ * @param {string} targetUrl submit target url
+ * @param {object} params 미리보기 데이터
+ * @param {string} winOptions window의 options text
+ * @param {*} enctype enctype 여부
+ */
+const winOpenPreview = (targetUrl, params, winOptions = 'width=665,height=680,location=1,status=1,scrollbars=1,resizable=1', enctype = null) => {
+    window.open('about:blank', 'winOpenPreview', winOptions);
+    const form = document.createElement('form');
+    form.action = targetUrl;
+    form.method = 'post';
+    form.target = 'winOpenPreview';
+    if (enctype !== null) form.enctype = 'multipart/form-data';
+    setPreviewData(form, params);
+    document.getElementsByTagName('body')[0].appendChild(form);
+    form.submit();
+    form.remove();
+};
+
+/**
+ * 아티클페이지 미리보기 new Tab
+ * @param {string} targetUrl submit target url
+ * @param {object} params 미리보기 데이터
+ * @param {*} enctype enctype 여부
+ */
+const newTabPreview = (targetUrl, params, enctype = null) => {
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = targetUrl;
+    form.target = '_blank';
+    if (enctype !== null) form.enctype = 'multipart/form-data';
+    setPreviewData(form, params);
     document.getElementsByTagName('body')[0].appendChild(form);
     form.submit();
     form.remove();
@@ -456,7 +483,8 @@ export default {
     setDefaultValue,
     delay,
     cancellablePromise,
-    popupPreview,
+    newTabPreview,
+    winOpenPreview,
     toRangeDateForDateType,
     validateForDateRange,
     toKorFromCode,

@@ -190,4 +190,8 @@ export const AREA_HOME = [
     { name: '선데이 홈 섹션편집', value: '61' },
 ];
 
+// iconTab의 핫키
 export const ICON_TAB_HOT_KEYS = ['shift+Q', 'shift+W', 'shift+E', 'shift+R', 'shift+T', 'shift+Y', 'shift+U', 'shift+I', 'shift+O', 'shift+P'];
+
+// 서비스사이트의 breakpoint
+export const BREAKPOINT_SERVICE = { mobile: 375, tablet: 768, pc: 1024, wide: 1200 };

@@ -87,7 +87,7 @@ const RelationInArticlePageList = (props) => {
                                                 ...data,
                                                 totalId: response.body,
                                             };
-                                            util.popupPreview('/preview/article-page', item);
+                                            util.newTabPreview('/preview/article-page', item);
                                         } else {
                                             toast.error(header.message || '미리보기에 실패하였습니다');
                                         }

@@ -189,7 +189,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                     content: artPageBody,
                     callback: ({ header }) => {
                         if (header.success) {
-                            commonUtil.popupPreview(`${API_BASE_URL}/preview/article-page`, {
+                            commonUtil.winOpenPreview(`${API_BASE_URL}/preview/article-page`, {
                                 ...articlePage,
                                 artPageBody,
                                 totalId: previewTotalId,
@@ -217,7 +217,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                     totalId: previewTotalId,
                     callback: ({ header, body }) => {
                         if (header.success) {
-                            commonUtil.popupPreview(W3C_URL, { fragment: body }, true);
+                            commonUtil.newTabPreview(W3C_URL, { fragment: body }, true);
                         } else {
                             messageBox.alert(header.message || 'W3C검사에 실패했습니다');
                         }

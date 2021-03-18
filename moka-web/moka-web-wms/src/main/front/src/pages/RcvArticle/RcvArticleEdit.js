@@ -153,7 +153,7 @@ const RcvArticleEdit = ({ match }) => {
      * 미리보기 팝업
      */
     const handleClickPreviewOpen = (domainId) => {
-        commonUtil.popupPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, domainId });
+        commonUtil.winOpenPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, domainId });
     };
 
     if (!rcvArticle.rid) return null;

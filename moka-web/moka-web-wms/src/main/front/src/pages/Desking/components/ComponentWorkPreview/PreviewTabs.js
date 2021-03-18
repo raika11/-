@@ -32,19 +32,19 @@ const PreviewTabs = ({ show, componentList, isNaverChannel }) => {
                     /**
                      * Wide 미리보기
                      */
-                    <CommonPreview show={show && activeTabIdx === 0} componentList={componentList} isNaverChannel={isNaverChannel} />,
+                    <CommonPreview show={show && activeTabIdx === 0} breakpoint="wide" componentList={componentList} isNaverChannel={isNaverChannel} />,
                     /**
                      * PC 미리보기
                      */
-                    <CommonPreview show={show && activeTabIdx === 1} componentList={componentList} isNaverChannel={isNaverChannel} />,
+                    <CommonPreview show={show && activeTabIdx === 1} breakpoint="pc" componentList={componentList} isNaverChannel={isNaverChannel} />,
                     /**
                      * Tablet 미리보기
                      */
-                    <CommonPreview show={show && activeTabIdx === 2} componentList={componentList} isNaverChannel={isNaverChannel} />,
+                    <CommonPreview show={show && activeTabIdx === 2} breakpoint="tablet" componentList={componentList} isNaverChannel={isNaverChannel} />,
                     /**
                      * Mobile 미리보기
                      */
-                    <CommonPreview show={show && activeTabIdx === 3} componentList={componentList} isNaverChannel={isNaverChannel} />,
+                    <CommonPreview show={show && activeTabIdx === 3} breakpoint="mobile" componentList={componentList} isNaverChannel={isNaverChannel} />,
                 ]}
             />
             <Button variant="outline-neutral" className="position-absolute" style={{ top: 10, right: 24 }} onClick={handleClickPreview} disabled={!area.page}>

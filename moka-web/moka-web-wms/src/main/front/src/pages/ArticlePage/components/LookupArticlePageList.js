@@ -125,7 +125,7 @@ const LookupArticlePageList = (props) => {
                                                 totalId: response.body,
                                             };
                                             console.log(item);
-                                            util.popupPreview('/preview/article-page', item);
+                                            util.newTabPreview('/preview/article-page', item);
                                         } else {
                                             toast.error(header.message || '미리보기에 실패하였습니다');
                                         }

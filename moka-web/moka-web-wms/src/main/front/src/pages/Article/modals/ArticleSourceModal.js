@@ -145,7 +145,6 @@ const ArticleSourceModal = (props) => {
                         onChange={handleAllCheck}
                     />
                 </div>
-                <hr className="divider my-2" />
                 <div className="flex-fill overflow-hidden pt-2">
                     <Form.Row className="flex-wrap input-border custom-scroll h-100">
                         {renderList.map((source, idx) => {

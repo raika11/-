@@ -223,7 +223,7 @@ ${bulkArticleRow
     .join(``)}${copyright.cdNm}
 </body>
 </html>`;
-        commonUtil.popupPreview(W3C_URL, { fragment: checkBody }, 'multipart/form-data');
+        commonUtil.newTabPreview(W3C_URL, { fragment: checkBody }, 'multipart/form-data');
     };
 
     // 현재 선택한 bulkartSeq 가 없을떄 ( 등록 상태.).

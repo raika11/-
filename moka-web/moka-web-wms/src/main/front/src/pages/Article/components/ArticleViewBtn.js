@@ -11,9 +11,7 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
     /**
      * 미리보기 팝업
      */
-    const handleClickPreviewOpen = () => {
-        utils.popupPreview(`${API_BASE_URL}/preview/article/${data.totalId}`, { ...data, domainId: PREVIEW_DOMAIN_ID });
-    };
+    const handleClickPreviewOpen = () => utils.winOpenPreview(`${API_BASE_URL}/preview/article/${data.totalId}`, { ...data, domainId: PREVIEW_DOMAIN_ID });
 
     useImperativeHandle(ref, () => ({
         refresh: () => false,

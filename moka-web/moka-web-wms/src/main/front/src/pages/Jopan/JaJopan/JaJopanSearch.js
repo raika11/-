@@ -31,9 +31,10 @@ const JaJopanSearch = () => {
      * 검색 버튼
      */
     const handleClickSearch = () => {
+        const pressDate = search.pressDate && search.pressDate.isValid() ? moment(search.pressDate).format(DB_DATEFORMAT) : null;
         let ns = {
             ...search,
-            pressDate: moment(search.pressDate).format(DB_DATEFORMAT),
+            pressDate,
             page: 0,
         };
         dispatch(changeJopanSearchOption(ns));

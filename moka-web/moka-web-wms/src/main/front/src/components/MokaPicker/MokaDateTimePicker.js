@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useCallback } from 'react';
 import clsx from 'clsx';
 import moment from 'moment';
 import DateTime from 'react-datetime';
@@ -126,7 +126,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
     /**
      * renderDay
      */
-    const renderDay = (props, currentDate, selectedDate) => {
+    const renderDay = useCallback((props, currentDate, selectedDate) => {
         // 일요일 스타일 변경
         if (currentDate._d.getDay() === 0) {
             return (
@@ -136,7 +136,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
             );
         }
         return <td {...props}>{currentDate.date()}</td>;
-    };
+    }, []);
 
     /**
      * time 기본값 설정
@@ -159,28 +159,31 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
      * @param {func} openCalendar 캘린더 여는 함수
      * @param {func} closeCalendar 캘린더 닫는 함수
      */
-    const renderInput = (props, openCalendar, closeCalendar) => {
-        return (
-            <InputGroup ref={inputGroupRef} style={{ width }} size={size} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-                <InputMask
-                    onChange={props.onChange}
-                    onKeyDown={props.onKeyDown}
-                    value={props.value}
-                    className={clsx(props.className, inputClassName, { 'is-invalid': isInvalid })}
-                    placeholder={placeholder || dateTimeFormat}
-                    disabled={disabled}
-                    mask={dateTimeFormat.replace(/y|m|d|h|s/gi, '9')}
-                    alwaysShowMask={false}
-                    maskChar={null}
-                />
-                <InputGroup.Append>
-                    <Button variant="searching" disabled={disabled} onClick={openCalendar}>
-                        <MokaIcon iconName={dateFormat ? 'far-calendar-alt' : timeFormat ? 'fal-clock' : 'far-calendar-alt'} />
-                    </Button>
-                </InputGroup.Append>
-            </InputGroup>
-        );
-    };
+    const renderInput = useCallback(
+        (props, openCalendar, closeCalendar) => {
+            return (
+                <InputGroup ref={inputGroupRef} style={{ width }} size={size} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+                    <InputMask
+                        onChange={props.onChange}
+                        onKeyDown={props.onKeyDown}
+                        value={props.value}
+                        className={clsx(props.className, inputClassName, { 'is-invalid': isInvalid })}
+                        placeholder={placeholder || dateTimeFormat}
+                        disabled={disabled}
+                        mask={dateTimeFormat.replace(/y|m|d|h|s/gi, '9')}
+                        alwaysShowMask={false}
+                        maskChar={null}
+                    />
+                    <InputGroup.Append>
+                        <Button variant="searching" disabled={disabled} onClick={openCalendar}>
+                            <MokaIcon iconName={dateFormat ? 'far-calendar-alt' : timeFormat ? 'fal-clock' : 'far-calendar-alt'} />
+                        </Button>
+                    </InputGroup.Append>
+                </InputGroup>
+            );
+        },
+        [dateFormat, dateTimeFormat, disabled, inputClassName, isInvalid, onMouseEnter, onMouseLeave, placeholder, size, timeFormat, width],
+    );
 
     useImperativeHandle(ref, () => ({
         dateTimeRef: dateTimeRef.current,

@@ -46,7 +46,7 @@ export const initialState = {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
         section: 'all',
-        pressDate: '',
+        pressDate: null,
         ho: '',
         myun: '',
     },

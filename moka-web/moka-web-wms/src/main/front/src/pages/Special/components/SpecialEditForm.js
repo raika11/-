@@ -117,7 +117,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                         }}
                         ref={imgFileRef}
                         isInvalid={error.imgUrl}
-                        invalidMessage={error.imgUrlMessage}
+                        // invalidMessage={error.imgUrlMessage}
                     />
                     <div className="d-flex justify-content-between mt-2">
                         <Button variant="gray-700" size="sm" onClick={() => setArcShow(true)}>
@@ -181,7 +181,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                             value={special.pageCd}
                             onChange={handleChangeValue}
                             isInvalid={error.pageCd}
-                            invalidMessage={error.pageCdMessage}
+                            // invalidMessage={error.pageCdMessage}
                             required
                         >
                             <option hidden>선택</option>
@@ -200,7 +200,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                             required
                             value={special.ordinal}
                             isInvalid={error.ordinal}
-                            invalidMessage={error.ordinalMessage}
+                            // invalidMessage={error.ordinalMessage}
                             onChange={handleChangeValue}
                         />
                     </Form.Row>
@@ -215,7 +215,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                                 value={special.schKwd}
                                 onChange={handleChangeValue}
                                 isInvalid={error.schKwd}
-                                invalidMessage={error.schKwdMessage}
+                                // invalidMessage={error.schKwdMessage}
                             />
                             <p className="m-0 ft-12 text-neutral">*'" 포함 특수문자 사용금지</p>
                         </div>
@@ -230,7 +230,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                                 className="mb-1"
                                 value={special.pageTitle}
                                 isInvalid={error.pageTitle}
-                                invalidMessage={error.pageTitleMessage}
+                                // invalidMessage={error.pageTitleMessage}
                                 onChange={handleChangeValue}
                             />
                             <p className="m-0 ft-12 text-neutral">*'" 포함 특수문자 사용금지</p>
@@ -248,7 +248,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                                 value={special.pageSdate}
                                 onChange={handleChangeSdate}
                                 isInvalid={error.pageSdate}
-                                invalidMessage={error.pageSdateMessage}
+                                // invalidMessage={error.pageSdateMessage}
                             />
                         </Col>
                         <Col xs={6} className="p-0 pl-10">
@@ -257,10 +257,11 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                                 as="dateTimePicker"
                                 name="pageEdate"
                                 inputProps={{ timeFormat: null }}
+                                inputClassName="right"
                                 value={special.pageEdate}
                                 onChange={handleChangeEdate}
                                 isInvalid={error.pageEdate}
-                                invalidMessage={error.pageEdateMessage}
+                                // invalidMessage={error.pageEdateMessage}
                             />
                         </Col>
                     </Form.Row>
@@ -275,7 +276,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                 value={special.pcUrl}
                 onChange={handleChangeValue}
                 isInvalid={error.pcUrl}
-                invalidMessage={error.pcUrlMessage}
+                // invalidMessage={error.pcUrlMessage}
                 required
             />
 
@@ -287,7 +288,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                 value={special.mobUrl}
                 onChange={handleChangeValue}
                 isInvalid={error.mobUrl}
-                invalidMessage={error.mobUrlMessage}
+                // invalidMessage={error.mobUrlMessage}
                 required
             />
 
@@ -346,7 +347,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                 value={special.pageDesc}
                 onChange={handleChangeValue}
                 isInvalid={error.pageDesc}
-                invalidMessage={error.pageDescMessage}
+                // invalidMessage={error.pageDescMessage}
             />
 
             {/* 부서명 */}

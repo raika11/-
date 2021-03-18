@@ -55,6 +55,7 @@ const RcvArticleSearch = () => {
     const handleChangeSDate = (date) => {
         if (typeof date === 'object') {
             setSearch({ ...search, startDay: date });
+            if (error.startDay) setError({ ...error, startDay: false });
         } else if (date === '') {
             setSearch({ ...search, startDay: null });
         }
@@ -67,6 +68,7 @@ const RcvArticleSearch = () => {
     const handleChangeEDate = (date) => {
         if (typeof date === 'object') {
             setSearch({ ...search, endDay: date });
+            if (error.endDay) setError({ ...error, endDay: false });
         } else if (date === '') {
             setSearch({ ...search, endDay: null });
         }
@@ -104,6 +106,16 @@ const RcvArticleSearch = () => {
             setError({ ...error, sourceList: true });
         }
 
+        if (!ns.startDay) {
+            isInvalid = isInvalid || true;
+            setError({ ...error, startDay: true });
+        }
+
+        if (!ns.endDay) {
+            isInvalid = isInvalid || true;
+            setError({ ...error, endDay: true });
+        }
+
         return !isInvalid;
     };
 
@@ -111,11 +123,14 @@ const RcvArticleSearch = () => {
      * 검색
      */
     const handleSearch = () => {
+        const startDay = search.startDay && search.startDay.isValid() ? moment(search.startDay).format(DB_DATEFORMAT) : null;
+        const endDay = search.endDay && search.endDay.isValid() ? moment(search.endDay).format(DB_DATEFORMAT) : null;
+
         let ns = {
             ...search,
             sourceList,
-            startDay: moment(search.startDay).format(DB_DATEFORMAT),
-            endDay: moment(search.endDay).format(DB_DATEFORMAT),
+            startDay,
+            endDay,
             page: 0,
         };
 
@@ -189,12 +204,24 @@ const RcvArticleSearch = () => {
 
                 {/* 시작일 */}
                 <div className="mr-2">
-                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'start', width: 140 }} onChange={handleChangeSDate} value={search.startDay} />
+                    <MokaInput
+                        as="dateTimePicker"
+                        inputProps={{ timeFormat: null, timeDefault: 'start', width: 140 }}
+                        onChange={handleChangeSDate}
+                        value={search.startDay}
+                        isInvalid={error.startDay}
+                    />
                 </div>
 
                 {/* 종료일 */}
                 <div className="mr-2">
-                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'end', width: 140 }} onChange={handleChangeEDate} value={search.endDay} />
+                    <MokaInput
+                        as="dateTimePicker"
+                        inputProps={{ timeFormat: null, timeDefault: 'end', width: 140 }}
+                        onChange={handleChangeEDate}
+                        value={search.endDay}
+                        isInvalid={error.endDay}
+                    />
                 </div>
 
                 {/* 상태 */}

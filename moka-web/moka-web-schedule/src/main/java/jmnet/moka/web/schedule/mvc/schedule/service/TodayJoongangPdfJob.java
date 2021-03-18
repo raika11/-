@@ -13,7 +13,7 @@ import java.util.*;
 
 /**
  * <pre>
- * 투데이중앙 PDF 이미지 데이터를 조회하여 js 파일로 FTP 업로드
+ * 오늘자 중앙 PDF 이미지 데이터를 조회하여 js 파일로 FTP 업로드
  * Project : moka
  * Package : jmnet.moka.web.schedule.mvc.schedule.service
  * ClassName : TodayJoongangPdfJob

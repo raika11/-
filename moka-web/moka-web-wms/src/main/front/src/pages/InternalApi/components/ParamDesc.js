@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel, MokaInput, MokaIcon } from '@components';
 
-const ParamDesc = ({ className, onChange, onDelete, onAdd, index, validateParamName, isInvalid, invalidMessage, ...data }) => {
+const ParamDesc = ({ className, onChange, onDelete, onAdd, index, validateParamName, isInvalid, ...data }) => {
     return (
         <Form.Row className={clsx('d-flex align-items-center', className)}>
             {/* 파라미터명 */}
@@ -17,7 +17,6 @@ const ParamDesc = ({ className, onChange, onDelete, onAdd, index, validateParamN
                     value={data.name}
                     onChange={(e) => onChange(e, index)}
                     isInvalid={isInvalid}
-                    invalidMessage={invalidMessage}
                     inputProps={{ onBlur: (e) => validateParamName(e, index) }}
                 />
             </Col>

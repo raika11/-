@@ -126,7 +126,6 @@ const MokaInput = forwardRef((props, ref) => {
         ...rest
     } = props;
     const inputRef = useRef(null);
-    const [invalidShow, setInvalidShow] = React.useState(false);
     useImperativeHandle(ref, () => inputRef?.current);
 
     /**
@@ -140,11 +139,8 @@ const MokaInput = forwardRef((props, ref) => {
             if (inputProps.onMouseEnter) {
                 inputProps.onMouseEnter();
             }
-            if (isInvalid) {
-                setInvalidShow(true);
-            }
         },
-        [inputProps, isInvalid],
+        [inputProps],
     );
 
     /**
@@ -158,11 +154,8 @@ const MokaInput = forwardRef((props, ref) => {
             if (inputProps.onMouseLeave) {
                 inputProps.onMouseLeave();
             }
-            if (isInvalid) {
-                setInvalidShow(false);
-            }
         },
-        [inputProps, isInvalid],
+        [inputProps],
     );
 
     let Type = Form.Control;
@@ -239,11 +232,12 @@ const MokaInput = forwardRef((props, ref) => {
             <Type ref={inputRef} {...contextProps}>
                 {children}
             </Type>
-            {isInvalid && invalidMessage && invalidMessage !== '' && (
-                <Overlay target={as === 'imageFile' ? inputRef.current?.wrapRef : as === 'dateTimePicker' ? inputRef.current?.inputGroupRef : inputRef.current} show={invalidShow}>
-                    <Tooltip id={`input-invalid-${name}`}>{invalidMessage}</Tooltip>
-                </Overlay>
-            )}
+            <Overlay
+                show={isInvalid && invalidMessage && invalidMessage !== ''}
+                target={as === 'imageFile' ? inputRef.current?.wrapRef : as === 'dateTimePicker' ? inputRef.current?.inputGroupRef : inputRef.current}
+            >
+                <Tooltip id={`input-invalid-${name}`}>{invalidMessage}</Tooltip>
+            </Overlay>
         </React.Fragment>
     );
 });

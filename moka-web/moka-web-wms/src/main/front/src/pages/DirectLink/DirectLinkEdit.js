@@ -341,16 +341,7 @@ const DirectLinkEdit = ({ history, match }) => {
                 {/* 제목 */}
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel
-                            label="제목"
-                            className="mb-0"
-                            name="linkTitle"
-                            value={temp.linkTitle}
-                            onChange={handleChangeValue}
-                            isInvalid={error.linkTitle}
-                            invalidMessage={error.linkTitleMessage}
-                            required
-                        />
+                        <MokaInputLabel label="제목" className="mb-0" name="linkTitle" value={temp.linkTitle} onChange={handleChangeValue} isInvalid={error.linkTitle} required />
                     </Col>
                 </Form.Row>
 
@@ -364,7 +355,6 @@ const DirectLinkEdit = ({ history, match }) => {
                             value={temp.linkContent}
                             onChange={handleChangeValue}
                             isInvalid={error.linkContent}
-                            invalidMessage={error.linkContentMessage}
                             inputProps={{ rows: 5 }}
                             required
                         />
@@ -374,16 +364,7 @@ const DirectLinkEdit = ({ history, match }) => {
                 {/* 링크 */}
                 <Form.Row className="mb-2">
                     <Col xs={9} className="p-0">
-                        <MokaInputLabel
-                            label="LINK"
-                            className="mb-0"
-                            name="linkUrl"
-                            value={temp.linkUrl}
-                            onChange={handleChangeValue}
-                            isInvalid={error.linkUrl}
-                            invalidMessage={error.linkUrlMessage}
-                            required
-                        />
+                        <MokaInputLabel label="LINK" className="mb-0" name="linkUrl" value={temp.linkUrl} onChange={handleChangeValue} isInvalid={error.linkUrl} required />
                     </Col>
                     <Col xs={3} className="p-0 pl-2">
                         <Button variant="outline-neutral" onClick={validateLink} className="h-100 w-100">
@@ -403,16 +384,7 @@ const DirectLinkEdit = ({ history, match }) => {
                 {/* 키워드 */}
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel
-                            label="키워드"
-                            className="mb-0"
-                            name="linkKwd"
-                            value={temp.linkKwd}
-                            onChange={handleChangeValue}
-                            isInvalid={error.linkKwd}
-                            invalidMessage={error.linkKwdMessage}
-                            required
-                        />
+                        <MokaInputLabel label="키워드" className="mb-0" name="linkKwd" value={temp.linkKwd} onChange={handleChangeValue} isInvalid={error.linkKwd} required />
                     </Col>
                 </Form.Row>
 
@@ -477,7 +449,6 @@ const DirectLinkEdit = ({ history, match }) => {
                             inputProps={{ img: temp.imgUrl ? `${temp.imgUrl}?${temp.linkSeq}` : null, width: 115, height: 90, setFileValue, deleteButton: true }}
                             labelClassName="justify-content-end"
                             isInvalid={error.directLinkThumbnailFile}
-                            invalidMessage={error.directLinkThumbnailFileMessage}
                             onChange={() => setError({ ...error, directLinkThumbnailFile: false })}
                         />
                     </Col>

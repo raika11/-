@@ -288,7 +288,7 @@ const TourListEdit = ({ match }) => {
                     onChange={handleChangeValue}
                 />
 
-                <hr className="divider" />
+                <hr />
 
                 <MokaInputLabel label="신청자 정보" className="mb-2" as="none" />
                 <Form.Row className="mb-2">
@@ -329,7 +329,7 @@ const TourListEdit = ({ match }) => {
                     </Col>
                 </Form.Row>
 
-                <hr className="divider" />
+                <hr />
 
                 <MokaInputLabel label="담당자 정보" className="mb-2" as="none" />
                 <MokaInputLabel label="부서" className="mb-2" name="chargeDept" value={temp.chargeDept} onChange={handleChangeValue} />

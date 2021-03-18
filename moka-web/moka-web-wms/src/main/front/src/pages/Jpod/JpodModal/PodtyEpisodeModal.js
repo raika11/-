@@ -52,7 +52,7 @@ const PodtyEpisodeModal = (props) => {
 
     return (
         <MokaModal
-            size="xl"
+            size="md"
             width={1200}
             height={820}
             show={show}

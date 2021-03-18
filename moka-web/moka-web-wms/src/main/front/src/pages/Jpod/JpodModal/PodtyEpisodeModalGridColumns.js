@@ -29,9 +29,10 @@ export const columnDefs = [
         headerName: '소개',
         field: 'summary',
         flex: 1,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: 'initial', paddingTop: '5px', paddingBottom: '5px' },
         tooltipField: 'summary',
         wrapText: true,
+        autoHeight: true,
     },
     {
         headerName: '보기',

@@ -180,7 +180,6 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
             SetRowData(hotClickList);
         }*/
         if (!commonUtil.isEmpty(hotClickList)) {
-            console.log(hotClickList);
             setRowData(
                 hotClickList.map((e, index) => ({
                     dataIndex: index,

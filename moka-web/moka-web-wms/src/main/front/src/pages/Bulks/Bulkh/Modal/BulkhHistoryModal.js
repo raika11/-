@@ -31,10 +31,10 @@ const BulkhHistoryModal = ({ show, onHide }) => {
     return (
         <MokaModal show={show} onHide={() => onHide()} title="핫클릭 히스토리" size="xl" headerClassName="mb-0 pl-4 pb-0" width={1150} height={750} draggable>
             <Form.Row>
-                <Col>
+                <Col xs={5}>
                     <HistoryAgGrid />
                 </Col>
-                <Col>
+                <Col xs={7}>
                     <HistoryDetailAgGrid />
                 </Col>
             </Form.Row>

@@ -41,21 +41,17 @@ const HistoryDetailAgGrid = () => {
     return (
         <>
             <MokaCard
-                width={630}
                 height={670}
                 loading={loading}
                 header={false}
-                className="custom-scroll mr-gutter flex-fill no-shadow"
+                className="custom-scroll mr-gutter w-100 no-shadow"
                 footer
                 footerAs={
-                    <>
-                        <Col></Col>
-                        <Col className="offset-8 pr-0">
-                            <Button variant="outline-neutral" onClick={() => handleClickLoadButton()} disabled={rowData.length > 0 ? false : true}>
-                                불러오기
-                            </Button>
-                        </Col>
-                    </>
+                    <div className="text-right">
+                        <Button variant="outline-neutral" onClick={() => handleClickLoadButton()} disabled={rowData.length > 0 ? false : true}>
+                            불러오기
+                        </Button>
+                    </div>
                 }
             >
                 <MokaTable
@@ -68,6 +64,7 @@ const HistoryDetailAgGrid = () => {
                     total={historyListArticle.list.totalCnt}
                     page={null}
                     size={null}
+                    className="flex-fill"
                     onChangeSearchOption={null}
                     selected={null}
                     paging={false}

@@ -196,6 +196,31 @@ const CommentListBox = ({ setSelectBannedItem }) => {
                         memNm: element.memNm,
                         memId: element.memId,
                     },
+                    onClickTitle: (params) => {
+                        const { api: gridApi, rowIndex, reactContainer } = params;
+                        const row = gridApi.getDisplayedRowAtIndex(rowIndex);
+                        const contHeight = reactContainer.querySelector('span').clientHeight;
+                        if (row.rowHeight === 54) {
+                            row.setRowHeight(contHeight + 10);
+                        } else {
+                            gridApi.resetRowHeights();
+                        }
+
+                        gridApi.onRowHeightChanged();
+                    },
+                    onPreview: (params) => {
+                        const { commentUrl, contentId } = params.data;
+                        let url = commentUrl;
+                        if (url !== null) {
+                            window.open(url);
+                        } else {
+                            url = 'https://news.joins.com';
+                            if (!commonUtil.isEmpty(contentId)) {
+                                url = `${url}/article/${contentId}`;
+                            }
+                            window.open(url);
+                        }
+                    },
                 };
             }),
         );
@@ -215,13 +240,14 @@ const CommentListBox = ({ setSelectBannedItem }) => {
             onRowSelected={(e) => handleGridRowSelected(e)}
             onColumnResized={(e) => onColumnResized(e)}
             onColumnVisible={(e) => onColumnVisible(e)}
+            rowHeight={54}
             // rowSelected={(e) => handleClick(e)}
             // onRowClicked={(e) => handleOnClick(e)}
-            onCellClicked={(e) => handleOnCellClicked(e)}
+            //onCellClicked={(e) => handleOnCellClicked(e)}
             // onRowDoubleClicked={(e) => handleDoubleClickListRow(e)}
             onGridReady={(e) => onGridReady(e)}
             changeSearchOption={(e) => handleChangeSearchOption(e)}
-            preventRowClickCell={['cont', 'action']}
+            preventRowClickCell={['cont', 'action', 'preview']}
         />
     );
 };

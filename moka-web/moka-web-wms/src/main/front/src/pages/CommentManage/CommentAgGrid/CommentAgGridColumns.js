@@ -1,3 +1,9 @@
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import { Button } from 'react-bootstrap';
+import { MokaIcon } from '@components';
+import React from 'react';
+
 export const columnDefs = [
     {
         colId: 'checkbox',
@@ -25,20 +31,61 @@ export const columnDefs = [
         field: 'cont',
         tooltipField: 'cont',
         flex: 1,
-        autoHeight: true,
-        resizable: true,
+        //autoHeight: true,
+        //resizable: true,
         // suppressDoubleClickExpand: true,
         cellStyle: {
             boxSizing: 'border-box',
             whiteSpace: 'normal',
-            lineHeight: '20px',
-            height: '50px',
+            lineHeight: '22px',
             display: '-webkit-box',
             '-webkit-line-clamp': '2',
             '-webkit-box-orient': 'vertical',
             paddingTop: '5px',
+            paddingBottom: '5px',
             overflow: 'hidden',
             cursor: 'pointer',
+        },
+        cellRendererFramework: (param) => {
+            return (
+                <OverlayTrigger overlay={<Tooltip id="tooltip-table-preview-button">{param.value}</Tooltip>}>
+                    <span
+                        onClick={() => {
+                            if (param.data.onClickTitle instanceof Function) {
+                                param.data.onClickTitle(param);
+                            }
+                        }}
+                        className="d-flex flex-fill"
+                    >
+                        {param.value}
+                    </span>
+                </OverlayTrigger>
+            );
+        },
+    },
+    {
+        headerName: '보기',
+        field: 'preview',
+        width: 50,
+        cellStyle: { diplay: 'flex', alignItems: 'center' },
+        cellRendererFramework: (param) => {
+            return (
+                <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+                    <OverlayTrigger overlay={<Tooltip id="tooltip-table-preview-button">미리보기</Tooltip>}>
+                        <Button
+                            variant="white"
+                            className="border-0 p-0 bg-transparent shadow-none"
+                            onClick={() => {
+                                if (param.data.onPreview instanceof Function) {
+                                    param.data.onPreview(param);
+                                }
+                            }}
+                        >
+                            <MokaIcon iconName="fal-file-search" style={{ fontSize: '18px' }} />
+                        </Button>
+                    </OverlayTrigger>
+                </div>
+            );
         },
     },
     {
@@ -88,7 +135,7 @@ export const columnDefs = [
     {
         headerName: '기능',
         field: 'action',
-        width: 60,
+        width: 70,
         // suppressDoubleClickExpand: true,
         cellRenderer: 'deleteButtonRenderer',
         cellStyle: { display: 'flex', alignItems: 'center', overflow: 'visible' },

@@ -131,12 +131,13 @@ section{width:100%;}
 
 /** grid **/
 .row {display:flex;flex-wrap:wrap;}
-.row + .row{margin-top:30px;}
+/* .row + .row{margin-top:30px;} */
 .row > * {width:100%; max-width:100%;}
 
 /** margin,padding **/
 .mt_6 {margin-top: 6px;}
 .mt_10 {margin-top: 10px;}
+.mr_8 {margin-right: 8px;}
 
 /** flex **/
 .flex {display: flex;}
@@ -144,6 +145,7 @@ section{width:100%;}
 .flex_align_center {align-items: center;}
 .flex_align_start {align-items: flex-start;}
 .flex_align_end {align-items: flex-end;}
+.flex_justify_center {justify-content: center;}
 .flex_justify_start {justify-content: flex-start;}
 .flex_justify_end {justify-content: flex-end;}
 .flex_justify_between {justify-content: space-between;}
@@ -206,15 +208,16 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 .radio_type_1 input[type="radio"]:checked + label span::after {content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 12px; height: 12px; border-radius: 50%; background-color: #fb502f; background-size: 100%;}
 
 /** badge **/
-.badge { display: flex; align-items: center; justify-content: center; }
-.badge_type1 { min-width: 40px; height: 20px; color: #fff; font-size: 13px; }
+.badge {display: inline-flex; align-items: center; justify-content: center; text-align:cent}
+.badge_type1 {min-width: 40px; height: 20px; color: #fff; font-size: 13px; }
+.badge_type2 {min-width: 46px; height: 23px; margin-right: 20px; color: #fff; font-size: 13px;}
 
 /** button **/
 .btn {display: flex; align-items: center; justify-content: space-between; text-align:center;}
 /* type */
-.btn_type1 {padding: 0 20px; height: 34px; font-size: 13px; font-weight: 700; color: #111;}
-.btn_type2 {padding: 0 20px; height: 38px; font-size: 14px; font-weight: 700; color: #000;}
-.btn_type3 {height: 38px; padding: 9px 16px 8px; line-height: 13px;color: #111; font-size: 14px; font-weight: 700;}
+.btn_type1 {height: 34px; padding: 0 20px; font-size: 13px; font-weight: 700; color: #111;}
+.btn_type2 {height: 38px; padding: 0 20px; font-size: 14px; font-weight: 700; color: #000;}
+.btn_type3 {height: 38px; padding: 7px 16px 9px; color: #111; font-size: 14px; font-weight: 700;}
 .btn_type4 {height: 40px; padding: 10px 28px; color: #fff; background-color: #111; font-size: 14px; font-weight: 500;}
 .btn_type5 {height: 40px; padding: 10px 28px; color: #111; background-color: #fff; font-size: 14px; font-weight: 500;}
 /* outline */
@@ -374,6 +377,9 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .col_md10{flex:0 0 auto;width:83.33333%;}
     .col_md11{flex:0 0 auto;width:91.66667%;}
     .col_md12{flex:0 0 auto;width:100%;}
+
+    /* button */
+    .btn_type3 {padding: 7px 20px 9px;}
 
     /* table */
     .info_table th {width: 20%;}

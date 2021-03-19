@@ -15,7 +15,6 @@
 
 .customer_contetns .notice_new_area {display: flex; align-items: center; justify-content: space-between; margin: 16px 0 0; padding: 13px 20px 17px; background-color: #f3f3f3;}
 .customer_contetns .notice_new_area .text_view {display: flex; align-items: center; justify-content: flex-start; width: 100%;}
-.customer_contetns .notice_new_area .badge {height: 23px; line-height: 20px; margin-right: 20px; padding: 0 11px; color: #fff; font-size: 13px;}
 .customer_contetns .notice_new_area .noti_text {display: block; overflow: hidden; white-space: nowrap; width: 100%; line-height: 23px; color: #fb502f; font-size: 14px; text-overflow: ellipsis; word-break: break-all;}
 .customer_contetns .notice_new_area .more_view {display: none;}
 
@@ -146,11 +145,14 @@
 @media (max-width:767px) {
     /** 메인 **/
     .customer_wrap.main .page_title {display: block;}
-    .customer_wrap .side_nav {padding: 0 20px; overflow: hidden;}
+    .customer_wrap .side_nav {padding: 0 20px; overflow-x: scroll; scrollbar-width: none; scrollbar-color: transparent transparent;}
+    .customer_wrap .side_nav::-webkit-scrollbar {display: none; width: 0px; background: transparent;}
     .customer_wrap .side_nav .nav {display: flex; flex-wrap: nowrap;}
     .customer_wrap .side_nav .nav .nav_item {flex-shrink: 0; position: relative; width: auto; border-bottom: 0;}
-    .customer_wrap .side_nav .nav .nav_item::after {content: ''; display: inline-block; width: 1px; height: 16px; margin: -2px 16px; background-color: #e2e2e2;}
-    .customer_wrap .side_nav .nav .nav_item .nav_link {width: auto; padding: 0; font-size: 16px;}
+    .customer_wrap .side_nav .nav .nav_item::after {content: ''; display: inline-block; width: 1px; height: 16px; margin: -2px 0; background-color: #e2e2e2;}
+    .customer_wrap .side_nav .nav .nav_item:last-child::after {content: none;} 
+    .customer_wrap .side_nav .nav .nav_item .nav_link {width: auto; padding: 0 16px; font-size: 16px;}
+    .customer_wrap .side_nav .nav .nav_item:first-child .nav_link {padding-left: 0;}
 
     .customer_contetns .sub_cont_wrap {padding: 0 20px;}
 
@@ -235,7 +237,6 @@
     .btn_list_wrap {padding: 28px 0;}
     .btn_list_wrap .btn_group {justify-content: flex-start;}
     .btn_list_wrap .btn_group li {width: 172px; padding-right: 20px;}
-    .btn_list_wrap .btn_group li .btn {padding: 9px 20px 8px;}
 
     /** 게시판 유형 **/
     .row.body_board .col_md3{padding-right:50px;}

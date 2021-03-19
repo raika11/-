@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { initialState, deleteArea, clearStore, getAreaListModal } from '@store/area';
@@ -7,7 +7,7 @@ import toast, { messageBox } from '@utils/toastUtil';
 import AreaAgGridDepth1 from './AreaAgGridDepth1';
 import AreaAgGridDepth2 from './AreaAgGridDepth2';
 import AreaAgGridDepth3 from './AreaAgGridDepth3';
-const AreaEdit = React.lazy(() => import('./AreaEdit'));
+import AreaEdit from './AreaEdit';
 const it = new Date().getTime();
 
 /**
@@ -158,23 +158,21 @@ const Area = () => {
             />
 
             {/* 편집영역 등록/수정 */}
-            <Suspense>
-                <AreaEdit
-                    sourceCode={sourceCode}
-                    onDelete={handleClickDelete}
-                    areaDepth1={areaDepth1}
-                    areaDepth2={areaDepth2}
-                    areaDepth3={areaDepth3}
-                    flag={flag}
-                    setFlag={setFlag}
-                    listDepth1={listDepth1}
-                    listDepth2={listDepth2}
-                    listDepth3={listDepth3}
-                    setAreaDepth1={setAreaDepth1}
-                    setAreaDepth2={setAreaDepth2}
-                    setAreaDepth3={setAreaDepth3}
-                />
-            </Suspense>
+            <AreaEdit
+                sourceCode={sourceCode}
+                onDelete={handleClickDelete}
+                areaDepth1={areaDepth1}
+                areaDepth2={areaDepth2}
+                areaDepth3={areaDepth3}
+                flag={flag}
+                setFlag={setFlag}
+                listDepth1={listDepth1}
+                listDepth2={listDepth2}
+                listDepth3={listDepth3}
+                setAreaDepth1={setAreaDepth1}
+                setAreaDepth2={setAreaDepth2}
+                setAreaDepth3={setAreaDepth3}
+            />
         </div>
     );
 };

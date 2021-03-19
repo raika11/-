@@ -6,10 +6,9 @@ import clsx from 'clsx';
 import { useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { MokaCard } from '@components';
+import { MokaCard, MokaErrorBoundary } from '@components';
 import { clearStore } from '@store/article';
 import useBreakpoint from '@hooks/useBreakpoint';
-
 import ArticleEdit from './ArticleEdit';
 const ArticleList = React.lazy(() => import('./ArticleList'));
 
@@ -38,9 +37,11 @@ const Article = ({ match, displayName, name }) => {
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     {/* 리스트 */}
                     <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={displayName}>
-                        <Suspense>
-                            <ArticleList match={match} ja={name === 'articleJa' ? true : false} sun={name === 'articleSun' ? true : false} />
-                        </Suspense>
+                        <MokaErrorBoundary>
+                            <Suspense>
+                                <ArticleList match={match} ja={name === 'articleJa' ? true : false} sun={name === 'articleSun' ? true : false} />
+                            </Suspense>
+                        </MokaErrorBoundary>
                     </MokaCard>
                 </Col>
 

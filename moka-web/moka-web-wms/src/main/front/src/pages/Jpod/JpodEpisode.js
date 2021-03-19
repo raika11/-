@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -35,23 +35,13 @@ const JpodEpisode = ({ match, displayName }) => {
             <Row className="m-0">
                 {/* 에피소드 리스트 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
-                    <Suspense>
-                        <EpisodeList match={match} />
-                    </Suspense>
+                    <EpisodeList match={match} />
                 </Col>
                 {/* 등록 / 수정 */}
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
                         <Switch>
-                            <Route
-                                path={[`${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]}
-                                exact
-                                render={() => (
-                                    <Suspense>
-                                        <EpisodeEdit match={match} />
-                                    </Suspense>
-                                )}
-                            />
+                            <Route path={[`${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]} exact render={() => <EpisodeEdit match={match} />} />
                         </Switch>
                     </Col>
                 )}
@@ -62,9 +52,7 @@ const JpodEpisode = ({ match, displayName }) => {
                             exact
                             render={() => (
                                 <Col xs={7} className="absolute-top-right h-100 overlay-shadow p-0" style={{ zIndex: 2 }}>
-                                    <Suspense>
-                                        <EpisodeEdit match={match} />
-                                    </Suspense>
+                                    <EpisodeEdit match={match} />
                                 </Col>
                             )}
                         />

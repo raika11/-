@@ -1,11 +1,11 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { MokaCard } from '@/components';
 import { clearStore } from '@store/internalApi';
 import InternalApiEdit from './InternalApiEdit';
-const InternalApiList = React.lazy(() => import('./InternalApiList'));
+import InternalApiList from './InternalApiList';
 
 /**
  * API 관리
@@ -29,9 +29,7 @@ const InternalApi = ({ match }) => {
 
             {/* API 목록 */}
             <MokaCard title="API 관리" width={812} className="mr-gutter" bodyClassName="d-flex flex-column">
-                <Suspense>
-                    <InternalApiList match={match} />
-                </Suspense>
+                <InternalApiList match={match} />
             </MokaCard>
 
             {/* API 정보 */}

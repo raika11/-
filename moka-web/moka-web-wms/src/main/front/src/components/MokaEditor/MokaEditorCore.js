@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState, useCallback, forwardRef, useRef, useImperativeHandle } from 'react';
+import React, { useEffect, useState, useCallback, forwardRef, useRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
@@ -156,24 +156,22 @@ const MokaEditorCore = forwardRef((props, ref) => {
     }, [tag]);
 
     return (
-        <Suspense>
-            <div className={clsx('w-100 h-100', { 'position-relative': !expansion, 'fixed-top': expansion })} style={{ zIndex: expansion ? 3 : undefined }}>
-                {fullWindowButton && (
-                    <Button variant="white" className="absolute-top-right border py-0 px-1" onClick={() => setExpansion(!expansion)} style={{ right: 15, zIndex: 1 }}>
-                        <MokaIcon iconName={expansion ? 'fal-compress-arrows-alt' : 'fal-expand-arrows'} />
-                    </Button>
-                )}
-                <MonacoEditor
-                    ref={editorRef}
-                    defaultValue={defaultValue}
-                    value={value}
-                    theme={theme}
-                    language={language}
-                    options={{ ...defaultOptions, ...options, glyphMargin: error.line }}
-                    editorDidMount={editorDidMount}
-                />
-            </div>
-        </Suspense>
+        <div className={clsx('w-100 h-100', { 'position-relative': !expansion, 'fixed-top': expansion })} style={{ zIndex: expansion ? 3 : undefined }}>
+            {fullWindowButton && (
+                <Button variant="white" className="absolute-top-right border py-0 px-1" onClick={() => setExpansion(!expansion)} style={{ right: 15, zIndex: 1 }}>
+                    <MokaIcon iconName={expansion ? 'fal-compress-arrows-alt' : 'fal-expand-arrows'} />
+                </Button>
+            )}
+            <MonacoEditor
+                ref={editorRef}
+                defaultValue={defaultValue}
+                value={value}
+                theme={theme}
+                language={language}
+                options={{ ...defaultOptions, ...options, glyphMargin: error.line }}
+                editorDidMount={editorDidMount}
+            />
+        </div>
     );
 });
 

@@ -1,12 +1,11 @@
-import React, { Suspense, useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@/components';
 import { clearStore } from '@store/articleSource';
 import ArticleSourceEdit from './ArticleSourceEdit';
-
-const ArticleSourceList = React.lazy(() => import('./ArticleSourceList'));
+import ArticleSourceList from './ArticleSourceList';
 
 /**
  * 수신 매체 관리
@@ -46,8 +45,7 @@ const ArticleSource = (props) => {
         return () => {
             dispatch(clearStore());
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="d-flex">
@@ -59,9 +57,7 @@ const ArticleSource = (props) => {
 
             {/* 수신 매체 리스트 */}
             <MokaCard width={812} className="mr-gutter" bodyClassName="d-flex flex-column" title="수신 매체 관리">
-                <Suspense>
-                    <ArticleSourceList match={match} />
-                </Suspense>
+                <ArticleSourceList match={match} />
             </MokaCard>
 
             {/* 수신 매체 편집 */}

@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaCard } from '@/components';
+import { MokaCard } from '@components';
 import { clearStore } from '@store/jpod';
 import useBreakpoint from '@hooks/useBreakpoint';
 import ChannelList from '@pages/Jpod/Channel/ChannelList';
@@ -36,25 +36,15 @@ const JpodChannel = ({ match, displayName }) => {
             <Row className="m-0">
                 {/* 리스트 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
-                    <Suspense>
-                        <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={`채널 리스트`}>
-                            <ChannelList match={match} />
-                        </MokaCard>
-                    </Suspense>
+                    <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={`채널 리스트`}>
+                        <ChannelList match={match} />
+                    </MokaCard>
                 </Col>
                 {/* 등록 / 수정창 */}
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
                         <Switch>
-                            <Route
-                                path={([`${match.path}/add`], [`${match.path}/:chnlSeq`])}
-                                exact
-                                render={() => (
-                                    <Suspense>
-                                        <ChannelTab match={match} />
-                                    </Suspense>
-                                )}
-                            />
+                            <Route path={([`${match.path}/add`], [`${match.path}/:chnlSeq`])} exact render={() => <ChannelTab match={match} />} />
                         </Switch>
                     </Col>
                 )}
@@ -65,9 +55,7 @@ const JpodChannel = ({ match, displayName }) => {
                             exact
                             render={() => (
                                 <Col xs={7} className="color-bg-body absolute-top-right h-100 overlay-shadow p-0" style={{ zIndex: 2 }}>
-                                    <Suspense>
-                                        <ChannelTab match={match} />
-                                    </Suspense>
+                                    <ChannelTab match={match} />
                                 </Col>
                             )}
                         />

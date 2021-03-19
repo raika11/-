@@ -1,4 +1,4 @@
-import React, { Suspense, forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import 'bootstrap';
 import PropTypes from 'prop-types';
 import ReactSummernote from 'react-summernote';
@@ -17,32 +17,27 @@ const defaultProps = {
     editImageUpload: false,
 };
 
-// Summernote 컴포 넌트.
+/**
+ * Summernote
+ */
 const BoardsSummernote = forwardRef((props, ref) => {
     const { contentValue, editChange, editImageUpload } = props;
 
     return (
-        <Suspense>
-            <div className="p-0 d-flex moka-summernote">
-                {/* <div className="d-flex moka-summernote"> */}
-                <ReactSummernote
-                    className="overflow-hidden flex-fill mb-0"
-                    value={contentValue !== '' ? unescapeHtml(contentValue) : contentValue}
-                    options={{
-                        lang: 'ko-KR',
-                        height: 250,
-                        dialogsInBody: true,
-                    }}
-                    onChange={(value) => {
-                        editChange(value);
-                    }}
-                    onImageUpload={(e) => {
-                        editImageUpload(e);
-                    }}
-                />
-                {/* </div> */}
-            </div>
-        </Suspense>
+        <div className="p-0 d-flex moka-summernote" ref={ref}>
+            <ReactSummernote
+                className="overflow-hidden flex-fill mb-0"
+                value={contentValue !== '' ? unescapeHtml(contentValue) : contentValue}
+                options={{
+                    lang: 'ko-KR',
+                    height: 250,
+                    dialogsInBody: true,
+                }}
+                onChange={(value) => editChange(value)}
+                onImageUpload={(e) => editImageUpload(e)}
+            />
+            {/* </div> */}
+        </div>
     );
 });
 

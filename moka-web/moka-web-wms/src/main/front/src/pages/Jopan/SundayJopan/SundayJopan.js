@@ -1,14 +1,13 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaCard } from '@/components';
+import { MokaCard } from '@components';
+import { clearStore } from '@store/rcvArticle';
 import SundayJopanEdit from './SundayJopanEdit';
-import { clearStore } from '@/store/rcvArticle';
-
-const SundayJopanList = React.lazy(() => import('./SundayJopanList'));
+import SundayJopanList from './SundayJopanList';
 
 /**
  * 수신기사 > 중앙선데이 조판
@@ -41,9 +40,7 @@ const SundayJopan = ({ match, displayName }) => {
                 >
                     {/* 리스트 */}
                     <MokaCard title={displayName} className="w-100" bodyClassName="d-flex flex-column">
-                        <Suspense>
-                            <SundayJopanList match={match} setView={setView} />
-                        </Suspense>
+                        <SundayJopanList match={match} setView={setView} />
                     </MokaCard>
                 </Col>
 

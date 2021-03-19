@@ -1,11 +1,11 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import { clearStore } from '@store/cdnArticle';
+import CdnArticleList from './CdnArticleList';
 import CdnArticleEdit from './CdnArticleEdit';
-const CdnArticleList = React.lazy(() => import('./CdnArticleList'));
 
 /**
  * 트래픽 분산(기사) 관리
@@ -29,9 +29,7 @@ const CdnArticle = ({ match, displayName }) => {
 
             {/* 리스트 */}
             <MokaCard width={800} className="mr-gutter" title={displayName} bodyClassName="d-flex flex-column">
-                <Suspense>
-                    <CdnArticleList match={match} />
-                </Suspense>
+                <CdnArticleList match={match} />
             </MokaCard>
 
             {/* 등록/수정 */}

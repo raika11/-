@@ -18,3 +18,4 @@ export { default as MokaMessageBox } from './MokaMessageBox';
 export * from './MokaImage';
 export * from './MokaWindow';
 export { default as MokaImageEditor } from './MokaImageEditor';
+export { default as MokaErrorBoundary } from './MokaErrorBoundary';

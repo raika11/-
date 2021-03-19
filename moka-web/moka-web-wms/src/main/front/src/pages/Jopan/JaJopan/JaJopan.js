@@ -1,14 +1,13 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaCard } from '@/components';
+import { MokaCard } from '@components';
+import { clearStore } from '@store/rcvArticle';
 import JaJopanEdit from './JaJopanEdit';
-import { clearStore } from '@/store/rcvArticle';
-
-const JaJopanList = React.lazy(() => import('./JaJopanList'));
+import JaJopanList from './JaJopanList';
 
 /**
  * 수신기사 > 중앙일보 조판
@@ -41,9 +40,7 @@ const JaJopan = ({ match, displayName }) => {
                 >
                     {/* 리스트 */}
                     <MokaCard title={displayName} className="w-100" bodyClassName="d-flex flex-column">
-                        <Suspense>
-                            <JaJopanList match={match} setView={setView} />
-                        </Suspense>
+                        <JaJopanList match={match} setView={setView} />
                     </MokaCard>
                 </Col>
 

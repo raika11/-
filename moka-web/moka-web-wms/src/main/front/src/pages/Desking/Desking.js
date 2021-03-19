@@ -1,12 +1,11 @@
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/desking';
-
-const DeskingTree = React.lazy(() => import('./DeskingTree'));
-const ComponentWorkList = React.lazy(() => import('./ComponentWorkList'));
-const DeskingTab = React.lazy(() => import('./DeskingTab'));
+import DeskingTree from './DeskingTree';
+import ComponentWorkList from './ComponentWorkList';
+import DeskingTab from './DeskingTab';
 
 /**
  * 홈 섹션편집
@@ -38,14 +37,10 @@ const Desking = ({ match }) => {
             </Switch>
 
             {/* 워크 */}
-            <Suspense>
-                <ComponentWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
-            </Suspense>
+            <ComponentWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
 
             {/* 데스킹 탭 */}
-            <Suspense>
-                <DeskingTab componentAgGridInstances={componentAgGridInstances} />
-            </Suspense>
+            <DeskingTab componentAgGridInstances={componentAgGridInstances} />
         </div>
     );
 };

@@ -14,6 +14,7 @@ export const initialState = {
         searchType: 'all',
         page: 0,
         size: PAGESIZE_OPTIONS[0],
+        sort: 'regDt,desc',
     },
     searchTypeList: [
         { id: 'all', name: '전체' },

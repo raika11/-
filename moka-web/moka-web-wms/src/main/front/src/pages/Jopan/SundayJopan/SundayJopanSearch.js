@@ -14,9 +14,8 @@ import { initialState, getJopanList, changeJopanSearchOption } from '@store/rcvA
  */
 const SundayJopanSearch = () => {
     const dispatch = useDispatch();
-    const pressCate61Rows = useSelector((store) => store.codeMgt.pressCate61Rows);
-    const storeSearch = useSelector((store) => store.rcvArticle.jopanSearch);
-
+    const pressCate61Rows = useSelector(({ codeMgt }) => codeMgt.pressCate61Rows);
+    const storeSearch = useSelector(({ rcvArticle }) => rcvArticle.jopanSearch);
     const [search, setSearch] = useState(initialState.jopanSearch);
 
     /**
@@ -31,11 +30,8 @@ const SundayJopanSearch = () => {
      * 검색 버튼
      */
     const handleClickSearch = () => {
-        let ns = {
-            ...search,
-            pressDate: moment(search.pressDate).format(DB_DATEFORMAT),
-            page: 0,
-        };
+        const pressDate = search.pressDate && search.pressDate.isValid() ? moment(search.pressDate).format(DB_DATEFORMAT) : null;
+        let ns = { ...search, pressDate, page: 0 };
         dispatch(changeJopanSearchOption(ns));
         dispatch(getJopanList({ search: ns }));
     };
@@ -96,7 +92,7 @@ const SundayJopanSearch = () => {
                     className="mr-2"
                     name="pressDate"
                     value={search.pressDate}
-                    inputProps={{ timeFormat: null }}
+                    inputProps={{ timeFormat: null, timeDefault: 'start' }}
                     onChange={(date) => {
                         if (typeof date === 'object') {
                             setSearch({ ...search, pressDate: date });

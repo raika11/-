@@ -21,12 +21,15 @@ const TourListSearch = () => {
      * 검색 버튼
      */
     const handleClickSearch = () => {
+        const startTourDay = search.startTourDay && search.startTourDay.isValid() ? moment(search.startTourDay).format(DB_DATEFORMAT) : null;
+        const endTourDay = search.endTourDay && search.endTourDay.isValid() ? moment(search.endTourDay).format(DB_DATEFORMAT) : null;
+
         dispatch(
             getTourApplyList(
                 changeSearchOption({
                     ...search,
-                    startTourDay: moment(search.startTourDay).format(DB_DATEFORMAT),
-                    endTourDay: moment(search.endTourDay).format(DB_DATEFORMAT),
+                    startTourDay,
+                    endTourDay,
                     page: 0,
                 }),
             ),
@@ -37,7 +40,10 @@ const TourListSearch = () => {
      * 검색 조건 초기화
      */
     const handleClickReset = () => {
-        setSearch({ ...initialState.search, startTourDay: moment().format(DB_DATEFORMAT), endTourDay: moment().add(2, 'weeks').format(DB_DATEFORMAT), keyword: '' });
+        const nt = new Date();
+        const startTourDay = moment(nt).format(DB_DATEFORMAT);
+        const endTourDay = moment(nt).add(2, 'weeks').format(DB_DATEFORMAT);
+        setSearch({ ...initialState.search, startTourDay, endTourDay, keyword: '' });
     };
 
     useEffect(() => {
@@ -53,12 +59,14 @@ const TourListSearch = () => {
     }, [storeSearch]);
 
     useEffect(() => {
+        const nt = new Date();
+
         dispatch(
             getTourApplyList(
                 changeSearchOption({
                     ...search,
-                    startTourDay: moment().startOf('day').format(DB_DATEFORMAT),
-                    endTourDay: moment().add(2, 'weeks').endOf('day').format(DB_DATEFORMAT),
+                    startTourDay: moment(nt).startOf('day').format(DB_DATEFORMAT),
+                    endTourDay: moment(nt).add(2, 'weeks').endOf('day').format(DB_DATEFORMAT),
                     page: 0,
                 }),
             ),

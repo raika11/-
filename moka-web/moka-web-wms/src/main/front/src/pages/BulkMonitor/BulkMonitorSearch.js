@@ -98,7 +98,7 @@ const BulkMonitorSearch = () => {
 
     return (
         <>
-            <Form className="mb-5">
+            <Form className="mb-14">
                 <Form.Row className="d-flex align-items-center justify-content-between">
                     <div className="mr-2" style={{ width: 160 }}>
                         <MokaInput

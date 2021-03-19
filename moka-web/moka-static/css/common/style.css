@@ -1,28 +1,34 @@
-@charset "utf-8";/* CSS Document */
+@charset "utf-8";
 
-@import url('reset.css');
+/* @import url('reset.css'); */
 
 @import url('common.css');
-@import url('layout.css');
-@import url('grid.css');
-@import url('button.css');
 
-@import url('board.css');
+/* 고객센터 */
+@import url('cs.css');
 
-@import url('contents.css');
+/* section */
+@import url('section.css');
 
-@import url('kds.css'); 
+/* article */
+/* @import url('article.css'); */
+
+/* main */
+/* @import url('index.css'); */
 
 
-
-/* Medium devices (tablet + pc, 768px and up) */
-@media (min-width: 768px) {
-   
-
-}
+/* 삭제 예정 */
+/* @import url('kds.css');  */
+/* @import url('lee.css'); */
+/* @import url('bss.css'); */
 
 /* Mobile devices (mobile, 767px and down) */
-@media (max-width: 767px) {
-   
+@media (max-width:767px) {
 
 }
+
+/* Medium devices (tablet + pc, 768px and up) */
+@media (min-width:768px) {
+   
+}
+

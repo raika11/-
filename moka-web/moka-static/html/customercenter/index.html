@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
 
+    <!-- <script src="include.js"></script> -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>중앙일보-고객센터</title>
 
@@ -13,8 +14,8 @@
     <!-- Responsive meta tag / 브라우저 확대 및 축소를 비활성화 / 접근성 문제 -->
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+
     <link href="//stg-static.joongang.co.kr/css/common/style.css" rel="stylesheet">
-    <link href="//stg-static.joongang.co.kr/css/common/kds.css" rel="stylesheet">
     <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
 </head>
 <body>
@@ -54,6 +55,7 @@
 
                     <div class="col_sm12 col_md9">
                         <section class="customer_contetns">
+                            <h3 class="sr_only">공지사항 메인</h3>
                             <div class="notice_new_area">
                                 <div class="text_view">
                                     <span class="badge bg_orange">공지</span>
@@ -64,123 +66,171 @@
                                 </div>
                             </div>
 
-                            <ul class="list">
-                                <li>
-                                    <div>
-                                        <div class="tit_area">
-                                            <div class="exp">서비스 안내</div>
-                                            <div class="tit">뉴스</div>
-                                        </div>
-                                        <div class="shortcuts">
-                                            <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
-                                            <i class="img_cutomer_01"></i>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <div class="tit_area">
-                                            <div class="exp">서비스 안내</div>
-                                            <div class="tit">구독</div>
-                                        </div>
-                                        <div class="shortcuts">
-                                            <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
-                                            <i class="img_cutomer_02"></i>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <div class="tit_area">
-                                            <div class="exp">서비스 안내</div>
-                                            <div class="tit">모바일 앱</div>
-                                        </div>
-                                        <div class="shortcuts">
-                                            <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
-                                            <i class="img_cutomer_03"></i>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <div class="tit_area">
-                                            <div class="exp">서비스 안내</div>
-                                            <div class="tit">계정</div>
-                                        </div>
-                                        <div class="shortcuts">
-                                            <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
-                                            <i class="img_cutomer_04"></i>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <div class="tit_area">
-                                            <div class="exp">이용 안내</div>
-                                            <div class="tit">개인정보 도용 신고</div>
-                                        </div>
-                                        <div class="shortcuts">
-                                            <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
-                                            <i class="img_cutomer_05"></i>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <div class="tit_area">
-                                            <div class="exp">이용 문의</div>
-                                            <div class="tit">신고</div>
-                                        </div>
-                                        <div class="shortcuts">
-                                            <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
-                                            <i class="img_cutomer_06"></i>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <div class="tit_area">
-                                            <div class="exp">이용 문의</div>
-                                            <div class="tit">1:1 문의</div>
-                                        </div>
-                                        <div class="shortcuts">
-                                            <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
-                                            <i class="img_cutomer_07"></i>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <div class="tit_area">
-                                            <div class="exp">기타</div>
-                                            <div class="tit">제보</div>
-                                        </div>
-                                        <div class="shortcuts">
-                                            <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
-                                            <i class="img_cutomer_08"></i>
-                                        </div>
-                                    </div>
-                                </li>                            
-                            </ul>
-
-                            <div class="my_info_wrap">
-                                <h3>회원정보 관리</h3>
-                                <p>내 회원정보와 문의 내역을 쉽고 편하게 관리 할 수 있습니다.</p>
-                                <ul class="btn_group">
+                            <section class="sub_cont_wrap">
+                                <h4 class="section_tit">자주 찾는 질문 <a href="#"><i class="fa fa_arrow_right_bl"></i></a></h4>
+                                <ul class="list">
                                     <li>
-                                        <a href="#" class="link">가입 이메일 찾기 <i class="fa fa_arrow_right_b"></i></a>
+                                        <div>
+                                            <div class="tit_area">
+                                                <!-- <div class="exp">서비스 안내</div> -->
+                                                <div class="tit">뉴스</div>
+                                            </div>
+                                            <div class="shortcuts">
+                                                <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
+                                                <i class="img_cutomer_01"></i>
+                                            </div>
+                                        </div>
                                     </li>
                                     <li>
-                                        <a href="#" class="link">본인 확인 정보 <i class="fa fa_arrow_right_b"></i></a>
+                                        <div>
+                                            <div class="tit_area">
+                                                <!-- <div class="exp">서비스 안내</div> -->
+                                                <div class="tit">구독</div>
+                                            </div>
+                                            <div class="shortcuts">
+                                                <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
+                                                <i class="img_cutomer_02"></i>
+                                            </div>
+                                        </div>
                                     </li>
                                     <li>
-                                        <a href="#" class="link">내 정보 관리 <i class="fa fa_arrow_right_b"></i></a>
+                                        <div>
+                                            <div class="tit_area">
+                                                <!-- <div class="exp">서비스 안내</div> -->
+                                                <div class="tit">모바일 앱</div>
+                                            </div>
+                                            <div class="shortcuts">
+                                                <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
+                                                <i class="img_cutomer_03"></i>
+                                            </div>
+                                        </div>
                                     </li>
                                     <li>
-                                        <a href="#" class="link">내 문의 내역 보기 <i class="fa fa_arrow_right_b"></i></a>
-                                    </li>
+                                        <div>
+                                            <div class="tit_area">
+                                                <!-- <div class="exp">서비스 안내</div> -->
+                                                <div class="tit">계정</div>
+                                            </div>
+                                            <div class="shortcuts">
+                                                <a href="#">바로가기 <i class="fa fa_arrow_right"></i></a>
+                                                <i class="img_cutomer_04"></i>
+                                            </div>
+                                        </div>
+                                    </li>                      
                                 </ul>
-                            </div>
+                            </section>
+
+                            <section class="sub_cont_wrap">
+                                <h4 class="section_tit">1:1 문의</h4>
+                                <div class="btn_list_wrap">
+                                    <ul class="btn_group row">
+                                        <li class="col_sm4">
+                                            <a href="#" class="btn">문의하기 <i class="fa fa_arrow_right_b"></i></a>
+                                        </li>
+                                        <li class="col_sm4">
+                                            <a href="#" class="btn">신고하기 <i class="fa fa_arrow_right_b"></i></a>
+                                        </li>
+                                        <li class="col_sm4">
+                                            <a href="#" class="btn">제보하기 <i class="fa fa_arrow_right_b"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </section>
+
+                            <section class="sub_cont_wrap">
+                                <h4 class="section_tit">회원정보 관리</h4>
+                                <div class="section_exp">내 회원정보와 문의 내역을 쉽고 편하게 관리 할 수 있습니다.</div>
+                                <div class="btn_list_wrap">                                
+                                    <ul class="btn_group row">
+                                        <li class="col_sm6">
+                                            <a href="#" class="btn">가입 이메일 찾기 <i class="fa fa_arrow_right_b"></i></a>
+                                        </li>
+                                        <li class="col_sm6">
+                                            <a href="#" class="btn">본인 확인 정보 <i class="fa fa_arrow_right_b"></i></a>
+                                        </li>
+                                        <li class="col_sm6">
+                                            <a href="#" class="btn">내 정보 관리 <i class="fa fa_arrow_right_b"></i></a>
+                                        </li>
+                                        <li class="col_sm6">
+                                            <a href="#" class="btn">내 문의 내역 보기 <i class="fa fa_arrow_right_b"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </section>
+
+                            <section class="sub_cont_wrap">
+                                <h4 class="section_tit">문의 및 안내</h4>
+                                <table class="info_table" summary="문의 및 안내 연락처">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">일반 문의 및 안내</th>
+                                            <td>
+                                                <p>02-751-5114(9114)</p>
+                                                <p>jservice@joongang.co.kr</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row" class="row"><span class="col_sm12">기사제보 및 </span> <span class="col_sm12">기사 관련</span></th>
+                                            <td>
+                                                <p>02-751-9000(9911)</p>
+                                                <p>080-023-5002</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">불편불만 처리센터</th>
+                                            <td>
+                                                <p>saragbang@joongang.co.kr</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">광고 관련 문의</th>
+                                            <td>
+                                                <p>02-751-5555, 080-023-5004</p>
+                                                <p>(FAX) 02-751-5806</p>
+                                                <p>jadmaster@joongang.co.kr</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">고객센터</th>
+                                            <td>
+                                                <p>1588-3600, 080-023-5001</p>
+                                                <p>jservice@joongang.co.kr</p>
+                                                <p class="mt_10">대구, 경북 : 053-469-5007</p>
+                                                <p>부산, 경남 051-469-5007</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row" class="row"><span class="col_sm12">영어신문 </span><span class="col_sm12">구독 및 광고</span></th>
+                                            <td>
+                                                <p>1577-0510</p>
+                                                <p>nyt@joongang.co.kr</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">기사 검색</th>
+                                            <td>
+                                                <p>02-751-9538</p>
+                                                <p>info_search@joins.com</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">사진 검색</th>
+                                            <td>
+                                                <p>02-751-9535</p>
+                                                <p>jphoto@joongang.co.kr</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">인물 검색 </th>
+                                            <td>
+                                                <p>이용문의  : 02-751-9756</p>
+                                                <p>등록 및 수정 : 02-751-9681</p>
+                                                <p>inmul@joongang.co.kr</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
                         </section>
                     </div>
                 </div>

@@ -23,12 +23,15 @@ const initialSearch = {
     regDt: moment().startOf('day'),
 };
 
+/**
+ * 컴포넌트워크 히스토리
+ */
 const HistoryList = (props) => {
     const { show, isNaverChannel, componentList } = props;
     const dispatch = useDispatch();
-    const { componentWorkLoading, deskingWorkLoading } = useSelector((store) => ({
-        componentWorkLoading: store.loading[GET_COMPONENT_WORK_HISTORY],
-        deskingWorkLoading: store.loading[GET_DESKING_WORK_HISTORY],
+    const { componentWorkLoading, deskingWorkLoading } = useSelector(({ loading }) => ({
+        componentWorkLoading: loading[GET_COMPONENT_WORK_HISTORY],
+        deskingWorkLoading: loading[GET_DESKING_WORK_HISTORY],
     }));
     const selectedComponent = useSelector(({ desking }) => desking.selectedComponent);
     const area = useSelector(({ desking }) => desking.area);
@@ -54,10 +57,11 @@ const HistoryList = (props) => {
     const handleSearch = useCallback(
         (newSearch) => {
             let ns = { ...search, ...newSearch };
+            const regDt = ns.regDt && ns.regDt.isValid() ? moment(ns.regDt).format(DB_DATEFORMAT) : null;
             setSearch(ns);
             dispatch(
                 getComponentWorkHistory({
-                    search: { ...ns, regDt: moment(ns.regDt).format(DB_DATEFORMAT) },
+                    search: { ...ns, regDt },
                     callback: ({ header }) => {
                         if (header.success) {
                             dispatch(clearDeskingHistoryList());

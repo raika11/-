@@ -25,6 +25,7 @@ const DeskingArticleTab = (props) => {
      */
     const handleArticleDragStop = useCallback(
         (source, target, targetIndex) => {
+            debugger;
             const tgtComponent = componentList[targetIndex];
 
             // deskingPart를 찾아야해서 area.areaComp || area.areaComps 에서 찾음

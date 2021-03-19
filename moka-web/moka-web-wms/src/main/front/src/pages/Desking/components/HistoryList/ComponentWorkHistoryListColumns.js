@@ -14,7 +14,7 @@ export default [
         field: 'regDt',
         width: 150,
         cellClassRules: {
-            'text-positive': ({ data }) => data.approvalYn === 'N' && data.status === DESK_HIST_PUBLISH,
+            'text-positive': ({ data }) => data.approvalYn === 'N' && data.status === DESK_HIST_PUBLISH, // 예약 데이터
         },
     },
     {

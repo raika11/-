@@ -56,9 +56,7 @@ const ComponentWorkHistoryList = (props) => {
                     as="dateTimePicker"
                     labelWidth={28}
                     className="flex-fill"
-                    inputProps={{
-                        timeFormat: null,
-                    }}
+                    inputProps={{ timeFormat: null }}
                     value={search.regDt}
                     onChange={handleDate}
                 />

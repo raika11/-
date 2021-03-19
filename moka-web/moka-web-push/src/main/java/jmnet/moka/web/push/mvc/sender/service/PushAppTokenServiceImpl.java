@@ -8,7 +8,6 @@ import jmnet.moka.web.push.mvc.sender.mapper.PushTokenMapper;
 import jmnet.moka.web.push.mvc.sender.repository.PushAppTokenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,16 +25,6 @@ public class PushAppTokenServiceImpl implements PushAppTokenService {
     }
 
     @Override
-    public List<PushAppToken> findPushAppToken(Integer appSeq, Pageable pageable) {
-        return pushAppTokenRepository.findAllByAppSeq(appSeq, pageable);
-    }
-
-    @Override
-    public List<PushAppToken> findPushAppToken(Integer appSeq, long lastTokenSeq, Pageable pageable) {
-        return pushAppTokenRepository.findAllByAppScope(appSeq, lastTokenSeq, pageable);
-    }
-
-    @Override
     public List<PushAppToken> findPushAppToken(PushAppTokenSearchDTO pushAppTokenSearch) {
         return pushAppTokenRepository.findAllByAppScope(pushAppTokenSearch);
     }
@@ -44,32 +33,6 @@ public class PushAppTokenServiceImpl implements PushAppTokenService {
     public PushAppTokenStatus findPushAppTokenStatus(Integer appSeq) {
         return pushAppTokenRepository.countAllByAppScope(appSeq);
     }
-
-    @Override
-    public List<PushAppToken> findPushAppToken(Integer appSeq, long start, long limit) {
-        return pushAppTokenRepository.findAllByAppScope(appSeq, start, limit);
-    }
-
-
-    @Override
-    public List<PushAppToken> findByAppSeqAsc(Integer appSeq) {
-        return pushAppTokenRepository.findFirstByAppSeqOrderByTokenSeqAsc(appSeq);
-    }
-
-    @Override
-    public List<PushAppToken> findByAppSeqDesc(Integer appSeq) {
-        return pushAppTokenRepository.findFirstByAppSeqOrderByTokenSeqDesc(appSeq);
-    }
-
-    @Override
-    public List<PushAppToken> findByTokenSeq(Long tokenSeq) {
-        return pushAppTokenRepository.findByTokenSeq(tokenSeq);
-    }
-
-    //@Override
-    //public List<PushAppToken> findAllToken(Integer appSeq, Integer pageIdx) {
-    //    return pushAppTokenRepository.findAllByAppSeq(appSeq, PageRequest.of(1, pageIdx));
-    //}
 
     @Override
     public void deletePushAppToken(String pushTokenSeqs) {

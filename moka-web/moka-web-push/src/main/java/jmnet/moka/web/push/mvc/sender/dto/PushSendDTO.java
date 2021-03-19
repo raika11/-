@@ -1,18 +1,18 @@
 package jmnet.moka.web.push.mvc.sender.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import jmnet.moka.core.common.MokaConstants;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import java.util.Date;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import jmnet.moka.core.common.MokaConstants;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <pre>
@@ -36,13 +36,13 @@ public class PushSendDTO {
     /**
      * 앱 일련번호
      */
-    @ApiModelProperty(value = "앱 일련번호", required = true)
+    @ApiModelProperty(value = "앱 일련번호(1,2,3)", required = true)
     private String[] appSeq;
 
     /**
      * 요청일자
      */
-    @ApiModelProperty(value = "출고예약(요청일자)")
+    @ApiModelProperty(value = "출고예약(요청일자:2021-03-18 01:10:10)")
     @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
     private Date rsvDt;
 

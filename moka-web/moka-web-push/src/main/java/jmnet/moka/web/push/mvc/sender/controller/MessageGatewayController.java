@@ -2,6 +2,9 @@ package jmnet.moka.web.push.mvc.sender.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.InvalidDataException;
@@ -22,11 +25,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
@@ -57,13 +60,12 @@ public class MessageGatewayController extends AbstractCommonController {
     private final PushContentsService pushContentsService;
     private final PushContentsProcService pushContentsProcService;
 
-    public MessageGatewayController(PushAppService pushAppService, PushContentsService pushContentsService, PushContentsProcService pushContentsProcService) {
+    public MessageGatewayController(PushAppService pushAppService, PushContentsService pushContentsService,
+            PushContentsProcService pushContentsProcService) {
         this.pushAppService = pushAppService;
         this.pushContentsService = pushContentsService;
         this.pushContentsProcService = pushContentsProcService;
     }
-
-    public static Integer APP_SEQ;
 
     /**
      * 신규 Job 추가
@@ -76,14 +78,11 @@ public class MessageGatewayController extends AbstractCommonController {
     @PostMapping
     public ResponseEntity<?> postJob(@Valid PushSendDTO sendDTO)
             throws Exception {
-
         for (String param : sendDTO.getAppSeq()) {
-
-            APP_SEQ =  Integer.parseInt(param);
 
             /** Check if there is AppSeq    */
             PushAppSearchDTO checkItem = new PushAppSearchDTO();
-            checkItem.setAppSeq(APP_SEQ);
+            checkItem.setAppSeq(Integer.parseInt(param));
 
             if (!pushAppService.isValidData(checkItem)) {
                 String message = msg("wpush.error.notnull.appPushInfo");
@@ -103,8 +102,6 @@ public class MessageGatewayController extends AbstractCommonController {
         PushContents pushContents = new PushContents();
 
         for (String param : sendDTO.getAppSeq()) {
-            APP_SEQ = Integer.parseInt(param);
-
             /** Insert to TB_PUSH_CONTENTS_PROC the PushContentProc Info    */
             try {
                 pushContents = pushContentsService
@@ -116,7 +113,7 @@ public class MessageGatewayController extends AbstractCommonController {
                 PushContentsProcPK pushContentsProcPK = PushContentsProcPK
                         .builder()
                         .contentSeq(pushContents.getContentSeq())
-                        .appSeq(APP_SEQ)
+                        .appSeq(Integer.parseInt(param))
                         .build();
 
                 PushContentsProc pushContentsProc = new PushContentsProc();
@@ -145,18 +142,17 @@ public class MessageGatewayController extends AbstractCommonController {
     @ApiOperation(value = "예약 취소")
     @DeleteMapping("/{jobTaskSeq}")
     public ResponseEntity<?> deleteJob(HttpServletRequest request,
-                                       @ApiParam("Task 일련번호") @PathVariable("jobTaskSeq")
-                                       @Min(value = 0, message = "wpush.common.error.min.seq") Long jobTaskSeq)
+            @ApiParam("Task 일련번호") @PathVariable("jobTaskSeq") @Min(value = 0, message = "wpush.common.error.min.seq") Long jobTaskSeq)
             throws Exception {
 
         /** Check if the requested cancellation information is a cancelable operation */
         Long deleteYn = pushContentsService.countByContentSeqAndPushYn(jobTaskSeq, MokaConstants.NO);
 
-        if(deleteYn == 0){
+        if (deleteYn == 0) {
             String message = msg("wpush.error.send.cancel.no-data");
             throw new InvalidDataException(message);
-        }else{
-            try{
+        } else {
+            try {
                 PushContents pushContents = pushContentsService
                         .findPushContentsBySeq(jobTaskSeq)
                         .orElseThrow(() -> {

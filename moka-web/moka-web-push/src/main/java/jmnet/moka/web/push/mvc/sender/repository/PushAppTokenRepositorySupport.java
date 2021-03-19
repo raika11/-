@@ -4,7 +4,6 @@ import java.util.List;
 import jmnet.moka.web.push.mvc.sender.dto.PushAppTokenSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppTokenStatus;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,24 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PushAppTokenRepositorySupport {
-
-
-
-    /**
-     * 범위에 해당하는 토큰 목록 조회
-     *
-     * @param appSeq 검색조건
-     * @return 작업
-     */
-    List<PushAppToken> findAllByAppScope(Integer appSeq, long start, long limit);
-
-    /**
-     * 범위에 해당하는 토큰 목록 조회
-     *
-     * @param appSeq 검색조건
-     * @return 작업
-     */
-    List<PushAppToken> findAllByAppScope(Integer appSeq, long lastTokenSeq, Pageable pageable);
 
     /**
      * 범위에 해당하는 토큰 목록 조회

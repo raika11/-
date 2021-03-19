@@ -1,6 +1,5 @@
 package jmnet.moka.web.push.mvc.sender.service;
 
-import jmnet.moka.web.push.mvc.sender.entity.PushTokenSendHist;
 import jmnet.moka.web.push.mvc.sender.mapper.PushTokenMapper;
 import jmnet.moka.web.push.mvc.sender.repository.PushTokenSendHistRepository;
 import jmnet.moka.web.push.mvc.sender.vo.PushTokenBatchVO;
@@ -21,11 +20,6 @@ public class PushTokenSendHistServiceImpl implements PushTokenSendHistService {
         this.pushTokenSendHistRepository = pushTokenSendHistRepository;
         this.modelMapper = modelMapper;
         this.pushTokenMapper = pushTokenMapper;
-    }
-
-    @Override
-    public PushTokenSendHist savePushTokenSendHist(PushTokenSendHist pushTokenSendHist) {
-        return pushTokenSendHistRepository.save(pushTokenSendHist);
     }
 
     @Override

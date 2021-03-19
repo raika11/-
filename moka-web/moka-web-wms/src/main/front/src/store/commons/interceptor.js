@@ -1,27 +1,29 @@
 import axios from './axios';
-import { setLocalItem, getLocalItem } from '@utils/storageUtil';
+import { getLocalItem } from '@utils/storageUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { AUTHORIZATION } from '@/constants';
-//import { auth } from '@store/auth/index';
 import { logout } from '@store/auth';
 
+/**
+ * axios를 사용하여 api 호출 전 interceptor
+ */
 export default {
     setupInterceptors: (store) => {
-        const goToLogin = (message) => {
-            setLocalItem({ key: AUTHORIZATION, value: undefined });
-            // store.dispatch(
-            //     enqueueToast({
-            //         key: 'loginAuthorization',
-            //         message,
-            //         callback: () => {
-            //             window.location.reload();
-            //         },
-            //         options: {
-            //             persist: true,
-            //         },
-            //     }),
-            // );
-        };
+        // const goToLogin = (message) => {
+        //     setLocalItem({ key: AUTHORIZATION, value: undefined });
+        //     store.dispatch(
+        //         enqueueToast({
+        //             key: 'loginAuthorization',
+        //             message,
+        //             callback: () => {
+        //                 window.location.reload();
+        //             },
+        //             options: {
+        //                 persist: true,
+        //             },
+        //         }),
+        //     );
+        // };
 
         /** 요청 인터셉터 */
         const onRequest = (config) => {

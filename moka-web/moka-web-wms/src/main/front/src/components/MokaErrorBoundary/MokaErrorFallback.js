@@ -6,11 +6,14 @@ import Button from 'react-bootstrap/Button';
  */
 const MokaErrorFallback = () => {
     return (
-        <div className="vw-100 vh-100 d-flex flex-column align-items-center justify-content-center">
-            <h1>파일이 변경되어 페이지를 로드하지 못했습니다</h1>
+        <div
+            className="vw-100 vh-100 d-flex flex-column align-items-center justify-content-center"
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'white', opacity: 0.9 }}
+        >
+            <h1>프로그램이 변경되었으니 새로고침하시기 바랍니다</h1>
             <Button
                 size="lg"
-                variant="negative"
+                variant="positive"
                 onClick={() => {
                     window.location.reload();
                 }}

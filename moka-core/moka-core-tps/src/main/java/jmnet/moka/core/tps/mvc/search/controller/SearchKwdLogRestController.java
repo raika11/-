@@ -117,7 +117,7 @@ public class SearchKwdLogRestController extends AbstractCommonController {
         List<SearchKwdLogVO> returnValue = searchKwdLogService.findAllSearchKwdLogDetailStat(search);
 
         // 리턴값 설정
-        resultListMessage.setTotalCnt(returnValue.size());
+        resultListMessage.setTotalCnt(search.getTotal());
         resultListMessage.setList(returnValue);
 
 

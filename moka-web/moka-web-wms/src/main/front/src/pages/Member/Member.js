@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -6,11 +6,9 @@ import { MokaCard, MokaIconTabs, MokaIcon } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore } from '@store/member';
 import MemberChildMenuAuth from '@pages/Member/relations/MemberChildMenuAuth';
-import { MokaLoader } from '@components';
-
+import MemberList from './MemberLIst';
 import MemberEdit from './MemberEdit';
-const MemberList = React.lazy(() => import('./MemberLIst'));
-const MemberChildLoginHistoryList = React.lazy(() => import('./relations/MemberChildLoginHistoryList'));
+import MemberChildLoginHistoryList from './relations/MemberChildLoginHistoryList';
 
 /**
  * 사용자 관리
@@ -34,10 +32,8 @@ const Member = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard className="mb-0 mr-gutter" height={CARD_DEFAULT_HEIGHT} bodyClassName="d-flex flex-column" title="사용자 관리" width={1016}>
-                <Suspense>
-                    <MemberList />
-                </Suspense>
+            <MokaCard className="mr-gutter" height={CARD_DEFAULT_HEIGHT} bodyClassName="d-flex flex-column" title="사용자 관리" width={1016}>
+                <MemberList />
             </MokaCard>
 
             <Switch>
@@ -51,15 +47,7 @@ const Member = ({ match }) => {
                                 height={CARD_DEFAULT_HEIGHT}
                                 tabWidth={520}
                                 onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
-                                tabs={[
-                                    <MemberEdit match={match} />,
-                                    <Suspense fallback={<MokaLoader />}>
-                                        <MemberChildLoginHistoryList show={activeTabIdx === 1} />
-                                    </Suspense>,
-                                    <Suspense fallback={<MokaLoader />}>
-                                        <MemberChildMenuAuth />
-                                    </Suspense>,
-                                ]}
+                                tabs={[<MemberEdit match={match} />, <MemberChildLoginHistoryList show={activeTabIdx === 1} />, <MemberChildMenuAuth />]}
                                 tabNavWidth={48}
                                 tabNavPosition="right"
                                 tabNavs={[

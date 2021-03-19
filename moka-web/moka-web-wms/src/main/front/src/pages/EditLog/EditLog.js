@@ -1,11 +1,11 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/editLog';
 import { MokaCard } from '@components';
+import EditLogList from './EditLogList';
 import EditLogInfo from './EditLogInfo';
-const EditLogList = React.lazy(() => import('./EditLogList'));
 
 /**
  * 시스템관리 > 로그관리
@@ -27,11 +27,9 @@ const EditLog = ({ match }) => {
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            <Suspense>
-                <MokaCard width={700} className="mr-gutter" bodyClassName="d-flex flex-column" title="로그 관리">
-                    <EditLogList match={match} />
-                </MokaCard>
-            </Suspense>
+            <MokaCard width={700} className="mr-gutter" bodyClassName="d-flex flex-column" title="로그 관리">
+                <EditLogList match={match} />
+            </MokaCard>
 
             <Route path={[`${match.url}/:seqNo`]} exact render={() => <EditLogInfo match={match} />} />
         </div>

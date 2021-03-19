@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
@@ -8,33 +8,24 @@ import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore, deleteEditForm, GET_EDIT_FORM, SAVE_EDIT_FORM, showFormXmlImportModal } from '@store/editForm';
 import toast, { messageBox } from '@utils/toastUtil';
 import EditFormImportModal from './EditFormImportModal';
-
-const EditFormEdit = React.lazy(() => import('./EditFormEdit'));
-const EditFormList = React.lazy(() => import('./EditFormList'));
+import EditFormList from './EditFormList';
+import EditFormEdit from './EditFormEdit';
 
 /**
  * 편집폼 관리
  */
 const EditForm = () => {
     const history = useHistory();
-
     const dispatch = useDispatch();
-
-    const { formImportModalShow, loading } = useSelector((store) => ({
-        formImportModalShow: store.editForm.formImportModalShow,
-        loading: store.loading[GET_EDIT_FORM] || store.loading[SAVE_EDIT_FORM],
-    }));
+    const loading = useSelector(({ loading }) => loading[GET_EDIT_FORM] || loading[SAVE_EDIT_FORM]);
+    const formImportModalShow = useSelector(({ editForm }) => editForm.formImportModalShow);
 
     /**
      * 편집폼 추가
      */
-    const handleAddClickEditForm = () => {
-        dispatch(showFormXmlImportModal(true));
-    };
+    const handleAddClickEditForm = () => dispatch(showFormXmlImportModal(true));
 
-    const hideImportModal = () => {
-        dispatch(showFormXmlImportModal(false));
-    };
+    const hideImportModal = () => dispatch(showFormXmlImportModal(false));
 
     /**
      * 삭제 버튼 클릭
@@ -75,19 +66,16 @@ const EditForm = () => {
                         편집폼 추가
                     </Button>
                 </div>
-                <Suspense>
-                    <EditFormList onDelete={handleClickDelete} />
-                </Suspense>
+                <EditFormList onDelete={handleClickDelete} />
             </MokaCard>
 
             {/* 편집폼 정보 */}
-            <MokaCard title="편집폼 추가" className="flex-fill" minWidth={820} height={CARD_DEFAULT_HEIGHT} loading={loading}>
-                <Suspense>
-                    <Switch>
-                        <Route path={['/edit-form', '/edit-form/:formId']} exact render={() => <EditFormEdit onDelete={handleClickDelete} />} />
-                    </Switch>
-                </Suspense>
-            </MokaCard>
+            <Switch>
+                <MokaCard title="편집폼 추가" className="flex-fill" minWidth={820} height={CARD_DEFAULT_HEIGHT} loading={loading}>
+                    <Route path={['/edit-form', '/edit-form/:formId']} exact render={() => <EditFormEdit onDelete={handleClickDelete} />} />
+                </MokaCard>
+            </Switch>
+
             <EditFormImportModal show={formImportModalShow} onHide={() => hideImportModal()} />
         </div>
     );

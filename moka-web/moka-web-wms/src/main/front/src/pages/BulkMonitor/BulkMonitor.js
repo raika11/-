@@ -33,9 +33,7 @@ const BulkMonitor = () => {
                 <BulkMonitorSearch />
 
                 {/* 벌크 모니터링 현황 */}
-                <div className="d-flex justify-content-center">
-                    <BulkMonitorSumAgGrid />
-                </div>
+                <BulkMonitorSumAgGrid />
 
                 {/* 벌크 전송 목록 */}
                 <BulkMonitorRcvProgsAgGrid />

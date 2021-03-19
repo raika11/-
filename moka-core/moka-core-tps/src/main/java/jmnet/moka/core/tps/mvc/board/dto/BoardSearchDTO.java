@@ -84,4 +84,7 @@ public class BoardSearchDTO extends SearchDTO {
     @ApiModelProperty(value = "j팟", hidden = true)
     @Builder.Default
     private Integer channelUsedYn = 0;
+
+    @ApiModelProperty("삭제여부")
+    private String replyYn;
 }

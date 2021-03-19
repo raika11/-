@@ -101,7 +101,7 @@ const CodeMappingModal = (props) => {
             headerClassName="p-3 border border-top-0 border-left-0 border-right-0"
             bodyClassName="d-flex flex-column"
             titleAs={
-                <div className="w-100 d-flex align-items-center">
+                <div className="w-100 d-flex align-items-center ft-16 font-weight-bold justify-content-center color-dark">
                     <p className="mb-0 mr-2">매체 코드 : {data.sourceCode}</p>
                     <p className="mb-0 mr-2">매체명 : {data.sourceName}</p>
                     {/* <Button variant="outline-table-btn" onClick={handleClickAdd} style={{ position: 'absolute', left: 385 }}>

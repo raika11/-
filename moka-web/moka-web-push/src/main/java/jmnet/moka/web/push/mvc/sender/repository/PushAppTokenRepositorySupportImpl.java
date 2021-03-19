@@ -7,7 +7,6 @@ import jmnet.moka.web.push.mvc.sender.dto.PushAppTokenSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppTokenStatus;
 import jmnet.moka.web.push.mvc.sender.entity.QPushAppToken;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
@@ -46,18 +45,6 @@ public class PushAppTokenRepositorySupportImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public List<PushAppToken> findAllByAppScope(Integer appSeq, long lastTokenSeq, Pageable pageable) {
-        QPushAppToken pushAppToken = QPushAppToken.pushAppToken;
-        JPQLQuery<PushAppToken> query = from(pushAppToken);
-        query = getQuerydsl().applyPagination(pageable, query);
-        return query
-                .where(pushAppToken.tokenSeq
-                        .loe(lastTokenSeq)
-                        .and(pushAppToken.appSeq.eq(appSeq)))
-                .fetch();
-    }
-
-    @Override
     public List<PushAppToken> findAllByAppScope(PushAppTokenSearchDTO pushAppTokenSearch) {
         QPushAppToken pushAppToken = QPushAppToken.pushAppToken;
         JPQLQuery<PushAppToken> query = from(pushAppToken);
@@ -80,8 +67,10 @@ public class PushAppTokenRepositorySupportImpl extends QuerydslRepositorySupport
         return query
                 .select(Projections.fields(PushAppTokenStatus.class, pushAppToken.tokenSeq
                         .max()
+                        .coalesce(0L)
                         .as("lastTokenSeq"), pushAppToken.tokenSeq
                         .min()
+                        .coalesce(0L)
                         .as("firstTokenSeq"), pushAppToken.tokenSeq
                         .count()
                         .as("totalCount")))

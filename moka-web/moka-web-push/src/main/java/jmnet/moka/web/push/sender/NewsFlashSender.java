@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.web.push.mvc.sender.dto.PushAppTokenSearchDTO;
-import jmnet.moka.web.push.mvc.sender.dto.PushContentSeqSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushApp;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.mvc.sender.entity.PushAppTokenStatus;
@@ -47,15 +46,11 @@ public class NewsFlashSender extends AbstractPushSender {
 
     @Override
     public FcmMessage makePushMessage(PushContents pushContents, PushApp pushApp) {
-        long contentSeq = pushContents.getContentSeq();
-        log.debug("[FcmMessage makePushMessage] pushItemSeq=", contentSeq);
 
-        PushContentSeqSearchDTO searchContentSeq = new PushContentSeqSearchDTO();
-
-        String pushType = null;
         String title = null;
         String content = null;
         String pushImgUrl = null;
+
         try {
             title = pushContents.getTitle();
             content = pushContents.getContent();
@@ -92,25 +87,14 @@ public class NewsFlashSender extends AbstractPushSender {
         }
     }
 
-
-    @Override
-    protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long startTokenSeq, int pageIdx, int tokenCnt)
-            throws Exception {
-        return pushAppTokenService.findPushAppToken(appSeq, startTokenSeq, (startTokenSeq + tokenCnt) - 1);
-    }
-
     @Override
     protected List<PushAppToken> findAllToken(PushAppTokenSearchDTO pushAppTokenSearch)
             throws Exception {
         return pushAppTokenService.findPushAppToken(pushAppTokenSearch);
     }
 
-
     @Override
     protected PushAppTokenStatus findAppTokenStatus(Integer appSeq, Long contentSeq) {
         return pushAppTokenService.findPushAppTokenStatus(appSeq);
     }
-
-
-
 }

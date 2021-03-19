@@ -92,25 +92,14 @@ public class PreviewTodaySender extends AbstractPushSender {
         }
     }
 
-
-    @Override
-    protected List<PushAppToken> findAllToken(String pushType, long contentSeq, int appSeq, long startTokenSeq, int pageIdx, int tokenCnt)
-            throws Exception {
-        return pushAppTokenService.findPushAppToken(appSeq, startTokenSeq, (startTokenSeq + tokenCnt) - 1);
-    }
-
     @Override
     protected List<PushAppToken> findAllToken(PushAppTokenSearchDTO pushAppTokenSearch)
             throws Exception {
         return pushAppTokenService.findPushAppToken(pushAppTokenSearch);
     }
 
-
     @Override
     protected PushAppTokenStatus findAppTokenStatus(Integer appSeq, Long contentSeq) {
         return pushAppTokenService.findPushAppTokenStatus(appSeq);
     }
-
-
-
 }

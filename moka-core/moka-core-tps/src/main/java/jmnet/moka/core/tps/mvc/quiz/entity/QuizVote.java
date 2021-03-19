@@ -76,12 +76,7 @@ public class QuizVote implements Serializable {
     @Column(name = "MEM_SEQ")
     private Long memSeq;
 
-    /**
-     * 로그인SITE(소셜로그인경로포함)
-     */
-    @Column(name = "LOGIN_SITE")
-    private String loginSite;
-
+   
     /**
      * 로그인TYPE
      */

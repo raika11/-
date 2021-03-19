@@ -50,9 +50,6 @@ public class TrendpollExcelView extends AbstractExcelView {
                     .setCellValue(vote.getRegIp());
             row
                     .createCell(cellNum.getAndAdd(1))
-                    .setCellValue(vote.getLoginSite());
-            row
-                    .createCell(cellNum.getAndAdd(1))
                     .setCellValue(vote.getMemId());
             row
                     .createCell(cellNum.getAndAdd(1))

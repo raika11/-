@@ -39,7 +39,7 @@ public abstract class AbstractScheduler implements Scheduler {
      * 마무리 처리
      */
     public void finish() {
-        // TODO 1. 처리 결과 update 등 마무리 처리
+        // 처리 결과 update 등 마무리 처리
     }
 
     @Override
@@ -58,5 +58,6 @@ public abstract class AbstractScheduler implements Scheduler {
     /**
      * 각 Job별 기능 구현
      */
-    public abstract void invoke() throws Exception;
+    public abstract void invoke()
+            throws Exception;
 }

@@ -13,23 +13,27 @@ const BulkMonitorSumAgGrid = () => {
     const loading = useSelector((store) => store.loading[GET_BULK_STAT_TOTAL]);
 
     return (
-        <div className="mb-5 d-flex align-items-center" style={{ width: 786 }}>
-            <div className="mr-3 text-center">
+        <>
+            <div className="mb-2 text-right">
                 <p className="mb-0">
-                    {search.startDt} ~ {search.endDt}
+                    <span className="mr-4">
+                        {search.startDt} ~ {search.endDt}
+                    </span>
+                    벌크 현황 정보
                 </p>
-                <p className="mb-0">벌크 현황 정보</p>
             </div>
-            <MokaTable
-                className="overflow-hidden flex-fill ag-grid-align-center"
-                agGridHeight={173}
-                columnDefs={columnDefs}
-                onRowNodeId={(params) => params.status}
-                rowData={totalList}
-                paging={false}
-                loading={loading}
-            />
-        </div>
+            <div className="mb-14 d-flex">
+                <MokaTable
+                    className="overflow-hidden flex-fill ag-grid-align-center"
+                    agGridHeight={173}
+                    columnDefs={columnDefs}
+                    onRowNodeId={(params) => params.status}
+                    rowData={totalList}
+                    paging={false}
+                    loading={loading}
+                />
+            </div>
+        </>
     );
 };
 

@@ -69,11 +69,7 @@ public class TrendpollVote implements Serializable {
     @Column(name = "REG_IP")
     private String regIp;
 
-    /**
-     * 로그인SITE(소셜로그인경로포함)
-     */
-    @Column(name = "LOGIN_SITE")
-    private String loginSite;
+    
 
     /**
      * 회원ID

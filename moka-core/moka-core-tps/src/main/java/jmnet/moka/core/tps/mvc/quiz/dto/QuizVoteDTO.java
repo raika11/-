@@ -63,12 +63,6 @@ public class QuizVoteDTO implements Serializable {
     @Min(value = 0, message = "{tps.quiz-vote.error.min.memSeq}")
     private Long memSeq;
 
-    /**
-     * 로그인SITE(소셜로그인경로포함)
-     */
-    @ApiModelProperty(value = "로그인SITE(소셜로그인경로포함)")
-    @Size(max = 10, message = "{tps.quiz-vote.error.size.loginSite}")
-    private String loginSite;
 
     /**
      * 로그인TYPE(소셜로그인경로포함)
@@ -78,7 +72,7 @@ public class QuizVoteDTO implements Serializable {
     private String loginType;
 
     /**
-     * PC아이디 LOGIN_SITE
+     * PC아이디
      */
     @ApiModelProperty(value = "PC아이디")
     @Size(max = 100, message = "{tps.quiz-vote.error.size.pcId}")

@@ -1,8 +1,6 @@
 package jmnet.moka.web.push.mvc.sender.repository;
 
 import java.util.Optional;
-
-import jmnet.moka.web.push.mvc.sender.dto.PushAppSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushApp;
 import org.springframework.stereotype.Repository;
 
@@ -19,14 +17,4 @@ public interface PushAppRepositorySupport {
      * @return 작업
      */
     Optional<PushApp> findByAppSeq(Integer appSeq);
-
-    /**
-     * 특정작업 존재여부 확인 - 앱 일련번호
-     *
-     * @param AppOs
-     * @param AppDiv
-     * @param DevDiv
-     * @return 작업
-     */
-    Optional<PushApp> findByAppOsAndAppDivAndDevDiv(String AppOs, String AppDiv, String DevDiv);
 }

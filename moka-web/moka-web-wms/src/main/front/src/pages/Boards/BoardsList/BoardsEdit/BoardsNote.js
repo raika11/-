@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Form, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import BoardsSummernote from './BoardsSummernote';
-import { GET_LISTMENU_CONTENTS_INFO, uploadBoardContentImage, changeListmenuContent } from '@store/board';
+import { GET_LIST_MENU_CONTENTS_INFO, uploadBoardContentImage, changeListMenuContent } from '@store/board';
 import toast, { messageBox } from '@utils/toastUtil';
 
 const BoardsNote = () => {
     const dispatch = useDispatch();
-    const { contentsinfo, selectboard } = useSelector((store) => ({
-        contentsinfo: store.board.listmenu.contents.info,
-        selectboard: store.board.listmenu.selectboard,
-        loading: store.loading[GET_LISTMENU_CONTENTS_INFO],
+    const { contentsinfo, selectBoard } = useSelector((store) => ({
+        contentsinfo: store.board.listMenu.contents.info,
+        selectBoard: store.board.listMenu.selectBoard,
+        loading: store.loading[GET_LIST_MENU_CONTENTS_INFO],
     }));
 
     const [contentData, setContentData] = useState(null);
@@ -22,14 +22,14 @@ const BoardsNote = () => {
 
         dispatch(
             uploadBoardContentImage({
-                boardId: selectboard.boardId,
+                boardId: selectBoard.boardId,
                 imageForm: formData,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
                         toast.success(message);
                         let tempContent = `${contentsinfo.content} <img src="${body}">`;
 
-                        dispatch(changeListmenuContent({ content: tempContent }));
+                        dispatch(changeListMenuContent({ content: tempContent }));
                         setContentData(tempContent);
                     } else {
                         const { totalCnt, list } = body;
@@ -62,7 +62,7 @@ const BoardsNote = () => {
                     <BoardsSummernote
                         contentValue={contentData}
                         editChange={(value) => {
-                            dispatch(changeListmenuContent({ content: value }));
+                            dispatch(changeListMenuContent({ content: value }));
                             // setContentData(value);
                         }}
                         editImageUpload={(e) => SummernoteImageUpload(e)}

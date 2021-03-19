@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { GET_BOARD_GROUP_LIST, getBoardGroupList, getListmenuSelectBoard } from '@store/board';
+import { GET_BOARD_GROUP_LIST, getBoardGroupList, getListMenuSelectBoard } from '@store/board';
 import { MokaLoader } from '@components';
 import TreeCategory from './TreeCategory';
 import TreeItem from './TreeItem';
 
+/**
+ * 게시판 관리 > 게시글 관리(트리)
+ */
 const TreeBox = (props) => {
     const dispatch = useDispatch();
-    const params = useParams();
-    const boardId = useRef(null);
+    const { boardId } = useParams();
+    const boardType = useSelector((store) => store.board.boardType);
+    const groupList = useSelector((store) => store.board.listMenu.groupList);
     const loading = useSelector(({ loading }) => loading[GET_BOARD_GROUP_LIST]);
-    const { boardType, groupList } = useSelector(({ board }) => ({
-        boardType: board.boardType,
-        groupList: board.listmenu.groupList,
-    }));
     const [treeData, setTreeData] = useState([]);
     const [selectCategory, setSelectCategory] = useState(0);
 
@@ -22,8 +22,9 @@ const TreeBox = (props) => {
         dispatch(getBoardGroupList());
     }, [dispatch]);
 
-    //초기 설정.
     useEffect(() => {
+        //초기 설정
+
         // 최초 /router/:boardId 없이 접근시 강제초 첫번쨰 게시판 id 로 라우터 이동 시킴.
         // const goLastBoardIndex = () => {
         //     groupList
@@ -75,13 +76,11 @@ const TreeBox = (props) => {
         setInitData();
     }, [boardType, groupList]);
 
-    // useRef 현재 선택된 게시판, 게시글 정보 설정.
     useEffect(() => {
-        if (!isNaN(params.boardId) && boardId.current !== params.boardId) {
-            dispatch(getListmenuSelectBoard({ boardId: params.boardId }));
-            boardId.current = params.boardId;
+        if (boardId) {
+            dispatch(getListMenuSelectBoard(boardId));
         }
-    }, [dispatch, params]);
+    }, [dispatch, boardId]);
 
     return (
         <div className="custom-scroll treeview h-100">
@@ -105,7 +104,7 @@ const TreeBox = (props) => {
                                 return (
                                     <TreeItem
                                         key={nodeData.boardId}
-                                        selectItem={Number(params.boardId) === nodeData.boardId}
+                                        selectItem={Number(boardId) === nodeData.boardId}
                                         boardId={nodeData.boardId}
                                         nodeId={String(nodeData.listIndex)}
                                         nodeData={nodeData}

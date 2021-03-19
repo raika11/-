@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import { MokaTable } from '@components';
-import { DISPLAY_PAGE_NUM } from '@/constants';
-import { changeSetMenuSearchOption, GET_SETMENU_BOARD_LIST } from '@store/board';
+import { BASIC_DATEFORMAT, DISPLAY_PAGE_NUM } from '@/constants';
+import { changeSetMenuSearchOption, GET_SET_MENU_BOARD_LIST } from '@store/board';
 
 import { columnDefs } from './BoardsSetAgGridColumns';
 import ButtonRenderer from './components/ButtonRenderer';
@@ -14,25 +15,25 @@ import ButtonRenderer from './components/ButtonRenderer';
 const BoardsSetAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const params = useParams();
 
-    const { boardslist, total, page, size, search, loading, pagePathName } = useSelector((store) => ({
-        pagePathName: store.board.pagePathName,
-        total: store.board.setmenu.total,
-        search: store.board.setmenu.search,
-        boardslist: store.board.setmenu.list,
-        loading: store.loading[GET_SETMENU_BOARD_LIST],
-    }));
+    const pagePathName = useSelector((store) => store.board.pagePathName);
+    const total = useSelector((store) => store.board.setMenu.total);
+    const boardslist = useSelector((store) => store.board.setMenu.list);
+    const search = useSelector((store) => store.board.setMenu.search);
+    const boardInfo = useSelector((store) => store.board.setMenu.boardInfo);
+    const loading = useSelector((store) => store.loading[GET_SET_MENU_BOARD_LIST]);
 
-    // 그리드 리스트 데이터.
+    // 그리드 리스트 데이터
     const [rowData, setRowData] = useState([]);
 
-    // 리스트 아이템 클릭.
+    // 리스트 아이템 클릭
     const handleRowClicked = ({ boardId }) => {
         history.push(`/${pagePathName}/${boardId}`);
     };
 
-    // grid 에서 상태 변경시 리스트를 가지고 오기.
+    /**
+     * 검색 조건 변경
+     */
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
             let temp = { ...search, [key]: value };
@@ -45,52 +46,40 @@ const BoardsSetAgGrid = () => {
     );
 
     useEffect(() => {
-        const setRowDataState = (element) => {
-            setRowData([]);
+        if (boardslist) {
             setRowData(
-                element.map((data) => {
-                    const regDt = (data.regDt || '').slice(0, -3);
-                    const modDt = (data.modDt || '').slice(0, -3);
-
-                    return {
+                boardslist.map((data) => ({
+                    ...data,
+                    regDt: moment(data.regDt || '').format(BASIC_DATEFORMAT),
+                    modDt: moment(data.modDt || '').format(BASIC_DATEFORMAT),
+                    buttonInfo: {
                         boardId: data.boardId,
-                        boardName: data.boardName,
-                        regDt: regDt,
-                        modDt: modDt,
-                        usedYn: data.usedYn,
-                        buttonInfo: {
-                            boardId: data.boardId,
-                            boardUrl: data.boardUrl,
-                        },
-                    };
-                }),
+                        boardUrl: data.boardUrl,
+                    },
+                })),
             );
-        };
-        setRowDataState(boardslist);
+        }
     }, [boardslist]);
 
     return (
-        <>
-            <MokaTable
-                className="flex-fill overflow-hidden"
-                columnDefs={columnDefs}
-                rowData={rowData}
-                // rowHeight={40}
-                onRowNodeId={(data) => data.boardId}
-                onRowClicked={handleRowClicked}
-                loading={loading}
-                total={total}
-                page={page}
-                size={size}
-                displayPageNum={DISPLAY_PAGE_NUM}
-                onChangeSearchOption={handleChangeSearchOption}
-                selected={params.boardId}
-                frameworkComponents={{
-                    buttonRenderer: ButtonRenderer,
-                }}
-                preventRowClickCell={['button']}
-            />
-        </>
+        <MokaTable
+            className="flex-fill overflow-hidden"
+            columnDefs={columnDefs}
+            rowData={rowData}
+            onRowNodeId={(data) => data.boardId}
+            onRowClicked={handleRowClicked}
+            loading={loading}
+            total={total}
+            page={search.page}
+            size={search.size}
+            displayPageNum={DISPLAY_PAGE_NUM}
+            onChangeSearchOption={handleChangeSearchOption}
+            selected={boardInfo.boardId}
+            frameworkComponents={{
+                buttonRenderer: ButtonRenderer,
+            }}
+            preventRowClickCell={['button']}
+        />
     );
 };
 

@@ -47,7 +47,11 @@
     #{endDt, mode=IN, jdbcType=INTEGER, javaType=java.util.Date},
     #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{tabDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{statType, mode=IN, jdbcType=VARCHAR, javaType=string}
+    #{statType, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
     ) }
   </select>
 

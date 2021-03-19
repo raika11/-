@@ -117,7 +117,7 @@ const CodeMappingModal = (props) => {
                 <Row className="m-0">
                     <Col xs={6} className="p-0 pt-14 pr-gutter">
                         <div className="mb-14 d-flex justify-content-end">
-                            <Button variant="outline-table-btn" onClick={handleClickAdd}>
+                            <Button variant="positive" onClick={handleClickAdd}>
                                 등록
                             </Button>
                         </div>

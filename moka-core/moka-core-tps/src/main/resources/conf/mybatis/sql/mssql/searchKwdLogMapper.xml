@@ -15,44 +15,44 @@
   <select id="findAll" parameterType="SearchKwdLogSearchDTO" resultType="SearchKwdLogVO"
     statementType="CALLABLE">
     {call UPA_SEARCH_KWD_LOG_STAT_SEL(
-    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
-    #{endDt, mode=IN, jdbcType=INTEGER, javaType=java.util.Date},
-    #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{tabDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
-    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
-    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{order, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{dir, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
-    ) }
+      #{startDt, mode=IN, jdbcType=TIMESTAMP, javaType=java.util.Date},
+      #{endDt, mode=IN, jdbcType=TIMESTAMP, javaType=java.util.Date},
+      #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{tabDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+      #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+      #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{order, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{dir, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
   </select>
 
   <!-- 검색어 전체 통계 -->
   <select id="findTotalStat" parameterType="SearchKwdLogSearchDTO" resultType="SearchKwdTotalLogVO"
     statementType="CALLABLE">
     {call UPA_SEARCH_KWD_LOG_TOTAL_STAT_SEL(
-    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
-    #{endDt, mode=IN, jdbcType=INTEGER, javaType=java.util.Date},
-    #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{tabDiv, mode=IN, jdbcType=VARCHAR, javaType=string}
-    ) }
+      #{startDt, mode=IN, jdbcType=TIMESTAMP, javaType=java.util.Date},
+      #{endDt, mode=IN, jdbcType=TIMESTAMP, javaType=java.util.Date},
+      #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{tabDiv, mode=IN, jdbcType=VARCHAR, javaType=string}
+      ) }
   </select>
 
   <!-- 검색어 통계 상세 리스트 -->
   <select id="findAllDetailStat" parameterType="SearchKwdLogSearchDTO" resultType="SearchKwdLogVO"
     statementType="CALLABLE">
     {call UPA_SEARCH_KWD_LOG_DETAIL_STAT_SEL(
-    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
-    #{endDt, mode=IN, jdbcType=INTEGER, javaType=java.util.Date},
-    #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{tabDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{statType, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
-    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
-    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
-    ) }
+      #{startDt, mode=IN, jdbcType=TIMESTAMP, javaType=java.util.Date},
+      #{endDt, mode=IN, jdbcType=TIMESTAMP, javaType=java.util.Date},
+      #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{tabDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{statType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+      #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+      #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
   </select>
 
 

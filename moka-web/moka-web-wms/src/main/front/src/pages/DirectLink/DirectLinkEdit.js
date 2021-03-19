@@ -401,22 +401,24 @@ const DirectLinkEdit = ({ history, match }) => {
                     />
                     <MokaInputLabel
                         label="시작일"
+                        labelWidth={46}
                         as="dateTimePicker"
                         name="viewSdate"
                         value={temp.viewSdate}
                         onChange={handleSDate}
-                        className="mr-1"
+                        className="mr-3"
                         inputClassName="top"
                         inputProps={{ timeFormat: null }}
                         disabled={dateDisabled}
                     />
                     <MokaInputLabel
                         label="종료일"
+                        labelWidth={46}
                         as="dateTimePicker"
                         name="viewEdate"
                         value={temp.viewEdate}
                         onChange={handleEDate}
-                        className="ml-1"
+                        className="ml-3"
                         inputClassName="right top"
                         inputProps={{ timeFormat: null }}
                         disabled={dateDisabled}

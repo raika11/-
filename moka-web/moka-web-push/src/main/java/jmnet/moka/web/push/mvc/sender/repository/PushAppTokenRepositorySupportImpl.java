@@ -80,8 +80,10 @@ public class PushAppTokenRepositorySupportImpl extends QuerydslRepositorySupport
         return query
                 .select(Projections.fields(PushAppTokenStatus.class, pushAppToken.tokenSeq
                         .max()
+                        .coalesce(0L)
                         .as("lastTokenSeq"), pushAppToken.tokenSeq
                         .min()
+                        .coalesce(0L)
                         .as("firstTokenSeq"), pushAppToken.tokenSeq
                         .count()
                         .as("totalCount")))

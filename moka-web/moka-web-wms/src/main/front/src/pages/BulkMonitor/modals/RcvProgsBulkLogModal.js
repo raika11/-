@@ -75,19 +75,19 @@ const RcvProgsBulkLogModal = (props) => {
     }, [bulkSendListInfo]);
 
     return (
-        <MokaModal size="xl" width={rcvProgs === false ? 700 : 1120} height={800} show={show} onHide={handleHide} draggable>
+        <MokaModal size="xl" width={rcvProgs === false ? 700 : 1120} height={850} show={show} onHide={handleHide} draggable>
             <div className="d-flex justify-content-between">
                 <div style={{ width: 700 }}>
                     <Form className="mb-3">
                         <MokaInputLabel className="mb-2" label="기사 ID" value={data.contentId} inputProps={{ readOnly: true, plaintext: true }} />
                         <MokaInputLabel className="mb-2" label="제목" value={data.title} inputProps={{ readOnly: true, plaintext: true }} />
-                        <Form.Row className="d-flex justify-content-between">
+                        <Form.Row className="d-flex justify-content-between mb-2">
                             <MokaInputLabel label="매체" value={data.orgSourceName} inputProps={{ readOnly: true, plaintext: true }} />
-                            <div className="d-flex align-items-center">
-                                <MokaInputLabel as="none" label="상태" />
-                                <MokaInput className="cursor-pointer" value={data.status} onClick={handleClickStatus} readOnly plaintext />
-                            </div>
                         </Form.Row>
+                        <div className="d-flex align-items-center">
+                            <MokaInputLabel as="none" label="상태" />
+                            <MokaInput className="cursor-pointer" value={data.status} onClick={handleClickStatus} readOnly plaintext />
+                        </div>
                     </Form>
                     <div className="d-flex flex-column">
                         <MokaTable

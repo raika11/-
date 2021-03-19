@@ -29,9 +29,7 @@ const ArchiveTable = (props) => {
         } else {
             temp = { ...temp, [key]: value };
         }
-        if (key !== 'page') {
-            temp['pageCount'] = 0;
-        }
+        if (key !== 'page') temp['page'] = 0;
         dispatch(getPhotoList(changeSearchOption(temp)));
     };
 

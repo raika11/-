@@ -1,13 +1,12 @@
-package jmnet.moka.web.schedule.mvc.jreport.dto;
+package jmnet.moka.web.schedule.mvc.mybatis.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.io.Serializable;
 
 /**
  * JReporterListJobDTO

@@ -1,13 +1,17 @@
-package jmnet.moka.web.schedule.mvc.jreport.vo;
+package jmnet.moka.web.schedule.mvc.mybatis.vo;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 /**
  * <pre>
  * JReport 목록 조회용 VO
  * Project : moka
- * Package : jmnet.moka.web.schedule.mvc.jreport.vo
+ * Package : jmnet.moka.web.schedule.mvc.mybatis.vo
  * ClassName : JobStatisticVO
  * </pre>
  *

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.web.schedule.mvc.mybatis.mapper.JoinsNewsRssJobMapper">
+
+  <!-- 중앙 기자 리스트 -->
+  <select id="findAll" parameterType="JoinsNewsRssDTO"
+    resultType="jmnet.moka.web.schedule.mvc.mybatis.vo.JoinsNewsVO" statementType="CALLABLE">
+    {call UPA_ARTICLE_BASIC_SEL(
+      #{piPageCount, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{piPageNum, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{piCtgId, mode=IN, jdbcType=VARCHAR, javaType=string}
+      ) }
+  </select>
+
+</mapper>

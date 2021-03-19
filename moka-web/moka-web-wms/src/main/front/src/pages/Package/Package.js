@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
@@ -7,9 +7,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
+import PackageList from './PackageList';
 import PackageEdit from './PackageEdit';
-
-const PackageList = React.lazy(() => import('./PackageList'));
 
 /**
  * 패키지 관리
@@ -29,9 +28,7 @@ const Package = ({ match, displayName }) => {
                 {/* 패키지 목록 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     <MokaCard title="패키지 목록" className="w-100" bodyClassName="d-flex flex-column">
-                        <Suspense>
-                            <PackageList match={match} />
-                        </Suspense>
+                        <PackageList match={match} />
                     </MokaCard>
                 </Col>
 

@@ -1,29 +1,25 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
-
-import { MokaCard, MokaIcon } from '@components';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
-
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { changeOrderChildren, clearStore, getMenuList } from '@store/menu';
-import toast, { messageBox } from '@/utils/toastUtil';
+import { useDispatch, useSelector } from 'react-redux';
+import Button from 'react-bootstrap/Button';
+import { changeOrderChildren, clearStore } from '@store/menu';
 import { changeSearchOption, deleteMenu, existAuth } from '@store/menu';
 import MenuDraggableAgGrid from '@pages/Menu/component/MenuDraggableAgGrid';
-import Button from 'react-bootstrap/Button';
+import { MokaCard } from '@components';
+import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
-const MenuLargeLIst = React.lazy(() => import('./MenuLargeLIst'));
-const MenuMiddleLIst = React.lazy(() => import('./MenuMiddleLIst'));
-const MenuSmallLIst = React.lazy(() => import('./MenuSmallLIst'));
+import MenuEditContainer from './MenuEditContainer';
 
-const MenuEditContainer = React.lazy(() => import('./MenuEditContainer'));
 const LIST_WIDTH = 300;
+const rootParentMenuId = '00';
 
 /**
  * 메뉴 관리
  */
 const Menu = () => {
     const dispatch = useDispatch();
-    const rootParentMenuId = '00';
+    const { listLarge, listMiddle, listSmall } = useSelector(({ menu }) => menu);
     const [menuSeq, setMenuSeq] = useState('');
     const [largeMenuId, setLargeMenuId] = useState(null);
     const [middleMenuId, setMiddleMenuId] = useState(null);
@@ -34,21 +30,6 @@ const Menu = () => {
     const [largeOrderList, setLargeOrderList] = useState(null);
     const [middleOrderList, setMiddleOrderList] = useState(null);
     const [smallOrderList, setSmallOrderList] = useState(null);
-
-    const { listLarge, listMiddle, listSmall } = useSelector(
-        (store) => ({
-            listLarge: store.menu.listLarge,
-            listMiddle: store.menu.listMiddle,
-            listSmall: store.menu.listSmall,
-        }),
-        shallowEqual,
-    );
-
-    React.useEffect(() => {
-        return () => {
-            dispatch(clearStore());
-        };
-    }, [dispatch]);
 
     const handleRowClicked = (rowData) => {
         setMenuSearchInfo(rowData.menuSeq, rowData.depth, rowData.menuId, rowData.parentMenuId);
@@ -105,6 +86,7 @@ const Menu = () => {
                 break;
         }
     };
+
     /**
      *  메뉴 삭제
      * @param {object} response response
@@ -174,6 +156,12 @@ const Menu = () => {
         );
     };
 
+    React.useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
+
     return (
         <div className="d-flex">
             <Helmet>
@@ -205,19 +193,17 @@ const Menu = () => {
                         저장
                     </Button>
                 </div>
-                <Suspense>
-                    {/*<MenuLargeLIst handleRowClicked={handleRowClicked} menuId={largeMenuId} parentMenuId={rootParentMenuId} depth="1" />*/}
-                    <MenuDraggableAgGrid
-                        onRowClicked={handleRowClicked}
-                        menuId={largeMenuId}
-                        parentMenuId={rootParentMenuId}
-                        depth="1"
-                        onChange={(data) => {
-                            setLargeOrderList(data);
-                        }}
-                        list={listLarge}
-                    />
-                </Suspense>
+
+                <MenuDraggableAgGrid
+                    onRowClicked={handleRowClicked}
+                    menuId={largeMenuId}
+                    parentMenuId={rootParentMenuId}
+                    depth="1"
+                    onChange={(data) => {
+                        setLargeOrderList(data);
+                    }}
+                    list={listLarge}
+                />
             </MokaCard>
             <MokaCard
                 className="mr-gutter"
@@ -242,19 +228,17 @@ const Menu = () => {
                         저장
                     </Button>
                 </div>
-                <Suspense>
-                    {/*<MenuMiddleLIst handleRowClicked={handleRowClicked} parentMenuId={largeMenuId} menuId={middleMenuId} depth="2" />*/}
-                    <MenuDraggableAgGrid
-                        onRowClicked={handleRowClicked}
-                        menuId={middleMenuId}
-                        parentMenuId={largeMenuId}
-                        depth="2"
-                        onChange={(data) => {
-                            setMiddleOrderList(data);
-                        }}
-                        list={listMiddle}
-                    />
-                </Suspense>
+
+                <MenuDraggableAgGrid
+                    onRowClicked={handleRowClicked}
+                    menuId={middleMenuId}
+                    parentMenuId={largeMenuId}
+                    depth="2"
+                    onChange={(data) => {
+                        setMiddleOrderList(data);
+                    }}
+                    list={listMiddle}
+                />
             </MokaCard>
             <MokaCard
                 className="mr-gutter"
@@ -279,23 +263,20 @@ const Menu = () => {
                         저장
                     </Button>
                 </div>
-                <Suspense>
-                    {/*<MenuSmallLIst handleRowClicked={handleRowClicked} parentMenuId={middleMenuId} menuId={smallMenuId} depth="3" />*/}
-                    <MenuDraggableAgGrid
-                        onRowClicked={handleRowClicked}
-                        menuId={smallMenuId}
-                        parentMenuId={middleMenuId}
-                        depth="3"
-                        onChange={(data) => {
-                            setSmallOrderList(data);
-                        }}
-                        list={listSmall}
-                    />
-                </Suspense>
+
+                <MenuDraggableAgGrid
+                    onRowClicked={handleRowClicked}
+                    menuId={smallMenuId}
+                    parentMenuId={middleMenuId}
+                    depth="3"
+                    onChange={(data) => {
+                        setSmallOrderList(data);
+                    }}
+                    list={listSmall}
+                />
             </MokaCard>
-            <Suspense>
-                <MenuEditContainer handleClickDelete={handleClickDelete} menuSeq={menuSeq} parentMenuId={parentMenuId} depth={depth} />
-            </Suspense>
+
+            <MenuEditContainer handleClickDelete={handleClickDelete} menuSeq={menuSeq} parentMenuId={parentMenuId} depth={depth} />
         </div>
     );
 };

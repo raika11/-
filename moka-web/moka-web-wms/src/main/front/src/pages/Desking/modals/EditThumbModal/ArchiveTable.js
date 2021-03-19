@@ -3,7 +3,7 @@ import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaLoader, MokaPagination } from '@components';
 import ThumbCard from './ThumbCard';
-import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
+import { S_MODAL_PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 import { GET_PHOTO_LIST, GET_ARCHIVE_DATA, getPhotoList, changeSearchOption } from '@store/photoArchive';
 
 /**
@@ -29,9 +29,7 @@ const ArchiveTable = (props) => {
         } else {
             temp = { ...temp, [key]: value };
         }
-        if (key !== 'page') {
-            temp['page'] = 0;
-        }
+        if (key !== 'page') temp['page'] = 0;
         dispatch(getPhotoList(changeSearchOption(temp)));
     };
 
@@ -77,9 +75,9 @@ const ArchiveTable = (props) => {
             <MokaPagination
                 page={search.page}
                 total={total}
-                size={search.size}
+                size={search.pageCount}
                 onChangeSearchOption={handleChangeSearchOption}
-                pageSizes={PAGESIZE_OPTIONS}
+                pageSizes={S_MODAL_PAGESIZE_OPTIONS}
                 displayPageNum={DISPLAY_PAGE_NUM}
             />
         </React.Fragment>

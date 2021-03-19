@@ -246,7 +246,7 @@ public abstract class AbstractPushSender implements Sender {
             Future<Long> future = null;
 
             log.info("[ Collecting transmission results for each thread ]");
-            for (int idx = 0; idx < threadPoolCnt; idx++) {
+            for (int idx = 0; idx < maxThreadPoolCnt; idx++) {
                 future = completionService.take();
                 if (future.isDone()) {
                     int appSeq = futureMap.get(future);
@@ -438,9 +438,9 @@ public abstract class AbstractPushSender implements Sender {
     protected void updateDone(final PushContents pushContents) {
         log.info("[ updateDone - Update to complete status ]");
 
-        pushContents.setPushYn(MokaConstants.YES);
-
         pushContentsService.savePushContents(pushContents);
+
+        pushContents.setPushYn(MokaConstants.YES);
     }
 
     /**

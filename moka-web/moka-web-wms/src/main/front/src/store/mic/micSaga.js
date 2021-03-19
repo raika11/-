@@ -35,9 +35,9 @@ function* saveMicAgenda({ payload }) {
 
         if (response.data.header.success) {
             // 목록 조회
-            const search = yield select(({ mic }) => mic.category.search);
+            const search = yield select(({ mic }) => mic.search);
             yield put({
-                type: act.GET_MIC_CATEGORY_LIST,
+                type: act.GET_MIC_AGENDA_LIST,
                 payload: { search },
             });
         } else {

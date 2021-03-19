@@ -35,6 +35,7 @@ const SearchKeywordSearch = () => {
             const startDt = moment(nt).startOf(value).startOf('day');
             setPeriod(value);
             setSearch({ ...search, startDt, endDt });
+            setError({ ...error, startDt: false, endDt: false });
         } else {
             setSearch({ ...search, [name]: value });
         }
@@ -83,16 +84,23 @@ const SearchKeywordSearch = () => {
      */
     const validate = () => {
         let isInvalid = false;
+        let ne = {};
 
         if (!search.startDt) {
-            setError({ ...error, startDt: true });
+            ne.startDt = true;
             isInvalid = isInvalid || true;
         }
         if (!search.endDt) {
-            setError({ ...error, endDt: true });
+            ne.endDt = true;
+            isInvalid = isInvalid || true;
+        }
+        if (moment(search.endDt).subtract('1', 'y').isAfter(search.startDt)) {
+            messageBox.alert('검색 기간은 1년을 넘길 수 없습니다. 기간을 다시 설정해 주세요.');
+            ne.endDt = true;
             isInvalid = isInvalid || true;
         }
 
+        if (isInvalid) setError({ ...error, ...ne });
         return !isInvalid;
     };
 
@@ -100,46 +108,40 @@ const SearchKeywordSearch = () => {
      * 검색
      */
     const handleSearch = () => {
-        const targetDt = moment(search.endDt).subtract('1', 'y').format('YYYY-MM-DD');
-        if (moment(search.startDt).format('YYYY-MM-DD') < targetDt) {
-            setSearch({ ...search, startDt: null, endDt: null });
-            messageBox.alert('검색 기간은 1년을 넘길 수 없습니다. 기간을 다시 설정해 주세요.');
-        } else {
-            if (validate()) {
-                const ns = {
-                    ...search,
-                    startDt: moment(search.startDt).format(DB_DATEFORMAT),
-                    endDt: moment(search.endDt).format(DB_DATEFORMAT),
-                    page: 0,
-                };
+        if (validate()) {
+            const ns = {
+                ...search,
+                startDt: moment(search.startDt).format(DB_DATEFORMAT),
+                endDt: moment(search.endDt).format(DB_DATEFORMAT),
+                page: 0,
+            };
 
-                dispatch(changeStatSearchOption(ns));
-                // 통계 조회
-                dispatch(
-                    getSearchKeywordStat({
-                        search: ns,
-                        callback: ({ header }) => {
-                            if (!header.success) {
-                                messageBox.alert(header.mesage);
-                            }
-                        },
-                    }),
-                );
-                // 전체 건수 조회
-                dispatch(
-                    getSearchKeywordStatTotal({
-                        search: {
-                            startDt: ns.startDt,
-                            endDt: ns.endDt,
-                        },
-                        callback: ({ header }) => {
-                            if (!header.success) {
-                                messageBox.alert(header.mesage);
-                            }
-                        },
-                    }),
-                );
-            }
+            dispatch(changeStatSearchOption(ns));
+            // 통계 조회
+            dispatch(
+                getSearchKeywordStat({
+                    search: ns,
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.mesage);
+                        }
+                    },
+                }),
+            );
+            // 전체 건수 조회
+            dispatch(
+                getSearchKeywordStatTotal({
+                    search: {
+                        startDt: ns.startDt,
+                        endDt: ns.endDt,
+                    },
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.mesage);
+                        }
+                    },
+                }),
+            );
         }
     };
 
@@ -191,6 +193,7 @@ const SearchKeywordSearch = () => {
         <div className="mb-14">
             <Form.Row>
                 <Col xs={6} className="p-0 pr-2 d-flex">
+                    {/* 기간설정 */}
                     <div className="flex-shrink-0 mr-2">
                         <MokaInput as="select" name="period" onChange={handleChangeValue} value={period}>
                             <option value="day">오늘</option>
@@ -199,6 +202,7 @@ const SearchKeywordSearch = () => {
                             <option value="year">올해</option>
                         </MokaInput>
                     </div>
+                    {/* 시작일 */}
                     <MokaInput
                         as="dateTimePicker"
                         className="mr-1"
@@ -208,6 +212,7 @@ const SearchKeywordSearch = () => {
                         onChange={handleChangeSD}
                         isInvalid={error.startDt}
                     />
+                    {/* 종료일 */}
                     <MokaInput
                         as="dateTimePicker"
                         className="ml-1"

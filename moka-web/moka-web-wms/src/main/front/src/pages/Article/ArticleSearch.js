@@ -44,8 +44,9 @@ const ArticleSearch = ({ ja, sun }) => {
             // startServiceDay, endServiceDay 변경
             const nd = new Date();
             const startServiceDay = moment(nd).subtract(Number(number), date).startOf('day');
-            const endServiceDay = moment(nd);
+            const endServiceDay = moment(nd).endOf('day');
             setSearch({ ...search, startServiceDay, endServiceDay });
+            setError({ ...error, startServiceDay: false, endServiceDay: false });
         } else {
             setSearch({ ...search, [name]: value });
         }
@@ -111,23 +112,25 @@ const ArticleSearch = ({ ja, sun }) => {
      */
     const validate = (ns) => {
         let isInvalid = false;
+        let ne = {};
 
         if (!REQUIRED_REGEX.test(ns.sourceList)) {
             isInvalid = isInvalid || true;
-            setError({ ...error, sourceList: true });
+            ne.sourceList = true;
             toast.warning('매체를 하나 이상 선택하세요');
         }
 
         if (!ns.startServiceDay) {
             isInvalid = isInvalid || true;
-            setError({ ...error, startServiceDay: true });
+            ne.startServiceDay = true;
         }
 
         if (!ns.endServiceDay) {
             isInvalid = isInvalid || true;
-            setError({ ...error, endServiceDay: true });
+            ne.endServiceDay = true;
         }
 
+        if (isInvalid) setError({ ...error, ...ne });
         return !isInvalid;
     };
 

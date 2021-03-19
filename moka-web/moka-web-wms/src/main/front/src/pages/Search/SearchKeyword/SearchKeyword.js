@@ -1,9 +1,9 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
 import { MokaCard } from '@components';
 import SearchKeywordDetail from './SearchKeywordDetail';
-const SearchKeywordList = React.lazy(() => import('./SearchKeywordList'));
+import SearchKeywordList from './SearchKeywordList';
 
 /**
  * 검색 로그
@@ -18,9 +18,7 @@ const SearchKeyword = ({ match }) => {
             </Helmet>
 
             <MokaCard width={900} className="mr-gutter" title="검색 로그" bodyClassName="d-flex flex-column">
-                <Suspense>
-                    <SearchKeywordList match={match} />
-                </Suspense>
+                <SearchKeywordList match={match} />
             </MokaCard>
 
             <Route path={[`${match.url}/:keyword`]} exact render={() => <SearchKeywordDetail match={match} />} />

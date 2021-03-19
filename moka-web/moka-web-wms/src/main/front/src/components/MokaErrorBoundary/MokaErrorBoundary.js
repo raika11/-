@@ -29,7 +29,7 @@ class MokaErrorBoundary extends React.Component {
     }
 
     render() {
-        if (this.state.errorInfo) {
+        if (this.state.hasError) {
             // Error path
             return <MokaErrorFallback />;
         }

@@ -233,4 +233,9 @@ public class MokaConstants {
 
     public static final String MODEL_ATTR_EXCEPTION = "exception";
     public static final String MODEL_ATTR_ROOTCAUSE = "rootCause";
+
+    /**
+     * 미리보기
+     */
+    public static final String SYSTEM_AREA = "SYSTEM_AREA"; //미리보기 리소스의 컨텐트 토큰
 }

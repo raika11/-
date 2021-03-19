@@ -1,8 +1,10 @@
 import { call, select, put, takeLatest } from 'redux-saga/effects';
+import moment from 'moment';
 import { callApiAfterActions, createRequestSaga } from '../commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import * as api from './photoArchiveApi';
 import * as act from './photoArchiveAction';
+import { DB_DATEFORMAT } from '@/constants';
 
 /**
  * 포토 아카이브 사진 목록 조회
@@ -46,7 +48,15 @@ export function* getArchiveData() {
             });
 
             const search = yield select((store) => store.photoArchive.search);
-            const option = { ...search, imageType: 'All', originCode: 'all' };
+            // 기본 검색조건 설정
+            const nt = new Date();
+            const option = {
+                ...search,
+                startdate: moment(nt).startOf('day').format(DB_DATEFORMAT),
+                finishdate: moment(nt).endOf('day').format(DB_DATEFORMAT),
+                imageType: 'All',
+                originCode: 'all',
+            };
             yield put({
                 type: act.CHANGE_SEARCH_OPTION,
                 payload: option,

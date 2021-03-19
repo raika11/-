@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './photoArchiveAction';
-import { PAGESIZE_OPTIONS } from '@/constants';
+import { S_MODAL_PAGESIZE_OPTIONS } from '@/constants';
 
 /**
  * initialState
@@ -12,7 +12,7 @@ export const initialState = {
     list: [],
     search: {
         page: 0,
-        pageCount: PAGESIZE_OPTIONS[0],
+        pageCount: S_MODAL_PAGESIZE_OPTIONS[0],
         startdate: null,
         finishdate: null,
         menuCode: 'PHOTO_DB',

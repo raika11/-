@@ -16,6 +16,9 @@ import { ACCEPTED_IMAGE_TYPES } from '@/constants';
 
 moment.locale('ko');
 
+/**
+ * Gif 생성
+ */
 const GifDropzone = (props) => {
     const { collapse, setCollapse, onThumbClick, onRepClick, setRepImg } = props;
     const [imgList, setImgList] = useState([]);
@@ -190,7 +193,7 @@ const GifDropzone = (props) => {
                     <div style={{ width: 120 }} className="mr-1">
                         <MokaInputLabel label="간격" labelWidth={45} className="mb-0" name="gifInterval" value={gifInterval} onChange={handleChangeValue} />
                     </div>
-                    <p className="mb-0 mr-3">sce</p>
+                    <p className="mb-0 mr-3">sec</p>
                     <Button
                         variant="searching"
                         className="px-2"

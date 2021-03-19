@@ -9,7 +9,6 @@ import ArchiveOriginDropdown from './ArchiveOriginDropdown';
 import ArchiveTypeDropdown from './ArchiveTypeDropdown';
 
 const periodType = [
-    { id: 'all', name: '전체' },
     { id: 'day', name: '오늘' },
     { id: 'week', name: '일주일' },
 ];
@@ -19,30 +18,84 @@ const periodType = [
  */
 const ArchiveSearch = () => {
     const dispatch = useDispatch();
-    const searchKeyList = useSelector((store) => store.photoArchive.searchKeyList);
-    const storeSearch = useSelector((store) => store.photoArchive.search);
+    const { searchKeyList, search: storeSearch } = useSelector(({ photoArchive }) => photoArchive);
     const [search, setSearch] = useState(initialState.search);
     const [period, setPeriod] = useState('all');
-    const [startDate, setStartDate] = useState(null);
-    const [finishDate, setFinishDate] = useState(null);
     const [error, setError] = useState({});
 
     /**
      * 검색
      */
     const handleSearch = () => {
+        const startdate = search.startdate && search.startdate.isValid() ? moment(search.startdate).format(DB_DATEFORMAT) : null;
+        const finishdate = search.finishdate && search.finishdate.isValid() ? moment(search.finishdate).format(DB_DATEFORMAT) : null;
         dispatch(
             getPhotoList(
                 changeSearchOption({
                     ...search,
+                    startdate,
+                    finishdate,
                     page: 0,
                 }),
             ),
         );
     };
 
+    /**
+     * 기간 변경
+     * @param {object} e 이벤트
+     */
+    const handleChangePeriod = (e) => {
+        setPeriod(e.target.value);
+        const nt = new Date();
+        let startdate,
+            finishdate = moment(nt).endOf('day');
+
+        if (e.target.value === 'day') {
+            startdate = moment(nt).startOf('day');
+        } else if (e.target.value === 'week') {
+            startdate = moment(nt).subtract(7, 'days').startOf('day');
+        }
+        setSearch({ ...search, startdate, finishdate });
+    };
+
+    /**
+     * 시작일 변경
+     * @param {object} date moment object
+     */
+    const handleChangeSDate = (date) => {
+        if (typeof date === 'object') {
+            setSearch({ ...search, startdate: date });
+            if (error.startdate) setError({ ...error, startdate: false });
+        } else if (date === '') {
+            setSearch({ ...search, startdate: null });
+        }
+    };
+
+    /**
+     * 종료일 변경
+     * @param {object} date moment object
+     */
+    const handleChangeEDate = (date) => {
+        if (typeof date === 'object') {
+            setSearch({ ...search, finishdate: date });
+            if (error.finishdate) setError({ ...error, finishdate: false });
+        } else if (date === '') {
+            setSearch({ ...search, finishdate: null });
+        }
+    };
+
     useEffect(() => {
-        setSearch(storeSearch);
+        let ssd = moment(storeSearch.startdate, DB_DATEFORMAT);
+        if (!ssd.isValid()) ssd = null;
+        let esd = moment(storeSearch.finishdate, DB_DATEFORMAT);
+        if (!esd.isValid()) esd = null;
+
+        setSearch({
+            ...storeSearch,
+            startdate: ssd,
+            finishdate: esd,
+        });
     }, [storeSearch]);
 
     useEffect(() => {
@@ -52,24 +105,7 @@ const ArchiveSearch = () => {
     return (
         <Form className="d-flex mb-14">
             <div className="mr-2 flex-shrink-0">
-                <MokaInput
-                    as="select"
-                    value={period}
-                    onChange={(e) => {
-                        setPeriod(e.target.value);
-
-                        if (e.target.value === 'day') {
-                            setStartDate(moment().format(DB_DATEFORMAT));
-                            setFinishDate(moment().format(DB_DATEFORMAT));
-                        } else if (e.target.value === 'week') {
-                            setStartDate(moment().subtract(7, 'd').format(DB_DATEFORMAT));
-                            setFinishDate(moment().add(7, 'd').format(DB_DATEFORMAT));
-                        } else {
-                            setStartDate(moment(search.startdate, DB_DATEFORMAT));
-                            setFinishDate(moment(search.finishdate, DB_DATEFORMAT));
-                        }
-                    }}
-                >
+                <MokaInput as="select" value={period} onChange={handleChangePeriod}>
                     {periodType.map((period) => (
                         <option key={period.id} value={period.id}>
                             {period.name}
@@ -79,45 +115,11 @@ const ArchiveSearch = () => {
             </div>
 
             <div className="mr-2">
-                <MokaInput
-                    as="dateTimePicker"
-                    inputProps={{ timeFormat: null, width: 145 }}
-                    value={startDate}
-                    onChange={(date) => {
-                        if (typeof date === 'object') {
-                            setSearch({
-                                ...search,
-                                startdate: moment(date).format('YYYYMMDD'),
-                            });
-                        } else {
-                            setSearch({
-                                ...search,
-                                startdate: null,
-                            });
-                        }
-                    }}
-                />
+                <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, width: 145 }} value={search.startdate} onChange={handleChangeSDate} />
             </div>
 
             <div className="mr-2">
-                <MokaInput
-                    as="dateTimePicker"
-                    inputProps={{ timeFormat: null, width: 145 }}
-                    value={finishDate}
-                    onChange={(date) => {
-                        if (typeof date === 'object') {
-                            setSearch({
-                                ...search,
-                                finishdate: moment(date).format('YYYYMMDD'),
-                            });
-                        } else {
-                            setSearch({
-                                ...search,
-                                finishdate: null,
-                            });
-                        }
-                    }}
-                />
+                <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, width: 145 }} value={search.finishdate} onChange={handleChangeEDate} />
             </div>
 
             <div className="mr-2">

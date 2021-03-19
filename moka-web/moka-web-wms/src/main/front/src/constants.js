@@ -18,6 +18,7 @@ export const CARD_FOLDING_WIDTH = 32;
 // 한 페이지당 가능한 데이타 건수
 export const PAGESIZE_OPTIONS = [20, 50, 100];
 export const MODAL_PAGESIZE_OPTIONS = [15, 30, 60];
+export const S_MODAL_PAGESIZE_OPTIONS = [10, 20, 30];
 
 // 그룹당 페이지수
 export const DISPLAY_PAGE_NUM = 5;

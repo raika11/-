@@ -22,7 +22,7 @@ export default [
         },
     },
     {
-        headerName: '제  목',
+        headerName: '제목',
         field: 'title',
         width: 565,
         tooltipField: 'title',

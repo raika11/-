@@ -65,10 +65,12 @@ const EditLogSearch = () => {
      * 검색
      */
     const handleSearch = () => {
+        const startDt = search.startDt && search.startDt.isValid() ? moment(search.startDt).format(DB_DATEFORMAT) : null;
+        const endDt = search.endDt && search.endDt.isValid() ? moment(search.endDt).format(DB_DATEFORMAT) : null;
         const ns = {
             ...search,
-            startDt: moment(search.startDt).format(DB_DATEFORMAT),
-            endDt: moment(search.endDt).format(DB_DATEFORMAT),
+            startDt,
+            endDt,
             page: 0,
         };
         dispatch(changeSearchOption(ns));
@@ -96,7 +98,7 @@ const EditLogSearch = () => {
 
     useEffect(() => {
         const nt = new Date();
-        const dt = moment(nt).format(DB_DATEFORMAT);
+        const dt = moment(nt).endOf('day').format(DB_DATEFORMAT);
         const st = moment(nt).startOf('day').format(DB_DATEFORMAT);
         const ns = { ...initialState.search, startDt: st, endDt: dt };
         dispatch(changeSearchOption(ns));
@@ -116,10 +118,10 @@ const EditLogSearch = () => {
         <Form className="mb-14">
             <Form.Row className="mb-2">
                 <Col xs={4} className="p-0 pr-2">
-                    <MokaInput as="dateTimePicker" name="startDt" inputProps={{ timeFormat: null }} value={search.startDt} onChange={handleChangeSD} />
+                    <MokaInput as="dateTimePicker" name="startDt" inputProps={{ timeFormat: null, timeDefault: 'start' }} value={search.startDt} onChange={handleChangeSD} />
                 </Col>
                 <Col xs={4} className="p-0 pr-2">
-                    <MokaInput as="dateTimePicker" name="endDt" inputProps={{ timeFormat: null }} value={search.endDt} onChange={handleChangeED} />
+                    <MokaInput as="dateTimePicker" name="endDt" inputProps={{ timeFormat: null, timeDefault: 'end' }} value={search.endDt} onChange={handleChangeED} />
                 </Col>
                 <Col xs={4} className="p-0">
                     <MokaInput as="select" name="successYn" value={search.successYn} onChange={handleChangeValue}>

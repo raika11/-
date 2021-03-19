@@ -278,10 +278,13 @@ function* getSnsMeta({ type, payload: totalId }) {
 
 function* getSnsMetaList({ type, payload }) {
     yield put(startLoading(type));
-    try {
-        const search = { ...payload, startDt: moment(payload.startDt).format(DB_DATEFORMAT), endDt: moment(payload.endDt).format(DB_DATEFORMAT) };
-        const response = yield call(api.getSnsMetaList, { search });
 
+    try {
+        const startDt = payload.startDt && payload.startDt.isValid() ? moment(payload.startDt).format(DB_DATEFORMAT) : null;
+        const endDt = payload.endDt && payload.endDt.isValid() ? moment(payload.endDt).format(DB_DATEFORMAT) : null;
+        const search = { ...payload, startDt, endDt };
+
+        const response = yield call(api.getSnsMetaList, { search });
         if (response.data.header.success) {
             const list = toSnsMetaListData(response.data.body.list);
 

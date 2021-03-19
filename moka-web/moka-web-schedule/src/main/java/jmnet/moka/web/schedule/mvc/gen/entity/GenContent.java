@@ -108,12 +108,6 @@ public class GenContent {
     private String targetFileName;
 
     /**
-     * URL
-     */
-    @Column(name = "CALL_URL")
-    private String callUrl;
-
-    /**
      * 설명
      */
     @Column(name = "JOB_DESC")
@@ -146,5 +140,10 @@ public class GenContent {
     @Column(name = "JOB_CD")
     private String jobCd;
 
+    /**
+     * PKG_OPT
+     */
+    @Column(name = "PKG_OPT")
+    private String pkgOpt;
 
 }

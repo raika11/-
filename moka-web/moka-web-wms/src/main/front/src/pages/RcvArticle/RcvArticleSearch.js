@@ -17,9 +17,7 @@ moment.locale('ko');
  */
 const RcvArticleSearch = () => {
     const dispatch = useDispatch();
-    const storeSearch = useSelector((store) => store.rcvArticle.search);
-
-    // state
+    const storeSearch = useSelector(({ rcvArticle }) => rcvArticle.search);
     const [search, setSearch] = useState(initialState.search);
     const [sourceOn, setSourceOn] = useState(false);
     const [sourceList, setSourceList] = useState(getLocalItem(RCV_ARTICLE_SOURCE_LIST_KEY));
@@ -41,8 +39,9 @@ const RcvArticleSearch = () => {
             // startDay, endDay 변경
             const nd = new Date();
             const startDay = moment(nd).subtract(Number(number), date).startOf('day');
-            const endDay = moment(nd);
+            const endDay = moment(nd).endOf('day');
             setSearch({ ...search, startDay, endDay });
+            setError({ ...search, startDay: false, endDay: false });
         } else {
             setSearch({ ...search, [name]: value });
         }
@@ -100,22 +99,24 @@ const RcvArticleSearch = () => {
      */
     const validate = (ns) => {
         let isInvalid = false;
+        let ne = {};
 
         if (!REQUIRED_REGEX.test(ns.sourceList)) {
             isInvalid = isInvalid || true;
-            setError({ ...error, sourceList: true });
+            ne.sourceList = true;
         }
 
         if (!ns.startDay) {
             isInvalid = isInvalid || true;
-            setError({ ...error, startDay: true });
+            ne.startDay = true;
         }
 
         if (!ns.endDay) {
             isInvalid = isInvalid || true;
-            setError({ ...error, endDay: true });
+            ne.endDay = true;
         }
 
+        if (isInvalid) setError({ ...error, ...ne });
         return !isInvalid;
     };
 

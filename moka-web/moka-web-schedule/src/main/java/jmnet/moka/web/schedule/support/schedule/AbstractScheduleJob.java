@@ -1,5 +1,12 @@
 package jmnet.moka.web.schedule.support.schedule;
 
+import java.io.BufferedWriter;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
 import jmnet.moka.core.common.encrypt.MokaCrypt;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
@@ -13,9 +20,6 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.*;
-import java.util.Date;
 
 /**
  * <pre>
@@ -67,11 +71,11 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
         //info에 해당하는 GenStatus가 없는 경우 생성
         scheduleResult = info.getGenStatus();
-        if(scheduleResult == null){
+        if (scheduleResult == null) {
             scheduleResult = jobStatusService.insertGenStatus(info.getJobSeq());
         }
         //GenStatus가 존재하는 경우 작업시작 전 작업실패 상태로 갱신 (에러발생 시 shutdown 되는 경우로 인해 완료 시 성공처리)
-        else{
+        else {
             scheduleResult.setGenResult(500L);
             scheduleResult.setLastExecDt(new Date());
             scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
@@ -92,21 +96,19 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
     }
 
     /**
-     * finish()에서 처리할 스케줄 실행 결과 값 입력
-     * 각 작업 별 invoke()에서 작업 완료 후 호출 필요
+     * finish()에서 처리할 스케줄 실행 결과 값 입력 각 작업 별 invoke()에서 작업 완료 후 호출 필요
      */
-    protected void setFinish(boolean success){
-        if(success){
+    protected void setFinish(boolean success) {
+        if (success) {
             //schedule 실행 결과가 성공
             scheduleResult.setGenResult(200L);
         }
     }
 
     /**
-     * finish()에서 처리한 스케쥴 실행 결과 값 외부로 전달
-     * 스케쥴러에서는 미사용 / 실패작업 재실행 API 에서 사용 중
+     * finish()에서 처리한 스케쥴 실행 결과 값 외부로 전달 스케쥴러에서는 미사용 / 실패작업 재실행 API 에서 사용 중
      */
-    public GenStatus getFinish(){
+    public GenStatus getFinish() {
         return scheduleResult;
     }
 
@@ -144,7 +146,9 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
         log.debug("before rss upload : {}", scheduleInfo.getJobSeq());
         log.debug("before rss upload : {}", scheduleInfo.getSendType());
-        log.debug("before rss upload : {}", scheduleInfo.getGenTarget().getServerIp());
+        log.debug("before rss upload : {}", scheduleInfo
+                .getGenTarget()
+                .getServerIp());
         log.debug("before rss upload : {}", scheduleInfo.getFtpPassive());
         log.debug("before rss upload : {}", scheduleInfo.getFtpPort());
         log.debug("before rss upload : {}", scheduleInfo.getTargetPath());
@@ -153,7 +157,9 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
         boolean result = false;
 
         //FTP
-        if(scheduleInfo.getSendType() != null && scheduleInfo.getSendType().equals("FTP")){
+        if (scheduleInfo.getSendType() != null && scheduleInfo
+                .getSendType()
+                .equals("FTP")) {
             result = uploadFtpString(rss);
         }
 
@@ -167,27 +173,36 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
      * @param content
      * @return true/false
      */
-    private boolean uploadFtpString(String content){
+    private boolean uploadFtpString(String content) {
         FileWriter fw = null;
         BufferedWriter bw = null;
         FileInputStream fis = null;
 
-        try{
+        try {
             FTPClient ftpClient = new FTPClient();
             //Passive Mode (ftp서버가 기본포트가 아닌 경우)
-            if(scheduleInfo.getFtpPassive() != null && scheduleInfo.getFtpPassive().equals("Y")){
-                ftpClient.connect(scheduleInfo.getGenTarget().getServerIp(), Math.toIntExact(scheduleInfo.getFtpPort()));
+            if (scheduleInfo.getFtpPassive() != null && scheduleInfo
+                    .getFtpPassive()
+                    .equals("Y")) {
+                ftpClient.connect(scheduleInfo
+                        .getGenTarget()
+                        .getServerIp(), Math.toIntExact(scheduleInfo.getFtpPort()));
                 ftpClient.enterLocalPassiveMode();
-            }
-            else{
-                ftpClient.connect(scheduleInfo.getGenTarget().getServerIp());
+            } else {
+                ftpClient.connect(scheduleInfo
+                        .getGenTarget()
+                        .getServerIp());
             }
 
             //FTP 연결성공
-            if(FTPReply.isPositiveCompletion(ftpClient.getReplyCode())){
+            if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
+                //log.debug("login info : {} : {}", scheduleInfo.getGenTarget().getAccessId(), mokaCrypt.decrypt(scheduleInfo.getGenTarget().getAccessPwd()));
                 //FTP 로그인
-                boolean loginResponse = ftpClient.login(scheduleInfo.getGenTarget().getAccessId(),
-                        mokaCrypt.decrypt(scheduleInfo.getGenTarget().getAccessPwd()));
+                boolean loginResponse = ftpClient.login(scheduleInfo
+                        .getGenTarget()
+                        .getAccessId(), mokaCrypt.decrypt(scheduleInfo
+                        .getGenTarget()
+                        .getAccessPwd()));
                 log.debug("ftp login : {}", loginResponse);
 
                 //업로드 위치 설정
@@ -195,8 +210,10 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
                 ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
                 //현재 임시파일 저장공간 지정이 없는 관계로 현재 패키지 위치에서 생성/삭제
-                String tempPath = AbstractScheduleJob.class.getResource("").getPath();
-                File tempFile = File.createTempFile("temp",".txt", new File(tempPath));
+                String tempPath = AbstractScheduleJob.class
+                        .getResource("")
+                        .getPath();
+                File tempFile = File.createTempFile("temp", ".txt", new File(tempPath));
                 //File tempFile = File.createTempFile("test",".rss", new File("c:\\Temp"));
 
                 //임시파일에 스트링 데이터 입력
@@ -229,22 +246,24 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
 
                 //FTP 업로드 실패 시
-                if(!uploadResponse){
+                if (!uploadResponse) {
                     return false;
                 }
 
             }
             //FTP 연결실패
-            else{
+            else {
                 ftpClient.disconnect();
-                log.error("ftp connect failed : {}", scheduleInfo.getGenTarget().getServerIp());
+                log.error("ftp connect failed : {}", scheduleInfo
+                        .getGenTarget()
+                        .getServerIp());
                 return false;
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("uploadFtpString error : {}", e);
             return false;
-        }finally{
+        } finally {
             close(bw);
             close(fw);
             close(fis);
@@ -253,14 +272,14 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
         return true;
     }
 
-    public static void close(Closeable c){
-        if(c == null){
+    public static void close(Closeable c) {
+        if (c == null) {
             return;
         }
 
-        try{
+        try {
             c.close();
-        }catch (IOException e) {
+        } catch (IOException e) {
             log.error("ftp file error : {}", e);
         }
     }

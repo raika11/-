@@ -442,14 +442,14 @@ const DirectLinkEdit = ({ history, match }) => {
                                 <React.Fragment>
                                     이미지
                                     <br />
-                                    (60*50)
+                                    (120*100)
                                     <br />
                                     <Button variant="gray-700" size="sm" className="mt-2" onClick={(e) => imgFileRef.current.rootRef.onClick(e)}>
                                         신규등록
                                     </Button>
                                 </React.Fragment>
                             }
-                            inputProps={{ img: temp.imgUrl ? `${temp.imgUrl}?${temp.linkSeq}` : null, width: 115, height: 90, setFileValue, deleteButton: true }}
+                            inputProps={{ img: temp.imgUrl ? `${temp.imgUrl}?${temp.linkSeq}` : null, width: 120, height: 100, setFileValue, deleteButton: true }}
                             labelClassName="justify-content-end"
                             isInvalid={error.directLinkThumbnailFile}
                             onChange={() => setError({ ...error, directLinkThumbnailFile: false })}

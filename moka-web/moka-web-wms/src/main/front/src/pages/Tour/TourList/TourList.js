@@ -17,8 +17,7 @@ const TourList = ({ match, displayName }) => {
         return () => {
             dispatch(clearStore());
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="d-flex">

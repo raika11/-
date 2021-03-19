@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
-import commonUtil from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 import { initialState, changeSeoMetaSearchOptions, getSeoMetaList } from '@store/seoMeta';
 
@@ -14,13 +13,13 @@ import { initialState, changeSeoMetaSearchOptions, getSeoMetaList } from '@store
  */
 const SEOMetaSearch = () => {
     const dispatch = useDispatch();
-    const storeSearch = useSelector((store) => store.seoMeta.search);
+    const storeSearch = useSelector(({ seoMeta }) => seoMeta.search);
     const [dateType, setDateType] = useState('today');
     const [search, setSearch] = useState(initialState.search);
-    const [disabled, setDisabled] = useState({ date: false });
 
     /**
-     * change input value
+     * 입력값 변경
+     * @params {object} e 이벤트
      */
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
@@ -32,15 +31,13 @@ const SEOMetaSearch = () => {
     };
 
     /**
-     * 검색 버튼
+     * 검색
+     * @params {object} search 검색조건
      */
-    const handleClickSearch = () => {
-        const ns = {
-            ...search,
-            startDt: moment(search.startDt).startOf('day').format(DB_DATEFORMAT),
-            endDt: moment(search.endDt).endOf('day').format(DB_DATEFORMAT),
-            page: 0,
-        };
+    const handleSearch = (search) => {
+        const startDt = search.startDt && search.startDt.isValid() ? moment(search.startDt).format(DB_DATEFORMAT) : null;
+        const endDt = search.endDt && search.endDt.isValid() ? moment(search.endDt).format(DB_DATEFORMAT) : null;
+        const ns = { ...search, startDt, endDt, page: 0 };
         dispatch(changeSeoMetaSearchOptions(ns));
         dispatch(getSeoMetaList(ns));
     };
@@ -66,12 +63,6 @@ const SEOMetaSearch = () => {
     }, [storeSearch]);
 
     useEffect(() => {
-        // SEO 메타 목록 조회
-        dispatch(getSeoMetaList(storeSearch));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
         const diff = moment(search.endDt).diff(moment(search.startDt));
         if (diff < 0) {
             toast.warning('시작일은 종료일 보다 클 수 없습니다.');
@@ -81,14 +72,11 @@ const SEOMetaSearch = () => {
     }, [search.startDt, search.endDt]);
 
     useEffect(() => {
-        // 날짜 타입에 따른 셋팅
-        if (dateType === 'direct') {
-            //setDisabled({ ...disabled, date: false });
-        } else {
-            const { startDt, endDt } = commonUtil.toRangeDateForDateType(dateType);
-            setSearch({ ...search, startDt: moment(startDt, DB_DATEFORMAT), endDt: moment(endDt, DB_DATEFORMAT) });
-            //setDisabled({ ...disabled, date: true });
-        }
+        // 날짜 타입에 따른 셋팅 && SEO 메타 목록 조회
+        const nt = new Date();
+        const ns = { ...search, startDt: moment(nt).startOf('day'), endDt: moment(nt).endOf('day') };
+        setSearch(ns);
+        handleSearch(ns);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateType]);
 
@@ -101,15 +89,16 @@ const SEOMetaSearch = () => {
                         <option value="today">오늘</option>
                         <option value="thisWeek">이번주</option>
                         <option value="thisMonth">이번달</option>
-                        {/*<option value="direct">직접입력</option>*/}
                     </MokaInput>
                 </div>
+
+                {/* 시작일 */}
                 <div className="mr-2">
                     <MokaInput
                         as="dateTimePicker"
                         name="startDt"
                         placeholder="YYYY-MM-DD"
-                        inputProps={{ timeFormat: null, width: 140 }}
+                        inputProps={{ timeFormat: null, width: 140, timeDefault: 'start' }}
                         value={search.startDt}
                         onChange={(date) => {
                             if (typeof date === 'object') {
@@ -118,15 +107,16 @@ const SEOMetaSearch = () => {
                                 setSearch({ ...search, startDt: null });
                             }
                         }}
-                        disabled={disabled.date}
                     />
                 </div>
+
+                {/* 종료일 */}
                 <div className="mr-2">
                     <MokaInput
                         as="dateTimePicker"
                         name="endDt"
                         placeholder="YYYY-MM-DD"
-                        inputProps={{ timeFormat: null, width: 140 }}
+                        inputProps={{ timeFormat: null, width: 140, timeDefault: 'end' }}
                         value={search.endDt}
                         onChange={(date) => {
                             if (typeof date === 'object') {
@@ -135,7 +125,6 @@ const SEOMetaSearch = () => {
                                 setSearch({ ...search, endDt: null });
                             }
                         }}
-                        disabled={disabled.date}
                     />
                 </div>
 
@@ -148,7 +137,7 @@ const SEOMetaSearch = () => {
                 </div>
 
                 {/* 검색어 */}
-                <MokaSearchInput className="mr-1 flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleClickSearch} />
+                <MokaSearchInput className="mr-1 flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={() => handleSearch(search)} />
 
                 {/* 초기화 */}
                 <Button variant="negative" onClick={handleClickReset} className="flex-shrink-0">

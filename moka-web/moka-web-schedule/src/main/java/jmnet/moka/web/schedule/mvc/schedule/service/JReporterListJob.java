@@ -2,9 +2,9 @@ package jmnet.moka.web.schedule.mvc.schedule.service;
 
 import java.util.List;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.web.schedule.mvc.jreport.dto.JReporterListJobDTO;
-import jmnet.moka.web.schedule.mvc.jreport.mapper.JReporterListJobMapper;
-import jmnet.moka.web.schedule.mvc.jreport.vo.JReporterVO;
+import jmnet.moka.web.schedule.mvc.mybatis.dto.JReporterListJobDTO;
+import jmnet.moka.web.schedule.mvc.mybatis.mapper.JReporterListJobMapper;
+import jmnet.moka.web.schedule.mvc.mybatis.vo.JReporterVO;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

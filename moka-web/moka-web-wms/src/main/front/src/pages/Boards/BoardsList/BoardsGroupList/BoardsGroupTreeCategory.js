@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
-import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
-
+import Collapse from 'react-bootstrap/Collapse';
 import { MokaIcon } from '@components';
 
-const TreeCategory = (props) => {
+const BoardsGroupTreeCategory = (props) => {
     const { listIndex, nodeData, selected, children } = props;
     const [open, setOpen] = useState(false);
     const controls = `sidebar-collapse-${listIndex}`;
@@ -44,4 +43,4 @@ const TreeCategory = (props) => {
     );
 };
 
-export default TreeCategory;
+export default BoardsGroupTreeCategory;

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { GET_BOARD_GROUP_LIST, getBoardGroupList, getListMenuSelectBoard } from '@store/board';
 import { MokaLoader } from '@components';
-import TreeCategory from './TreeCategory';
-import TreeItem from './TreeItem';
+import TreeCategory from './BoardsGroupTreeCategory';
+import TreeItem from './BoardsGroupTreeItem';
 
 /**
- * 게시판 관리 > 게시글 관리(트리)
+ * 게시판 관리 > 게시글 관리 > 게시판 목록 트리
  */
-const TreeBox = (props) => {
+const BoardsGroupTree = (props) => {
     const dispatch = useDispatch();
     const { boardId } = useParams();
     const boardType = useSelector((store) => store.board.boardType);
@@ -25,7 +25,7 @@ const TreeBox = (props) => {
     useEffect(() => {
         //초기 설정
 
-        // 최초 /router/:boardId 없이 접근시 강제초 첫번쨰 게시판 id 로 라우터 이동 시킴.
+        // 최초 /router/:boardId 없이 접근시 첫번쨰 게시판 id 로 라우터 이동 시킴.
         // const goLastBoardIndex = () => {
         //     groupList
         //         .filter((element) => element.boardType === boardType)
@@ -37,44 +37,36 @@ const TreeBox = (props) => {
         //         });
         // };
 
-        // 선택된 boardId 가 있을시에 트리 메뉴를 펼침.
-        const setInitData = () => {
-            setTreeData(
-                groupList
-                    .filter((element) => element.boardType === boardType)
-                    .map((data, index) => {
-                        const { boardType, boardTypeName } = data;
-                        return {
-                            listIndex: index,
-                            boardType: boardType,
-                            boardTypeName: boardTypeName,
-                            pageUrl: '/',
-                            parentPageSeq: 0,
-                            pageOrd: index,
-                            btnShow: false,
-                            match: 'N',
-                            usedYn: 'Y',
-                            boardInfoList: data.boardInfoList.map((e, i) => {
-                                return {
-                                    infoIndex: i,
-                                    boardId: e.boardId,
-                                    boardName: e.boardName,
-                                    boardType: e.boardType,
-                                };
-                            }),
-                        };
-                    }),
-            );
-        };
-
-        // if (isNaN(Number(params.boardId))) {
-        //     goLastBoardIndex();
-        // } else {
-        //     setInitData();
+        // 선택된 boardId 가 있을시에 트리 메뉴를 펼침
+        // if (boardId) {
+        setTreeData(
+            groupList
+                .filter((element) => element.boardType === boardType)
+                .map((data, index) => {
+                    const { boardType, boardTypeName } = data;
+                    return {
+                        listIndex: index,
+                        boardType: boardType,
+                        boardTypeName: boardTypeName,
+                        pageUrl: '/',
+                        parentPageSeq: 0,
+                        pageOrd: index,
+                        btnShow: false,
+                        match: 'N',
+                        usedYn: 'Y',
+                        boardInfoList: data.boardInfoList.map((e, i) => {
+                            return {
+                                infoIndex: i,
+                                boardId: e.boardId,
+                                boardName: e.boardName,
+                                boardType: e.boardType,
+                            };
+                        }),
+                    };
+                }),
+        );
         // }
-
-        setInitData();
-    }, [boardType, groupList]);
+    }, [boardId, boardType, groupList]);
 
     useEffect(() => {
         if (boardId) {
@@ -119,4 +111,4 @@ const TreeBox = (props) => {
     );
 };
 
-export default TreeBox;
+export default BoardsGroupTree;

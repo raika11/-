@@ -110,7 +110,7 @@ export const getBoardGroup = () => {
 };
 
 /**
- * 게시글 게시판 리스트
+ * 게시글 게시판 목록
  */
 export const getBoardContentsList = ({ boardId, search }) => {
     return instance.get(`/api/boards/${boardId}/contents?${qs.stringify(search)}`).catch((err) => {

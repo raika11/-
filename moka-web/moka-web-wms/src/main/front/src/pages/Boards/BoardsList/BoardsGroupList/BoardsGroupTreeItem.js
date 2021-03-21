@@ -1,11 +1,11 @@
 import React from 'react';
-import { MokaIcon } from '@components';
-import clsx from 'clsx';
-import { Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import clsx from 'clsx';
+import Button from 'react-bootstrap/Button';
+import { MokaIcon } from '@components';
 
-const TreeItem = (props) => {
+const BoardsGroupTreeItem = (props) => {
     const { boardId } = props;
     const history = useHistory();
     const { pagePathName } = useSelector((store) => ({
@@ -46,4 +46,4 @@ const TreeItem = (props) => {
     );
 };
 
-export default TreeItem;
+export default BoardsGroupTreeItem;

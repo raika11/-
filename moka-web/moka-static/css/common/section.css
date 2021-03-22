@@ -1,5 +1,13 @@
 @charset "utf-8";
 
+
+
+
+
+/***************************************    catalog     ************************************/
+
+
+
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
 
@@ -10,3 +18,8 @@
    
 }
 
+
+/* Medium devices (tablet + pc, 768px and up) */
+@media (min-width:768px) {
+   
+}

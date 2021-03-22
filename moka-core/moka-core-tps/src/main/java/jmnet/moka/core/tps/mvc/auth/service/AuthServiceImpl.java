@@ -3,7 +3,6 @@ package jmnet.moka.core.tps.mvc.auth.service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
@@ -53,7 +52,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
      *
      * @return 권한 목록
      */
-    public List<GrantedAuthority> getAuthorities(Set<GroupMember> groupMembers) {
+    public List<GrantedAuthority> getAuthorities(List<GroupMember> groupMembers) {
         if (groupMembers != null && !groupMembers.isEmpty()) {
             if (groupMembers
                     .stream()

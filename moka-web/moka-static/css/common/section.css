@@ -4,10 +4,16 @@
 
 
 
-/***************************************    catalog     ************************************/
 
+
+/***************************************    catalog     ************************************/
+/* common 으로 옮길것들 */
+.swiper-scrollbar{background: transparent;}
+.swiper-button-prev, .swiper-button-next{width:calc(var(--swiper-navigation-size) / 44 * 27) !important;right: 30px;}
 .bdr_top_1{border-top:1px solid #000;}
 
+
+section.catalog .swiper-container{width:calc(100% + 140px);margin-left:-70px;}
 .catalog_main .swiper-slide div:nth-child(2){position:relative;}
 .catalog_main .swiper-slide div:nth-child(2) .text_wrap{position:absolute;left:0;top:50%;transform: translate(0, -50%);}
 

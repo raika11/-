@@ -12,8 +12,10 @@ import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.dto.JpodNoticeSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
+import jmnet.moka.core.tps.mvc.board.entity.JpodBoard;
 import jmnet.moka.core.tps.mvc.board.entity.QBoard;
 import jmnet.moka.core.tps.mvc.board.entity.QBoardInfo;
+import jmnet.moka.core.tps.mvc.board.entity.QJpodBoard;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodChannel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -40,51 +42,64 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
     }
 
     @Override
-    @EntityGraph(attributePaths = {"boardInfo", "attaches", "jpodChannel"}, type = EntityGraph.EntityGraphType.LOAD)
     public Page<Board> findAllBoard(Integer boardId, BoardSearchDTO searchDTO) {
         QBoard qBoard = QBoard.board;
-        QJpodChannel jpodChannel = QJpodChannel.jpodChannel;
+        QBoard board = QBoard.board;
+        QJpodChannel qJpodChannel = QJpodChannel.jpodChannel;
 
         JPQLQuery<Board> query = from(qBoard);
+        JPQLQuery<Long> subQuery = JPAExpressions
+                .select(board.parentBoardSeq)
+                .from(board);
+
+        query.where(qBoard.boardId.eq(boardId));
+        subQuery.where(board.boardId
+                .eq(boardId)
+                .and(board.depth.eq(0)));
 
         //검색조건 : 조회시작일자
         if (searchDTO.getStartDt() != null && searchDTO.getEndDt() != null) {
-            query.where(qBoard.regDt.between(searchDTO.getStartDt(), searchDTO.getEndDt()));
+            subQuery.where(board.regDt.between(searchDTO.getStartDt(), searchDTO.getEndDt()));
         } else if (searchDTO.getStartDt() != null) {
-            query.where(qBoard.regDt.goe(searchDTO.getStartDt()));
+            subQuery.where(board.regDt.goe(searchDTO.getStartDt()));
         } else if (searchDTO.getEndDt() != null) {
-            query.where(qBoard.regDt.loe(searchDTO.getEndDt()));
+            subQuery.where(board.regDt.loe(searchDTO.getEndDt()));
         } else {
             // 아무것도 안함
         }
-        query.where(qBoard.delYn.eq(MokaConstants.NO));
 
         if (McpString.isNotEmpty(searchDTO.getTitlePrefix1())) {
-            query.where(qBoard.titlePrefix1.eq(searchDTO.getTitlePrefix1()));
+            subQuery.where(board.titlePrefix1.eq(searchDTO.getTitlePrefix1()));
         }
 
-        query.where(qBoard.delYn.eq(searchDTO.getDelYn()));
+        if (McpString.isNotEmpty(searchDTO.getDelYn())) {
+            subQuery.where(board.delYn.eq(searchDTO.getDelYn()));
+        }
+
+        if (McpString.isNotEmpty(searchDTO.getAnswYn())) {
+            subQuery.where(board.answYn.eq(searchDTO.getAnswYn()));
+        }
 
         if (McpString.isNotEmpty(searchDTO.getKeyword())) {
             String keyword = searchDTO
                     .getKeyword()
                     .toUpperCase();
-            query.where(qBoard.title
+            subQuery.where(board.title
                     .toUpperCase()
                     .contains(keyword)
-                    .or(qBoard.content
+                    .or(board.content
                             .toUpperCase()
                             .contains(keyword))
-                    .or(qBoard.regName
+                    .or(board.regName
                             .toUpperCase()
                             .contains(keyword)));
         }
 
         if (McpString.isNotEmpty(searchDTO.getChannelId()) && searchDTO.getChannelId() > 0) {
-            query.where(qBoard.channelId.eq(searchDTO.getChannelId()));
+            subQuery.where(board.channelId.eq(searchDTO.getChannelId()));
         }
 
-        query.where(qBoard.boardId.eq(boardId));
+        query.where(qBoard.parentBoardSeq.in(subQuery));
 
         Pageable pageable = searchDTO.getPageable();
         if (McpString.isYes(searchDTO.getUseTotal())) {
@@ -103,46 +118,54 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
 
     @Override
     @EntityGraph(attributePaths = {"boardInfo", "attaches", "jpodChannel"}, type = EntityGraph.EntityGraphType.LOAD)
-    public Page<Board> findAllJpodNotice(JpodNoticeSearchDTO searchDTO) {
-        QBoard qBoard = QBoard.board;
+    public Page<JpodBoard> findAllJpodNotice(JpodNoticeSearchDTO searchDTO) {
+        QJpodBoard qBoard = QJpodBoard.jpodBoard;
+        QJpodBoard board = QJpodBoard.jpodBoard;
         QBoardInfo boardInfo = QBoardInfo.boardInfo;
 
-        JPQLQuery<Board> query = from(qBoard);
+        JPQLQuery<JpodBoard> query = from(qBoard);
+        JPQLQuery<Long> subQuery = JPAExpressions
+                .select(board.parentBoardSeq)
+                .from(board);
+
+        subQuery.where(board.boardId.eq(JPAExpressions
+                .select(board.boardId)
+                .from(boardInfo)
+                .where(board.boardInfo.channelType
+                        .eq(TpsConstants.BOARD_JPOD)
+                        .and(board.depth.eq(0)))));
 
         //검색조건 : 조회시작일자
         if (searchDTO.getStartDt() != null && searchDTO.getEndDt() != null) {
-            query.where(qBoard.regDt.between(searchDTO.getStartDt(), searchDTO.getEndDt()));
+            subQuery.where(board.regDt.between(searchDTO.getStartDt(), searchDTO.getEndDt()));
         } else if (searchDTO.getStartDt() != null) {
-            query.where(qBoard.regDt.goe(searchDTO.getStartDt()));
+            subQuery.where(board.regDt.goe(searchDTO.getStartDt()));
         } else if (searchDTO.getEndDt() != null) {
-            query.where(qBoard.regDt.loe(searchDTO.getEndDt()));
+            subQuery.where(board.regDt.loe(searchDTO.getEndDt()));
         } else {
             // 아무것도 안함
         }
-        query.where(qBoard.delYn.eq(searchDTO.getDelYn()));
+        if (McpString.isNotEmpty(searchDTO.getDelYn())) {
+            subQuery.where(board.delYn.eq(searchDTO.getDelYn()));
+        }
 
         if (McpString.isNotEmpty(searchDTO.getKeyword())) {
             String keyword = searchDTO
                     .getKeyword()
                     .toUpperCase();
-            query.where(qBoard.title
+            subQuery.where(board.title
                     .toUpperCase()
                     .contains(keyword)
-                    .or(qBoard.content
+                    .or(board.content
                             .toUpperCase()
                             .contains(keyword))
-                    .or(qBoard.regName
+                    .or(board.regName
                             .toUpperCase()
                             .contains(keyword)));
         }
 
-        query.where(qBoard.boardId.eq(JPAExpressions
-                .select(boardInfo.boardId)
-                .from(boardInfo)
-                .where(boardInfo.channelType.eq(TpsConstants.BOARD_JPOD))));
-
         if (McpString.isNotEmpty(searchDTO.getChannelId()) && searchDTO.getChannelId() > 0) {
-            query.where(qBoard.channelId.eq(searchDTO.getChannelId()));
+            subQuery.where(board.channelId.eq(searchDTO.getChannelId()));
         }
 
         Pageable pageable = searchDTO.getPageable();
@@ -150,16 +173,18 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
             query = getQuerydsl().applyPagination(pageable, query);
         }
 
+        query.where(qBoard.parentBoardSeq.in(subQuery));
+
         query.orderBy(qBoard.ordNo.asc(), qBoard.parentBoardSeq.desc(), qBoard.depth.asc(), qBoard.indent.asc());
 
-        QueryResults<Board> list = query
+        QueryResults<JpodBoard> list = query
                 .join(qBoard.boardInfo)
                 .fetchJoin()
                 .join(qBoard.jpodChannel)
                 .fetchJoin()
                 .fetchResults();
 
-        return new PageImpl<Board>(list.getResults(), pageable, list.getTotal());
+        return new PageImpl<JpodBoard>(list.getResults(), pageable, list.getTotal());
     }
 
     @Override

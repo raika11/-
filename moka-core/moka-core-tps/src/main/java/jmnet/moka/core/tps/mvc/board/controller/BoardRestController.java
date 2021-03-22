@@ -245,12 +245,13 @@ public class BoardRestController extends AbstractCommonController {
         //board.setContent(HtmlUtils.htmlEscape(board.getContent()));
         setRegisterInfo(board, principal);
         setPassword(board);
+        Board parentBoard;
         try {
             if (board.getParentBoardSeq() == null || board.getParentBoardSeq() == 0) {
                 throw new InvalidDataException(msg("tps.board.error.min.parentBoardSeq"));
             }
 
-            Board parentBoard = boardService
+            parentBoard = boardService
                     .findBoardBySeq(board.getParentBoardSeq())
                     .orElseThrow(() -> new NoDataException(msg("tps.board.error.no-data.parentBoardSeq")));
 
@@ -264,8 +265,25 @@ public class BoardRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.INSERT, e);
             throw new Exception(msg("tps.board.error.save"), e);
         }
-
-        return processBoardContents(board, boardDTO.getAttaches());
+        ResponseEntity<ResultDTO<BoardDTO>> result = processBoardContents(board, boardDTO.getAttaches());
+        /**
+         * 답변글 등록시 부모글의 answYn을 Y로 변경
+         */
+        try {
+            if (result
+                    .getBody()
+                    .getHeader()
+                    .isSuccess()) {
+                parentBoard.setAnswYn(MokaConstants.YES);
+                boardService.updateBoard(parentBoard);
+            }
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT BOARD]", e);
+            // 액션 로그에 오류 내용 출력
+            tpsLogger.error(ActionType.INSERT, e);
+            throw new Exception(msg("tps.board.error.save"), e);
+        }
+        return result;
     }
 
     /**
@@ -315,6 +333,7 @@ public class BoardRestController extends AbstractCommonController {
         newBoard.setRegIp(oldBoard.getRegIp());
         newBoard.setAttaches(oldBoard.getAttaches());
         newBoard.setBoardInfo(oldBoard.getBoardInfo());
+        newBoard.setAnswYn(oldBoard.getAnswYn());
         newBoard.setModDiv(TpsConstants.BOARD_REG_DIV_ADMIN);
         setPassword(newBoard);
         return processBoardContents(newBoard, boardAttachSaveDTOSet);
@@ -383,7 +402,7 @@ public class BoardRestController extends AbstractCommonController {
      * @return ResponseEntity
      * @throws InvalidDataException 공통 에러 처리
      */
-    private ResponseEntity<?> processBoardContents(Board board, List<BoardAttachSaveDTO> boardAttachSaveDTOSet)
+    private ResponseEntity<ResultDTO<BoardDTO>> processBoardContents(Board board, List<BoardAttachSaveDTO> boardAttachSaveDTOSet)
             throws InvalidDataException {
         ActionType actionType = board.getBoardSeq() != null && board.getBoardSeq() > 0 ? ActionType.UPDATE : ActionType.INSERT;
         try {

@@ -17,6 +17,7 @@ import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.BoardTypeCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
@@ -177,21 +178,30 @@ public class BoardInfoRestController extends AbstractCommonController {
     /**
      * 등록
      *
-     * @param request  요청
-     * @param groupDTO 등록할 게시판정보
+     * @param request      요청
+     * @param boardInfoDTO 등록할 게시판정보
      * @return 등록된 게시판정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
     @ApiOperation(value = "게시판 등록")
     @PostMapping
-    public ResponseEntity<?> postBoardInfo(HttpServletRequest request, @Valid BoardInfoDTO groupDTO)
+    public ResponseEntity<?> postBoardInfo(HttpServletRequest request, @Valid BoardInfoDTO boardInfoDTO)
             throws InvalidDataException, Exception {
 
         // BoardInfoDTO -> BoardInfo 변환
-        BoardInfo group = modelMapper.map(groupDTO, BoardInfo.class);
+        BoardInfo group = modelMapper.map(boardInfoDTO, BoardInfo.class);
+
+        // jpod 게시판은 1개만....
+        if (TpsConstants.BOARD_JPOD.equals(boardInfoDTO.getChannelType()) && boardInfoService
+                .findAllBoardInfoByChannelType(TpsConstants.BOARD_JPOD)
+                .size() > 0) {
+            throw new InvalidDataException(msg("tps.board-info.error.jpod.exist"));
+        }
 
         try {
+
+
             // insert
             BoardInfo returnValue = boardInfoService.insertBoardInfo(group);
 
@@ -216,9 +226,9 @@ public class BoardInfoRestController extends AbstractCommonController {
     /**
      * 수정
      *
-     * @param request  요청
-     * @param boardId  게시판아이디
-     * @param groupDTO 수정할 게시판정보
+     * @param request      요청
+     * @param boardId      게시판아이디
+     * @param boardInfoDTO 수정할 게시판정보
      * @return 수정된 게시판정보
      * @throws Exception 그외 모든 에러
      */
@@ -226,12 +236,12 @@ public class BoardInfoRestController extends AbstractCommonController {
     @PutMapping("/{boardId}")
     public ResponseEntity<?> putBoardInfo(HttpServletRequest request,
             @ApiParam("게시판코드") @PathVariable("boardId") @Min(value = 1, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            @Valid BoardInfoDTO groupDTO)
+            @Valid BoardInfoDTO boardInfoDTO)
             throws Exception {
 
         // BoardInfoDTO -> BoardInfo 변환
         String infoMessage = msg("tps.common.error.no-data", request);
-        BoardInfo newBoardInfo = modelMapper.map(groupDTO, BoardInfo.class);
+        BoardInfo newBoardInfo = modelMapper.map(boardInfoDTO, BoardInfo.class);
         newBoardInfo.setBoardId(boardId);
 
         // 오리진 데이터 조회
@@ -239,7 +249,21 @@ public class BoardInfoRestController extends AbstractCommonController {
                 .findBoardInfoById(newBoardInfo.getBoardId())
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
-
+        // jpod 게시판은 1개만....
+        if (TpsConstants.BOARD_JPOD.equals(boardInfoDTO.getChannelType())) {
+            List<BoardInfo> jpodBoardList = boardInfoService.findAllBoardInfoByChannelType(TpsConstants.BOARD_JPOD);
+            if (jpodBoardList != null && jpodBoardList.size() > 0) { // jpod 게시판이 있는 경우
+                // jpod 게시판이 있는데 일반게시판을 수정해서 jpod 게시판으로 변경하려고 한 경우
+                if (jpodBoardList
+                        .stream()
+                        .filter(boardInfo -> boardInfo
+                                .getBoardId()
+                                .equals(boardId))
+                        .count() == 0) {
+                    throw new InvalidDataException(msg("tps.board-info.error.jpod.exist"));
+                }
+            }
+        }
 
         try {
             // update

@@ -3,13 +3,16 @@ package jmnet.moka.core.tps.mvc.comment.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -145,7 +148,7 @@ public class CommentBannedRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "차단 등록")
     @PostMapping
-    public ResponseEntity<?> processCommentBlock(@Valid CommentBannedSaveDTO commentBannedSaveDTO)
+    public ResponseEntity<?> processCommentBlock(@Valid CommentBannedSaveDTO commentBannedSaveDTO, @NotNull Principal principal)
             throws MokaException {
         if (commentBannedSaveDTO
                 .getTagValues()
@@ -154,6 +157,9 @@ public class CommentBannedRestController extends AbstractCommonController {
             commentBanned.setTagValue(commentBannedSaveDTO
                     .getTagValues()
                     .get(0));
+            // 등록시에 수정일시, 수정자 정보 입력
+            commentBanned.setModDt(McpDate.now());
+            commentBanned.setModId(principal.getName());
             return processCommentBlock(commentBanned);
         } else {
             List<String> tagValues = new ArrayList<>();

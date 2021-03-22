@@ -54,6 +54,7 @@ export const initialState = {
         schCodeId: '',
         pagingYn: 'N',
         pagingType: 'N',
+        viewYn: 'N',
     },
     componentError: null,
     inputTag: '',

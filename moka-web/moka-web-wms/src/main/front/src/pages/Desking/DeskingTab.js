@@ -25,7 +25,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                     /**
                      * 미리보기
                      */
-                    <ComponentWorkPreview show={activeTabIdx === 0} componentList={componentList} isNaverChannel={isNaverChannel} />,
+                    <ComponentWorkPreview show={activeTabIdx === 0} isNaverChannel={isNaverChannel} />,
                     /**
                      * 기사보기
                      */

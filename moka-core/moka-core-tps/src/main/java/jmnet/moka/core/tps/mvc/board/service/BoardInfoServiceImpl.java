@@ -1,6 +1,8 @@
 package jmnet.moka.core.tps.mvc.board.service;
 
+import java.util.List;
 import java.util.Optional;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.board.dto.BoardInfoSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.BoardInfo;
 import jmnet.moka.core.tps.mvc.board.repository.BoardInfoRepository;
@@ -39,6 +41,11 @@ public class BoardInfoServiceImpl implements BoardInfoService {
     @Override
     public Optional<BoardInfo> findBoardInfoById(Integer boardId) {
         return boardInfoRepository.findById(boardId);
+    }
+
+    @Override
+    public List<BoardInfo> findAllBoardInfoByChannelType(String channelType) {
+        return boardInfoRepository.findAllByChannelTypeAndUsedYn(channelType, MokaConstants.YES);
     }
 
     @Override

@@ -13,6 +13,9 @@ export default [
         width: 165,
         flex: 1,
         tooltipField: 'componentName',
+        cellClassRules: {
+            'usedyn-n': (params) => params.data.viewYn === 'N',
+        },
     },
     {
         headerName: '위치그룹',

@@ -57,6 +57,10 @@ const propTypes = {
      * @default
      */
     dataType: PropTypes.oneOf(['archive', 'article', 'local', 'represent', 'drop']),
+    /**
+     * (이미지리스트에서) 대표사진과 동일 여부
+     */
+    isRep: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -66,6 +70,7 @@ const defaultProps = {
     data: {},
     selected: false,
     dataType: 'archive',
+    isRep: false,
 };
 
 export const ItemTypes = {
@@ -89,10 +94,12 @@ const ThumbCard = forwardRef((props, ref) => {
         moveCard,
         setAddIndex,
         dataType,
-        boxShadow, // 대표사진 설정 props
+        // 대표사진 설정 props
+        boxShadow,
         represent,
         onThumbClick,
         onDeleteClick,
+        isRep,
         onRepClick,
         onEditClick,
     } = props;
@@ -101,7 +108,6 @@ const ThumbCard = forwardRef((props, ref) => {
     const wrapperRef = useRef(null);
     const cardRef = useRef(null);
     const [mouseOver, setMouseOver] = useState(false);
-    const [repButtonColor, setRepButtonColor] = useState('');
 
     // return ref 설정
     useImperativeHandle(
@@ -179,10 +185,7 @@ const ThumbCard = forwardRef((props, ref) => {
                             rounded: dataType !== 'archive',
                         })}
                         onMouseOver={() => setMouseOver(true)}
-                        onMouseLeave={() => {
-                            setMouseOver(false);
-                            setRepButtonColor('');
-                        }}
+                        onMouseLeave={() => setMouseOver(false)}
                     >
                         <img src={img} className="center-image" alt={alt} ref={imgRef} />
 
@@ -190,15 +193,12 @@ const ThumbCard = forwardRef((props, ref) => {
                             {/* 마우스 오버 -> 대표 사진 등록 버튼 생성 */}
                             {mouseOver && !represent && (
                                 <Button
-                                    variant="searching"
-                                    className="border-0 p-0 moka-table-button"
-                                    style={{ position: 'absolute', top: '5px', left: '5px', opacity: '0.8', color: repButtonColor }}
-                                    onClick={(e) => {
-                                        setRepButtonColor('yellow');
-                                        onRepClick(data, e);
-                                    }}
+                                    variant={isRep ? 'positive' : 'negative'}
+                                    size="sm"
+                                    style={{ position: 'absolute', top: '5px', left: '5px' }}
+                                    onClick={(e) => onRepClick(data, e)}
                                 >
-                                    <MokaIcon iconName="fas-star" />
+                                    대표
                                 </Button>
                             )}
 

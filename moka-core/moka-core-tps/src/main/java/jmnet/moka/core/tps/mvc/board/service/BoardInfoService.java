@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.board.service;
 
+import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.board.dto.BoardInfoSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.BoardInfo;
@@ -33,6 +34,14 @@ public interface BoardInfoService {
      * @return 게시판 정보 상세
      */
     Optional<BoardInfo> findBoardInfoById(Integer boardId);
+
+    /**
+     * 게시판 정보 상세 조회
+     *
+     * @param channelType 채널 유형
+     * @return 게시판 정보 상세
+     */
+    List<BoardInfo> findAllBoardInfoByChannelType(String channelType);
 
     /**
      * 게시판 정보 등록

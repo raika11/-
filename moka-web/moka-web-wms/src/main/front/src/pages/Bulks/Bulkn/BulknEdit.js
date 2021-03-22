@@ -242,7 +242,7 @@ ${bulkArticleRow
             let tempList = rowInit.map(function (e, index) {
                 const t_title = list[index] ? list[index].title.replace(/^\s+|\s+$/g, '') : '';
                 const t_url = list[index] ? list[index].url.replace(/^\s+|\s+$/g, '') : '';
-                const t_symbol = list[index] ? list[index].symbol : '';
+                const t_symbol = list[index] ? list[index].symbol : '▶';
                 const title_length = checkTextLength(t_title);
 
                 return {
@@ -334,13 +334,12 @@ ${bulkArticleRow
                         <Col xs={3} className="p-0">
                             <MokaInputLabel
                                 label="타이틀"
-                                as="select"
                                 name="symbol"
                                 id={`symbol-${index}`}
                                 value={bulkArticleRow[index] ? bulkArticleRow[index].symbol : ''}
                                 onChange={(e) => handleChangeBulkinputBox(e, index)}
-                            >
-                                <option hidden>선택</option>
+                            />
+                            {/*<option hidden>선택</option>
                                 {symbol
                                     .split(' ')
                                     .filter((e) => e !== '')
@@ -350,6 +349,7 @@ ${bulkArticleRow
                                         </option>
                                     ))}
                             </MokaInputLabel>
+                            */}
                         </Col>
                         {/* <Col xs={1} className="justify-content-center align-items-center"></Col> */}
                         {/*<div className="mr-2">

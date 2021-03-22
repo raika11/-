@@ -221,5 +221,5 @@ public class TpsConstants extends MokaConstants {
     public static final String BOARD_DIVA_CD = "BOARD_DIVA";
 
     // J팟용 게시판
-    public static final String BOARD_JPOD = "JPOD";
+    public static final String BOARD_JPOD = "BOARD_DIVC1";
 }

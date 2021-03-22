@@ -428,12 +428,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
 
                 {/* 태그 */}
                 <Form.Row className="mb-2">
-                    <Col className="p-0" xs={10}>
+                    <div className="flex-fill">
                         <MokaInputLabel label="태그" name="tagList" className="mb-0" value={tagStr} onChange={handleChangeValue} inputProps={{ onBlur: handleTagBlur }} />
-                    </Col>
-                    <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
+                    </div>
+                    <div className="flex-shrink-0 d-flex align-items-center">
                         <p className="mb-0 ml-2 ft-12">콤마(,) 구분입력</p>
-                    </Col>
+                    </div>
                 </Form.Row>
 
                 {/* 본문 */}

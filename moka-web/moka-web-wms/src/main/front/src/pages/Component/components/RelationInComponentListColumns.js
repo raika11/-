@@ -12,6 +12,9 @@ export default [
         field: 'componentName',
         flex: 1,
         width: 276,
+        cellClassRules: {
+            'usedyn-n': (params) => params.data.viewYn === 'N',
+        },
     },
     {
         headerName: '',

@@ -48,7 +48,7 @@ const ComponentWorkPreview = ({ show, breakpoint, isNaverChannel }) => {
                     if (entry.contentBoxSize) {
                         let w = Math.ceil(entry.contentRect.width);
                         const h = Math.ceil(entry.contentRect.height);
-                        noticeRef.current.innerText = `${w}*${h}`;
+                        if (noticeRef.current) noticeRef.current.innerText = `${w}*${h}`;
                     }
                 }
             });

@@ -70,7 +70,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     }
 
     public List<GrantedAuthority> getAuthorities(String position) {
-        if (position.equals(TpsConstants.SUPER_ADMIN_GROUP_CD)) {
+        if (position.equals(TpsConstants.SUPER_ADMIN_GROUP_CD) || position.equals(TpsConstants.TEST_ADMIN_GROUP_CD)) {
             return Arrays.asList(new SimpleGrantedAuthority(TpsConstants.ROLE_SUPERADMIN));
         } else if (position.equals("J")) {
             return Arrays.asList(new SimpleGrantedAuthority(TpsConstants.ROLE_USER));

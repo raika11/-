@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { previewAreaModal, PREVIEW_AREA_MODAL } from '@store/merge';
 import toast from '@utils/toastUtil';
@@ -8,9 +8,8 @@ import { BREAKPOINT_SERVICE } from '@/constants';
 /**
  * 컴포넌트워크 미리보기
  */
-const ComponentWorkPreview = ({ show, breakpoint, componentList, isNaverChannel }) => {
+const ComponentWorkPreview = ({ show, breakpoint, isNaverChannel }) => {
     const dispatch = useDispatch();
-    const [previewContent, setPreviewContent] = useState(null);
     const loading = useSelector(({ loading }) => loading[PREVIEW_AREA_MODAL]);
     const area = useSelector(({ desking }) => desking.area);
     const [minConstraints, setMinConstraints] = useState([0, 0]);
@@ -18,78 +17,83 @@ const ComponentWorkPreview = ({ show, breakpoint, componentList, isNaverChannel 
     const iframeRef = useRef(null);
     const flexableRef = useRef(null);
 
-    useEffect(() => {
-        /**
-         * 감싸고 있는 div가 변경되면 높이값 변경
-         */
-        const resizeObserver = new ResizeObserver((entries) => {
-            for (let entry of entries) {
-                if (entry.contentBoxSize) {
-                    let w = 0;
-                    const h = entry.contentRect.height;
-
-                    if (isNaverChannel) {
-                        w = 530;
-                    } else if (breakpoint === 'wide' || breakpoint === 'pc') {
-                        w = entry.contentRect.width < BREAKPOINT_SERVICE[breakpoint] ? entry.contentRect.width : BREAKPOINT_SERVICE[breakpoint];
-                    } else {
-                        w = BREAKPOINT_SERVICE[breakpoint];
-                    }
-
-                    setMinConstraints([w, h]);
-                    setMaxConstraints([w, h]);
-                }
-            }
-        });
-
-        if (flexableRef.current) resizeObserver.observe(flexableRef.current);
-        else {
-            setTimeout(function () {
-                resizeObserver.observe(flexableRef.current);
-            }, 300);
-        }
-    }, [isNaverChannel, breakpoint]);
-
-    useEffect(() => {
-        if (!area.areaSeq) {
-            setPreviewContent(null);
-            return;
-        }
-        if (!show) return;
-
-        dispatch(
-            previewAreaModal({
-                areaSeq: area.areaSeq,
-                callback: ({ header, body }) => {
-                    if (header.success) {
-                        setPreviewContent(body);
-                    } else {
-                        setPreviewContent(null);
-                        toast.fail(header.message);
-                    }
-                },
-            }),
-        );
-    }, [area.areaSeq, componentList, show, dispatch]);
-
-    useEffect(() => {
-        if (!iframeRef.current) return;
-        let doc = iframeRef.current.contentDocument;
-        if (!doc) {
-            iframeRef.current.src = 'about:blank';
-            iframeRef.current.onload = function () {
-                doc = iframeRef.current.contentDocument;
+    /**
+     * preview
+     */
+    const setPreview = useCallback((previewContent) => {
+        if (iframeRef.current) {
+            let doc = iframeRef.current.contentDocument;
+            if (!doc) {
+                iframeRef.current.src = 'about:blank';
+                iframeRef.current.onload = function () {
+                    doc = iframeRef.current.contentDocument;
+                    doc.open();
+                    doc.write(previewContent || '');
+                    doc.close();
+                    iframeRef.current.onload = null;
+                };
+            } else {
                 doc.open();
                 doc.write(previewContent || '');
                 doc.close();
-                iframeRef.current.onload = null;
-            };
-        } else {
-            doc.open();
-            doc.write(previewContent || '');
-            doc.close();
+            }
         }
-    }, [previewContent]);
+    }, []);
+
+    useEffect(() => {
+        if (show && flexableRef.current) {
+            /**
+             * 감싸고 있는 div가 변경되면 높이값 변경
+             */
+            const resizeObserver = new ResizeObserver((entries) => {
+                for (let entry of entries) {
+                    if (entry.contentBoxSize) {
+                        let w = 0;
+                        const h = entry.contentRect.height;
+                        if (isNaverChannel) {
+                            w = 530;
+                        } else if (breakpoint === 'wide' || breakpoint === 'pc') {
+                            w = entry.contentRect.width < BREAKPOINT_SERVICE[breakpoint] ? entry.contentRect.width : BREAKPOINT_SERVICE[breakpoint];
+                        } else {
+                            w = BREAKPOINT_SERVICE[breakpoint];
+                        }
+                        if (flexableRef.current) {
+                            setMinConstraints([w, h]);
+                            setMaxConstraints([w, h]);
+                        }
+                    }
+                }
+            });
+            resizeObserver.observe(flexableRef.current);
+        }
+    }, [isNaverChannel, breakpoint, show]);
+
+    useEffect(() => {
+        if (show && area.areaSeq) {
+            dispatch(
+                previewAreaModal({
+                    areaSeq: area.areaSeq,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            setPreview(body);
+                        } else {
+                            setPreview(null);
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
+        } else {
+            setPreview(null);
+        }
+    }, [area.areaSeq, dispatch, setPreview, show]);
+
+    useEffect(() => {
+        return () => {
+            setMinConstraints([0, 0]);
+            setMaxConstraints([0, 0]);
+        };
+    }, []);
 
     return (
         <div className="position-relative overflow-hidden h-100 d-flex flex-column">

@@ -7,8 +7,9 @@ import { BREAKPOINT_SERVICE } from '@/constants';
 
 /**
  * 컴포넌트워크 미리보기
+ * componentList => 컴포넌트워크리스트가 변경되었을 때 미리보기 다시 가져와야해서 필요함
  */
-const ComponentWorkPreview = ({ show, breakpoint, isNaverChannel }) => {
+const ComponentWorkPreview = ({ show, breakpoint, isNaverChannel, componentList }) => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[PREVIEW_AREA_MODAL]);
     const area = useSelector(({ desking }) => desking.area);
@@ -102,7 +103,7 @@ const ComponentWorkPreview = ({ show, breakpoint, isNaverChannel }) => {
         } else {
             setPreview(null);
         }
-    }, [area.areaSeq, dispatch, setPreview, show]);
+    }, [area.areaSeq, dispatch, setPreview, show, componentList]);
 
     useEffect(() => {
         return () => {

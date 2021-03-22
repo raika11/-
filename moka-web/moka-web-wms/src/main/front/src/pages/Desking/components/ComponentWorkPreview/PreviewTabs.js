@@ -9,7 +9,7 @@ import CommonPreview from './CommonPreview';
  * 컴포넌트 미리보기 탭
  * Wide, PC, Tablet, Mobile
  */
-const PreviewTabs = ({ show, isNaverChannel }) => {
+const PreviewTabs = ({ show, isNaverChannel, componentList }) => {
     const area = useSelector(({ desking }) => desking.area);
     const [activeTabIdx, setActiveTabIdx] = useState(3);
 
@@ -33,19 +33,19 @@ const PreviewTabs = ({ show, isNaverChannel }) => {
                     /**
                      * Wide 미리보기
                      */
-                    <CommonPreview show={show && activeTabIdx === 0} breakpoint="wide" isNaverChannel={isNaverChannel} />,
+                    <CommonPreview show={show && activeTabIdx === 0} componentList={componentList} breakpoint="wide" isNaverChannel={isNaverChannel} />,
                     /**
                      * PC 미리보기
                      */
-                    <CommonPreview show={show && activeTabIdx === 1} breakpoint="pc" isNaverChannel={isNaverChannel} />,
+                    <CommonPreview show={show && activeTabIdx === 1} componentList={componentList} breakpoint="pc" isNaverChannel={isNaverChannel} />,
                     /**
                      * Tablet 미리보기
                      */
-                    <CommonPreview show={show && activeTabIdx === 2} breakpoint="tablet" isNaverChannel={isNaverChannel} />,
+                    <CommonPreview show={show && activeTabIdx === 2} componentList={componentList} breakpoint="tablet" isNaverChannel={isNaverChannel} />,
                     /**
                      * Mobile 미리보기
                      */
-                    <CommonPreview show={show && activeTabIdx === 3} breakpoint="mobile" isNaverChannel={isNaverChannel} />,
+                    <CommonPreview show={show && activeTabIdx === 3} componentList={componentList} breakpoint="mobile" isNaverChannel={isNaverChannel} />,
                 ]}
             />
             <Button variant="outline-neutral" className="position-absolute" style={{ top: 10, right: 24 }} onClick={handleClickPreview} disabled={!area.page}>

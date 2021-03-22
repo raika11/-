@@ -1,4 +1,4 @@
-import React, { Suspense, forwardRef, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { MokaIcon, MokaCard } from '@components';
 import defaultOptions from './options';
@@ -102,9 +102,7 @@ const MokaCardEditor = forwardRef((props, ref) => {
             height={height}
             loading={loading}
         >
-            <Suspense>
-                <MokaEditor ref={ref} defaultValue={defaultValue} value={value} language={language} options={{ ...options, wordWrap }} onBlur={onBlur} error={error} tag={tag} />
-            </Suspense>
+            <MokaEditor ref={ref} defaultValue={defaultValue} value={value} language={language} options={{ ...options, wordWrap }} onBlur={onBlur} error={error} tag={tag} />
         </MokaCard>
     );
 });

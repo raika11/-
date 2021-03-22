@@ -1,17 +1,17 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { ITEM_DS } from '@/constants';
-import { MokaCard, MokaIcon, MokaLoader, MokaIconTabs } from '@components';
+import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import { clearStore, deleteDataset, hasRelationList } from '@store/dataset';
 import toast, { messageBox } from '@utils/toastUtil';
 import DatasetEdit from './DatasetEdit';
 import RelationInPageList from '@pages/Page/components/RelationInPageList';
-const DatasetList = React.lazy(() => import('./DatasetList'));
-const RelationInArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/RelationInArticlePageList'));
-const RelationInContainerList = React.lazy(() => import('@pages/Container/components/RelationInContainerList'));
-const RelationInComponentList = React.lazy(() => import('@pages/Component/components/RelationInComponentList'));
+import DatasetList from './DatasetList';
+import RelationInArticlePageList from '@pages/ArticlePage/components/RelationInArticlePageList';
+import RelationInContainerList from '@pages/Container/components/RelationInContainerList';
+import RelationInComponentList from '@pages/Component/components/RelationInComponentList';
 
 /**
  * 데이터셋 관리
@@ -92,9 +92,7 @@ const Dataset = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
-                <Suspense>
-                    <DatasetList onDelete={handleClickDelete} match={match} />
-                </Suspense>
+                <DatasetList onDelete={handleClickDelete} match={match} />
             </MokaCard>
 
             <Switch>
@@ -110,15 +108,9 @@ const Dataset = ({ match }) => {
                                 onSelectNav={(idx) => setActiveTabIdx(idx)}
                                 tabs={[
                                     <RelationInPageList show={activeTabIdx === 0} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />,
-                                    <Suspense fallback={<MokaLoader />}>
-                                        <RelationInArticlePageList show={activeTabIdx === 1} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
-                                    </Suspense>,
-                                    <Suspense fallback={<MokaLoader />}>
-                                        <RelationInContainerList show={activeTabIdx === 2} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
-                                    </Suspense>,
-                                    <Suspense fallback={<MokaLoader />}>
-                                        <RelationInComponentList show={activeTabIdx === 3} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
-                                    </Suspense>,
+                                    <RelationInArticlePageList show={activeTabIdx === 1} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />,
+                                    <RelationInContainerList show={activeTabIdx === 2} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />,
+                                    <RelationInComponentList show={activeTabIdx === 3} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />,
                                 ]}
                                 tabNavWidth={48}
                                 placement="left"

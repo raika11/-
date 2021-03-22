@@ -1,13 +1,13 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
 import { clearStore } from '@store/mic';
-import { MokaCard, MokaIcon, MokaIconTabs, MokaLoader } from '@components';
+import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
+import MicAgendaList from './MicAgendaList';
 import MicAgendaEdit from './MicAgendaEdit';
-const AgendaList = React.lazy(() => import('./MicAgendaList'));
-const MicFeedList = React.lazy(() => import('./MicFeedList'));
-const MicPostList = React.lazy(() => import('./MicPostList'));
+import MicFeedList from './MicFeedList';
+import MicPostList from './MicPostList';
 
 /**
  * 시민 마이크
@@ -32,9 +32,7 @@ const Mic = ({ match }) => {
 
             {/* 아젠다 목록 */}
             <MokaCard title="아젠다 목록" width={670} bodyClassName="d-flex flex-column" className="mr-gutter">
-                <Suspense>
-                    <AgendaList match={match} />
-                </Suspense>
+                <MicAgendaList match={match} />
             </MokaCard>
 
             {/* 아젠다 상세 */}
@@ -51,20 +49,16 @@ const Mic = ({ match }) => {
                             onSelectNav={(idx) => setActiveTabIdx(idx)}
                             tabs={[
                                 <MicAgendaEdit match={match} setActiveTabIdx={setActiveTabIdx} />,
-                                <Suspense fallback={<MokaLoader />}>
-                                    <MicFeedList show={activeTabIdx === 1} />
-                                </Suspense>,
-                                <Suspense fallback={<MokaLoader />}>
-                                    <MicPostList show={activeTabIdx === 2} />
-                                </Suspense>,
+                                <MicFeedList show={activeTabIdx === 1} />,
+                                <MicPostList show={activeTabIdx === 2} />,
                             ]}
                             tabNavs={[
                                 { title: '아젠다', text: 'Info' },
                                 !isAddPage && { title: '피드 목록', icon: <MokaIcon iconName="fal-comment-alt-lines" /> },
                                 !isAddPage && { title: '포스트 목록', icon: <MokaIcon iconName="fal-comment-alt" /> },
-                            ].filter((a) => a)}
+                            ].filter(Boolean)}
                             foldable={false}
-                            hasHotkeys={true}
+                            hasHotkeys
                         />
                     );
                 }}

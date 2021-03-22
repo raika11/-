@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
@@ -9,7 +9,7 @@ import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore, deleteDomain, hasRelationList, GET_DOMAIN, SAVE_DOMAIN } from '@store/domain';
 import toast, { messageBox } from '@utils/toastUtil';
 import DomainEdit from './DomainEdit';
-const DomainList = React.lazy(() => import('./DomainList'));
+import DomainList from './DomainList';
 
 /**
  * 도메인 관리
@@ -101,9 +101,8 @@ const Domain = ({ match }) => {
                             도메인 등록
                         </Button>
                     </div>
-                    <Suspense>
-                        <DomainList onDelete={handleClickDelete} match={match} />
-                    </Suspense>
+
+                    <DomainList onDelete={handleClickDelete} match={match} />
                 </MokaCard>
             </Col>
 

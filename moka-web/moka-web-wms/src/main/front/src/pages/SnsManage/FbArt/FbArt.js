@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import clsx from 'clsx';
@@ -7,16 +7,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
-
+import FbArtList from './FbArtList';
 import FbArtEdit from './FbArtEdit';
-const FbArtList = React.lazy(() => import('./FbArtList'));
 
 /**
  * FB전송기사
  */
 const FbArt = ({ match, displayName }) => {
     const matchPoints = useBreakpoint();
-    // FIXME 클린 함수 생성.
 
     return (
         <Container className="p-0 position-relative" fluid>
@@ -30,9 +28,7 @@ const FbArt = ({ match, displayName }) => {
                 {/* 리스트 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="Facebook 전송기사">
-                        <Suspense>
-                            <FbArtList />
-                        </Suspense>
+                        <FbArtList />
                     </MokaCard>
                 </Col>
 

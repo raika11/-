@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
@@ -54,74 +54,72 @@ const Sidebar = ({ match, currentMenu }) => {
     }, [location]);
 
     return (
-        <Suspense>
-            <nav
-                className={clsx('sidebar', {
-                    toggled: !sidebarIsOpen,
-                    'sidebar-sticky': sidebarIsSticky,
-                })}
-            >
-                <div className="sidebar-content">
-                    <PerfectScrollbar ref={scrollbarRef} options={{ handlers: ['drag-thumb', 'keyboard', 'wheel', 'touch'], wheelSpeed: 0.5 }}>
-                        <Link className="sidebar-brand mt-3" to="/">
-                            <span>
-                                <img src={logo} alt="joongang" />
-                            </span>
-                        </Link>
+        <nav
+            className={clsx('sidebar', {
+                toggled: !sidebarIsOpen,
+                'sidebar-sticky': sidebarIsSticky,
+            })}
+        >
+            <div className="sidebar-content">
+                <PerfectScrollbar ref={scrollbarRef} options={{ handlers: ['drag-thumb', 'keyboard', 'wheel', 'touch'], wheelSpeed: 0.5 }}>
+                    <Link className="sidebar-brand mt-3" to="/">
+                        <span>
+                            <img src={logo} alt="joongang" />
+                        </span>
+                    </Link>
 
-                        <ul className="sidebar-nav">
-                            {/* 3depth까지만 그려서 재귀로 처리하지 않음 */}
-                            {menu.children
-                                ? menu.children.map((depth1) =>
-                                      depth1.children ? (
-                                          <SidebarCategory
-                                              key={depth1.menuId}
-                                              nodeData={depth1}
-                                              open={sidebarOpenItem[depth1.menuId]}
-                                              onClick={(e) => {
-                                                  e.preventDefault();
-                                                  e.stopPropagation();
-                                                  changeNodeToggle(depth1);
-                                              }}
-                                              match={currentMenu}
-                                          >
-                                              <>
-                                                  {depth1.children.map((depth2) =>
-                                                      depth2.children ? (
-                                                          <SidebarCategory
-                                                              key={depth2.menuId}
-                                                              nodeData={depth2}
-                                                              open={sidebarOpenItem[depth2.menuId]}
-                                                              onClick={(e) => {
-                                                                  e.preventDefault();
-                                                                  e.stopPropagation();
-                                                                  changeNodeToggle(depth2);
-                                                              }}
-                                                              match={currentMenu}
-                                                          >
-                                                              {depth2.children.map((depth3) => (
-                                                                  // 3depth
-                                                                  <SidebarItem key={depth3.menuId} nodeData={depth3} match={currentMenu} />
-                                                              ))}
-                                                          </SidebarCategory>
-                                                      ) : (
-                                                          // 2depth
-                                                          <SidebarItem key={depth2.menuId} nodeData={depth2} match={currentMenu} />
-                                                      ),
-                                                  )}
-                                              </>
-                                          </SidebarCategory>
-                                      ) : (
-                                          // 1depth
-                                          <SidebarItem key={depth1.menuId} nodeData={depth1} match={currentMenu} />
-                                      ),
-                                  )
-                                : ''}
-                        </ul>
-                    </PerfectScrollbar>
-                </div>
-            </nav>
-        </Suspense>
+                    <ul className="sidebar-nav">
+                        {/* 3depth까지만 그려서 재귀로 처리하지 않음 */}
+                        {menu.children
+                            ? menu.children.map((depth1) =>
+                                  depth1.children ? (
+                                      <SidebarCategory
+                                          key={depth1.menuId}
+                                          nodeData={depth1}
+                                          open={sidebarOpenItem[depth1.menuId]}
+                                          onClick={(e) => {
+                                              e.preventDefault();
+                                              e.stopPropagation();
+                                              changeNodeToggle(depth1);
+                                          }}
+                                          match={currentMenu}
+                                      >
+                                          <>
+                                              {depth1.children.map((depth2) =>
+                                                  depth2.children ? (
+                                                      <SidebarCategory
+                                                          key={depth2.menuId}
+                                                          nodeData={depth2}
+                                                          open={sidebarOpenItem[depth2.menuId]}
+                                                          onClick={(e) => {
+                                                              e.preventDefault();
+                                                              e.stopPropagation();
+                                                              changeNodeToggle(depth2);
+                                                          }}
+                                                          match={currentMenu}
+                                                      >
+                                                          {depth2.children.map((depth3) => (
+                                                              // 3depth
+                                                              <SidebarItem key={depth3.menuId} nodeData={depth3} match={currentMenu} />
+                                                          ))}
+                                                      </SidebarCategory>
+                                                  ) : (
+                                                      // 2depth
+                                                      <SidebarItem key={depth2.menuId} nodeData={depth2} match={currentMenu} />
+                                                  ),
+                                              )}
+                                          </>
+                                      </SidebarCategory>
+                                  ) : (
+                                      // 1depth
+                                      <SidebarItem key={depth1.menuId} nodeData={depth1} match={currentMenu} />
+                                  ),
+                              )
+                            : ''}
+                    </ul>
+                </PerfectScrollbar>
+            </div>
+        </nav>
     );
 };
 

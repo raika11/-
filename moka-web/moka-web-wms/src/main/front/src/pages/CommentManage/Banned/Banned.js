@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { Switch, Route, useHistory } from 'react-router-dom';
@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { initializeBannedParams, clearStore, getInitData } from '@store/commentManage';
-const BannedList = React.lazy(() => import('./BannedList'));
+import BannedList from './BannedList';
 
 /**
  * 댓글 관리 > 차단 관리
@@ -95,9 +95,7 @@ const Banned = ({ match, ...rest }) => {
                         exact
                         render={() => (
                             <Col sm={12} md={12} className="p-0">
-                                <Suspense>
-                                    <BannedList match={match} />
-                                </Suspense>
+                                <BannedList match={match} />
                             </Col>
                         )}
                     />

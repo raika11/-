@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import { Switch, Route, useHistory } from 'react-router-dom';
@@ -7,8 +7,8 @@ import { MokaCard } from '@components';
 import { GET_RESERVED, SAVE_RESERVED, DELETE_RESERVED } from '@store/reserved';
 import { messageBox } from '@utils/toastUtil';
 import { deleteReserved, clearStore } from '@store/reserved';
+import ReservedList from './ReservedList';
 import ReservedEdit from './ReservedEdit';
-const ReservedList = React.lazy(() => import('./ReservedList'));
 
 /**
  * 예약어 관리 컴포넌트
@@ -68,9 +68,7 @@ const Reserved = ({ match }) => {
             {/* 예약어 목록 */}
             <Col xs={5} className="p-0 pr-gutter">
                 <MokaCard width={412} className="w-100" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
-                    <Suspense>
-                        <ReservedList match={match} onDelete={handleClickDelete} />
-                    </Suspense>
+                    <ReservedList match={match} onDelete={handleClickDelete} />
                 </MokaCard>
             </Col>
 

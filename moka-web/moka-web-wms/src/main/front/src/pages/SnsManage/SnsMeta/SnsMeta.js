@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
@@ -10,9 +10,8 @@ import { MokaCard } from '@components';
 import { clearMetaStore } from '@store/snsManage';
 import { clearSpecialCharCode } from '@store/codeMgt';
 import useBreakpoint from '@hooks/useBreakpoint';
-
+import SnsMetaList from './SnsMetaList';
 import SnsMetaEdit from './SnsMetaEdit';
-const SnsMetaList = React.lazy(() => import('./SnsMetaList'));
 
 /**
  * FB & TW
@@ -40,9 +39,7 @@ const SnsMeta = ({ match, displayName }) => {
                 {/* 리스트 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="Facebook&Twitter 리스트">
-                        <Suspense>
-                            <SnsMetaList />
-                        </Suspense>
+                        <SnsMetaList />
                     </MokaCard>
                 </Col>
 

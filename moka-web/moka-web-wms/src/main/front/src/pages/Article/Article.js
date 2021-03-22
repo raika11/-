@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,9 +9,8 @@ import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import { clearStore } from '@store/article';
 import useBreakpoint from '@hooks/useBreakpoint';
-
+import ArticleList from './ArticleList';
 import ArticleEdit from './ArticleEdit';
-const ArticleList = React.lazy(() => import('./ArticleList'));
 
 /**
  * 등록기사
@@ -38,9 +37,7 @@ const Article = ({ match, displayName, name }) => {
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     {/* 리스트 */}
                     <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={displayName}>
-                        <Suspense>
-                            <ArticleList match={match} ja={name === 'articleJa' ? true : false} sun={name === 'articleSun' ? true : false} />
-                        </Suspense>
+                        <ArticleList match={match} ja={name === 'articleJa' ? true : false} sun={name === 'articleSun' ? true : false} />
                     </MokaCard>
                 </Col>
 

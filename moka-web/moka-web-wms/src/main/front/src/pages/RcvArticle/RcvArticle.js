@@ -1,12 +1,11 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import { clearStore } from '@store/rcvArticle';
-
+import RcvArticleList from './RcvArticleList';
 import RcvArticleEdit from './RcvArticleEdit';
-const RcvArticleList = React.lazy(() => import('./RcvArticleList'));
 
 /**
  * 수신 기사 전체
@@ -30,9 +29,7 @@ const RcvArticle = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard width={850} className="mr-gutter" bodyClassName="d-flex flex-column" title="수신 기사 전체">
-                <Suspense>
-                    <RcvArticleList />
-                </Suspense>
+                <RcvArticleList />
             </MokaCard>
 
             <Route path={[`${match.path}/:rid/:registerable`]} render={() => <RcvArticleEdit match={match} />} />

@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import { Form, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import BoardsSummernote from './BoardsSummernote';
 import toast, { messageBox } from '@utils/toastUtil';
-import { GET_LISTMENU_CONTENTS_INFO, changeListmenuReplyContent, uploadBoardContentImage } from '@store/board';
+import { GET_LIST_MENU_CONTENTS_INFO, changeListMenuReplyContent, uploadBoardContentImage } from '@store/board';
 
-const BoardsNote = ({ EditState }) => {
+const BoardsNote = () => {
+    const { boardId, boardSeq, parentBoardSeq, reply } = useParams();
     const dispatch = useDispatch();
-    const { contentsinfo, contentsreply, selectboard } = useSelector((store) => ({
-        contentsinfo: store.board.listmenu.contents.info,
-        contentsreply: store.board.listmenu.contents.reply,
-        selectboard: store.board.listmenu.selectboard,
-        loading: store.loading[GET_LISTMENU_CONTENTS_INFO],
+    const { contentsinfo, contentsreply, selectBoard } = useSelector((store) => ({
+        contentsinfo: store.board.listMenu.contents.info,
+        contentsreply: store.board.listMenu.contents.reply,
+        selectBoard: store.board.listMenu.selectBoard,
+        loading: store.loading[GET_LIST_MENU_CONTENTS_INFO],
     }));
 
     const [contentData, setContentData] = useState(null);
@@ -22,14 +24,14 @@ const BoardsNote = ({ EditState }) => {
 
         dispatch(
             uploadBoardContentImage({
-                boardId: selectboard.boardId,
+                boardId: selectBoard.boardId,
                 imageForm: formData,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
                         toast.success(message);
                         let tempContent = `${contentsreply.content} <img src="${body}">`;
 
-                        dispatch(changeListmenuReplyContent({ content: tempContent }));
+                        dispatch(changeListMenuReplyContent({ content: tempContent }));
                         setContentData(tempContent);
                     } else {
                         const { totalCnt, list } = body;
@@ -47,7 +49,7 @@ const BoardsNote = ({ EditState }) => {
     };
 
     useEffect(() => {
-        if (EditState.mode === 'add') {
+        if (!boardSeq && parentBoardSeq) {
             let tempContent = `
             <br/>
             원본 게시글<br/>
@@ -56,11 +58,11 @@ const BoardsNote = ({ EditState }) => {
             ${contentsinfo.content}`;
 
             setContentData(tempContent);
-        } else {
+        } else if (boardSeq && parentBoardSeq && reply) {
             setContentData(contentsreply.content);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [EditState]);
+    }, [boardSeq, parentBoardSeq]);
 
     return (
         <>
@@ -69,7 +71,7 @@ const BoardsNote = ({ EditState }) => {
                     <BoardsSummernote
                         contentValue={contentData}
                         editChange={(value) => {
-                            dispatch(changeListmenuReplyContent({ content: value }));
+                            dispatch(changeListMenuReplyContent({ content: value }));
                         }}
                         editImageUpload={(e) => SummernoteImageUpload(e)}
                     />

@@ -1,14 +1,14 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { MokaCard } from '@components';
 import { clearStore } from '@store/codeMgt';
+import GrpList from './GrpList';
 import DtlList from './DtlList';
-const GrpList = React.lazy(() => import('./GrpList'));
 
 /**
- * 기타코드 관리
+ * 시스템코드 관리
  */
 const CodeMgt = ({ match }) => {
     const dispatch = useDispatch();
@@ -30,9 +30,7 @@ const CodeMgt = ({ match }) => {
 
             {/* 그룹코드 목록 */}
             <MokaCard width={480} className="mr-gutter" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
-                <Suspense>
-                    <GrpList match={match} />
-                </Suspense>
+                <GrpList match={match} />
             </MokaCard>
 
             {/* 그룹의 상세코드 목록 */}

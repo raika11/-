@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { MokaErrorBoundary } from '@components';
 const TourMonth = React.lazy(() => import('./TourMonth'));
 const TourList = React.lazy(() => import('./TourList'));
 const TourMsgSet = React.lazy(() => import('./TourMsgSet'));
@@ -13,27 +13,35 @@ const Tour = ({ match, ...rest }) => {
     const history = useHistory();
     if (match.path === '/tour-month') {
         return (
-            <Suspense>
-                <TourMonth match={match} {...rest} />
-            </Suspense>
+            <MokaErrorBoundary>
+                <Suspense>
+                    <TourMonth match={match} {...rest} />
+                </Suspense>
+            </MokaErrorBoundary>
         );
     } else if (match.path === '/tour-list') {
         return (
-            <Suspense>
-                <TourList match={match} {...rest} />
-            </Suspense>
+            <MokaErrorBoundary>
+                <Suspense>
+                    <TourList match={match} {...rest} />
+                </Suspense>
+            </MokaErrorBoundary>
         );
     } else if (match.path === '/tour-set') {
         return (
-            <Suspense>
-                <TourSet match={match} {...rest} />
-            </Suspense>
+            <MokaErrorBoundary>
+                <Suspense>
+                    <TourSet match={match} {...rest} />
+                </Suspense>
+            </MokaErrorBoundary>
         );
     } else if (match.path === '/tour-message') {
         return (
-            <Suspense>
-                <TourMsgSet match={match} {...rest} />
-            </Suspense>
+            <MokaErrorBoundary>
+                <Suspense>
+                    <TourMsgSet match={match} {...rest} />
+                </Suspense>
+            </MokaErrorBoundary>
         );
     } else {
         history.push(`${match.path}/404`);

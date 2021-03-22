@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import useBreakpoint from '@hooks/useBreakpoint';
-import { initialState, getSetmenuBoardsList, changeSetMenuSearchOption } from '@store/board';
+import { initialState, getSetMenuBoardsList, changeSetMenuSearchOption } from '@store/board';
 import BoardsList from './BoardsList';
 import BoardsEdit from './BoardsEdit';
 
@@ -27,10 +27,10 @@ const BoardsSet = ({ match, displayName }) => {
         // store boardType 값이 변경 되면 검색 옵션 처리후 리스트를 가지고 옵니다.
         if (boardType) {
             const tmpSearchOption = {
-                ...initialState.setmenu.search,
+                ...initialState.setMenu.search,
                 boardType: boardType,
             };
-            dispatch(getSetmenuBoardsList(changeSetMenuSearchOption(tmpSearchOption)));
+            dispatch(getSetMenuBoardsList(changeSetMenuSearchOption(tmpSearchOption)));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [boardType]);

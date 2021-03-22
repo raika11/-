@@ -1,60 +1,60 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Col } from 'react-bootstrap';
-import { MokaInputLabel } from '@components';
+import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
-import { GET_LISTMENU_CONTENTS_INFO } from '@store/board';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import { MokaInputLabel } from '@components';
+import { GET_LIST_MENU_CONTENTS_INFO } from '@store/board';
 import ReplayNote from './ReplayNote';
 
-const BoardsEditReplyForm = ({ EditState, EditData, HandleChangeFormData, setEditReplayData }) => {
-    const { selectboard, contentsreply, userName, contentsinfo } = useSelector((store) => ({
-        selectboard: store.board.listmenu.selectboard,
-        contentsinfo: store.board.listmenu.contents.info,
-        contentsreply: store.board.listmenu.contents.reply,
-        userName: store.app.AUTH.userName,
-        loading: store.loading[GET_LISTMENU_CONTENTS_INFO],
-    }));
+/**
+ * 게시판 관리 > 게시글 관리 > 게시판 편집 답변 폼
+ */
+const BoardsEditReplyForm = ({ data, setEditReplayData, onChangeFormData }) => {
+    const { boardId, boardSeq, parentBoardSeq, reply } = useParams();
 
-    const [replyEditdata, setReplyEditdata] = useState({
+    const userName = useSelector((store) => store.app.AUTH.userName);
+    const selectBoard = useSelector((store) => store.board.listMenu.selectBoard);
+    const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
+    const contentsReply = useSelector((store) => store.board.listMenu.contents.reply);
+
+    const [replyEditData, setReplyEditData] = useState({
         title: 'Re: ',
         content: '',
         regName: '',
     });
 
-    const handleEditDataChange = (e) => {
-        HandleChangeFormData(e);
-    };
-
     useEffect(() => {
-        if (selectboard.editorYn === 'Y') {
-            setReplyEditdata({
-                ...replyEditdata,
-                title: EditData.title,
-                regName: EditData.regName,
+        if (selectBoard.editorYn === 'Y') {
+            setReplyEditData({
+                ...replyEditData,
+                title: data.title,
+                regName: data.regName,
             });
         } else {
-            setReplyEditdata({
-                ...replyEditdata,
-                title: EditData.title,
-                content: EditData.content,
-                regName: EditData.regName,
+            setReplyEditData({
+                ...replyEditData,
+                title: data.title,
+                content: data.content,
+                regName: data.regName,
             });
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [EditData]);
+    }, [data]);
 
     useEffect(() => {
-        if (EditState.mode === 'add') {
+        // 원글 답변 등록시
+        if (!boardSeq && parentBoardSeq) {
             let tempContent = `
-<br />
-원본 게시글<br />
-------------------------------------------------------<br />
-<br />
-                ${contentsinfo.content}`;
+                <br />
+                원본 게시글<br />
+                ------------------------------------------------------<br />
+                <br />
+                ${contentsInfo.content}`;
 
             // setEditReplayData({
             //     title: 're: ',
-            //     content: selectboard.editorYn === 'Y' ? tempContent : tempContent.replace(/(<br ?\/?>)*/g, ''),
+            //     content: selectBoard.editorYn === 'Y' ? tempContent : tempContent.replace(/(<br ?\/?>)*/g, ''),
             //     regName: userName,
             // });
             setEditReplayData({
@@ -62,15 +62,16 @@ const BoardsEditReplyForm = ({ EditState, EditData, HandleChangeFormData, setEdi
                 content: tempContent,
                 regName: userName,
             });
-        } else if (EditState.mode === 'modify') {
+        } else if (boardSeq && parentBoardSeq && reply) {
+            // 답변 글 조회시
             setEditReplayData({
-                title: contentsreply.title,
-                content: contentsreply.content,
-                regName: contentsreply.regName,
+                title: contentsReply.title,
+                content: contentsReply.content,
+                regName: contentsReply.regName,
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectboard]);
+    }, [selectBoard]);
 
     return (
         <Form>
@@ -82,20 +83,20 @@ const BoardsEditReplyForm = ({ EditState, EditData, HandleChangeFormData, setEdi
                         className="mb-0"
                         id="title"
                         name="title"
-                        value={replyEditdata.title}
+                        value={replyEditData.title}
                         onChange={(e) => {
                             const { name, value } = e.target;
-                            setReplyEditdata({
-                                ...replyEditdata,
+                            setReplyEditData({
+                                ...replyEditData,
                                 [name]: value,
                             });
-                            handleEditDataChange(e);
+                            onChangeFormData(e);
                         }}
                     />
                 </Col>
             </Form.Row>
             {/* 기획서에 백오피스는 설정과 관계 없이 에디터를 표현한다고 textarea 는 주석처리. */}
-            {/* {loading === false && selectboard.editorYn === 'N' ? (
+            {/* {loading === false && selectBoard.editorYn === 'N' ? (
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
@@ -112,14 +113,14 @@ const BoardsEditReplyForm = ({ EditState, EditData, HandleChangeFormData, setEdi
                                     ...replyEditdata,
                                     [name]: value,
                                 });
-                                dispatch(changeListmenuReplyContent({ content: e.target.value }));
+                                dispatch(changeListMenuReplyContent({ content: e.target.value }));
                                 handleEditDataChange(e);
                             }}
                         />
                     </Col>
                 </Form.Row>
             ) : ( */}
-            <ReplayNote EditState={EditState} />
+            <ReplayNote />
             {/* )} */}
             <Form.Row>
                 <Col xs={7} className="p-0">
@@ -128,14 +129,14 @@ const BoardsEditReplyForm = ({ EditState, EditData, HandleChangeFormData, setEdi
                         labelWidth={80}
                         id="regName"
                         name="regName"
-                        value={replyEditdata.regName}
+                        value={replyEditData.regName}
                         onChange={(e) => {
                             const { name, value } = e.target;
-                            setReplyEditdata({
-                                ...replyEditdata,
+                            setReplyEditData({
+                                ...replyEditData,
                                 [name]: value,
                             });
-                            handleEditDataChange(e);
+                            onChangeFormData(e);
                         }}
                     />
                 </Col>

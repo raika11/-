@@ -1,10 +1,10 @@
-import React, { useState, Suspense, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import produce from 'immer';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { MokaCard, MokaIcon, MokaLoader } from '@components';
+import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_AP, ITEM_CT, ITEM_CP, ITEM_TP, TEMS_PREFIX } from '@/constants';
 import { getArticleType } from '@store/codeMgt';
@@ -12,15 +12,15 @@ import { clearStore, deleteArticlePage, appendTag, changeArticlePageBody } from 
 import toast, { messageBox } from '@utils/toastUtil';
 import ArticlePageEditor from './ArticlePageEditor';
 import ArticlePageEdit from './ArticlePageEdit';
-const ArticlePageList = React.lazy(() => import('./ArticlePageList'));
+import ArticlePageList from './ArticlePageList';
 
 // relations
-const LookupArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/LookupArticlePageList'));
-const LookupContainerList = React.lazy(() => import('@pages/Container/components/LookupContainerList'));
-const LookupComponentList = React.lazy(() => import('@pages/Component/components/LookupComponentList'));
-const LookupTemplateList = React.lazy(() => import('@pages/Template/components/LookupTemplateList'));
-const LookupAdList = React.lazy(() => import('@pages/Ad/components/LookupAdList'));
-const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
+import LookupArticlePageList from '@pages/ArticlePage/components/LookupArticlePageList';
+import LookupContainerList from '@pages/Container/components/LookupContainerList';
+import LookupComponentList from '@pages/Component/components/LookupComponentList';
+import LookupTemplateList from '@pages/Template/components/LookupTemplateList';
+import LookupAdList from '@pages/Ad/components/LookupAdList';
+import HistoryList from '@pages/commons/HistoryList';
 
 /**
  * 아티클페이지 관리
@@ -186,9 +186,7 @@ const ArticlePage = ({ match }) => {
                 onExpansion={handleListExpansion}
                 foldable
             >
-                <Suspense>
-                    <ArticlePageList match={match} />
-                </Suspense>
+                <ArticlePageList match={match} />
             </MokaCard>
 
             <Route
@@ -207,24 +205,12 @@ const ArticlePage = ({ match }) => {
                             tabWidth={412}
                             tabs={[
                                 <ArticlePageEdit show={activeTabIdx === 0} match={match} onDelete={handleClickDelete} />,
-                                <Suspense fallback={<MokaLoader />}>
-                                    <LookupArticlePageList show={activeTabIdx === 1} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickArticlePageLoad} />
-                                </Suspense>,
-                                <Suspense fallback={<MokaLoader />}>
-                                    <LookupContainerList show={activeTabIdx === 2} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
-                                </Suspense>,
-                                <Suspense fallback={<MokaLoader />}>
-                                    <LookupComponentList show={activeTabIdx === 3} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
-                                </Suspense>,
-                                <Suspense fallback={<MokaLoader />}>
-                                    <LookupTemplateList show={activeTabIdx === 4} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
-                                </Suspense>,
-                                <Suspense fallback={<MokaLoader />}>
-                                    <LookupAdList show={activeTabIdx === 5} seqType={ITEM_AP} />
-                                </Suspense>,
-                                <Suspense fallback={<MokaLoader />}>
-                                    <HistoryList show={activeTabIdx === 6} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickHistLoad} />
-                                </Suspense>,
+                                <LookupArticlePageList show={activeTabIdx === 1} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickArticlePageLoad} />,
+                                <LookupContainerList show={activeTabIdx === 2} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />,
+                                <LookupComponentList show={activeTabIdx === 3} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />,
+                                <LookupTemplateList show={activeTabIdx === 4} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />,
+                                <LookupAdList show={activeTabIdx === 5} seqType={ITEM_AP} />,
+                                <HistoryList show={activeTabIdx === 6} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickHistLoad} />,
                             ]}
                             tabNavWidth={48}
                             tabNavPosition="right"

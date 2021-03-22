@@ -151,7 +151,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         return super.merge(MokaConstants.ITEM_PAGE, pageItemId, mergeContext);
     }
 
-    public String mergeSource(String temsSource)
+    public String mergePreviewResource(String temsSource, String content)
             throws TemplateMergeException {
         StringBuilder sb;
         try {
@@ -161,6 +161,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
             TemplateRoot templateRoot = new TpTemplateRoot(templateItem);
             sb = new StringBuilder(templateRoot.getTemplateSize() * 2);
             MergeContext mergeContext = createMergeContext(false);
+            mergeContext.set(MokaConstants.SYSTEM_AREA, content);
             templateRoot.merge(this, mergeContext, sb);
         } catch (Exception e) {
             throw new TemplateMergeException("Template Merge Fail : temporary merge", e);

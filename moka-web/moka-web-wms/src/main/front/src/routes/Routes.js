@@ -3,11 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import utils from '@utils/commonUtil';
-
-// routes
-import routes from './index';
 import { getUserMenuTree, changeLatestMenuId } from '@store/auth/authAction';
-import { MokaLoader, ScrollToTop } from '@components';
+import { MokaLoader, ScrollToTop, MokaErrorBoundary } from '@components';
+import routes from './index'; // routes
 
 const MenuBox = ({ children, menu, path, nonResponsive = false, side = true }) => {
     const history = useHistory();
@@ -30,6 +28,9 @@ const MenuBox = ({ children, menu, path, nonResponsive = false, side = true }) =
     return React.cloneElement(children, { menuPaths: menu.menuPaths, menuById: menu.menuById, nonResponsive, side });
 };
 
+/**
+ * 페이지 Routes
+ */
 const Routes = () => {
     const { menu } = useSelector((store) => ({
         menu: store.auth.menu,
@@ -45,9 +46,11 @@ const Routes = () => {
                         {...rest}
                         render={(props) => (
                             <MenuBox path={path} menu={menu} nonResponsive={nonResponsive} side={side}>
-                                <Suspense fallback={<MokaLoader clsOpt="black" />}>
-                                    <Component {...props} name={name} {...rest} />
-                                </Suspense>
+                                <MokaErrorBoundary>
+                                    <Suspense fallback={<MokaLoader clsOpt="black" />}>
+                                        <Component {...props} name={name} {...rest} />
+                                    </Suspense>
+                                </MokaErrorBoundary>
                             </MenuBox>
                         )}
                     />

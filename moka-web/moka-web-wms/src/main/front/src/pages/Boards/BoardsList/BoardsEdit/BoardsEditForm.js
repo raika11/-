@@ -1,36 +1,32 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Form, Col, Row } from 'react-bootstrap';
-import { MokaInputLabel, MokaInput, MokaTableEditCancleButton } from '@components';
-import BoardRepoterSelect from './BoardRepoterSelect';
+import { useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
-import { MokaIcon } from '@components';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import { MokaIcon, MokaInputLabel, MokaInput, MokaTableEditCancleButton } from '@components';
 import { messageBox } from '@utils/toastUtil';
-import { getBoardChannelList, GET_LISTMENU_CONTENTS_INFO } from '@store/board';
+import { getBoardChannelList, GET_LIST_MENU_CONTENTS_INFO } from '@store/board';
+import BoardRepoterSelect from './BoardRepoterSelect';
 import BoardsNote from './BoardsNote';
 
-const BoardsEditForm = ({ EditState, EditData, HandleChangeFormData }) => {
+/**
+ * 게시판 관리 > 게시글 관리 > 게시판 편집 폼
+ */
+const BoardsEditForm = ({ data, onChangeFormData }) => {
     const dispatch = useDispatch();
-    const { selectboard, loading, PDS_URL, contentsinfo } = useSelector((store) => ({
-        selectboard: store.board.listmenu.selectboard,
-        PDS_URL: store.app.PDS_URL,
-        contentsinfo: store.board.listmenu.contents.info,
-        loading: store.loading[GET_LISTMENU_CONTENTS_INFO],
-    }));
+    const { boardId, boardSeq, parentBoardSeq, reply } = useParams();
+
+    const PDS_URL = useSelector((store) => store.app.PDS_URL);
+    const selectBoard = useSelector((store) => store.board.listMenu.selectBoard);
+    const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
+    const loading = useSelector((store) => store.loading[GET_LIST_MENU_CONTENTS_INFO]);
 
     const [channalList, setChannalList] = useState([]); // 채넌 선택.
-    const [gubun1, setGubun1] = useState({
-        label: null,
-        list: [],
-    });
-    const [gubun2, setGubun2] = useState({
-        label: null,
-        list: [],
-    });
     const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일.
     let fileinputRef = useRef(null);
 
     const SelectReport = (e) => {
-        HandleChangeFormData({
+        onChangeFormData({
             target: {
                 name: 'channelId',
                 value: e,
@@ -52,43 +48,10 @@ const BoardsEditForm = ({ EditState, EditData, HandleChangeFormData }) => {
             );
         };
 
-        if (selectboard && selectboard.channelType) {
-            getchannelTypeItem(selectboard.channelType);
+        if (selectBoard && selectBoard.channelType) {
+            getchannelTypeItem(selectBoard.channelType);
         }
-    }, [dispatch, selectboard]);
-
-    // 게시판 정보창 설정.
-    useEffect(() => {
-        const { boardId } = selectboard;
-
-        // 구분 설정.
-        const setBoardGubun = ({ titlePrefixNm1, titlePrefix1, titlePrefixNm2, titlePrefix2 }) => {
-            // 첫번째 구분.
-            if (titlePrefixNm1 && titlePrefixNm1.length > 0) {
-                setGubun1({
-                    label: titlePrefixNm1,
-                    list: titlePrefix1
-                        .split(',')
-                        .map((e) => e.replace(' ', ''))
-                        .filter((e) => e !== ''),
-                });
-            }
-
-            if (titlePrefixNm2 && titlePrefix2.length > 0) {
-                setGubun2({
-                    label: titlePrefixNm2,
-                    list: titlePrefix2
-                        .split(',')
-                        .map((e) => e.replace(' ', ''))
-                        .filter((e) => e !== ''),
-                });
-            }
-        };
-
-        if (!isNaN(Number(boardId)) && boardId > 0) {
-            setBoardGubun(selectboard);
-        }
-    }, [selectboard]);
+    }, [dispatch, selectBoard]);
 
     // 이미지 추가 처리.
     const handleChangeFileInput = (event) => {
@@ -98,8 +61,8 @@ const BoardsEditForm = ({ EditState, EditData, HandleChangeFormData }) => {
             let tempFile = event.target.files[0].name.split('.');
             let tempFileExt = tempFile[1];
 
-            if (selectboard.allowFileExt.split(',').indexOf(tempFileExt) < 0) {
-                messageBox.alert(`해당 게시판의 첨부 파일은 (${selectboard.allowFileExt}) 만 등록 가능합니다.`, () => {});
+            if (selectBoard.allowFileExt.split(',').indexOf(tempFileExt) < 0) {
+                messageBox.alert(`해당 게시판의 첨부 파일은 (${selectBoard.allowFileExt}) 만 등록 가능합니다.`, () => {});
             } else {
                 extCheck = true;
             }
@@ -109,8 +72,8 @@ const BoardsEditForm = ({ EditState, EditData, HandleChangeFormData }) => {
 
         if (!extCheck) return;
 
-        if (uploadFiles.length + 1 > selectboard.allowFileCnt) {
-            messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${selectboard.allowFileCnt}개 입니다.`, () => {});
+        if (uploadFiles.length + 1 > selectBoard.allowFileCnt) {
+            messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${selectBoard.allowFileCnt}개 입니다.`, () => {});
         } else {
             setUploadFiles([...uploadFiles, event.target.files[0]]);
         }
@@ -132,7 +95,7 @@ const BoardsEditForm = ({ EditState, EditData, HandleChangeFormData }) => {
     };
 
     useEffect(() => {
-        HandleChangeFormData({
+        onChangeFormData({
             target: {
                 name: 'attaches',
                 value: uploadFiles,
@@ -144,7 +107,7 @@ const BoardsEditForm = ({ EditState, EditData, HandleChangeFormData }) => {
     useEffect(() => {
         if (loading === false) {
             setUploadFiles(
-                EditData.attaches.map((element, i) => {
+                data.attaches.map((element, i) => {
                     const { seqNo, orgFileName, filePath, fileName } = element;
                     const file_url = PDS_URL && filePath && fileName ? `${PDS_URL}/${filePath}/${fileName}` : '';
                     return {
@@ -158,201 +121,158 @@ const BoardsEditForm = ({ EditState, EditData, HandleChangeFormData }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading]);
 
+    console.log(data);
+
     return (
         <>
             <Form>
-                {EditState.mode === 'modify' && (
+                {boardSeq && !parentBoardSeq && (
                     <>
                         <Form.Row>
-                            <Col xs={6} className="ft-12">
-                                {`${EditData.boardId !== null && EditData.regInfo ? EditData.regInfo : ''}`}
+                            <Col xs={6} className="p-0">
+                                <p className="mb-0">{data.boardSeq && data.regDt ? `${data.regDt} ${data.regName}(${data.regId})` : ''}</p>
                             </Col>
-                            <Col xs={6} className="ft-12">
-                                {`${EditData.boardId !== null && EditData.modInfo ? EditData.modInfo : ''}`}
+                            <Col xs={6} className="p-0">
+                                <p className="mb-0">{data.boardSeq && data.modDt ? `${data.modDt} ${data.regName}(${data.regId})` : ''}</p>
                             </Col>
                         </Form.Row>
-                        <Form.Row className="mb-2">
-                            <MokaInputLabel label={`조회수`} as="none" />
-                            <div className="ft-14 flex-fill text-dark text-truncate">
-                                <span>{EditData.viewCnt}</span>
-                            </div>
-                            {(function () {
-                                if (selectboard.recomFlag === '1' || selectboard.recomFlag === '2') {
-                                    return (
-                                        <>
-                                            <MokaInputLabel label={`추천`} as="none" />
-                                            <div className="ft-14 flex-fill text-dark text-truncate">
-                                                <Row className="mb-0 pr-0">
-                                                    <Col xs={3} className="mb-0 pr-0">
-                                                        <MokaIcon iconName="fad-thumbs-up" size="1x" /> {EditData.recomCnt}
-                                                    </Col>
-                                                    <Col xs={3} className="mb-0 pr-0">
-                                                        <MokaIcon iconName="fad-thumbs-down" size="1x" /> {EditData.decomCnt}
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                        </>
-                                    );
-                                }
-                            })()}
-                            {(function () {
-                                if (selectboard.declareYn === 'Y') {
-                                    return (
-                                        <>
-                                            <MokaInputLabel label={`신고`} as="none" />
-                                            <div className="ft-14 flex-fill text-dark text-truncate">
-                                                <span>{EditData.declareCnt}</span>
-                                            </div>
-                                        </>
-                                    );
-                                }
-                            })()}
+                        <Form.Row className="mb-2 align-items-center">
+                            <Col className="p-0 d-flex">
+                                <MokaInputLabel label="조회수" as="none" />
+                                <p className="mb-0">{data.viewCnt}</p>
+                            </Col>
+                            {selectBoard.recomFlag === '1' && (
+                                <Col className="p-0 d-flex justify-content-center">
+                                    <MokaInputLabel label="추천" as="none" />
+                                    <MokaIcon className="mr-2" iconName="fad-thumbs-up" size="1x" />
+                                    <p className="mb-0 mr-4">{data.recomCnt}</p>
+                                    <MokaIcon className="mr-2" iconName="fad-thumbs-down" size="1x" />
+                                    <p className="mb-0">{data.decomCnt}</p>
+                                </Col>
+                            )}
+                            {selectBoard.recomFlag === '2' && (
+                                <Col className="p-0 d-flex justify-content-center">
+                                    <MokaIcon className="mr-2" iconName="fad-thumbs-up" size="1x" />
+                                    <p className="mb-0">{data.recomCnt}</p>
+                                </Col>
+                            )}
+                            {selectBoard.declareYn === 'Y' && (
+                                <Col className="p-0 d-flex justify-content-center">
+                                    <MokaInputLabel label="신고" as="none" />
+                                    <p className="mb-0">{data.declareCnt}</p>
+                                </Col>
+                            )}
                         </Form.Row>
                     </>
                 )}
-                {(function () {
-                    if (loading === false && selectboard.channelType === 'BOARD_DIVC2') {
-                        return (
-                            <>
-                                <BoardRepoterSelect
-                                    ChannalList={channalList}
-                                    SelectValue={EditData.channelId}
-                                    OnChange={(e) => {
-                                        SelectReport(e.value);
-                                    }}
-                                />
-                            </>
-                        );
-                    } else {
-                        if (channalList.length > 0) {
-                            return (
-                                <Form.Row className="mb-2">
-                                    <Col xs={6} className="p-0">
-                                        <MokaInputLabel
-                                            as="select"
-                                            label="채널명"
-                                            name="channelId"
-                                            id="channelId"
-                                            value={EditData.channelId}
-                                            onChange={(e) => HandleChangeFormData(e)}
-                                        >
-                                            <option value="">선택</option>
-                                            {channalList.map((item, index) => (
-                                                <option key={index} value={item.value}>
-                                                    {item.name}
-                                                </option>
-                                            ))}
-                                        </MokaInputLabel>
-                                    </Col>
-                                </Form.Row>
-                            );
-                        }
-                    }
-                })()}
-                {(gubun1.label !== null || gubun2.label !== null) && (
+                {/* 채널 게시판일 때 */}
+                {loading === false &&
+                    (selectBoard.channelType === 'BOARD_DIVC2' ? (
+                        // 기자
+                        <BoardRepoterSelect
+                            ChannalList={channalList}
+                            SelectValue={data.channelId}
+                            OnChange={(e) => {
+                                SelectReport(e.value);
+                            }}
+                        />
+                    ) : (
+                        channalList.length > 0 && (
+                            <Form.Row className="mb-2">
+                                <Col xs={6} className="p-0">
+                                    <MokaInputLabel as="select" label="채널명" name="channelId" value={data.channelId} onChange={(e) => onChangeFormData(e)}>
+                                        <option value="">선택</option>
+                                        {channalList.map((item, index) => (
+                                            <option key={index} value={item.value}>
+                                                {item.name}
+                                            </option>
+                                        ))}
+                                    </MokaInputLabel>
+                                </Col>
+                            </Form.Row>
+                        )
+                    ))}
+                {selectBoard.boardId && (selectBoard.titlePrefixNm1 || selectBoard.titlePrefixNm2) && (
                     <Form.Row className="mb-2">
-                        {gubun1.label !== null && (
+                        {selectBoard.titlePrefixNm1 && (
                             <Col xs={6} className="p-0 pr-20">
-                                <MokaInputLabel
-                                    as="select"
-                                    label={gubun1.label}
-                                    name="titlePrefix1"
-                                    id="titlePrefix1"
-                                    value={EditData.titlePrefix1}
-                                    onChange={(e) => HandleChangeFormData(e)}
-                                >
+                                <MokaInputLabel as="select" label={selectBoard.titlePrefixNm1} name="titlePrefix1" value={data.titlePrefix1} onChange={(e) => onChangeFormData(e)}>
                                     <option value="">선택</option>
-                                    {gubun1.list.map((item, index) => (
-                                        <option key={index} value={item}>
-                                            {item}
-                                        </option>
-                                    ))}
+                                    {selectBoard.titlePrefix1
+                                        .replaceAll(' ', '')
+                                        .split(',')
+                                        .map((item, index) => (
+                                            <option key={index} value={item}>
+                                                {item}
+                                            </option>
+                                        ))}
                                 </MokaInputLabel>
                             </Col>
                         )}
 
-                        {gubun2.label !== null && (
+                        {selectBoard.titlePrefixNm2 && (
                             <Col xs={6} className="p-0 pl-20">
-                                <MokaInputLabel
-                                    as="select"
-                                    label={gubun2.label}
-                                    name="titlePrefix2"
-                                    id="titlePrefix2"
-                                    value={EditData.titlePrefix2}
-                                    onChange={(e) => HandleChangeFormData(e)}
-                                >
+                                <MokaInputLabel as="select" label={selectBoard.titlePrefixNm2} name="titlePrefix2" value={data.titlePrefix2} onChange={(e) => onChangeFormData(e)}>
                                     <option value="">선택</option>
-                                    {gubun2.list.map((item, index) => (
-                                        <option key={index} value={item}>
-                                            {item}
-                                        </option>
-                                    ))}
+                                    {selectBoard.titlePrefix2
+                                        .replaceAll(' ', '')
+                                        .split(',')
+                                        .map((item, index) => (
+                                            <option key={index} value={item}>
+                                                {item}
+                                            </option>
+                                        ))}
                                 </MokaInputLabel>
                             </Col>
                         )}
                     </Form.Row>
                 )}
 
-                <Form.Row className="mb-2">
-                    <MokaInputLabel
-                        label="노출순서"
-                        type="number"
-                        className="mb-2"
-                        id="ordNo"
-                        name="ordNo"
-                        placeholder={'노출순서'}
-                        value={EditData.ordNo}
-                        onChange={(e) => HandleChangeFormData(e)}
-                    />
+                <Form.Row className="mb-2 align-items-center">
+                    <MokaInputLabel label="노출순서" type="number" name="ordNo" placeholder={'노출순서'} value={data.ordNo} onChange={(e) => onChangeFormData(e)} />
+                    <p className="mb-0 ml-20 text-neutral">
+                        * 공지 글과 같이 상단에 노출되는 경우는 <br />
+                        적은 숫자(예: 0)로 입력해주세요
+                    </p>
                 </Form.Row>
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-2 align-items-center">
                     <MokaInputLabel
                         as="switch"
                         name="pushReceiveYn"
                         id="pushReceiveYn"
-                        label="PUSH"
-                        inputProps={{ checked: EditData.pushReceiveYn === 'Y' }}
-                        onChange={(e) => HandleChangeFormData(e)}
-                        value={'Y'}
+                        label="답변 PUSH 수신"
+                        inputProps={{ checked: data.pushReceiveYn === 'Y', readOnly: true }}
+                        onChange={(e) => onChangeFormData(e)}
                     />
-                    <span className="ft-12 text-neutral">%게시물 순서를 사용자가 변경 가능</span>
+                    <p className="mb-0 ml-2">답변에 대한 APP 푸쉬를 받을 수 있습니다.</p>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <MokaInputLabel
                         as="switch"
                         name="emailReceiveYn"
                         id="emailReceiveYn"
-                        className="mr-40"
-                        label="발송 이에밀"
-                        inputProps={{ checked: EditData.emailReceiveYn === 'Y' }}
-                        onChange={(e) => HandleChangeFormData(e)}
+                        className="mr-2"
+                        label="발송 이메일"
+                        inputProps={{ checked: data.emailReceiveYn === 'Y' }}
+                        onChange={(e) => onChangeFormData(e)}
                     />
-
                     <MokaInputLabel
                         label="이메일"
                         labelWidth={40}
-                        id="email"
                         className="flex-fill"
                         name="email"
-                        placeholder={'이메일'}
-                        value={EditData.email}
-                        onChange={(e) => HandleChangeFormData(e)}
+                        placeholder="이메일"
+                        value={data.email}
+                        onChange={(e) => onChangeFormData(e)}
                     />
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0">
-                        <MokaInput
-                            className="mb-0"
-                            id="title"
-                            name="title"
-                            placeholder={'제목을 입력해 주세요.'}
-                            value={EditData.title}
-                            onChange={(e) => HandleChangeFormData(e)}
-                        />
+                        <MokaInput className="mb-0" name="title" placeholder="제목을 입력해 주세요." value={data.title} onChange={(e) => onChangeFormData(e)} />
                     </Col>
                 </Form.Row>
                 {/* 기획서에 백오피스는 설정과 관계 없이 에디터를 표현한다고 textarea 는 주석처리. */}
-                {/* {selectboard.editorYn === 'N' ? (
+                {/* {selectBoard.editorYn === 'N' ? (
                     <Form.Row className="mb-2">
                         <Col className="p-0">
                             <MokaInputLabel
@@ -360,100 +280,84 @@ const BoardsEditForm = ({ EditState, EditData, HandleChangeFormData }) => {
                                 className="mb-2"
                                 inputClassName="resize-none"
                                 inputProps={{ rows: 6 }}
-                                id="content"
                                 name="content"
-                                value={EditData.content}
-                                // onChange={(e) => HandleChangeFormData(e)}
+                                value={data.content}
+                                // onChange={(e) => onChangeFormData(e)}
                                 onChange={(e) => {
-                                    dispatch(changeListmenuContent({ content: e.target.value }));
-                                    HandleChangeFormData(e);
+                                    dispatch(changeListMenuContent({ content: e.target.value }));
+                                    onChangeFormData(e);
                                 }}
                             />
                         </Col>
                     </Form.Row>
                 ) : ( */}
-                <BoardsNote editContentData={contentsinfo.content} />
+                <BoardsNote editContentData={contentsInfo.content} />
                 {/* )} */}
 
                 <hr className="divider" />
-                {(function () {
-                    if (selectboard.fileYn === 'Y') {
-                        return (
-                            <>
-                                <Form.Row>
-                                    <Col xs={4} className="p-0">
-                                        <MokaInputLabel label={`첨부파일`} as="none" className="mb-2" />
-                                    </Col>
-                                    <Col xs={8} className="p-0 text-right">
-                                        <div className="file btn btn-primary" style={{ position: 'relative', overflow: 'hidden' }}>
-                                            등록
-                                            <input
-                                                type="file"
-                                                name="file"
-                                                ref={fileinputRef}
-                                                onChange={(e) => handleChangeFileInput(e)}
-                                                style={{
-                                                    position: 'absolute',
-                                                    fontSize: '50px',
-                                                    opacity: '0',
-                                                    right: '0',
-                                                    top: '0',
-                                                }}
-                                            />
-                                        </div>
-                                    </Col>
-                                </Form.Row>
-                                <hr className="divider" />
-                                {uploadFiles.map((element, index) => {
-                                    return (
-                                        <Form.Row className="mb-0 pt-1" key={index}>
-                                            <Form.Row className="w-100" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
-                                                <Col xs={11} className="w-100 h-100 d-flex align-items-center justify-content-start">
-                                                    <div onClick={() => handleClickImageName(element)}>{element.name}</div>
-                                                </Col>
-                                                <Col>
-                                                    <MokaTableEditCancleButton onClick={() => handleDeleteUploadFile(index)} />
-                                                </Col>
-                                            </Form.Row>
-                                        </Form.Row>
-                                    );
-                                })}
-                                <hr className="divider" />
-                            </>
-                        );
-                    }
-                })()}
 
-                {selectboard.allowItem && selectboard.allowItem.split(',').indexOf('EMAIL') >= 0 && (
+                {selectBoard.fileYn === 'Y' && (
+                    <>
+                        <Form.Row>
+                            <Col xs={4} className="p-0">
+                                <MokaInputLabel label={`첨부파일`} as="none" className="mb-2" />
+                            </Col>
+                            <Col xs={8} className="p-0 text-right">
+                                <div className="file btn btn-primary" style={{ position: 'relative', overflow: 'hidden' }}>
+                                    등록
+                                    <input
+                                        type="file"
+                                        name="file"
+                                        ref={fileinputRef}
+                                        onChange={(e) => handleChangeFileInput(e)}
+                                        style={{
+                                            position: 'absolute',
+                                            fontSize: '50px',
+                                            opacity: '0',
+                                            right: '0',
+                                            top: '0',
+                                        }}
+                                    />
+                                </div>
+                            </Col>
+                        </Form.Row>
+                        <hr className="divider" />
+                        {uploadFiles.map((element, index) => {
+                            return (
+                                <Form.Row className="mb-0 pt-1" key={index}>
+                                    <Form.Row className="w-100" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
+                                        <Col xs={11} className="w-100 h-100 d-flex align-items-center justify-content-start">
+                                            <div onClick={() => handleClickImageName(element)}>{element.name}</div>
+                                        </Col>
+                                        <Col>
+                                            <MokaTableEditCancleButton onClick={() => handleDeleteUploadFile(index)} />
+                                        </Col>
+                                    </Form.Row>
+                                </Form.Row>
+                            );
+                        })}
+                        <hr className="divider" />
+                    </>
+                )}
+
+                {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('EMAIL') >= 0 && (
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label={`이메일`} as="none" />
-                        <div className="ft-14 flex-fill text-dark text-truncate">
-                            <span>{EditData.addr}</span>
-                        </div>
+                        <MokaInputLabel label="이메일" value={data.email} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
-                {selectboard.allowItem && selectboard.allowItem.split(',').indexOf('MOBILE_POHONE') >= 0 && (
+                {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('MOBILE_POHONE') >= 0 && (
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label={`휴대폰 번호`} as="none" />
-                        <div className="ft-14 flex-fill text-dark text-truncate">
-                            <span>{EditData.addr}</span>
-                        </div>
+                        <MokaInputLabel label="휴대폰 번호" value={data.mobilePhone} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
-                {selectboard.allowItem && selectboard.allowItem.split(',').indexOf('ADDR') >= 0 && (
+                {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('ADDR') >= 0 && (
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label={`주소`} as="none" />
-                        <div className="ft-14 flex-fill text-dark text-truncate">
-                            <span>{EditData.addr}</span>
-                        </div>
+                        <MokaInputLabel label="주소" value={data.addr} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
-                {selectboard.allowItem && selectboard.allowItem.split(',').indexOf('URL') >= 0 && (
-                    <Form.Row className="mb-2">
-                        <MokaInputLabel label={`URL`} as="none" />
-                        <div className="ft-14 flex-fill text-dark text-truncate">
-                            <span>{EditData.url}</span>
-                        </div>
+                {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('URL') >= 0 && (
+                    <Form.Row>
+                        <MokaInputLabel label="URL" value={data.url} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
             </Form>

@@ -2,6 +2,7 @@ import React, { Suspense, useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { clearStore, initializeParams, getBoardChannelTypeList } from '@store/board';
+import { MokaErrorBoundary } from '@components';
 const BoardsSet = React.lazy(() => import('./BoardsSet'));
 const BoardsList = React.lazy(() => import('./BoardsList'));
 
@@ -83,13 +84,17 @@ const Boards = ({ match, displayName }) => {
     }, [dispatch]);
 
     return pagesParams.gubun === 'set' ? (
-        <Suspense>
-            <BoardsSet match={match} displayName={displayName} />
-        </Suspense>
+        <MokaErrorBoundary>
+            <Suspense>
+                <BoardsSet match={match} displayName={displayName} />
+            </Suspense>
+        </MokaErrorBoundary>
     ) : (
-        <Suspense>
-            <BoardsList match={match} displayName={displayName} />
-        </Suspense>
+        <MokaErrorBoundary>
+            <Suspense>
+                <BoardsList match={match} displayName={displayName} />
+            </Suspense>
+        </MokaErrorBoundary>
     );
 };
 

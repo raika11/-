@@ -1,13 +1,15 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
 import { Route, Switch } from 'react-router-dom';
+import MemberGroupList from './MemberGroupList';
 import MemberGroupEdit from '@pages/group/groupEdit';
 
-const MemberGroupList = React.lazy(() => import('./GroupList'));
-
+/**
+ * 사용자 그룹 관리
+ */
 const MemberGroup = () => {
     const handleAdd = () => {};
 
@@ -32,44 +34,38 @@ const MemberGroup = () => {
                         추가
                     </Button>
                 </div>
+
                 <MemberGroupList />
             </MokaCard>
+
+            {/* 탭 */}
             <Switch>
                 <Route
                     path={['/member-group', '/memeber-group/:grpCd']}
                     exact
                     render={() => (
-                        <>
-                            {/* 탭 */}
-                            <MokaIconTabs
-                                //expansion={expansionState[2]}
-                                //onExpansion={handleTabExpansion}
-                                tabWidth={1000}
-                                height={CARD_DEFAULT_HEIGHT}
-                                tabs={[
-                                    <Suspense>
-                                        <MemberGroupEdit />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <MokaCard title="사용자 목록">
-                                            <MemberGroupList />
-                                        </MokaCard>
-                                    </Suspense>,
-                                    <Suspense>
-                                        <MokaCard title="메뉴 권한">
-                                            <MemberGroupList />
-                                        </MokaCard>
-                                    </Suspense>,
-                                ]}
-                                tabNavWidth={48}
-                                tabNavPosition="right"
-                                tabNavs={[
-                                    { title: '사이트 정보', text: 'Info' },
-                                    { title: '페이지 검색', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '콘텐츠 스킨 검색', icon: <MokaIcon iconName="fal-file-alt" /> },
-                                ]}
-                            />
-                        </>
+                        <MokaIconTabs
+                            //expansion={expansionState[2]}
+                            //onExpansion={handleTabExpansion}
+                            tabWidth={1000}
+                            height={CARD_DEFAULT_HEIGHT}
+                            tabs={[
+                                <MemberGroupEdit />,
+                                <MokaCard title="사용자 목록">
+                                    <MemberGroupList />
+                                </MokaCard>,
+                                <MokaCard title="메뉴 권한">
+                                    <MemberGroupList />
+                                </MokaCard>,
+                            ]}
+                            tabNavWidth={48}
+                            tabNavPosition="right"
+                            tabNavs={[
+                                { title: '사이트 정보', text: 'Info' },
+                                { title: '페이지 검색', icon: <MokaIcon iconName="fal-file" /> },
+                                { title: '콘텐츠 스킨 검색', icon: <MokaIcon iconName="fal-file-alt" /> },
+                            ]}
+                        />
                     )}
                 />
             </Switch>

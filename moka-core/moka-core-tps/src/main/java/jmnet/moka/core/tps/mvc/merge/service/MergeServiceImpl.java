@@ -205,12 +205,6 @@ public class MergeServiceImpl implements MergeService {
             StringBuilder sb = dtm.merge(pageItem, containerItem, true, false, false, true);
             content = sb.toString();
 
-            // 미리보기 리소스 추가
-            String previewRsrc = dtm.mergeSource(area.getPreviewRsrc());
-            if (content.length() > 0 && previewRsrc.length() > 0) {
-                content = previewRsrc + content;
-            }
-
         } else {
             // 작업컴포넌트 목록 조회
             List<String> componentIdList = new ArrayList<String>();
@@ -224,12 +218,6 @@ public class MergeServiceImpl implements MergeService {
             // 랜더링
             StringBuilder sb = dtm.merge(pageItem, componentItem, true, false, false, true);
             content = sb.toString();
-
-            // 미리보기 리소스 추가
-            String previewRsrc = dtm.mergeSource(area.getPreviewRsrc());
-            if (content.length() > 0 && previewRsrc.length() > 0) {
-                content = previewRsrc + content;
-            }
         }
 
         return content;
@@ -307,9 +295,9 @@ public class MergeServiceImpl implements MergeService {
             String content = sb.toString();
 
             // 미리보기 리소스 추가
-            String previewRsrc = dtm.mergeSource(area.getPreviewRsrc());
-            if (content.length() > 0 && resourceYn.equals(MokaConstants.YES)) {
-                content = previewRsrc + content;
+            String previewRsrc = area.getPreviewRsrc();
+            if (McpString.isNotEmpty(previewRsrc) && resourceYn.equals(MokaConstants.YES)) {
+                content = dtm.mergePreviewResource(area.getPreviewRsrc(), content);
             }
 
             return content;
@@ -389,9 +377,9 @@ public class MergeServiceImpl implements MergeService {
                 content = sb.toString();
 
                 // 미리보기 리소스 추가
-                String previewRsrc = dtm.mergeSource(area.getPreviewRsrc());
-                if (content.length() > 0 && previewRsrc.length() > 0) {
-                    content = previewRsrc + content;
+                String previewRsrc = area.getPreviewRsrc();
+                if (McpString.isNotEmpty(previewRsrc)) {
+                    content = dtm.mergePreviewResource(area.getPreviewRsrc(), content);
                 }
 
             } else {
@@ -409,9 +397,9 @@ public class MergeServiceImpl implements MergeService {
                 content = sb.toString();
 
                 // 미리보기 리소스 추가
-                String previewRsrc = dtm.mergeSource(area.getPreviewRsrc());
-                if (content.length() > 0 && previewRsrc.length() > 0) {
-                    content = previewRsrc + content;
+                String previewRsrc = area.getPreviewRsrc();
+                if (McpString.isNotEmpty(previewRsrc)) {
+                    content = dtm.mergePreviewResource(area.getPreviewRsrc(), content);
                 }
             }
 

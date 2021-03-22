@@ -1,7 +1,7 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { MokaIconTabs } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
-const MenuEditContainerEdit = React.lazy(() => import('./MenuEditContainerEdit'));
+import MenuEditContainerEdit from './MenuEditContainerEdit';
 
 const MenuEditContainer = (props) => {
     const { handleClickDelete, menuSeq, depth, parentMenuId } = props;
@@ -14,11 +14,7 @@ const MenuEditContainer = (props) => {
                 className="flex-fill"
                 tabContentClass="w-100"
                 height={CARD_DEFAULT_HEIGHT}
-                tabs={[
-                    <Suspense>
-                        <MenuEditContainerEdit handleClickDelete={handleClickDelete} menuSeq={menuSeq} depth={depth} parentMenuId={parentMenuId} />
-                    </Suspense>,
-                ]}
+                tabs={[<MenuEditContainerEdit handleClickDelete={handleClickDelete} menuSeq={menuSeq} depth={depth} parentMenuId={parentMenuId} />]}
                 tabNavWidth={48}
                 tabNavPosition="right"
                 tabNavs={[{ title: '메뉴정보', text: 'Info' }]}

@@ -1,9 +1,21 @@
-import React, { forwardRef, useState, useCallback, useEffect } from 'react';
+import React, { forwardRef, useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
+import produce from 'immer';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputGroup, MokaIcon } from '@components';
-import { selectItem } from '@pages/Boards/BoardConst';
+
+const fileExt = [
+    { ext: 'zip', index: 0 },
+    { ext: 'xls', index: 1 },
+    { ext: 'xlsx', index: 2 },
+    { ext: 'ppt', index: 3 },
+    { ext: 'doc', index: 4 },
+    { ext: 'hwp', index: 5 },
+    { ext: 'jpg', index: 6 },
+    { ext: 'png', index: 7 },
+    { ext: 'gif', index: 8 },
+];
 
 /**
  * 커스텀 메뉴
@@ -32,7 +44,7 @@ const CustomToggle = forwardRef(({ children, onClick, isInvalid }, ref) => {
             <MokaInputGroup
                 value={children}
                 inputProps={{ readOnly: true }}
-                placeholder="매체를 선택하세요"
+                placeholder="확장자를 선택하세요"
                 inputClassName="bg-white cursor-pointer"
                 isInvalid={isInvalid}
                 append={
@@ -46,77 +58,113 @@ const CustomToggle = forwardRef(({ children, onClick, isInvalid }, ref) => {
 });
 
 /**
- * 게시글 등록시 선택할수 있은 파일 확장자 선택 컨퍼넌트
- * 일반 적인 select box 가 아니고 해당 컨퍼넌트가 공통으로 쓰는곳이 없어서 대시보드에 있는 Select 컨퍼넌트(매체 선택)를 가지오 옴.
+ * 게시글 파일 확장자 선택 컴포넌트
  */
-const FileExtSelect = (props) => {
-    const { isInvalid, value, selectChange, dropdownHeight } = props;
+const FileExtSelector = (props) => {
+    const { isInvalid, value, onChange, dropdownHeight, disabled } = props;
     const [toggleText, setToggleText] = useState('전체');
+    // const [itemsObj, setItemsObj] = useState({});
     const [selectItems, setSelectItems] = useState([]);
 
-    // 선택 체크 해제 되었을 경우 스테이트 업데이트
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const handleChangeValue = useCallback((e) => {
-        const { name, checked } = e.target;
-        let tempItems = [];
+    // const originIndex = useCallback((id) => itemsObj.findIndex((origin) => origin.code === id.code), [originList]);
 
-        if (checked === true) {
-            if (name === 'all') {
-                tempItems = selectItem.FileExt;
-            } else {
-                tempItems = [...selectItems, name];
+    /**
+     * 체크 해제 되었을 경우 state 업데이트
+     */
+    const handleChangeValue = (e) => {
+        const { id, checked } = e.target;
+        let itemList = [];
 
-                // 선택한 아이템이 전체 일경우.
-                if (selectItem.FileExt.length - 1 === tempItems.length) {
-                    // tempItems.unshift('all');
+        if (typeof onChange === 'function') {
+            if (id === 'file-all') {
+                if (checked) {
+                    onChange('all');
+                    setToggleText('전체');
+                } else {
+                    onChange('');
+                    setToggleText('');
                 }
-            }
-        } else if (checked === false) {
-            if (name === 'all') {
-                tempItems = [];
             } else {
-                tempItems = selectItems;
+                const targetIdx = fileExt.indexOf(id);
+
+                if (checked) {
+                    itemList = [...selectItems, fileExt[targetIdx]].sort((a, b) => {
+                        return a.index - b.index;
+                    });
+                } else {
+                    const isSelected = fileExt.indexOf(id);
+                    if (isSelected > -1) {
+                        itemList = produce(selectItems, (draft) => {
+                            draft.splice(isSelected, 1);
+                        });
+                    }
+                }
+                onChange(itemList.join(','));
             }
         }
-        setSelectItems(tempItems);
-    });
+    };
 
-    // 설정된 리스트중 체크 및 해제 되었을떄 내용 업데이트 및 상위에 전달.
-    useEffect(() => {
-        let selectItemsValue = selectItems
-            .filter((e) => e !== 'all')
-            .map((e) => {
-                return e === 'all' ? '전체' : e;
-            })
-            .join(',');
-        setToggleText(selectItem.FileExt.length === selectItems.length ? '전체' : selectItemsValue);
-        selectChange({
-            target: {
-                name: 'allowFileExt',
-                value: selectItemsValue,
-            },
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectItems]);
+    const chkTrue = (id) => {
+        if (!value || value === '') return false;
+        else if (toggleText === '전체') return true;
+        else return value.split(',').indexOf(id) > -1;
+    };
 
-    // 상위에서 내려온 리스트를 설정. ( 기존 수정시 데이터를 설정)
+    // useEffect(() => {
+    //     setItemsObj(fileExt);
+    // }, []);
+
+    // useEffect(() => {
+    //     if (selectItems.length > 0) {
+    //         const targetIdx = itemIndex(originSelectedList[0]);
+    //         const target = originObj[targetIdx];
+
+    //         if (originSelectedList.length + 1 === Object.keys(originObj).length) {
+    //             setToggleText('전체');
+    //         } else if (originSelectedList.length === 1) {
+    //             setToggleText(target.name);
+    //         } else {
+    //             setToggleText(`${target.name} 외 ${originSelectedList.length - 1}개`);
+    //         }
+    //     } else {
+    //         setToggleText('');
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [originIndex, originObj, originSelectedList]);
+
     useEffect(() => {
-        if (value.length > 0) {
-            let tempItems = value
-                .split(',')
-                .map((e) => e.replace(' ', ''))
-                .filter((e) => e !== '');
-            if (selectItem.FileExt.length - 1 === tempItems.length) {
-                tempItems.unshift('all');
-            }
-            setSelectItems(tempItems);
+        if (selectItems.length === fileExt.length) {
+            setToggleText('전체');
+        } else {
+            setToggleText('');
         }
-    }, [value]);
+    }, [selectItems.length]);
 
-    // 최초 로딩시 설정 해 놓은 리스트를 설정...
-    useEffect(() => {
-        setSelectItems(selectItem.FileExt);
-    }, []);
+    // useEffect(() => {
+    //     if (value || value === '') {
+    //         if (value.length === fileExt.length) {
+    //             setSelectItems(
+    //                 Object.values(itemsObj).map((i) => {
+    //                     const targetIndex = fileExt.indexOf(i);
+    //                     return itemsObj[targetIndex];
+    //                 }),
+    //             );
+    //             setToggleText('전체');
+    //         } else {
+    //             const valueArr = value
+    //                 .split(',')
+    //                 .map((e) => e.replace(' ', ''))
+    //                 .filter((i) => i !== '');
+
+    //             setSelectItems(
+    //                 valueArr.map((i) => {
+    //                     const targetIndex = fileExt.indexOf(i);
+    //                     return itemsObj[targetIndex];
+    //                 }),
+    //             );
+    //         }
+    //     }
+    // }, [itemsObj, value]);
 
     return (
         <Dropdown className={clsx('flex-fill')}>
@@ -125,16 +173,17 @@ const FileExtSelect = (props) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll w-100">
-                {selectItem.FileExt.map((e, idex) => {
+                <MokaInput id="file-all" onChange={handleChangeValue} as="checkbox" inputProps={{ label: '전체', custom: true, checked: toggleText === '전체' }} />
+                {fileExt.map((i) => {
                     return (
                         <MokaInput
-                            key={idex}
-                            id={e}
-                            name={e}
-                            onChange={handleChangeValue}
-                            className={clsx({ 'mb-2': false })}
                             as="checkbox"
-                            inputProps={{ label: e === 'all' ? '전체' : e, custom: true, checked: selectItems.includes(e) }}
+                            key={i}
+                            id={i}
+                            name="itemList"
+                            onChange={handleChangeValue}
+                            disabled={disabled}
+                            inputProps={{ label: i, custom: true, checked: chkTrue(i) }}
                         />
                     );
                 })}
@@ -142,4 +191,4 @@ const FileExtSelect = (props) => {
         </Dropdown>
     );
 };
-export default FileExtSelect;
+export default FileExtSelector;

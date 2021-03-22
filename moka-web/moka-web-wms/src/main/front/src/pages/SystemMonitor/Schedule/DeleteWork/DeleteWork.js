@@ -1,8 +1,7 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Route } from 'react-router-dom';
+import DeleteWorkList from './DeleteWorkList';
 import DeleteWorkEdit from './DeleteWorkEdit';
-
-const DeleteWorkList = React.lazy(() => import('./DeleteWorkList'));
 
 /**
  * 스케줄 서버 관리 > 삭제 작업 목록
@@ -14,17 +13,13 @@ const DeleteWork = (props) => {
         <div className="h-100 d-flex">
             {/* 삭제 작업 목록 */}
             <div className="mr-gutter" style={{ width: 825 }}>
-                <Suspense>
-                    <DeleteWorkList match={match} />
-                </Suspense>
+                <DeleteWorkList match={match} />
             </div>
 
             {/* 삭제 작업 조회 */}
             <Route path={[`${match.path}/work-delete/:jobSeq`]}>
                 <div className="flex-fill">
-                    <Suspense>
-                        <DeleteWorkEdit match={match} />
-                    </Suspense>
+                    <DeleteWorkEdit match={match} />
                 </div>
             </Route>
         </div>

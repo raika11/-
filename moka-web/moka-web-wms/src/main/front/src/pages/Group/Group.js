@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import Helmet from 'react-helmet';
 import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
@@ -10,12 +10,6 @@ import { Col, Row } from 'react-bootstrap';
 import GroupList from '@pages/Group/GroupList';
 import GroupEdit from '@pages/Group/GroupEdit';
 import GroupChildGroupMemberEdit from '@pages/Group/relations/GroupChildGroupMemberEdit';
-
-// relations
-
-/*const MemberGroupList = React.lazy(() => import('./GroupList'));
-const GroupEdit = React.lazy(() => import('./GroupEdit'));
-const GroupChildGroupMemberEdit = React.lazy(() => import('./relations/GroupChildGroupMemberEdit'));*/
 
 /**
  * 그룹 관리
@@ -44,17 +38,17 @@ const Group = ({ match }) => {
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            {/*리스트*/}
+            {/* 리스트 */}
             <MokaCard title="사용자 그룹관리" width={480} className="mr-gutter" bodyClassName="d-flex flex-column">
                 <div className="mb-14 d-flex justify-content-end">
                     <Button variant="positive" onClick={handleClickAddGroup}>
                         등록
                     </Button>
                 </div>
-                <Suspense>
-                    <GroupList />
-                </Suspense>
+
+                <GroupList />
             </MokaCard>
+
             <Switch>
                 <Route
                     path={[`${match.path}/add`, `${match.path}/:groupCd`]}

@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
@@ -54,9 +54,7 @@ const JpodChannel = ({ match }) => {
             <Row className="m-0">
                 {/* 리스트 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
-                    <Suspense>
-                        <NoticeList match={match} />
-                    </Suspense>
+                    <NoticeList match={match} />
                 </Col>
                 {/* 등록 / 수정 */}
                 {(matchPoints.md || matchPoints.lg) && (
@@ -70,11 +68,7 @@ const JpodChannel = ({ match }) => {
                                     `${match.path}/:boardId/:parentBoardSeq/reply/:boardSeq`,
                                 ]}
                                 exact
-                                render={() => (
-                                    <Suspense>
-                                        <NoticeEdit match={match} />
-                                    </Suspense>
-                                )}
+                                render={() => <NoticeEdit match={match} />}
                             />
                         </Switch>
                     </Col>
@@ -91,9 +85,7 @@ const JpodChannel = ({ match }) => {
                             exact
                             render={() => (
                                 <Col xs={7} className="absolute-top-right h-100 overlay-shadow p-0" style={{ zIndex: 2 }}>
-                                    <Suspense>
-                                        <NoticeEdit match={match} />
-                                    </Suspense>
+                                    <NoticeEdit match={match} />
                                 </Col>
                             )}
                         />

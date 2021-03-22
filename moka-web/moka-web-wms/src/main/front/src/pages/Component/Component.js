@@ -1,19 +1,18 @@
-import React, { useCallback, useState, Suspense } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { MokaCard, MokaIcon, MokaLoader } from '@components';
+import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { clearStore, deleteComponent, hasRelationList } from '@store/component';
 import toast, { messageBox } from '@utils/toastUtil';
 import { ITEM_CP } from '@/constants';
-
 import ComponentEdit from './ComponentEdit';
+import ComponentList from './ComponentList';
 import RelationInPageList from '@pages/Page/components/RelationInPageList';
-const ComponentList = React.lazy(() => import('./ComponentList'));
-const RelationInArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/RelationInArticlePageList'));
-const RelationInContainerList = React.lazy(() => import('@pages/Container/components/RelationInContainerList'));
+import RelationInArticlePageList from '@pages/ArticlePage/components/RelationInArticlePageList';
+import RelationInContainerList from '@pages/Container/components/RelationInContainerList';
 
 /**
  * 컴포넌트 관리
@@ -103,9 +102,7 @@ const Component = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
-                <Suspense>
-                    <ComponentList onDelete={handleClickDelete} match={match} />
-                </Suspense>
+                <ComponentList onDelete={handleClickDelete} match={match} />
             </MokaCard>
 
             <Route
@@ -123,12 +120,8 @@ const Component = ({ match }) => {
                             tabWidth={412}
                             tabs={[
                                 <RelationInPageList show={activeTabIdx === 0} relSeqType={ITEM_CP} relSeq={component.componentSeq} />,
-                                <Suspense fallback={<MokaLoader />}>
-                                    <RelationInArticlePageList show={activeTabIdx === 1} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
-                                </Suspense>,
-                                <Suspense fallback={<MokaLoader />}>
-                                    <RelationInContainerList show={activeTabIdx === 2} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
-                                </Suspense>,
+                                <RelationInArticlePageList show={activeTabIdx === 1} relSeqType={ITEM_CP} relSeq={component.componentSeq} />,
+                                <RelationInContainerList show={activeTabIdx === 2} relSeqType={ITEM_CP} relSeq={component.componentSeq} />,
                             ]}
                             tabNavWidth={48}
                             tabNavPosition="right"

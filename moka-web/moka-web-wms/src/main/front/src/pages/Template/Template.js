@@ -1,24 +1,24 @@
-import React, { useState, Suspense, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import produce from 'immer';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { MokaCard, MokaIcon, MokaLoader } from '@components';
+import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_TP } from '@/constants';
 import { clearStore, deleteTemplate, hasRelationList, changeTemplateBody } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
 import TemplateEditor from './TemplateEditor';
 import TemplateEdit from './TemplateEdit';
-const TemplateList = React.lazy(() => import('./TemplateList'));
+import TemplateList from './TemplateList';
 
 // relations
-const RelationInPageList = React.lazy(() => import('@pages/Page/components/RelationInPageList'));
-const RelationInArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/RelationInArticlePageList'));
-const RelationInContainerList = React.lazy(() => import('@pages/Container/components/RelationInContainerList'));
-const RelationInComponentList = React.lazy(() => import('@pages/Component/components/RelationInComponentList'));
-const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
+import RelationInPageList from '@pages/Page/components/RelationInPageList';
+import RelationInArticlePageList from '@pages/ArticlePage/components/RelationInArticlePageList';
+import RelationInContainerList from '@pages/Container/components/RelationInContainerList';
+import RelationInComponentList from '@pages/Component/components/RelationInComponentList';
+import HistoryList from '@pages/commons/HistoryList';
 
 /**
  * 템플릿 관리
@@ -171,9 +171,7 @@ const Template = ({ match }) => {
                 onExpansion={handleListExpansion}
                 foldable
             >
-                <Suspense>
-                    <TemplateList onDelete={handleClickDelete} match={match} />
-                </Suspense>
+                <TemplateList onDelete={handleClickDelete} match={match} />
             </MokaCard>
 
             <Route
@@ -185,42 +183,30 @@ const Template = ({ match }) => {
                         <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} match={match} />
 
                         {/* 탭 */}
-                        <Suspense>
-                            <MokaIconTabs
-                                expansion={expansionState[2]}
-                                onExpansion={handleTabExpansion}
-                                onSelectNav={(idx) => setActiveTabIdx(idx)}
-                                tabWidth={412}
-                                tabs={[
-                                    <TemplateEdit show={activeTabIdx === 0} onDelete={handleClickDelete} match={match} />,
-                                    <Suspense fallback={<MokaLoader />}>
-                                        <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
-                                    </Suspense>,
-                                    <Suspense fallback={<MokaLoader />}>
-                                        <RelationInArticlePageList show={activeTabIdx === 2} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
-                                    </Suspense>,
-                                    <Suspense fallback={<MokaLoader />}>
-                                        <RelationInContainerList show={activeTabIdx === 3} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
-                                    </Suspense>,
-                                    <Suspense fallback={<MokaLoader />}>
-                                        <RelationInComponentList show={activeTabIdx === 4} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
-                                    </Suspense>,
-                                    <Suspense fallback={<MokaLoader />}>
-                                        <HistoryList show={activeTabIdx === 5} seqType={ITEM_TP} seq={template.templateSeq} onLoad={handleClickLoad} />
-                                    </Suspense>,
-                                ]}
-                                tabNavWidth={48}
-                                tabNavPosition="right"
-                                tabNavs={[
-                                    { title: '템플릿 정보', text: 'Info' },
-                                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                                    { title: '관련 아티클페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
-                                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
-                                    { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
-                                    { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
-                                ]}
-                            />
-                        </Suspense>
+                        <MokaIconTabs
+                            expansion={expansionState[2]}
+                            onExpansion={handleTabExpansion}
+                            onSelectNav={(idx) => setActiveTabIdx(idx)}
+                            tabWidth={412}
+                            tabs={[
+                                <TemplateEdit show={activeTabIdx === 0} onDelete={handleClickDelete} match={match} />,
+                                <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_TP} relSeq={template.templateSeq} />,
+                                <RelationInArticlePageList show={activeTabIdx === 2} relSeqType={ITEM_TP} relSeq={template.templateSeq} />,
+                                <RelationInContainerList show={activeTabIdx === 3} relSeqType={ITEM_TP} relSeq={template.templateSeq} />,
+                                <RelationInComponentList show={activeTabIdx === 4} relSeqType={ITEM_TP} relSeq={template.templateSeq} />,
+                                <HistoryList show={activeTabIdx === 5} seqType={ITEM_TP} seq={template.templateSeq} onLoad={handleClickLoad} />,
+                            ]}
+                            tabNavWidth={48}
+                            tabNavPosition="right"
+                            tabNavs={[
+                                { title: '템플릿 정보', text: 'Info' },
+                                { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
+                                { title: '관련 아티클페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
+                                { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
+                                { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
+                            ]}
+                        />
                     </React.Fragment>
                 )}
             />

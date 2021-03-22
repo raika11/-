@@ -1,11 +1,11 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import SpecialEdit from './SpecialEdit';
 import { clearStore } from '@store/special';
-const SpecialList = React.lazy(() => import('./SpecialList'));
+import SpecialList from './SpecialList';
 
 /**
  * 디지털 스페셜 관리
@@ -17,8 +17,7 @@ const Special = ({ match }) => {
         return () => {
             dispatch(clearStore());
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="d-flex">
@@ -30,9 +29,7 @@ const Special = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard width={814} className="mr-gutter" bodyClassName="d-flex flex-column" title="디지털 스페셜">
-                <Suspense>
-                    <SpecialList match={match} />
-                </Suspense>
+                <SpecialList match={match} />
             </MokaCard>
 
             {/* 등록/수정 */}

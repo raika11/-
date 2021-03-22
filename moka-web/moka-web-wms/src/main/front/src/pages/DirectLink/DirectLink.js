@@ -1,12 +1,11 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { MokaCard } from '@components';
 import { clearStore } from '@store/directLink';
 import DirectLinkEdit from './DirectLinkEdit';
-
-const DirectLinkList = React.lazy(() => import('./DirectLinkList'));
+import DirectLinkList from './DirectLinkList';
 
 /**
  * 사이트 바로 가기 관리
@@ -30,9 +29,7 @@ const DirectLink = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard width={940} className="mr-gutter" bodyClassName="d-flex flex-column" title="사이트 바로 가기">
-                <Suspense>
-                    <DirectLinkList match={match} />
-                </Suspense>
+                <DirectLinkList match={match} />
             </MokaCard>
 
             {/* 등록/수정창 */}

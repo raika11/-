@@ -111,6 +111,7 @@ public class TpsConstants extends MokaConstants {
     public static final String API_PATH = "apiPath";
 
     public static final String SUPER_ADMIN_GROUP_CD = "999";
+    public static final String TEST_ADMIN_GROUP_CD = "333"; // 사용자 그룹 권한 테스트용, 테스트 완료 후 삭제 요망
 
     /**
      * 프로시져 호출결과 성공여부

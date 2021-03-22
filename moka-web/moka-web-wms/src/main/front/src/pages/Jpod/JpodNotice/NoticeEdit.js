@@ -10,8 +10,8 @@ import toast, { messageBox } from '@utils/toastUtil';
 // import { GET_BOARD_CONTENTS, clearBoardContents, changeSelectBoard, clearSelectBoard, getJpodNotice, getBoardContents } from '@store/jpod';
 import { GET_BOARD_CONTENTS, getJpodNotice, getBoardContents } from '@store/jpod';
 
-// import { uploadBoardContentImage, updateBoardContents, saveBoardReply, saveBoardContents, deleteBoardContents } from '@store/board';
-import { uploadBoardContentImage, updateBoardContents, saveBoardContents, deleteBoardContents } from '@store/board';
+// import { uploadBoardContentsImage, updateBoardContents, saveBoardReply, saveBoardContents, deleteBoardContents } from '@store/board';
+import { uploadBoardContentsImage, updateBoardContents, saveBoardContents, deleteBoardContents } from '@store/board';
 
 import BoardRepoterSelect from '@pages/Boards/BoardsList/BoardsEdit/BoardRepoterSelect';
 import BoardsSummernote from '@pages/Boards/BoardsList/BoardsEdit/BoardsSummernote';
@@ -257,7 +257,7 @@ const NoticeEdit = ({ match }) => {
         formData.append('attachFile', file[0]);
 
         dispatch(
-            uploadBoardContentImage({
+            uploadBoardContentsImage({
                 boardId: boardId.current,
                 imageForm: formData,
                 callback: ({ header: { success, message }, body }) => {
@@ -728,10 +728,10 @@ const NoticeEdit = ({ match }) => {
                                             <Col className="p-0">
                                                 <BoardsSummernote
                                                     contentValue={editData.content}
-                                                    editChange={(value) => {
+                                                    onChangeValue={(value) => {
                                                         setEditContents(value);
                                                     }}
-                                                    editImageUpload={(e) => SummernoteImageUpload(e)}
+                                                    onImageUpload={(e) => SummernoteImageUpload(e)}
                                                 />
                                             </Col>
                                         </Form.Row>

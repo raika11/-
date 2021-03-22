@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
+import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaIcon, MokaInputLabel, MokaInput, MokaTableEditCancleButton } from '@components';
@@ -21,41 +22,15 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
     const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
     const loading = useSelector((store) => store.loading[GET_LIST_MENU_CONTENTS_INFO]);
 
-    const [channalList, setChannalList] = useState([]); // 채넌 선택.
-    const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일.
+    const [channalList, setChannalList] = useState([]); // 채널 선택
+    const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일
     let fileinputRef = useRef(null);
 
-    const SelectReport = (e) => {
-        onChangeFormData({
-            target: {
-                name: 'channelId',
-                value: e,
-            },
-        });
-    };
-
-    useEffect(() => {
-        const getchannelTypeItem = (channelType) => {
-            // BOARD_DIVC1 -> JPOD.
-            // BOARD_DIVC2 -> 기자.
-            dispatch(
-                getBoardChannelList({
-                    type: channelType,
-                    callback: (element) => {
-                        setChannalList(element);
-                    },
-                }),
-            );
-        };
-
-        if (selectBoard && selectBoard.channelType) {
-            getchannelTypeItem(selectBoard.channelType);
-        }
-    }, [dispatch, selectBoard]);
-
-    // 이미지 추가 처리.
+    /**
+     * 첨부 파일 등록
+     */
     const handleChangeFileInput = (event) => {
-        // 게시판 설정 확장자 체크.
+        // 게시판 설정 확장자 체크
         let extCheck = false;
         try {
             let tempFile = event.target.files[0].name.split('.');
@@ -80,12 +55,20 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         fileinputRef.current.value = '';
     };
 
-    // 이미지 삭제 처리.
-    const handleDeleteUploadFile = (stateIndex) => {
-        setUploadFiles(uploadFiles.filter((e, i) => i !== stateIndex));
+    /**
+     * 첨부파일 삭제
+     */
+    const handleDeleteUploadFile = (index) => {
+        setUploadFiles(
+            produce(uploadFiles, (draft) => {
+                draft.splice(index, 1);
+            }),
+        );
     };
 
-    // 이미지 리스트 클릭시 새텝
+    /**
+     * 이미지 리스트 클릭시 새탭
+     */
     const handleClickImageName = (element) => {
         const { file_url } = element;
         if (file_url) {
@@ -93,6 +76,22 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
             win.focus();
         }
     };
+
+    useEffect(() => {
+        if (selectBoard && selectBoard.channelType) {
+            // BOARD_DIVC1 -> JPOD
+            // BOARD_DIVC2 -> 기자
+            dispatch(
+                getBoardChannelList({
+                    type: selectBoard.channelType,
+                    callback: (element) => {
+                        if (typeof element === 'object') setChannalList(element);
+                        else return;
+                    },
+                }),
+            );
+        }
+    }, [dispatch, selectBoard]);
 
     useEffect(() => {
         onChangeFormData({
@@ -105,9 +104,19 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
     }, [uploadFiles]);
 
     useEffect(() => {
+        onChangeFormData({
+            target: {
+                name: 'content',
+                value: data.content,
+            },
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data.content]);
+
+    useEffect(() => {
         if (loading === false) {
             setUploadFiles(
-                data.attaches.map((element, i) => {
+                data.attaches.map((element) => {
                     const { seqNo, orgFileName, filePath, fileName } = element;
                     const file_url = PDS_URL && filePath && fileName ? `${PDS_URL}/${filePath}/${fileName}` : '';
                     return {
@@ -170,10 +179,15 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                     (selectBoard.channelType === 'BOARD_DIVC2' ? (
                         // 기자
                         <BoardRepoterSelect
-                            ChannalList={channalList}
-                            SelectValue={data.channelId}
-                            OnChange={(e) => {
-                                SelectReport(e.value);
+                            channalList={channalList}
+                            selectValue={data.channelId}
+                            onChange={(value) => {
+                                onChangeFormData({
+                                    target: {
+                                        name: 'channelId',
+                                        value: value,
+                                    },
+                                });
                             }}
                         />
                     ) : (
@@ -229,7 +243,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                 )}
 
                 <Form.Row className="mb-2 align-items-center">
-                    <MokaInputLabel label="노출순서" type="number" name="ordNo" placeholder={'노출순서'} value={data.ordNo} onChange={(e) => onChangeFormData(e)} />
+                    <MokaInputLabel label="노출 순서" type="number" name="ordNo" placeholder={'노출순서'} value={data.ordNo} onChange={(e) => onChangeFormData(e)} />
                     <p className="mb-0 ml-20 text-neutral">
                         * 공지 글과 같이 상단에 노출되는 경우는 <br />
                         적은 숫자(예: 0)로 입력해주세요
@@ -241,7 +255,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                         name="pushReceiveYn"
                         id="pushReceiveYn"
                         label="답변 PUSH 수신"
-                        inputProps={{ checked: data.pushReceiveYn === 'Y', readOnly: true }}
+                        inputProps={{ custom: true, checked: data.pushReceiveYn === 'Y', disabled: true }}
                         onChange={(e) => onChangeFormData(e)}
                     />
                     <p className="mb-0 ml-2">답변에 대한 APP 푸쉬를 받을 수 있습니다.</p>
@@ -253,7 +267,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                         id="emailReceiveYn"
                         className="mr-2"
                         label="발송 이메일"
-                        inputProps={{ checked: data.emailReceiveYn === 'Y' }}
+                        inputProps={{ custom: true, checked: data.emailReceiveYn === 'Y' }}
                         onChange={(e) => onChangeFormData(e)}
                     />
                     <MokaInputLabel
@@ -291,7 +305,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                         </Col>
                     </Form.Row>
                 ) : ( */}
-                <BoardsNote editContentData={contentsInfo.content} />
+                <BoardsNote data={data.content} onChangeFormData={onChangeFormData} />
                 {/* )} */}
 
                 <hr className="divider" />
@@ -300,7 +314,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                     <>
                         <Form.Row>
                             <Col xs={4} className="p-0">
-                                <MokaInputLabel label={`첨부파일`} as="none" className="mb-2" />
+                                <MokaInputLabel label="첨부파일" as="none" className="mb-2" />
                             </Col>
                             <Col xs={8} className="p-0 text-right">
                                 <div className="file btn btn-primary" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -342,22 +356,22 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
 
                 {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('EMAIL') >= 0 && (
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label="이메일" value={data.email} inputProps={{ readOnly: true, plaintext: true }} />
+                        <MokaInputLabel label="이메일" value={contentsInfo.email} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
                 {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('MOBILE_POHONE') >= 0 && (
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label="휴대폰 번호" value={data.mobilePhone} inputProps={{ readOnly: true, plaintext: true }} />
+                        <MokaInputLabel label="휴대폰 번호" value={contentsInfo.mobilePhone} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
                 {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('ADDR') >= 0 && (
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label="주소" value={data.addr} inputProps={{ readOnly: true, plaintext: true }} />
+                        <MokaInputLabel label="주소" value={contentsInfo.addr} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
                 {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('URL') >= 0 && (
                     <Form.Row>
-                        <MokaInputLabel label="URL" value={data.url} inputProps={{ readOnly: true, plaintext: true }} />
+                        <MokaInputLabel label="URL" value={contentsInfo.url} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
             </Form>

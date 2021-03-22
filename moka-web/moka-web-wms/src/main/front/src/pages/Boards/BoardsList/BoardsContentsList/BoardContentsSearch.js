@@ -151,14 +151,17 @@ const BoardContentsSearch = () => {
                     />
                 </Col>
 
-                {/* 게시판 선택 */}
-                <MokaInput className="mr-2" as="select" name="delYn" id="delYn" value={search.delYn} onChange={handleChangeValue}>
-                    <option value="">전체</option>
-                    <option value="N">노출</option>
-                    <option value="Y">삭제</option>
-                </MokaInput>
+                {/* 게시판 노출 여부 */}
+                <Col xs={1} className="p-0 pr-2">
+                    <MokaInput as="select" name="delYn" id="delYn" value={search.delYn} onChange={handleChangeValue}>
+                        <option value="">전체</option>
+                        <option value="N">노출</option>
+                        <option value="Y">삭제</option>
+                    </MokaInput>
+                </Col>
 
                 {selectBoard?.titlePrefixNm1 && (
+                    // 첫번째 분류가 있으면
                     <MokaInput className="mr-2" as="select" name="titlePrefix1" id="titlePrefix1" value={search.titlePrefix1} onChange={handleChangeValue}>
                         <option value="">{selectBoard.titlePrefixNm1}</option>
                         {selectBoard.titlePrefix1
@@ -173,7 +176,8 @@ const BoardContentsSearch = () => {
                 )}
 
                 {selectBoard?.titlePrefixNm2 && (
-                    <MokaInput className="mr-1" as="select" name="titlePrefix2" id="titlePrefix2" value={search.titlePrefix2} onChange={handleChangeValue}>
+                    // 두번째 분류가 있으면
+                    <MokaInput className="mr-2" as="select" name="titlePrefix2" id="titlePrefix2" value={search.titlePrefix2} onChange={handleChangeValue}>
                         <option value="">{selectBoard.titlePrefixNm2}</option>
                         {selectBoard.titlePrefix2
                             .replaceAll(' ', '')

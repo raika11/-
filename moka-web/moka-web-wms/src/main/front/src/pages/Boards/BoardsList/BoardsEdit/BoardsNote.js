@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import BoardsSummernote from './BoardsSummernote';
-import { GET_LIST_MENU_CONTENTS_INFO, uploadBoardContentImage, changeListMenuContent } from '@store/board';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import { uploadBoardContentsImage, changeListMenuContents } from '@store/board';
 import toast, { messageBox } from '@utils/toastUtil';
+import BoardsSummernote from './BoardsSummernote';
 
-const BoardsNote = () => {
+/**
+ * 게시판 관리 > 게시글 관리 > 게시판 편집 폼 > 게시글 썸머노트 편집
+ */
+const BoardsNote = ({ data, onChangeFormData }) => {
     const dispatch = useDispatch();
-    const { contentsinfo, selectBoard } = useSelector((store) => ({
-        contentsinfo: store.board.listMenu.contents.info,
-        selectBoard: store.board.listMenu.selectBoard,
-        loading: store.loading[GET_LIST_MENU_CONTENTS_INFO],
-    }));
+    const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
+    const selectBoard = useSelector((store) => store.board.listMenu.selectBoard);
 
-    const [contentData, setContentData] = useState(null);
+    const [contentsData, setContentsData] = useState(data);
 
-    // summernote 이미지 업로드 처리.
-    const SummernoteImageUpload = (file) => {
+    /**
+     * summernote 이미지 업로드 처리
+     */
+    const SummernoteImageUpload = (files) => {
         const formData = new FormData();
-        formData.append('attachFile', file[0]);
+        formData.append('attachFile', files[0]);
 
         dispatch(
-            uploadBoardContentImage({
+            uploadBoardContentsImage({
                 boardId: selectBoard.boardId,
                 imageForm: formData,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
-                        toast.success(message);
-                        let tempContent = `${contentsinfo.content} <img src="${body}">`;
-
-                        dispatch(changeListMenuContent({ content: tempContent }));
-                        setContentData(tempContent);
+                        let tempContent = `${contentsInfo.content} <img src="${body}">`;
+                        // dispatch(changeListMenuContents({ content: tempContent }));
+                        setContentsData(tempContent);
                     } else {
                         const { totalCnt, list } = body;
                         if (totalCnt > 0 && Array.isArray(list)) {
@@ -47,29 +48,32 @@ const BoardsNote = () => {
     };
 
     useEffect(() => {
-        if (contentData === null) {
-            setContentData(contentsinfo.content);
-        } else if (contentData !== null && contentsinfo.content === null) {
-            setContentData('');
-        }
+        setContentsData(data);
+    }, [data]);
+
+    useEffect(() => {
+        onChangeFormData({
+            target: {
+                name: 'content',
+                value: contentsData,
+            },
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [contentsinfo]);
+    }, [contentsData]);
 
     return (
-        <>
-            <Form.Row className="mb-2">
-                <Col className="p-0">
-                    <BoardsSummernote
-                        contentValue={contentData}
-                        editChange={(value) => {
-                            dispatch(changeListMenuContent({ content: value }));
-                            // setContentData(value);
-                        }}
-                        editImageUpload={(e) => SummernoteImageUpload(e)}
-                    />
-                </Col>
-            </Form.Row>
-        </>
+        <Form.Row className="mb-2">
+            <Col className="p-0">
+                <BoardsSummernote
+                    contentValue={contentsData}
+                    onChangeValue={(value) => {
+                        // dispatch(changeListMenuContents({ content: value }));
+                        setContentsData(value);
+                    }}
+                    onImageUpload={(e) => SummernoteImageUpload(e)}
+                />
+            </Col>
+        </Form.Row>
     );
 };
 

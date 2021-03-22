@@ -148,7 +148,7 @@ export const BannedColumnDefs = {
         {
             headerName: '',
             colId: 'button',
-            width: 60,
+            width: 80,
             field: 'bannedElement',
             cellRenderer: 'banneButtonRenderer',
             cellStyle: { display: 'flex', alignItems: 'center' },

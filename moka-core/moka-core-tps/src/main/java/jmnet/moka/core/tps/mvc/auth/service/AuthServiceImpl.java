@@ -57,10 +57,13 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         if (groupMembers != null && !groupMembers.isEmpty()) {
             if (groupMembers
                     .stream()
-                    .filter(gm -> gm
+                    .filter(gm -> (gm
                             .getGroup()
                             .getGroupCd()
-                            .equals(TpsConstants.SUPER_ADMIN_GROUP_CD) && MokaConstants.YES.equals(gm.getUsedYn()))
+                            .equals(TpsConstants.SUPER_ADMIN_GROUP_CD) || gm
+                            .getGroup()
+                            .getGroupCd()
+                            .equals(TpsConstants.TEST_ADMIN_GROUP_CD)) && MokaConstants.YES.equals(gm.getUsedYn()))
                     .count() > 0) {
                 return Arrays.asList(new SimpleGrantedAuthority(TpsConstants.ROLE_SUPERADMIN));
             }

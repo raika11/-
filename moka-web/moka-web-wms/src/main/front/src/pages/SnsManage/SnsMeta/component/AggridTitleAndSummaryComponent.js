@@ -1,16 +1,8 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
 import { MokaIcon } from '@components';
 
-const AggridTitleAndSummaryComponent = forwardRef((params, ref) => {
+const AggridTitleAndSummaryComponent = (params) => {
     const { title, reservation, summary } = params.node.data;
-
-    useImperativeHandle(
-        ref,
-        () => ({
-            refresh: () => true,
-        }),
-        [],
-    );
 
     return (
         <div className="h-100 d-flex flex-column justify-content-center">
@@ -27,6 +19,6 @@ const AggridTitleAndSummaryComponent = forwardRef((params, ref) => {
             </div>
         </div>
     );
-});
+};
 
 export default AggridTitleAndSummaryComponent;

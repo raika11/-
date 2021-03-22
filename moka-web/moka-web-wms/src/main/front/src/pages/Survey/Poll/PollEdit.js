@@ -58,7 +58,7 @@ const PollEdit = ({ onDelete }) => {
             let isValid = true;
             if (name === 'allowAnswCnt') {
                 if (edit.itemCnt < value) {
-                    toast.warning('허용 답변수는 보기 개수보다 클 수 없습니다.');
+                    toast.warning('허용답변수가 답변수보다 크거나 같습니다.');
                     isValid = false;
                 }
             }

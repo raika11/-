@@ -132,8 +132,9 @@ section{width:100%;}
 .bg_black{background-color:#000;}
 
 /** font color **/
-.font_black_default {color: #333;}
-.font_black_dark {color: #111;}
+.font_default {color: #333;}
+.font_dark {color: #111;}
+.font_black {color: #000;}
 .font_orange{color:#fb502f;}
 .js-text_search{color:#fb502f;}
 
@@ -446,6 +447,10 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .fs_lg8{font-size:16px;}
     .fs_lg9{font-size:14px;}
     .fs_lg10{font-size:13px;}
+    .fs_lg11{font-size:34px;}
+    .fs_lg12{font-size:36px;}
+    .fs_lg13{font-size:38px;}
+    .fs_lg14{font-size:40px;}
 
     /* grid */
     .col_lg1{flex:0 0 auto;width:8.33333%;}

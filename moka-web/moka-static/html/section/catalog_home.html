@@ -106,9 +106,9 @@
                 </div> -->
 
                 <!-- Slider main container -->
-                <div class="swiper-container">
+                <div class="swiper-container catalog_home">
                     <!-- Additional required wrapper -->
-                    <div class="swiper-wrapper catalog_main">
+                    <div class="swiper-wrapper">
                         <!-- Slides -->
                         <div class="swiper-slide ">
                             <div class="row">
@@ -346,27 +346,25 @@
 <script>
     var swiper = new Swiper('.swiper-container', {
         slidesPerView: 1,
-        spaceBetween: 40,
+        spaceBetween: 170,
         slidesPerGroup: 1,
         pagination: {
             el: '.swiper-pagination',
             clickable: true,
         },
         navigation: {
-                    nextEl: '.swiper-button-next.ss2',
-                    prevEl: '.swiper-button-prev.ss2',
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
                 },
         breakpoints: {
             1024: {
-                spaceBetween: 40,
+                // spaceBetween: 40,
             },
             768: {
-                slidesPerView: 3,
-                spaceBetween: 16,
+                // spaceBetween: 16,
             },
             414: {
-                slidesPerView: 2,
-                spaceBetween: 20,
+                // spaceBetween: 20,
                 centeredSlides: true,
             }
         },

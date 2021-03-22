@@ -126,8 +126,8 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                         {/* 포토 아카이브 모달 */}
                         <EditThumbModal
                             show={arcShow}
-                            cropHeight={290}
-                            cropWidth={180}
+                            cropWidth={290}
+                            cropHeight={180}
                             onHide={() => setArcShow(false)}
                             thumbFileName={special.imgUrl}
                             apply={handleThumbFileApply}
@@ -240,7 +240,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
 
             {/* 서비스시작일/서비스종료일 */}
             <Form.Row className="mb-2">
-                <Col xs={6} className="p-0 pr-10">
+                <Col xs={6} className="p-0 pr-3">
                     <MokaInputLabel
                         label="서비스 시작일"
                         as="dateTimePicker"
@@ -252,7 +252,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                         // invalidMessage={error.pageSdateMessage}
                     />
                 </Col>
-                <Col xs={6} className="p-0 pl-10">
+                <Col xs={6} className="p-0 pl-3">
                     <MokaInputLabel
                         label="서비스 종료일"
                         labelWidth={76}

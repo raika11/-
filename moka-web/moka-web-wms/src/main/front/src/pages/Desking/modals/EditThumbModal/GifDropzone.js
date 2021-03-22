@@ -1,31 +1,54 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import clsx from 'clsx';
 import produce from 'immer';
 import Button from 'react-bootstrap/Button';
-import { useDrop } from 'react-dnd';
-import { MokaIcon, MokaInputLabel } from '@components';
-import ThumbCard, { ItemTypes } from './ThumbCard';
-import toast from '@utils/toastUtil';
-import gifshot from 'gifshot';
-import moment from 'moment';
-import commonUtil from '@utils/commonUtil';
-import { IMAGE_PROXY_API } from '@/constants';
-import imageEditer from '@utils/imageEditorUtil';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { ACCEPTED_IMAGE_TYPES } from '@/constants';
+import { useDrop } from 'react-dnd';
+import moment from 'moment';
+import { IMAGE_PROXY_API, ACCEPTED_IMAGE_TYPES } from '@/constants';
+import toast from '@utils/toastUtil';
+import imageEditer from '@utils/imageEditorUtil';
+import { MokaIcon } from '@components';
+import ThumbCard, { ItemTypes } from './ThumbCard';
+import MakeGifModal from '../MakeGifModal';
 
 moment.locale('ko');
 
 /**
- * Gif 생성
+ * Gif를 생성하기 위한 이미지 드롭존
  */
 const GifDropzone = (props) => {
-    const { collapse, setCollapse, onThumbClick, onRepClick, setRepImg } = props;
+    const { collapse, setCollapse, onThumbClick, onRepClick, setRepImg, repImg, cropWidth, cropHeight } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
+    const [modalShow, setModalShow] = useState(false);
     const cardRef = useRef(null);
-    const [gifInterval, setGifInterval] = useState(0.5);
-    const [btnDisabled, setBtnDisabled] = useState('disabled');
+    const fileRef = useRef(null);
+
+    /**
+     * 로컬 이미지 추가
+     * @param {object} item file의 target
+     */
+    const addLocalImg = useCallback(
+        (item) => {
+            let imageFiles = [];
+            Array.from(item.files).forEach((f, idx) => {
+                if (ACCEPTED_IMAGE_TYPES.includes(f.type)) {
+                    const id = `${moment().format('YYYYMMDDsss')}_${idx}`;
+                    const preview = URL.createObjectURL(f);
+                    const imageData = { id: id, File: f, preview, dataType: 'local', thumbPath: preview, imageOnlnPath: `${IMAGE_PROXY_API}${encodeURIComponent(preview)}` };
+                    imageFiles.push(imageData);
+                } else {
+                    // 이미지 파일이 아닌경우
+                    toast.warning('이미지 파일만 등록할 수 있습니다.');
+                }
+            });
+
+            const arr = imgList.concat(imageFiles);
+            setImgList(arr);
+        },
+        [imgList],
+    );
 
     /**
      * 드롭존으로 사용하기 위한 hook
@@ -56,26 +79,8 @@ const GifDropzone = (props) => {
                         }),
                     );
                 }
-                onRepClick(item);
             } else {
-                let imageFiles = [];
-                item.files.forEach((f, idx) => {
-                    if (ACCEPTED_IMAGE_TYPES.includes(f.type)) {
-                        const id = moment().format('YYYYMMDDsss') + `_${idx}`;
-                        const preview = URL.createObjectURL(f);
-                        const imageData = { id: id, File: f, preview, dataType: 'local', thumbPath: preview, imageOnlnPath: preview };
-                        imageFiles.push(imageData);
-                        if (idx === item.files.length - 1) {
-                            onRepClick(imageData);
-                        }
-                    } else {
-                        // 이미지 파일이 아닌경우
-                        toast.warning('이미지 파일만 등록할 수 있습니다.');
-                    }
-                });
-
-                const arr = imgList.concat(imageFiles);
-                setImgList(arr);
+                addLocalImg(item);
             }
             setAddIndex(-1);
         },
@@ -84,6 +89,9 @@ const GifDropzone = (props) => {
         }),
     });
 
+    /**
+     * move card
+     */
     const moveCard = useCallback(
         (dragIndex, hoverIndex) => {
             const dragImg = imgList[dragIndex];
@@ -97,6 +105,10 @@ const GifDropzone = (props) => {
         [imgList],
     );
 
+    /**
+     * 이미지 편집
+     * @param {*} data
+     */
     const handleEditClick = (data) => {
         imageEditer.create(
             data.imageOnlnPath,
@@ -112,121 +124,109 @@ const GifDropzone = (props) => {
                     }),
                 );
             },
-            { cropWidth: 300, cropHeight: 300 },
+            { cropWidth, cropHeight },
         );
     };
 
     /**
-     * 드롭 카드 아이템 삭제 버튼 클릭
+     * 카드 목록에서 아이템 삭제
      */
     const handleDeleteDropCard = (data, e) => {
         e.stopPropagation();
-
         setImgList(
             produce(imgList, (draft) => {
-                draft.splice(imgList.findIndex((list) => list.index === data.index, 1));
+                draft.splice(
+                    imgList.findIndex((list) => list.id === data.id),
+                    1,
+                );
             }),
         );
     };
 
-    const handleMakeGif = () => {
-        let images = [];
-        // eslint-disable-next-line array-callback-return
-        imgList.map((image) => {
-            if (image.dataType !== 'local') {
-                images.push(`${IMAGE_PROXY_API}${encodeURIComponent(image.imageOnlnPath)}`);
-            } else {
-                images.push(image.imageOnlnPath);
-            }
+    /**
+     * 파일 변경
+     * @param {object} e 이벤트
+     */
+    const handleChangeFile = (e) => {
+        addLocalImg(e.target);
+    };
+
+    /**
+     * gif 생성 -> 저장
+     * @param {string} gifImage 생성된 gif 이미지 링크
+     */
+    const handleSaveGif = (gifImage) => {
+        setRepImg({
+            dataType: 'local',
+            id: `${moment().format('YYYYMMDDsss')}_gif`,
+            thumbPath: gifImage,
+            path: {
+                preview: gifImage,
+            },
         });
-
-        gifshot.createGIF(
-            {
-                images: images,
-                crossOrigin: 'Anonymous',
-                gifWidth: 300,
-                gifHeight: 300,
-                interval: gifInterval,
-            },
-            (obj) => {
-                if (!obj.error) {
-                    const gifImage = URL.createObjectURL(commonUtil.base64ToBlob(obj.image));
-                    setRepImg({
-                        dataType: 'local',
-                        id: moment().format('YYYYMMDDsss'),
-                        thumbPath: gifImage,
-                        path: {
-                            preview: gifImage,
-                        },
-                    });
-                } else {
-                    toast.error('GIF이미지 생성에 실패했습니다.');
-                }
-            },
-        );
     };
 
-    const handleChangeValue = ({ target }) => {
-        const { name, value } = target;
-        if (name === 'gifInterval') {
-            setGifInterval(value);
-        }
-    };
-
-    useEffect(() => {
-        if (imgList.length > 1) {
-            setBtnDisabled(false);
-        } else {
-            setBtnDisabled(true);
-        }
-    }, [imgList.length]);
+    React.useEffect(() => {
+        return () => {
+            setImgList([]);
+            setModalShow(false);
+            setAddIndex(-1);
+        };
+    }, []);
 
     return (
         <div className="d-flex flex-column overflow-hidden" style={{ width: 998 }}>
-            {/* 버튼 영역 */}
+            {/* 버튼 그룹 */}
             <div className="w-100 d-flex align-items-center justify-content-between py-2 px-3">
-                <div>{imgList.length > 0 && <p className="m-0 ft-12">총 : {imgList.length} 건</p>}</div>
+                <div>{imgList.length > 0 && <p className="m-0">총 : {imgList.length} 건</p>}</div>
                 <div className="d-flex align-items-center">
-                    <Button variant="searching" className="ft-12 mr-2" onClick={handleMakeGif} disabled={btnDisabled}>
+                    {/* 내 PC */}
+                    <Button variant="searching" className="mr-1" onClick={() => fileRef.current.click()}>
+                        내 PC 사진
+                    </Button>
+                    <input type="file" ref={fileRef} onChange={handleChangeFile} className="d-none" accept="image/*" />
+
+                    {/* GIF 생성 */}
+                    <Button variant="searching" className="mr-1" onClick={() => setModalShow(true)} disabled={imgList.length < 2}>
                         GIF 생성
                     </Button>
-                    <div style={{ width: 120 }} className="mr-1">
-                        <MokaInputLabel label="간격" labelWidth={45} className="mb-0" name="gifInterval" value={gifInterval} onChange={handleChangeValue} />
-                    </div>
-                    <p className="mb-0 mr-3">sec</p>
-                    <Button
-                        variant="searching"
-                        className="px-2"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setCollapse(!collapse);
-                        }}
-                    >
+                    <MakeGifModal
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                        cropWidth={cropWidth}
+                        cropHeight={cropHeight}
+                        onSave={handleSaveGif}
+                        gifWidth={cropWidth}
+                        gifHeight={cropHeight}
+                        imgList={imgList.map((image) =>
+                            image.imageOnlnPath.startsWith('blob:') ? image.imageOnlnPath : `${IMAGE_PROXY_API}${encodeURIComponent(image.imageOnlnPath)}`,
+                        )}
+                    />
+
+                    {/* 영역 확장 */}
+                    <Button variant="searching" className="px-2" onClick={() => setCollapse(!collapse)}>
                         <MokaIcon iconName={!collapse ? 'fal-compress-arrows-alt' : 'fal-expand-arrows'} />
                     </Button>
                 </div>
             </div>
 
-            {/* 드롭 영역 */}
+            {/* 드롭한 사진 리스트 */}
             <div className="flex-fill px-3 is-file-dropzone pb-3 overflow-hidden">
                 <div ref={drop} className={clsx('w-100 h-100 position-relative p-1', { 'dropzone-dragover': isOver })}>
                     <div className="d-flex flex-wrap h-100 align-content-start custom-scroll position-relative">
                         {/* default text */}
-                        {imgList.length === 0 ? (
+                        {imgList.length === 0 && (
                             <span className="absolute-top w-100 h-100 d-flex align-items-center justify-content-center pointer-events-none p-3" style={{ whiteSpace: 'pre-wrap' }}>
                                 <MokaIcon iconName="fal-cloud-upload" className="mr-2" />
                                 Drop files to attach, or browse
                             </span>
-                        ) : (
-                            ''
                         )}
                         {imgList.map((data, idx) => (
                             <ThumbCard
                                 ref={cardRef}
                                 width={'calc(20% - 8px)'}
                                 height={125}
-                                className={clsx('flex-shrink-0 mr-2', imgList.length > 5 ? 'mb-2' : '')}
+                                className={clsx('flex-shrink-0 mr-2', { 'mb-2': imgList.length > 5 })}
                                 key={idx}
                                 dataType="drop"
                                 data={{ ...data, move: true, index: idx, dataType: 'drop' }}
@@ -236,6 +236,7 @@ const GifDropzone = (props) => {
                                 onThumbClick={onThumbClick}
                                 onDeleteClick={handleDeleteDropCard}
                                 onRepClick={onRepClick}
+                                isRep={data.id === repImg?.id}
                                 onEditClick={handleEditClick}
                             />
                         ))}

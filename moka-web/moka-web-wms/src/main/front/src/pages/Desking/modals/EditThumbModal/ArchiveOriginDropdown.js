@@ -11,7 +11,7 @@ import { MokaIcon, MokaInput, MokaInputGroup } from '@components';
  */
 const CustomMenu = forwardRef(({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
     return (
-        <div ref={ref} style={{ ...style, minWidth: 222 }} className={clsx('px-2', className)} aria-labelledby={labeledBy}>
+        <div ref={ref} style={{ ...style, minWidth: 180 }} className={clsx('px-2', className)} aria-labelledby={labeledBy}>
             {children}
         </div>
     );

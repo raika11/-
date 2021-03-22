@@ -7,6 +7,7 @@ import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.dto.JpodNoticeSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
+import jmnet.moka.core.tps.mvc.board.entity.JpodBoard;
 import jmnet.moka.core.tps.mvc.board.repository.BoardAttachRepository;
 import jmnet.moka.core.tps.mvc.board.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Page<Board> findAllJpodNotice(JpodNoticeSearchDTO searchDTO) {
+    public List<Board> findAllBoardByParentBoardSeq(Integer boardId, Long parentBoardSeq) {
+        return null;
+    }
+
+    @Override
+    public Page<JpodBoard> findAllJpodNotice(JpodNoticeSearchDTO searchDTO) {
         return boardRepository.findAllJpodNotice(searchDTO);
     }
 

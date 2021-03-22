@@ -77,19 +77,27 @@ footer::before{content:"";width:100%;height:1px;background:#e2e2e2;}
 
 /** content **/
 section{width:100%;}
-.contents{width:100%;margin:0 auto;padding:28px 0 120px}
+.contents{position: relative; width:100%; margin:0 auto; padding:28px 0 120px; }
 
 /** side **/
 .page_title{display:block;}
 
 /** nav **/
+/* header nav */
+.header_nav {width:100%;border-bottom:4px solid #000;margin-bottom:20px;}
+.header_nav .nav {width:100%;}
+.header_nav .nav .nav_item {display:inline-block;}
+.header_nav .nav .nav_item .nav_link {display:inline-block; width:100%;}
+.header_nav .nav .nav_item .nav_link:hover,
+.header_nav .nav .nav_item .nav_link.active{color:#000; font-size: 40px; font-weight:700; letter-spacing: -0.5px;}
+
 /* side nav */
-.side_nav{width:100%;margin-top:16px;}
-.side_nav .nav{width:100%;}
-.side_nav .nav .nav_item{display:inline-block;width:100%;border-bottom:1px solid #e2e2e2;}
-.side_nav .nav .nav_item .nav_link{display:inline-block;width:100%;padding:18px 0 22px;font-size:18px;line-height:1.22;letter-spacing:-0.4px;color:#666;}
+.side_nav {width:100%; margin-top:16px;}
+.side_nav .nav {width:100%;}
+.side_nav .nav .nav_item {display:inline-block;width:100%;border-bottom:1px solid #e2e2e2;}
+.side_nav .nav .nav_item .nav_link {display:inline-block;width:100%;padding:18px 0 22px;font-size:18px;line-height:1.22;letter-spacing:-0.4px;color:#666;}
 .side_nav .nav .nav_item .nav_link:hover,
-.side_nav .nav .nav_item .nav_link.active{color:#111;font-weight:900;}
+.side_nav .nav .nav_item .nav_link.active {color:#111;font-weight:900;}
 
 /* tab - a link */
 .tab_box{font-size:0;padding:10px 0 6px;}
@@ -99,8 +107,7 @@ section{width:100%;}
 .tab_box a.active{font-weight:900;}
 
 /* tab - li*/
-.nav{display:flex;flex-wrap:wrap;padding-left:0;margin-bottom:0;list-style:none;}
-.tab_nav{clear:both;float:none;width:max-content;}
+.tab_nav{display:flex;flex-wrap:wrap;clear:both;float:none;width:max-content;padding-left:0;margin-bottom:0;list-style:none;}
 .tab_nav .nav_item{display:inline-block;padding:0 5px;}
 .tab_nav .nav_item:first-child{border:none;}
 .tab_nav .nav_item .nav_link{font-size:16px;}
@@ -110,25 +117,11 @@ section{width:100%;}
 .tab_content .tab_pane{display:none;width:100%;}
 .tab_content .tab_pane.active{display:block;}
 
-/** component 외 단위별 **/
-.box-dataset{display:inline-block;width:100%;}
-.box-template{display:inline-block;width:100%;}/* tpl */
-.box-component{display:inline-block;}/* cpnt */
-.box-container{display:inline-block;}/* ctn */
-
-.page{display:inline-block;width:100%;}
-.page.news-letter{display:inline-block;}
-
-/** content 영역들 **/
-.body-article{width:100%;max-width:720px;min-height:200px;margin:28px auto 120px;padding:0 70px;/*padding-left:60px;*/color:#3c3e40;letter-spacing:-0.05em;background:#efefef;}
-
-.box-head{width:100%;}
-
-.ttl_main{line-height:1.3;}
-.ttl_sub{margin-top:20px;color:#333;font-size:16px;font-weight:400;line-height:1.6}
-.ttl_category{display:block;margin-bottom:20px;color:#fa4b36;font-size:22px;font-weight:700;}
-
-.box-by{padding:20px 0 30px;margin-top:30px;border-top:1px solid #d8d8d8}
+/** component 영역 **/
+/* component */
+.component {position: relative; width: 100%;}
+/* template */
+.template {width: 100%;}
 
 /** background color **/
 .bg_orange{background-color:#fb502f;}
@@ -139,8 +132,9 @@ section{width:100%;}
 .bg_black{background-color:#000;}
 
 /** font color **/
-.font_black_default {color: #333;}
-.font_black_dark {color: #111;}
+.font_default {color: #333;}
+.font_dark {color: #111;}
+.font_black {color: #000;}
 .font_orange{color:#fb502f;}
 .js-text_search{color:#fb502f;}
 
@@ -155,10 +149,23 @@ section{width:100%;}
 /* .row + .row{margin-top:30px;} */
 .row > * {width:100%; max-width:100%;}
 
-/** margin,padding **/
-.mt_6 {margin-top: 6px;}
-.mt_10 {margin-top: 10px;}
-.mr_8 {margin-right: 8px;}
+/** width,height **/
+.w100p {width: 100%;}
+.h100p {height: 100%;}
+
+/** align **/
+.ta_l {text-align: left;}
+.ta_r {text-align: right;}
+
+/** position **/
+.position_re {position: relative;}
+.position_ab {position: absolute;}
+.position_top_def {top: 0;}
+.position_bottom_def {top: 0;}
+.position_left_def {left: 0;}
+.position_right_def {right: 0;}
+.position_ab_l {position: absolute; left: 0;}
+.position_ab_r {position: absolute; right: 0;}
 
 /** flex **/
 .flex {display: flex;}
@@ -173,6 +180,28 @@ section{width:100%;}
 .flex_justify_around {justify-content: space-around;}
 .flex_wrap {flex-wrap: wrap;}
 .flex_nowrap {flex-wrap: nowrap;}
+
+/** float **/
+.flt_l {float: left;}
+.flt_l::after {content: ''; display: table; clear: both;}
+.flt_r {float: right;}
+.flt_r::after {content: ''; display: table; clear: both;}
+
+/** margin,padding **/
+.mt_6 {margin-top: 6px;}
+.mt_10 {margin-top: 10px;}
+.mt_20 {margin-top: 20px;}
+.mt_30 {margin-top: 30px;}
+.mb_10 {margin-bottom: 10px;}
+.mb_20 {margin-bottom: 20px;}
+.mb_30 {margin-bottom: 30px;}
+.mr_8 {margin-right: 8px;}
+.mr_10 {margin-right: 10px;}
+.mr_20 {margin-right: 20px;}
+.mr_30 {margin-right: 30px;}
+.ml_10 {margin-left: 10px;}
+.ml_20 {margin-left: 20px;}
+.ml_30 {margin-left: 30px;}
 
 /** input **/
 /* input default */
@@ -314,6 +343,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
     .contents {width:100%;margin:0 auto;padding:20px 0 120px;}
 
+    .header_nav{border-bottom-width:3px;}
+
     .page_title{display:none;}
 
     .side_nav_mobile{width:100%;}
@@ -357,6 +388,11 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .mo{display:none;}
 
     .side_nav_mobile{display:none;}
+
+    /* component */
+    .component {width: auto;}
+    /* template */
+    .template {width: auto;}
 
     /* font size */
     .fs_md1{font-size:32px;}
@@ -402,6 +438,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .contents,
     .footer_wrap {max-width: 1200px;}
 
+    .header_nav{margin-bottom:40px;}
+
     /* font size */
     .fs_lg1{font-size:32px;}
     .fs_lg2{font-size:30px;}
@@ -413,6 +451,10 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .fs_lg8{font-size:16px;}
     .fs_lg9{font-size:14px;}
     .fs_lg10{font-size:13px;}
+    .fs_lg11{font-size:34px;}
+    .fs_lg12{font-size:36px;}
+    .fs_lg13{font-size:38px;}
+    .fs_lg14{font-size:40px;}
 
     /* grid */
     .col_lg1{flex:0 0 auto;width:8.33333%;}

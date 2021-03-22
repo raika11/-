@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
@@ -158,8 +157,10 @@ public class MemberDTO {
     @ApiModelProperty(hidden = true)
     private List<MemberGroupSaveDTO> memberGroups;
 
+    @ApiModelProperty(hidden = true)
+    private List<GroupMemberSimpleDTO> groupMembers;
 
-    private Set<GroupMemberSimpleDTO> groupMembers;
+    //private Set<GroupMemberSimpleDTO> groupMembers;
 
     /**
      * 등록일시

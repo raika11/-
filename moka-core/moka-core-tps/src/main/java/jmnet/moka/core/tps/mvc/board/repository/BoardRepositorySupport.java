@@ -4,6 +4,7 @@ import java.util.Optional;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.dto.JpodNoticeSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
+import jmnet.moka.core.tps.mvc.board.entity.JpodBoard;
 import org.springframework.data.domain.Page;
 
 /**
@@ -21,7 +22,7 @@ import org.springframework.data.domain.Page;
 public interface BoardRepositorySupport {
     Page<Board> findAllBoard(Integer boardId, BoardSearchDTO searchDTO);
 
-    Page<Board> findAllJpodNotice(JpodNoticeSearchDTO searchDTO);
+    Page<JpodBoard> findAllJpodNotice(JpodNoticeSearchDTO searchDTO);
 
     long updateParentBoardSeq(Long boardSeq, Long parentBoardSeq);
 

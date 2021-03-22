@@ -88,6 +88,10 @@ export const propTypes = {
          * type="input" 에서 사용하며 input을 plaintext처럼 보이게 한다
          */
         plaintext: PropTypes.bool,
+        /**
+         * 기본 label (우측에 노출, 라디오, 체크박스)
+         */
+        label: PropTypes.string,
     }),
     /**
      * uncontrolled input (기본 false)

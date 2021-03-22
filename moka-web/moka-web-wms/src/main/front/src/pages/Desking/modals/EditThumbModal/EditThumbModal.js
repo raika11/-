@@ -250,7 +250,7 @@ const EditThumbModal = (props) => {
                 {!totalId ? (
                     <div className="d-flex px-card pb-card w-100 flex-column" style={{ height: 480 }}>
                         <ArchiveSearch />
-                        <ArchiveTable onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
+                        <ArchiveTable onThumbClick={handleThumbClick} repImg={repImg} onRepClick={handleRepClick} />
                     </div>
                 ) : (
                     <MokaCardTabs
@@ -260,12 +260,12 @@ const EditThumbModal = (props) => {
                             // 아카이브 탭
                             <div className="d-flex h-100 flex-column">
                                 <ArchiveSearch />
-                                <ArchiveTable onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
+                                <ArchiveTable onThumbClick={handleThumbClick} repImg={repImg} onRepClick={handleRepClick} />
                             </div>,
 
                             // 본문 소재 탭
                             <div className="d-flex h-100 flex-column">
-                                <ArticleImageList totalId={totalId} onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
+                                <ArticleImageList totalId={totalId} repImg={repImg} onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
                             </div>,
                         ]}
                         tabNavs={['아카이브', '본문 소재 리스트']}
@@ -274,7 +274,7 @@ const EditThumbModal = (props) => {
                 )}
                 <div className={clsx('deskthumb-gif-list d-flex justify-content-between overflow-hidden', { collapse: collapse })} style={{ backgroundColor: 'F4F5F6' }}>
                     {/* 대표사진 */}
-                    <div className="deskthumb-main d-flex justify-content-center align-items-center" style={{ width: 202 }}>
+                    <div className="deskthumb-main d-flex justify-content-center pt-3" style={{ width: 202 }}>
                         <ThumbCard
                             className="p-2"
                             img={repImg.thumbPath}
@@ -294,6 +294,7 @@ const EditThumbModal = (props) => {
                         setCollapse={setCollapse}
                         onThumbClick={handleThumbClick}
                         onDeleteClick={handleDeleteClick}
+                        repImg={repImg}
                         onRepClick={handleRepClick}
                         setRepImg={setRepImg}
                     />

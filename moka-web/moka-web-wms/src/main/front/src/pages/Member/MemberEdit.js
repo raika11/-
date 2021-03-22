@@ -4,12 +4,11 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import moment from 'moment';
 import { MokaCard } from '@components';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Button from 'react-bootstrap/Button';
 import { DB_DATEFORMAT } from '@/constants';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { clearMember, getMember, changeInvalidList, changeMember, saveMember, GET_MEMBER, SAVE_MEMBER, getMemberMenuAuth, clearMemberMenuAuth } from '@store/member';
 import { MokaInputLabel } from '@components';
+import commonUtil from '@utils/commonUtil';
 
 /**
  * 사용자 상세/수정
@@ -28,6 +27,8 @@ const MemberEdit = ({ match }) => {
     const [expireDtError, setExpireDtError] = useState(false);
     const [remarkError, setRemarkError] = useState(false);
     const [statusError, setStatusError] = useState(false);
+
+    const [groupNames, setGroupNames] = useState('');
 
     const { member, loading, statusList, invalidList } = useSelector(
         (store) => ({
@@ -51,11 +52,18 @@ const MemberEdit = ({ match }) => {
 
     useEffect(() => {
         // 메뉴 데이터 셋팅
+        const groupMembers = member.groupMembers;
         setMemberId(member.memberId || '');
         setStatus(member.status || '');
         setExpireDt(member.expireDt || '');
         setTmpExpireDt(member.expireDt || '');
         setRemark(member.remark || '');
+
+        let groupNms = '';
+        if (!commonUtil.isEmpty(groupMembers) && groupMembers instanceof Array) {
+            groupNms = groupMembers.map((groupInfo) => groupInfo.group.groupKorNm).join(', ');
+        }
+        setGroupNames(groupNms);
     }, [member]);
 
     /**
@@ -190,6 +198,8 @@ const MemberEdit = ({ match }) => {
                 <MokaInputLabel className="mb-2" label="휴대전화" value={member.mobilePhone} name="mobilePhone" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 소속 */}
                 <MokaInputLabel className="mb-2" label="소속" value={member.dept} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
+                {/* 그룹 */}
+                <MokaInputLabel className="mb-2" label="그룹" value={groupNames} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 상태 */}
                 <MokaInputLabel
                     as="select"

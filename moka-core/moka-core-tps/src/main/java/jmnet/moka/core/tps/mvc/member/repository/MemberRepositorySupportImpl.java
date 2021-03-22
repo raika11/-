@@ -73,10 +73,11 @@ public class MemberRepositorySupportImpl extends TpsQueryDslRepositorySupport im
         }
 
         if (McpString.isNotEmpty(memberSearchDTO.getGroupCd())) {
-            query.where(qMember.groupMembers.contains(JPAExpressions
-                    .selectFrom(qGroupMember)
-                    .where(qGroupMember.member
-                            .eq(qMember)
+            query.where(qMember.memberId.contains(JPAExpressions
+                    .select(qGroupMember.memberId)
+                    .from(qGroupMember)
+                    .where(qGroupMember.member.memberId
+                            .eq(qMember.memberId)
                             .and(qGroupMember.groupCd.eq(memberSearchDTO.getGroupCd()))
                             .and(qGroupMember.usedYn.eq(MokaConstants.YES))
                             .and(qGroupMember.group.eq(JPAExpressions
@@ -110,10 +111,18 @@ public class MemberRepositorySupportImpl extends TpsQueryDslRepositorySupport im
     public Optional<MemberInfo> findByMemberId(String memberId) {
         QMemberInfo qMember = QMemberInfo.memberInfo;
         QMemberInfo qRegMember = new QMemberInfo("regMember");
-
+        QGroupMember qGroupMember = QGroupMember.groupMember;
+        QGroupInfo qGroupInfo = QGroupInfo.groupInfo;
         JPQLQuery<MemberInfo> query = from(qMember);
 
         query.where(qMember.memberId.eq(memberId));
+        query.where(qMember.memberId.in(JPAExpressions
+                .select(qGroupMember.memberId)
+                .from(qGroupMember)
+                .where(qGroupMember.member.memberId
+                        .eq(memberId)
+                        .and(qGroupMember.usedYn.eq(MokaConstants.YES))
+                        .and(qGroupMember.group.usedYn.eq(MokaConstants.YES)))));
 
         MemberInfo member = query
                 .leftJoin(qMember.regMember, qRegMember)

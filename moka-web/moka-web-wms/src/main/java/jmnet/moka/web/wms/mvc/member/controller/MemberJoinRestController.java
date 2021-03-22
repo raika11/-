@@ -18,6 +18,8 @@ import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.mail.mvc.dto.SmtpSendDTO;
+import jmnet.moka.core.mail.mvc.service.SmtpService;
 import jmnet.moka.core.tps.common.code.MemberRequestCode;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
@@ -35,6 +37,7 @@ import jmnet.moka.web.wms.config.security.exception.UnauthrizedErrorCode;
 import jmnet.moka.web.wms.config.security.groupware.GroupWareUserInfo;
 import jmnet.moka.web.wms.config.security.groupware.SoapWebServiceGatewaySupport;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,11 +71,22 @@ public class MemberJoinRestController extends AbstractCommonController {
 
     private final PasswordEncoder passwordEncoder;
 
-    public MemberJoinRestController(SoapWebServiceGatewaySupport groupWareAuthClient, MemberService memberService, PasswordEncoder passwordEncoder) {
+
+    private final SmtpService smtpService;
+
+    public MemberJoinRestController(SoapWebServiceGatewaySupport groupWareAuthClient, MemberService memberService, PasswordEncoder passwordEncoder,
+            SmtpService smtpService) {
         this.groupWareAuthClient = groupWareAuthClient;
         this.memberService = memberService;
         this.passwordEncoder = passwordEncoder;
+        this.smtpService = smtpService;
     }
+
+    @Value("${general.receive-address}")
+    private String fromEmailAddress;
+
+    @Value("${request.send-address}")
+    private String[] toEmailAddress;
 
     /**
      * 그룹웨어 사용자 정보 조회
@@ -198,6 +212,15 @@ public class MemberJoinRestController extends AbstractCommonController {
 
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
             ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, msg(MemberRequestCode.NEW_REQUEST.getMessageKey()));
+
+            // 담당자에게 요청 Email 발송
+            String[] mailTo = toEmailAddress;
+            String remark = member
+                    .getRemark()
+                    .replace("\n", "<br>");
+            String memberId = member.getMemberId();
+
+            sendEmail(mailTo, memberId, "N", remark);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -362,6 +385,16 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
+        if (successMsg != null) {
+
+            if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_REQUEST) {
+
+                // 담당자에게 요청 Email 발송
+                String[] mailTo = toEmailAddress;
+                sendEmail(mailTo, memberId, "R", remark.replace("\n", "<br><br>"));
+            }
+        }
+
         // 결과리턴
         ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO, successMsg);
 
@@ -390,5 +423,22 @@ public class MemberJoinRestController extends AbstractCommonController {
         if (!same) {
             throw new UserPrincipalNotFoundException(orgMember.getMemberId());
         }
+    }
+
+    private void sendEmail(String[] to, String memberId, String status, String remark)
+            throws Exception {
+        if (status.equals("N")) {
+            status = "신규";
+        } else if (status.equals("R")) {
+            status = "잠김 해제";
+        }
+
+        smtpService.send(SmtpSendDTO
+                .builder()
+                .from(fromEmailAddress)
+                .to(to)
+                .body("ID : " + memberId + "<br><br>" + "상태 : " + status + "<br><br>" + "비고 : " + remark)
+                .title(memberId + " " + status + " 신청")
+                .build());
     }
 }

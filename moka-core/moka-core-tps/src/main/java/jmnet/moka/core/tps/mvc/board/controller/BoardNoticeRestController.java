@@ -12,7 +12,7 @@ import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.mvc.board.dto.BoardDTO;
 import jmnet.moka.core.tps.mvc.board.dto.JpodNoticeSearchDTO;
-import jmnet.moka.core.tps.mvc.board.entity.Board;
+import jmnet.moka.core.tps.mvc.board.entity.JpodBoard;
 import jmnet.moka.core.tps.mvc.board.service.BoardInfoService;
 import jmnet.moka.core.tps.mvc.board.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +65,7 @@ public class BoardNoticeRestController extends AbstractCommonController {
         ResultListDTO<BoardDTO> resultListMessage = new ResultListDTO<>();
 
         // 조회
-        Page<Board> returnValue = boardService.findAllJpodNotice(search);
+        Page<JpodBoard> returnValue = boardService.findAllJpodNotice(search);
 
         // 리턴값 설정
         List<BoardDTO> boardDtoList = modelMapper.map(returnValue.getContent(), BoardDTO.TYPE);

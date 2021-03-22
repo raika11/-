@@ -16,6 +16,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -26,7 +27,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 /**
- * 게시물
+ * Jpod 전용 게시물
  */
 @Table(name = "TB_BOARD")
 @Entity
@@ -36,7 +37,7 @@ import org.hibernate.annotations.NotFoundAction;
 @Getter
 @Builder
 @EqualsAndHashCode(callSuper = true)
-public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implements Serializable {
+public class JpodBoard extends jmnet.moka.core.tps.common.entity.BaseAudit implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -239,6 +240,15 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.REMOVE)
     @OrderBy("seqNo")
     private List<BoardAttach> attaches;
+
+    /**
+     * JPOD 채널 정보
+     */
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CHANNEL_ID", insertable = false, updatable = false)
+    private JpodChannel jpodChannel;
+
 
     /**
      * 등록구분(M:회원,A:관리자)

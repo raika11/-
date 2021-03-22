@@ -122,7 +122,7 @@ const ArchiveSearch = () => {
                 <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, width: 145 }} value={search.finishdate} onChange={handleChangeEDate} />
             </div>
 
-            <div className="mr-2">
+            <div className="mr-2" style={{ width: 180 }}>
                 <ArchiveOriginDropdown
                     originValue={search.originCode}
                     onChange={(value) => {

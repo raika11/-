@@ -1,12 +1,55 @@
 @charset "utf-8";
 
-/* Mobile devices (mobile, 767px and down) */
-@media (max-width:767px) {
+
+
+
+
+
+
+/***************************************    catalog     ************************************/
+/* common 으로 옮길것들 */
+.swiper-scrollbar{background: transparent;}
+.swiper-button-prev, .swiper-button-next{right: 30px;}
+.bdr_top_1{border-top:1px solid #000;}
+
+
+.catalog_home.swiper-container{width:calc(100% + 140px);padding:0 70px;margin-left:-70px;}
+/* .catalog_home.swiper-container .swiper-wrapper{border:1px solid red} */
+.catalog_home.swiper-container .swiper-slide div:nth-child(2){position:relative;}
+.catalog_home.swiper-container .swiper-slide div:nth-child(2) .text_wrap{position:absolute;left:0;top:50%;transform: translate(0, -50%);}
+
+.text_wrap{}
+.text_wrap{}
+.text_wrap{}
+.text_wrap{}
+.text_wrap .headline{font-size: 24px;font-weight: bold;line-height: 1.38;letter-spacing: -0.4px;color: #000;}
+.text_wrap .lead{margin-top:18px;font-size: 14px;line-height: 1.57;letter-spacing: -0.4px;color: #444;}
+.text_wrap .byline{margin-top:18px;font-size: 12px;line-height: 1.83;letter-spacing: -0.32px;color: #aaa;}
+
+.title_wrap{}
+.title_wrap h2.subtitle{font-size: 18px;font-weight: bold;line-height: 1.44;letter-spacing: -0.28px;color: #000;}
+.title_wrap h2.subtitle span{padding-left:20px}
+
+
+
+
+
+
+/* Small devices (portrait phones, landscape phones, less than 767px) */
+/* No media query this is the default */
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
 
 }
 
-/* Medium devices (tablet + pc, 768px and up) */
-@media (min-width:768px) {
-   
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+
 }
 
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    /* .catalog_home.swiper-container{margin-top:40px;} */
+
+}

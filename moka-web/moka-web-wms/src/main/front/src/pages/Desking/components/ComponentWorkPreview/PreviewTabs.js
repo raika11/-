@@ -11,7 +11,7 @@ import CommonPreview from './CommonPreview';
  */
 const PreviewTabs = ({ show, isNaverChannel }) => {
     const area = useSelector(({ desking }) => desking.area);
-    const [activeTabIdx, setActiveTabIdx] = useState(0);
+    const [activeTabIdx, setActiveTabIdx] = useState(3);
 
     /**
      * 전체화면 미리보기
@@ -27,6 +27,7 @@ const PreviewTabs = ({ show, isNaverChannel }) => {
             <MokaCardTabs
                 onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                 className="w-100 h-100"
+                activeKey={activeTabIdx}
                 tabNavs={['Wide', 'PC', 'Tablet', 'Mobile']}
                 tabs={[
                     /**

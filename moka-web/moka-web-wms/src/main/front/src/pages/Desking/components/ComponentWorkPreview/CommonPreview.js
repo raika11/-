@@ -14,6 +14,7 @@ const ComponentWorkPreview = ({ show, breakpoint, isNaverChannel }) => {
     const area = useSelector(({ desking }) => desking.area);
     const [minConstraints, setMinConstraints] = useState([0, 0]);
     const [maxConstraints, setMaxConstraints] = useState([0, 0]);
+    const noticeRef = useRef(null);
     const iframeRef = useRef(null);
     const flexableRef = useRef(null);
 
@@ -41,6 +42,21 @@ const ComponentWorkPreview = ({ show, breakpoint, isNaverChannel }) => {
     }, []);
 
     useEffect(() => {
+        if (show && iframeRef.current && noticeRef.current) {
+            const resizeObserver = new ResizeObserver((entries) => {
+                for (let entry of entries) {
+                    if (entry.contentBoxSize) {
+                        let w = Math.ceil(entry.contentRect.width);
+                        const h = Math.ceil(entry.contentRect.height);
+                        noticeRef.current.innerText = `${w}*${h}`;
+                    }
+                }
+            });
+            resizeObserver.observe(iframeRef.current);
+        }
+    }, [show]);
+
+    useEffect(() => {
         if (show && flexableRef.current) {
             /**
              * 감싸고 있는 div가 변경되면 높이값 변경
@@ -50,16 +66,16 @@ const ComponentWorkPreview = ({ show, breakpoint, isNaverChannel }) => {
                     if (entry.contentBoxSize) {
                         let w = 0;
                         const h = entry.contentRect.height;
+
                         if (isNaverChannel) {
-                            w = 530;
-                        } else if (breakpoint === 'wide' || breakpoint === 'pc') {
-                            w = entry.contentRect.width < BREAKPOINT_SERVICE[breakpoint] ? entry.contentRect.width : BREAKPOINT_SERVICE[breakpoint];
+                            w = [530, 530];
                         } else {
                             w = BREAKPOINT_SERVICE[breakpoint];
                         }
+
                         if (flexableRef.current) {
-                            setMinConstraints([w, h]);
-                            setMaxConstraints([w, h]);
+                            setMinConstraints([w[0], h]);
+                            setMaxConstraints([w[1], h]);
                         }
                     }
                 }
@@ -96,17 +112,18 @@ const ComponentWorkPreview = ({ show, breakpoint, isNaverChannel }) => {
     }, []);
 
     return (
-        <div className="position-relative overflow-hidden h-100 d-flex flex-column">
+        <div className="position-relative h-100">
             {loading && <MokaLoader />}
+            <div className="absolute-top-right border bg-white px-2 color-searching" style={{ top: '-21px', zIndex: 1 }} ref={noticeRef}></div>
 
-            <div className="overflow-hidden flex-fill d-flex">
-                <div className="overflow-hidden flex-fill" ref={flexableRef}>
+            <div className="overflow-hidden d-flex h-100">
+                <div className="flex-fill overflow-x-auto" ref={flexableRef}>
                     <MokaResizableBox
                         width={minConstraints[0]}
                         height={minConstraints[1]}
                         minConstraints={minConstraints}
                         maxConstraints={maxConstraints}
-                        axis="both"
+                        axis="x"
                         handleSize={[40, 40]}
                     >
                         <iframe ref={iframeRef} title="컴포넌트미리보기" frameBorder="0" className="h-100 w-100" />

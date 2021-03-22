@@ -15,7 +15,7 @@ export const columnDefs = [
     },
     {
         headerName: '그룹',
-        field: 'category',
+        field: 'group',
         width: 80,
         cellStyle: { diplay: 'flex', alignItems: 'center' },
     },

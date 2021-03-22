@@ -9,13 +9,14 @@ import { deletePoll, getPollList } from '@store/survey/poll/pollAction';
 import toast from '@utils/toastUtil';
 import { clearStore } from '@store/survey/poll/pollAction';
 import { useHistory } from 'react-router-dom';
-import PollList from '@pages/Survey/Poll/PollList';
+//import PollList from '@pages/Survey/Poll/PollList';
 import PollEdit from '@pages/Survey/Poll/PollEdit';
 import { Col } from 'react-bootstrap';
 import clsx from 'clsx';
 import useBreakpoint from '@hooks/useBreakpoint';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+const PollList = React.lazy(() => import('@pages/Survey/Poll/PollList'));
 
 const Poll = ({ match }) => {
     const matchPoints = useBreakpoint();

@@ -116,14 +116,7 @@ public class MemberRepositorySupportImpl extends TpsQueryDslRepositorySupport im
         JPQLQuery<MemberInfo> query = from(qMember);
 
         query.where(qMember.memberId.eq(memberId));
-        query.where(qMember.memberId.in(JPAExpressions
-                .select(qGroupMember.memberId)
-                .from(qGroupMember)
-                .where(qGroupMember.member.memberId
-                        .eq(memberId)
-                        .and(qGroupMember.usedYn.eq(MokaConstants.YES))
-                        .and(qGroupMember.group.usedYn.eq(MokaConstants.YES)))));
-
+        
         MemberInfo member = query
                 .leftJoin(qMember.regMember, qRegMember)
                 .fetchJoin()

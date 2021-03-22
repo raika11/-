@@ -36,6 +36,13 @@
 .customer_contetns .list .shortcuts .img_cutomer_07 {display: inline-block; width: 31px; height: 31px; background: url('//stg-img.joongang.co.kr/svcimg/customercenter/img_cutomer_m_07_2x.png') no-repeat; background-size: 100%;}
 .customer_contetns .list .shortcuts .img_cutomer_08 {display: inline-block; width: 32px; height: 31px; background: url('//stg-img.joongang.co.kr/svcimg/customercenter/img_cutomer_m_08_2x.png') no-repeat; background-size: 100%;}
 
+/** info table **/
+.info_table {width: 100%;}
+.info_table th,
+.info_table td {padding: 14px 0 16px; border-bottom: 1px solid #e2e2e2; font-size: 14px; line-height: 22px; vertical-align: top; text-align: left;}
+.info_table th {display: table-cell; color: #111; font-weight: 700;}
+.info_table td {color: #333;}
+
 .btn_list_wrap {padding: 22px 0;}
 .btn_list_wrap .btn_group li {padding-right: 8px; margin-bottom: 10px;}
 

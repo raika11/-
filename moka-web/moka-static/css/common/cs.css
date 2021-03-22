@@ -141,6 +141,7 @@
 .notice_area .board_table .notice_info .state { font-size: 14px; color: #666; }
 .notice_area .board_table .notice_info span:nth-child(n+2) { margin-left: 8px; }
 
+
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
     /** 메인 **/

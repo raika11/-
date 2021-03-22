@@ -171,15 +171,15 @@ public class ComponentRestController extends AbstractCommonController {
         }
 
         // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
-        if (componentDTO
-                .getDataType()
-                .equals(TpsConstants.DATATYPE_DESK) || componentDTO
-                .getDataType()
-                .equals(TpsConstants.DATATYPE_FORM)) {
-            componentDTO.setViewYn(MokaConstants.NO);
-        } else {
-            componentDTO.setViewYn(MokaConstants.YES);
-        }
+        //        if (componentDTO
+        //                .getDataType()
+        //                .equals(TpsConstants.DATATYPE_DESK) || componentDTO
+        //                .getDataType()
+        //                .equals(TpsConstants.DATATYPE_FORM)) {
+        //            componentDTO.setViewYn(MokaConstants.NO);
+        //        } else {
+        //            componentDTO.setViewYn(MokaConstants.YES);
+        //        }
 
         Component component = modelMapper.map(componentDTO, Component.class);
 
@@ -228,15 +228,15 @@ public class ComponentRestController extends AbstractCommonController {
         for (ComponentDTO componentDTO : componentDTOs) {
             validData(componentDTO, ActionType.INSERT);
             // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
-            if (componentDTO
-                    .getDataType()
-                    .equals(TpsConstants.DATATYPE_DESK) || componentDTO
-                    .getDataType()
-                    .equals(TpsConstants.DATATYPE_FORM)) {
-                componentDTO.setViewYn(MokaConstants.NO);
-            } else {
-                componentDTO.setViewYn(MokaConstants.YES);
-            }
+            //            if (componentDTO
+            //                    .getDataType()
+            //                    .equals(TpsConstants.DATATYPE_DESK) || componentDTO
+            //                    .getDataType()
+            //                    .equals(TpsConstants.DATATYPE_FORM)) {
+            //                componentDTO.setViewYn(MokaConstants.NO);
+            //            } else {
+            //                componentDTO.setViewYn(MokaConstants.YES);
+            //            }
         }
 
         List<Component> components = modelMapper.map(componentDTOs, Component.TYPE);
@@ -311,15 +311,15 @@ public class ComponentRestController extends AbstractCommonController {
         }
 
         // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
-        if (componentDTO
-                .getDataType()
-                .equals(TpsConstants.DATATYPE_DESK) || componentDTO
-                .getDataType()
-                .equals(TpsConstants.DATATYPE_FORM)) {
-            componentDTO.setViewYn(MokaConstants.NO);
-        } else {
-            componentDTO.setViewYn(MokaConstants.YES);
-        }
+        //        if (componentDTO
+        //                .getDataType()
+        //                .equals(TpsConstants.DATATYPE_DESK) || componentDTO
+        //                .getDataType()
+        //                .equals(TpsConstants.DATATYPE_FORM)) {
+        //            componentDTO.setViewYn(MokaConstants.NO);
+        //        } else {
+        //            componentDTO.setViewYn(MokaConstants.YES);
+        //        }
 
         try {
             // 업데이트

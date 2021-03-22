@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import { MokaInput, MokaInputLabel, MokaInputGroup, MokaIcon, MokaPrependLinkInput, MokaCopyTextButton } from '@components';
 import { DatasetListModal } from '@pages/Dataset/modals';
 import { TemplateListModal } from '@pages/Template/modals';
@@ -29,20 +31,10 @@ const DetailRelationForm = (props) => {
                 ...component,
                 dataType: checked ? 'DESK' : 'NONE',
             });
-        } else if (name === 'delWords') {
+        } else {
             setComponent({
                 ...component,
-                delWords: value,
-            });
-        } else if (name === 'zone') {
-            setComponent({
-                ...component,
-                zone: value,
-            });
-        } else if (name === 'matchZone') {
-            setComponent({
-                ...component,
-                matchZone: value,
+                [name]: value,
             });
         }
     };
@@ -114,6 +106,7 @@ const DetailRelationForm = (props) => {
                 isInvalid={error.template}
                 required
             />
+
             {/* 데이터셋 */}
             <Form.Row className="mb-2">
                 <Col xs={3} className="p-0">
@@ -130,7 +123,7 @@ const DetailRelationForm = (props) => {
                 {component.dataType !== 'NONE' && (
                     <React.Fragment>
                         {/* 자동/편집/폼 셀렉트 */}
-                        <Col xs={2} className="d-flex p-0 pr-3">
+                        <Col xs={2} className="d-flex p-0 pr-2">
                             <MokaInput as="select" value={component.dataType} onChange={handleChangeDataset}>
                                 <option value="DESK">편집</option>
                                 <option value="AUTO">자동</option>
@@ -140,7 +133,32 @@ const DetailRelationForm = (props) => {
 
                         {/* 자동/편집/폼에 따른 input */}
                         <Col xs={7} className="p-0">
-                            {component.dataType === 'DESK' && <MokaInput placeholder="ID" value={component.prevDeskDataset ? component.prevDeskDataset.datasetSeq : ''} disabled />}
+                            {component.dataType === 'DESK' && (
+                                <div className="d-flex">
+                                    <Col xs={7} className="p-0 pr-2">
+                                        <MokaInput placeholder="ID" value={component.prevDeskDataset ? component.prevDeskDataset.datasetSeq : ''} disabled />
+                                    </Col>
+                                    {/* viewYn 변경 */}
+                                    <MokaInputLabel
+                                        as="select"
+                                        label={
+                                            <React.Fragment>
+                                                viewYn
+                                                <OverlayTrigger overlay={<Tooltip id="viewyn-info">viewYn</Tooltip>}>
+                                                    <MokaIcon iconName="fas-info-circle" className="ml-1 color-info" />
+                                                </OverlayTrigger>
+                                            </React.Fragment>
+                                        }
+                                        name="viewYn"
+                                        value={component.viewYn}
+                                        onChange={handleChangeValue}
+                                        className="flex-fill"
+                                    >
+                                        <option value="Y">Y</option>
+                                        <option value="N">N</option>
+                                    </MokaInputLabel>
+                                </div>
+                            )}
                             {component.dataType === 'AUTO' && (
                                 <MokaPrependLinkInput
                                     to={dataset.datasetSeq ? `/dataset/${dataset.datasetSeq}` : undefined}
@@ -176,8 +194,10 @@ const DetailRelationForm = (props) => {
                     </React.Fragment>
                 )}
             </Form.Row>
+
             {/* 입력태그 */}
             <MokaInputGroup label="입력태그" value={inputTag} className="mb-2" append={<MokaCopyTextButton copyText={inputTag} />} disabled />
+
             {/* 삭제 단어 */}
             <MokaInputLabel
                 label={

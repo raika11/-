@@ -1,7 +1,7 @@
 package jmnet.moka.core.tps.mvc.member.entity;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,8 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
@@ -159,8 +159,8 @@ public class MemberInfo extends BaseAudit {
     @Builder.Default
     private String remark = "";
 
-    @OneToMany(mappedBy = "member")
-    private Set<GroupMember> groupMembers;
+    @Transient
+    private List<GroupMember> groupMembers;
 
     /**
      * 등록자

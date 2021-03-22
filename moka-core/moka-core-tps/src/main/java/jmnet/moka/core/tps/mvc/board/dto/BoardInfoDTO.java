@@ -274,7 +274,7 @@ public class BoardInfoDTO {
     private String allowFileExt = "zip,xls,xlsx,ppt,doc,hwp,jpg,png,gif,";
 
     @ApiModelProperty("허용 컬럼(,로 구분)")
-    @Size(min = 2, max = 100, message = "{tps.board-info.error.size.allowItem}")
+    @Size(max = 100, message = "{tps.board-info.error.size.allowItem}")
     private String allowItem;
 
     @ApiModelProperty(value = "등록일", hidden = true)

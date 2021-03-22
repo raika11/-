@@ -39,7 +39,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<GroupMember> findAllGroupMember(String groupCd) {
-        return groupMemberRepository.findAllByGroupCd(groupCd);
+        return groupMemberRepository.findAllByGroupCdAndUsedYn(groupCd, MokaConstants.YES);
     }
 
     @Override

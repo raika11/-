@@ -1,11 +1,12 @@
 package jmnet.moka.core.tps.mvc.member.service;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
@@ -46,6 +47,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Optional<MemberInfo> findMemberById(String memberId) {
+        memberRepository
+                .findByMemberId(memberId)
+                .ifPresent(memberInfo1 -> {
+                    memberInfo1.setGroupMembers(groupMemberRepository.findAllByMemberIdAndUsedYn(memberId, MokaConstants.YES));
+                });
         return memberRepository.findByMemberId(memberId);
     }
 
@@ -161,7 +167,7 @@ public class MemberServiceImpl implements MemberService {
     public void deleteMember(MemberInfo member) {
         if (member.getGroupMembers() == null) {
             List<GroupMember> groupMembers = this.findGroupMemberList(member.getMemberId());
-            member.setGroupMembers((groupMembers != null ? new HashSet<>(groupMembers) : new HashSet<>()));
+            member.setGroupMembers((groupMembers != null ? new ArrayList<>(groupMembers) : new ArrayList<>()));
         }
 
         member

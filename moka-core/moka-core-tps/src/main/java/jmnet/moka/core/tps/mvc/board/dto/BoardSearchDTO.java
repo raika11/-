@@ -85,6 +85,6 @@ public class BoardSearchDTO extends SearchDTO {
     @Builder.Default
     private Integer channelUsedYn = 0;
 
-    @ApiModelProperty("삭제여부")
-    private String replyYn;
+    @ApiModelProperty("답글등록여부")
+    private String answYn;
 }

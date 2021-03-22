@@ -19,7 +19,13 @@
     <link href="//stg-static.joongang.co.kr/css/common/section.css" rel="stylesheet">
     
     <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
-    <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/plugin/swiper-bundle.js"></script>
+
+
+    <style>
+
+       
+    </style>
 </head>
 <body>
     <div id="wrapper">
@@ -34,7 +40,7 @@
         <!-- container -->
         <main id="container">
             <!-- contents -->
-            <section class="contents">
+            <section class="contents catalog">
                 <div class="component row">
                     <div class="col_sm12 col_md12 col_lg12">
                         <h2 class="sr_only">정치</h2>
@@ -63,7 +69,7 @@
                     </div>
                 </div>
 
-                <div class="component row">
+                <!-- <div class="component row">
                     <div class="col_sm12 col_md12 col_lg6">
                         <div class="template">
                             1
@@ -88,18 +94,32 @@
                             6
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Slider main container -->
-                <div class="swiper-container">
+                <div class="row swiper-container">
                     <!-- Additional required wrapper -->
-                    <div class="swiper-wrapper">
+                    <div class="swiper-wrapper catalog_main">
                         <!-- Slides -->
-                        <div class="col_sm12 col_md12 col_lg12 swiper-slide">Slide 1</div>
+                        <div class="col_sm12 col_md12 col_lg12 swiper-slide ">
+                            <div class="row">
+                                <div class="col_sm8 col_md8 col_lg8"><img src="https://pds.joins.com/news/component/htmlphoto_mmdata/202103/12/c96a0d19-e125-4dd0-9192-50d4bdd761de.jpg" width="788" height="443" alt="이미지설명" /></div>
+                                <div class="col_sm4 col_md4 col_lg4 ">
+                                    <div class="text_wrap">
+                                        <em class="mg">방탄소년단, IFPI 글로벌 아티스트 1위</em>
+                                        <h2 class="headline"><a href="/article/24016143">BTS, 지난해 세계 앨범 판매 1·2위 휩쓸었다…IFPI 선정</a></h2>
+                                        <span class="lead">
+                                            <a href="/article/24016317">        방탄소년단(BTS)이 국제음반산업협회(IFPI) 선정 지난해 세계 음악 시장 앨범 판매 1·2위를 모두 차지했다.  </a>
+                                        </span>
+                                        <span class="byline"><em>2021.03.20 00:22</em></span>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        </div>
                         <div class="col_sm12 col_md12 col_lg12 swiper-slide">Slide 2</div>
                         <div class="col_sm12 col_md12 col_lg12 swiper-slide">Slide 3</div>
                         <div class="col_sm12 col_md12 col_lg12 swiper-slide">Slide 4</div>
-                        
                     </div>
                     <!-- If we need pagination -->
                     <div class="swiper-pagination"></div>
@@ -112,9 +132,12 @@
                     <div class="swiper-scrollbar"></div>
                 </div>
 
-                <div class="component row">
-                    정정보도 영역
+                <div class="component row bdr_top_1">
+                    <div class="title_wrap">
+                        <h2 class="subtitle">집콕할 때 필요한건?<span>취미 홈 인테리어 트렌드의 모든 것</span></h2>
+                    </div>
                 </div>
+
 
                 <div class="component">
                     <ul class="card_group row">
@@ -263,5 +286,34 @@
         <!-- // footer -->
     </div>
 </body>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 4,
+        spaceBetween: 40,
+        slidesPerGroup: 1,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+                    nextEl: '.swiper-button-next.ss2',
+                    prevEl: '.swiper-button-prev.ss2',
+                },
+        breakpoints: {
+            1024: {
+                spaceBetween: 40,
+            },
+            768: {
+                slidesPerView: 3,
+                spaceBetween: 16,
+            },
+            414: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+                centeredSlides: true,
+            }
+        },
+    });
+</script>
 
 </html>

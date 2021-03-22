@@ -6,8 +6,22 @@
 
 /***************************************    catalog     ************************************/
 
+.bdr_top_1{border-top:1px solid #000;}
 
+.catalog_main .swiper-slide div:nth-child(2){position:relative;}
+.catalog_main .swiper-slide div:nth-child(2) .text_wrap{position:absolute;left:0;top:50%;transform: translate(0, -50%);}
 
+.text_wrap{}
+.text_wrap{}
+.text_wrap{}
+.text_wrap{}
+.text_wrap .headline{font-size: 24px;font-weight: bold;line-height: 1.38;letter-spacing: -0.4px;color: #000;}
+.text_wrap .lead{margin-top:18px;font-size: 14px;line-height: 1.57;letter-spacing: -0.4px;color: #444;}
+.text_wrap .byline{margin-top:18px;font-size: 12px;line-height: 1.83;letter-spacing: -0.32px;color: #aaa;}
+
+.title_wrap{}
+.title_wrap h2.subtitle{font-size: 18px;font-weight: bold;line-height: 1.44;letter-spacing: -0.28px;color: #000;}
+.title_wrap h2.subtitle span{padding-left:20px}
 
 
 

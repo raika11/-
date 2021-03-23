@@ -27,14 +27,15 @@ public class Api {
     private boolean hasAsyncRequest = false;
     private boolean hasCookieParameter = false;
     private boolean resultWrap = true;
+    private String membership;
     private List<Request> requestList;
     private List<String> keyList = ApiParser.EMPTY_TOKEN_LIST;
 
     public Api(ApiConfig apiConfig, String id) {
-        this(apiConfig, id, null, 0L, null, null, null, null, false);
+        this(apiConfig, id, null, 0L, null, null, null, null, false, null);
     }
 
-    public Api(ApiConfig apiConfig, String id, HttpMethod method, long expire, String period, String description, String contentType, String cors, boolean resultWrap) {
+    public Api(ApiConfig apiConfig, String id, HttpMethod method, long expire, String period, String description, String contentType, String cors, boolean resultWrap, String membership) {
         this.apiConfig = apiConfig;
         this.id = id;
         this.method = method;
@@ -46,6 +47,7 @@ public class Api {
         this.parameterMap = new LinkedHashMap<String, Parameter>(16);
         this.requestList = new ArrayList<Request>(4);
         this.resultWrap = resultWrap;
+        this.membership = membership;
     }
 
     public ApiConfig getApiConfig() {
@@ -127,6 +129,8 @@ public class Api {
     public Map<String, Parameter> getParameterMap() {
         return this.parameterMap;
     }
+
+    public String getMembership() { return this.membership; }
 
     public List<String> getKeyList() {
         return this.keyList;

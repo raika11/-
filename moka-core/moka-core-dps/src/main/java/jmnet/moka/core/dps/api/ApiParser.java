@@ -64,6 +64,7 @@ public class ApiParser {
     private static final String ATTR_RESULTWRAP = "resultWrap";
     private static final String ATTR_NAME = "name";
     private static final String ATTR_PERIOD = "period";
+    private static final String ATTR_MEMBERSHIP = "membership";
     private static final String ATTR_TYPE = "type";
     private static final String ATTR_DESCRIPTION = "desc";
     private static final String ATTR_HINTS = "hints";
@@ -181,7 +182,8 @@ public class ApiParser {
         if (McpString.isNotEmpty(resultUnwrapStr) && resultUnwrapStr.equalsIgnoreCase("N")) {
             resultWrap = false;
         }
-        Api api = new Api(apiConfig, id, method, expire, period, description, contentType, cors, resultWrap);
+        String membership = apiEl.getAttribute(ATTR_MEMBERSHIP);
+        Api api = new Api(apiConfig, id, method, expire, period, description, contentType, cors, resultWrap, membership);
         setParameter(api, apiEl);
         setRequestList(api, apiEl);
         setKeys(api, apiEl);

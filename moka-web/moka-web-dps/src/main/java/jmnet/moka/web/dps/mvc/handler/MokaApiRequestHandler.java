@@ -43,6 +43,10 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 	@Autowired
 	private MembershipHelper membershipHelper;
 
+	private static final String PARAM_REMOTE_IP = "remoteIP";
+	private static final String MEMBERSHIP_COOKIE = "cookie";
+	private static final String MEMBERSHIP_API = "api";
+
 	public MokaApiRequestHandler(ForwardHandler forwardHandler) {
 		super(forwardHandler);
 	}
@@ -81,6 +85,9 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
             ApiResolver apiResolver = new ApiResolver(request);
 			Map<String, String> httpParamMap = HttpHelper.getParamMap(request);
 
+			// remoteIp를 넣어준다.
+			httpParamMap.put(PARAM_REMOTE_IP, remoteIp);
+
             // Api가 존재하지 않을 경우
             if (this.apiRequestHelper.apiRequestExists(apiResolver) == false) {
 				Forward forward = this.forwardHandler.getForward(request);
@@ -113,16 +120,16 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 			String membership = api.getMembership();
 			if ( membership != null) {
 				try {
-					if (membership.equals("cookie")) {
+					if (membership.equals(MEMBERSHIP_COOKIE)) {
 						this.membershipHelper.setMembershipByCookie(apiContext);
-					} else if ( membership.equals("api")) {
+					} else if ( membership.equals(MEMBERSHIP_API)) {
 						this.membershipHelper.setMembershipByApi(apiContext);
 					}
 				}catch (Exception e) {
 					actionLogger.fail(remoteIp, ActionType.API,
 							System.currentTimeMillis() - startTime,
 							String.format( "%s/%s : %s", apiResolver.getPath(),apiResolver.getId(),
-									"Membership Error"));
+									e.getMessage()));
 					return getMembershipErrorResponse(request, apiResolver);
 				}
 			}
@@ -164,7 +171,11 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 					if (api.isResultWrap()) {
 						resultObject = apiResult;
 					} else {
-						resultObject = apiResult.unwrap(ApiResult.MAIN_DATA);
+						if ( apiResult.containsKey(ApiResult.MAIN_DATA)) {
+							resultObject = apiResult.unwrap(ApiResult.MAIN_DATA);
+						} else { // ERROR일 경우 _DATA가 없음
+							resultObject = apiResult;
+						}
 					}
 					if ( api.getContentType() != null) {
 						responseHeaders.set("Content-Type", api.getContentType());

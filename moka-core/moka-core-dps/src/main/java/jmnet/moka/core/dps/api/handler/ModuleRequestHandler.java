@@ -1,5 +1,6 @@
 package jmnet.moka.core.dps.api.handler;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import jmnet.moka.common.ApiResult;
@@ -48,17 +49,22 @@ public class ModuleRequestHandler implements RequestHandler {
             ModuleInterface module = getModule(moduleRequest.getClassName());
             Object result = callMethod(module, moduleRequest, apiContext);
             long endTime = System.currentTimeMillis();
-            if ( result instanceof ApiResult) {
-                if ( ((ApiResult)result).containsKey(ApiResult.MAIN_DATA)) {
-                    return (ApiResult)result;
+            if (result instanceof ApiResult) {
+                if (((ApiResult) result).containsKey(ApiResult.MAIN_DATA)) {
+                    return (ApiResult) result;
                 }
             }
             return ApiResult.createApiResult(startTime, endTime, result, true, null);
+        } catch (InvocationTargetException ie) {
+            logger.error("Module invoke Failed:", ie.getTargetException());
+            return ApiResult.createApiErrorResult(String.format("Module invoke Failed: %s", moduleRequest
+                    .getClass()
+                    .getName()), (Exception) ie.getTargetException());
         } catch (Exception e) {
-            logger.error("Module invoke Failed:",e);
-            return ApiResult.createApiErrorResult(
-                    String.format("Module invoke Failed: %s", moduleRequest.getClass().getName()),
-                    e);
+            logger.error("Module invoke Failed:", e);
+            return ApiResult.createApiErrorResult(String.format("Module invoke Failed: %s", moduleRequest
+                    .getClass()
+                    .getName()), e);
 
         }
     }
@@ -69,7 +75,9 @@ public class ModuleRequestHandler implements RequestHandler {
         if (McpString.isEmpty(methodName) || methodName.equals(INVOKE_METHOD)) {
             return module.invoke(apiContext);
         } else {
-            Method method = module.getClass().getMethod(methodName,ApiContext.class);
+            Method method = module
+                    .getClass()
+                    .getMethod(methodName, ApiContext.class);
             return method.invoke(module, apiContext);
         }
     }
@@ -79,7 +87,8 @@ public class ModuleRequestHandler implements RequestHandler {
         // TODO Auto-generated method stub
     }
 
-    public ModuleInterface getModule(String className) throws ClassNotFoundException {
+    public ModuleInterface getModule(String className)
+            throws ClassNotFoundException {
         if (this.moduleMap.containsKey(className)) {
             return this.moduleMap.get(className);
         }

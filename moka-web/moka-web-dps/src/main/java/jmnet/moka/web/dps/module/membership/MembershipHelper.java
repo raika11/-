@@ -1,6 +1,5 @@
 package jmnet.moka.web.dps.module.membership;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import jmnet.moka.core.common.encrypt.MokaMembershipCrypt;
@@ -42,17 +41,7 @@ public class MembershipHelper {
     public Map<String, Object> decodeCookie(String membershipCookie)
             throws Exception {
         String decoded = this.mokaMembershipCrypt.decrypt(membershipCookie);
-        Map<String, Object> valueMap = new HashMap<>();
-        short count = 0;
-        for (String value : decoded.split("\\|")) {
-            if (count == 1) {
-                valueMap.put(names[count], Integer.parseInt(value));
-            } else {
-                valueMap.put(names[count], value);
-            }
-            count++;
-        }
-        return valueMap;
+        return Membership.getMembershipFromCookie(decoded);
     }
 
     public Object getMemberInfo(String membershipCookie) {
@@ -62,9 +51,9 @@ public class MembershipHelper {
         HttpEntity<String> request = new HttpEntity<>("", headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Map> response = restTemplate.exchange(api, HttpMethod.GET, request, Map.class);
-        return response
+        return Membership.getMembershipFromApi((Map) response
                 .getBody()
-                .get("data");
+                .get("data"));
     }
 
     public void setMembershipByCookie(ApiContext apiContext)
@@ -78,7 +67,11 @@ public class MembershipHelper {
 
     private String getMembershipCookie(ApiContext apiContext) {
         Map<String, String> cookieMap = HttpHelper.getCookieMap(apiContext.getHttpRequest());
-        return cookieMap.get(MEMBERSHIP_COOKIE);
+        String membershipCookie = cookieMap.get(MEMBERSHIP_COOKIE);
+        if (membershipCookie == null) {
+            throw new RuntimeException("Membership cookie is not exists");
+        }
+        return membershipCookie;
     }
 
     private void setMembership(ApiContext apiContext, Map<String, Object> membership) {

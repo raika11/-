@@ -8,10 +8,7 @@ import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
-import jmnet.moka.core.dps.api.handler.module.ModuleInterface;
 import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -48,7 +45,12 @@ public class MembershipHelper {
         Map<String, Object> valueMap = new HashMap<>();
         short count = 0;
         for (String value : decoded.split("\\|")) {
-            valueMap.put(names[count++], value);
+            if (count == 1) {
+                valueMap.put(names[count], Integer.parseInt(value));
+            } else {
+                valueMap.put(names[count], value);
+            }
+            count++;
         }
         return valueMap;
     }
@@ -60,7 +62,9 @@ public class MembershipHelper {
         HttpEntity<String> request = new HttpEntity<>("", headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Map> response = restTemplate.exchange(api, HttpMethod.GET, request, Map.class);
-        return response.getBody().get("data");
+        return response
+                .getBody()
+                .get("data");
     }
 
     public void setMembershipByCookie(ApiContext apiContext)
@@ -69,19 +73,19 @@ public class MembershipHelper {
     }
 
     public void setMembershipByApi(ApiContext apiContext) {
-        setMembership(apiContext, (Map<String,Object>)getMemberInfo(getMembershipCookie(apiContext)));
+        setMembership(apiContext, (Map<String, Object>) getMemberInfo(getMembershipCookie(apiContext)));
     }
 
     private String getMembershipCookie(ApiContext apiContext) {
-        Map<String,String> cookieMap = HttpHelper.getCookieMap(apiContext.getHttpRequest());
+        Map<String, String> cookieMap = HttpHelper.getCookieMap(apiContext.getHttpRequest());
         return cookieMap.get(MEMBERSHIP_COOKIE);
     }
 
-    private void setMembership(ApiContext apiContext, Map<String,Object> membership) {
+    private void setMembership(ApiContext apiContext, Map<String, Object> membership) {
         Map paramMap = apiContext.getCheckedParamMap();
-        if ( membership != null) {
-            for ( Entry entry : membership.entrySet()) {
-                paramMap.put(MEMBERSHIP_PREFIX+entry.getKey(),entry.getValue());
+        if (membership != null) {
+            for (Entry entry : membership.entrySet()) {
+                paramMap.put(MEMBERSHIP_PREFIX + entry.getKey(), entry.getValue());
             }
         }
     }

@@ -406,7 +406,7 @@ public class GroupRestController extends AbstractCommonController {
             final List<String> errorGroupMemberIds = new ArrayList<>();
 
             memberIds.forEach(memberId -> memberService
-                    .findMemberById(memberId)
+                    .findMemberById(memberId, true)
                     .ifPresentOrElse((memberInfo) -> {
                         Optional<GroupMember> found = Optional.empty();
                         for (GroupMember member : memberInfo.getGroupMembers()) {

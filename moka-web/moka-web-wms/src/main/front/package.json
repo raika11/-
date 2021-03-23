@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "sass:compile": "node-sass-chokidar --include-path ./node_modules/ --output-style compact ./src/assets/styles/classic.scss -o ./public/css",
-        "sass:autoprefixer": "postcss public/css/*.css --use autoprefixer -d public/css",
+        "sass:autoprefixer": "postcss public/css/*.css --use autoprefixer -d public/css --no-map",
         "build:css": "npm-run-all sass:*",
         "build:js": "node --max-old-space-size=3072 scripts/build.js",
         "watch:css": "chokidar \"src/assets/styles/**/*\" -c \"yarn build:css\"",

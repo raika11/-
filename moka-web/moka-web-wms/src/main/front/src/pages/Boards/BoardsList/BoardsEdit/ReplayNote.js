@@ -4,35 +4,38 @@ import { Form, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import BoardsSummernote from './BoardsSummernote';
 import toast, { messageBox } from '@utils/toastUtil';
-import { GET_LIST_MENU_CONTENTS_INFO, changeListMenuReplyContent, uploadBoardContentImage } from '@store/board';
+import { changeListMenuReplyContents, uploadBoardContentsImage } from '@store/board';
 
-const BoardsNote = () => {
+/**
+ * 게시판 관리 > 게시글 관리 > 게시판 편집 폼 > 게시글 답변 썸머노트 편집
+ */
+const ReplyNote = ({ data, onChangeFormData }) => {
     const { boardId, boardSeq, parentBoardSeq, reply } = useParams();
     const dispatch = useDispatch();
-    const { contentsinfo, contentsreply, selectBoard } = useSelector((store) => ({
-        contentsinfo: store.board.listMenu.contents.info,
-        contentsreply: store.board.listMenu.contents.reply,
-        selectBoard: store.board.listMenu.selectBoard,
-        loading: store.loading[GET_LIST_MENU_CONTENTS_INFO],
-    }));
+    const selectBoard = useSelector((store) => store.board.listMenu.contents.info);
+    const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
+    const contentsReply = useSelector((store) => store.board.listMenu.contents.reply);
 
-    const [contentData, setContentData] = useState(null);
+    const [contentsData, setContentsData] = useState(data);
 
-    const SummernoteImageUpload = (file) => {
+    /**
+     * summernote 이미지 업로드 처리
+     */
+    const SummernoteImageUpload = (files) => {
         const formData = new FormData();
-        formData.append('attachFile', file[0]);
+        formData.append('attachFile', files[0]);
 
         dispatch(
-            uploadBoardContentImage({
+            uploadBoardContentsImage({
                 boardId: selectBoard.boardId,
                 imageForm: formData,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
                         toast.success(message);
-                        let tempContent = `${contentsreply.content} <img src="${body}">`;
+                        let tempContent = `${contentsReply.content} <img src="${body}">`;
 
-                        dispatch(changeListMenuReplyContent({ content: tempContent }));
-                        setContentData(tempContent);
+                        // dispatch(changeListMenuReplyContents({ content: tempContent }));
+                        setContentsData(tempContent);
                     } else {
                         const { totalCnt, list } = body;
                         if (totalCnt > 0 && Array.isArray(list)) {
@@ -55,30 +58,43 @@ const BoardsNote = () => {
             원본 게시글<br/>
             ------------------------------------------------------<br/>
             <br/>
-            ${contentsinfo.content}`;
+            ${contentsInfo.content}`;
 
-            setContentData(tempContent);
+            setContentsData(tempContent);
         } else if (boardSeq && parentBoardSeq && reply) {
-            setContentData(contentsreply.content);
+            setContentsData(contentsReply.content);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [boardSeq, parentBoardSeq]);
 
+    useEffect(() => {
+        setContentsData(data);
+    }, [data]);
+
+    useEffect(() => {
+        onChangeFormData({
+            target: {
+                name: 'content',
+                value: contentsData,
+            },
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [contentsData]);
+
     return (
-        <>
-            <Form.Row className="mb-2">
-                <Col className="p-0">
-                    <BoardsSummernote
-                        contentValue={contentData}
-                        editChange={(value) => {
-                            dispatch(changeListMenuReplyContent({ content: value }));
-                        }}
-                        editImageUpload={(e) => SummernoteImageUpload(e)}
-                    />
-                </Col>
-            </Form.Row>
-        </>
+        <Form.Row className="mb-2">
+            <Col className="p-0">
+                <BoardsSummernote
+                    contentValue={contentsData}
+                    onChangeValue={(value) => {
+                        // dispatch(changeListMenuReplyContents({ content: value }));
+                        setContentsData(value);
+                    }}
+                    onImageUpload={(e) => SummernoteImageUpload(e)}
+                />
+            </Col>
+        </Form.Row>
     );
 };
 
-export default BoardsNote;
+export default ReplyNote;

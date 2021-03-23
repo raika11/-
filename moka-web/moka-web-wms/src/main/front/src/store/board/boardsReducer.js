@@ -22,7 +22,7 @@ const initContentInfo = {
     titlePrefix1: '',
     titlePrefix2: '',
     title: '',
-    ordNo: null,
+    ordNo: 99,
     content: '',
     pwd: null,
     addr: null,
@@ -141,8 +141,8 @@ export default handleActions(
                 draft.gubun = gubun;
             });
         },
-        // 게시판 등록시 사용할 채널 타입 리스트 처리
-        [act.GET_BOARD_CHANNELTYPE_LIST_SUCCESS]: (state, { payload }) => {
+        // 게시판 등록 시 사용할 채널 타입 목록
+        [act.GET_BOARD_CHANNEL_TYPE_LIST_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.channelTypeList = payload;
             });
@@ -258,14 +258,14 @@ export default handleActions(
                 draft.listMenu.contents = initialState.listMenu.contents;
             });
         },
-
-        // Tree 메뉴 리스트 정상 처리
-        [act.CHANGE_LIST_MENU_CONTENT]: (state, { payload: { content } }) => {
+        // 게시글 정보 변경
+        [act.CHANGE_LIST_MENU_CONTENTS]: (state, { payload: { content } }) => {
             return produce(state, (draft) => {
                 draft.listMenu.contents.info.content = content;
             });
         },
-        [act.CHANGE_LIST_MENU_REPLY_CONTENT]: (state, { payload: { content } }) => {
+        // 게시글 답글 정보 변경
+        [act.CHANGE_LIST_MENU_REPLY_CONTENTS]: (state, { payload: { content } }) => {
             return produce(state, (draft) => {
                 draft.listMenu.contents.reply.content = content;
             });

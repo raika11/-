@@ -47,10 +47,17 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Optional<MemberInfo> findMemberById(String memberId) {
+        return findMemberById(memberId, false);
+    }
+
+    @Override
+    public Optional<MemberInfo> findMemberById(String memberId, boolean isGroupAll) {
         memberRepository
                 .findByMemberId(memberId)
                 .ifPresent(memberInfo1 -> {
-                    memberInfo1.setGroupMembers(groupMemberRepository.findAllByMemberIdAndUsedYn(memberId, MokaConstants.YES));
+                    memberInfo1.setGroupMembers(isGroupAll
+                            ? groupMemberRepository.findAllByMemberId(memberId)
+                            : groupMemberRepository.findAllByMemberIdAndUsedYn(memberId, MokaConstants.YES));
                 });
         return memberRepository.findByMemberId(memberId);
     }

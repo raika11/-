@@ -19,13 +19,18 @@ export const clearListMenuSearchOption = createAction(CLEAR_LIST_MENU_SEARCH_OPT
 export const CLEAR_LIST_MENU_CONTENTS_INFO = 'board/CLEAR_LIST_MENU_CONTENTS_INFO';
 export const clearListMenuContentsInfo = createAction(CLEAR_LIST_MENU_CONTENTS_INFO);
 
-export const [GET_BOARD_CHANNELTYPE_LIST, GET_BOARD_CHANNELTYPE_LIST_SUCCESS, GET_BOARD_CHANNELTYPE_LIST_FAILURE] = createRequestActionTypes('board/GET_BOARD_CHANNELTYPE_LIST');
-export const getBoardChannelTypeList = createAction(GET_BOARD_CHANNELTYPE_LIST, (...actions) => actions);
+/**
+ * 게시판 등록 시 사용할 채널 타입 목록
+ */
+export const [GET_BOARD_CHANNEL_TYPE_LIST, GET_BOARD_CHANNEL_TYPE_LIST_SUCCESS, GET_BOARD_CHANNEL_TYPE_LIST_FAILURE] = createRequestActionTypes(
+    'board/GET_BOARD_CHANNEL_TYPE_LIST',
+);
+export const getBoardChannelTypeList = createAction(GET_BOARD_CHANNEL_TYPE_LIST, (...actions) => actions);
 
 /**
- * 게시판 channalType 별 목록 가지고 오기(store를 거치지 않고 callback 으로 목록 전달)
+ * 게시판 channalType 별 목록 가지고 오기(saga callback으로 목록 전달)
  */
-export const [GET_BOARD_CHANNEL_LIST] = createRequestActionTypes('board/GET_BOARD_CHANNEL_LIST');
+export const GET_BOARD_CHANNEL_LIST = 'board/GET_BOARD_CHANNEL_LIST';
 export const getBoardChannelList = createAction(GET_BOARD_CHANNEL_LIST, ({ type, callback }) => ({ type, callback }));
 
 /** set 메뉴 */
@@ -99,16 +104,16 @@ export const [GET_LIST_MENU_CONTENTS_INFO, GET_LIST_MENU_CONTENTS_INFO_SUCCESS, 
 export const getListMenuContentsInfo = createAction(GET_LIST_MENU_CONTENTS_INFO, ({ boardId, boardSeq }) => ({ boardId, boardSeq }));
 
 /**
- * 게시글 정보중 내용 변경
+ * 게시글 정보 내용 변경
  */
-export const CHANGE_LIST_MENU_CONTENT = 'board/CHANGE_LIST_MENU_CONTENT';
-export const changeListMenuContent = createAction(CHANGE_LIST_MENU_CONTENT, ({ content }) => ({ content }));
+export const CHANGE_LIST_MENU_CONTENTS = 'board/CHANGE_LIST_MENU_CONTENT';
+export const changeListMenuContents = createAction(CHANGE_LIST_MENU_CONTENTS, ({ content }) => ({ content }));
 
 /**
  * 게시글 답변 내용 변경
  */
-export const CHANGE_LIST_MENU_REPLY_CONTENT = 'board/CHANGE_LIST_MENU_REPLY_CONTENT';
-export const changeListMenuReplyContent = createAction(CHANGE_LIST_MENU_REPLY_CONTENT, ({ content }) => ({ content }));
+export const CHANGE_LIST_MENU_REPLY_CONTENTS = 'board/CHANGE_LIST_MENU_REPLY_CONTENT';
+export const changeListMenuReplyContents = createAction(CHANGE_LIST_MENU_REPLY_CONTENTS, ({ content }) => ({ content }));
 
 /**
  * 게시글 정보 저장
@@ -131,7 +136,7 @@ export const deleteBoardContents = createAction(DELETE_BOARD_CONTENTS, ({ boardI
 /**
  * 게시글 답변 저장
  */
-export const [SAVE_BOARD_REPLY] = createRequestActionTypes('board/SAVE_BOARD_REPLY');
+export const SAVE_BOARD_REPLY = 'board/SAVE_BOARD_REPLY';
 export const saveBoardReply = createAction(SAVE_BOARD_REPLY, ({ boardId, parentBoardSeq, boardSeq, contents, callback }) => ({
     boardId,
     parentBoardSeq,
@@ -141,7 +146,7 @@ export const saveBoardReply = createAction(SAVE_BOARD_REPLY, ({ boardId, parentB
 }));
 
 /**
- * 게시글 본문 이미지 업로드
+ * 게시글 썸머노트 이미지 업로드
  */
-export const [UPLOAD_BOARD_CONTENT_IMAGE] = createRequestActionTypes('board/UPLOAD_BOARD_CONTENT_IMAGE');
-export const uploadBoardContentImage = createAction(UPLOAD_BOARD_CONTENT_IMAGE, ({ boardId, imageForm, callback }) => ({ boardId, imageForm, callback }));
+export const UPLOAD_BOARD_CONTENTS_IMAGE = 'board/UPLOAD_BOARD_CONTENTS_IMAGE';
+export const uploadBoardContentsImage = createAction(UPLOAD_BOARD_CONTENTS_IMAGE, ({ boardId, imageForm, callback }) => ({ boardId, imageForm, callback }));

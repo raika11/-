@@ -33,7 +33,7 @@ const BoardsList = ({ match, displayName }) => {
                                 `${match.path}`,
                                 `${match.path}/:boardId`,
                                 `${match.path}/:boardId/:boardSeq`,
-                                `${match.path}/:boardId/:parentBoardSeq/reply`,
+                                `${match.path}/:boardId/:boardSeq/:reply`,
                                 `${match.path}/:boardId/:parentBoardSeq/:reply/:boardSeq`,
                             ]}
                             exact
@@ -49,7 +49,7 @@ const BoardsList = ({ match, displayName }) => {
                             path={[
                                 `${match.path}/:boardId`,
                                 `${match.path}/:boardId/:boardSeq`,
-                                `${match.path}/:boardId/:parentBoardSeq/reply`,
+                                `${match.path}/:boardId/:boardSeq/:reply`,
                                 `${match.path}/:boardId/:parentBoardSeq/:reply/:boardSeq`,
                             ]}
                             exact
@@ -65,11 +65,11 @@ const BoardsList = ({ match, displayName }) => {
                             path={[
                                 `${match.path}/:boardId/add`,
                                 `${match.path}/:boardId/:boardSeq`,
-                                `${match.path}/:boardId/:parentBoardSeq/reply`,
+                                `${match.path}/:boardId/:boardSeq/:reply`,
                                 `${match.path}/:boardId/:parentBoardSeq/:reply/:boardSeq`,
                             ]}
                             exact
-                            render={() => <BoardsEdit />}
+                            render={() => <BoardsEdit match={match} />}
                         />
                     </Switch>
                 </Col>

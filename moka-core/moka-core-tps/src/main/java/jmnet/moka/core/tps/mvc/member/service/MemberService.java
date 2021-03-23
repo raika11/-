@@ -37,6 +37,15 @@ public interface MemberService {
     Optional<MemberInfo> findMemberById(String memberId);
 
     /**
+     * 멤버 ID로 멤버 상세 조회
+     *
+     * @param memberId   멤버 ID
+     * @param isGroupAll 삭제된 그룹까지 조회 할지 여부
+     * @return
+     */
+    Optional<MemberInfo> findMemberById(String memberId, boolean isGroupAll);
+
+    /**
      * 멤버 등록
      *
      * @param member 멤버 정보

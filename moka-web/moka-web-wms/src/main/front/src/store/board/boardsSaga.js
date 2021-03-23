@@ -5,16 +5,16 @@ import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/co
 import * as act from './boardsAction';
 import * as api from './boardsApi';
 
-// 게시판 채널 리스트 가지고 오기.
-function* getBoardChannelTypeListSaga() {
-    yield put(startLoading(act.GET_BOARD_CHANNELTYPE_LIST));
-    let response;
+// 게시판 채널 리스트
+function* getBoardChannelTypeList({ callback }) {
+    yield put(startLoading(act.GET_BOARD_CHANNEL_TYPE_LIST));
+    let response, callbackData;
+
     try {
         response = yield call(api.getBoardChannelList);
-        const {
-            header: { success, message },
-        } = response.data;
-        if (success === true) {
+        callbackData = response.data;
+
+        if (response.data.header.success) {
             // yield put({ type: GET_SET_MENU_BOARD_INFO_SUCCESS, payload: response.data });
             const { list } = response.data.body;
             const resultList = list.map((element) => {
@@ -26,36 +26,36 @@ function* getBoardChannelTypeListSaga() {
                 };
             });
 
-            yield put({ type: act.GET_BOARD_CHANNELTYPE_LIST_SUCCESS, payload: resultList });
+            yield put({ type: act.GET_BOARD_CHANNEL_TYPE_LIST_SUCCESS, payload: resultList });
         } else {
-            // 에러 나면 서버 에러 메시지 토스트 전달.
-            toast.error(message);
+            // 에러 나면 서버 에러 메시지 토스트 전달
+            toast.error(response.data.header.message);
         }
     } catch (e) {
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
+        callbackData = errorResponse(e);
     }
-    yield put(finishLoading(act.GET_BOARD_CHANNELTYPE_LIST));
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(act.GET_BOARD_CHANNEL_TYPE_LIST));
 }
 
-// 게시판 채널 (JPOD, 기자) 리스트 가지고 와서 조합 해서 store 에 저장.
-function* getBoardChannelListSaga({ payload: { type, callback } }) {
+/**
+ * 게시판 채널 (JPOD, 기자) 리스트 가지고 와서 store에 저장
+ */
+function* getBoardChannelList({ payload: { type, callback } }) {
     yield put(startLoading(act.GET_BOARD_CHANNEL_LIST));
-    let response;
-    let callbackData = {};
+    let response, callbackData;
     try {
-        // jpod 채널 리스트 목록 가지고 오기.
         if (type === 'BOARD_DIVC1') {
+            // jpod 채널 리스트 목록
             response = yield call(api.getBoardJpodChannalList);
+            callbackData = response.data;
 
-            const {
-                header: { success, message },
-                body: { list },
-            } = response.data;
-
-            if (success === true) {
+            if (response.data.header.success) {
+                const { list } = response.data.body;
                 callbackData = list.map((data) => {
                     return {
                         name: data.chnlNm,
@@ -63,18 +63,15 @@ function* getBoardChannelListSaga({ payload: { type, callback } }) {
                     };
                 });
             } else {
-                toast.error(message);
+                toast.error(response.data.header.success);
             }
-            // 기자 목록 가지고 오기.
         } else if (type === 'BOARD_DIVC2') {
+            // 기자 목록
             response = yield call(api.getBoardReportersChannalList);
+            callbackData = response.data;
 
-            const {
-                header: { success, message },
-                body: { list },
-            } = response.data;
-
-            if (success === true) {
+            if (response.data.header.success) {
+                const { list } = response.data.body;
                 callbackData = list.map((data) => {
                     return {
                         name: data.repName,
@@ -83,15 +80,13 @@ function* getBoardChannelListSaga({ payload: { type, callback } }) {
                     };
                 });
             } else {
-                toast.error(message);
+                toast.error(response.data.header.success);
             }
         }
     } catch (e) {
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
+        callbackData = errorResponse(e);
     }
+
     if (typeof callback === 'function') {
         yield call(callback, callbackData);
     }
@@ -127,7 +122,6 @@ function* saveBoardInfoSaga({ payload: { boardInfo, callback } }) {
         const {
             header: { message },
         } = errorResponse(e);
-        toast.error(message);
     }
     if (typeof callback === 'function') {
         yield call(callback, callbackData);
@@ -187,8 +181,10 @@ function* getListMenuContentsList({ payload: boardId }) {
  */
 const getListMenuContentsInfo = createRequestSaga(act.GET_LIST_MENU_CONTENTS_INFO, api.getBoardContentsInfo);
 
-// 게시글 등록 하기.
-function* saveBoardContentsSaga({ payload: { boardId, formData, callback } }) {
+/**
+ * 게시글 등록
+ */
+function* saveBoardContents({ payload: { boardId, formData, callback } }) {
     yield put(startLoading(act.SAVE_BOARD_CONTENTS));
 
     let callbackData = {};
@@ -215,8 +211,10 @@ function* saveBoardContentsSaga({ payload: { boardId, formData, callback } }) {
     yield put(finishLoading(act.SAVE_BOARD_CONTENTS));
 }
 
-// 게시글 정보 수정.
-function* updateBoardContentsSaga({ payload: { boardId, boardSeq, formData, callback } }) {
+/**
+ * 게시글 수정
+ */
+function* updateBoardContents({ payload: { boardId, boardSeq, formData, callback } }) {
     yield put(startLoading(act.UPDATE_BOARD_CONTENTS));
 
     let callbackData = {};
@@ -243,8 +241,10 @@ function* updateBoardContentsSaga({ payload: { boardId, boardSeq, formData, call
     yield put(finishLoading(act.UPDATE_BOARD_CONTENTS));
 }
 
-// 게시글 삭제.
-function* deleteBoardContentsSaga({ payload: { boardId, boardSeq, callback } }) {
+/**
+ * 게시글 삭제
+ */
+function* deleteBoardContents({ payload: { boardId, boardSeq, callback } }) {
     yield put(startLoading(act.DELETE_BOARD_CONTENTS));
 
     let callbackData = {};
@@ -270,8 +270,10 @@ function* deleteBoardContentsSaga({ payload: { boardId, boardSeq, callback } }) 
     yield put(finishLoading(act.DELETE_BOARD_CONTENTS));
 }
 
-// 답변 등록 및 수정.
-function* saveBoardReplySaga({ payload: { boardId, parentBoardSeq, boardSeq, contents, callback } }) {
+/**
+ * 답변 등록 및 수정
+ */
+function* saveBoardReply({ payload: { boardId, parentBoardSeq, boardSeq, contents, callback } }) {
     yield put(startLoading(act.SAVE_BOARD_REPLY));
 
     let callbackData = {};
@@ -313,9 +315,11 @@ function* saveBoardReplySaga({ payload: { boardId, parentBoardSeq, boardSeq, con
     yield put(finishLoading(act.SAVE_BOARD_REPLY));
 }
 
-// 게시글 본문 에디터에서 이미지 등록 하기.
-function* uploadBoardContentImageSaga({ payload: { boardId, imageForm, callback } }) {
-    yield put(startLoading(act.UPLOAD_BOARD_CONTENT_IMAGE));
+/**
+ * 게시글 썸머노트 이미지 등록
+ */
+function* uploadBoardContentsImage({ payload: { boardId, imageForm, callback } }) {
+    yield put(startLoading(act.UPLOAD_BOARD_CONTENTS_IMAGE));
 
     let callbackData = {};
     let response;
@@ -337,7 +341,7 @@ function* uploadBoardContentImageSaga({ payload: { boardId, imageForm, callback 
         yield call(callback, callbackData);
     }
 
-    yield put(finishLoading(act.UPLOAD_BOARD_CONTENT_IMAGE));
+    yield put(finishLoading(act.UPLOAD_BOARD_CONTENTS_IMAGE));
 }
 
 export default function* boardsSaga() {
@@ -346,17 +350,17 @@ export default function* boardsSaga() {
     yield takeLatest(act.SAVE_SET_MENU_BOARD_INFO, saveBoardInfoSaga); // 게시판 상세 정보 가지고 오기.
     yield takeLatest(act.DELETE_SET_MENU_BOARD, deleteBoardSaga); // 게시판 삭제.
     yield takeLatest(act.GET_BOARD_GROUP_LIST, getBoardGroupList); // 게시판 그룹(트리메뉴)
-    yield takeLatest(act.GET_BOARD_CHANNELTYPE_LIST, getBoardChannelTypeListSaga); // 게시판 채널 리스트 가지고 오기.
-    yield takeLatest(act.GET_BOARD_CHANNEL_LIST, getBoardChannelListSaga); // 게시판 채널 리스트 가지고 오기.
+    yield takeLatest(act.GET_BOARD_CHANNEL_TYPE_LIST, getBoardChannelTypeList); // 게시판 채널 리스트
+    yield takeLatest(act.GET_BOARD_CHANNEL_LIST, getBoardChannelList); // 게시판 채널 리스트
 
     yield takeLatest(act.GET_LIST_MENU_SELECT_BOARD, getListMenuSelectBoard); // 게시글 tree 메뉴 선택시 게시판 상세 조회
     yield takeLatest(act.GET_LIST_MENU_CONTENTS_LIST, getListMenuContentsList); // 게시글 게시판 글 목록 조회
     yield takeLatest(act.GET_LIST_MENU_CONTENTS_INFO, getListMenuContentsInfo); // 게시글 게시판 상세 조회
 
-    yield takeLatest(act.SAVE_BOARD_CONTENTS, saveBoardContentsSaga); // 게시글 게시판 글 정보 저장.
-    yield takeLatest(act.UPDATE_BOARD_CONTENTS, updateBoardContentsSaga); // 게시글 게시판 글 정보 수정.
-    yield takeLatest(act.DELETE_BOARD_CONTENTS, deleteBoardContentsSaga); // 게시글 게시판 글 정보 저장.
-    yield takeLatest(act.SAVE_BOARD_REPLY, saveBoardReplySaga); // 게시글 게시판 답변 정보 저장.
+    yield takeLatest(act.SAVE_BOARD_CONTENTS, saveBoardContents); // 게시글 등록
+    yield takeLatest(act.UPDATE_BOARD_CONTENTS, updateBoardContents); // 게시글 수정
+    yield takeLatest(act.DELETE_BOARD_CONTENTS, deleteBoardContents); // 게시글 삭제
+    yield takeLatest(act.SAVE_BOARD_REPLY, saveBoardReply); // 게시글 답변 등록
 
-    yield takeLatest(act.UPLOAD_BOARD_CONTENT_IMAGE, uploadBoardContentImageSaga); // 게시글 본문 이미지 업로드.
+    yield takeLatest(act.UPLOAD_BOARD_CONTENTS_IMAGE, uploadBoardContentsImage); // 게시글 본문 이미지 업로드.
 }

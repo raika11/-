@@ -1,6 +1,4 @@
-/* -----------------------
-* 서울시스템 추가 mixin
-* ---------------------- */
+// ssc 추가 mixin
 @mixin custom-scroll {
     overflow-y: auto;
     &::-webkit-scrollbar {

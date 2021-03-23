@@ -1,7 +1,6 @@
-/**
-* 견학 월별 현황의 스타일을 조정
-*/
+@import '@fullcalendar/bootstrap/main';
 
+// 견학 - 월별 현황
 // 이전 다음 버튼
 .fc-prev-button, .fc-next-button {
     @include button-variant($searching, $searching);
@@ -42,8 +41,8 @@
     position: absolute;
     width: 25px;
     height: 25px;
-    top: 0;
-    right: 0;
+    top: 1px;
+    right: 3px;
     border: 1px solid $secondary;    
     border-radius: 50%;
 }

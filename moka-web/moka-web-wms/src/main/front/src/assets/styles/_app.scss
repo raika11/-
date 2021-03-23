@@ -53,7 +53,6 @@
 @import 'bootstrap/scss/spinners';
 @import 'bootstrap/scss/utilities';
 @import 'bootstrap/scss/print';
-// @import 'bootstrap/scss/bootstrap';
 
 // Theme components
 @import '3-components/accordion';
@@ -99,12 +98,8 @@
 @import '4-utilities/colors';
 @import '4-utilities/close';
 
-// 3rd party plugins
-@import '@fullcalendar/bootstrap/main';
-
 // 3rd party plugin styles
 @import '5-vendor/perfect-scrollbar';
-@import '5-vendor/react-bootstrap-table';
 @import '5-vendor/react-datetime';
 @import '5-vendor/react-select';
 @import '5-vendor/toastr';
@@ -117,9 +112,9 @@
 @import '5-vendor/fontawesome-pro/scss/regular';
 @import '5-vendor/react-resizable';
 
-// 서울시스템 추가
-@import 'non_responsive';
+// ssc
 @import 'custom';
+@import 'non_responsive';
 
 // 이미지에디터
 @import '@moka/tui-image-editor/dist/@moka/tui-image-editor';

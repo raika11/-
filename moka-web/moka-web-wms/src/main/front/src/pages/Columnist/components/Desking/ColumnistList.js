@@ -1,11 +1,18 @@
-import React, { useEffect, forwardRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import ColumnistDeskSearch from './ColumnistDeskSearch';
 import ColumnistDeskAgGrid from './ColumnistDeskAgGrid';
 import { clearStore } from '@store/columnist';
 
-const ColumnistList = forwardRef((props, ref) => {
+const propTypes = {};
+const defaultProps = {};
+
+/**
+ * 페이지편집 > 칼럼니스트 목록
+ */
+const ColumnistList = (props) => {
     const { className, selectedComponent, dropTargetAgGrid, onDragStop, show } = props;
     const dispatch = useDispatch();
 
@@ -18,9 +25,12 @@ const ColumnistList = forwardRef((props, ref) => {
     return (
         <div className={clsx('d-flex flex-column h-100', className)}>
             <ColumnistDeskSearch selectedComponent={selectedComponent} show={show} />
-            <ColumnistDeskAgGrid ref={ref} dropTargetAgGrid={dropTargetAgGrid} onDragStop={onDragStop} />
+            <ColumnistDeskAgGrid dropTargetAgGrid={dropTargetAgGrid} onDragStop={onDragStop} />
         </div>
     );
-});
+};
+
+ColumnistList.propTypes = propTypes;
+ColumnistList.defaultProps = defaultProps;
 
 export default ColumnistList;

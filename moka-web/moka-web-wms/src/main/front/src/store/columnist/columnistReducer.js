@@ -4,27 +4,14 @@ import * as act from './columnistAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
 export const initialState = {
-    columnlist_list: {
-        total: 0,
-        error: null,
-        list: [],
-        search: {
-            page: 0,
-            size: PAGESIZE_OPTIONS[0],
-            status: '',
-            keyword: '',
-        },
-    },
-    repoter_list: {
-        total: 0,
-        error: null,
-        list: [],
-        search: {
-            page: 0,
-            searchType: 'all',
-            sort: 'repSeq,asc',
-            keyword: '',
-        },
+    total: 0,
+    error: null,
+    list: [],
+    search: {
+        page: 0,
+        size: PAGESIZE_OPTIONS[0],
+        status: '',
+        keyword: '',
     },
     columnist: {
         seqNo: '',
@@ -49,44 +36,27 @@ export default handleActions(
         /**
          * 검색조건 변경
          */
-        [act.CHANGE_REPOTER_SEARCH_OPTION]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.repoter_list.search = payload;
-            });
-        },
         [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.columnlist_list.search = payload;
+                draft.search = payload;
             });
         },
         [act.CLEAR_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.columnlist_list.search = initialState.columnlist_list.search;
+                draft.search = initialState.search;
             });
         },
         /**
          * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,
-        [act.CLEAR_COLUMNIST_LIST]: (state) => {
-            return produce(state, (draft) => {
-                draft.columnlist_list = initialState.columnlist_list;
-                draft.columnlistError = initialState.columnistError;
-                draft.invalidList = initialState.invalidList;
-            });
-        },
         [act.CLEAR_COLUMNIST]: (state) => {
             return produce(state, (draft) => {
                 draft.columnist = initialState.columnist;
             });
         },
-        [act.CLEAR_REPORTER_LIST]: (state) => {
-            return produce(state, (draft) => {
-                draft.repoter_list = initialState.repoter_list;
-            });
-        },
         /**
-         * 스토어 데이터 변경.
+         * 스토어 데이터 변경
          */
         [act.CHANGE_COLUMNIST]: (state, { payload }) => {
             return produce(state, (draft) => {
@@ -103,16 +73,16 @@ export default handleActions(
          */
         [act.GET_COLUMNIST_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.columnlist_list.error = initialState.error;
-                draft.columnlist_list.list = body.list;
-                draft.columnlist_list.total = body.totalCnt;
+                draft.error = initialState.error;
+                draft.list = body.list;
+                draft.total = body.totalCnt;
             });
         },
         [act.GET_COLUMNIST_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.columnlist_list.error = payload;
-                draft.columnlist_list.list = initialState.columnlist_list.list;
-                draft.columnlist_list.total = initialState.columnlist_list.total;
+                draft.error = payload;
+                draft.list = initialState.list;
+                draft.total = initialState.total;
             });
         },
         /**
@@ -127,23 +97,6 @@ export default handleActions(
         [act.GET_COLUMNIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.columnistError = payload;
-            });
-        },
-        /**
-         * 기자 검색 데이터 조회
-         */
-        [act.GET_REPOTER_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.repoter_list.list = body.list;
-                draft.repoter_list.total = body.totalCnt;
-                draft.repoter_list.error = initialState.error;
-            });
-        },
-        [act.GET_REPOTER_LIST_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.repoter_list.list = initialState.repoter_list.list;
-                draft.repoter_list.total = initialState.repoter_list.total;
-                draft.repoter_list.error = payload;
             });
         },
     },

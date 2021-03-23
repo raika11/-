@@ -45,14 +45,14 @@ const Columnist = ({ match, displayName }) => {
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
                         <Switch>
-                            <Route path={([`${match.path}/add`], [`${match.path}/:seqNo`])} exact render={() => <ColumnistEdit match={match} />} />
+                            <Route path={[`${match.path}/add`, `${match.path}/:seqNo`]} exact render={() => <ColumnistEdit match={match} />} />
                         </Switch>
                     </Col>
                 )}
                 {(matchPoints.xs || matchPoints.sm) && (
                     <Switch>
                         <Route
-                            path={([`${match.path}/add`], [`${match.path}/:seqNo`])}
+                            path={[`${match.path}/add`, `${match.path}/:seqNo`]}
                             exact
                             render={() => (
                                 <Col xs={7} className="absolute-top-right h-100 overlay-shadow p-0" style={{ zIndex: 2 }}>

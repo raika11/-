@@ -53,11 +53,9 @@ const defaultProps = {
 };
 
 /**
- * 페이지편집에서 쓰는 기사 리스트
- * (다른 곳에서 사용 X)
- *
- * 네이버 채널 => 벌크기사 리스트 조회
- * 네이버 채널X => 서비스기사 리스트 조회
+ * 페이지편집 > 기사 목록
+ * @desc 네이버 채널 => 벌크기사 리스트 조회
+ * @desc 네이버 채널X => 서비스기사 리스트 조회
  */
 const ArticleList = (props) => {
     const { className, selectedComponent, dropTargetAgGrid, onDragStop, isNaverChannel, show, movie } = props;
@@ -227,7 +225,6 @@ const ArticleList = (props) => {
                 onDragStop={onDragStop}
                 onSearch={handleSearch}
                 onChangeSearchOption={changeTableSearchOption}
-                show={show}
                 getArticleList={() => getArticleList({ type, search })}
             />
         </div>

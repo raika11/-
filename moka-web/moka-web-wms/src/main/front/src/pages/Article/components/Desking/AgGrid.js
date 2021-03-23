@@ -10,7 +10,7 @@ import GroupNumberRenderer from './GroupNumberRenderer';
 import ChangeArtTitleModal from '@pages/Article/modals/ChangeArtTitleModal';
 
 /**
- * 기사관리 ag-grid 컴포넌트 (페이지편집)
+ * 페이지편집 > 기사 목록 > AgGrid
  */
 const AgGrid = forwardRef((props, ref) => {
     const { search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption, getArticleList } = props;

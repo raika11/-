@@ -40,14 +40,14 @@ export default [
     {
         headerName: '약력정보',
         field: 'profile',
-        width: 620,
+        width: 400,
         flex: 1,
         tooltipField: 'profile',
     },
     {
         headerName: '등록일',
         field: 'regDt',
-        width: 90,
+        width: 140,
         tooltipField: 'regDt',
     },
 ];

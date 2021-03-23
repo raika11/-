@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaSearchInput, MokaTable } from '@components';
+import { messageBox } from '@utils/toastUtil';
+import { initialState, getReporterListModal, GET_REPORTER_LIST_MODAL } from '@store/reporter';
 import columnDefs from './ReporterListModalColumns';
-import { GET_REPOTER_LIST, getRepoterList, changeRepoterSearchOption } from '@store/columnist';
 
 const propTypes = {
     show: PropTypes.bool,
     onHide: PropTypes.func,
-    /**
-     * 등록 버튼 클릭
-     * @param {object} template 선택한 데이터셋데이터
-     */
-    onClickSave: PropTypes.func,
-    /**
-     * 취소 버튼 클릭
-     */
-    onClickCancle: PropTypes.func,
     onClick: PropTypes.func,
 };
 const defaultProps = {};
@@ -25,68 +17,103 @@ const defaultProps = {};
  * 기자 목록 모달
  */
 const ReporterListModal = (props) => {
+    const { show, onHide, onClick } = props;
     const dispatch = useDispatch();
-    const loading = useSelector(({ loading }) => loading[GET_REPOTER_LIST]);
-    const { list, repotersearch, total } = useSelector(({ columnist }) => ({
-        list: columnist.repoter_list.list,
-        repotersearch: columnist.repoter_list.search,
-        total: columnist.repoter_list.total,
-    }));
-    const [keyword, setKeyword] = useState('');
+    const loading = useSelector(({ loading }) => loading[GET_REPORTER_LIST_MODAL]);
+    const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
+    const [total, setTotal] = useState(0);
 
     /**
-     * 입력값 변경
-     * @param {object} e 이벤트
+     * 기자 조회 함수
      */
-    const handleChangeValue = (e) => {
-        setKeyword(e.target.value);
-    };
+    const getReporterList = useCallback(
+        ({ search: appendSearch }) => {
+            const ns = { ...search, ...appendSearch };
+            setSearch(ns);
+
+            dispatch(
+                getReporterListModal({
+                    search: ns,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            setRowData(
+                                body.list.map((reporter) => ({
+                                    ...reporter,
+                                    belong:
+                                        (reporter.r1CdNm ? `${reporter.r1CdNm} / ` : '') +
+                                        (reporter.r2CdNm ? `${reporter.r2CdNm} / ` : '') +
+                                        (reporter.r3CdNm ? `${reporter.r3CdNm} / ` : '') +
+                                        (reporter.r4CdNm ? `${reporter.r4CdNm}` : ''),
+                                    onClick,
+                                })),
+                            );
+                            setTotal(body.totalCnt);
+                        } else {
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
+        },
+        [search, dispatch, onClick],
+    );
+
+    /**
+     * 검색조건 변경
+     */
+    const handleSearchOption = useCallback(
+        ({ key, value }) => {
+            setSearch({ ...search, [key]: value });
+        },
+        [search],
+    );
+
+    /**
+     * 테이블에서 검색조건 변경
+     */
+    const changeTableSearchOption = useCallback(
+        ({ key, value }) => {
+            let ns = { [key]: value };
+            if (key !== 'page') ns['page'] = 0;
+            getReporterList({ search: ns });
+        },
+        [getReporterList],
+    );
 
     /**
      * 검색
      */
-    const handleSearch = () => {
-        const temp = { ...repotersearch, keyword };
-        setRowData([]);
-        dispatch(getRepoterList(changeRepoterSearchOption(temp)));
-    };
+    const handleSearch = useCallback(() => {
+        let ns = { page: 0 };
+        getReporterList({ search: ns });
+    }, [getReporterList]);
 
     /**
-     * 테이블 페이징 변경
+     * 취소
      */
-    const handleChangeSearchOption = ({ key, value }) => {
-        let temp = { ...repotersearch, keyword, [key]: value };
-        if (key !== 'page') {
-            temp['page'] = 0;
-        }
-
-        // 기존 리스트 초기화
+    const handleHide = () => {
+        setSearch(initialState.search);
         setRowData([]);
-        dispatch(getRepoterList(changeRepoterSearchOption(temp)));
-        //FIXME: 에러 처리는 어떻게 할지?
+        setTotal(0);
+        onHide();
     };
 
     useEffect(() => {
-        setRowData(
-            list.map((row) => ({
-                ...row,
-                belong:
-                    (row.r1CdNm ? `${row.r1CdNm} / ` : '') + (row.r2CdNm ? `${row.r2CdNm} / ` : '') + (row.r3CdNm ? `${row.r3CdNm} / ` : '') + (row.r4CdNm ? `${row.r4CdNm}` : ''),
-                onClick: props.onClick,
-            })),
-        );
-    }, [list, props.onClick]);
-
-    useEffect(() => {
-        dispatch(getRepoterList());
+        if (show) {
+            getReporterList({});
+        } else {
+            setSearch(initialState.search);
+            setRowData([]);
+            setTotal(0);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [show]);
 
     return (
         <MokaModal
-            show={props.show}
-            onHide={props.onHide}
+            show={show}
+            onHide={handleHide}
             title="기자 검색"
             size="xl"
             bodyClassName="overflow-x-hidden custom-scroll"
@@ -96,7 +123,7 @@ const ReporterListModal = (props) => {
             draggable
         >
             <div className="mb-14">
-                <MokaSearchInput value={keyword} onChange={handleChangeValue} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
+                <MokaSearchInput name="keyword" value={search.keyword} onChange={handleSearchOption} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
             </div>
             <MokaTable
                 agGridHeight={600}
@@ -106,10 +133,9 @@ const ReporterListModal = (props) => {
                 onRowClicked={() => {}}
                 loading={loading}
                 total={total}
-                page={repotersearch.page}
-                size={repotersearch.size}
-                selected={null}
-                onChangeSearchOption={handleChangeSearchOption}
+                page={search.page}
+                size={search.size}
+                onChangeSearchOption={changeTableSearchOption}
             />
         </MokaModal>
     );

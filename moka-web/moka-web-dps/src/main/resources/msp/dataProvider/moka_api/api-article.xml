@@ -26,7 +26,7 @@
   <api id="article.info" resultWrap="N">
     <description>기사 상세 정보를 조회한다.v2</description>
     <parameter>
-      <totalId desc="기사Id" type="number" required="Y">[0-9]{1,9}</totalId>
+      <totalId desc="기사Id" type="number" required="Y">^[0-9]{1,9}$</totalId>
     </parameter>
     <request dmlType="sp" setNames="_DATA,CODE,REPORTER,COMPONENT">dps.article.articleN</request>
     <request type="module">jmnet.moka.web.dps.module.ArticleModule</request>
@@ -38,19 +38,19 @@
   <api id="list">
     <description>기사 목록을 반환한다.</description>
     <parameter>
-      <sources desc="소스코드">.{0,1000}</sources>
-      <scodes desc="서비스코드">.{0,1000}</scodes>
-      <mcodes desc="마스터코드">.{0,1000}</mcodes>
-      <keywords desc="키워드">.{0,1000}</keywords>
+      <sources desc="소스코드">^.{0,1000}$</sources>
+      <scodes desc="서비스코드">^.{0,1000}$</scodes>
+      <mcodes desc="마스터코드">^.{0,1000}$</mcodes>
+      <keywords desc="키워드">^.{0,1000}$</keywords>
       <usage desc="권한" default="P">^[P|T|J|I|O|C|U|R|M|T|S]{1}$</usage>
       <ctype desc="컨텐츠타입" default="R">^[RPMW]{1}$</ctype>
-      <startdt desc="검색시작일">.{0,1000}</startdt>
-      <enddt desc="검색종료일">.{0,1000}</enddt>
+      <startdt desc="검색시작일">^.{0,1000}$</startdt>
+      <enddt desc="검색종료일">^.{0,1000}$</enddt>
       <term type="number" desc="검색기간">^[0-9]{0,3}$</term>
-      <startid default="0" type="number" desc="시작TOTALID">.{0,1000}</startid>
-      <exceptids desc="제외 기사키">.{0,1000}</exceptids>
-      <exceptmcodes desc="제외 마스터코드">.{0,1000}</exceptmcodes>
-      <exceptsources desc="제외 소스코드">.{0,1000}</exceptsources>
+      <startid default="0" type="number" desc="시작TOTALID">^.{0,1000}$</startid>
+      <exceptids desc="제외 기사키">^.{0,1000}$</exceptids>
+      <exceptmcodes desc="제외 마스터코드">^.{0,1000}$</exceptmcodes>
+      <exceptsources desc="제외 소스코드">^.{0,1000}$</exceptsources>
       <thumb desc="썸네일존재" default="N">^[Y|N]{1}$</thumb>
       <todaypress desc="오늘중앙" default="N">^[Y|N]{1}$</todaypress>
       <total desc="총건수사용" default="Y">^[Y|N]{1}$</total>
@@ -101,7 +101,7 @@
   <api id="digitalSpecial.info" expire="5s">
     <description>디지털스페셜 정보를 조회한다.</description>
     <parameter>
-      <digitalSpecialId desc="디지털스페셜 Id" require="Y">[0-9]{1,20}</digitalSpecialId>
+      <digitalSpecialId desc="디지털스페셜 Id" require="Y">^[0-9]{1,20}$</digitalSpecialId>
     </parameter>
     <request>dps.article.digitalSpecial</request>
     <keys>
@@ -130,7 +130,7 @@
   <api id="article.flag">
     <description>기사 FLAG정보를 조회한다.</description>
     <parameter>
-      <totalId desc="기사Id" type="number" required="Y">[0-9]{1,9}</totalId>
+      <totalId desc="기사Id" type="number" required="Y">^[0-9]{1,9}$</totalId>
     </parameter>
     <request dmlType="sp" setNames="_DATA">dps.article.articleFlag</request>
     <keys>
@@ -142,7 +142,7 @@
   <api id="reporter">
     <description>기자 목록을 조회한다.</description>
     <parameter>
-      <name desc="기자명">.{0,1000}</name>
+      <name desc="기자명">^.{0,1000}$</name>
     </parameter>
     <request dmlType="sp" setNames="_DATA">dps.article.reporter</request>
     <request type="script" resultName="_TOTAL">
@@ -159,7 +159,7 @@
   <api id="columnist">
     <description>컬럼니스트 목록을 조회한다.</description>
     <parameter>
-      <name desc="컬럼니스트명">.{0,1000}</name>
+      <name desc="컬럼니스트명">^.{0,1000}$</name>
     </parameter>
     <request dmlType="sp" setNames="_DATA">dps.article.columnist</request>
     <request type="script" resultName="_TOTAL">
@@ -176,7 +176,7 @@
   <api id="jpod.channel">
     <description>J팟 채널 목록을 조회한다.</description>
     <parameter>
-      <name desc="채널명">.{0,1000}</name>
+      <name desc="채널명">^.{0,1000}$</name>
     </parameter>
     <request dmlType="sp" setNames="_DATA">dps.article.jpodChannel</request>
     <request type="script" resultName="_TOTAL">
@@ -202,6 +202,20 @@
     <keys>
       id
       #paging
+    </keys>
+  </api>
+
+  <!--북마크등록-->
+  <api id="scrap.insert">
+    <description>북마크를 등록한다.</description>
+    <parameter>
+      <totalId desc="기사Id" default="0" require="Y" type="number">^[0-9]{1,9}$</totalId>
+      <ip desc="기사Id" require="Y">^.{0,50}$</ip>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.article.scrapInsert</request>
+    <keys>
+      totalId
+      ip
     </keys>
   </api>
 

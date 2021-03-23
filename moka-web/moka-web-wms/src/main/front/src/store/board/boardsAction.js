@@ -58,8 +58,8 @@ export const getBoardInfo = createAction(GET_SET_MENU_BOARD_INFO, (boardId) => b
 /**
  * 전체 게시판 저장
  */
-export const [SAVE_SET_MENU_BOARD_INFO, SAVE_SET_MENU_BOARD_INFO_SUCCESS, SAVE_SET_MENU_BOARD_INFO_FAILURE] = createRequestActionTypes('board/SAVE_SET_MENU_BOARD_INFO');
-export const saveBoardInfo = createAction(SAVE_SET_MENU_BOARD_INFO, ({ boardInfo, callback }) => ({ boardInfo, callback }));
+export const SAVE_BOARD_INFO = 'board/SAVE_BOARD_INFO';
+export const saveBoardInfo = createAction(SAVE_BOARD_INFO, ({ boardInfo, callback }) => ({ boardInfo, callback }));
 
 /**
  * 전체 게시판 삭제

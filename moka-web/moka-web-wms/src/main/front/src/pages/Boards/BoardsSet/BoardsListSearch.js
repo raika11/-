@@ -10,13 +10,12 @@ import { initialState, changeSetMenuSearchOption, clearSetMenuSearchOption, getS
 /**
  * 게시판 관리 > 전체 게시판 > 게시판 목록 검색
  */
-const BoardsListSearch = () => {
+const BoardsListSearch = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
     // 공통 구분값 URL
-    const { pagePathName, boardType, storeSearch } = useSelector((store) => ({
-        pagePathName: store.board.pagePathName,
+    const { boardType, storeSearch } = useSelector((store) => ({
         boardType: store.board.boardType,
         storeSearch: store.board.setMenu.search,
     }));
@@ -53,7 +52,7 @@ const BoardsListSearch = () => {
      * 등록 버튼
      */
     const handleBoardNewButton = () => {
-        history.push(`/${pagePathName}/add`);
+        history.push(`${match.path}/add`);
     };
 
     useEffect(() => {

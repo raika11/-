@@ -58,11 +58,6 @@ export default handleActions(
         /**
          * 스토어 데이터 변경
          */
-        [act.CHANGE_COLUMNIST]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.columnist = payload;
-            });
-        },
         [act.CHANGE_INVALID_LINK]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.invalidList = payload;

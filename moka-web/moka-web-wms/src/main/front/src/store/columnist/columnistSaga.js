@@ -10,6 +10,11 @@ import * as act from './columnistAction';
 const getColumnistList = createRequestSaga(act.GET_COLUMNIST_LIST, api.getColumnistList);
 
 /**
+ * 칼럼니스트 목록(모달)
+ */
+const getColumnistListModal = createRequestSaga(act.GET_COLUMNIST_LIST, api.getColumnistList, true);
+
+/**
  * 칼럼니스트
  */
 const getColumnist = createRequestSaga(act.GET_COLUMNIST, api.getColumnist);
@@ -62,6 +67,7 @@ function* saveColumnist({ payload: { columnist, callback } }) {
 
 export default function* saga() {
     yield takeLatest(act.GET_COLUMNIST_LIST, getColumnistList);
+    yield takeLatest(act.GET_COLUMNIST_LIST_MODAL, getColumnistListModal);
     yield takeLatest(act.SAVE_COLUMNIST, saveColumnist);
     yield takeLatest(act.GET_COLUMNIST, getColumnist);
 }

@@ -65,7 +65,16 @@ const ReporterList = (props, ref) => {
                     search: ns,
                     callback: ({ header, body }) => {
                         if (header.success) {
-                            setRowData(body.list);
+                            setRowData(
+                                body.list.map((reporter) => ({
+                                    ...reporter,
+                                    belong:
+                                        (reporter.r1CdNm ? `${reporter.r1CdNm} / ` : '') +
+                                        (reporter.r2CdNm ? `${reporter.r2CdNm} / ` : '') +
+                                        (reporter.r3CdNm ? `${reporter.r3CdNm} / ` : '') +
+                                        (reporter.r4CdNm ? `${reporter.r4CdNm}` : ''),
+                                })),
+                            );
                             setTotal(body.totalCnt);
                         } else {
                             messageBox.alert(header.message);

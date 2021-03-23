@@ -61,7 +61,7 @@
     
     
 }
-
+ 
 /* X-Large devices (large desktops, 1200px and up) */
 @media (min-width:1200px) {
 
@@ -92,12 +92,11 @@
 .bdr_width4 {border-width:4px;}
 
 .bdr_black {border-color:#000;}
-
-
 .border_type1 {border-top:1px solid #000;}
 
-.title_wrap {border-top:1px solid #000;}
 
+
+.title_wrap {border-top:1px solid #000;}
 
 .text_wrap {width:100%;}
 .text_wrap .hashtag {font-size:14px;font-weight:bold;line-height:1.57;letter-spacing:-0.25px;color:#ff3c14;}

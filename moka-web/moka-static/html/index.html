@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ko">
+
 <head>
     <meta charset="utf-8">
 
@@ -12,43 +13,147 @@
     <!-- Responsive meta tag -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Responsive meta tag / 브라우저 확대 및 축소를 비활성화 / 접근성 문제 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <style>
         /* page list */
-        .page_list{margin-top:30px;padding:30px 10px 50px;}
-        .page_list h2{font-size:24px;}
-        .table_pglist{margin-top:5px;border-collapse:collapse;width:100%;background:rgb(255, 255, 255);overflow:hidden;border-top:2px solid #eb4141;}
-        .table_pglist + h2{margin-top:50px;}
-        .table_pglist th, .table_pglist td{border-style:solid;border-color:#555;border-image:initial;border-width:0px 0px 1px;vertical-align:middle;}
-        .table_pglist th{font-weight:normal;text-align:inherit;padding:10px 10px 8px;}
-        .table_pglist td{padding:9px 5px;font-size:16px;text-align:left;font-weight:bold;}
-        .table_pglist td.ct{text-align:center;}
-        .table_pglist td.lt{text-align:left;}
-        .table_pglist td.dp3{padding-left:35px;background-image:url(../images/icon_3depth.png);background-repeat:no-repeat;background-position:10px 45%;}
-        .table_pglist td.subbg{background:rgb(242, 242, 242);}
+        .page_list {
+            margin-top: 30px;
+            padding: 30px 10px 50px;
+        }
 
-        .table_pglist thead th, .table_pglist tfoot th{border-style:solid;border-color:rgb(231, 234, 236);border-image:initial;border-width:0px 0px 1px;background:#ededed;color:#353c48;text-align:center;vertical-align:middle;font-size:11px;font-weight:bold;}
-        .table_pglist thead th + th{border-left:1px solid #555;}
-        .table_pglist thead tr + tr th{background:#ddd;}
+        .page_list h2 {
+            font-size: 24px;
+        }
 
-        .table_pglist tr.cmd td{background:#82ca9c}
-        .table_pglist tr.ing td{background:#8393ca}
-        .table_pglist tr.dlt td{background:#ccc}
+        .table_pglist {
+            margin-top: 5px;
+            border-collapse: collapse;
+            width: 100%;
+            background: rgb(255, 255, 255);
+            overflow: hidden;
+            border-top: 2px solid #eb4141;
+        }
 
-        .hisEdit{margin:0;padding-inline-start:20px;}
-        .hisEdit li{text-align:left;}
-        .hisEdit li + li{padding-top:3px;}
-        .hisEdit li span{font-size:9px;}
+        .table_pglist+h2 {
+            margin-top: 50px;
+        }
+
+        .table_pglist th,
+        .table_pglist td {
+            border-style: solid;
+            border-color: #555;
+            border-image: initial;
+            border-width: 0px 0px 1px;
+            vertical-align: middle;
+        }
+
+        .table_pglist th {
+            font-weight: normal;
+            text-align: inherit;
+            padding: 10px 10px 8px;
+        }
+
+        .table_pglist td {
+            padding: 9px 5px;
+            font-size: 16px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .table_pglist td.ct {
+            text-align: center;
+        }
+
+        .table_pglist td.lt {
+            text-align: left;
+        }
+
+        .table_pglist td.dp3 {
+            padding-left: 35px;
+            background-image: url(../images/icon_3depth.png);
+            background-repeat: no-repeat;
+            background-position: 10px 45%;
+        }
+
+        .table_pglist td.subbg {
+            background: rgb(242, 242, 242);
+        }
+
+        .table_pglist thead th,
+        .table_pglist tfoot th {
+            border-style: solid;
+            border-color: rgb(231, 234, 236);
+            border-image: initial;
+            border-width: 0px 0px 1px;
+            background: #ededed;
+            color: #353c48;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .table_pglist thead th+th {
+            border-left: 1px solid #555;
+        }
+
+        .table_pglist thead tr+tr th {
+            background: #ddd;
+        }
+
+        .table_pglist tr.cmd td {
+            background: #82ca9c
+        }
+
+        .table_pglist tr.ing td {
+            background: #8393ca
+        }
+
+        .table_pglist tr.dlt td {
+            background: #ccc
+        }
+
+        .hisEdit {
+            margin: 0;
+            padding-inline-start: 20px;
+        }
+
+        .hisEdit li {
+            text-align: left;
+        }
+
+        .hisEdit li+li {
+            padding-top: 3px;
+        }
+
+        .hisEdit li span {
+            font-size: 9px;
+        }
+
         .hisEdit li.pun span,
         .hisEdit li span.pun,
-        .hisEdit li span:hover{font-size:15px;}
+        .hisEdit li span:hover {
+            font-size: 15px;
+        }
 
-        .table_pglist tbody th{text-align:center;background:rgb(249, 249, 249);color:rgb(0, 0, 0);}
-        .table_pglist tbody td + td{border-left:1px solid #555;}
-        .table_pglist tr.bounds td{border-top:3px double #555;}
+        .table_pglist tbody th {
+            text-align: center;
+            background: rgb(249, 249, 249);
+            color: rgb(0, 0, 0);
+        }
+
+        .table_pglist tbody td+td {
+            border-left: 1px solid #555;
+        }
+
+        .table_pglist tr.bounds td {
+            border-top: 3px double #555;
+        }
     </style>
 </head>
+
 <body>
     <div id="wrapper">
         <h2>SECTION</h2>
@@ -58,7 +163,7 @@
                 <col width="135px">
                 <col width="150px">
                 <col width="120px">
-                
+
                 <col width="100px">
                 <col width="90px">
                 <col width="90px">
@@ -75,14 +180,15 @@
                     <th>수정일</th>
                     <th>수정이력</th>
                 </tr>
-            </thead> 
+            </thead>
             <tbody>
                 <tr>
                     <td>HOME</td>
                     <td>일반형</td>
                     <td colspan="2">정치</td>
                     <td class="ct">
-                        <a href="https://stg-publish.joongang.co.kr/section/poli_home.html" class="link" target="_blank">poli_home.html</a>
+                        <a href="https://stg-publish.joongang.co.kr/section/poli_home.html" class="link"
+                            target="_blank">poli_home.html</a>
                     </td>
                     <td class="ct"></td>
                     <td class="ct"></td>
@@ -109,9 +215,27 @@
                         </ol>
                     </td>
                 </tr>
+                <tr>
+                    <td></td>
+                    <td>유니크형</td>
+                    <td>포토</td>
+                    <td></td>
+                    <td class="ct">
+                        <a href="https://stg-publish.joongang.co.kr/section/unique_photo_home.html" class="link"
+                            target="_blank">unique_photo_home.html</a>
+                    </td>
+                    <td class="ct"></td>
+                    <td class="ct"></td>
+                    <td>
+                        <ol class="hisEdit">
+                            <li><span>1.</span></li>
+                            <li><span>2.</span></li>
+                        </ol>
+                    </td>
+                </tr>
             </tbody>
         </table>
-        
+
         <h2>고객센터</h2>
         <table class="table_pglist">
             <colgroup>
@@ -119,7 +243,7 @@
                 <col width="135px">
                 <col width="150px">
                 <col width="120px">
-                
+
                 <col width="100px">
                 <col width="90px">
                 <col width="90px">
@@ -136,12 +260,13 @@
                     <th>수정일</th>
                     <th>수정이력</th>
                 </tr>
-            </thead> 
+            </thead>
             <tbody>
                 <tr>
                     <td colspan="4">메인</td>
                     <td class="ct">
-                        <a href="https://stg-publish.joongang.co.kr/customercenter/cs_main.html" class="link" target="_blank">cs_main.html</a>
+                        <a href="https://stg-publish.joongang.co.kr/customercenter/cs_main.html" class="link"
+                            target="_blank">cs_main.html</a>
                     </td>
                     <td class="ct"></td>
                     <td class="ct"></td>
@@ -155,7 +280,8 @@
                 <tr>
                     <td colspan="4">공지사항</td>
                     <td class="ct">
-                        <a href="https://stg-publish.joongang.co.kr/customercenter/notice.html" class="link" target="_blank">notice.html</a>
+                        <a href="https://stg-publish.joongang.co.kr/customercenter/notice.html" class="link"
+                            target="_blank">notice.html</a>
                     </td>
                     <td class="ct"></td>
                     <td class="ct"></td>
@@ -184,7 +310,8 @@
                     <td>고객문의</td>
                     <td colspan="3">홈</td>
                     <td class="ct">
-                        <a href="https://stg-publish.joongang.co.kr/customercenter/question.html" class="link" target="_blank">question.html</a>
+                        <a href="https://stg-publish.joongang.co.kr/customercenter/question.html" class="link"
+                            target="_blank">question.html</a>
                     </td>
                     <td class="ct"></td>
                     <td class="ct"></td>
@@ -199,7 +326,8 @@
                     <td></td>
                     <td colspan="3">문의 등록</td>
                     <td class="ct">
-                        <a href="https://stg-publish.joongang.co.kr/customercenter/question_write.html" class="link" target="_blank">question_write.html</a>
+                        <a href="https://stg-publish.joongang.co.kr/customercenter/question_write.html" class="link"
+                            target="_blank">question_write.html</a>
                     </td>
                     <td class="ct"></td>
                     <td class="ct"></td>
@@ -214,7 +342,8 @@
                     <td></td>
                     <td colspan="3">나의 문의내역</td>
                     <td class="ct">
-                        <a href="https://stg-publish.joongang.co.kr/customercenter/my_question.html" class="link" target="_blank">my_question.html</a>
+                        <a href="https://stg-publish.joongang.co.kr/customercenter/my_question.html" class="link"
+                            target="_blank">my_question.html</a>
                     </td>
                     <td class="ct"></td>
                     <td class="ct"></td>
@@ -238,11 +367,12 @@
                             <li><span>2.</span></li>
                         </ol>
                     </td>
-                </tr>                  
-                
+                </tr>
+
             </tbody>
         </table>
 
     </div>
 </body>
+
 </html>

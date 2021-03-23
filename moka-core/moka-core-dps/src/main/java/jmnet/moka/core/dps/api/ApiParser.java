@@ -236,6 +236,8 @@ public class ApiParser {
                         type = PARAM_TYPE_NUMBER;
                     } else if (type.equals(PARAM_TYPE_DATE)) {
                         type = PARAM_TYPE_DATE;
+                    } else if (type.equals(PARAM_TYPE_COOKIE)) {
+                        type = PARAM_TYPE_COOKIE;
                     } else {
                         type = PARAM_TYPE_STRING;
                     }

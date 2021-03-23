@@ -98,4 +98,8 @@ public class ModuleRequestHandler implements RequestHandler {
         }
         return module;
     }
+
+    public GenericApplicationContext getApplicationContext() {
+        return this.appContext;
+    }
 }

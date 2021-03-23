@@ -18,7 +18,7 @@ moment.locale('ko');
  * Gif를 생성하기 위한 이미지 드롭존
  */
 const GifDropzone = (props) => {
-    const { collapse, setCollapse, onThumbClick, onRepClick, setRepImg, repImg, cropWidth, cropHeight } = props;
+    const { collapse, setCollapse, showPhotoDetail, setRepImg, repImg, cropWidth, cropHeight } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
     const [modalShow, setModalShow] = useState(false);
@@ -36,7 +36,8 @@ const GifDropzone = (props) => {
                 if (ACCEPTED_IMAGE_TYPES.includes(f.type)) {
                     const id = `${moment().format('YYYYMMDDsss')}_${idx}`;
                     const preview = URL.createObjectURL(f);
-                    const imageData = { id: id, File: f, preview, dataType: 'local', thumbPath: preview, imageOnlnPath: `${IMAGE_PROXY_API}${encodeURIComponent(preview)}` };
+                    // thumbPath: preview, imageOnlnPath: `${IMAGE_PROXY_API}${encodeURIComponent(preview)}`
+                    const imageData = { id: id, File: f, preview, dataType: 'local' };
                     imageFiles.push(imageData);
                 } else {
                     // 이미지 파일이 아닌경우
@@ -129,27 +130,28 @@ const GifDropzone = (props) => {
     };
 
     /**
-     * 카드 목록에서 아이템 삭제
+     * 드롭 목록에 있는 아이템 삭제
      */
-    const handleDeleteDropCard = (data, e) => {
-        e.stopPropagation();
-        setImgList(
-            produce(imgList, (draft) => {
-                draft.splice(
-                    imgList.findIndex((list) => list.id === data.id),
-                    1,
-                );
-            }),
-        );
-    };
+    const handleDeleteDropCard = useCallback(
+        (data, e) => {
+            e.stopPropagation();
+            setImgList(
+                produce(imgList, (draft) => {
+                    draft.splice(
+                        imgList.findIndex((list) => list.id === data.id),
+                        1,
+                    );
+                }),
+            );
+        },
+        [imgList],
+    );
 
     /**
      * 파일 변경
      * @param {object} e 이벤트
      */
-    const handleChangeFile = (e) => {
-        addLocalImg(e.target);
-    };
+    const handleChangeFile = (e) => addLocalImg(e.target);
 
     /**
      * gif 생성 -> 저장
@@ -159,10 +161,7 @@ const GifDropzone = (props) => {
         setRepImg({
             dataType: 'local',
             id: `${moment().format('YYYYMMDDsss')}_gif`,
-            thumbPath: gifImage,
-            path: {
-                preview: gifImage,
-            },
+            preview: gifImage,
         });
     };
 
@@ -233,9 +232,9 @@ const GifDropzone = (props) => {
                                 img={data.thumbPath}
                                 moveCard={moveCard}
                                 setAddIndex={setAddIndex}
-                                onThumbClick={onThumbClick}
+                                showPhotoDetail={showPhotoDetail}
                                 onDeleteClick={handleDeleteDropCard}
-                                onRepClick={onRepClick}
+                                setRepImg={setRepImg}
                                 isRep={data.id === repImg?.id}
                                 onEditClick={handleEditClick}
                             />

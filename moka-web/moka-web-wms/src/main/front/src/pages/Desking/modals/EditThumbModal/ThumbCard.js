@@ -12,19 +12,15 @@ const propTypes = {
      */
     className: PropTypes.string,
     /**
-     * onClick 썸네일 카드 onClick 이벤트
-     */
-    onClick: PropTypes.func,
-    /**
      * width 컴포넌트의 가로 사이즈
      * @default
      */
-    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /**
      * height 이미지의 세로 사이즈
      * @default
      */
-    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /**
      * 컴포넌트 그림자 style
      */
@@ -46,12 +42,7 @@ const propTypes = {
      * 렌더링 데이터
      * @default
      */
-    data: PropTypes.object,
-    /**
-     * 선택 여부
-     * @default
-     */
-    selected: PropTypes.bool,
+    data: PropTypes.shape({}),
     /**
      * 데이터타입
      * @default
@@ -68,7 +59,6 @@ const defaultProps = {
     height: 168,
     alt: '',
     data: {},
-    selected: false,
     dataType: 'archive',
     isRep: false,
 };
@@ -78,9 +68,8 @@ export const ItemTypes = {
 };
 
 /**
- * 페이지편집 대표이미지편집 팝업의 썸네일카드
- * (드래그 가능)
- * https://github.com/react-dnd/react-dnd/issues/1550
+ * 드래그가능한 썸네일 카드
+ * @see https://github.com/react-dnd/react-dnd/issues/1550
  */
 const ThumbCard = forwardRef((props, ref) => {
     const {
@@ -89,37 +78,24 @@ const ThumbCard = forwardRef((props, ref) => {
         data,
         img,
         alt,
-        selected,
         className,
         moveCard,
         setAddIndex,
         dataType,
-        // 대표사진 설정 props
+        // 대표사진과 관련된 props
         boxShadow,
         represent,
-        onThumbClick,
+        showPhotoDetail,
+        editPhoto,
         onDeleteClick,
         isRep,
-        onRepClick,
-        onEditClick,
+        setRepImg,
     } = props;
 
     const imgRef = useRef(null);
     const wrapperRef = useRef(null);
     const cardRef = useRef(null);
     const [mouseOver, setMouseOver] = useState(false);
-
-    // return ref 설정
-    useImperativeHandle(
-        ref,
-        () => ({
-            cardRef: cardRef.current,
-            hoverIndex: data.index,
-            wrapperRef: wrapperRef.current,
-            imgRef: imgRef.current,
-        }),
-        [data],
-    );
 
     /**
      * 드롭존 hook
@@ -174,9 +150,21 @@ const ThumbCard = forwardRef((props, ref) => {
         }),
     });
 
+    // return ref 설정
+    useImperativeHandle(
+        ref,
+        () => ({
+            cardRef: cardRef.current,
+            hoverIndex: data.index,
+            wrapperRef: wrapperRef.current,
+            imgRef: imgRef.current,
+        }),
+        [data],
+    );
+
     return (
         <div className={className} style={{ width, height, opacity: isDragging ? 0.5 : 1 }}>
-            <div ref={drag(drop(cardRef))} className={clsx('d-flex flex-direction-column h-100 w-100 border rounded', { 'thumb-card-selected': selected })} style={{ boxShadow }}>
+            <div ref={drag(drop(cardRef))} className={clsx('d-flex flex-direction-column h-100 w-100 border rounded')} style={{ boxShadow }}>
                 <div className="position-relative overflow-hidden flex-fill">
                     <div
                         ref={wrapperRef}
@@ -196,7 +184,7 @@ const ThumbCard = forwardRef((props, ref) => {
                                     variant={isRep ? 'positive' : 'negative'}
                                     size="sm"
                                     style={{ position: 'absolute', top: '5px', left: '5px' }}
-                                    onClick={(e) => onRepClick(data, e)}
+                                    onClick={(e) => setRepImg(data, e)}
                                 >
                                     대표
                                 </Button>
@@ -230,7 +218,7 @@ const ThumbCard = forwardRef((props, ref) => {
                                             variant="searching"
                                             className="border-0 p-0 moka-table-button"
                                             style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
-                                            onClick={() => onThumbClick(data)}
+                                            onClick={() => showPhotoDetail(data)}
                                         >
                                             <MokaIcon iconName="fal-search-plus" />
                                         </Button>
@@ -255,7 +243,7 @@ const ThumbCard = forwardRef((props, ref) => {
                                         variant="searching"
                                         className="border-0 p-0 moka-table-button"
                                         style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
-                                        onClick={(e) => onEditClick(data)}
+                                        onClick={() => editPhoto(data)}
                                     >
                                         <MokaIcon iconName="fas-pencil" />
                                     </Button>
@@ -279,9 +267,7 @@ const ThumbCard = forwardRef((props, ref) => {
                                         variant="searching"
                                         className="border-0 p-0 moka-table-button"
                                         style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
-                                        onClick={(e) => {
-                                            onEditClick(data);
-                                        }}
+                                        onClick={() => editPhoto(data)}
                                     >
                                         <MokaIcon iconName="fas-pencil" />
                                     </Button>

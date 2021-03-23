@@ -1,37 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { MokaModal, MokaCardTabs } from '@components';
 import { clearStore } from '@store/photoArchive';
+import toast from '@utils/toastUtil';
+import commonUtil from '@utils/commonUtil';
+import imageEditer from '@utils/imageEditorUtil';
+import { MokaModal, MokaCardTabs } from '@components';
 import ArchiveSearch from './ArchiveSearch';
 import ArchiveTable from './ArchiveTable';
 import ArticleImageList from './ArticleImageList';
 import GifDropzone from './GifDropzone';
 import ThumbCard from './ThumbCard';
 import ThumbViewModal from './ThumbViewModal';
-import toast from '@utils/toastUtil';
-import commonUtil from '@utils/commonUtil';
-import imageEditer from '@utils/imageEditorUtil';
 import { IMAGE_PROXY_API } from '@/constants';
 
-/**
- * 대표사진 초기 데이터
- */
-const defaultRepImg = {
-    id: '',
-    dataType: 'represent',
-    thumbPath: '',
-    imageOnlnPath: '',
-    path: {
-        orgPath: '',
-        articleImgPath: '',
-        localImgPath: '',
-    },
-    imgProps: {},
-};
 const propTypes = {
     /**
      * 기사ID, 기사ID가 있으면 본문 소재도 조회한다
@@ -68,7 +53,23 @@ const defaultProps = {
 };
 
 /**
- * 포토아카이브 + 대표이미지 편집 모달
+ * 대표사진 초기 데이터
+ */
+const defaultRepImg = {
+    id: '',
+    dataType: 'represent',
+    thumbPath: '',
+    imageOnlnPath: '',
+    path: {
+        orgPath: '',
+        articleImgPath: '',
+        localImgPath: '',
+    },
+    imgProps: {},
+};
+
+/**
+ * 포토아카이브 + 본문 내 사진 목록(기사 키가 있는 경우) + 대표이미지 편집 모달
  */
 const EditThumbModal = (props) => {
     const {
@@ -87,19 +88,19 @@ const EditThumbModal = (props) => {
     const [collapse, setCollapse] = useState(true);
     const [cardData, setCardData] = useState({});
     const [repImg, setRepImg] = useState(defaultRepImg);
-    const [showViewModal, setShowViewModal] = useState(false);
+    const [showDetailModal, setShowDetailModal] = useState(false);
 
     /**
-     * 썸네일 클릭
+     * 사진 상세보기
      * @param {object} data 썸네일 클릭 팝업 데이터
      */
-    const handleThumbClick = (data) => {
+    const showPhotoDetail = (data) => {
         setCardData(data);
-        setShowViewModal(true);
+        setShowDetailModal(true);
     };
 
     /**
-     * 대표사진 삭제
+     * 대표사진에서 삭제
      */
     const handleDeleteClick = (data, e) => {
         e.stopPropagation();
@@ -109,58 +110,59 @@ const EditThumbModal = (props) => {
     };
 
     /**
-     * 카드 안의 대표사진 지정 버튼 클릭
+     * 대표사진으로 지정
+     * @param {object} data 대표사진으로 지정할 사진의 데이터
      */
-    const handleRepClick = (data) => {
-        if (repImg.id === data.id) {
-            toast.warning('대표 이미지로 지정된 사진입니다.');
-        }
+    const setRepImgByDataType = useCallback(
+        (data) => {
+            if (repImg.id === data.id) {
+                toast.warning('대표 이미지로 지정된 사진입니다.');
+            }
 
-        // 데이터 타입에 따라 분기하여 repImg Data에 매핑한다 (필드가 다 다름)
-        if (data.dataType === 'archive') {
-            setRepImg({
-                ...repImg,
-                dataType: 'archive',
-                id: data.id,
-                thumbPath: data.imageThumPath,
-                imageOnlnPath: data.imageOnlnPath,
-                path: {
+            // 데이터 타입에 따라 분기하여 repImg Data에 매핑한다 (필드가 다 다름)
+            if (data.dataType === 'archive') {
+                setRepImg({
+                    dataType: 'archive',
+                    id: data.id,
+                    thumbPath: data.imageThumPath,
                     imageOnlnPath: data.imageOnlnPath,
-                    imageThumPath: data.imageThumPath,
-                },
-            });
-        } else if (data.dataType === 'article') {
-            setRepImg({
-                ...repImg,
-                dataType: 'article',
-                id: data.id,
-                thumbPath: data.compFileUrl,
-                imageOnlnPath: data.compFileUrl,
-                path: {
-                    compFileUrl: data.compFileUrl,
-                },
-            });
-        } else if (data.dataType === 'local') {
-            setRepImg({
-                ...repImg,
-                dataType: 'local',
-                id: data.id,
-                thumbPath: data.preview,
-                imageOnlnPath: data.preview,
-                path: {
-                    preview: data.preview,
-                },
-                imgProps: data,
-            });
-        } else {
-            setRepImg(data);
-        }
-    };
+                    path: {
+                        imageOnlnPath: data.imageOnlnPath,
+                        imageThumPath: data.imageThumPath,
+                    },
+                });
+            } else if (data.dataType === 'article') {
+                setRepImg({
+                    dataType: 'article',
+                    id: data.id,
+                    thumbPath: data.compFileUrl,
+                    imageOnlnPath: data.compFileUrl,
+                    path: {
+                        compFileUrl: data.compFileUrl,
+                    },
+                });
+            } else if (data.dataType === 'local') {
+                setRepImg({
+                    dataType: 'local',
+                    id: data.id,
+                    thumbPath: data.preview,
+                    imageOnlnPath: data.preview,
+                    path: {
+                        preview: data.preview,
+                    },
+                    imgProps: data,
+                });
+            } else {
+                setRepImg(data);
+            }
+        },
+        [repImg.id],
+    );
 
     /**
      * 카드 안의 편집기능 실행
      */
-    const handleEditClick = () => {
+    const editPhoto = () => {
         imageEditer.create(
             repImg.imageOnlnPath ? repImg.imageOnlnPath : repImg.thumbPath,
             (imageSrc) => {
@@ -179,7 +181,7 @@ const EditThumbModal = (props) => {
     };
 
     /**
-     * 모달의 적용 버튼
+     * 적용 버튼
      */
     const handleClickSave = () => {
         if (repImg.dataType === 'article') {
@@ -210,7 +212,7 @@ const EditThumbModal = (props) => {
     };
 
     /**
-     * 모달의 취소 버튼
+     * 취소 버튼
      */
     const handleHide = () => {
         setRepImg(defaultRepImg);
@@ -250,7 +252,7 @@ const EditThumbModal = (props) => {
                 {!totalId ? (
                     <div className="d-flex px-card pb-card w-100 flex-column" style={{ height: 480 }}>
                         <ArchiveSearch />
-                        <ArchiveTable onThumbClick={handleThumbClick} repImg={repImg} onRepClick={handleRepClick} />
+                        <ArchiveTable showPhotoDetail={showPhotoDetail} repImg={repImg} setRepImg={setRepImgByDataType} />
                     </div>
                 ) : (
                     <MokaCardTabs
@@ -260,12 +262,12 @@ const EditThumbModal = (props) => {
                             // 아카이브 탭
                             <div className="d-flex h-100 flex-column">
                                 <ArchiveSearch />
-                                <ArchiveTable onThumbClick={handleThumbClick} repImg={repImg} onRepClick={handleRepClick} />
+                                <ArchiveTable showPhotoDetail={showPhotoDetail} repImg={repImg} setRepImg={setRepImgByDataType} />
                             </div>,
 
                             // 본문 소재 탭
                             <div className="d-flex h-100 flex-column">
-                                <ArticleImageList totalId={totalId} repImg={repImg} onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
+                                <ArticleImageList totalId={totalId} repImg={repImg} showPhotoDetail={showPhotoDetail} setRepImg={setRepImgByDataType} />
                             </div>,
                         ]}
                         tabNavs={['아카이브', '본문 소재 리스트']}
@@ -279,9 +281,9 @@ const EditThumbModal = (props) => {
                             className="p-2"
                             img={repImg.thumbPath}
                             dataType={repImg.dataType}
-                            onThumbClick={handleThumbClick}
                             onDeleteClick={handleDeleteClick}
-                            onEditClick={handleEditClick}
+                            editPhoto={editPhoto}
+                            showPhotoDetail={showPhotoDetail}
                             represent
                         />
                     </div>
@@ -292,17 +294,16 @@ const EditThumbModal = (props) => {
                         cropHeight={cropHeight}
                         collapse={collapse}
                         setCollapse={setCollapse}
-                        onThumbClick={handleThumbClick}
                         onDeleteClick={handleDeleteClick}
                         repImg={repImg}
-                        onRepClick={handleRepClick}
-                        setRepImg={setRepImg}
+                        setRepImg={setRepImgByDataType}
+                        showPhotoDetail={showPhotoDetail}
                     />
                 </div>
             </DndProvider>
 
             {/* 사진 크게 보기 */}
-            <ThumbViewModal show={showViewModal} onHide={() => setShowViewModal(false)} data={cardData} />
+            <ThumbViewModal show={showDetailModal} onHide={() => setShowDetailModal(false)} data={cardData} />
         </MokaModal>
     );
 };

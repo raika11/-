@@ -65,9 +65,9 @@ const propTypes = {
      * @default
      */
     deleteButton: PropTypes.bool,
-
     /**
      * 에러 이미지 사용
+     * @default
      */
     isUsedDefaultImage: PropTypes.bool,
 };
@@ -161,7 +161,7 @@ const MokaImageInput = forwardRef((props, ref) => {
         }
         imageHide();
         setAlert(false);
-    }, [setFileValue, imageHide]);
+    }, [setFileValue, isUsedDefaultImage, imageHide]);
 
     /**
      * 파일 드롭

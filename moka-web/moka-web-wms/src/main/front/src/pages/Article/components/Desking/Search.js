@@ -8,7 +8,7 @@ import { SourceSelector } from '@pages/commons';
 import { initialState } from '@store/article';
 
 /**
- * 페이지편집 기사 검색 공통 컴포넌트
+ * 페이지편집 > 기사 목록 > 기사 검색
  */
 const Search = (props) => {
     const { onChangeSearchOption, search, period, isNaverChannel, error, onSearch, onReset, onChangeGroupNumber, media = false } = props;

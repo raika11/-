@@ -107,14 +107,22 @@ const UnlockModal = (props) => {
         let isInvalid = false;
         let errList = [];
 
-        if (!/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)/.test(member.password)) {
+        if (
+            !/^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*)/.test(
+                member.password,
+            )
+        ) {
             errList.push({
                 field: 'password',
                 reason: '비밀번호 형식이 올바르지 않습니다.',
             });
             isInvalid = isInvalid | true;
         }
-        if (!/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)/.test(member.confirmPassword)) {
+        if (
+            !/^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*)/.test(
+                member.confirmPassword,
+            )
+        ) {
             errList.push({
                 field: 'confirmPassword',
                 reason: '비밀번호 확인 형식이 올바르지 않습니다.',

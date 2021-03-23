@@ -14,7 +14,7 @@ const DeskingArticleTab = (props) => {
     const { componentList, componentAgGridInstances, show } = props;
     const dispatch = useDispatch();
     const { area, selectedComponent, isNaverChannel } = useSelector(({ desking }) => desking);
-    const [tabNavs] = useState(['기사', '영상', '이슈키워드', '기자', '칼럼니스트']); // 컴포넌트 폼여부에 따라 리스트 변경o
+    const [tabNavs] = useState(['기사', '영상', '패키지', '기자', '칼럼니스트']); // 컴포넌트 폼여부에 따라 리스트 변경o
     const [navIdx, setNavIdx] = useState(0);
 
     /**

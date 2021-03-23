@@ -35,7 +35,7 @@ export default [
     {
         headerName: '아이디',
         field: 'joinsId',
-        width: 120,
+        width: 100,
         tooltipField: 'joinsId',
     },
     {

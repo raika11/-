@@ -59,7 +59,9 @@ public class NewsFlashSender extends AbstractPushSender {
             log.debug(e.toString());
         }
 
-        if (pushApp.equals("iOS")) {
+        if (pushApp
+                .getAppOs()
+                .equals("iOS")) {
             Notification notification = new Notification();
             notification.setTitle(title);
             notification.setBody(content);

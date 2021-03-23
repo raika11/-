@@ -19,7 +19,7 @@ export default [
     {
         headerName: '사용',
         field: 'status',
-        width: 63,
+        width: 40,
         cellRenderer: 'usedYnRenderer',
     },
     {

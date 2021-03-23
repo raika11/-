@@ -243,4 +243,14 @@
       ) }
   </select>
 
+  <!--북마크등록-->
+  <select id="scrapInsert" parameterType="map" resultType="string" statementType="CALLABLE">
+    { call UPU_ARTICLE_SCRAP_INS(
+      #{memid, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{memseq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{logintype, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{ip, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
+  </select>
 </mapper>

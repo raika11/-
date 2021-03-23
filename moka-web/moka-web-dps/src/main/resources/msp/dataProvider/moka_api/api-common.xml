@@ -4,6 +4,57 @@
   -->
 
 <apiConfig>
+  <api id="member.cookie" expire="5s" resultWrap="N">
+    <description>멤버십 정보를 반환한다.</description>
+    <parameter>
+      <JAMemSSOInfo type="cookie" desc="멤버십쿠키">^.{1,150}$</JAMemSSOInfo>
+    </parameter>
+    <request type="module" methodName="getCookieInfo">
+      jmnet.moka.web.dps.module.MembershipModule
+    </request>
+    <keys>
+      JAMemSSOInfo
+    </keys>
+  </api>
+
+  <api id="member.cookie.param" expire="5s" resultWrap="N">
+    <description>멤버십 정보를 반환한다.</description>
+    <parameter>
+      <JAMemSSOInfo desc="멤버십쿠키" require="Y">^.{1,150}$</JAMemSSOInfo>
+    </parameter>
+    <request type="module" methodName="getCookieInfo">
+      jmnet.moka.web.dps.module.MembershipModule
+    </request>
+    <keys>
+      JAMemSSOInfo
+    </keys>
+  </api>
+
+  <api id="member.api" expire="5s" resultWrap="N">
+    <description>멤버십 정보를 반환한다.</description>
+    <parameter>
+      <JAMemSSOInfo type="cookie" desc="멤버십쿠키">^.{1,150}$</JAMemSSOInfo>
+    </parameter>
+    <request type="module" methodName="getMemberInfo">
+      jmnet.moka.web.dps.module.MembershipModule
+    </request>
+    <keys>
+      JAMemSSOInfo
+    </keys>
+  </api>
+
+  <api id="member.api.param" expire="5s" resultWrap="N">
+    <description>멤버십 정보를 반환한다.</description>
+    <parameter>
+      <JAMemSSOInfo desc="멤버십쿠키" require="Y">^.{1,150}$</JAMemSSOInfo>
+    </parameter>
+    <request type="module" methodName="getMemberInfo">
+      jmnet.moka.web.dps.module.MembershipModule
+    </request>
+    <keys>
+      JAMemSSOInfo
+    </keys>
+  </api>
 
 </apiConfig>
 

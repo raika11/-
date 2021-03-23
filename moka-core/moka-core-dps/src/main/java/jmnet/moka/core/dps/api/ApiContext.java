@@ -1,6 +1,7 @@
 package jmnet.moka.core.dps.api;
 
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import jmnet.moka.common.ApiResult;
 import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.dps.api.model.Api;
@@ -38,6 +39,10 @@ public class ApiContext {
 				this.parameterMap.put(parameterName,cookieMap.get(parameterName));
 			}
 		}
+	}
+
+	public HttpServletRequest getHttpRequest() {
+		return this.apiResolver.getRequest();
 	}
 
 	public void setSqlSession(SqlSession sqlSession) {

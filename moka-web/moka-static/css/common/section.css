@@ -135,7 +135,7 @@
 .text_wrap {width:100%;}
 .text_wrap .hashtag {font-size:14px;font-weight:bold;line-height:1.57;letter-spacing:-0.25px;color:#ff3c14;}
 .text_wrap .headline {font-size:24px;font-weight:bold;letter-spacing:-0.4px;color:#000;line-height:1.38;}
-.text_wrap .headline a {height:3.14em;-webkit-line-clamp:2;line-height:inherit;}
+.text_wrap .headline a {height:2.76m;-webkit-line-clamp:2;line-height:inherit;}
 .text_wrap .lead {height:50px;margin-top:6px;font-size:14px;line-height:1.57;letter-spacing:-0.4px;color:#444;}
 .text_wrap .lead a {height:3.14em;-webkit-line-clamp:2;line-height:inherit;}
 .text_wrap .byline {margin-top:8px;font-size:12px;line-height:1.83;letter-spacing:-0.32px;color:#aaa;}

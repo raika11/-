@@ -14,6 +14,65 @@
 
 
 
+/* Mobile devices (mobile, 375px and down) */
+@media (max-width:375px) {
+    
+}
+
+
+/* Mobile devices (mobile, 767px and down) */
+@media (max-width:767px) {
+    .header_nav .nav .nav_item {margin-right: 26px;}
+    .swiper-container.catalog_home .swiper-button-prev, .swiper-container.catalog_home .swiper-button-next{display:none;}
+
+
+   /***************************************    catalog     ************************************/
+
+}
+
+/* Medium devices (tablet + pc, 768px and up) */
+@media (min-width:768px) {
+    .header_nav_wrap {align-items: flex-end;}
+    .header_nav .nav .nav_item {margin-right: 24px;}
+    .header_nav .nav .nav_item .nav_link {color: #000; font-size: 14px;}
+
+    .section.general .component {padding: 18px 0 30px;}
+    .section.general .component.latest_area {float: left; width: 65.666666%; margin-right: 36px;}
+    .section.general .component.view_lank_area {float: right; width: 31.333333%;}
+    .section.general .view_lank_area .card_image {display: none;}
+
+
+    /***************************************    catalog     ************************************/
+
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width:1024px) {
+    .contents.section {padding: 88px 0 100px;}
+
+    .header_nav .nav .nav_item {margin-right: 30px;}
+    .header_nav .nav .nav_item .nav_link {font-size: 16px;}
+
+    .section.general .component {padding: 18px 0 50px;}
+    .section.general .view_lank_area .card_image {display: block;}
+
+
+    /***************************************    catalog     ************************************/
+    
+    
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width:1200px) {
+
+}
+
+/* Unique devices (large desktops, 1280px and up) */
+@media (min-width:1280px) {
+
+    /***************************************    catalog     ************************************/
+}
+
 
 
 
@@ -50,6 +109,7 @@
 .title_wrap .subtitle span {padding-left:20px;color:#888;font-size:13px;font-weight:400;}
 
 
+
 /* Mobile devices (mobile, 375px and down) */
 @media (max-width:375px) {
     
@@ -58,9 +118,6 @@
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
-    .header_nav .nav .nav_item {margin-right: 26px;}
-    .swiper-container.catalog_home .swiper-button-prev, .swiper-container.catalog_home .swiper-button-next{display:none;}
-
 
     /***************************************    catalog     ************************************/
     .catalog_home.swiper-container .swiper-slide div:nth-child(2) .text_wrap{position:relative;padding:0 30px;left:unset;top:unset;transform:translate(0, 0%);}
@@ -71,14 +128,7 @@
 
 /* Medium devices (tablet + pc, 768px and up) */
 @media (min-width:768px) {
-    .header_nav_wrap {align-items: flex-end;}
-    .header_nav .nav .nav_item {margin-right: 24px;}
-    .header_nav .nav .nav_item .nav_link {color: #000; font-size: 14px;}
 
-    .section.general .component {padding: 18px 0 30px;}
-    .section.general .component.latest_area {float: left; width: 65.666666%; margin-right: 36px;}
-    .section.general .component.view_lank_area {float: right; width: 31.333333%;}
-    .section.general .view_lank_area .card_image {display: none;}
 
     /* catalog main swiper */
     .catalog_home.swiper-container .swiper-slide .row .img_thumbnail {background:#eee;}
@@ -90,13 +140,7 @@
 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
-    .contents.section {padding: 88px 0 100px;}
 
-    .header_nav .nav .nav_item {margin-right: 30px;}
-    .header_nav .nav .nav_item .nav_link {font-size: 16px;}
-
-    .section.general .component {padding: 18px 0 50px;}
-    .section.general .view_lank_area .card_image {display: block;}
 
 
     /***************************************    catalog     ************************************/

@@ -58,8 +58,6 @@
     .section.general .component.view_lank_area {float: right; width: 31.333333%;}
     .section.general .view_lank_area .card_image {display: none;}
 
-
-
     /* catalog main swiper */
     .catalog_home.swiper-container .swiper-slide .row .img_thumbnail{background:#eee;}
     .catalog_home.swiper-container .swiper-slide div:nth-child(2){position:relative;}

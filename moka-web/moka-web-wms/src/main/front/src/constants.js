@@ -129,6 +129,7 @@ export const DESK_HIST_PUBLISH = 'PUBLISH'; // 전송
 export const DATA_TYPE_DESK = 'DESK';
 export const DATA_TYPE_AUTO = 'AUTO';
 export const DATA_TYPE_FORM = 'FORM';
+export const DATA_TYPE_NONE = 'NONE';
 
 export const PDS_URL = process.env.REACT_APP_PDS_URL;
 export const IR_URL = process.env.REACT_APP_IR_URL;

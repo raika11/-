@@ -5,6 +5,11 @@ import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
 import { MokaInputLabel, MokaInput } from '@components';
 
+/**
+ * 컴포넌트 > 리스트 노출건수, 페이징 사용여부, 이전다음/더보기 선택
+ * @desc 이전/다음 => 최대 페이지수, 표출 페이지수,
+ * @desc 더보기 => 호출 건수
+ */
 const DetailPagingForm = (props) => {
     const { component, setComponent, available } = props;
 

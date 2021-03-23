@@ -7,7 +7,7 @@ import Collapse from 'react-bootstrap/Collapse';
 import { MokaInputLabel, MokaInput, MokaDateTimePicker } from '@components';
 
 /**
- * 기간 설정
+ * 컴포넌트 > 기간 설정
  */
 const DetailPeriodForm = (props) => {
     const { component, setComponent, available, error, setError } = props;

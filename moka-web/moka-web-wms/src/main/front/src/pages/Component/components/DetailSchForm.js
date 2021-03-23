@@ -7,6 +7,9 @@ import Collapse from 'react-bootstrap/Collapse';
 import { MokaInputLabel } from '@components';
 import { CodeAutocomplete } from '@pages/commons';
 
+/**
+ * 컴포넌트 > 검색 설정
+ */
 const DetailSchForm = (props) => {
     const { component, setComponent, available } = props;
     const controls = `component-collapse-sch-form`;

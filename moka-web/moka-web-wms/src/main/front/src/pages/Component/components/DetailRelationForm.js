@@ -2,23 +2,42 @@ import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
+import Popover from 'react-bootstrap/Popover';
+import { DATA_TYPE_AUTO, DATA_TYPE_DESK, DATA_TYPE_NONE } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaInputGroup, MokaIcon, MokaPrependLinkInput, MokaCopyTextButton } from '@components';
 import { DatasetListModal } from '@pages/Dataset/modals';
 import { TemplateListModal } from '@pages/Template/modals';
-import { EditFormPartListModal } from '@pages/EditForm/modals';
+// import { EditFormPartListModal } from '@pages/EditForm/modals';
 
+/**
+ * 노출여부 설명하는 popover
+ */
+const popover = (
+    <Popover id="popover-component-info">
+        <Popover.Title>노출여부 (viewYn)</Popover.Title>
+        <Popover.Content>
+            편집 컴포넌트는 등록 시 자동으로 viewYn이 N으로 설정되어 페이지에 추가되어도 보이지 않습니다. (페이지편집에서만 영역 활성으로 변경 가능)
+            <br />
+            다만 <strong>예외적으로 Y로 등록해야할 경우 Y로 변경하여 등록하세요.</strong> <br />
+            (ex. 네이버스탠드, 네이버채널 페이지에 새로운 컴포넌트 추가)
+        </Popover.Content>
+    </Popover>
+);
+
+/**
+ * 컴포넌트 > 템플릿, 데이터셋, 입력태그, 삭제 단어
+ * 편집폼 관련 소스 주석 처리
+ */
 const DetailRelationForm = (props) => {
-    const { component, setComponent, inputTag, error, setError } = props;
+    const { addMode, component, setComponent, inputTag, error, setError } = props;
 
     // state
     const [templateModalShow, setTemplateModalShow] = useState(false);
     const [datasetModalShow, setDatasetModalShow] = useState(false);
-    const [formModalShow, setFormModalShow] = useState(false);
-
+    // const [formModalShow, setFormModalShow] = useState(false);
     const [dataset, setDataset] = useState({});
     const [template, setTemplate] = useState({});
-    const [editFormPart, setEditFormPart] = useState({});
+    // const [editFormPart, setEditFormPart] = useState({});
 
     /**
      * input 값 변경
@@ -29,7 +48,7 @@ const DetailRelationForm = (props) => {
         if (name === 'dataType') {
             setComponent({
                 ...component,
-                dataType: checked ? 'DESK' : 'NONE',
+                dataType: checked ? DATA_TYPE_DESK : DATA_TYPE_NONE,
             });
         } else {
             setComponent({
@@ -45,34 +64,31 @@ const DetailRelationForm = (props) => {
     const handleChangeDataset = (e) => {
         const { value } = e.target;
         let result = { dataType: value };
-        if (value === 'AUTO') {
-            if (component.prevAutoDataset) {
-                result.dataset = component.prevAutoDataset;
-            } else {
-                result.dataset = {};
-            }
-            result.editFormPart = {};
-        } else if (value === 'DESK') {
-            if (component.prevDeskDataset) {
-                result.dataset = component.prevDeskDataset;
-            } else {
-                result.dataset = {};
-            }
-            result.editFormPart = {};
-        } else if (value === 'FORM') {
-            result.dataset = {};
-        }
+        // 편집 <=> 자동 변경 불가능하게 변경됨
+        // if (value === DATA_TYPE_AUTO) {
+        //     if (component.prevAutoDataset) {
+        //         result.dataset = component.prevAutoDataset;
+        //     } else {
+        //         result.dataset = {};
+        //     }
+        //     result.editFormPart = {};
+        // } else if (value === DATA_TYPE_DESK) {
+        //     if (component.prevDeskDataset) {
+        //         result.dataset = component.prevDeskDataset;
+        //     } else {
+        //         result.dataset = {};
+        //     }
+        //     result.editFormPart = {};
+        // } else if (value === DATA_TYPE_FORM) {
+        //     result.dataset = {};
+        // }
         setComponent({ ...component, ...result });
     };
 
     useEffect(() => {
-        if (component.dataset) {
-            setDataset(component.dataset);
-        }
-        if (component.template) {
-            setTemplate(component.template);
-        }
-        setEditFormPart(component.editFormPart || {});
+        if (component.dataset) setDataset(component.dataset);
+        if (component.template) setTemplate(component.template);
+        // setEditFormPart(component.editFormPart || {});
     }, [component]);
 
     return (
@@ -116,50 +132,53 @@ const DetailRelationForm = (props) => {
                         className="mb-0 h-100"
                         id="data-type-check"
                         name="dataType"
-                        inputProps={{ checked: component.dataType !== 'NONE' }}
+                        inputProps={{ checked: component.dataType !== DATA_TYPE_NONE }}
                         onChange={handleChangeValue}
                     />
                 </Col>
-                {component.dataType !== 'NONE' && (
+                {component.dataType !== DATA_TYPE_NONE && (
                     <React.Fragment>
-                        {/* 자동/편집/폼 셀렉트 */}
+                        {/* 자동/편집/폼 셀렉트 => 등록 시에만 선택 가능!!! */}
                         <Col xs={2} className="d-flex p-0 pr-2">
-                            <MokaInput as="select" value={component.dataType} onChange={handleChangeDataset}>
-                                <option value="DESK">편집</option>
-                                <option value="AUTO">자동</option>
+                            <MokaInput as="select" value={component.dataType} onChange={handleChangeDataset} disabled={!addMode}>
+                                <option value={DATA_TYPE_DESK}>편집</option>
+                                <option value={DATA_TYPE_AUTO}>자동</option>
                                 {/* <option value="FORM">폼</option> */}
                             </MokaInput>
                         </Col>
 
                         {/* 자동/편집/폼에 따른 input */}
                         <Col xs={7} className="p-0">
-                            {component.dataType === 'DESK' && (
+                            {component.dataType === DATA_TYPE_DESK && (
                                 <div className="d-flex">
-                                    <Col xs={7} className="p-0 pr-2">
-                                        <MokaInput placeholder="ID" value={component.prevDeskDataset ? component.prevDeskDataset.datasetSeq : ''} disabled />
-                                    </Col>
-                                    {/* viewYn 변경 */}
-                                    <MokaInputLabel
-                                        as="select"
-                                        label={
-                                            <React.Fragment>
-                                                viewYn
-                                                <OverlayTrigger overlay={<Tooltip id="viewyn-info">viewYn</Tooltip>}>
-                                                    <MokaIcon iconName="fas-info-circle" className="ml-1 color-info" />
-                                                </OverlayTrigger>
-                                            </React.Fragment>
-                                        }
-                                        name="viewYn"
-                                        value={component.viewYn}
-                                        onChange={handleChangeValue}
-                                        className="flex-fill"
-                                    >
-                                        <option value="Y">Y</option>
-                                        <option value="N">N</option>
-                                    </MokaInputLabel>
+                                    {/* 편집 데이터셋 ID 노출 */}
+                                    <MokaInput placeholder="ID" className="flex-fill" value={component.prevDeskDataset ? component.prevDeskDataset.datasetSeq : ''} disabled />
+
+                                    {/* viewYn 설정 => 등록 시에만 설정할 수 있음!!!! */}
+                                    {addMode && (
+                                        <div className="flex-shrink-0 ml-2" style={{ width: 150 }}>
+                                            <MokaInputLabel
+                                                as="select"
+                                                label={
+                                                    <React.Fragment>
+                                                        노출여부
+                                                        <OverlayTrigger overlay={popover} trigger={['click']}>
+                                                            <MokaIcon iconName="fas-info-circle" className="ml-1 color-info cursor-pointer" />
+                                                        </OverlayTrigger>
+                                                    </React.Fragment>
+                                                }
+                                                name="viewYn"
+                                                value={component.viewYn}
+                                                onChange={handleChangeValue}
+                                            >
+                                                <option value="Y">Y</option>
+                                                <option value="N">N</option>
+                                            </MokaInputLabel>
+                                        </div>
+                                    )}
                                 </div>
                             )}
-                            {component.dataType === 'AUTO' && (
+                            {component.dataType === DATA_TYPE_AUTO && (
                                 <MokaPrependLinkInput
                                     to={dataset.datasetSeq ? `/dataset/${dataset.datasetSeq}` : undefined}
                                     linkText={dataset.datasetSeq ? `ID: ${dataset.datasetSeq}` : 'ID'}
@@ -175,7 +194,7 @@ const DetailRelationForm = (props) => {
                                     isInvalid={error.dataset}
                                 />
                             )}
-                            {component.dataType === 'FORM' && (
+                            {/* {component.dataType === DATA_TYPE_FORM && (
                                 <MokaPrependLinkInput
                                     to={editFormPart.partSeq ? `/edit-form/${editFormPart.formSeq}` : undefined}
                                     linkText={editFormPart.partSeq ? `ID: ${editFormPart.partSeq}` : 'ID'}
@@ -189,7 +208,7 @@ const DetailRelationForm = (props) => {
                                     // 아이콘 클릭했을 때 데이터셋 팝업 열고, 데이터셋 선택하면 화면에 보여줌
                                     onIconClick={() => setFormModalShow(true)}
                                 />
-                            )}
+                            )} */}
                         </Col>
                     </React.Fragment>
                 )}
@@ -214,6 +233,7 @@ const DetailRelationForm = (props) => {
                 value={component.delWords}
                 onChange={handleChangeValue}
             />
+
             {/* 영역 설정 -> 사용X */}
             {/* <Form.Row className="mb-2">
                 <Col xs={4} className="p-0">
@@ -229,10 +249,7 @@ const DetailRelationForm = (props) => {
                 show={templateModalShow}
                 onHide={() => setTemplateModalShow(false)}
                 onClickSave={(template) => {
-                    setComponent({
-                        ...component,
-                        template,
-                    });
+                    setComponent({ ...component, template });
                     if (template.templateSeq) {
                         setError({ ...error, template: false });
                     }
@@ -255,12 +272,12 @@ const DetailRelationForm = (props) => {
             />
 
             {/* 폼 선택 팝업 */}
-            <EditFormPartListModal
+            {/* <EditFormPartListModal
                 show={formModalShow}
                 onHide={() => setFormModalShow(false)}
                 onClickSave={(editFormPart) => setComponent({ ...component, editFormPart })}
                 selected={editFormPart.partSeq}
-            />
+            /> */}
         </div>
     );
 };

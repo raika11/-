@@ -5,7 +5,7 @@ import moment from 'moment';
 import { MokaCard } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { initialState, getComponent, clearComponent, saveComponent, hasRelationList, changeInvalidList, GET_COMPONENT, SAVE_COMPONENT, DELETE_COMPONENT } from '@store/component';
-import { DB_DATEFORMAT } from '@/constants';
+import { DB_DATEFORMAT, DATA_TYPE_AUTO } from '@/constants';
 import { invalidListToError } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
@@ -16,7 +16,7 @@ import DetailSchForm from './components/DetailSchForm';
 import DetailPagingForm from './components/DetailPagingForm';
 
 /**
- * 컴포넌트 정보/수정 컴포넌트
+ * 컴포넌트 > 상세 조회, 수정, 등록
  */
 const ComponentEdit = ({ onDelete, match }) => {
     const { componentSeq } = useParams();
@@ -30,6 +30,7 @@ const ComponentEdit = ({ onDelete, match }) => {
     // state
     const [temp, setTemp] = useState(initialState.component);
     const [error, setError] = useState({});
+    const [addMode, setAddMode] = useState(false);
 
     /**
      * 유효성 검사
@@ -147,7 +148,7 @@ const ComponentEdit = ({ onDelete, match }) => {
             }
         }
 
-        if (saveData.dataType === 'AUTO') {
+        if (saveData.dataType === DATA_TYPE_AUTO) {
             // 자동일 경우 반드시 viewYn을 Y로 바꾼다 (중요)
             saveData.viewYn = 'Y';
         }
@@ -212,8 +213,10 @@ const ComponentEdit = ({ onDelete, match }) => {
         // 컴포넌트ID가 있을 때 데이터 조회
         if (componentSeq) {
             dispatch(getComponent({ componentSeq: componentSeq }));
+            setAddMode(false);
         } else {
             dispatch(clearComponent());
+            setAddMode(true);
         }
         setError({});
     }, [dispatch, componentSeq]);
@@ -225,6 +228,7 @@ const ComponentEdit = ({ onDelete, match }) => {
     useEffect(() => {
         return () => {
             dispatch(clearComponent());
+            setAddMode(false);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -243,7 +247,7 @@ const ComponentEdit = ({ onDelete, match }) => {
             />
             <hr className="divider mb-0" />
             <div className="custom-scroll component-padding-box py-3" style={{ height: 615 }}>
-                <DetailRelationForm component={temp} setComponent={setTemp} inputTag={inputTag} error={error} setError={setError} />
+                <DetailRelationForm addMode={addMode} component={temp} setComponent={setTemp} inputTag={inputTag} error={error} setError={setError} />
                 <hr className="divider" />
                 <DetailPeriodForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} error={error} setError={setError} />
                 <hr className="divider" />

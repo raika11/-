@@ -252,9 +252,12 @@ public class ApiRequestHelper implements ApiListingScannerPlugin {
                             : " , Hints = " + dpsParam.getHints());
             apiParamList.add(new ParameterBuilder()
                     .description(description)
-                    .type(new TypeResolver().resolve(String.class)).name(dpsParam.getName())
+                    .type(new TypeResolver().resolve(String.class))
+                    .name(dpsParam.getName())
                     .defaultValue(dpsParam.getDefaultValueStr())
-                    .parameterType("query").parameterAccess("access").required(dpsParam.isRequire())
+                    .parameterType( dpsParam.getType().equals(ApiParser.PARAM_TYPE_COOKIE)?"cookie":"query")
+                    .parameterAccess("access")
+                    .required(dpsParam.isRequire())
                     .modelRef(new ModelRef("string"))
                     .build());
         }

@@ -56,6 +56,8 @@
     .header_nav .nav .nav_item .nav_link {font-size: 16px;}
 
     .section.general .component {padding: 18px 0 50px;}
+    .section.general .component:not(.header_nav_area) .row > * {padding-right: 36px;}
+    .section.general .component .row > *:last-child {padding-right: 0;}
     .section.general .view_lank_area .card_image {display: block;}
 
 

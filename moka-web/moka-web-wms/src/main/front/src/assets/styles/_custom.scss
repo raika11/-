@@ -1,6 +1,3 @@
-/* -----------------------
-* body
-* ---------------------- */
 body {
     height: 100vh;
     overflow: hidden;
@@ -66,9 +63,7 @@ body {
     @include disabled-font;
 }
 
-/* -----------------------
-* sign In
-* ---------------------- */
+// sign In
 .signin-main{
     color: $white;
 
@@ -168,9 +163,7 @@ body {
     }
 }
 
-/* -----------------------
-* card
-* ---------------------- */
+// card
 .card {
     &.fold {
         .card-header {
@@ -211,9 +204,7 @@ body {
     justify-content: center;
 }
 
-/* -----------------------
-* card-tab (SSC 추가)
-* ---------------------- */
+// card-tab (ssc)
 .card-tab {
     display: flex;
     flex-direction: column;
@@ -266,9 +257,7 @@ body {
     }
 }
 
-/* -----------------------
-* icon-toggle-tab
-* ---------------------- */
+// icon-toggle-tab
 .icon-toggle-tab {
     > .tab-content {
         box-shadow: $tab-content-box-shadow;
@@ -285,9 +274,7 @@ body {
     }
 }
 
-/* -----------------------
-* divider
-* ---------------------- */
+// divider
 .divider {
     display: block;
     width: 100%;
@@ -305,9 +292,7 @@ body {
     margin-right: $spacer;
 }
 
-/* -----------------------
-* modal (react-draggable-container)
-* ---------------------- */
+// modal (react-draggable-container)
 .react-draggable-container {
     height: 100vh;
     width: 100vw;
@@ -344,9 +329,7 @@ body {
     }
 }
 
-/* -----------------------
-* modal (code-modal)
-* ---------------------- */
+// modal (code-modal)
 .code-modal {
     .service {
         .section {
@@ -381,9 +364,7 @@ body {
     }
 }
 
-/* -----------------------
-* tree
-* ---------------------- */
+// tree
 .treeview {
     .tree-list {
         .tree-category, .tree-item {
@@ -480,9 +461,7 @@ body {
     }
 }
 
-/* -----------------------
-* input
-* ---------------------- */
+// input
 .required-text {
     position: absolute;
     top: -4px;
@@ -498,9 +477,7 @@ body {
     border-bottom-right-radius: 0;
 }
 
-/* -----------------------
-* MokaTable 안에 사용하는 컴포넌트 스타일
-* ---------------------- */
+// MokaTable 안에 사용하는 컴포넌트 스타일
 .moka-table-button {
     width: 20px;
     height: 20px;
@@ -509,18 +486,14 @@ body {
     justify-content: center;
 }
 
-/* -----------------------
-* 컴포넌트관리
-* ---------------------- */
+// 컴포넌트관리
 .component-padding-box {
     margin: 0px -1 * $card-spacer-x;
     padding: 0px $card-spacer-x;
     padding-top: 3px;
 }
 
-/* -----------------------
-* Monaco Editor (glyph hover message)
-* ---------------------- */
+// Monaco Editor (glyph hover message)
 .errorContextGlyphMargin {
     background-image: url('../images/icon/error_icon.png');
     background-size: contain;
@@ -547,9 +520,7 @@ body {
     max-width: 231px !important;
 }
 
-/* -----------------------
-* 기사관리
-* ---------------------- */
+// 기사관리
 .article-group-number {
     display: flex;
     align-items: center;
@@ -601,9 +572,7 @@ body {
     border-right: 1px solid $warning;
 }
 
-/* -----------------------
-* 페이지편집
-* ---------------------- */
+// 페이지편집
 .component-work {
     position: relative;
     
@@ -696,9 +665,7 @@ body {
     }
 }
 
-/* -----------------------
-* 시민마이크 작성자 아이콘
-* ---------------------- */
+// 시민마이크 작성자 아이콘
 .icon {
     display: inline-block;
     padding-left: 22px;

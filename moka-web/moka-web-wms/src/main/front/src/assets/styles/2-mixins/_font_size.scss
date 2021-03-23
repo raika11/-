@@ -1,7 +1,5 @@
-/**
-* node_modules/bootstrap/scss/vendor/_rfs.scss의 font-size 재정의
-* - letter-spacing
-*/
+// node_modules/bootstrap/scss/vendor/_rfs.scss의 font-size 재정의
+// - letter-spacing 추가
 @mixin font-size($fs, $important: false) {
     @include rfs($fs, $important);
 

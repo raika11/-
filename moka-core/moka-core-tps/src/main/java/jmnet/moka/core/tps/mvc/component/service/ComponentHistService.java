@@ -5,6 +5,7 @@ import java.util.Optional;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
+import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -78,5 +79,16 @@ public interface ComponentHistService {
      * @param componentSeq 컴포넌트SEQ
      */
     void deleteByReserveComponentSeq(Long componentSeq)
+            throws Exception;
+
+    /**
+     * 컴포넌트 히스토리저장(네이버채널에서 사용)
+     *
+     * @param workVO
+     * @param histPublishDTO
+     * @param templateSeq
+     * @return
+     */
+    ComponentHist insertComponentHist(ComponentWorkVO workVO, HistPublishDTO histPublishDTO, Long templateSeq)
             throws Exception;
 }

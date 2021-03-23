@@ -184,13 +184,21 @@ public class ComponentRestController extends AbstractCommonController {
         Component component = modelMapper.map(componentDTO, Component.class);
 
         try {
+
+            //임시저장
+            HistPublishDTO histSaveDTO = HistPublishDTO
+                    .builder()
+                    .status(EditStatusCode.SAVE)
+                    .approvalYn(MokaConstants.NO)
+                    .build();
+            ComponentHist componentHist = componentHistService.insertComponentHist(component, histSaveDTO);
+
+            //저장
             HistPublishDTO histPublishDTO = HistPublishDTO
                     .builder()
                     .status(EditStatusCode.PUBLISH)
                     .approvalYn(MokaConstants.YES)
                     .build();
-
-            // 등록
             Component returnVal = componentService.insertComponent(component, histPublishDTO);
 
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
@@ -242,14 +250,8 @@ public class ComponentRestController extends AbstractCommonController {
         List<Component> components = modelMapper.map(componentDTOs, Component.TYPE);
 
         try {
-            HistPublishDTO histPublishDTO = HistPublishDTO
-                    .builder()
-                    .status(EditStatusCode.PUBLISH)
-                    .approvalYn(MokaConstants.YES)
-                    .build();
-
             // 한번에 등록한다
-            List<Component> returnVal = componentService.insertComponents(components, histPublishDTO);
+            List<Component> returnVal = componentService.insertComponents(components);
             List<ComponentDTO> returnValDTO = modelMapper.map(returnVal, ComponentDTO.TYPE);
 
             // 리턴 DTO 생성
@@ -325,6 +327,15 @@ public class ComponentRestController extends AbstractCommonController {
             // 업데이트
             Component newComponent = modelMapper.map(componentDTO, Component.class);
 
+            // 임시저장
+            HistPublishDTO histSaveDTO = HistPublishDTO
+                    .builder()
+                    .status(EditStatusCode.SAVE)
+                    .approvalYn(MokaConstants.NO)
+                    .build();
+            ComponentHist componentHist = componentHistService.insertComponentHist(newComponent, histSaveDTO);
+
+            // 저장
             HistPublishDTO histPublishDTO = HistPublishDTO
                     .builder()
                     .status(EditStatusCode.PUBLISH)

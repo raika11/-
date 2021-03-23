@@ -334,11 +334,11 @@ public class DeskingServiceImpl implements DeskingService {
                 .build();
 
         // 컴포넌트 히스토리만 추가
-        ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO, templateSeq);
+        ComponentHist componentHist = componentHistService.insertComponentHist(componentWorkVO, histPublishDTO, templateSeq);
 
         // 편집기사 히스토리 추가
         insertDeskingHist(componentHist, componentWorkVO.getDeskingWorks(), regId);
-        
+
     }
 
 
@@ -436,7 +436,7 @@ public class DeskingServiceImpl implements DeskingService {
         deleteReserveHist(componentWorkVO);
 
         // 컴포넌트 히스토리만 추가
-        ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO, templateSeq);
+        ComponentHist componentHist = componentHistService.insertComponentHist(componentWorkVO, histPublishDTO, templateSeq);
 
         // 편집기사 히스토리 추가
         insertDeskingHist(componentHist, componentWorkVO.getDeskingWorks(), regId);
@@ -520,53 +520,47 @@ public class DeskingServiceImpl implements DeskingService {
     //        return exist;
     //    }
 
-    @Override
-    public ComponentHist insertComponentHist(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO, Long templateSeq)
-            throws Exception {
-        String messageC = messageByLocale.get("tps.common.error.no-data");
-        Component component = componentService
-                .findComponentBySeq(workVO.getComponentSeq())
-                .orElseThrow(() -> new NoDataException(messageC));
-
-        ComponentHist history = ComponentHist
-                .builder()
-                .dataset(component.getDataset())
-                .editFormPart(component.getEditFormPart())
-                .dataType(component.getDataType())
-                .domainId(component
-                        .getDomain()
-                        .getDomainId())
-                .componentSeq(component.getComponentSeq())
-                .snapshotYn(workVO.getSnapshotYn()) // 페이지편집에서 수정할 수 있는 컴포넌트정보
-                .snapshotBody(workVO.getSnapshotBody())// 페이지편집에서 수정할 수 있는 컴포넌트정보
-                .status(histPublishDTO.getStatus())// 페이지편집에서 수정할 수 있는 컴포넌트정보
-                .approvalYn(histPublishDTO.getApprovalYn())// 페이지편집에서 수정할 수 있는 컴포넌트정보
-                .reserveDt(histPublishDTO.getReserveDt())// 페이지편집에서 수정할 수 있는 컴포넌트정보
-                .zone(component.getZone())
-                .matchZone(component.getMatchZone())
-                .viewYn(workVO.getViewYn())// 페이지편집에서 수정할 수 있는 컴포넌트정보
-                .perPageCount(workVO.getPerPageCount())// 페이지편집에서 수정할 수 있는 컴포넌트정보
-                .build();
-
-        // 네이버채널
-        if (templateSeq != null) {
-            String messageT = messageByLocale.get("tps.common.error.no-data");
-            Template template = templateService
-                    .findTemplateBySeq(workVO.getTemplateSeq())
-                    .orElseThrow(() -> new NoDataException(messageT));
-            history.setTemplate(template);
-        }
-
-        //        // 페이지편집에서 수정할 수 있는 컴포넌트정보
-        //        component.setSnapshotYn(workVO.getSnapshotYn());
-        //        component.setSnapshotBody(workVO.getSnapshotBody());
-        //        component.setPerPageCount(workVO.getPerPageCount());
-        //        component.setViewYn(workVO.getViewYn());
-
-        ComponentHist componentHist = componentHistService.insertComponentHist(history);
-        log.debug("[COMPONENT HISTORY INSERT] seq: {}", component.getComponentSeq());
-        return componentHist;
-    }
+    //    @Override
+    //    public ComponentHist insertComponentHist(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO, Long templateSeq)
+    //            throws Exception {
+    //        String messageC = messageByLocale.get("tps.common.error.no-data");
+    //        Component component = componentService
+    //                .findComponentBySeq(workVO.getComponentSeq())
+    //                .orElseThrow(() -> new NoDataException(messageC));
+    //
+    //        ComponentHist history = ComponentHist
+    //                .builder()
+    //                .dataset(component.getDataset())
+    //                .editFormPart(component.getEditFormPart())
+    //                .dataType(component.getDataType())
+    //                .domainId(component
+    //                        .getDomain()
+    //                        .getDomainId())
+    //                .componentSeq(component.getComponentSeq())
+    //                .snapshotYn(workVO.getSnapshotYn()) // 페이지편집에서 수정할 수 있는 컴포넌트정보
+    //                .snapshotBody(workVO.getSnapshotBody())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+    //                .status(histPublishDTO.getStatus())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+    //                .approvalYn(histPublishDTO.getApprovalYn())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+    //                .reserveDt(histPublishDTO.getReserveDt())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+    //                .zone(component.getZone())
+    //                .matchZone(component.getMatchZone())
+    //                .viewYn(workVO.getViewYn())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+    //                .perPageCount(workVO.getPerPageCount())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+    //                .build();
+    //
+    //        // 네이버채널
+    //        if (templateSeq != null) {
+    //            String messageT = messageByLocale.get("tps.common.error.no-data");
+    //            Template template = templateService
+    //                    .findTemplateBySeq(workVO.getTemplateSeq())
+    //                    .orElseThrow(() -> new NoDataException(messageT));
+    //            history.setTemplate(template);
+    //        }
+    //
+    //        ComponentHist componentHist = componentHistService.insertComponentHist(history);
+    //        log.debug("[COMPONENT HISTORY INSERT] seq: {}", component.getComponentSeq());
+    //        return componentHist;
+    //    }
 
     @Override
     public Component updateComponent(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO, Long templateSeq)

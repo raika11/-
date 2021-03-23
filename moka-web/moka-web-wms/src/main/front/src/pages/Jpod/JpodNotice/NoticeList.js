@@ -8,7 +8,7 @@ import NoticeListAgGrid from './NoticeListAgGrid';
  */
 const NoticeList = ({ match }) => {
     return (
-        <MokaCard className="w-100" title={`J팟 공지 게시판 글목록`} bodyClassName="d-flex flex-column">
+        <MokaCard className="w-100" title="J팟 공지 게시판 글 목록" bodyClassName="d-flex flex-column">
             {/* 검색 */}
             <NoticeListSearchBox match={match} />
 

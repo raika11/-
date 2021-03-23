@@ -83,7 +83,7 @@ const BoardsListSearch = ({ match }) => {
                 id="keyword"
                 name="keyword"
                 className="flex-fill mr-1"
-                placeholder={'게시판명, 설명'}
+                placeholder="게시판명, 설명"
                 value={searchData.keyword}
                 onChange={handleSearchChange}
                 onSearch={handleClickSearchButton}

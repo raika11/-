@@ -130,7 +130,7 @@ export const updateBoardContents = createAction(UPDATE_BOARD_CONTENTS, ({ boardI
 /**
  * 게시글 정보 삭제
  */
-export const [DELETE_BOARD_CONTENTS] = createRequestActionTypes('board/DELETE_BOARD_CONTENTS');
+export const DELETE_BOARD_CONTENTS = 'board/DELETE_BOARD_CONTENTS';
 export const deleteBoardContents = createAction(DELETE_BOARD_CONTENTS, ({ boardId, boardSeq, callback }) => ({ boardId, boardSeq, callback }));
 
 /**

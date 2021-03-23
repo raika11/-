@@ -25,10 +25,6 @@ export const insertBoard = ({ file }) => {
 };
 
 const makeBoardContentsFormData = ({ files, contentsData }) => {
-    delete contentsData.attaches;
-    delete contentsData.regName;
-    delete contentsData.boardInfo;
-
     var formData = new FormData();
 
     files.map((element, index) => {
@@ -45,11 +41,9 @@ const makeBoardContentsFormData = ({ files, contentsData }) => {
     Object.keys(contentsData).forEach((key) => {
         let value = contentsData[key];
 
-        if (value !== undefined && value !== null) {
+        if (value) {
             formData.append(key, value);
         }
-
-        // formData.append(key, value);
     });
 
     return formData;

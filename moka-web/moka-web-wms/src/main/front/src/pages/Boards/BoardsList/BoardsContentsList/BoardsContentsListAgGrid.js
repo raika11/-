@@ -30,8 +30,6 @@ const BoardsContentsListAgGrid = () => {
      * 테이블 row 클릭
      */
     const handleOnRowClicked = (row) => {
-        // console.log(row);
-
         // 게시글의 답변이 없으면
         if (row.boardSeq === row.parentBoardSeq) {
             history.push(`/${pagePathName}/${row.boardId}/${row.boardSeq}`);
@@ -39,8 +37,6 @@ const BoardsContentsListAgGrid = () => {
             // 게시글의 답변이 있으면
             history.push(`/${pagePathName}/${row.boardId}/${row.parentBoardSeq}/reply/${row.boardSeq}`);
         }
-        // dispatch(clearListMenuContentsInfo());
-        // dispatch(getListMenuContentsInfo({ boardId: selectBoardId, boardSeq: boardSeq }));
     };
 
     /**

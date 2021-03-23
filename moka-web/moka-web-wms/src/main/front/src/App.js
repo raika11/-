@@ -1,10 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-// BrowserRouter
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'; // BrowserRouter
 import ReduxToastr from 'react-redux-toastr';
-
 import SignIn from '@pages/Auth/SignIn';
 import { init } from '@store/app';
 import { getDomainList } from '@store/auth';
@@ -44,8 +41,8 @@ const App = () => {
             <WithToastr>
                 <BrowserRouter>
                     <Switch>
-                        <Route path={`/`} name="MOKA BackOffice" component={BaseLayout} />
-                        <Route exact path={`/404`} name="Page404" render={(props) => <Page404 defaultLink="/" {...props} />} />
+                        <Route path="/" name="MOKA BackOffice" component={BaseLayout} />
+                        <Route exact path="/404" name="Page404" render={(props) => <Page404 defaultLink="/" {...props} />} />
                     </Switch>
                 </BrowserRouter>
             </WithToastr>

@@ -62,7 +62,8 @@ const MakeGifModal = (props) => {
                 },
                 (obj) => {
                     if (!obj.error) {
-                        const gifImage = URL.createObjectURL(commonUtil.base64ToBlob(obj.image));
+                        const blob = commonUtil.base64ToBlob(obj.image);
+                        const gifImage = URL.createObjectURL(blob);
                         setGifImage(gifImage);
                     } else {
                         toast.error('GIF 이미지를 생성하지 못했습니다.');

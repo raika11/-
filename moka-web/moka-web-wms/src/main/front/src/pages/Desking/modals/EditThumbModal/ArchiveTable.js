@@ -10,7 +10,7 @@ import { GET_PHOTO_LIST, GET_ARCHIVE_DATA, getPhotoList, changeSearchOption } fr
  * 포토아카이브 테이블
  */
 const ArchiveTable = (props) => {
-    const { onThumbClick, onRepClick, repImg } = props;
+    const { showPhotoDetail, setRepImg, repImg } = props;
     const dispatch = useDispatch();
     const PHOTO_ARCHIVE_URL = useSelector((store) => store.app.PHOTO_ARCHIVE_URL);
     const loading = useSelector(({ loading }) => loading[GET_PHOTO_LIST] || loading[GET_ARCHIVE_DATA]);
@@ -62,8 +62,8 @@ const ArchiveTable = (props) => {
                                 key={data.nid}
                                 img={data.thumbPath}
                                 data={data}
-                                onThumbClick={onThumbClick}
-                                onRepClick={onRepClick}
+                                showPhotoDetail={showPhotoDetail}
+                                setRepImg={setRepImg}
                                 isRep={data.id === repImg?.id}
                                 dataType={data.dataType}
                                 boxShadow="0px 8px 10px -1px #bbb"

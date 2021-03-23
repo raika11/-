@@ -7,9 +7,9 @@ import { MokaLoader } from '@/components';
 
 const propTypes = {
     /**
-     * 대표 사진 버튼 click e
+     * 대표사진으로 지정
      */
-    onRepClick: PropTypes.func,
+    setRepImg: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -17,7 +17,7 @@ const defaultProps = {};
  * 기사 내 이미지 목록
  */
 const ArticleImageList = (props) => {
-    const { totalId, onThumbClick, onRepClick, repImg } = props;
+    const { totalId, showPhotoDetail, setRepImg, repImg } = props;
     const dispatch = useDispatch();
     const imageList = useSelector(({ article }) => article.imageList);
     const loading = useSelector(({ loading }) => loading[GET_ARTICLE_IMAGE_LIST]);
@@ -55,9 +55,9 @@ const ArticleImageList = (props) => {
                         img={data.thumbPath}
                         data={data}
                         dataType={data.dataType}
-                        onThumbClick={onThumbClick}
+                        showPhotoDetail={showPhotoDetail}
                         isRep={data.id === repImg?.id}
-                        onRepClick={onRepClick}
+                        setRepImg={setRepImg}
                         articleImg
                     />
                 ))}

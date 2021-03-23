@@ -5,6 +5,9 @@ import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@components';
 import CopyModal from '../modals/CopyModal';
 
+/**
+ * 컴포넌트 > 아이디, 컴포넌트명, 설명
+ */
 const BasicForm = (props) => {
     const { component, setComponent, componentNameRegex, onClickSave, onClickDelete, onClickCancle, error, setError } = props;
 

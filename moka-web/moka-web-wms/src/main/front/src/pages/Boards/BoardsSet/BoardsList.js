@@ -7,10 +7,8 @@ import AgGrid from './BoardsSetAgGrid';
 /**
  * 게시판 관리 > 전체 게시판 리스트
  */
-const BoardsList = () => {
-    const { boardType } = useSelector((store) => ({
-        boardType: store.board.boardType,
-    }));
+const BoardsList = ({ match }) => {
+    const boardType = useSelector((store) => store.board.boardType);
     const [cardTitle, setCardTitle] = useState('');
 
     useEffect(() => {
@@ -24,8 +22,8 @@ const BoardsList = () => {
 
     return (
         <MokaCard title={`${cardTitle} 게시판 목록`} className="w-100" bodyClassName="d-flex flex-column">
-            <Search />
-            <AgGrid />
+            <Search match={match} />
+            <AgGrid match={match} />
         </MokaCard>
     );
 };

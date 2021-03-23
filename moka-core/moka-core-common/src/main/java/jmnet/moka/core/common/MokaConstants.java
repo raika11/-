@@ -238,4 +238,19 @@ public class MokaConstants {
      * 미리보기
      */
     public static final String SYSTEM_AREA = "SYSTEM_AREA"; //미리보기 리소스의 컨텐트 토큰
+
+    // APP OS 구분 코드
+    public static final String PUSH_APP_OS_DIV = "APP_OS_DIV";
+
+    // APP 디바이스 구분 코드
+    public static final String PUSH_APP_DEV_DIV = "APP_DEV_DIV";
+
+    // 푸시 APP 구분 코드
+    public static final String PUSH_APP_DIV = "APP_DIV";
+
+    // 푸시 중앙일보 앱 코드
+    public static final String PUSH_APP_DIV_J = "J";
+
+    // 푸시 유형 - 게시판 답변
+    public static final String PUSH_TYPE_BOARD_REPLY = "B";
 }

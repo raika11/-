@@ -390,9 +390,9 @@ public class MemberRestController extends AbstractCommonController {
     public ResponseEntity<?> putChangePassword(
             @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @ApiParam("패스워드") @RequestParam("password")
-            @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}") String password,
+            @Pattern(regexp = "^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*)$", message = "{tps.member.error.pattern.password}") String password,
             @ApiParam("신규 패스워드") @RequestParam("newPassword")
-            @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}") String newPassword)
+            @Pattern(regexp = "^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*)$", message = "{tps.member.error.pattern.password}") String newPassword)
             throws Exception {
 
         String infoMessage = msg("tps.common.error.no-data");

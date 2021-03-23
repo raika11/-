@@ -25,6 +25,8 @@ import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.common.push.dto.PushSendDTO;
+import jmnet.moka.core.common.push.service.PushSendService;
 import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
@@ -40,6 +42,8 @@ import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
 import jmnet.moka.core.tps.mvc.board.entity.BoardInfo;
 import jmnet.moka.core.tps.mvc.board.service.BoardInfoService;
 import jmnet.moka.core.tps.mvc.board.service.BoardService;
+import jmnet.moka.core.tps.mvc.push.dto.PushAppSearchDTO;
+import jmnet.moka.core.tps.mvc.push.service.PushAppService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,11 +93,18 @@ public class BoardRestController extends AbstractCommonController {
     @Value("${pds.url}")
     private String pdsUrl;
 
+    private final PushAppService pushAppService;
+
+    private final PushSendService pushSendService;
+
     public BoardRestController(BoardService boardService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger,
-            BoardInfoService boardInfoService, FtpHelper ftpHelper, MokaCrypt mokaCrypt) {
+            BoardInfoService boardInfoService, FtpHelper ftpHelper, MokaCrypt mokaCrypt, PushAppService pushAppService,
+            PushSendService pushSendService) {
         this.boardService = boardService;
         this.boardInfoService = boardInfoService;
         this.ftpHelper = ftpHelper;
+        this.pushAppService = pushAppService;
+        this.pushSendService = pushSendService;
         this.modelMapper = modelMapper;
         this.messageByLocale = messageByLocale;
         this.tpsLogger = tpsLogger;
@@ -276,6 +287,24 @@ public class BoardRestController extends AbstractCommonController {
                     .isSuccess()) {
                 parentBoard.setAnswYn(MokaConstants.YES);
                 boardService.updateBoard(parentBoard);
+                if (board
+                        .getPushReceiveYn()
+                        .equals(MokaConstants.YES)) { // 답변 등록 알림 푸시 전송
+                    List<Integer> appIds = pushAppService.findAllPushAppIds(PushAppSearchDTO
+                            .builder()
+                            .appDiv(MokaConstants.PUSH_APP_DIV_J)
+                            .devDiv(board.getDevDiv())
+                            .appOs(board.getAppOs())
+                            .build());
+                    pushSendService.send(PushSendDTO
+                            .builder()
+                            .appSeq(appIds)
+                            .content(msg("tps.board.push.replay-content"))
+                            .pushType(MokaConstants.PUSH_TYPE_BOARD_REPLY)
+                            .relContentId(board.getBoardSeq())
+                            .title(msg("tps.board.push.replay-title"))
+                            .build());
+                }
             }
         } catch (Exception e) {
             log.error("[FAIL TO INSERT BOARD]", e);

@@ -15,7 +15,7 @@ import BoardsNote from './BoardsNote';
  */
 const BoardsEditForm = ({ data, onChangeFormData }) => {
     const dispatch = useDispatch();
-    const { boardId, boardSeq, parentBoardSeq, reply } = useParams();
+    const { boardSeq, parentBoardSeq } = useParams();
 
     const PDS_URL = useSelector((store) => store.app.PDS_URL);
     const selectBoard = useSelector((store) => store.board.listMenu.selectBoard);

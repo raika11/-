@@ -78,11 +78,11 @@ public class MessageGatewayController extends AbstractCommonController {
     @PostMapping
     public ResponseEntity<?> postJob(@Valid PushSendDTO sendDTO)
             throws Exception {
-        for (String param : sendDTO.getAppSeq()) {
+        for (Integer appSeq : sendDTO.getAppSeq()) {
 
             /** Check if there is AppSeq    */
             PushAppSearchDTO checkItem = new PushAppSearchDTO();
-            checkItem.setAppSeq(Integer.parseInt(param));
+            checkItem.setAppSeq(appSeq);
 
             if (!pushAppService.isValidData(checkItem)) {
                 String message = msg("wpush.error.notnull.appPushInfo");
@@ -101,7 +101,7 @@ public class MessageGatewayController extends AbstractCommonController {
 
         PushContents pushContents = new PushContents();
 
-        for (String param : sendDTO.getAppSeq()) {
+        for (Integer appSeq : sendDTO.getAppSeq()) {
             /** Insert to TB_PUSH_CONTENTS_PROC the PushContentProc Info    */
             try {
                 pushContents = pushContentsService
@@ -113,7 +113,7 @@ public class MessageGatewayController extends AbstractCommonController {
                 PushContentsProcPK pushContentsProcPK = PushContentsProcPK
                         .builder()
                         .contentSeq(pushContents.getContentSeq())
-                        .appSeq(Integer.parseInt(param))
+                        .appSeq(appSeq)
                         .build();
 
                 PushContentsProc pushContentsProc = new PushContentsProc();

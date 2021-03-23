@@ -2,8 +2,6 @@ package jmnet.moka.web.schedule.mvc.gen.service;
 
 import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 
-import java.util.Optional;
-
 public interface GenStatusService {
 
     /**
@@ -11,7 +9,7 @@ public interface GenStatusService {
      *
      * @return GenStatus
      */
-    GenStatus insertGenStatus(Long jobSeq);
+    GenStatus insertGenStatusInit(Long jobSeq);
 
     /**
      * 일련번호에 해당하는 genStatus를 갱신

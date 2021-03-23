@@ -12,6 +12,7 @@ import jmnet.moka.core.common.brightcove.BrightcoveCredentailVO;
 import jmnet.moka.core.common.brightcove.BrightcoveProperties;
 import jmnet.moka.web.schedule.mvc.brightcove.service.BrightcoveService;
 import jmnet.moka.web.schedule.mvc.schedule.vo.OvpVideoRssVO;
+import jmnet.moka.web.schedule.support.StatusResultType;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,7 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
 
         } catch (Exception ex) {
             log.error(ex.toString());
+            setFinish(StatusResultType.FAILED_JOB, ex.getMessage());
         }
     }
 

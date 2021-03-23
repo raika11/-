@@ -53,7 +53,7 @@ const BoardsNote = ({ data, onChangeFormData }) => {
     }, [noteData]);
 
     return (
-        <Form.Row className="mb-2">
+        <Form.Row className="mb-4">
             <Col className="p-0">
                 <BoardsSummernote
                     contentValue={data}

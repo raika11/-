@@ -18,7 +18,6 @@ import {
 
 import BoardsEditForm from './BoardsEditForm';
 import BoardsEditReplyForm from './BoardsEditReplyForm';
-import { objectToFormData } from '@/utils/convertUtil';
 
 /**
  * 게시판 관리 > 게시글 관리 > 게시판 편집
@@ -206,11 +205,7 @@ const BoardsEdit = ({ match }) => {
      * 답변 등록 버튼
      */
     const handleClickReplay = () => {
-        // if (reply) {
         history.push(`${match.path}/${boardId}/${boardSeq}/reply`);
-        // } else {
-        //     history.push(`${match.path}/${boardId}/${boardSeq}/reply`);
-        // }
     };
 
     /**

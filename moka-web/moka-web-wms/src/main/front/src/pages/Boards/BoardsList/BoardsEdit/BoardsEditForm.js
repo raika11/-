@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaInputLabel, MokaInput, MokaTableEditCancleButton } from '@components';
 import { messageBox } from '@utils/toastUtil';
 import { getBoardChannelList, GET_LIST_MENU_CONTENTS_INFO } from '@store/board';
@@ -24,7 +25,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
 
     const [channalList, setChannalList] = useState([]); // 채널 선택
     const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일
-    let fileinputRef = useRef(null);
+    let fileRef = useRef(null);
 
     /**
      * 입력값 변경
@@ -43,11 +44,13 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
     /**
      * 첨부 파일 등록
      */
-    const handleChangeFileInput = (event) => {
+    const handleChangeFile = (e) => {
         // 게시판 설정 확장자 체크
         let extCheck = false;
+        // let imageFiles = [];
+
         try {
-            let tempFile = event.target.files[0].name.split('.');
+            let tempFile = e.target.files[0].name.split('.');
             let tempFileExt = tempFile[1];
 
             if (selectBoard.allowFileExt.split(',').indexOf(tempFileExt) < 0) {
@@ -64,9 +67,9 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         if (uploadFiles.length + 1 > selectBoard.allowFileCnt) {
             messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${selectBoard.allowFileCnt}개 입니다.`, () => {});
         } else {
-            setUploadFiles([...uploadFiles, event.target.files[0]]);
+            setUploadFiles([...uploadFiles, e.target.files[0]]);
         }
-        fileinputRef.current.value = '';
+        fileRef.current.value = '';
     };
 
     /**
@@ -302,8 +305,6 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                 <BoardsNote data={data.content} onChangeFormData={onChangeFormData} />
                 {/* )} */}
 
-                <hr className="divider" />
-
                 {selectBoard.fileYn === 'Y' && (
                     <>
                         <Form.Row>
@@ -311,25 +312,12 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                 <MokaInputLabel label="첨부파일" as="none" className="mb-2" />
                             </Col>
                             <Col xs={8} className="p-0 text-right">
-                                <div className="file btn btn-primary" style={{ position: 'relative', overflow: 'hidden' }}>
+                                <Button variant="positive" className="mr-1" onClick={() => fileRef.current.click()}>
                                     등록
-                                    <input
-                                        type="file"
-                                        name="file"
-                                        ref={fileinputRef}
-                                        onChange={(e) => handleChangeFileInput(e)}
-                                        style={{
-                                            position: 'absolute',
-                                            fontSize: '50px',
-                                            opacity: '0',
-                                            right: '0',
-                                            top: '0',
-                                        }}
-                                    />
-                                </div>
+                                </Button>
+                                <input type="file" ref={fileRef} onChange={handleChangeFile} className="d-none" />
                             </Col>
                         </Form.Row>
-                        <hr className="divider" />
                         {uploadFiles.map((element, index) => {
                             return (
                                 <Form.Row className="mb-0 pt-1" key={index}>

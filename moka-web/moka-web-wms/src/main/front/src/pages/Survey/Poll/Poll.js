@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { MokaCard, MokaIconTabs, MokaLoader } from '@components';
+import { MokaCard, MokaErrorBoundary, MokaIconTabs, MokaLoader } from '@components';
 import { Route } from 'react-router-dom';
 import PollChildRelation from '@pages/Survey/Poll/relations/PollChildRelationInfo';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,6 @@ import { deletePoll, getPollList } from '@store/survey/poll/pollAction';
 import toast from '@utils/toastUtil';
 import { clearStore } from '@store/survey/poll/pollAction';
 import { useHistory } from 'react-router-dom';
-//import PollList from '@pages/Survey/Poll/PollList';
 import PollEdit from '@pages/Survey/Poll/PollEdit';
 import { Col } from 'react-bootstrap';
 import clsx from 'clsx';
@@ -63,9 +62,11 @@ const Poll = ({ match }) => {
                 {/* 리스트 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     <MokaCard className="w-100" title="투표 관리" bodyClassName="d-flex flex-column">
-                        <Suspense fallback={<MokaLoader />}>
-                            <PollList onDelete={handleClickDelete} />
-                        </Suspense>
+                        <MokaErrorBoundary>
+                            <Suspense fallback={<MokaLoader />}>
+                                <PollList onDelete={handleClickDelete} />
+                            </Suspense>
+                        </MokaErrorBoundary>
                     </MokaCard>
                 </Col>
 
@@ -87,14 +88,7 @@ const Poll = ({ match }) => {
                                     foldable={false}
                                     className="w-100"
                                     onSelectNav={(idx) => setActiveTabIdx(idx)}
-                                    tabs={[
-                                        <Suspense fallback={<MokaLoader />}>
-                                            <PollEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
-                                        </Suspense>,
-                                        <Suspense fallback={<MokaLoader />}>
-                                            <PollChildRelation show={activeTabIdx === 1} />
-                                        </Suspense>,
-                                    ]}
+                                    tabs={[<PollEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />, <PollChildRelation show={activeTabIdx === 1} />]}
                                     tabNavWidth={48}
                                     placement="left"
                                     tabNavs={[

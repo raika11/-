@@ -3,13 +3,14 @@
 /* No media query this is the default */
 
 /* header */
-.header_nav_area {padding: 0 0 10px !important; border-top: 0 !important; border-bottom: 4px solid #000;}
+.header_nav_area {padding: 0 0 18px !important; border-top: 0 !important; border-bottom: 4px solid #000;}
 .header_nav .nav .nav_item {display:inline-block;}
 .header_nav .nav .nav_item .nav_link {display:inline-block; width:100%; color: #111; font-size: 16px; font-weight: 500;}
 
 /***************************************    general     ************************************/
 .section.general .component {padding: 18px 0 40px; border-top: 1px solid #000;}
 .section.general .component.showcase {padding: 40px 0; border-top: 0;}
+.section.general .component.showcase .card_image {margin-bottom: 18px;}
 .section.general .view_lank_area .card_image {display: block;}
 
 
@@ -69,9 +70,10 @@
 
 /* Medium devices (tablet + pc, 768px and up) */
 @media (min-width:768px) {
-    .header_nav_wrap {align-items: flex-end;}
+    .header_nav_wrap {align-items: flex-end; flex-wrap: nowrap;}
     .header_nav .nav .nav_item {margin-right: 24px;}
     .header_nav .nav .nav_item .nav_link {color: #000; font-size: 14px;}
+    .header_nav_wrap .btn_area {position: absolute; right: 16px; bottom: 16px; width: auto;}
 
     .section.general .component {padding: 18px 0 30px;}
     .section.general .component.latest_area {float: left; width: 65.666666%; margin-right: 36px;}

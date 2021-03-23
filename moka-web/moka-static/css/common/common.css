@@ -321,6 +321,11 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 .card.border .card_body{padding:16px 16px;}
 
 
+
+/* swiper */
+.swiper-scrollbar{background:transparent;}
+
+
 /* Mobile devices (mobile, 375px and down) */
 @media (max-width:375px) {
     

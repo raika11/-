@@ -147,6 +147,11 @@ const ComponentEdit = ({ onDelete, match }) => {
             }
         }
 
+        if (saveData.dataType === 'AUTO') {
+            // 자동일 경우 반드시 viewYn을 Y로 바꾼다 (중요)
+            saveData.viewYn = 'Y';
+        }
+
         if (!saveData.editFormPart?.partSeq) {
             saveData.editFormPart = null;
         } else {

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DB_DATEFORMAT } from '@/constants';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { messageBox } from '@utils/toastUtil';
-import articleStore from '@store/article';
+import { initialState, GET_ARTICLE_LIST_MODAL, getArticleListModal } from '@store/article';
 import Search from './Search';
 import AgGrid from './AgGrid';
 
@@ -64,10 +64,10 @@ const ArticleList = (props) => {
     const dispatch = useDispatch();
 
     // initial setting
-    const initialSearch = isNaverChannel ? articleStore.initialState.bulk.search : articleStore.initialState.service.search;
+    const initialSearch = isNaverChannel ? initialState.bulk.search : initialState.service.search;
     const [type, setType] = useState('DESKING');
     const [period, setPeriod] = useState([2, 'days']);
-    const loading = useSelector(({ loading }) => loading[articleStore.GET_ARTICLE_LIST_MODAL]);
+    const loading = useSelector(({ loading }) => loading[GET_ARTICLE_LIST_MODAL]);
     const [search, setSearch] = useState(initialSearch);
     const [error, setError] = useState({});
     const [rowData, setRowData] = useState([]);
@@ -86,7 +86,7 @@ const ArticleList = (props) => {
             setSearch(ns);
 
             dispatch(
-                articleStore.getArticleListModal({
+                getArticleListModal({
                     getSourceList,
                     type,
                     search: {
@@ -187,7 +187,7 @@ const ArticleList = (props) => {
     useEffect(() => {
         const type = !!isNaverChannel ? 'BULK' : 'DESKING';
         const masterCode = selectedComponent.schCodeId || null;
-        const ns = { masterCode };
+        const ns = { ...initialSearch, masterCode };
 
         if (show) {
             // 기사 처음 로드 + 매체도 조회 (매체가 변경되는 경우 이 effect를 탄다)

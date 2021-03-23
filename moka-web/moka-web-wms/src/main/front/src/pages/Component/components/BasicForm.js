@@ -21,7 +21,7 @@ const BasicForm = (props) => {
     }, [component.componentSeq]);
 
     return (
-        <Form>
+        <div>
             {/* 컴포넌트아이디, 버튼그룹 */}
             <Form.Row className="mb-2">
                 <Col xs={6} className="p-0">
@@ -32,7 +32,9 @@ const BasicForm = (props) => {
                         <Button variant="outline-neutral" className="mr-1" onClick={() => setCopyModalShow(true)} disabled={btnDisabled}>
                             설정복사
                         </Button>
+                        <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} componentSeq={component.componentSeq} componentName={component.componentName} />
                     </div>
+
                     <div className="d-flex">
                         <Button variant="positive" className="mr-1" onClick={onClickSave}>
                             {btnDisabled ? '저장' : '수정'}
@@ -48,29 +50,27 @@ const BasicForm = (props) => {
                     </div>
                 </Col>
             </Form.Row>
+
             {/* 컴포넌트명 */}
-            <Form.Row className="mb-2">
-                <Col xs={7} className="p-0">
-                    <MokaInputLabel
-                        className="mb-0"
-                        label="컴포넌트명"
-                        placeholder="컴포넌트명을 입력하세요"
-                        value={component.componentName}
-                        onChange={(e) => {
-                            setComponent({
-                                ...component,
-                                componentName: e.target.value,
-                            });
-                            if (componentNameRegex.test(e.target.value)) {
-                                setError({ ...error, componentName: false });
-                            }
-                        }}
-                        isInvalid={error.componentName}
-                        required
-                    />
-                </Col>
-            </Form.Row>
-            {/* 컴포넌트명 */}
+            <MokaInputLabel
+                className="mb-2 w-100"
+                label="컴포넌트명"
+                placeholder="컴포넌트명을 입력하세요"
+                value={component.componentName}
+                onChange={(e) => {
+                    setComponent({
+                        ...component,
+                        componentName: e.target.value,
+                    });
+                    if (componentNameRegex.test(e.target.value)) {
+                        setError({ ...error, componentName: false });
+                    }
+                }}
+                isInvalid={error.componentName}
+                required
+            />
+
+            {/* 컴포넌트 설명 */}
             <MokaInputLabel
                 className="w-100"
                 label="설명"
@@ -83,10 +83,7 @@ const BasicForm = (props) => {
                     });
                 }}
             />
-
-            {/* 복사 모달 */}
-            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} componentSeq={component.componentSeq} componentName={component.componentName} />
-        </Form>
+        </div>
     );
 };
 

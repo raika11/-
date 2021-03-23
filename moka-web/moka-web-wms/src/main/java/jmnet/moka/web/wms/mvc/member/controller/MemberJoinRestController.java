@@ -215,7 +215,9 @@ public class MemberJoinRestController extends AbstractCommonController {
 
             // 담당자에게 요청 Email 발송
             String[] mailTo = toEmailAddress;
-            String remark = member.getRemark();
+            String remark = member
+                    .getRemark()
+                    .replace("\n", "<br>");
             String memberId = member.getMemberId();
 
             sendEmail(mailTo, memberId, "N", remark);
@@ -383,13 +385,13 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
-        if (!successMsg.equals(null)) {
+        if (successMsg != null) {
 
             if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_REQUEST) {
 
                 // 담당자에게 요청 Email 발송
                 String[] mailTo = toEmailAddress;
-                sendEmail(mailTo, memberId, "R", remark);
+                sendEmail(mailTo, memberId, "R", remark.replace("\n", "<br><br>"));
             }
         }
 
@@ -428,7 +430,7 @@ public class MemberJoinRestController extends AbstractCommonController {
         if (status.equals("N")) {
             status = "신규";
         } else if (status.equals("R")) {
-            status = "잠김 해제 요청";
+            status = "잠김 해제";
         }
 
         smtpService.send(SmtpSendDTO

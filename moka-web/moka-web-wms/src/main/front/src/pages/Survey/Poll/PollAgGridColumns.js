@@ -14,8 +14,8 @@ export const columnDefs = [
         cellStyle: { diplay: 'flex', alignItems: 'center' },
     },
     {
-        headerName: '분류',
-        field: 'category',
+        headerName: '그룹',
+        field: 'group',
         width: 80,
         cellStyle: { diplay: 'flex', alignItems: 'center' },
     },

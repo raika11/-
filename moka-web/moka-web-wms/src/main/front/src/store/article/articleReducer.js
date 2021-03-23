@@ -57,7 +57,7 @@ export const initialState = {
         search: {
             page: 0,
             size: PAGESIZE_OPTIONS[0],
-            searchType: 'all',
+            searchType: 'title',
             keyword: '',
             pressPan: null, // 판
             pressMyun: null, // 면
@@ -73,7 +73,7 @@ export const initialState = {
         search: {
             page: 0,
             size: PAGESIZE_OPTIONS[0],
-            searchType: 'all',
+            searchType: 'title',
             keyword: '',
             pressPan: null, // 판
             pressMyun: null, // 면

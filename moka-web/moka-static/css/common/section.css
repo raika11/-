@@ -80,6 +80,10 @@
 /***************************************    catalog     ************************************/
 /* common 으로 옮길것들 */
 
+
+/* 말줄임 */
+.ellip {display:inline-block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;white-space:normal;text-align:left;word-wrap:break-word;display:-webkit-box;-webkit-box-orient:vertical;}
+
 /* border */
 .bdr_top {border-top-style:solid;}
 .bdr_right {border-right-style:solid;}
@@ -98,10 +102,15 @@
 
 .title_wrap {border-top:1px solid #000;}
 
+
+.img_thumbnail img{height:auto;}
+
 .text_wrap {width:100%;}
 .text_wrap .hashtag {font-size:14px;font-weight:bold;line-height:1.57;letter-spacing:-0.25px;color:#ff3c14;}
-.text_wrap .headline {font-size:24px;font-weight:bold;line-height:1.38;letter-spacing:-0.4px;color:#000;}
+.text_wrap .headline {font-size:24px;font-weight:bold;letter-spacing:-0.4px;color:#000;}
+.text_wrap .headline a{line-height:1.38;height:2.76em;-webkit-line-clamp:2;}
 .text_wrap .lead {height:50px;margin-top:6px;font-size:14px;line-height:1.57;letter-spacing:-0.4px;color:#444;}
+.text_wrap .lead a{line-height: inherit;}
 .text_wrap .byline {margin-top:8px;font-size:12px;line-height:1.83;letter-spacing:-0.32px;color:#aaa;}
 
 .title_wrap .subtitle {font-size:18px;font-weight:bold;line-height:1.44;letter-spacing:-0.28px;color:#000;}
@@ -130,7 +139,21 @@
 
 
     /* catalog main swiper */
-    .catalog_home.swiper-container .swiper-slide .row .img_thumbnail {background:#eee;}
+
+
+
+    .wrap{width:50%;border:1px solid red}
+
+
+
+
+    .str_thum {position: relative;width: 100%;/*   height:100%; */background:blue;}
+    .str_img {position: relative;padding-bottom: calc(100% * 9 / 16);background:green;}
+    .str_img  img{position: absolute;top: 0;bottom: 0;left: 0;right: 0;width:100%;height:100%;}
+
+    .catalog_home.swiper-container .swiper-slide .row .thum_wrap {position: relative;background:blue;}
+    .catalog_home.swiper-container .swiper-slide .row .img_thumbnail {position:relative;width:100%;padding-bottom: calc(100% * 9 / 16);background:#eee;}
+    .catalog_home.swiper-container .swiper-slide .row .img_thumbnail img{position: absolute;top: 0;bottom: 0;left: 0;right: 0;width:100%;height:100%;}
     .catalog_home.swiper-container .swiper-slide div:nth-child(2) {position:relative;}
     .catalog_home.swiper-container .swiper-slide div:nth-child(2) .text_wrap {position:absolute;padding:0 30px;left:0;top:50%;transform:translate(0, -50%);}
     .catalog_home.swiper-container .swiper-pagination {left:70%;}

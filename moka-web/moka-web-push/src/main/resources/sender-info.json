@@ -22,5 +22,11 @@
     "pushTitle": "뉴스룸레터",
     "tokenCnt": 100,
     "threadPoolCnt": 20
+  },
+  "B": {
+    "className": "jmnet.moka.web.push.sender.BoardReplySender",
+    "pushTitle": "게시판 답글 알림 메시지",
+    "tokenCnt": 1,
+    "threadPoolCnt": 1
   }
 }

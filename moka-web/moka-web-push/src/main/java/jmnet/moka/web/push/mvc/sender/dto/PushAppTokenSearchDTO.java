@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.lang.reflect.Type;
 import java.util.List;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.web.push.support.message.FcmMessage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -69,5 +70,10 @@ public class PushAppTokenSearchDTO extends SearchDTO {
      * 최소 토큰 일련번호
      */
     private Long firstTokenSeq;
+
+    /**
+     * 푸시 메시지
+     */
+    private FcmMessage pushMessage;
 
 }

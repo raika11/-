@@ -116,6 +116,9 @@ public class PushSenderHandler extends AbstractCommonController {
                     .get(pushItem.getPushType())
                     .doTask(pushItem));
             result = true;
+        } else {
+            String message = msg("wpush.error.notnull.pushType");
+            log.error("message : {}", message);
         }
         return result;
     }

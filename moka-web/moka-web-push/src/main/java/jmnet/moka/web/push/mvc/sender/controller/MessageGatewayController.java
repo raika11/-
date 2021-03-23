@@ -107,7 +107,7 @@ public class MessageGatewayController extends AbstractCommonController {
                 pushContents = pushContentsService
                         .findByRelContentId(sendDTO.getRelContentId())
                         .orElseThrow(() -> {
-                            return new NoDataException(msg("wpush.contentsProc.error.notnull"));
+                            return new NoDataException(msg("wpush.contents.error.notnull"));
                         });
 
                 PushContentsProcPK pushContentsProcPK = PushContentsProcPK

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { uploadBoardContentsImage, changeListMenuContents } from '@store/board';
-import toast, { messageBox } from '@utils/toastUtil';
+import { uploadBoardContentsImage } from '@store/board';
+import { messageBox } from '@utils/toastUtil';
 import BoardsSummernote from './BoardsSummernote';
 
 /**

@@ -12,11 +12,10 @@ import ButtonRenderer from './components/ButtonRenderer';
 /**
  * 게시판 관리 > 전체 게시판 AgGrid
  */
-const BoardsSetAgGrid = () => {
+const BoardsSetAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const pagePathName = useSelector((store) => store.board.pagePathName);
     const total = useSelector((store) => store.board.setMenu.total);
     const boardslist = useSelector((store) => store.board.setMenu.list);
     const search = useSelector((store) => store.board.setMenu.search);
@@ -26,9 +25,11 @@ const BoardsSetAgGrid = () => {
     // 그리드 리스트 데이터
     const [rowData, setRowData] = useState([]);
 
-    // 리스트 아이템 클릭
+    /**
+     * 목록 클릭
+     */
     const handleRowClicked = ({ boardId }) => {
-        history.push(`/${pagePathName}/${boardId}`);
+        history.push(`${match.path}/${boardId}`);
     };
 
     /**

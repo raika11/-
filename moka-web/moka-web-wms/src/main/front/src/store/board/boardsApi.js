@@ -85,10 +85,31 @@ export const getBoardInfo = (boardId) => {
 /**
  * 게시판 등록
  */
-export const saveBoardInfo = ({ boardInfo }) => {
-    return instance.post(`/api/board-info`, objectToFormData(boardInfo)).catch((err) => {
-        throw err;
-    });
+export const postBoardInfo = ({ boardInfo }) => {
+    return instance
+        .post(`/api/board-info`, objectToFormData(boardInfo), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+/**
+ * 게시판 수정
+ */
+export const putBoardInfo = ({ boardInfo }) => {
+    return instance
+        .put(`/api/board-info/${boardInfo.boardId}`, objectToFormData(boardInfo), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
 
 /**

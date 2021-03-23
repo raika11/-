@@ -338,6 +338,7 @@ public class DeskingServiceImpl implements DeskingService {
 
         // 편집기사 히스토리 추가
         insertDeskingHist(componentHist, componentWorkVO.getDeskingWorks(), regId);
+        
     }
 
 
@@ -527,29 +528,44 @@ public class DeskingServiceImpl implements DeskingService {
                 .findComponentBySeq(workVO.getComponentSeq())
                 .orElseThrow(() -> new NoDataException(messageC));
 
+        ComponentHist history = ComponentHist
+                .builder()
+                .dataset(component.getDataset())
+                .editFormPart(component.getEditFormPart())
+                .dataType(component.getDataType())
+                .domainId(component
+                        .getDomain()
+                        .getDomainId())
+                .componentSeq(component.getComponentSeq())
+                .snapshotYn(workVO.getSnapshotYn()) // 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .snapshotBody(workVO.getSnapshotBody())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .status(histPublishDTO.getStatus())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .approvalYn(histPublishDTO.getApprovalYn())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .reserveDt(histPublishDTO.getReserveDt())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .zone(component.getZone())
+                .matchZone(component.getMatchZone())
+                .viewYn(workVO.getViewYn())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .perPageCount(workVO.getPerPageCount())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .build();
+
+        // 네이버채널
         if (templateSeq != null) {
             String messageT = messageByLocale.get("tps.common.error.no-data");
             Template template = templateService
                     .findTemplateBySeq(workVO.getTemplateSeq())
                     .orElseThrow(() -> new NoDataException(messageT));
-            component.setTemplate(template);
+            history.setTemplate(template);
         }
 
-        component.setSnapshotYn(workVO.getSnapshotYn());
-        component.setSnapshotBody(workVO.getSnapshotBody());
+        //        // 페이지편집에서 수정할 수 있는 컴포넌트정보
+        //        component.setSnapshotYn(workVO.getSnapshotYn());
+        //        component.setSnapshotBody(workVO.getSnapshotBody());
+        //        component.setPerPageCount(workVO.getPerPageCount());
+        //        component.setViewYn(workVO.getViewYn());
 
-        component.setPerPageCount(workVO.getPerPageCount());
-        component.setViewYn(workVO.getViewYn());
-        //        component.setZone(workVO.getZone());
-        //        component.setMatchZone(workVO.getMatchZone());
-        component.setModDt(McpDate.now());
-        component.setModId(regId);
-
-        ComponentHist componentHist = componentHistService.insertComponentHist(component, histPublishDTO);
+        ComponentHist componentHist = componentHistService.insertComponentHist(history);
         log.debug("[COMPONENT HISTORY INSERT] seq: {}", component.getComponentSeq());
-
         return componentHist;
-
     }
 
     @Override

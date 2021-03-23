@@ -3,7 +3,6 @@ package jmnet.moka.web.wms.mvc.member.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -407,22 +406,22 @@ public class MemberJoinRestController extends AbstractCommonController {
      * @param password        비밀번호 입력값
      * @param confirmPassword 비밀번호 확인 입력값
      * @param orgMember       기존 사용자 정보
-     * @throws PasswordNotMatchedException    비밀번호와 비밀번호 확인 불일치
-     * @throws UserPrincipalNotFoundException 비밀번호와 기존 비밀번호 불일치
+     * @throws PasswordNotMatchedException 비밀번호와 비밀번호 확인 불일치
      */
     private void throwPasswordCheck(String password, String confirmPassword, MemberInfo orgMember)
-            throws PasswordNotMatchedException, UserPrincipalNotFoundException {
+            throws PasswordNotMatchedException {
 
         // 비밀번호와 비밀번호 확인 비교
         boolean same = password.equals(confirmPassword);
         if (!same) {
             throw new PasswordNotMatchedException(msg("wms.login.error.PasswordNotMatchedException"));
         }
-
+        /*
         same = passwordEncoder.matches(password, orgMember.getPassword());
         if (!same) {
             throw new UserPrincipalNotFoundException(orgMember.getMemberId());
         }
+         */
     }
 
     private void sendEmail(String[] to, String memberId, String status, String remark)

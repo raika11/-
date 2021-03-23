@@ -13,6 +13,7 @@ import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.web.schedule.mvc.mybatis.dto.JoinsNewsRssDTO;
 import jmnet.moka.web.schedule.mvc.mybatis.mapper.JoinsNewsRssJobMapper;
 import jmnet.moka.web.schedule.mvc.mybatis.vo.JoinsNewsVO;
+import jmnet.moka.web.schedule.support.StatusResultType;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -73,7 +74,7 @@ public class JoinsNewsRssJob extends AbstractScheduleJob {
             List<JoinsNewsVO> list = joinsNewsRssJobMapper.findAll(dto);
 
             if (list.isEmpty()) {
-                throw new MokaException("조회된 article 기사가 없습니다.");
+                throw new MokaException("조회된 joins 뉴스 기사가 없습니다.");
             }
 
             //RSS String 생성
@@ -82,12 +83,12 @@ public class JoinsNewsRssJob extends AbstractScheduleJob {
 
             boolean success = stringFileUpload(stringBuffer.toString());
             //AbstractSchduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
-            //임시로 성공/실패만 입력 + 그외 입력값은 입력정의 필요
             setFinish(success);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            log.error(ex.toString());
+        } catch (Exception e) {
+            //e.printStackTrace();
+            log.error(e.toString());
+            setFinish(StatusResultType.FAILED_JOB, e.getMessage());
         }
     }
 

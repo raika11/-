@@ -8,6 +8,7 @@ import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.mvc.gen.service.GenContentService;
 import jmnet.moka.web.schedule.mvc.gen.service.GenStatusService;
 import jmnet.moka.web.schedule.support.StatusFlagType;
+import jmnet.moka.web.schedule.support.StatusResultType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,10 +62,14 @@ public abstract class AbstractReserveJob implements ReserveJob {
                 .name());
 
         //실행 완료 시 GenStatus 저장
-        GenStatus scheduleResult = history.getGenContent().getGenStatus();
-        //현재 genResult + lastExecdt 만 입력 중
-        if(history.getStatus() == StatusFlagType.DONE){
-            scheduleResult.setGenResult(200L);  //성공
+        GenStatus scheduleResult = history
+                .getGenContent()
+                .getGenStatus();
+        
+        //schedule 실행 결과가 성공
+        if (history.getStatus() == StatusFlagType.DONE) {
+            scheduleResult.setGenResult(StatusResultType.SUCCESS.getCode());
+            scheduleResult.setErrMgs(StatusResultType.SUCCESS.getName());
         }
         scheduleResult.setLastExecDt(new Date());
         scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
@@ -92,13 +97,16 @@ public abstract class AbstractReserveJob implements ReserveJob {
             logger.debug("start task jobseq : {}", history.getSeqNo());
 
             //history에 해당하는 GenStatus가 없는 경우 생성
-            GenStatus scheduleResult = scheduleHistory.getGenContent().getGenStatus();
-            if(scheduleResult == null){
-                jobStatusService.insertGenStatus(scheduleHistory.getJobSeq());
+            GenStatus scheduleResult = scheduleHistory
+                    .getGenContent()
+                    .getGenStatus();
+            if (scheduleResult == null) {
+                jobStatusService.insertGenStatusInit(scheduleHistory.getJobSeq());
             }
             //genStatus가 존재하는 경우 작업시작 전 작업실패 상태로 갱신 (에러발생 시 shutdown 되는 경우로 인해 완료 시 성공처리)
-            else{
-                scheduleResult.setGenResult(500L);
+            else {
+                scheduleResult.setGenResult(StatusResultType.BEFORE_EXECUTE.getCode());
+                scheduleResult.setErrMgs(StatusResultType.BEFORE_EXECUTE.getName());
                 scheduleResult.setLastExecDt(new Date());
                 jobStatusService.updateGenStatus(scheduleResult);
             }
@@ -111,13 +119,13 @@ public abstract class AbstractReserveJob implements ReserveJob {
              * todo 2. 에러발생시 status 5로 update
              */
             // 유효한 작업인 경우 > 실패 설정
-            if(scheduleHistory != null){
+            if (scheduleHistory != null) {
                 scheduleHistory.setStatus(StatusFlagType.ERROR_SERVER);
             }
             logger.error("reserved invoke error ", ex);
         } finally {
             // 유효한 작업인경우 > 마무리
-            if(scheduleHistory != null) {
+            if (scheduleHistory != null) {
                 finish(scheduleHistory);
             }
         }
@@ -129,7 +137,7 @@ public abstract class AbstractReserveJob implements ReserveJob {
      */
     public abstract GenContentHistory invoke(GenContentHistory history);
 
-    protected boolean CallApi(){
+    protected boolean CallApi() {
         return false;
     }
 }

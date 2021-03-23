@@ -7,12 +7,15 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.encrypt.MokaCrypt;
+import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.mvc.gen.service.GenContentService;
 import jmnet.moka.web.schedule.mvc.gen.service.GenStatusService;
+import jmnet.moka.web.schedule.support.StatusResultType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -69,14 +72,15 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
     protected void init(GenContent info) {
         scheduleInfo = info;
 
-        //info에 해당하는 GenStatus가 없는 경우 생성
+        //info에 해당하는 GenStatus가 없는 경우 생성(작업시작 전 작업실패 상태)
         scheduleResult = info.getGenStatus();
         if (scheduleResult == null) {
-            scheduleResult = jobStatusService.insertGenStatus(info.getJobSeq());
+            scheduleResult = jobStatusService.insertGenStatusInit(info.getJobSeq());
         }
         //GenStatus가 존재하는 경우 작업시작 전 작업실패 상태로 갱신 (에러발생 시 shutdown 되는 경우로 인해 완료 시 성공처리)
         else {
-            scheduleResult.setGenResult(500L);
+            scheduleResult.setGenResult(StatusResultType.BEFORE_EXECUTE.getCode());
+            scheduleResult.setErrMgs(StatusResultType.BEFORE_EXECUTE.getName());
             scheduleResult.setLastExecDt(new Date());
             scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
         }
@@ -88,7 +92,6 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
     public void finish() {
         // todo 1. 처리 결과 TB_GEN_STATUS 테이블에 update 등 마무리 처리
 
-        //현재 genResult + lastExecdt 만 입력 중
         scheduleResult.setLastExecDt(new Date());
         scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
 
@@ -100,8 +103,30 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
      */
     protected void setFinish(boolean success) {
         if (success) {
-            //schedule 실행 결과가 성공
-            scheduleResult.setGenResult(200L);
+            setFinish(StatusResultType.SUCCESS, StatusResultType.SUCCESS.getName());
+        }
+    }
+
+    /**
+     * finish()에서 처리할 스케줄 실행 결과 값 입력 각 작업 별 invoke()에서 작업 실패 시 호출 필요
+     */
+    protected void setFinish(StatusResultType statusResultType, String errorMsg) {
+        //schedule 실행 결과가 성공
+        if (statusResultType == StatusResultType.SUCCESS) {
+            scheduleResult.setGenResult(StatusResultType.SUCCESS.getCode());
+            scheduleResult.setErrMgs(StatusResultType.SUCCESS.getName());
+        }
+        //schedule 실행 결과가 실패
+        else {
+            scheduleResult.setGenResult(statusResultType.getCode());
+            if (McpString.isNotEmpty(errorMsg)) {
+                //전달된 에러 메시지가 존재하는 경우
+                scheduleResult.setErrMgs(errorMsg);
+            } else {
+                //에러 메시지가 없는 경우 statusResultType에 해당 하는 메시지 입력
+                scheduleResult.setErrMgs(statusResultType.getName());
+            }
+
         }
     }
 
@@ -119,6 +144,7 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
             invoke();
         } catch (Exception ex) {
             logger.error("schedule invoke error ", ex);
+            setFinish(StatusResultType.FAILED, ex.getMessage());
         } finally {
             finish();
         }
@@ -245,9 +271,10 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
                 log.debug("ftp delete tempFile : {}", deleteResponse);
 
 
-                //FTP 업로드 실패 시
-                if (!uploadResponse) {
-                    return false;
+                if (!loginResponse) {
+                    throw new MokaException("FTP 로그인이 실패했습니다.");
+                } else if (!uploadResponse) {
+                    throw new MokaException("FTP 업로드가 실패했습니다.");
                 }
 
             }
@@ -257,11 +284,12 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
                 log.error("ftp connect failed : {}", scheduleInfo
                         .getGenTarget()
                         .getServerIp());
-                return false;
+                throw new MokaException("FTP 연결이 실패했습니다.");
             }
 
         } catch (Exception e) {
-            log.error("uploadFtpString error : {}", e);
+            log.error("uploadFtpString error : {}", e.getMessage());
+            setFinish(StatusResultType.FAILED, e.getMessage());
             return false;
         } finally {
             close(bw);

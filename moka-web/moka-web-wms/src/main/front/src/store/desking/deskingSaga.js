@@ -1,4 +1,5 @@
 import { takeLatest, takeEvery, put, call, select } from 'redux-saga/effects';
+import produce from 'immer';
 import { createRequestSaga, errorResponse } from '@store/commons/saga';
 import { getRowIndex } from '@utils/agGridUtil';
 import { getMoveMode } from '@utils/deskingUtil';
@@ -90,7 +91,11 @@ function* getComponentWorkList({ payload }) {
                         if (second.data.body.templateSeq !== targetComponent.templateSeq) {
                             const third = yield call(api.putComponentWorkTemplate, { componentWorkSeq: targetComponent.seq, templateSeq: second.data.body?.templateSeq });
                             if (third.data.header.success) {
-                                callbackData = { ...callbackData, ...third.data, isNaverChannel };
+                                // desking 목록 중에 대상 워크를 third의 결과물로 변경된 컴포넌트워크 정보로 업데이트 쳐야함 (데이터 구조는 디버깅해서 확인하세요)
+                                const targetIdx = callbackData.body.desking.findIndex((d) => d.componentSeq === third.data.body.componentSeq);
+                                callbackData = produce(callbackData, (draft) => {
+                                    draft.body.desking.splice(targetIdx, 1, third.data.body);
+                                });
                             }
                         }
                     }

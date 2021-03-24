@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { GET_GROUP_MENU_AUTH, changeGroupMenuAuth, getGroupMenuAuth, updateGroupMenuAuth, UPDATE_GROUP_MENU_AUTH } from '@store/group';
 import toastUtil from '@utils/toastUtil';
 import MenuAuthTree from '@pages/Menu/component/MenuAuthTree';
 import { Col, Row } from 'react-bootstrap';
 import { MokaCard } from '@components';
+import { useParams } from 'react-router-dom';
+import commonUtil from '@utils/commonUtil';
 
 const GroupChildMenuAuth = () => {
+    const { groupCd: paramCd } = useParams();
     const { menuAuthInfo, groupCd, loading } = useSelector(
         (store) => {
             return {
@@ -48,11 +51,23 @@ const GroupChildMenuAuth = () => {
     };
 
     const handleClickCancel = () => {
+        console.log(paramCd);
         dispatch(getGroupMenuAuth(groupCd));
     };
 
     const handleChange = (changeInfo) => {
         dispatch(changeGroupMenuAuth(changeInfo));
+    };
+
+    const makeFooterButtons = () => {
+        let footerButtons = [];
+        if (!commonUtil.isEmpty(paramCd)) {
+            footerButtons = [
+                { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
+                { text: '새로고침', variant: 'negative', onClick: handleClickCancel },
+            ];
+        }
+        return footerButtons;
     };
 
     return (
@@ -78,10 +93,7 @@ const GroupChildMenuAuth = () => {
             className="w-100 shadow-none"
             loading={loading}
             footerClassName="justify-content-center"
-            footerButtons={[
-                { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
-                { text: '새로고침', variant: 'negative', onClick: handleClickCancel },
-            ]}
+            footerButtons={makeFooterButtons()}
             footer
         >
             <Row style={{ padding: '0 20px 0 20px' }} className="rc-tree-group">

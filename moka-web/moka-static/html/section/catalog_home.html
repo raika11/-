@@ -47,7 +47,7 @@
         <!-- container -->
         <main id="container">
             <!-- contents -->
-            <section class="contents catalog">
+            <section class="contents catalog ">
 
                 <div class="component header_nav_area">
                     <div class="row header_nav_wrap">
@@ -127,12 +127,61 @@
                     <div class="swiper-scrollbar"></div>
                 </div>
 
-                <div class="component row ">
-                    <div class="title_wrap row">
-                        <h2 class="subtitle col_lg10">집콕할 때 필요한건?<span>취미 홈 인테리어 트렌드의 모든 것</span></h2>
-                        <span class="col_lg2  ta_r">
-                            <button type="button" class="btn btn_outline_gray btn_type1">구독</button>
-                        </span>
+                <div class="component  ">
+                    <div class="top_area_wrap">
+                        <h2 class="sub_title fs_lg20 fw_b font_black">집콕할 때 필요한건?<span>취미 홈 인테리어 트렌드의 모든 것</span></h2>
+                        <button type="button" class="btn btn_type6 btn_outline_orange font_orange fs_lg14 fw_m"><i class="fa fa_plus_orange"></i>구독</button>
+                    </div>
+
+                    <!-- <div class=""> -->
+                        <ul class="card_group row">
+                            <li class="card col_sm12 col_md3 col_lg3">
+                                <div class="card_image thum_wrap">
+                                    <div class="img_thumbnail">
+                                        <img src="//stg-img.joongang.co.kr/svcimg/x_test.png" alt="...">
+                                    </div>
+                                </div>
+                                <div class="card_body">
+                                    <h2 class="headline">설 지나도 마음은 불편…부모-자식간 관계 개선하는 ‘대화의 기술’</h2>
+                                    <p class="byline">4시간 전</p>
+                                </div>
+                            </li>
+                            <li class="card col_sm12 col_md3 col_lg3">
+                                <div class="card_image">
+                                    <img src="https://placehold.it/275x170" width="275" height="170" alt="...">
+                                </div>
+                                <div class="card_body">
+                                    <h2 class="headline">비행기표 없어도 된다, 파리 재즈바로 '순간이동'하는 법</h2>
+                                    <p class="byline">2020.1.26    11:40</p>
+                                </div>
+                            </li>
+                            <li class="card col_sm12 col_md3 col_lg3">
+                                <div class="card_image">
+                                    <img src="https://placehold.it/275x170" width="275" height="170" alt="...">
+                                </div>
+                                <div class="card_body">
+                                    <h2 class="headline">설 지나도 마음은 불편…부모-자식간 관계 개선하는 ‘대화의 기술’</h2>
+                                    <p class="byline">4시간 전</p>
+                                </div>
+                            </li>
+                            <li class="card col_sm12 col_md3 col_lg3">
+                                <div class="card_image">
+                                    <img src="https://placehold.it/275x170" width="275" height="170" alt="...">
+                                </div>
+                                <div class="card_body">
+                                    <h2 class="headline">비행기표 없어도 된다, 파리 재즈바로 '순간이동'하는 법</h2>
+                                    <p class="byline">2020.1.26    11:40</p>
+                                </div>
+                            </li>
+                        </ul>
+                    <!-- </div> -->
+                </div>
+
+
+                <div class="component">
+                    <div class="top_area_wrap bdr_width1">
+                        <h2 class="sub_title fs_lg20 fw_b font_black">반려동물 백과사전<span>반려동물과 함께하는 삶, 필요한 정보만 쏙쏙</span></h2>
+                        <button type="button" class="btn btn_type6 btn_outline_orange font_orange fs_lg14 fw_m"><i class="fa fa_plus_orange"></i>구독</button>
                     </div>
                     <ul class="card_group row">
                         <li class="card col_sm12 col_md3 col_lg3">
@@ -174,11 +223,10 @@
                     </ul>
                 </div>
 
-
-                <div class="component row  ">
-                    <div class="title_wrap">
-                        <h2 class="subtitle">반려동물 백과사전<span>반려동물과 함께하는 삶, 필요한 정보만 쏙쏙</span></h2>
-                    </div>
+                <div class="component sns_wrap">
+                    <span>중앙일보 CULTURE</span>
+                    <span>팔로우</span><span>36,020</span>
+                    <span>좋아요</span><span>36,020</span>
                 </div>
 
 
@@ -331,9 +379,8 @@
 </body>
 <script>
     var swiper = new Swiper('.swiper-container', {
-        
-        
-        // slidesPerGroup: 1,
+        slidesPerView: 1,
+        spaceBetween: 2000,
         centeredSlides: true,
         loop: true,
         pagination: {
@@ -347,22 +394,13 @@
         },
         breakpoints: {
             1024: {
-                spaceBetween: 2000,
             },
-            768: {
-                slidesPerView: 1,
+            1023: {
                 spaceBetween: 36,
             },
             767: {
-                slidesPerView: 1,
                 spaceBetween: 10,
             },
-            280: {
-                slidesPerView: 1,
-                spaceBetween: 5,
-               
-            },
-            
         },
     });
 </script>

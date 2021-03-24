@@ -110,22 +110,24 @@
 .bdr_bottom {border-bottom-style:solid;}
 .bdr_left {border-left-style:solid;}
 
-.bdr_width1 {border-width:1px;}
-.bdr_width2 {border-width:2px;}
-.bdr_width3 {border-width:3px;}
-.bdr_width4 {border-width:4px;}
+.bdr_width1 {border-width:1px !important;}
+.bdr_width2 {border-width:2px !important;}
+.bdr_width3 {border-width:3px !important;}
+.bdr_width4 {border-width:4px !important;}
 
 .bdr_black {border-color:#000;}
 .border_type1 {border-top:1px solid #000;}
 
 
 
-.title_wrap {border-top:1px solid #000;}
+
+/* .component {padding-bottom:50px;} */
+.top_area_wrap {display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;height:60px;margin-top:30px;padding:12px 0;border-top:3px solid #000;}
+.top_area_wrap .sub_title {display:flex;align-items: center;font-size:18px;font-weight:bold;line-height:1.44;letter-spacing:-0.28px;color:#000;}
+.top_area_wrap .sub_title span {padding-left:20px;color:#888;font-size:13px;font-weight:400;}
 
 
-/* .img_thumbnail img {height:auto;} */
-
-.catalog_home.swiper-container{width:100%;}
+.catalog_home.swiper-container {width:100%;}
 .catalog_home.swiper-container .swiper-slide div:nth-child(2) {position:relative;}
 .catalog_home.swiper-container .swiper-slide div:nth-child(2) .text_wrap {position:absolute;padding:0 30px;left:0;top:50%;transform:translate(0, -50%);}
 .catalog_home.swiper-container .swiper-pagination {left:70%;}
@@ -134,14 +136,12 @@
 
 .text_wrap {width:100%;}
 .text_wrap .hashtag {font-size:14px;font-weight:bold;line-height:1.57;letter-spacing:-0.25px;color:#ff3c14;}
-.text_wrap .headline {font-size:24px;font-weight:bold;letter-spacing:-0.4px;color:#000;line-height:1.38;}
-.text_wrap .headline a {height:2.76m;-webkit-line-clamp:2;line-height:inherit;}
-.text_wrap .lead {height:50px;margin-top:6px;font-size:14px;line-height:1.57;letter-spacing:-0.4px;color:#444;}
-.text_wrap .lead a {height:3.14em;-webkit-line-clamp:2;line-height:inherit;}
-.text_wrap .byline {margin-top:8px;font-size:12px;line-height:1.83;letter-spacing:-0.32px;color:#aaa;}
+.text_wrap .headline {margin-top:4px;}
+.text_wrap .headline a {height:2.8em;-webkit-line-clamp:2;font-size:20px;font-weight:bold;line-height:1.4;letter-spacing:-0.4px;color:#111;}
+.text_wrap .lead {margin-top:6px;}
+.text_wrap .lead a {height:3.06em;-webkit-line-clamp:2;font-size:15px;line-height:1.53;letter-spacing:-0.4px;color:#777;}
+.text_wrap .byline {margin-top:8px;font-size:13px;line-height:1.62;letter-spacing:-0.2px;color:#aaa;}
 
-.title_wrap .subtitle {font-size:18px;font-weight:bold;line-height:1.44;letter-spacing:-0.28px;color:#000;}
-.title_wrap .subtitle span {padding-left:20px;color:#888;font-size:13px;font-weight:400;}
 
 
 
@@ -162,11 +162,17 @@
 @media (max-width:767px) {
 
     /***************************************    catalog     ************************************/
-    .catalog_home.swiper-container{/*width:100vw;margin-left:-20px;*/padding: 0 20px;}
+    /* main swiper */
+    .catalog_home.swiper-container{width:100vw;margin-left:-20px;padding: 0 20px;}
     .catalog_home.swiper-container .swiper-slide div:nth-child(2) .text_wrap{position:relative;padding:0 30px;left:unset;top:unset;transform:translate(0, 0%);}
-    .text_wrap {margin-top:16px;}
-    .title_wrap h2.subtitle span {display:none;}
     .catalog_home.swiper-container .swiper-pagination {left:50%;}
+    .text_wrap {margin-top:16px;}
+
+    /* component title */
+    .top_area_wrap .sub_title span {display:none;}
+
+
+    
 
 }
 
@@ -176,7 +182,9 @@
     /* catalog main swiper */
 
 
-
+    /* card */
+    .catalog .card_group{width:calc(100% + 20px);max-width:unset;margin-left:-10px;}
+    .catalog .card_group .card{padding:0 10px;}
 
 
 
@@ -188,8 +196,7 @@
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
 
-
-
+    
     /***************************************    catalog     ************************************/
     .text_wrap .hashtag {font-size:14px;font-weight:bold;line-height:1.57;letter-spacing:-0.25px;color:#ff3c14;}
     .text_wrap .headline {font-size:24px;font-weight:bold;line-height:1.38;letter-spacing:-0.4px;color:#000;}
@@ -197,6 +204,10 @@
     .text_wrap .byline {margin-top:18px;font-size:12px;line-height:1.83;letter-spacing:-0.32px;color:#aaa;}
     
     
+    /* card */
+    .catalog .card_group{width:calc(100% + 36px);max-width:unset;margin-left:-18px;}
+    .catalog .card_group .card{padding:0 18px;}
+
 }
 
 /* X-Large devices (large desktops, 1200px and up) */

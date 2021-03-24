@@ -359,7 +359,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
     .pc{display:none;}
 
-    .contents {width:100%;margin:0 auto;padding:20px 0 120px;}
+    .contents {width:100%;margin:0 auto;padding:20px 20px 120px;}
 
     .side_nav_mobile{width:100%;}
     .side_nav_mobile .form_select{padding-left:0;border:none;font-size:24px;font-weight:900;}
@@ -471,7 +471,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .contents,
     .footer_wrap {max-width: 1200px;}
 
-    .contents{padding-left:0;padding-right:0;}
+    /* .contents{padding-left:0;padding-right:0;} */
 
     /* main{padding:0px;} */
 

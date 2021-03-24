@@ -83,7 +83,6 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
      * 이미지 리스트 클릭시 새탭
      */
     const handleClickImageName = (element) => {
-        console.log(element);
         const { fileUrl } = element;
         if (fileUrl) {
             var win = window.open(fileUrl, '_blank');
@@ -129,7 +128,6 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading]);
 
-    console.log(uploadFiles);
     return (
         <>
             <Form>
@@ -181,10 +179,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                             selectValue={data.channelId}
                             onChange={(value) => {
                                 onChangeFormData({
-                                    target: {
-                                        name: 'channelId',
-                                        value: value,
-                                    },
+                                    channelId: value,
                                 });
                             }}
                         />

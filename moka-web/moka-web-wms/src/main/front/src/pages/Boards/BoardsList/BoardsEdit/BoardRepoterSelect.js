@@ -17,7 +17,6 @@ const BoardRepoterSelect = ({ channalList, selectValue, onChange }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [channalList, selectValue]);
-    console.log(channalList);
 
     return (
         <Form.Row className="mb-2 align-items-center">
@@ -27,8 +26,8 @@ const BoardRepoterSelect = ({ channalList, selectValue, onChange }) => {
                 closeMenuOnSelect={true}
                 searchIcon={true}
                 value={value}
-                onChange={(value, e) => {
-                    onChange(value);
+                onChange={(value, event) => {
+                    onChange(value.value);
                 }}
             />
         </Form.Row>

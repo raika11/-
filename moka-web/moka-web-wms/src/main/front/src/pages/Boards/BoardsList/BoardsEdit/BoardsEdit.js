@@ -86,10 +86,6 @@ const BoardsEdit = ({ match }) => {
             }
         });
 
-        for (let item of formData.entries()) {
-            console.log(item[0] + ', ' + item[1]);
-        }
-
         return formData;
     };
 

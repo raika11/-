@@ -4,17 +4,16 @@ import { Form, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import BoardsSummernote from './BoardsSummernote';
 import toast, { messageBox } from '@utils/toastUtil';
-import { changeListMenuReplyContents, uploadBoardContentsImage } from '@store/board';
+import { uploadBoardContentsImage } from '@store/board';
 
 /**
  * 게시판 관리 > 게시글 관리 > 게시판 편집 폼 > 게시글 답변 썸머노트 편집
  */
 const ReplyNote = ({ data, onChangeFormData }) => {
     const dispatch = useDispatch();
-    const selectBoard = useSelector((store) => store.board.listMenu.contents.info);
+    const { boardId } = useParams();
     const contentsReply = useSelector((store) => store.board.listMenu.contents.reply);
     const [noteData, setNoteData] = useState(data);
-    console.log(data);
 
     /**
      * summernote 이미지 업로드 처리
@@ -25,14 +24,13 @@ const ReplyNote = ({ data, onChangeFormData }) => {
 
         dispatch(
             uploadBoardContentsImage({
-                boardId: selectBoard.boardId,
+                boardId: boardId,
                 imageForm: formData,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
                         toast.success(message);
                         let tempContent = `${contentsReply.content} <img src="${body}">`;
 
-                        // dispatch(changeListMenuReplyContents({ content: tempContent }));
                         onChangeFormData({ content: tempContent });
                     } else {
                         const { totalCnt, list } = body;
@@ -60,7 +58,6 @@ const ReplyNote = ({ data, onChangeFormData }) => {
                 <BoardsSummernote
                     contentValue={data}
                     onChangeValue={(value) => {
-                        // dispatch(changeListMenuReplyContents({ content: value }));
                         setNoteData(value);
                     }}
                     onImageUpload={(e) => SummernoteImageUpload(e)}

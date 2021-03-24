@@ -9,13 +9,21 @@
 
 /***************************************    general     ************************************/
 .section.general .component {padding: 18px 0 40px; border-top: 1px solid #000;}
+
 .section.general .component.showcase {padding: 40px 0; border-top: 0;}
 .section.general .component.showcase .card {margin-bottom: 18px; padding-bottom: 30px; border-bottom: 1px solid #ddd;}
 .section.general .component.showcase .card:last-child {margin-bottom: 0; padding-bottom: 0; border-bottom: 0;}
 .section.general .component.showcase .card_image {margin-bottom: 18px;}
 .section.general .component.showcase .card.img_right .img_thumbnail {width: 78px;}
+
+.section.general .component.correct_noti {padding: 18px 0 20px; border-top: 1px solid #e2e2e2;}
+.section.general .component.correct_noti a::before {content: ''; display: inline-block; width: 1px; height: 12px; margin: 0 16px; background-color: #d8d8d8;}
+
+.section.general .component.fb_area {margin-bottom: 50px; padding: 30px 30px 30px 40px; border-top: 0;}
+
 .section.general .latest_area .card {margin-bottom: 20px; padding-bottom: 30px; border-bottom: 1px solid #ddd;}
 .section.general .latest_area .img_thumbnail {width: 211px;}
+
 .section.general .view_lank_area .card {margin-bottom: 30px;}
 .section.general .view_lank_area .card_image {display: block;}
 .section.general .view_lank_area .img_thumbnail {width: 86px;}

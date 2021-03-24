@@ -20,9 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ApiParameterChecker {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApiParameterChecker.class);
     public final static JexlBuilder jexlb = new JexlBuilder();
     public final static JexlEngine jexl = jexlb.create();
+    private static final Logger logger = LoggerFactory.getLogger(ApiParameterChecker.class);
     private HashMap<String, JexlScript> scriptMap = new HashMap<String, JexlScript>(256);
     private ApiRequestHelper apiRequestHelper;
 
@@ -51,8 +51,9 @@ public class ApiParameterChecker {
             } else {
                 return checkValue.matches(parameter.getFilter());
             }
+        } else {
+            return true;
         }
-        return false;
     }
 
     public Object decideParameter(Api api, Parameter parameter, String paramValue)

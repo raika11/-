@@ -6,12 +6,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import jmnet.moka.core.common.exception.NoDataException;
+import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.component.mapper.ComponentMapper;
 import jmnet.moka.core.tps.mvc.component.repository.ComponentHistRepository;
+import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
+import jmnet.moka.core.tps.mvc.template.entity.Template;
+import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +33,15 @@ public class ComponentHistServiceImpl implements ComponentHistService {
 
     @Autowired
     private ComponentMapper componentMapper;
+
+    @Autowired
+    private ComponentService componentService;
+
+    @Autowired
+    private TemplateService templateService;
+
+    @Autowired
+    private MessageByLocale messageByLocale;
 
     @Override
     public ComponentHist insertComponentHist(ComponentHist history)
@@ -135,5 +149,47 @@ public class ComponentHistServiceImpl implements ComponentHistService {
             log.debug("DELETE FAIL RESERVE COMPONENT : {} ", returnValue);
             throw new Exception("Failed to delete RESERVE COMPONENT error code: " + returnValue);
         }
+    }
+
+    @Override
+    public ComponentHist insertComponentHist(ComponentWorkVO workVO, HistPublishDTO histPublishDTO, Long templateSeq)
+            throws Exception {
+        String messageC = messageByLocale.get("tps.common.error.no-data");
+        Component component = componentService
+                .findComponentBySeq(workVO.getComponentSeq())
+                .orElseThrow(() -> new NoDataException(messageC));
+
+        ComponentHist history = ComponentHist
+                .builder()
+                .dataset(component.getDataset())
+                .editFormPart(component.getEditFormPart())
+                .dataType(component.getDataType())
+                .domainId(component
+                        .getDomain()
+                        .getDomainId())
+                .componentSeq(component.getComponentSeq())
+                .snapshotYn(workVO.getSnapshotYn()) // 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .snapshotBody(workVO.getSnapshotBody())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .status(histPublishDTO.getStatus())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .approvalYn(histPublishDTO.getApprovalYn())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .reserveDt(histPublishDTO.getReserveDt())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .zone(component.getZone())
+                .matchZone(component.getMatchZone())
+                .viewYn(workVO.getViewYn())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .perPageCount(workVO.getPerPageCount())// 페이지편집에서 수정할 수 있는 컴포넌트정보
+                .build();
+
+        // 네이버채널
+        if (templateSeq != null) {
+            String messageT = messageByLocale.get("tps.common.error.no-data");
+            Template template = templateService
+                    .findTemplateBySeq(workVO.getTemplateSeq())
+                    .orElseThrow(() -> new NoDataException(messageT));
+            history.setTemplate(template);
+        }
+
+        ComponentHist componentHist = this.insertComponentHist(history);
+        log.debug("[COMPONENT HISTORY INSERT] seq: {}", component.getComponentSeq());
+        return componentHist;
     }
 }

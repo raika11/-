@@ -48,6 +48,12 @@ public class ComponentHistVO implements Serializable {
     private String regId;
 
     /**
+     * 생성자명
+     */
+    @Column(name = "REG_NM")
+    private String regNm;
+
+    /**
      * 데이타셋ID
      */
     @Column(name = "DATASET_SEQ")

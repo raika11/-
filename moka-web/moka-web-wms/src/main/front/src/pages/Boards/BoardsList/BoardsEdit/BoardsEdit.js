@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
@@ -25,7 +25,6 @@ import BoardsEditReplyForm from './BoardsEditReplyForm';
 const BoardsEdit = ({ match }) => {
     const history = useHistory();
     const { boardId, boardSeq, parentBoardSeq, reply } = useParams();
-    console.log(`boardId: ${boardId}, boardSeq: ${boardSeq}, parentBoardSeq: ${parentBoardSeq}, reply: ${reply}`);
     const dispatch = useDispatch();
 
     const storeBoardType = useSelector((store) => store.board.boardType);
@@ -35,28 +34,30 @@ const BoardsEdit = ({ match }) => {
     const loading = useSelector((store) => store.loading[GET_LIST_MENU_CONTENTS_INFO]);
 
     const [title, setTitle] = useState('');
-    // const [noteReady, setNoteReady] = useState();
     const [editData, setEditData] = useState(initialState.listMenu.contents.info); // 게시글 정보가 저장되는 state
     const [editReplyData, setEditReplyData] = useState(initialState.listMenu.contents.reply); // 답변 정보가 저장되는 state
 
     /**
-     * BoardsEditForm change value
+     * 게시글 폼 입력값 변경
      */
-    const handleChangeEditData = (e) => {
-        const { name, value, checked, type } = e.target;
+    const handleChangeEditData = useCallback(
+        (formData) => {
+            setEditData({ ...editData, ...formData });
+            // const { name, value, checked, type } = e.target;
+        },
+        [editData],
+    );
 
-        if (type === 'checkbox') {
-            setEditData({ ...editData, [name]: checked === true ? 'Y' : 'N' });
-        } else {
-            setEditData({ ...editData, [name]: value });
-        }
-    };
-
-    const handleChangeReplyData = (e) => {
-        const { name, value } = e.target;
-
-        setEditReplyData({ ...editReplyData, [name]: value });
-    };
+    /**
+     * 답변 폼 입력값 변경
+     */
+    const handleChangeReplyData = useCallback(
+        (formData) => {
+            setEditReplyData({ ...editReplyData, ...formData });
+            // const { name, value } = e.target;
+        },
+        [editReplyData],
+    );
 
     /**
      * 서비스 게시글 폼 데이터
@@ -71,7 +72,7 @@ const BoardsEdit = ({ match }) => {
         formData.append('title', editData.title);
         formData.append('pushReceiveYn', editData.pushReceiveYn);
         formData.append('emailReceiveYn', editData.emailReceiveYn);
-        formData.append('email', editData.email);
+        formData.append('email', editData.email || '');
 
         formData.append('titlePrefix1', editData.titlePrefix1);
         formData.append('titlePrefix2', editData.titlePrefix2);
@@ -96,7 +97,7 @@ const BoardsEdit = ({ match }) => {
      * 게시글 저장
      */
     const handleClickContentsSave = () => {
-        let formData; // 폼데이터.
+        let formData; // 폼데이터
         if (storeBoardType === 'S') {
             formData = makeServiceFormData();
         } else {
@@ -127,10 +128,10 @@ const BoardsEdit = ({ match }) => {
     };
 
     /**
-     * 게시물 수정
+     * 게시글 수정
      */
     const handleClickUpdate = () => {
-        let formData = {}; // 폼데이터.
+        let formData = {}; // 폼데이터
         if (storeBoardType === 'S') {
             formData = makeServiceFormData();
         } else {
@@ -204,11 +205,7 @@ const BoardsEdit = ({ match }) => {
      * 답변 등록 버튼
      */
     const handleClickReplay = () => {
-        // if (reply) {
         history.push(`${match.path}/${boardId}/${boardSeq}/reply`);
-        // } else {
-        //     history.push(`${match.path}/${boardId}/${boardSeq}/reply`);
-        // }
     };
 
     /**
@@ -222,14 +219,15 @@ const BoardsEdit = ({ match }) => {
                 boardSeq: boardSeq,
                 contents: {
                     boardId: null,
-                    content: contentsReply.content,
-                    depth: 0,
-                    indent: 0,
+                    title: editReplyData.title,
+                    content: editReplyData.content,
+                    depth: editData.depth + 1,
+                    indent: editData.indent + 1,
                     ordNo: editData.ordNo,
                     channelId: parentBoardSeq && reply ? contentsReply.channelId : editData.channelId,
                     titlePrefix1: parentBoardSeq && reply ? contentsReply.titlePrefix1 : editData.titlePrefix1,
                     titlePrefix2: parentBoardSeq && reply ? contentsReply.titlePrefix2 : editData.titlePrefix2,
-                    addr: editData.addr,
+                    // addr: editData.addr,
                 },
                 files: { attachFile: [] },
                 callback: ({ header: { success, message }, body }) => {
@@ -291,10 +289,6 @@ const BoardsEdit = ({ match }) => {
         setEditReplyData(contentsReply);
     }, [contentsReply]);
 
-    // useEffect(() => {
-    //     setNoteReady(loading);
-    // }, [loading]);
-
     return (
         <MokaCard
             className="w-100"
@@ -336,7 +330,8 @@ const BoardsEdit = ({ match }) => {
                         </>
                     )}
                     {boardSeq &&
-                        (reply && parentBoardSeq ? (
+                        reply &&
+                        (parentBoardSeq ? (
                             // 답변 조회
                             <>
                                 <Button variant="positive" className="mr-1" onClick={handleClickReplaySave}>
@@ -365,7 +360,7 @@ const BoardsEdit = ({ match }) => {
         >
             <>
                 {reply ? (
-                    <BoardsEditReplyForm data={editReplyData} setReplayData={setEditReplyData} onChangeFormData={handleChangeReplyData} />
+                    <BoardsEditReplyForm data={editReplyData} onChangeFormData={handleChangeReplyData} />
                 ) : (
                     <BoardsEditForm data={editData} onChangeFormData={handleChangeEditData} />
                 )}

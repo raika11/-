@@ -124,19 +124,19 @@ public interface DeskingService {
     //    boolean existReserve(ComponentWorkVO workVO);
 
 
-    /**
-     * 컴포넌트 히스토리 등록
-     *
-     * @param workVO         work컴포넌트정보
-     * @param regId          작업자
-     * @param histPublishDTO 임시저장/전송/예약 정보
-     * @param templateSeq    템플릿순번
-     * @return 수정된 컴포넌트
-     * @throws NoDataException 데이터없음 예외
-     * @throws Exception       기타예외
-     */
-    ComponentHist insertComponentHist(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO, Long templateSeq)
-            throws NoDataException, Exception;
+    //    /**
+    //     * 컴포넌트 히스토리 등록
+    //     *
+    //     * @param workVO         work컴포넌트정보
+    //     * @param regId          작업자
+    //     * @param histPublishDTO 임시저장/전송/예약 정보
+    //     * @param templateSeq    템플릿순번
+    //     * @return 수정된 컴포넌트
+    //     * @throws NoDataException 데이터없음 예외
+    //     * @throws Exception       기타예외
+    //     */
+    //    ComponentHist insertComponentHist(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO, Long templateSeq)
+    //            throws NoDataException, Exception;
 
     /**
      * 편집 컴포넌트 수정

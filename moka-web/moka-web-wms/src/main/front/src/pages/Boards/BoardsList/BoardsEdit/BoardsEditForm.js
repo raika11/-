@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaInputLabel, MokaInput, MokaTableEditCancleButton } from '@components';
 import { messageBox } from '@utils/toastUtil';
 import { getBoardChannelList, GET_LIST_MENU_CONTENTS_INFO } from '@store/board';
@@ -24,16 +25,32 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
 
     const [channalList, setChannalList] = useState([]); // 채널 선택
     const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일
-    let fileinputRef = useRef(null);
+    let fileRef = useRef(null);
+
+    /**
+     * 입력값 변경
+     * @param {object} e 이벤트
+     */
+    const handleChangeValue = (e) => {
+        const { name, value, checked, type } = e.target;
+
+        if (type === 'checkbox') {
+            onChangeFormData({ [name]: checked === true ? 'Y' : 'N' });
+        } else {
+            onChangeFormData({ [name]: value });
+        }
+    };
 
     /**
      * 첨부 파일 등록
      */
-    const handleChangeFileInput = (event) => {
+    const handleChangeFile = (e) => {
         // 게시판 설정 확장자 체크
         let extCheck = false;
+        // let imageFiles = [];
+
         try {
-            let tempFile = event.target.files[0].name.split('.');
+            let tempFile = e.target.files[0].name.split('.');
             let tempFileExt = tempFile[1];
 
             if (selectBoard.allowFileExt.split(',').indexOf(tempFileExt) < 0) {
@@ -50,9 +67,9 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         if (uploadFiles.length + 1 > selectBoard.allowFileCnt) {
             messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${selectBoard.allowFileCnt}개 입니다.`, () => {});
         } else {
-            setUploadFiles([...uploadFiles, event.target.files[0]]);
+            setUploadFiles([...uploadFiles, e.target.files[0]]);
         }
-        fileinputRef.current.value = '';
+        fileRef.current.value = '';
     };
 
     /**
@@ -94,24 +111,14 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
     }, [dispatch, selectBoard]);
 
     useEffect(() => {
-        onChangeFormData({
-            target: {
-                name: 'attaches',
-                value: uploadFiles,
-            },
-        });
+        onChangeFormData({ attaches: uploadFiles });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [uploadFiles]);
 
-    useEffect(() => {
-        onChangeFormData({
-            target: {
-                name: 'content',
-                value: data.content,
-            },
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data.content]);
+    // useEffect(() => {
+    //     onChangeFormData({ content: data.content });
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [data.content]);
 
     useEffect(() => {
         if (loading === false) {
@@ -129,8 +136,6 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading]);
-
-    console.log(data);
 
     return (
         <>
@@ -194,7 +199,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                         channalList.length > 0 && (
                             <Form.Row className="mb-2">
                                 <Col xs={6} className="p-0">
-                                    <MokaInputLabel as="select" label="채널명" name="channelId" value={data.channelId} onChange={(e) => onChangeFormData(e)}>
+                                    <MokaInputLabel as="select" label="채널명" name="channelId" value={data.channelId} onChange={handleChangeValue}>
                                         <option value="">선택</option>
                                         {channalList.map((item, index) => (
                                             <option key={index} value={item.value}>
@@ -210,7 +215,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                     <Form.Row className="mb-2">
                         {selectBoard.titlePrefixNm1 && (
                             <Col xs={6} className="p-0 pr-20">
-                                <MokaInputLabel as="select" label={selectBoard.titlePrefixNm1} name="titlePrefix1" value={data.titlePrefix1} onChange={(e) => onChangeFormData(e)}>
+                                <MokaInputLabel as="select" label={selectBoard.titlePrefixNm1} name="titlePrefix1" value={data.titlePrefix1} onChange={handleChangeValue}>
                                     <option value="">선택</option>
                                     {selectBoard.titlePrefix1
                                         .replaceAll(' ', '')
@@ -226,7 +231,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
 
                         {selectBoard.titlePrefixNm2 && (
                             <Col xs={6} className="p-0 pl-20">
-                                <MokaInputLabel as="select" label={selectBoard.titlePrefixNm2} name="titlePrefix2" value={data.titlePrefix2} onChange={(e) => onChangeFormData(e)}>
+                                <MokaInputLabel as="select" label={selectBoard.titlePrefixNm2} name="titlePrefix2" value={data.titlePrefix2} onChange={handleChangeValue}>
                                     <option value="">선택</option>
                                     {selectBoard.titlePrefix2
                                         .replaceAll(' ', '')
@@ -243,7 +248,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                 )}
 
                 <Form.Row className="mb-2 align-items-center">
-                    <MokaInputLabel label="노출 순서" type="number" name="ordNo" placeholder={'노출순서'} value={data.ordNo} onChange={(e) => onChangeFormData(e)} />
+                    <MokaInputLabel label="노출 순서" type="number" name="ordNo" placeholder={'노출순서'} value={data.ordNo} onChange={handleChangeValue} />
                     <p className="mb-0 ml-20 text-neutral">
                         * 공지 글과 같이 상단에 노출되는 경우는 <br />
                         적은 숫자(예: 0)로 입력해주세요
@@ -256,7 +261,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                         id="pushReceiveYn"
                         label="답변 PUSH 수신"
                         inputProps={{ custom: true, checked: data.pushReceiveYn === 'Y', disabled: true }}
-                        onChange={(e) => onChangeFormData(e)}
+                        onChange={handleChangeValue}
                     />
                     <p className="mb-0 ml-2">답변에 대한 APP 푸쉬를 받을 수 있습니다.</p>
                 </Form.Row>
@@ -268,21 +273,13 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                         className="mr-2"
                         label="발송 이메일"
                         inputProps={{ custom: true, checked: data.emailReceiveYn === 'Y' }}
-                        onChange={(e) => onChangeFormData(e)}
+                        onChange={handleChangeValue}
                     />
-                    <MokaInputLabel
-                        label="이메일"
-                        labelWidth={40}
-                        className="flex-fill"
-                        name="email"
-                        placeholder="이메일"
-                        value={data.email}
-                        onChange={(e) => onChangeFormData(e)}
-                    />
+                    <MokaInputLabel label="이메일" labelWidth={40} className="flex-fill" name="email" placeholder="이메일" value={data.email} onChange={handleChangeValue} />
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0">
-                        <MokaInput className="mb-0" name="title" placeholder="제목을 입력해 주세요." value={data.title} onChange={(e) => onChangeFormData(e)} />
+                        <MokaInput className="mb-0" name="title" placeholder="제목을 입력해 주세요." value={data.title} onChange={handleChangeValue} />
                     </Col>
                 </Form.Row>
                 {/* 기획서에 백오피스는 설정과 관계 없이 에디터를 표현한다고 textarea 는 주석처리. */}
@@ -296,7 +293,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                 inputProps={{ rows: 6 }}
                                 name="content"
                                 value={data.content}
-                                // onChange={(e) => onChangeFormData(e)}
+                                // onChange={handleChangeValue}
                                 onChange={(e) => {
                                     dispatch(changeListMenuContent({ content: e.target.value }));
                                     onChangeFormData(e);
@@ -308,8 +305,6 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                 <BoardsNote data={data.content} onChangeFormData={onChangeFormData} />
                 {/* )} */}
 
-                <hr className="divider" />
-
                 {selectBoard.fileYn === 'Y' && (
                     <>
                         <Form.Row>
@@ -317,25 +312,12 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                 <MokaInputLabel label="첨부파일" as="none" className="mb-2" />
                             </Col>
                             <Col xs={8} className="p-0 text-right">
-                                <div className="file btn btn-primary" style={{ position: 'relative', overflow: 'hidden' }}>
+                                <Button variant="positive" className="mr-1" onClick={() => fileRef.current.click()}>
                                     등록
-                                    <input
-                                        type="file"
-                                        name="file"
-                                        ref={fileinputRef}
-                                        onChange={(e) => handleChangeFileInput(e)}
-                                        style={{
-                                            position: 'absolute',
-                                            fontSize: '50px',
-                                            opacity: '0',
-                                            right: '0',
-                                            top: '0',
-                                        }}
-                                    />
-                                </div>
+                                </Button>
+                                <input type="file" ref={fileRef} onChange={handleChangeFile} className="d-none" />
                             </Col>
                         </Form.Row>
-                        <hr className="divider" />
                         {uploadFiles.map((element, index) => {
                             return (
                                 <Form.Row className="mb-0 pt-1" key={index}>

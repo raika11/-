@@ -74,12 +74,11 @@ public interface ComponentService {
     /**
      * 여러개의 컴포넌트 등록
      *
-     * @param components     등록할 컴포넌트 리스트
-     * @param histPublishDTO 임시저장/전송/예약 정보
+     * @param components 등록할 컴포넌트 리스트
      * @return 등록된 컴포넌트 리스트
      * @throws Exception 에러
      */
-    public List<Component> insertComponents(List<Component> components, HistPublishDTO histPublishDTO)
+    public List<Component> insertComponents(List<Component> components)
             throws Exception;
 
     /**

@@ -293,9 +293,9 @@ function* saveBoardReply({ payload: { boardId, parentBoardSeq, boardSeq, content
     let response;
 
     try {
-        // 답변 등록.
-        if (parentBoardSeq === null) {
-            // 답변 등록.
+        // 등록 수정 분기
+        if (!parentBoardSeq) {
+            // 답변 등록
             response = yield call(api.saveBoardReply, {
                 boardId: boardId,
                 parentBoardSeq: boardSeq,
@@ -303,7 +303,7 @@ function* saveBoardReply({ payload: { boardId, parentBoardSeq, boardSeq, content
                 files: [], // 답변은 첨부 파일이 없어서 null 처리
             });
         } else {
-            // 답변 수정.
+            // 답변 수정
             response = yield call(api.updateBoardReply, {
                 boardId: boardId,
                 parentBoardSeq: parentBoardSeq,

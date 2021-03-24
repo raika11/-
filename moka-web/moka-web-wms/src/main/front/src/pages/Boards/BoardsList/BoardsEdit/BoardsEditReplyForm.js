@@ -9,7 +9,7 @@ import ReplayNote from './ReplayNote';
 /**
  * 게시판 관리 > 게시글 관리 > 게시판 편집 답변 폼
  */
-const BoardsEditReplyForm = ({ data, setReplayData, onChangeFormData }) => {
+const BoardsEditReplyForm = ({ data, onChangeFormData }) => {
     const { boardSeq, parentBoardSeq, reply } = useParams();
     console.log(boardSeq, parentBoardSeq, reply);
 
@@ -18,35 +18,20 @@ const BoardsEditReplyForm = ({ data, setReplayData, onChangeFormData }) => {
     const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
     const contentsReply = useSelector((store) => store.board.listMenu.contents.reply);
 
-    // const [replyEditData, setReplyEditData] = useState({
-    //     title: '',
-    //     content: '',
-    //     regName: '',
-    // });
-
     console.log(data);
 
-    // useEffect(() => {
-    //     if (selectBoard.editorYn === 'Y') {
-    //         setReplyEditData({
-    //             ...replyEditData,
-    //             title: data.title,
-    //             regName: data.regName,
-    //         });
-    //     } else {
-    //         setReplyEditData({
-    //             ...replyEditData,
-    //             title: data.title,
-    //             content: data.content,
-    //             regName: data.regName,
-    //         });
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [data]);
+    /**
+     * 입력값 변경
+     * @param {object} e 이벤트
+     */
+    const handleChangeValue = (e) => {
+        const { name, value } = e.target;
+        onChangeFormData({ [name]: value });
+    };
 
     useEffect(() => {
-        // 원글 답변 등록시
-        if (boardSeq && reply) {
+        // 답변 등록시
+        if (boardSeq && reply && !parentBoardSeq) {
             let tempContent = `
                 <br />
                 원본 게시글<br />
@@ -54,14 +39,14 @@ const BoardsEditReplyForm = ({ data, setReplayData, onChangeFormData }) => {
                 <br />
                 ${contentsInfo.content}`;
 
-            setReplayData({
+            onChangeFormData({
                 title: 'Re: ',
                 content: tempContent,
                 regName: userName,
             });
         } else if (boardSeq && parentBoardSeq && reply) {
             // 답변 글 조회시
-            setReplayData({
+            onChangeFormData({
                 title: contentsReply.title,
                 content: contentsReply.content,
                 regName: contentsReply.regName,
@@ -70,21 +55,21 @@ const BoardsEditReplyForm = ({ data, setReplayData, onChangeFormData }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => {
-        onChangeFormData({
-            target: {
-                name: 'content',
-                value: data.content,
-            },
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data.content]);
+    // useEffect(() => {
+    //     onChangeFormData({
+    //         target: {
+    //             name: 'content',
+    //             value: data.content,
+    //         },
+    //     });
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [data.content]);
 
     return (
         <Form>
             <Form.Row className="mb-2">
                 <Col className="p-0">
-                    <MokaInputLabel label="제목" className="mb-0" name="title" value={data.title} onChange={(e) => onChangeFormData(e)} />
+                    <MokaInputLabel label="제목" className="mb-0" name="title" value={data.title} onChange={handleChangeValue} />
                 </Col>
             </Form.Row>
             {/* 기획서에 백오피스는 설정과 관계 없이 에디터를 표현한다고 textarea 는 주석처리. */}
@@ -116,7 +101,7 @@ const BoardsEditReplyForm = ({ data, setReplayData, onChangeFormData }) => {
             {/* )} */}
             <Form.Row>
                 <Col xs={7} className="p-0">
-                    <MokaInputLabel label="등록자" name="regName" value={data.regName} onChange={(e) => onChangeFormData(e)} />
+                    <MokaInputLabel label="등록자" name="regName" value={data.regName} onChange={handleChangeValue} />
                 </Col>
             </Form.Row>
         </Form>

@@ -206,11 +206,11 @@
   </api>
 
   <!--북마크등록-->
-  <api id="scrap.insert">
+  <api id="scrap.insert" membership="cookie">
     <description>북마크를 등록한다.</description>
     <parameter>
       <totalId desc="기사Id" default="0" require="Y" type="number">^[0-9]{1,9}$</totalId>
-      <ip desc="기사Id" require="Y">^.{0,50}$</ip>
+      <ip desc="ip" require="Y">^.{0,50}$</ip>
     </parameter>
     <request dmlType="sp" setNames="_DATA">dps.article.scrapInsert</request>
     <keys>

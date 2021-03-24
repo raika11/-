@@ -24,7 +24,7 @@ const BoardContentsSearch = () => {
     const [search, setSearch] = useState(initialState.listMenu.contentsList.search);
 
     /**
-     * change input
+     * 입력값 변경
      */
     const handleChangeValue = (e) => {
         const { name, value } = e.target;

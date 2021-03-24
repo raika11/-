@@ -337,7 +337,9 @@ const BoardsEdit = ({ match }) => {
             footer
             footerClassName="d-flex justify-content-center"
             footerButtons={[
-                boardId && boardInfoData.boardUrl && { text: '미리보기', variant: 'outline-neutral', onClick: handleCLickBoardPriveButton, className: 'mr-1' },
+                boardId &&
+                    boardInfoData.headerContent &&
+                    boardInfoData.footerContent && { text: '미리보기', variant: 'outline-neutral', onClick: handleCLickBoardPriveButton, className: 'mr-1' },
                 { text: boardId ? '수정' : '저장', variant: 'positive', onClick: handleClickSaveButton, className: 'mr-1' },
                 boardId && { text: '삭제', variant: 'negative', onClick: handleClickDeleteButton, className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancleButton },

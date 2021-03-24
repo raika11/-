@@ -25,18 +25,6 @@ const BoardsGroupTree = (props) => {
     useEffect(() => {
         //초기 설정
 
-        // 최초 /router/:boardId 없이 접근시 첫번쨰 게시판 id 로 라우터 이동 시킴.
-        // const goLastBoardIndex = () => {
-        //     groupList
-        //         .filter((element) => element.boardType === boardType)
-        //         .map((e) => {
-        //             const infoList = e.boardInfoList;
-
-        //             const { boardId } = infoList[0];
-        //             history.push(`/${pagePathName}/${boardId}`);
-        //         });
-        // };
-
         // 선택된 boardId 가 있을시에 트리 메뉴를 펼침
         // if (boardId) {
         setTreeData(

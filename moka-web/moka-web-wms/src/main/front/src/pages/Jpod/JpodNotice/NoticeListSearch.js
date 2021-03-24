@@ -14,10 +14,9 @@ import toast from '@utils/toastUtil';
  * J팟 관리 - 공지 게시판 검색
  */
 const NoticeListSearch = ({ match }) => {
-    const [searchData, setSearchData] = useState(initialState.jpodNotice.jpodNotices.search);
     const history = useHistory();
     const dispatch = useDispatch();
-    const [channelLists, setChannelLists] = useState([]); // 채널 선택.
+    const [searchData, setSearchData] = useState(initialState.jpodNotice.jpodNotices.search);
 
     const { channelList, selectBoard } = useSelector((store) => ({
         channelList: store.jpod.jpodNotice.channelList,
@@ -82,13 +81,8 @@ const NoticeListSearch = ({ match }) => {
         });
     };
 
-    // 검색 및 본문에 작성시 필요한 J팟 채널 목록 설정.
     useEffect(() => {
-        setChannelLists(channelList);
-    }, [channelList]);
-
-    // 공지 목록 가지고 오기.
-    useEffect(() => {
+        // 공지 목록 조회
         if (selectBoard.boardId) {
             dispatch(getJpodNotice());
         }
@@ -130,11 +124,12 @@ const NoticeListSearch = ({ match }) => {
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="channelId" id="channelId" value={searchData.channelId} onChange={(e) => handleSearchChange(e)}>
                         <option value="">j팟 채널 전체</option>
-                        {channelLists.map((item, index) => (
-                            <option key={index} value={item.value}>
-                                {item.name}
-                            </option>
-                        ))}
+                        {channelList &&
+                            channelList.map((item, index) => (
+                                <option key={index} value={item.value}>
+                                    {item.name}
+                                </option>
+                            ))}
                     </MokaInput>
                 </Col>
                 <Button variant="negative" onClick={() => handleClickSearchResetButton()}>

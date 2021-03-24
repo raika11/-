@@ -249,7 +249,7 @@
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{ip, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{remoteIP, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 </mapper>

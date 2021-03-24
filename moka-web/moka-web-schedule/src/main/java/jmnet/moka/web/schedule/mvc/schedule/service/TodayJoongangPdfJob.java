@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.web.schedule.support.StatusResultType;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ public class TodayJoongangPdfJob extends AbstractScheduleJob {
         String now = format1.format(date);
         ArrayList<String> returnImageUrlList = new ArrayList<>();
         String url = SundayJoongangUrl + now;
-        
+
         try {
 /*
             //일요일인 경우
@@ -96,6 +97,8 @@ public class TodayJoongangPdfJob extends AbstractScheduleJob {
 
                 success = stringFileUpload(stringBuffer.toString());
                 log.debug("file upload : {}", success);
+            } else {
+                throw new MokaException("조회된 데이터가 없습니다.");
             }
 
             //AbstractScheduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력

@@ -153,4 +153,10 @@ public class DeskingWorkDTO implements Serializable {
 
     @ApiModelProperty("아이콘파일명")
     private String iconFileName;
+
+    @ApiModelProperty("중요도")
+    private String contentPriority;
+
+    @ApiModelProperty("재생시간")
+    private String duration;
 }

@@ -62,7 +62,7 @@ public class Comment implements Serializable {
     @Column(name = "CMT_CONTENT")
     private String cont;
 
-    @Column(name = "MEM_ID", nullable = false)
+    @Column(name = "MEM_ID")
     private String memId;
 
     @Column(name = "MEM_NM", nullable = false)
@@ -83,4 +83,16 @@ public class Comment implements Serializable {
     @Column(name = "REG_DEV")
     private String regDev;
 
+    /**
+     * 회원관리번호
+     */
+    @Column(name = "MEM_SEQ", nullable = false)
+    @Builder.Default
+    private Long memSeq = 0L;
+
+    /**
+     * 로그인TYPE
+     */
+    @Column(name = "LOGIN_TYPE")
+    private String loginType;
 }

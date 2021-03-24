@@ -29,6 +29,7 @@ const CommentAgGrid = (props) => {
         getRowNodeId,
         onCellClicked,
         onRowClicked,
+        ...rest
     } = props;
 
     // https://www.ag-grid.com/javascript-grid-row-height/
@@ -39,6 +40,7 @@ const CommentAgGrid = (props) => {
             <div className={clsx('ag-theme-moka-grid position-relative overflow-hidden flex-fill ag-grid-comment', { 'ag-header-no': false })}>
                 {loading && <MokaLoader />}
                 <AgGridReact
+                    {...rest}
                     immutableData
                     defaultColDef={{
                         wrapText: false,
@@ -67,7 +69,6 @@ const CommentAgGrid = (props) => {
                     onColumnVisible={onColumnVisible}
                     onRowSelected={onRowSelected}
                     getRowHeight={getRowHeight}
-                    // rowSelected={rowSelected}
                     frameworkComponents={{
                         deleteButtonRenderer: DeleteButtonRenderer,
                         dateItemRenderer: DateItemRenderer,
@@ -75,10 +76,8 @@ const CommentAgGrid = (props) => {
                         banneButtonRenderer: BanneButtonRenderer,
                         historyButtonRenderer: HistoryButtonRenderer,
                         memSiteRenderer: MemSiteRenderer,
-                        // commentItemRenderer: CommentItemRenderer,
                     }}
                     preventRowClickCell={preventRowClickCell}
-                    // suppressRowClickSelection={false}
                 />
             </div>
             <div className="mt-3">

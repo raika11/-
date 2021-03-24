@@ -225,7 +225,6 @@ const BoardsEdit = ({ match }) => {
                     channelId: parentBoardSeq && reply ? contentsReply.channelId : editData.channelId,
                     titlePrefix1: parentBoardSeq && reply ? contentsReply.titlePrefix1 : editData.titlePrefix1,
                     titlePrefix2: parentBoardSeq && reply ? contentsReply.titlePrefix2 : editData.titlePrefix2,
-                    // addr: editData.addr,
                 },
                 files: { attachFile: [] },
                 callback: ({ header: { success, message }, body }) => {

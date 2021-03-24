@@ -114,6 +114,15 @@ public interface BoardService {
     List<BoardAttach> findAllBoardAttach(Long boardSeq);
 
     /**
+     * 관련글의 가장 큰 Depth값을 가져온다.
+     *
+     * @param parentBoardSeq 부모 게시글 일련번호
+     * @return Depth 최대값
+     */
+    Integer findByMaxDepth(Long parentBoardSeq);
+
+
+    /**
      * 게시물 첨부파일 등록
      *
      * @param boardAttach 게시물

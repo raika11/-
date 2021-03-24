@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import toastUtil from '@utils/toastUtil';
+import toastUtil, { messageBox } from '@utils/toastUtil';
 import { MokaCard } from '@components';
 import { Col, Row } from 'react-bootstrap';
 import MenuAuthTree from '@pages/Menu/component/MenuAuthTree';
@@ -20,31 +20,37 @@ const MemberChildMenuAuth = () => {
     const dispatch = useDispatch();
 
     const handleClickSave = () => {
+        const halfCheckedKeys = menuAuthInfo.halfCheckedKeys;
+        const used = [...menuAuthInfo.used, ...halfCheckedKeys];
         const edited = menuAuthInfo.edited;
-        const used = [...menuAuthInfo.used, ...menuAuthInfo.halfCheckedKeys];
 
-        /*let changeMenuAuthList = [];
-        for (const menuId of used) {
-            const usedYn = 'Y';
-            const editYn = edited.includes(menuId) ? 'Y' : 'N';
-            const viewYn = 'Y';
+        const editedOrg = menuAuthInfo.editedOrg;
+        const usedOrg = menuAuthInfo.usedOrg;
 
-            changeMenuAuthList = [...changeMenuAuthList, { menuId, usedYn, editYn, viewYn }];
-        }*/
+        const editedChanged = edited.filter((menuId) => !editedOrg.includes(menuId)).concat(editedOrg.filter((menuId) => !edited.includes(menuId)));
+        //[...edited.filter((menuId) => !editedOrg.includes(menuId)), ...editedOrg.filter((menuId) => !edited.includes(menuId))];
+        const usedChanged = used.filter((menuId) => !usedOrg.includes(menuId)).concat(usedOrg.filter((menuId) => !used.includes(menuId)));
+        //[...used.filter((menuId) => !usedOrg.includes(menuId)), ...usedOrg.filter((menuId) => !used.includes(menuId))];
+        const changeMenuAuthList = nodeList(menuAuthInfo.list).filter((info) => {
+            return usedChanged.includes(info.menuId) || editedChanged.includes(info.menuId);
+        });
 
-        const changeMenuAuthList = nodeList(menuAuthInfo.list);
-        dispatch(
-            updateMemberMenuAuth({
-                memberId,
-                changeMenuAuthList,
-                callback: (response) => {
-                    if (response.body) {
-                        dispatch(getMemberMenuAuth(memberId));
-                    }
-                    toastUtil.result(response);
-                },
-            }),
-        );
+        if (changeMenuAuthList.length > 0) {
+            dispatch(
+                updateMemberMenuAuth({
+                    memberId,
+                    changeMenuAuthList,
+                    callback: (response) => {
+                        if (response.body) {
+                            dispatch(getMemberMenuAuth(memberId));
+                        }
+                        toastUtil.result(response);
+                    },
+                }),
+            );
+        } else {
+            messageBox.alert('변경된 메뉴 권한이 없습니다.');
+        }
 
         function nodeList(menuAuthInfos) {
             let infos = [];

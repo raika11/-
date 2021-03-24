@@ -9,13 +9,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GroupMemberRepository extends JpaRepository<GroupMember, Long>, JpaSpecificationExecutor<GroupMember> {
 
-    List<GroupMember> findAllByGroupCdAndUsedYn(String groupCd, String useYn);
-
     List<GroupMember> findAllByGroupCd(String groupCd);
 
-    Long countByGroupCdAndUsedYn(String groupCd, String useYn);
-
-    List<GroupMember> findAllByMemberIdAndUsedYn(String memberId, String useYn);
+    Long countByGroupCd(String groupCd);
 
     List<GroupMember> findAllByMemberId(String memberId);
 }

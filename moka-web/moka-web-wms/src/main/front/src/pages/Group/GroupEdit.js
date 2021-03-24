@@ -195,7 +195,7 @@ const GroupEdit = ({ match }) => {
             });
             isInvalid = isInvalid | true;
         }
-
+        messageBox.alert(errList.map((errInfo) => errInfo.reason).join('\n'));
         dispatch(changeInvalidList(errList));
         return !isInvalid;
     };
@@ -290,7 +290,7 @@ const GroupEdit = ({ match }) => {
             groupKorNm : group.groupKorNm,
         };
         */
-
+        debugger;
         const tmp = {
             groupCd,
             groupNm,

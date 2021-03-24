@@ -186,10 +186,7 @@ const CommentListBox = ({ setSelectBannedItem }) => {
                     ...element,
                     statusText: statusText,
                     mediaText: mediaText,
-                    userInfo: {
-                        memNm: element.memNm,
-                        memId: element.memId,
-                    },
+                    regMember: `${element.memNm}(${element.memId})`,
                     action: {
                         cmtSeq: element.cmtSeq,
                         status: element.status,
@@ -230,6 +227,7 @@ const CommentListBox = ({ setSelectBannedItem }) => {
 
     return (
         <CommentAgGrid
+            suppressRowClickSelection
             loading={loading}
             columnDefs={columnDefs}
             total={total}
@@ -237,16 +235,14 @@ const CommentListBox = ({ setSelectBannedItem }) => {
             size={search.size}
             rowData={rowData}
             getRowNodeId={(params) => params.cmtSeq}
-            onRowSelected={(e) => handleGridRowSelected(e)}
-            onColumnResized={(e) => onColumnResized(e)}
-            onColumnVisible={(e) => onColumnVisible(e)}
+            onRowSelected={handleGridRowSelected}
+            onColumnResized={onColumnResized}
+            onColumnVisible={onColumnVisible}
             rowHeight={54}
-            // rowSelected={(e) => handleClick(e)}
-            // onRowClicked={(e) => handleOnClick(e)}
-            //onCellClicked={(e) => handleOnCellClicked(e)}
-            // onRowDoubleClicked={(e) => handleDoubleClickListRow(e)}
-            onGridReady={(e) => onGridReady(e)}
-            changeSearchOption={(e) => handleChangeSearchOption(e)}
+            //onCellClicked={handleOnCellClicked}
+            //onRowDoubleClicked={handleDoubleClickListRow}
+            onGridReady={onGridReady}
+            changeSearchOption={handleChangeSearchOption}
             preventRowClickCell={['cont', 'action', 'preview']}
         />
     );

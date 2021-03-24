@@ -301,5 +301,18 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
         return query.fetchCount();
     }
 
+    @Override
+    public Integer findByMaxDepth(Long parentBoardSeq) {
+        QBoard qBoard = QBoard.board;
+
+        JPQLQuery<Board> query = from(qBoard);
+
+        return query
+                .select(qBoard.depth)
+                .where(qBoard.parentBoardSeq.eq(parentBoardSeq))
+                .orderBy(qBoard.depth.desc())
+                .fetchFirst();
+    }
+
 
 }

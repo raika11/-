@@ -40,4 +40,6 @@ public interface BoardRepositorySupport {
 
     Long countByParentBoardSeq(Long parentBoardSeq, String delYn);
 
+    Integer findByMaxDepth(Long parentBoardSeq);
+
 }

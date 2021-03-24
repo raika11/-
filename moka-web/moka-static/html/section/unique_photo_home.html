@@ -24,26 +24,24 @@
     <script src="//stg-static.joongang.co.kr/js/plugin/swiper.min.js"></script>
     <style>
         .card_in {position: relative;}
-        .card_in .card_image::before { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 70%; background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7)); }
+        .card_in .card_image::before { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 50%; background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7)); }
         .card_in .card_body { position: absolute; left: 0; bottom: 0; width: 100%; padding: 34px 40px; }
         .card_in .card_body .headline,
         .card_in .card_body .description { color: #fff; }
-        .card_in .card_body .headline { font-size: 28px; line-height: 43px; letter-spacing: -.43px; }
-        .card_in .card_body .description { font-size: 14px; line-height: 22px; letter-spacing: -.4px; }
+        .card_in .card_body .description { max-width: 580px; }
         .case_unique .card_in .card_image .fa_rect_w { right: 46px; bottom: 40px; width: 30px; height: 20px }
         .case_unique .card_in .fa_rect_w::after { left: 11px; top: 8px; width: 22px; height: 14px; }
         .case_unique .card_image { position: relative; }
         .case_unique .card_image .fa_rect_w { position: absolute; right: 14px; bottom: 12px; }
         .case_unique .card_group.trend { margin-top: -20px; margin: -20px -18px 0; }
         .case_unique .card_group.trend .col_lg4 { margin-top: 20px; padding: 0 18px; }
-        .case_unique .card_group.trend .card_more { display: flex; align-items: center; justify-content: center; width: calc(100% - 36px); margin-left: 18px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e2e2; }
-        .case_unique .card_group.trend .card_more .btn_txt_more { width: 100%; }
-        .case_unique .card_group.trend .card_more .btn_txt_more .fa_arrow_down_g { margin-left: 8px; }
+        .case_unique .component .card_more { display: flex; align-items: center; justify-content: center; margin-top: 30px; padding: 20px 0; border-top: 1px solid #e2e2e2; }
+        .case_unique .component .card_more .fa_arrow_down_g { margin-left: 8px; }
         .fa_rect_w { width: 15px; height: 10px; border: 1.5px solid #fff;  }
         .fa_rect_w::after { content: ''; position: absolute; left: 6px; top: 4px; width: 12px; height: 8px; border: 1.5px solid #fff; }
         .swiper-wrapper.card_group  { flex-wrap: nowrap; }
         .swiper-wrapper.card_group .card { margin-bottom: 0; }
-        .swiper-wrapper.card_group .headline { font-size: 16px; line-height: 24px; }
+        .swiper-wrapper.card_group .headline { line-height: 24px; }
         .case_unique [class*="swiper-button-prev"], .case_unique [class*="swiper-button-next"] { top: 156px; width: 10px; height: 20px; margin: 0; background-size: 10px 20px; filter: grayscale(100%); opacity: 0.8; }
         .case_unique [class*="swiper-button-next"] { right: -30px; }
         .case_unique [class*="swiper-button-prev"] { left: -30px; }
@@ -55,6 +53,18 @@
         .case_unique .top_area_wrap.type1 .sub_title { font-size: 20px; }
         /* 공통 */
         .fa_arrow_down_g { position: relative; top: -3px; width: 8px; height: 8px; border-top: 1px solid #999; border-right: 1px solid #999; transform: rotate(135deg); }
+        /* Mobile devices (mobile, 767px and down) */
+        @media (max-width:767px) {
+            .card_in .card_body { position: static; padding:0; }
+            .card_in .card_body .headline { color: #111; line-height: 28px; }
+            .card_in .card_body .description { color: #777; line-height: 23px; }
+        }
+        @media (max-width:1024px) {
+            .case_unique [class*="swiper-button-prev"], .case_unique [class*="swiper-button-next"] { display: none; }
+        }
+        @media (min-width:768px) {
+            .card_in .card_body .description { max-width: 500px; }
+        }
 </style>
 
 </head>
@@ -75,18 +85,18 @@
             <section class="contents case_unique">
                 <div class="component">
                     <div class="col_sm12 col_md12 col_lg12">
-                        <h2 class="page_title fs_sm4 fs_md3 fs_lg14 fs_lg40 fw_b font_black">포토</h2>
+                        <h2 class="page_title fs_sm24 fs_md28 fs_lg40 fw_b font_black">포토</h2>
                     </div>
                 </div>
                 <div class="component">
                     <div class="card_in col_sm12 col_md12 col_lg12">
                         <div class="card_image">
-                            <img src="https://placehold.it/1200x675" width="1200" height="675" alt="...">
+                            <img src="https://placehold.it/1200x675" alt="...">
                             <i class="fa fa_rect_w"></i>
                         </div>
                         <div class="card_body">
-                            <h2 class="headline fs_lg28">Card headline</h2>
-                            <p class="description">Card description.</p>
+                            <h2 class="headline fs_sm20 fs_md20 fs_lg28">‘위드 코로나’ 채비 나선 브랜드, 코로나로 못만나도 마음은 전해야</h2>
+                            <p class="description fs_sm15 fs_md13 fslg14">중국 군사 문제 전문가인 김태호 한림대 국제학대학원 교수는 "유사시 한반도에 개입하기 위해선 해군이 필요했기 때문에 북부전구가 북해함대를 가져간 것"이라고 밝혔다.</p>
                             <p class="byline">4시간 전</p>
                         </div>
                     </div>
@@ -94,58 +104,58 @@
 
                 <div class="component row">
                     <div class="top_area_wrap">
-                        <a href="#" class="sub_title fs_lg20 fw_b font_black">권혁재의 핸드폰 사진관 <i class="fa fa_arrow_right_b"></i></a>
-                        <button type="button" class="btn btn_type6 btn_outline_orange font_orange fs_lg14 fw_m" ><i class="fa fa_plus_orange"></i>구독</button>
+                        <a href="#" class="sub_title fs_sm16 fs_md16 fs_lg18 fw_b font_black">권혁재의 핸드폰 사진관 <i class="fa fa_arrow_right_b"></i></a>
+                        <button type="button" class="btn btn_type6 btn_outline_orange font_orange fs_sm20 fs_md14 fs_lg14 fw_m" ><i class="fa fa_plus_orange"></i>구독</button>
                     </div>
-                    <div class="swiper-container swiper1">
-                        <ul class="card_group row swiper-wrapper">
+                    <div class="swiper1">
+                        <ul class="card_group row ">
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">2020.1.26 11:40</p>
                                 </div>
                             </li>
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">2020.1.26 11:40</p>
                                 </div>
                             </li>
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">2020.1.26 11:40</p>
                                 </div>
                             </li>
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">2020.1.26 11:40</p>
                                 </div>
                             </li>
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">2020.1.26 11:40</p>
                                 </div>
                             </li>
@@ -157,78 +167,78 @@
                 </div>
                 <div class="component row">
                     <div class="top_area_wrap">
-                        <a href="#" class="sub_title fs_lg20 fw_b font_black">서소문 사진관 <i class="fa fa_arrow_right_b"></i></a>
-                        <button type="button" class="btn btn_type6 btn_outline_orange font_orange fs_lg14 fw_m" ><i class="fa fa_plus_orange"></i>구독</button>
+                        <a href="#" class="sub_title fs_sm16 fs_md16 fs_lg18 fw_b font_black">서소문 사진관 <i class="fa fa_arrow_right_b"></i></a>
+                        <button type="button" class="btn btn_type6 btn_outline_orange font_orange fs_sm14 fs_md14 fs_lg14 fw_m" ><i class="fa fa_plus_orange"></i>구독</button>
                     </div>
                     <div class="swiper-container swiper2">
                         <ul class="card_group row swiper-wrapper">
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">1일 전</p>
                                 </div>
                             </li>
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">2020.1.26 11:40</p>
                                 </div>
                             </li>
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">2020.1.26 11:40</p>
                                 </div>
                             </li>
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">2020.1.26 11:40</p>
                                 </div>
                             </li>
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">2020.1.26 11:40</p>
                                 </div>
                             </li>
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">2020.1.26 11:40</p>
                                 </div>
                             </li>
                             <li class="card col_sm12 col_md3 col_lg3 swiper-slide">
                                 <div class="card_image">
-                                    <img src="https://placehold.it/273x153" width="273" height="153" alt="...">
+                                    <img src="https://placehold.it/273x153" alt="...">
                                     <i class="fa fa_rect_w"></i>
                                 </div>
                                 <div class="card_body">
-                                    <h2 class="headline">Card headline</h2>
+                                    <h2 class="headline fs_sm16 fs_md14 fs_lg16">Card headline</h2>
                                     <p class="byline">2020.1.26 11:40</p>
                                 </div>
                             </li>
@@ -239,94 +249,92 @@
                     <div class="swiper-button-prev case2"></div>
                 </div>
 
-
                 <div class="component">
-                    <div class="top_area_wrap type1"><strong class="fs_lg20 fw_b font_black">최신 포토</strong></div>
+                    <div class="top_area_wrap type1"><strong class=" fs_md1 fs_lg16 fw_b font_black">최신 포토</strong></div>
                     <ul class="card_group row trend">
                         <li class="card col_sm12 col_md4 col_lg4">
                             <div class="card_image">
-                                <img src="https://placehold.it/376x212" width="376" height="212" alt="...">
+                                <img src="https://placehold.it/376x212" alt="...">
                             </div>
                             <div class="card_body">
-                                <h2 class="headline">Card headline</h2>
+                                <h2 class="headline fs_sm14 fs_md_14 fs_lg18">Card headline</h2>
                                 <p class="byline">4시간 전</p>
                             </div>
                         </li>
                         <li class="card col_sm12 col_md4 col_lg4">
                             <div class="card_image">
-                                <img src="https://placehold.it/376x212" width="376" height="212" alt="...">
+                                <img src="https://placehold.it/376x212" alt="...">
                             </div>
                             <div class="card_body">
-                                <h2 class="headline">Card headline</h2>
+                                <h2 class="headline fs_sm14 fs_md_14 fs_lg18">Card headline</h2>
                                 <p class="byline">4시간 전</p>
                             </div>
                         </li>
                         <li class="card col_sm12 col_md4 col_lg4">
                             <div class="card_image">
-                                <img src="https://placehold.it/376x212" width="376" height="212" alt="...">
+                                <img src="https://placehold.it/376x212" alt="...">
                             </div>
                             <div class="card_body">
-                                <h2 class="headline">Card headline</h2>
+                                <h2 class="headline fs_sm14 fs_md_14 fs_lg18">Card headline</h2>
                                 <p class="byline">4시간 전</p>
                             </div>
                         </li>
                         <li class="card col_sm12 col_md4 col_lg4">
                             <div class="card_image">
-                                <img src="https://placehold.it/376x212" width="376" height="212" alt="...">
+                                <img src="https://placehold.it/376x212" alt="...">
                             </div>
                             <div class="card_body">
-                                <h2 class="headline">Card headline</h2>
+                                <h2 class="headline fs_sm14 fs_md_14 fs_lg18">Card headline</h2>
                                 <p class="byline">4시간 전</p>
                             </div>
                         </li>
                         <li class="card col_sm12 col_md4 col_lg4">
                             <div class="card_image">
-                                <img src="https://placehold.it/376x212" width="376" height="212" alt="...">
+                                <img src="https://placehold.it/376x212" alt="...">
                             </div>
                             <div class="card_body">
-                                <h2 class="headline">Card headline</h2>
+                                <h2 class="headline fs_sm14 fs_md_14 fs_lg18">Card headline</h2>
                                 <p class="byline">4시간 전</p>
                             </div>
                         </li>
                         <li class="card col_sm12 col_md4 col_lg4">
                             <div class="card_image">
-                                <img src="https://placehold.it/376x212" width="376" height="212" alt="...">
+                                <img src="https://placehold.it/376x212" alt="...">
                             </div>
                             <div class="card_body">
-                                <h2 class="headline">Card headline</h2>
+                                <h2 class="headline fs_sm14 fs_md_14 fs_lg18">Card headline</h2>
                                 <p class="byline">4시간 전</p>
                             </div>
                         </li>
                         <li class="card col_sm12 col_md4 col_lg4">
                             <div class="card_image">
-                                <img src="https://placehold.it/376x212" width="376" height="212" alt="...">
+                                <img src="https://placehold.it/376x212" alt="...">
                             </div>
                             <div class="card_body">
-                                <h2 class="headline">Card headline</h2>
+                                <h2 class="headline fs_sm14 fs_md_14 fs_lg18">Card headline</h2>
                                 <p class="byline">4시간 전</p>
                             </div>
                         </li>
                         <li class="card col_sm12 col_md4 col_lg4">
                             <div class="card_image">
-                                <img src="https://placehold.it/376x212" width="376" height="212" alt="...">
+                                <img src="https://placehold.it/376x212" alt="...">
                             </div>
                             <div class="card_body">
-                                <h2 class="headline">Card headline</h2>
+                                <h2 class="headline fs_sm14 fs_md_14 fs_lg18">Card headline</h2>
                                 <p class="byline">4시간 전</p>
                             </div>
                         </li>
                         <li class="card col_sm12 col_md4 col_lg4">
                             <div class="card_image">
-                                <img src="https://placehold.it/376x212" width="376" height="212" alt="...">
+                                <img src="https://placehold.it/376x212" alt="...">
                             </div>
                             <div class="card_body">
-                                <h2 class="headline">Card headline</h2>
+                                <h2 class="headline fs_sm14 fs_md_14 fs_lg18">Card headline</h2>
                                 <p class="byline">4시간 전</p>
                             </div>
                         </li>
-                        <li class="card_more col_md12 col_lg12"><button type="button" class="btn_txt_more fs_lg14 fw_m font_gray">최신 기사 더보기<i class="fa fa_arrow_down_g"></i></button></li>
                     </ul>
-
+                    <button type="button" class="card_more col_sm12 col_md12 col_lg12 fs_sm20 fs_md14 fs_lg14 fw_m font_gray7">최신 기사 더보기<i class="fa fa_arrow_down_g"></i></button>
                 </div>
 
             <!-- // contents -->
@@ -343,49 +351,99 @@
     </div>
 </body>
 <script>
-    var swiper = new Swiper('.swiper-container.swiper1', {
-        spaceBetween: 36,
-        slidesPerView: 4,
-        navigation: {
-            nextEl: '.swiper-button-next.case1',
-            prevEl: '.swiper-button-prev.case1',
-        },
-        //반응형
-        breakpoints: {
-            // when window width is >= 480px
-            480: {
-            spaceBetween: 12
-            },
-            // when window width is >= 640px
-            640: {
-            spaceBetween: 24
-            },
-            1264: {
-            spaceBetween: 36
-            }
+
+    document.onreadystatechange = function() { 
+        // 모바일 브라우저 가로크기 체크
+        if (document.body.clientWidth >= 768) {
+            $( ".swiper1, .swiper2" ).addClass('swiper-container ');
+            $( ".swiper1 .card_group, .swiper2 .card_group" ).addClass('swiper-wrapper');
+            $( ".swiper1 .card, .swiper2 .card" ).addClass('swiper-slide');
+            var swiper1 = new Swiper('.swiper-container.swiper1 ', {
+                spaceBetween: 36,
+                slidesPerView: 4,
+                navigation: {
+                    nextEl: '.swiper-button-next.case1',
+                    prevEl: '.swiper-button-prev.case1',
+                },
+                breakpoints: {
+                    640: {
+                    allowTouchMove: false,
+                    touchRatio: 0,
+                    },
+                    1200: {
+                    spaceBetween: 20
+                    }
+                }
+            });
+            var swiper2 = new Swiper('.swiper-container.swiper2 ', {
+                spaceBetween: 36,
+                slidesPerView: 4,
+                navigation: {
+                    nextEl: '.swiper-button-next.case2',
+                    prevEl: '.swiper-button-prev.case2',
+                },
+                breakpoints: {
+                    640: {
+                    allowTouchMove: false,
+                    touchRatio: 0,
+                    },
+                    1200: {
+                    spaceBetween: 20
+                    }
+                }
+            });
         }
-    });
-    var swiper = new Swiper('.swiper-container.swiper2', {
-        spaceBetween: 36,
-        slidesPerView: 4,
-        navigation: {
-            nextEl: '.swiper-button-next.case2',
-            prevEl: '.swiper-button-prev.case2',
-        },
-        //반응형
-        breakpoints: {
-            // when window width is >= 480px
-            480: {
-            spaceBetween: 12
-            },
-            // when window width is >= 640px
-            640: {
-            spaceBetween: 24
-            },
-            1264: {
-            spaceBetween: 36
-            }
+    };
+
+    // 화면 사이즈별 
+	$(window).resize(function() { 
+		if (document.body.clientWidth >= 768) {
+            $( ".swiper1, .swiper2" ).addClass('swiper-container ');
+            $( ".swiper1 .card_group, .swiper2 .card_group" ).addClass('swiper-wrapper');
+            $( ".swiper1 .card, .swiper2 .card" ).addClass('swiper-slide');
+            var swiper1 = new Swiper('.swiper-container.swiper1 ', {
+                spaceBetween: 36,
+                slidesPerView: 4,
+                navigation: {
+                    nextEl: '.swiper-button-next.case1',
+                    prevEl: '.swiper-button-prev.case1',
+                },
+                breakpoints: {
+                    640: {
+                    allowTouchMove: false,
+                    touchRatio: 0,
+                    },
+                    1200: {
+                    spaceBetween: 20
+                    }
+                }
+            });
+            var swiper2 = new Swiper('.swiper-container.swiper2 ', {
+                spaceBetween: 36,
+                slidesPerView: 4,
+                navigation: {
+                    nextEl: '.swiper-button-next.case2',
+                    prevEl: '.swiper-button-prev.case2',
+                },
+                breakpoints: {
+                    640: {
+                    allowTouchMove: false,
+                    touchRatio: 0,
+                    },
+                    1200: {
+                    spaceBetween: 20
+                    }
+                }
+            });
+        } else if (document.body.clientWidth <= 767) {
+            $( ".swiper1, .swiper2" ).removeClass( 'swiper-container swiper-container-horizontal swiper-container-android');
+            $( ".swiper1 .card_group, .swiper2 .card_group" ).removeClass('swiper-wrapper');
+            $( ".swiper1 .card, .swiper2 .card" ).removeClass('swiper-slide');
+            $( ".swiper1 .card_group, .swiper2 .card_group" ).removeAttr( 'style' );
+            $( ".swiper1 .card, .swiper2 .card" ).removeAttr( 'style' );
         }
-    });
+	});
+
+
 </script>
 </html>

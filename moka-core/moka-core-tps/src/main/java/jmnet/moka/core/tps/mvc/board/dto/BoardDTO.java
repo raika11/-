@@ -262,4 +262,11 @@ public class BoardDTO {
 
     @DTODateTimeFormat
     private Date modDt;
+
+    /**
+     * 최대Depth
+     */
+    @ApiModelProperty(hidden = true)
+    @Builder.Default
+    private Integer maxDepth = 0;
 }

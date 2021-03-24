@@ -219,4 +219,17 @@
     </keys>
   </api>
 
+  <!--북마크삭제-->
+  <api id="scrap.delete" membership="cookie">
+    <description>북마크를 삭제한다.</description>
+    <parameter>
+      <totalId desc="기사Id" default="0" require="Y" type="number">^[0-9]{1,9}$</totalId>
+      <remoteIP/>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.article.scrapDelete</request>
+    <keys>
+      totalId
+    </keys>
+  </api>
+
 </apiConfig>

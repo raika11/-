@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import jmnet.moka.core.common.brightcove.BrightcoveCredentailVO;
 import jmnet.moka.core.common.brightcove.BrightcoveProperties;
+import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.web.schedule.mvc.brightcove.service.BrightcoveService;
 import jmnet.moka.web.schedule.mvc.ovp.dto.OvpSetJpotMetaJobDTO;
 import jmnet.moka.web.schedule.mvc.ovp.mapper.OvpSetJpotMetaJobMapper;
@@ -83,7 +84,7 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
 
                 //procedure 실행 실패 시
                 if (result == 0) {
-                    success = false;
+                    throw new MokaException("데이터 갱신이 실패했습니다.");
                 }
             }
 

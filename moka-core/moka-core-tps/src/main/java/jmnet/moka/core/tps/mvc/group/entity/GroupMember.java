@@ -55,13 +55,6 @@ public class GroupMember extends BaseAudit {
     private GroupInfo group;
 
     /**
-     * 사용여부(Y:사용, N:미사용)
-     */
-    @Column(name = "USED_YN")
-    @Builder.Default
-    private String usedYn = "Y";
-
-    /**
      * 사용자ID(TB_CMS_MEM.MEM_ID)
      */
     @Column(name = "MEM_ID", nullable = false)

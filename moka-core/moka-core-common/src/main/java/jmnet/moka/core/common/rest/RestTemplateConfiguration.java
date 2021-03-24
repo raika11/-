@@ -55,9 +55,9 @@ public class RestTemplateConfiguration {
     private int connectionReadTimeout;
 
     /**
-     * connection read timeout
+     * keep alive duration
      */
-    @Value("${interface.connection.read.timeout:100000}")
+    @Value("${interface.connection.keep.alive.duration:10000}")
     private int keepAliveDuration;
 
     /**

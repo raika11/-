@@ -3,7 +3,6 @@ package jmnet.moka.core.tps.mvc.group.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
@@ -39,7 +38,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<GroupMember> findAllGroupMember(String groupCd) {
-        return groupMemberRepository.findAllByGroupCdAndUsedYn(groupCd, MokaConstants.YES);
+        return groupMemberRepository.findAllByGroupCd(groupCd);
     }
 
     @Override
@@ -86,7 +85,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean hasMembers(String groupId) {
-        return groupMemberRepository.countByGroupCdAndUsedYn(groupId, MokaConstants.YES) > 0;
+        return groupMemberRepository.countByGroupCd(groupId) > 0;
     }
 
     private String getNewGroupCd() {

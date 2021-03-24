@@ -298,4 +298,14 @@ public interface MenuService {
      * @param menuAuths     권한 정보 목록
      */
     void saveMenuAuth(String groupMemberId, MenuAuthTypeCode menuAuthType, List<MenuAuth> menuAuths);
+
+    /**
+     * 메뉴 권한 저장
+     *
+     * @param groupMemberId   그룹멤버ID
+     * @param menuAuthType    권한 구분
+     * @param menuAuths       권한 정보 목록
+     * @param isOldMenuDelete 기존 메뉴 삭제 처리 여부
+     */
+    void saveMenuAuth(String groupMemberId, MenuAuthTypeCode menuAuthType, List<MenuAuth> menuAuths, boolean isOldMenuDelete);
 }

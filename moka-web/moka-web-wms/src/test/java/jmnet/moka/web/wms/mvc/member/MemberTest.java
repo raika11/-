@@ -2,7 +2,6 @@ package jmnet.moka.web.wms.mvc.member;
 
 import java.util.List;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
@@ -109,7 +108,7 @@ public class MemberTest {
                     .builder()
                     .groupCd(group.getGroupCd())
                     .memberId("ssc_test01")
-                    .usedYn(MokaConstants.YES)
+                    //.usedYn(MokaConstants.YES)
                     .build();
             memberService.insertGroupMember(groupMember);
         });

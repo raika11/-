@@ -61,4 +61,8 @@ public class CommentDTO implements Serializable {
 
     private String regDev;
 
+    private Long memSeq;
+
+    private String loginType;
+
 }

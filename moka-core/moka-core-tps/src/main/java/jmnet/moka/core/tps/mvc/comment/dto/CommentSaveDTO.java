@@ -66,4 +66,12 @@ public class CommentSaveDTO implements Serializable {
     @Size(max = 1, message = "{tps.comment.error.size.regDev}")
     private String regDev;
 
+    @ApiModelProperty("회원관리번호")
+    @Min(value = 0, message = "{tps.comment.error.size.memSeq}")
+    private Long memSeq;
+
+    @ApiModelProperty("로그인유형")
+    @Size(max = 8, message = "{tps.comment.error.size.loginType}")
+    private String loginType;
+
 }

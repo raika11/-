@@ -403,7 +403,7 @@ public class GroupRestController extends AbstractCommonController {
             }
 
             final List<String> errorMemberIds = new ArrayList<>();
-            final List<String> errorGroupMemberIds = new ArrayList<>();
+
 
             memberIds.forEach(memberId -> memberService
                     .findMemberById(memberId, true)
@@ -417,28 +417,36 @@ public class GroupRestController extends AbstractCommonController {
                                 break;
                             }
                         }
+
                         found.ifPresentOrElse((groupMember) -> {
-                            // 그룹 사용자 사용여부를 Y로 하여 저장
-                            groupMember.setUsedYn(useYn);
-                            memberService.updateGroupMember(groupMember);
+                            // 삭제시
+                            if (McpString.isNo(useYn)) {
+                                memberService.deleteGroupMember(groupMember);
+                            } else { // 동일 그룹 신규 추가 요청인 경우 - 잘못 요청한 경우
+
+                            }
                         }, () -> {
                             if (McpString.isYes(useYn)) {// 신규 등록
-                                memberService.insertGroupMember(GroupMember
-                                        .builder()
-                                        .usedYn(MokaConstants.YES)
-                                        .groupCd(groupCd)
-                                        .memberId(memberId)
-                                        .build());
-                            } else {
-                                errorGroupMemberIds.add(memberId);
-                            }
+                                if (memberInfo.getGroupMembers() != null && memberInfo
+                                        .getGroupMembers()
+                                        .size() > 0) { // 이미 다른 그룹의 사용자라면 에러 처리
+                                    errorMemberIds.add(memberId);
+                                } else { // 신규인 경우 등록
+                                    memberService.insertGroupMember(GroupMember.builder()
+                                                                               //.usedYn(MokaConstants.YES)
+                                                                               .groupCd(groupCd)
+                                                                               .memberId(memberId)
+                                                                               .build());
+                                }
+                            } else { // 삭제 요청한 그룹의 멤버도 아니면서 삭제요청이 들어온 경우 - 잘못 요청한 경우
 
+                            }
                         });
                     }, () -> errorMemberIds.add(memberId)));
 
             StringBuilder sbMsg = new StringBuilder();
             boolean success = false;
-            if (memberIds.size() > (errorMemberIds.size() + errorGroupMemberIds.size())) {
+            if (memberIds.size() > (errorMemberIds.size())) {
                 success = true;
                 if (McpString.isYes(useYn)) {
                     sbMsg.append(msg("tps.group.success.member-save"));
@@ -446,19 +454,11 @@ public class GroupRestController extends AbstractCommonController {
                     sbMsg.append(msg("tps.group.success.member-delete"));
                 }
             }
-            if ((errorMemberIds.size() + errorGroupMemberIds.size()) > 0) {
-                if (errorMemberIds.size() > 0) {
-                    String errorMemberIdStr = McpString.arrayToCommaDelimitedString(errorMemberIds.toArray());
-                    sbMsg
-                            .append(sbMsg.length() > 0 ? "\n" : "")
-                            .append(msg("tps.group.error.member-not-exist", errorMemberIdStr));
-                }
-                if (errorGroupMemberIds.size() > 0) {
-                    String errorMemberIdStr = McpString.arrayToCommaDelimitedString(errorGroupMemberIds.toArray());
-                    sbMsg
-                            .append(sbMsg.length() > 0 ? "\n" : "")
-                            .append(msg("tps.group.error.not-group-member", errorMemberIdStr));
-                }
+            if (errorMemberIds.size() > 0) {
+                String errorMemberIdStr = McpString.arrayToCommaDelimitedString(errorMemberIds.toArray());
+                sbMsg
+                        .append(sbMsg.length() > 0 ? "\n" : "")
+                        .append(msg("tps.group.error.exist-group-member", errorMemberIdStr));
             }
 
             ResultDTO<Boolean> resultDto = new ResultDTO<>(success, sbMsg.toString());

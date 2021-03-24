@@ -79,7 +79,6 @@ public class MemberRepositorySupportImpl extends TpsQueryDslRepositorySupport im
                     .where(qGroupMember.member.memberId
                             .eq(qMember.memberId)
                             .and(qGroupMember.groupCd.eq(memberSearchDTO.getGroupCd()))
-                            .and(qGroupMember.usedYn.eq(MokaConstants.YES))
                             .and(qGroupMember.group.eq(JPAExpressions
                                     .selectFrom(qGroupInfo)
                                     .where(qGroupInfo.groupCd
@@ -116,7 +115,7 @@ public class MemberRepositorySupportImpl extends TpsQueryDslRepositorySupport im
         JPQLQuery<MemberInfo> query = from(qMember);
 
         query.where(qMember.memberId.eq(memberId));
-        
+
         MemberInfo member = query
                 .leftJoin(qMember.regMember, qRegMember)
                 .fetchJoin()

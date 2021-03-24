@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
@@ -55,9 +54,8 @@ public class MemberServiceImpl implements MemberService {
         memberRepository
                 .findByMemberId(memberId)
                 .ifPresent(memberInfo1 -> {
-                    memberInfo1.setGroupMembers(isGroupAll
-                            ? groupMemberRepository.findAllByMemberId(memberId)
-                            : groupMemberRepository.findAllByMemberIdAndUsedYn(memberId, MokaConstants.YES));
+                    memberInfo1.setGroupMembers(
+                            isGroupAll ? groupMemberRepository.findAllByMemberId(memberId) : groupMemberRepository.findAllByMemberId(memberId));
                 });
         return memberRepository.findByMemberId(memberId);
     }

@@ -1,6 +1,10 @@
 package jmnet.moka.web.schedule.support.schedule;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import javax.annotation.PostConstruct;
 import jmnet.moka.common.utils.McpString;
@@ -56,10 +60,8 @@ public class ScheduleJobHandler {
      */
     @PostConstruct
     public void initSchedulerMap() {
-        try{
+        try {
             if (propertyHolder.getScheduleAction()) { // 스케줄 작업 초기화 실행 여부 체크
-                //scheduleMap = new IdentityHashMap<>();
-                //key value만으로 key값을 처리하기 위해 일반해쉬맵으로 변경
                 scheduleMap = new HashMap<>();
                 //Schedule Job 조회
                 List<GenContent> scheduleList = jobContentService.findAllScheduleJobContent();
@@ -67,7 +69,7 @@ public class ScheduleJobHandler {
                     appendJob(info);
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("init ScheduleJob fail {}", e);
         }
     }
@@ -103,16 +105,19 @@ public class ScheduleJobHandler {
                  * todo 1. 변경 된 테이블에 DummyScheduleJob 데이터 추가 후 해당 조건을 통과하는지 체크 필요
                  */
                 //Schedule Job + 동작주기가 0초 초과인 경우만 실행
-                if (McpString.defaultValue(genContent.getJobType()).equals("S")
-                        && genContent.getPeriod() > 0) {
+                if (McpString
+                        .defaultValue(genContent.getJobType())
+                        .equals("S") && genContent.getPeriod() > 0) {
 
                     //ScheduledFuture<?> scheduledFuture = taskScheduler.scheduleAtFixedRate(r, genContent.getPeriod() * 1000);
                     //등록 시 바로 JOB이 실행되는 관계로 PERIOD 만큼 시작시간을 늦춰서 등록 추가
                     Calendar startTime = Calendar.getInstance();
                     startTime.setTime(new Date());
-                    startTime.add(Calendar.SECOND, genContent.getPeriod().intValue());
-                    ScheduledFuture<?> scheduledFuture = taskScheduler.scheduleAtFixedRate(r, startTime.getTime(),genContent.getPeriod() * 1000);
-                    
+                    startTime.add(Calendar.SECOND, genContent
+                            .getPeriod()
+                            .intValue());
+                    ScheduledFuture<?> scheduledFuture = taskScheduler.scheduleAtFixedRate(r, startTime.getTime(), genContent.getPeriod() * 1000);
+
                     scheduleMap.put(genContent.getJobSeq(), scheduledFuture);
                     result = true;
                     log.debug("appendJob : {} : {}", genContent.getJobSeq(), result);
@@ -139,7 +144,6 @@ public class ScheduleJobHandler {
                     .get(jobSeq)
                     .cancel(true);
             scheduleMap.remove(jobSeq);
-
 
             result = true;
         }

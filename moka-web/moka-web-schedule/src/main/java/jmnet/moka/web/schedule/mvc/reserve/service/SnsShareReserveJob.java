@@ -63,7 +63,6 @@ public class SnsShareReserveJob extends AbstractReserveJob {
     @Override
     public GenContentHistory invoke(GenContentHistory history) {
         log.debug("비동기 예약 작업 처리 : {}", history.getJobSeq());
-        StatusFlagType statusFlagType = StatusFlagType.DONE;
         /**
          * todo 1. 작업 테이블에서 조회하여 이미 완료 되었거나, 삭제 된 작업이 아닌 경우 진행 시작
          * - AbstractReserveJob에 공통 메소드 생성하여 사용할 수 있도록 조치 필요
@@ -81,12 +80,20 @@ public class SnsShareReserveJob extends AbstractReserveJob {
 
         } catch (NoDataException ex) {
             log.error("[GEN STATUS HISTORY ERROR]", ex.toString());
-            statusFlagType = StatusFlagType.DELETE_TASK;
+            history.setStatus(StatusFlagType.DELETE_TASK);
+            history
+                    .getGenContent()
+                    .getGenStatus()
+                    .setErrMgs(ex.getMessage());
         } catch (Exception ex) {
-            log.error("[GEN STATUS HISTORY ERROR]", ex.toString());
-            statusFlagType = StatusFlagType.ERROR_SERVER;
+            log.error("[GEN STATUS HISTORY ERROR]: {}", ex.toString());
+            history.setStatus(StatusFlagType.FAILED_TASK);
+            history
+                    .getGenContent()
+                    .getGenStatus()
+                    .setErrMgs(ex.getMessage());
         }
-        history.setStatus(statusFlagType);
+        history.setStatus(StatusFlagType.DONE);
         return history;
     }
 

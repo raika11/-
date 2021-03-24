@@ -232,7 +232,6 @@ export default handleActions(
         },
         // 게시글 게시판 상세 조회
         [act.GET_LIST_MENU_CONTENTS_INFO_SUCCESS]: (state, { payload: { body } }) => {
-            console.log(body);
             const { boardSeq, parentBoardSeq } = body;
             if (boardSeq === parentBoardSeq) {
                 return produce(state, (draft) => {

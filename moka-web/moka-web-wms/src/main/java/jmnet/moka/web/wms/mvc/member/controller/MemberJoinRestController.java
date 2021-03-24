@@ -28,6 +28,7 @@ import jmnet.moka.core.tps.mvc.member.dto.MemberGroupSaveDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberRequestDTO;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
+import jmnet.moka.core.tps.mvc.member.vo.SmtpApplyVO;
 import jmnet.moka.web.wms.config.security.exception.GroupWareException;
 import jmnet.moka.web.wms.config.security.exception.PasswordNotMatchedException;
 import jmnet.moka.web.wms.config.security.exception.SmsAuthNumberBadCredentialsException;
@@ -214,9 +215,7 @@ public class MemberJoinRestController extends AbstractCommonController {
 
             // 담당자에게 요청 Email 발송
             String[] mailTo = toEmailAddress;
-            String remark = member
-                    .getRemark()
-                    .replace("\n", "<br>");
+            String remark = member.getRemark();
             String memberId = member.getMemberId();
             String memberNm = member.getMemberNm();
 
@@ -394,7 +393,8 @@ public class MemberJoinRestController extends AbstractCommonController {
                 // 담당자에게 요청 Email 발송
                 String[] mailTo = toEmailAddress;
                 String memberNm = member.getMemberNm();
-                sendEmail(mailTo, memberId, memberNm, "R", remark.replace("\n", "<br><br>"));
+                String requestReason = memberRequestDTO.getRequestReason();
+                sendEmail(mailTo, memberId, memberNm, "R", requestReason);
             }
         }
 
@@ -428,25 +428,42 @@ public class MemberJoinRestController extends AbstractCommonController {
          */
     }
 
-    private void sendEmail(String[] to, String memberId, String memberNm, String status, String remark)
+    private void sendEmail(String[] to, String memberId, String memberNm, String status, String requestReason)
             throws Exception {
 
         String title = "";
 
         if (status.equals("N")) {
             title = "[중앙일보 Back Office] 계정 신청 - " + memberNm + "(" + memberId + "}";
-            status = "신규";
         } else if (status.equals("R")) {
             title = "[중앙일보 Back Office] 잠김 해제 신청 - " + memberNm + "(" + memberId + "}";
-            status = "잠김 해제";
         }
+
+        SmtpApplyVO smtpApplyVO = new SmtpApplyVO();
+        smtpApplyVO.setMemberId(memberId);
+        smtpApplyVO.setMemberNm(memberNm);
+        smtpApplyVO.setRequestReason(requestReason);
 
         smtpService.send(SmtpSendDTO
                 .builder()
                 .from(fromEmailAddress)
                 .to(to)
-                .body("ID : " + memberId + "<br><br>" + "상태 : " + status + "<br><br>" + "비고 : " + remark)
+                .templateName(getReqestTemplateName(status))
+                .context(smtpApplyVO)
                 .title(title)
                 .build());
+    }
+
+    private String getReqestTemplateName(String status) {
+
+        String requestTemplateName = "";
+
+        if (status.equals("N")) {
+            requestTemplateName = "admin-mail-authorize-use";
+        }
+        if (status.equals("R")) {
+            requestTemplateName = "admin-mail-unlocked";
+        }
+        return requestTemplateName;
     }
 }

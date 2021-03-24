@@ -13,7 +13,7 @@ import toast from '@utils/toastUtil';
 /**
  * J팟 관리 - 공지 게시판 검색
  */
-const NoticeListSearchBox = ({ match }) => {
+const NoticeListSearch = ({ match }) => {
     const [searchData, setSearchData] = useState(initialState.jpodNotice.jpodNotices.search);
     const history = useHistory();
     const dispatch = useDispatch();
@@ -159,4 +159,4 @@ const NoticeListSearchBox = ({ match }) => {
     );
 };
 
-export default NoticeListSearchBox;
+export default NoticeListSearch;

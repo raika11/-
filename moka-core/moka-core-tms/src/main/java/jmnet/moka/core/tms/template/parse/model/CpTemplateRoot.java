@@ -1,6 +1,7 @@
 package jmnet.moka.core.tms.template.parse.model;
 
 import static jmnet.moka.common.template.Constants.DEFAULT_DATA_NAME;
+import static jmnet.moka.common.template.Constants.DEFAULT_LOOP_DATA_SIZE;
 
 import java.util.HashMap;
 import java.util.List;
@@ -198,6 +199,52 @@ public class CpTemplateRoot extends MokaTemplateRoot {
         }
     }
 
+    public MergeContext getRowDataContext(TemplateMerger<?> merger, MergeContext context) {
+        MergeContext rowDataContext = context.createRowDataChild();
+        rowDataContext.set(MokaConstants.MERGE_CONTEXT_COMPONENT, this.item);
+
+        String componentDataType = this.item.getString(ItemConstants.COMPONENT_DATA_TYPE);
+        // dataType이 NONE이 아닐 경우만 데이터 처리
+        if (componentDataType != null && componentDataType.equals(ItemConstants.CP_DATA_TYPE_NONE) == false) {
+            HashMap<String, JSONResult> dataMap = (HashMap<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
+
+            JSONResult jsonResult = null;
+            if (dataMap != null) {
+                jsonResult = dataMap.get(KeyResolver.makeDataId(this.getItemType(), this.getId()));
+            }
+            if (jsonResult == null) {
+                try {
+                    jsonResult = this.loadData(merger, rowDataContext);
+                } catch (DataLoadException | ParseException | TemplateParseException | TemplateLoadException e) {
+                    logger.warn("DataLoad Fail: {} - component : {} {} {}", ((MokaTemplateMerger) merger).getDomainId(), templateRoot.getItemType(),
+                            templateRoot.getId(), e.getMessage());
+                    return null;
+                }
+            }
+            // 데이터를 참조할 수 있도록 _RESULT에 추가
+            context.set(DEFAULT_DATA_NAME, jsonResult);
+            context.set(DEFAULT_LOOP_DATA_SIZE,jsonResult.getDataList().size());
+            rowDataContext.set(Constants.CURRENT_DATA_ID, this.item.getItemType() + this.item.getItemId());
+            // loop 커스텀태그 없이(혹은 결과가 1건인 경우) 첫번째 데이터를 사용하는 경우를 위해 첫 row를 context에
+            rowDataContext.set(Constants.LOOP_INDEX, 0);
+            Object resultObject = jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
+            if (resultObject != null) {
+                if (resultObject instanceof List && ((List<?>) resultObject).size() > 0) {
+                    rowDataContext.set(Constants.LOOP_DATA_ROW, ((List<?>) resultObject).get(0));
+                } else {
+                    // 리스트 형태가 아닐 경우 _DATA로 넣어준다.
+                    context.set(Constants.DEFAULT_LOOP_DATA_SELECT, resultObject);
+                }
+            }
+            // TOTAL 처리
+            int total = jsonResult.getTotal();
+            rowDataContext.set(ApiResult.MAIN_TOTAL, total);
+        } else {
+            rowDataContext.set(ApiResult.MAIN_TOTAL, 0);
+        }
+        return rowDataContext;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void merge(TemplateMerger<?> merger, MergeContext context, StringBuilder sb) {
@@ -211,50 +258,9 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             return;
         }
 
-        // 미리보기 일 경우 preview resource 추가
-        //        if (context.getMergeOptions().isPreviewResource()) {
-        //            this.setPreviewResource(merger, context, sb);
-        //        }
-        MergeContext childContext = context.createRowDataChild();
-        childContext.set(MokaConstants.MERGE_CONTEXT_COMPONENT, this.item);
-
-        String componentDataType = this.item.getString(ItemConstants.COMPONENT_DATA_TYPE);
-        // dataType이 NONE이 아닐 경우만 데이터 처리
-        if (componentDataType != null && componentDataType.equals(ItemConstants.CP_DATA_TYPE_NONE) == false) {
-            HashMap<String, JSONResult> dataMap = (HashMap<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
-
-            JSONResult jsonResult = null;
-            if (dataMap != null) {
-                jsonResult = dataMap.get(KeyResolver.makeDataId(this.getItemType(), this.getId()));
-            }
-            if (jsonResult == null) {
-                try {
-                    jsonResult = this.loadData(merger, childContext);
-                } catch (DataLoadException | ParseException | TemplateParseException | TemplateLoadException e) {
-                    logger.warn("DataLoad Fail: {} - component : {} {} {}", ((MokaTemplateMerger) merger).getDomainId(), templateRoot.getItemType(),
-                            templateRoot.getId(), e.getMessage());
-                    return;
-                }
-            }
-            // 데이터를 참조할 수 있도록 _RESULT에 추가
-            context.set(DEFAULT_DATA_NAME, jsonResult);
-            childContext.set(Constants.CURRENT_DATA_ID, this.item.getItemType() + this.item.getItemId());
-            // loop 커스텀태그 없이(혹은 결과가 1건인 경우) 첫번째 데이터를 사용하는 경우를 위해 첫 row를 context에
-            childContext.set(Constants.LOOP_INDEX, 0);
-            Object resultObject = jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
-            if (resultObject != null) {
-                if (resultObject instanceof List && ((List<?>) resultObject).size() > 0) {
-                    childContext.set(Constants.LOOP_DATA_ROW, ((List<?>) resultObject).get(0));
-                } else {
-                    // 리스트 형태가 아닐 경우 _DATA로 넣어준다.
-                    context.set(Constants.DEFAULT_LOOP_DATA_SELECT, resultObject);
-                }
-            }
-            // TOTAL 처리
-            int total = jsonResult.getTotal();
-            childContext.set(ApiResult.MAIN_TOTAL, total);
-        } else {
-            childContext.set(ApiResult.MAIN_TOTAL, 0);
+        MergeContext rowDataContext = getRowDataContext(merger, context);
+        if (rowDataContext == null) {
+            return;
         }
 
         TemplateRoot tpTemplateRoot = this.getTpTemplateRoot();
@@ -262,7 +268,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
         wrapItemStart(merger, context, sb);
 
         if (tpTemplateRoot != null) {
-            tpTemplateRoot.merge(merger, childContext, sb);
+            tpTemplateRoot.merge(merger, rowDataContext, sb);
         } else {
             if (context
                     .getMergeOptions()
@@ -352,14 +358,5 @@ public class CpTemplateRoot extends MokaTemplateRoot {
         String count = this.item.getString(ItemConstants.COMPONENT_MORE_COUNT);
         return Integer.parseInt(count);
     }
-
-    //    private String getDataUri(DatasetItem datasetItem, String api) {
-    //        String apiHost = datasetItem.getString(ItemConstants.DATASET_API_HOST);
-    //        String apiPath = datasetItem.getString(ItemConstants.DATASET_API_PATH);
-    //        if (api == null) {
-    //            api = datasetItem.getString(ItemConstants.DATASET_API);
-    //        }
-    //        return String.join("/", apiHost, apiPath, api);
-    //    }
 
 }

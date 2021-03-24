@@ -29,6 +29,7 @@ import jmnet.moka.core.common.push.dto.PushSendDTO;
 import jmnet.moka.core.common.push.service.PushSendService;
 import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.BoardTypeCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.common.util.ImageUtil;
@@ -159,9 +160,17 @@ public class BoardRestController extends AbstractCommonController {
             throws NoDataException {
 
         String message = msg("tps.common.error.no-data");
+
         Board board = boardService
                 .findBoardBySeq(boardSeq)
                 .orElseThrow(() -> new NoDataException(message));
+
+        if (board
+                .getBoardInfo()
+                .getBoardType() == BoardTypeCode.A) {
+            boardService.updateViewCnt(boardSeq);
+            board.setViewCnt(board.getViewCnt() + 1);
+        }
         /*
         if (!matchedPassword(board, pwd)) {
             throw new InvalidDataException(msg("tps.board.error.pwd-unmatched"));
@@ -545,131 +554,7 @@ public class BoardRestController extends AbstractCommonController {
         }
     }
 
-    /**
-     * 게시물 조회 건수 증가
-     *
-     * @param boardSeq 게시물 일련번호
-     * @return 등록된 게시판정보
-     */
-    @ApiOperation(value = "게시물 조회 건수 증가")
-    @PutMapping("/{boardSeq}/views/add")
-    public ResponseEntity<?> putViewAdd(
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq) {
 
-        if (boardService.updateViewCnt(boardSeq) > 0) {
-            return new ResponseEntity<>(new ResultDTO<>(true), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ResultDTO<>(false), HttpStatus.OK);
-        }
-    }
-
-    /**
-     * 등록
-     *
-     * @param boardSeq 게시물 일련번호
-     * @return 등록된 게시판정보
-     */
-    @ApiOperation(value = "게시물 조회 건수 증가")
-    @PutMapping("/{boardSeq}/recommands/add")
-    public ResponseEntity<?> putRecommandAdd(
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq) {
-
-        if (boardService.updateRecomCnt(boardSeq, true) > 0) {
-            return new ResponseEntity<>(new ResultDTO<>(true), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ResultDTO<>(false), HttpStatus.OK);
-        }
-    }
-
-    /**
-     * 등록
-     *
-     * @param boardSeq 게시물 일련번호
-     * @return 등록된 게시판정보
-     */
-    @ApiOperation(value = "게시물 추천 취소")
-    @PutMapping("/{boardSeq}/recommands/cancel")
-    public ResponseEntity<?> putRecommandCancel(
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq) {
-
-        if (boardService.updateRecomCnt(boardSeq, false) > 0) {
-            return new ResponseEntity<>(new ResultDTO<>(true), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ResultDTO<>(false), HttpStatus.OK);
-        }
-    }
-
-    /**
-     * 비추천수
-     *
-     * @param boardSeq 게시물 일련번호
-     * @return 등록된 게시판정보
-     */
-    @ApiOperation(value = "게시물 조회 건수 증가")
-    @PutMapping("/{boardSeq}/unrecommands/add")
-    public ResponseEntity<?> putUnrecommandAdd(
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq) {
-
-        if (boardService.updateDecomCnt(boardSeq, true) > 0) {
-            return new ResponseEntity<>(new ResultDTO<>(true), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ResultDTO<>(false), HttpStatus.OK);
-        }
-    }
-
-    /**
-     * 등록
-     *
-     * @param boardSeq 게시물 일련번호
-     * @return 등록된 게시판정보
-     */
-    @ApiOperation(value = "게시물 조회 건수 증가")
-    @PutMapping("/{boardSeq}/unrecommands/cancel")
-    public ResponseEntity<?> putUnrecommandCancel(
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq) {
-
-        if (boardService.updateDecomCnt(boardSeq, false) > 0) {
-            return new ResponseEntity<>(new ResultDTO<>(true), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ResultDTO<>(false), HttpStatus.OK);
-        }
-    }
-
-    /**
-     * 등록
-     *
-     * @param boardSeq 게시물 일련번호
-     * @return 등록된 게시판정보
-     */
-    @ApiOperation(value = "게시물 조회 건수 증가")
-    @PutMapping("/{boardSeq}/reports/add")
-    public ResponseEntity<?> putReportAdd(
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq) {
-
-        if (boardService.updateDeclareCnt(boardSeq, true) > 0) {
-            return new ResponseEntity<>(new ResultDTO<>(true), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ResultDTO<>(false), HttpStatus.OK);
-        }
-    }
-
-    /**
-     * 게시물 신고 취소
-     *
-     * @param boardSeq 게시물 일련번호
-     * @return 등록된 게시판정보
-     */
-    @ApiOperation(value = "게시물 신고 취소")
-    @PutMapping("/{boardSeq}/reports/cancel")
-    public ResponseEntity<?> putReportCancel(
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq) {
-
-        if (boardService.updateDeclareCnt(boardSeq, false) > 0) {
-            return new ResponseEntity<>(new ResultDTO<>(true), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ResultDTO<>(false), HttpStatus.OK);
-        }
-    }
 
     private void setRegisterInfo(Board board, Principal principal) {
         UserDTO userDTO = (UserDTO) ((UsernamePasswordAuthenticationToken) principal).getDetails();

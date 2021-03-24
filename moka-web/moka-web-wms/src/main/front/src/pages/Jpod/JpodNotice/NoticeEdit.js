@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { MokaCard, MokaInputLabel, MokaInput } from '@components';
-import { Form, Col, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { GET_BOARD_CONTENTS, getJpodNotice, getBoardContents } from '@store/jpod';
 import { uploadBoardContentsImage, updateBoardContents, saveBoardContents, deleteBoardContents } from '@store/board';
@@ -14,7 +16,7 @@ import BoardsSummernote from '@pages/Boards/BoardsList/BoardsEdit/BoardsSummerno
  */
 const NoticeEdit = ({ match }) => {
     const history = useHistory();
-    const { boardSeq, boardId } = useParams();
+    const { boardSeq } = useParams();
     const dispatch = useDispatch();
 
     const { noticeInfo, loading, selectBoard, channelList } = useSelector((store) => ({
@@ -184,7 +186,7 @@ const NoticeEdit = ({ match }) => {
 
         dispatch(
             uploadBoardContentsImage({
-                boardId: boardId,
+                boardId: editData.boardId,
                 imageForm: formData,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
@@ -245,8 +247,8 @@ const NoticeEdit = ({ match }) => {
     }, [editContents]);
 
     useEffect(() => {
-        if (boardId && boardSeq) {
-            dispatch(getBoardContents({ boardId: boardId, boardSeq: boardSeq }));
+        if (editData.boardId && boardSeq) {
+            dispatch(getBoardContents({ boardId: editData.boardId, boardSeq: boardSeq }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

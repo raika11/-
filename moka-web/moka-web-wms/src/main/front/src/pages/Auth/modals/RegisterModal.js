@@ -139,7 +139,7 @@ const RegisterModal = (props) => {
         if (member.password !== member.confirmPassword) {
             errList.push({
                 field: 'confirmPassword',
-                reason: '입력한 비밀번호와 확인 비밀번호가 일치하지 않습니다.',
+                reason: '입력하신 비밀번호와 비밀번호 확인이 일치하지 않습니다. 다시 입력해주세요.',
             });
             isInvalid = isInvalid | true;
         }

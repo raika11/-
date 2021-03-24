@@ -40,18 +40,19 @@ const JpodChannel = ({ match, displayName }) => {
                         <ChannelList match={match} />
                     </MokaCard>
                 </Col>
+
                 {/* 등록 / 수정창 */}
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
                         <Switch>
-                            <Route path={([`${match.path}/add`], [`${match.path}/:chnlSeq`])} exact render={() => <ChannelTab match={match} />} />
+                            <Route path={[`${match.path}/add`, `${match.path}/:chnlSeq`]} exact render={() => <ChannelTab match={match} />} />
                         </Switch>
                     </Col>
                 )}
                 {(matchPoints.xs || matchPoints.sm) && (
                     <Switch>
                         <Route
-                            path={([`${match.path}/add`], [`${match.path}/:chnlSeq`])}
+                            path={[`${match.path}/add`, `${match.path}/:chnlSeq`]}
                             exact
                             render={() => (
                                 <Col xs={7} className="color-bg-body absolute-top-right h-100 overlay-shadow p-0" style={{ zIndex: 2 }}>

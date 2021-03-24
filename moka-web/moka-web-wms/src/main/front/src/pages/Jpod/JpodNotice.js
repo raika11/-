@@ -61,12 +61,7 @@ const JpodChannel = ({ match, displayName }) => {
                     <Col md={5} className="p-0">
                         <Switch>
                             <Route
-                                path={[
-                                    `${match.path}/add`,
-                                    `${match.path}/:boardId/:boardSeq`,
-                                    `${match.path}/:boardId/:boardSeq/reply`,
-                                    `${match.path}/:boardId/:parentBoardSeq/reply/:boardSeq`,
-                                ]}
+                                path={[`${match.path}/add`, `${match.path}/:boardSeq`, `${match.path}/:boardSeq/:reply`, `${match.path}/:parentBoardSeq/:reply/:boardSeq`]}
                                 exact
                                 render={() => <NoticeEdit match={match} />}
                             />
@@ -76,12 +71,7 @@ const JpodChannel = ({ match, displayName }) => {
                 {(matchPoints.xs || matchPoints.sm) && (
                     <Switch>
                         <Route
-                            path={[
-                                `${match.path}/add`,
-                                `${match.path}/:boardId/:boardSeq`,
-                                `${match.path}/:boardId/:boardSeq/reply`,
-                                `${match.path}/:boardId/:parentBoardSeq/reply/:boardSeq`,
-                            ]}
+                            path={[`${match.path}/add`, `${match.path}/:boardSeq`, `${match.path}/:boardSeq/:reply`, `${match.path}/:parentBoardSeq/:reply/:boardSeq`]}
                             exact
                             render={() => (
                                 <Col xs={7} className="absolute-top-right h-100 overlay-shadow p-0" style={{ zIndex: 2 }}>

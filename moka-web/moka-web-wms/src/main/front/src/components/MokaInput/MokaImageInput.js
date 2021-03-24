@@ -269,7 +269,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         )}
 
                         {/* input file */}
-                        <input {...inputProps} />
+                        <input {...inputProps} accept="image/*" />
 
                         {/* alert */}
                         <div className="absolute-top">

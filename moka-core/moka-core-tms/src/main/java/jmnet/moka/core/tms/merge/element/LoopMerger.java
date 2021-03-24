@@ -48,7 +48,7 @@ public class LoopMerger extends AbstractElementMerger {
         public int count = -1;
         public int dataSize = 0;
 
-        public LoopState(TemplateElement element, MergeContext context) {
+        public LoopState(TemplateMerger templateMerger, TemplateElement element, MergeContext context) {
             this.element = element;
             this.context = context;
 
@@ -67,13 +67,21 @@ public class LoopMerger extends AbstractElementMerger {
 
             // 1-base index를 사용함
             String startAttr = element.getAttribute(Constants.ATTR_START);
-            if (startAttr != null && startAttr.matches("[0-9]+")) {
-                start = Integer.parseInt(startAttr);
+            if (startAttr != null ) {
+                if (startAttr.matches("[0-9]+")) {
+                    start = Integer.parseInt(startAttr);
+                } else {
+                    start = Integer.parseInt(templateMerger.getEvaluator().evalTemplate(startAttr, context));
+                }
             }
             start = (start == 0 ? 1 : start);
             String countAttr = element.getAttribute(Constants.ATTR_COUNT);
-            if (countAttr != null && startAttr.matches("[0-9]+")) {
-                count = Integer.parseInt(countAttr);
+            if (countAttr != null ) {
+                if (startAttr.matches("[0-9]+")) {
+                    count = Integer.parseInt(countAttr);
+                } else {
+                    count = Integer.parseInt(templateMerger.getEvaluator().evalTemplate(countAttr, context));
+                }
             }
 
             String fillAttr = element.getAttribute(Constants.ATTR_FILL);
@@ -152,7 +160,7 @@ public class LoopMerger extends AbstractElementMerger {
                 .getMergeOptions()
                 .isDebug();
 
-        LoopState state = new LoopState(element, context);
+        LoopState state = new LoopState(this.templateMerger, element, context);
 
         MergeContext childContext = context.createRowDataChild();
         childContext.set(Constants.LOOP_START, state.start);

@@ -24,7 +24,9 @@ export const initialState = {
     member: {},
     menuAuthInfo: {
         list: [],
+        editedOrg: [],
         edited: [],
+        usedOrg: [],
         used: [],
         halfCheckedKeys: [],
     },

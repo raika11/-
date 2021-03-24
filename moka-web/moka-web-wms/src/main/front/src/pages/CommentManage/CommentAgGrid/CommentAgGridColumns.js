@@ -89,11 +89,11 @@ export const columnDefs = [
         },
     },
     {
-        headerName: '이름/ID',
-        field: 'userInfo',
-        tooltipField: 'userId',
+        headerName: '등록자',
+        field: 'regMember',
+        tooltipField: 'regMember',
         width: 150,
-        cellRenderer: 'userInfoRenderer',
+        //cellRenderer: 'userInfoRenderer',
         cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '25px' },
     },
     {

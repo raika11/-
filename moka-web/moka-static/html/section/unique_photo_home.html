@@ -36,14 +36,15 @@
         .case_unique .card_image .fa_rect_w { position: absolute; right: 14px; bottom: 12px; }
         .case_unique .card_group.trend { margin-top: -20px; margin: -20px -18px 0; }
         .case_unique .card_group.trend .col_lg4 { margin-top: 20px; padding: 0 18px; }
-        .case_unique .card_group.trend .more { width: calc(100% - 36px); margin-left: 18px; border-top: 1px solid #e2e2e2; }
+        .case_unique .card_group.trend .card_more { display: flex; align-items: center; justify-content: center; width: calc(100% - 36px); margin-left: 18px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e2e2; }
+        .case_unique .card_group.trend .card_more .btn_txt_more { width: 100%; }
+        .case_unique .card_group.trend .card_more .btn_txt_more .fa_arrow_down_g { margin-left: 8px; }
         .fa_rect_w { width: 15px; height: 10px; border: 1.5px solid #fff;  }
         .fa_rect_w::after { content: ''; position: absolute; left: 6px; top: 4px; width: 12px; height: 8px; border: 1.5px solid #fff; }
         .swiper-wrapper.card_group  { flex-wrap: nowrap; }
         .swiper-wrapper.card_group .card { margin-bottom: 0; }
         .swiper-wrapper.card_group .headline { font-size: 16px; line-height: 24px; }
-        .case_unique [class*="swiper-button-prev"], .case_unique [class*="swiper-button-next"] { top: 156px; width: 10px; height: 20px; margin: 0;  }
-        .case_unique [class*="swiper-button-prev"]:after, .case_unique [class*="swiper-button-next"]:after { font-size: 20px; font-weight: 600; color: #000; opacity: 0.2; }
+        .case_unique [class*="swiper-button-prev"], .case_unique [class*="swiper-button-next"] { top: 156px; width: 10px; height: 20px; margin: 0; background-size: 10px 20px; filter: grayscale(100%); opacity: 0.8; }
         .case_unique [class*="swiper-button-next"] { right: -30px; }
         .case_unique [class*="swiper-button-prev"] { left: -30px; }
         .case_unique .page_title { margin-bottom: 30px; padding-bottom: 11px; border-bottom: 4px solid #000; }
@@ -53,9 +54,7 @@
         .case_unique .top_area_wrap.type1 { border-width: 2px; }
         .case_unique .top_area_wrap.type1 .sub_title { font-size: 20px; }
         /* 공통 */
-        .btn_outline_orange { border: 1px solid #ff3c14; }
-        .fa_plus_orange { position: relative; width: 10px; height: 10px; margin-right: 5px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' id='Layer_1' x='0' y='0' viewBox='0 0 10 10' xml:space='preserve'%3E%3Cstyle%3E.st0%7Bfill:%23e84326%7D%3C/style%3E%3Cpath class='st0' d='M4 0h2v10H4z'/%3E%3Cpath transform='rotate(-90 5 5)' class='st0' d='M4 0h2v10H4z'/%3E%3C/svg%3E"); }
-        .btn_type6 { height: 36px; padding: 0 14px; }
+        .fa_arrow_down_g { position: relative; top: -3px; width: 8px; height: 8px; border-top: 1px solid #999; border-right: 1px solid #999; transform: rotate(135deg); }
 </style>
 
 </head>
@@ -86,7 +85,7 @@
                             <i class="fa fa_rect_w"></i>
                         </div>
                         <div class="card_body">
-                            <h2 class="headline">Card headline</h2>
+                            <h2 class="headline fs_lg28">Card headline</h2>
                             <p class="description">Card description.</p>
                             <p class="byline">4시간 전</p>
                         </div>
@@ -325,7 +324,7 @@
                                 <p class="byline">4시간 전</p>
                             </div>
                         </li>
-                        <li class="more col_md12 col_lg12"><button type="button">최신 기사 더보기<i class="fa fa_arrow_down"></i></button></li>
+                        <li class="card_more col_md12 col_lg12"><button type="button" class="btn_txt_more fs_lg14 fw_m font_gray">최신 기사 더보기<i class="fa fa_arrow_down_g"></i></button></li>
                     </ul>
 
                 </div>
@@ -345,6 +344,7 @@
 </body>
 <script>
     var swiper = new Swiper('.swiper-container.swiper1', {
+        spaceBetween: 36,
         slidesPerView: 4,
         navigation: {
             nextEl: '.swiper-button-next.case1',
@@ -366,6 +366,7 @@
         }
     });
     var swiper = new Swiper('.swiper-container.swiper2', {
+        spaceBetween: 36,
         slidesPerView: 4,
         navigation: {
             nextEl: '.swiper-button-next.case2',

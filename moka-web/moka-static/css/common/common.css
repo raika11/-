@@ -127,6 +127,7 @@ section{width:100%;}
 .font_default {color: #333;}
 .font_dark {color: #111;}
 .font_black {color: #000;}
+.font_gray {color:#999;}
 .font_orange{color:#fb502f;}
 .js-text_search{color:#fb502f;}
 
@@ -278,9 +279,11 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 .btn_type3 {height: 38px; padding: 7px 16px 9px; color: #111; font-size: 14px; font-weight: 700;}
 .btn_type4 {height: 40px; padding: 10px 28px; color: #fff; background-color: #111; font-size: 14px; font-weight: 500;}
 .btn_type5 {height: 40px; padding: 10px 28px; color: #111; background-color: #fff; font-size: 14px; font-weight: 500;}
+.btn_type6 { height: 36px; padding: 0 14px; }
 /* outline */
 .btn_outline_default {border: 1px solid #333;}
 .btn_outline_gray {border: 1px solid #d5d5d5;}
+.btn_outline_orange { border: 1px solid #ff3c14; }
 /* radius */
 .btn_radius1 {border-radius: 17px;}
 .btn_radius2 {border-radius: 19px;}
@@ -295,6 +298,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 .fa_arrow_right_bl {width: 8px; height: 8px; border-top: 2px solid #111; border-right: 2px solid #111; transform: rotate(45deg);}
 .fa_arrow_right_g {width: 8px; height: 8px; border-top: 1px solid #999; border-right: 1px solid #999; transform: rotate(45deg); }
 .fa_plus {width: 13px; height: 13px; margin-right: 6px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13'%3E%3Cg fill='%23333' fill-rule='evenodd'%3E%3Cpath d='M0 6h13v1H0z'/%3E%3Cpath d='M6 0h1v13H6z'/%3E%3C/g%3E%3C/svg%3E") no-repeat;}
+.fa_plus_orange { position: relative; width: 10px; height: 10px; margin-right: 5px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' id='Layer_1' x='0' y='0' viewBox='0 0 10 10' xml:space='preserve'%3E%3Cstyle%3E.st0%7Bfill:%23e84326%7D%3C/style%3E%3Cpath class='st0' d='M4 0h2v10H4z'/%3E%3Cpath transform='rotate(-90 5 5)' class='st0' d='M4 0h2v10H4z'/%3E%3C/svg%3E"); }
 .ico{display:inline-block;background-repeat:no-repeat;background-position:50% 50%;background-size:100% auto;}
 .ico_bul{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='21'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Ccircle cx='9.3' cy='9.3' r='6.5' fill='%23FFF' stroke='%23000' stroke-width='2'/%3E%3Cpath fill='%23D8D8D8' stroke='%23000' stroke-width='2' d='M13.846 13.846L19 19'/%3E%3Cpath d='M0 0h21v21H0z'/%3E%3C/g%3E%3C/svg%3E");}
 

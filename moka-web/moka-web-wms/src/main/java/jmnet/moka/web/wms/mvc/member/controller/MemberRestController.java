@@ -230,7 +230,7 @@ public class MemberRestController extends AbstractCommonController {
                             .builder()
                             .groupCd(group.getGroupCd())
                             .memberId(member.getMemberId())
-                            .usedYn(group.getUsedYn())
+                            //.usedYn(group.getUsedYn())
                             .build();
                     memberService.insertGroupMember(groupMember);
                 });

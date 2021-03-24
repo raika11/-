@@ -23,6 +23,12 @@ export default [
         width: 100,
     },
     {
+        headerName: '사진',
+        field: 'repImg',
+        width: 50,
+        cellRenderer: 'imageRenderer',
+    },
+    {
         headerName: '이름',
         field: 'repName',
         width: 80,
@@ -38,7 +44,7 @@ export default [
         headerName: '이메일',
         field: 'repEmail1',
         tooltipField: 'repEmail1',
-        width: 250,
+        width: 220,
     },
     {
         headerName: '',

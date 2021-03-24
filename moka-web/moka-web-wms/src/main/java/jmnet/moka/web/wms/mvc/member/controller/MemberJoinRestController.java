@@ -371,6 +371,7 @@ public class MemberJoinRestController extends AbstractCommonController {
         member.setRemark(remark);
 
         // 잠금 해제
+        member.setPassword(passwordEncoder.encode(memberRequestDTO.getPassword()));
         member.setPasswordModDt(McpDate.now());
         member.setErrCnt(0);
 

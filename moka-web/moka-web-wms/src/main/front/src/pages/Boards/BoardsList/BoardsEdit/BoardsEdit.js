@@ -84,9 +84,11 @@ const BoardsEdit = ({ match }) => {
                 formData.append(`attaches[${index}].attachFile`, element);
                 formData.append(`attaches[${index}].seqNo`, 0);
             }
-
-            return true;
         });
+
+        for (let item of formData.entries()) {
+            console.log(item[0] + ', ' + item[1]);
+        }
 
         return formData;
     };

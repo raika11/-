@@ -161,23 +161,23 @@ export const initialState = {
 
 export default handleActions(
     {
-        // 전체 초기화.
+        // 전체 초기화
         [jpodAction.CLEAR_STORE]: () => initialState,
-        // 진행자(기자) 검색 모달 리스트.
+        // 진행자(기자) 검색 모달 리스트
         [jpodAction.GET_REPORTER_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.reporter.list = body.list;
                 draft.reporter.total = body.totalCnt;
             });
         },
-        // 진행자 검색 모달.
+        // 진행자 검색 모달
         [jpodAction.CLEAR_REPORTER]: (state) => {
             return produce(state, (draft) => {
                 draft.reporter = initialState.reporter;
                 draft.selectReporter = initialState.selectReporter;
             });
         },
-        // 기자 검색 모달 검색 옵션 처리.
+        // 기자 검색 모달 검색 옵션 처리
         [jpodAction.CHANGE_REPORTER_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.reporter.search = payload;
@@ -189,13 +189,13 @@ export default handleActions(
                 draft.selectReporter = payload;
             });
         },
-        // 팟티 채널 검색 모달.
+        // 팟티 채널 검색 모달
         [jpodAction.CLEAR_CHANNEL_PODTY]: (state) => {
             return produce(state, (draft) => {
                 draft.podtyChannel = initialState.podtyChannel;
             });
         },
-        // 팟티 검색 모달 리스트.
+        // 팟티 검색 모달 리스트
         [jpodAction.GET_CHANNEL_PODTY_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.podtyChannel.list = body.list;
@@ -208,7 +208,7 @@ export default handleActions(
                 draft.selectPodtyChannel = payload;
             });
         },
-        // 팟티 검색 모달창 검색 옵션 처리.
+        // 팟티 검색 모달창 검색 옵션 처리
         [jpodAction.CHANGE_JPOD_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.channel.jpod.search = payload;
@@ -221,45 +221,45 @@ export default handleActions(
                 draft.channel.jpod.total = body.totalCnt;
             });
         },
-        // 채널 리스트에서 클릭시 데이터 가지고 오기.
+        // 채널 리스트에서 클릭시 데이터 가지고 오기
         [jpodAction.GET_CHANNEL_INFO_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.channel.channelInfo = body;
             });
         },
-        // 채널 저장 수정 용 스토어 초기화.
+        // 채널 저장 수정 용 스토어 초기화
         [jpodAction.CLEAR_CHANNEL_INFO]: (state) => {
             return produce(state, (draft) => {
                 draft.channel.channelInfo = initialState.channel.channelInfo;
             });
         },
-        // 에피소드 검색 옵션 처리.
+        // 에피소드 검색 옵션 처리
         [jpodAction.CHANGE_EPISODES_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.episode.episodes.search = payload;
             });
         },
-        // 에피소드 리스트.
+        // 에피소드 리스트
         [jpodAction.GET_EPISODES_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.episode.episodes.list = body.list;
                 draft.episode.episodes.total = body.totalCnt;
             });
         },
-        // 에피소드 정보 초기화 리스트.
+        // 에피소드 정보 초기화 리스트
         [jpodAction.CLEAR_EPISODE_INFO]: (state) => {
             return produce(state, (draft) => {
                 draft.episode.episodeInfo = initialState.episode.episodeInfo;
             });
         },
-        // 에피소드 조회 성공.
+        // 에피소드 조회 성공
         [jpodAction.GET_EPISODES_INFO_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.episode.episodeInfo = body;
             });
         },
 
-        // 팟티 에피소드 리셋.
+        // 팟티 에피소드 리셋
         [jpodAction.CLEAR_PODTY_EPISODE]: (state) => {
             return produce(state, (draft) => {
                 draft.podtyEpisode = initialState.podtyEpisode;
@@ -270,45 +270,45 @@ export default handleActions(
                 draft.podtyEpisode.castSrl = payload;
             });
         },
-        // 에피소드 에서 사용할 채널 목록( 검색 , 등록, 수정)
+        // 에피소드 에서 사용할 채널 목록(검색 , 등록, 수정)
         [jpodAction.GET_EPISODE_GUBUN_CHANNELS_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.episode.channel.list = body.list;
             });
         },
-        // 에피소드 에서 사용할 채널 목록( 검색 , 등록, 수정)
+        // 에피소드 에서 사용할 채널 목록(검색 , 등록, 수정)
         [jpodAction.GET_PODTY_EPISODE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.podtyEpisode.list = body.list;
                 draft.podtyEpisode.total = body.totalCnt;
             });
         },
-        // 에피소드 에서 사용할 채널 목록( 검색 , 등록, 수정)
+        // 에피소드 에서 사용할 채널 목록(검색 , 등록, 수정)
         [jpodAction.SELECT_PODTY_EPISODE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.selectPodtyEpisode = payload;
             });
         },
-        // 브라이트 코브 초기화.
+        // 브라이트 코브 초기화
         [jpodAction.CLEAR_BRIGHT_OVP]: (state) => {
             return produce(state, (draft) => {
                 draft.brightOvp = initialState.brightOvp;
             });
         },
-        // 브라이트 코브 목록.
+        // 브라이트 코브 목록
         [jpodAction.GET_BRIGHT_OVP_SUCCESS]: (state, { payload: { list, total } }) => {
             return produce(state, (draft) => {
                 draft.brightOvp.list = list;
                 draft.brightOvp.total = total;
             });
         },
-        // 브라이트 코브 목록.
+        // 브라이트 코브 목록
         [jpodAction.SELECT_BRIGHTOVP]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.selectBrightOvp = payload;
             });
         },
-        // 기자 검색 모달 검색 옵션 처리.
+        // 기자 검색 모달 검색 옵션 처리
         [jpodAction.CHANGE_BRIGHTOVP_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 // draft.brightOvp.search = payload;

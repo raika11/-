@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
+import moment from 'moment';
 import { MokaTable } from '@components';
-import { DISPLAY_PAGE_NUM } from '@/constants';
+import { BASIC_DATEFORMAT, DISPLAY_PAGE_NUM } from '@/constants';
 import { columnDefs } from './NoticeListAgGridColumns';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,6 +16,7 @@ const NoticeListAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const selectBoardId = useRef(null);
     const selectBoardSeq = useRef(null);
+    console.log(params);
 
     // 스토어 연결.
     const { search, loading, list, total } = useSelector((store) => ({
@@ -58,8 +60,8 @@ const NoticeListAgGrid = ({ match }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params]);
 
-    // 최초 로딩시에만 게시판 정보가 있으면 정보 가지고 오기.
     useEffect(() => {
+        // 최초 로딩시에만 게시판 정보가 있으면 정보 가지고 오기.
         if (params.boardId && params.boardSeq) {
             dispatch(getBoardContents({ boardId: params.boardId, boardSeq: params.boardSeq }));
         }
@@ -67,26 +69,17 @@ const NoticeListAgGrid = ({ match }) => {
     }, []);
 
     useEffect(() => {
-        const initGridRow = (data) => {
-            console.log(data);
-            setRowData(
-                data.map((element) => {
-                    let regDt = element.regDt && element.regDt.length > 10 ? element.regDt.substr(0, 10) : element.regDt;
-                    return {
-                        boardId: element.boardId,
-                        boardSeq: element.boardSeq,
-                        chName: element.boardInfo.boardName,
-                        title: element.title,
-                        regName: element.regName,
-                        regDt: regDt,
-                        viewCnt: element.viewCnt,
-                        chnlNm: element.jpodChannel ? element.jpodChannel.chnlNm : '',
-                    };
-                }),
-            );
-        };
-
-        initGridRow(list);
+        console.log(list);
+        setRowData(
+            list.map((element) => {
+                return {
+                    ...list,
+                    regDt: element.regDt && moment(element.regDt).format(BASIC_DATEFORMAT),
+                    chName: element.boardInfo.boardName,
+                    chnlNm: element.jpodChannel ? element.jpodChannel.chnlNm : '',
+                };
+            }),
+        );
     }, [list]);
 
     return (

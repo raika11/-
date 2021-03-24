@@ -144,7 +144,8 @@ const ChannelEdit = ({ match }) => {
     const reporterToMember = useCallback(
         (reporter) => {
             const fakeIdx = members.findIndex((e) => !e.memMemo && !e.memNm && !e.memRepSeq && !e.nickNm && !e.seqNo);
-            if (fakeIdx < 0 || fakeIdx > 5) {
+            const insertIdx = members.length < 6 ? fakeIdx && members.length : fakeIdx;
+            if (insertIdx < 0 || insertIdx > 5) {
                 toast.warning('진행자는 6명까지 선택할 수 있습니다');
                 return;
             }
@@ -156,7 +157,7 @@ const ChannelEdit = ({ match }) => {
             }
 
             const nm = produce(members, (draft) => {
-                draft[fakeIdx] = {
+                draft[insertIdx] = {
                     seqNo: null,
                     chnlSeq: chnlSeq ? Number(chnlSeq) : null,
                     selectType: 'CM',

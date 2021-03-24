@@ -1,15 +1,39 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>중앙일보</title>
   <style>
-      *{margin:0 ;padding: 0}
-      .wrapper{margin:40px;  position: relative; box-sizing: border-box; outline: none;}
-      .email-notice-box{width: 400px; height:100%; border: 4px solid #ffc000; border-radius: 20px; padding: 20px; font-size:14px; color:#000000; line-height: 24px;}
-      .email-notice-box .email-notice-title{text-align: center; margin-bottom: 20px;}
+      * {
+          margin: 0;
+          padding: 0
+      }
+
+      .wrapper {
+          margin: 40px;
+          position: relative;
+          box-sizing: border-box;
+          outline: none;
+      }
+
+      .email-notice-box {
+          width: 400px;
+          height: 100%;
+          border: 4px solid #ffc000;
+          border-radius: 20px;
+          padding: 20px;
+          font-size: 14px;
+          color: #000000;
+          line-height: 24px;
+      }
+
+      .email-notice-box .email-notice-title {
+          text-align: center;
+          margin-bottom: 20px;
+      }
 
   </style>
 </head>
@@ -17,8 +41,8 @@
 <div class="wrapper">
   <div class="email-notice-box">
     <p class="email-notice-title">계정 신청</p>
-    <p>사용자 : <span>나중앙(najoongang)</span>님</p>
-    <p>사용 목적 : <span>신규 입사로 사용 신청</span></p>
+    <p>사용자 : <span th:text="${memberNm+'('+memberId+')'}"></span>님</p>
+    <p>사용 목적 : <span th:text="${requestReason}"></span></p>
   </div>
 </div>
 </body>

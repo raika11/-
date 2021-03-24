@@ -222,7 +222,7 @@ function makeRCTreeData(serverData) {
     const editedKeys = toCheckedData(list, serverData, 'editYn');
     const edited = [...editedKeys['yList'], ...editedKeys['halfCheckedKeys']];
 
-    return { list, used, edited, halfCheckedKeys };
+    return { list, used, edited, halfCheckedKeys, usedOrg: [...used, ...halfCheckedKeys], editedOrg: edited };
 }
 
 /**

@@ -72,6 +72,11 @@ public class CommandController {
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/", produces = "text/plain")
+    public ResponseEntity<?> home(HttpServletRequest request, HttpServletResponse response) {
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/command/health", produces = "text/plain")
     public ResponseEntity<?> health(HttpServletRequest request, HttpServletResponse response) {
         return new ResponseEntity<>("OK", HttpStatus.OK);

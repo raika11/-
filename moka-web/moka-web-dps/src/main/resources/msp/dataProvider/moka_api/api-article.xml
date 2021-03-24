@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <apiConfig>
 
+  <!--
   <api id="article">
     <description>기사 상세 정보를 조회한다.</description>
     <parameter>
@@ -22,7 +23,7 @@
       totalId
     </keys>
   </api>
-
+  -->
   <api id="article.info" resultWrap="N">
     <description>기사 상세 정보를 조회한다.v2</description>
     <parameter>

@@ -367,12 +367,15 @@ export default function* jpodSaga() {
     yield takeLatest(act.DELETE_CHNL, deleteChnl);
     yield takeLatest(act.GET_CHNL_EPSD_LIST, getChnlEpsdList);
 
+    /**
+     * 에피소드
+     */
     yield takeLatest(act.GET_EPISODES, getEpisodesSaga); // 에피소드 리스트 가지고 오기.
     yield takeLatest(act.GET_EPISODES_INFO, getEpisodesInfoSaga); // 에피소드 리스트 가지고 오기.
-
     yield takeLatest(act.GET_PODTY_EPISODE_LIST, getPodtyEpisodeListSaga); // 에피소드 리스트 가지고 오기.
     yield takeLatest(act.GET_EPISODE_GUBUN_CHANNELS, getEpisodeGubunChannelsSaga); // 에피소드 구분용 채널 리스트 가지고 오기 ( 등록, 수정, 검색 등에 사용).
     yield takeLatest(act.SAVE_JPOD_EPISODE, saveJpodEpisodeSaga); // 에피소드 등록.
+
     yield takeLatest(act.GET_BRIGHT_OVP, getBrightOvpSaga); // 브라이트 코브 목록 조회.
     yield takeLatest(act.SAVE_BRIGHTOVP, saveBrightovpSaga); // 브라이트 코브 저장.
 

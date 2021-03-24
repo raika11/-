@@ -73,44 +73,6 @@ export const saveBrightovp = createAction(SAVE_BRIGHTOVP, ({ ovpdata, callback }
 export const CHANGE_BRIGHTOVP_SEARCH_OPTION = 'jpod/CHANGE_BRIGHTOVP_SEARCH_OPTION';
 export const changeBrightovpSearchOption = createAction(CHANGE_BRIGHTOVP_SEARCH_OPTION, (actions) => actions);
 
-/* 채널 */
-
-/**
- * 채널 초기화
- */
-export const CLEAR_CHANNELS = 'jpod/CLEAR_CHANNELS';
-export const clearChannels = createAction(CLEAR_CHANNELS);
-
-/**
- * 채널 검색 옵션 변경
- */
-export const CHANGE_JPOD_SEARCH_OPTION = 'jpod/CHANGE_JPOD_SEARCH_OPTION';
-export const changeJpodSearchOption = createAction(CHANGE_JPOD_SEARCH_OPTION, (actions) => actions);
-
-export const [GET_CHANNELS, GET_CHANNELS_SUCCESS, GET_CHANNELS_FAILURE] = createRequestActionTypes('jpod/GET_CHANNELS');
-export const getChannels = createAction(GET_CHANNELS, (actions) => actions);
-
-export const CLEAR_CHANNEL_INFO = 'jpod/CLEAR_CHANNEL_INFO';
-export const clearChannelInfo = createAction(CLEAR_CHANNEL_INFO);
-
-/**
- * 채널 상세 조회
- */
-export const [GET_CHANNEL_INFO, GET_CHANNEL_INFO_SUCCESS, GET_CHANNEL_INFO_FAILURE] = createRequestActionTypes('jpod/GET_CHANNEL_INFO');
-export const getChannelInfo = createAction(GET_CHANNEL_INFO, ({ chnlSeq }) => ({ chnlSeq }));
-
-/**
- * 채널 저장
- */
-export const [SAVE_JPOD_CHANNEL, SAVE_JPOD_CHANNEL_SUCCESS, SAVE_JPOD_CHANNEL_FAILURE] = createRequestActionTypes('jpod/SAVE_JPOD_CHANNEL');
-export const saveJpodChannel = createAction(SAVE_JPOD_CHANNEL, ({ chnlSeq, channelinfo, callback }) => ({ chnlSeq, channelinfo, callback }));
-
-/**
- * 채널 삭제
- */
-export const [DELETE_JPOD_CHANNEL] = createRequestActionTypes('jpod/DELETE_JPOD_CHANNEL');
-export const deleteJpodChannel = createAction(DELETE_JPOD_CHANNEL, ({ chnlSeq, callback }) => ({ chnlSeq, callback }));
-
 /* 에피소드 */
 export const CLEAR_EPISODE = 'jpod/CLEAR_EPISODE';
 export const clearEpisode = createAction(CLEAR_EPISODE);

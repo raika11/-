@@ -63,43 +63,32 @@ export const initialState = {
     },
     // 에피소드
     episode: {
-        episodes: {
-            total: 0,
-            list: [],
-            search: {
-                page: 0,
-                sort: 'epsdSeq,desc',
-                size: PAGESIZE_OPTIONS[0],
-                usedYn: '',
-                startDt: '',
-                endDt: '',
-                keyword: '',
-                chnlSeq: '',
-                podtyChnlSrl: '',
-            },
+        total: 0,
+        list: [],
+        search: {
+            page: 0,
+            sort: 'epsdSeq,desc',
+            size: PAGESIZE_OPTIONS[0],
+            usedYn: '',
+            startDt: null,
+            endDt: null,
+            keyword: '',
+            chnlSeq: null,
+            podtyChnlSrl: null,
         },
-        episodeInfo: {
+        episode: {
             articles: [],
-            chnlSeq: '',
-            epsdDate: '',
             epsdFile: null,
-            epsdMemo: '',
-            epsdNm: '',
-            epsdNo: '',
             epsdSeq: 0,
-            jpodType: '',
-            katalkImg: '',
             keywords: [],
             likeCnt: 0,
             members: [],
             playCnt: 0,
-            playTime: '',
             podtyEpsdSrl: 0,
             replyCnt: 0,
             scbCnt: 0,
             seasonNo: 0,
             shareCnt: 0,
-            shrImg: '',
             usedYn: 'Y',
             viewCnt: 0,
         },
@@ -220,6 +209,30 @@ export default handleActions(
                 draft.channel.channelEpisode.list = body.list;
             });
         },
+        /**
+         * 에피소드 관련
+         */
+        [act.CHANGE_EPISODES_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.episode.search = payload;
+            });
+        },
+        [act.GET_EPISODES_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.episode.list = body.list;
+                draft.episode.total = body.totalCnt;
+            });
+        },
+        [act.CLEAR_EPISODE_INFO]: (state) => {
+            return produce(state, (draft) => {
+                draft.episode.episode = initialState.episode.episode;
+            });
+        },
+        [act.GET_EPISODES_INFO_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.episode.episode = body;
+            });
+        },
 
         /**
          * 이 뒤부터 정리 필요함
@@ -243,38 +256,6 @@ export default handleActions(
                 draft.selectPodtyChannel = payload;
             });
         },
-        // 팟티 검색 모달창 검색 옵션 처리
-        [act.CHANGE_JPOD_SEARCH_OPTION]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.channel.jpod.search = payload;
-            });
-        },
-        // 에피소드 검색 옵션 처리
-        [act.CHANGE_EPISODES_SEARCH_OPTION]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.episode.episodes.search = payload;
-            });
-        },
-        // 에피소드 리스트
-        [act.GET_EPISODES_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.episode.episodes.list = body.list;
-                draft.episode.episodes.total = body.totalCnt;
-            });
-        },
-        // 에피소드 정보 초기화 리스트
-        [act.CLEAR_EPISODE_INFO]: (state) => {
-            return produce(state, (draft) => {
-                draft.episode.episodeInfo = initialState.episode.episodeInfo;
-            });
-        },
-        // 에피소드 조회 성공
-        [act.GET_EPISODES_INFO_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.episode.episodeInfo = body;
-            });
-        },
-
         // 팟티 에피소드 리셋
         [act.CLEAR_PODTY_EPISODE]: (state) => {
             return produce(state, (draft) => {

@@ -362,13 +362,18 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public void saveMenuAuth(String groupMemberId, MenuAuthTypeCode menuAuthType, List<MenuAuth> menuAuths) {
+        saveMenuAuth(groupMemberId, menuAuthType, menuAuths, true);
+    }
 
-        findMenuAuthList(groupMemberId, menuAuthType.getCode()).forEach(menuAuth -> {
-            menuAuth.setUsedYn(MokaConstants.NO);
-            menuAuth.setEditYn(MokaConstants.NO);
-            menuAuth.setViewYn(MokaConstants.NO);
-            updateMenuAuth(menuAuth);
-        });
+    public void saveMenuAuth(String groupMemberId, MenuAuthTypeCode menuAuthType, List<MenuAuth> menuAuths, boolean isOldMenuDelete) {
+        if (isOldMenuDelete) {
+            findMenuAuthList(groupMemberId, menuAuthType.getCode()).forEach(menuAuth -> {
+                menuAuth.setUsedYn(MokaConstants.NO);
+                menuAuth.setEditYn(MokaConstants.NO);
+                menuAuth.setViewYn(MokaConstants.NO);
+                updateMenuAuth(menuAuth);
+            });
+        }
         menuAuths.forEach(menuAuth -> {
             try {
                 // 조회 여부는 useYn이 Y이 이면 자동으로 Y

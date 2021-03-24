@@ -101,6 +101,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Integer findByMaxDepth(Long parentBoardSeq) {
+        return boardRepository.findByMaxDepth(parentBoardSeq);
+    }
+
+    @Override
     public BoardAttach insertBoardAttach(BoardAttach boardAttach) {
         return boardAttachRepository.save(boardAttach);
     }

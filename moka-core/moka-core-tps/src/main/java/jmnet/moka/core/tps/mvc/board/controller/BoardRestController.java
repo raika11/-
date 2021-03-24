@@ -167,9 +167,13 @@ public class BoardRestController extends AbstractCommonController {
             throw new InvalidDataException(msg("tps.board.error.pwd-unmatched"));
         }
         */
+        /**
+         * depth 최대값 구해오기
+         */
+        int maxDepth = boardService.findByMaxDepth(board.getParentBoardSeq());
 
         BoardDTO dto = modelMapper.map(board, BoardDTO.class);
-
+        dto.setMaxDepth(maxDepth);
 
         tpsLogger.success(ActionType.SELECT);
 
@@ -856,7 +860,6 @@ public class BoardRestController extends AbstractCommonController {
                 boardService.deleteAllBoardAttach(attaches);
             }
             if (newAttaches.size() > 0) {
-                log.error("newAttaches {}", newAttaches.size());
                 boardDto.setAttaches(modelMapper.map(newAttaches, BoardAttachDTO.TYPE));
             }
         } else { // 수정시 클라이언트로 부터 전달된 첨부파일 정보가 없을 경우 무조건 삭제 처리 한번 한다.

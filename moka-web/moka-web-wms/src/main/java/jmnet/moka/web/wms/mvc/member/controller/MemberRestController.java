@@ -468,14 +468,14 @@ public class MemberRestController extends AbstractCommonController {
     }
 
     /**
-     * 여러 메뉴의 그룹 권한 수정
+     * 여러 메뉴의 사용자 권한 수정
      *
      * @param request   요청
      * @param menuAuths 메뉴권한목록
      * @return 수정된 메뉴정보
      * @throws Exception 그외 모든 에러
      */
-    @ApiOperation(value = "여러 메뉴의 그룹 권한 수정")
+    @ApiOperation(value = "여러 메뉴의 사용자 권한 수정")
     @PutMapping("/{memberId}/menu-auths")
     public ResponseEntity<?> putMemberMenuAuth(HttpServletRequest request,
             @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
@@ -486,7 +486,7 @@ public class MemberRestController extends AbstractCommonController {
             menuService.saveMenuAuth(memberId, MenuAuthTypeCode.MEMBER, menuAuths
                     .stream()
                     .map(menuAuthSimpleDTO -> modelMapper.map(menuAuthSimpleDTO, MenuAuth.class))
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toList()), true);
 
             ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.member.success.update.menu-auth"));
 

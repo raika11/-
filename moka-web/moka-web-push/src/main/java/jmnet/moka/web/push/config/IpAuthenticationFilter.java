@@ -31,11 +31,11 @@ public class IpAuthenticationFilter extends BasicAuthenticationFilter {
 
     Set<String> whitelist = new HashSet<>();
 
-    public IpAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public IpAuthenticationFilter(AuthenticationManager authenticationManager, String[] ips) {
         super(authenticationManager);
-        whitelist.add("172.29.58.*");
-        whitelist.add("192.168.0.1");
-        whitelist.add("0:0:0:0:0:0:0:1");
+        for (String ip : ips) {
+            whitelist.add(ip);
+        }
     }
 
     // endpoint every request hit with authorization

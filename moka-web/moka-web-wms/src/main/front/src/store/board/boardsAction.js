@@ -58,8 +58,8 @@ export const getBoardInfo = createAction(GET_SET_MENU_BOARD_INFO, (boardId) => b
 /**
  * 전체 게시판 저장
  */
-export const [SAVE_SET_MENU_BOARD_INFO, SAVE_SET_MENU_BOARD_INFO_SUCCESS, SAVE_SET_MENU_BOARD_INFO_FAILURE] = createRequestActionTypes('board/SAVE_SET_MENU_BOARD_INFO');
-export const saveBoardInfo = createAction(SAVE_SET_MENU_BOARD_INFO, ({ boardInfo, callback }) => ({ boardInfo, callback }));
+export const SAVE_BOARD_INFO = 'board/SAVE_BOARD_INFO';
+export const saveBoardInfo = createAction(SAVE_BOARD_INFO, ({ boardInfo, callback }) => ({ boardInfo, callback }));
 
 /**
  * 전체 게시판 삭제
@@ -130,7 +130,7 @@ export const updateBoardContents = createAction(UPDATE_BOARD_CONTENTS, ({ boardI
 /**
  * 게시글 정보 삭제
  */
-export const [DELETE_BOARD_CONTENTS] = createRequestActionTypes('board/DELETE_BOARD_CONTENTS');
+export const DELETE_BOARD_CONTENTS = 'board/DELETE_BOARD_CONTENTS';
 export const deleteBoardContents = createAction(DELETE_BOARD_CONTENTS, ({ boardId, boardSeq, callback }) => ({ boardId, boardSeq, callback }));
 
 /**

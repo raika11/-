@@ -224,7 +224,7 @@ public class DeskingRestController extends AbstractCommonController {
             throws Exception {
 
         boolean checkPublish = false;       // 전송여부
-        boolean checkAfterApi = true;      // afterApi성공여부
+        boolean checkAfterApi = false;      // afterApi성공여부
         try {
             // 컴포넌트워크 조회(편집기사워크포함)
             ComponentWorkVO componentWork = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
@@ -267,7 +267,6 @@ public class DeskingRestController extends AbstractCommonController {
                 } else {
                     message = msg("tps.desking.error.after-api");
                     log.warn(message);
-                    checkAfterApi = false;
                 }
             }
 

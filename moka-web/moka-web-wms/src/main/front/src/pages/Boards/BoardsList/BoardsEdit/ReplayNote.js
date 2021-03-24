@@ -10,13 +10,11 @@ import { changeListMenuReplyContents, uploadBoardContentsImage } from '@store/bo
  * 게시판 관리 > 게시글 관리 > 게시판 편집 폼 > 게시글 답변 썸머노트 편집
  */
 const ReplyNote = ({ data, onChangeFormData }) => {
-    const { boardId, boardSeq, parentBoardSeq, reply } = useParams();
     const dispatch = useDispatch();
     const selectBoard = useSelector((store) => store.board.listMenu.contents.info);
-    const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
     const contentsReply = useSelector((store) => store.board.listMenu.contents.reply);
-
-    const [contentsData, setContentsData] = useState(data);
+    const [noteData, setNoteData] = useState(data);
+    console.log(data);
 
     /**
      * summernote 이미지 업로드 처리
@@ -35,7 +33,7 @@ const ReplyNote = ({ data, onChangeFormData }) => {
                         let tempContent = `${contentsReply.content} <img src="${body}">`;
 
                         // dispatch(changeListMenuReplyContents({ content: tempContent }));
-                        setContentsData(tempContent);
+                        onChangeFormData({ content: tempContent });
                     } else {
                         const { totalCnt, list } = body;
                         if (totalCnt > 0 && Array.isArray(list)) {
@@ -52,43 +50,18 @@ const ReplyNote = ({ data, onChangeFormData }) => {
     };
 
     useEffect(() => {
-        if (!boardSeq && parentBoardSeq) {
-            let tempContent = `
-            <br/>
-            원본 게시글<br/>
-            ------------------------------------------------------<br/>
-            <br/>
-            ${contentsInfo.content}`;
-
-            setContentsData(tempContent);
-        } else if (boardSeq && parentBoardSeq && reply) {
-            setContentsData(contentsReply.content);
-        }
+        onChangeFormData({ content: noteData });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [boardSeq, parentBoardSeq]);
-
-    useEffect(() => {
-        setContentsData(data);
-    }, [data]);
-
-    useEffect(() => {
-        onChangeFormData({
-            target: {
-                name: 'content',
-                value: contentsData,
-            },
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [contentsData]);
+    }, [noteData]);
 
     return (
         <Form.Row className="mb-2">
             <Col className="p-0">
                 <BoardsSummernote
-                    contentValue={contentsData}
+                    contentValue={data}
                     onChangeValue={(value) => {
                         // dispatch(changeListMenuReplyContents({ content: value }));
-                        setContentsData(value);
+                        setNoteData(value);
                     }}
                     onImageUpload={(e) => SummernoteImageUpload(e)}
                 />

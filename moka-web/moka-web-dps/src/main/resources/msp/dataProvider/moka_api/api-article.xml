@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <apiConfig>
 
+  <!--
   <api id="article">
     <description>기사 상세 정보를 조회한다.</description>
     <parameter>
@@ -22,7 +23,7 @@
       totalId
     </keys>
   </api>
-
+  -->
   <api id="article.info" resultWrap="N">
     <description>기사 상세 정보를 조회한다.v2</description>
     <parameter>
@@ -206,11 +207,11 @@
   </api>
 
   <!--북마크등록-->
-  <api id="scrap.insert">
+  <api id="scrap.insert" membership="cookie">
     <description>북마크를 등록한다.</description>
     <parameter>
       <totalId desc="기사Id" default="0" require="Y" type="number">^[0-9]{1,9}$</totalId>
-      <ip desc="기사Id" require="Y">^.{0,50}$</ip>
+      <ip desc="ip" require="Y">^.{0,50}$</ip>
     </parameter>
     <request dmlType="sp" setNames="_DATA">dps.article.scrapInsert</request>
     <keys>

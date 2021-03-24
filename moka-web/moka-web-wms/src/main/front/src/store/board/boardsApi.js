@@ -25,10 +25,6 @@ export const insertBoard = ({ file }) => {
 };
 
 const makeBoardContentsFormData = ({ files, contentsData }) => {
-    delete contentsData.attaches;
-    delete contentsData.regName;
-    delete contentsData.boardInfo;
-
     var formData = new FormData();
 
     files.map((element, index) => {
@@ -45,11 +41,9 @@ const makeBoardContentsFormData = ({ files, contentsData }) => {
     Object.keys(contentsData).forEach((key) => {
         let value = contentsData[key];
 
-        if (value !== undefined && value !== null) {
+        if (value) {
             formData.append(key, value);
         }
-
-        // formData.append(key, value);
     });
 
     return formData;
@@ -85,10 +79,31 @@ export const getBoardInfo = (boardId) => {
 /**
  * 게시판 등록
  */
-export const saveBoardInfo = ({ boardInfo }) => {
-    return instance.post(`/api/board-info`, objectToFormData(boardInfo)).catch((err) => {
-        throw err;
-    });
+export const postBoardInfo = ({ boardInfo }) => {
+    return instance
+        .post(`/api/board-info`, objectToFormData(boardInfo), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+/**
+ * 게시판 수정
+ */
+export const putBoardInfo = ({ boardInfo }) => {
+    return instance
+        .put(`/api/board-info/${boardInfo.boardId}`, objectToFormData(boardInfo), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
 
 /**

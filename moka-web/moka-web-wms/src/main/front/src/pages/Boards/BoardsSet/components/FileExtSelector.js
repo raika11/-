@@ -63,10 +63,13 @@ const CustomToggle = forwardRef(({ children, onClick, isInvalid }, ref) => {
 const FileExtSelector = (props) => {
     const { isInvalid, value, onChange, dropdownHeight, disabled } = props;
     const [toggleText, setToggleText] = useState('전체');
-    // const [itemsObj, setItemsObj] = useState({});
+    const [itemsObj, setItemsObj] = useState({});
     const [selectItems, setSelectItems] = useState([]);
 
-    // const originIndex = useCallback((id) => itemsObj.findIndex((origin) => origin.code === id.code), [originList]);
+    /**
+     * id로 리스트의 index 조회
+     */
+    const extIndex = useCallback((id) => fileExt.findIndex((i) => i.ext === id), []);
 
     /**
      * 체크 해제 되었을 경우 state 업데이트
@@ -85,86 +88,82 @@ const FileExtSelector = (props) => {
                     setToggleText('');
                 }
             } else {
-                const targetIdx = fileExt.indexOf(id);
+                const targetIdx = extIndex(id);
 
                 if (checked) {
-                    itemList = [...selectItems, fileExt[targetIdx]].sort((a, b) => {
+                    itemList = [...selectItems, itemsObj[targetIdx]].sort((a, b) => {
                         return a.index - b.index;
                     });
                 } else {
-                    const isSelected = fileExt.indexOf(id);
+                    const isSelected = selectItems.findIndex((i) => i.ext === id);
                     if (isSelected > -1) {
                         itemList = produce(selectItems, (draft) => {
                             draft.splice(isSelected, 1);
                         });
                     }
                 }
-                onChange(itemList.join(','));
+                onChange(itemList.map((i) => i.ext).join(','));
             }
         }
     };
 
     const chkTrue = (id) => {
         if (!value || value === '') return false;
-        else if (toggleText === '전체') return true;
+        else if (value === 'zip,xls,xlsx,ppt,doc,hwp,jpg,png,gif') return true;
         else return value.split(',').indexOf(id) > -1;
     };
 
-    // useEffect(() => {
-    //     setItemsObj(fileExt);
-    // }, []);
-
-    // useEffect(() => {
-    //     if (selectItems.length > 0) {
-    //         const targetIdx = itemIndex(originSelectedList[0]);
-    //         const target = originObj[targetIdx];
-
-    //         if (originSelectedList.length + 1 === Object.keys(originObj).length) {
-    //             setToggleText('전체');
-    //         } else if (originSelectedList.length === 1) {
-    //             setToggleText(target.name);
-    //         } else {
-    //             setToggleText(`${target.name} 외 ${originSelectedList.length - 1}개`);
-    //         }
-    //     } else {
-    //         setToggleText('');
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [originIndex, originObj, originSelectedList]);
+    useEffect(() => {
+        setItemsObj(fileExt);
+    }, []);
 
     useEffect(() => {
-        if (selectItems.length === fileExt.length) {
-            setToggleText('전체');
+        if (selectItems.length > 0) {
+            const targetIdx = extIndex(selectItems[0].ext);
+            const target = itemsObj[targetIdx];
+
+            if (selectItems.length === Object.keys(itemsObj).length) {
+                setToggleText('전체');
+            } else if (selectItems.length === 1) {
+                setToggleText(target.ext);
+            } else {
+                setToggleText(`${target.ext} 외 ${selectItems.length - 1}개`);
+            }
         } else {
             setToggleText('');
         }
-    }, [selectItems.length]);
+    }, [extIndex, itemsObj, selectItems]);
 
-    // useEffect(() => {
-    //     if (value || value === '') {
-    //         if (value.length === fileExt.length) {
-    //             setSelectItems(
-    //                 Object.values(itemsObj).map((i) => {
-    //                     const targetIndex = fileExt.indexOf(i);
-    //                     return itemsObj[targetIndex];
-    //                 }),
-    //             );
-    //             setToggleText('전체');
-    //         } else {
-    //             const valueArr = value
-    //                 .split(',')
-    //                 .map((e) => e.replace(' ', ''))
-    //                 .filter((i) => i !== '');
+    useEffect(() => {
+        if (Object.keys(itemsObj).length < 1) return;
+        if (value || value === '') {
+            if (value === 'zip,xls,xlsx,ppt,doc,hwp,jpg,png,gif') {
+                setSelectItems(
+                    Object.values(itemsObj).map((i) => {
+                        const targetIndex = extIndex(i.ext);
+                        return itemsObj[targetIndex];
+                    }),
+                );
+            } else {
+                const valueArr = value
+                    .replaceAll(' ', '')
+                    .split(',')
+                    .filter((i) => i !== '');
 
-    //             setSelectItems(
-    //                 valueArr.map((i) => {
-    //                     const targetIndex = fileExt.indexOf(i);
-    //                     return itemsObj[targetIndex];
-    //                 }),
-    //             );
-    //         }
-    //     }
-    // }, [itemsObj, value]);
+                setSelectItems(
+                    valueArr.map((i) => {
+                        const targetIndex = extIndex(i);
+                        return itemsObj[targetIndex];
+                    }),
+                );
+            }
+        } else {
+            // 값이 없을 때는 모든 매체 선택
+            if (typeof onChange === 'function') {
+                onChange('all');
+            }
+        }
+    }, [itemsObj, onChange, extIndex, value]);
 
     return (
         <Dropdown className={clsx('flex-fill')}>
@@ -173,17 +172,24 @@ const FileExtSelector = (props) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll w-100">
-                <MokaInput id="file-all" onChange={handleChangeValue} as="checkbox" inputProps={{ label: '전체', custom: true, checked: toggleText === '전체' }} />
+                <MokaInput
+                    id="file-all"
+                    name="itemList"
+                    onChange={handleChangeValue}
+                    as="checkbox"
+                    inputProps={{ label: '전체', custom: true, checked: value.split(',').length === fileExt.length || toggleText === '전체' }}
+                />
+
                 {fileExt.map((i) => {
                     return (
                         <MokaInput
                             as="checkbox"
-                            key={i}
-                            id={i}
+                            key={i.index}
+                            id={i.ext}
                             name="itemList"
                             onChange={handleChangeValue}
                             disabled={disabled}
-                            inputProps={{ label: i, custom: true, checked: chkTrue(i) }}
+                            inputProps={{ label: i.ext, custom: true, checked: chkTrue(i.ext) }}
                         />
                     );
                 })}

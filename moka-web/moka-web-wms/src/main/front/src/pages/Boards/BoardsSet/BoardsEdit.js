@@ -3,23 +3,20 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { MokaCard } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@/utils/regexUtil';
 import { initialState, clearSetmenuBoardInfo, GET_SET_MENU_BOARD_INFO, getBoardInfo, getSetMenuBoardsList, saveBoardInfo, deleteBoard } from '@store/board';
 import BoardsForm from './BoardsForm';
-
-// 파일 확장자
-const fileExt = ['all', 'zip', 'xls', 'xlsx', 'ppt', 'doc', 'hwp', 'jpg', 'png', 'gif'];
 
 /**
  * 게시판 관리 > 전체 게시판 편집(등록, 수정)
  */
-const BoardsEdit = () => {
+const BoardsEdit = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { boardId } = useParams();
     // 공통 구분값 URL
-    const { pagePathName, boardType: storeBoardType, boardInfo, loading, channelTypeList } = useSelector(
+    const { boardType, boardInfo, loading, channelTypeList } = useSelector(
         (store) => ({
-            pagePathName: store.board.pagePathName,
             boardType: store.board.boardType,
             boardInfo: store.board.setMenu.boardInfo,
             channelTypeList: store.board.channelTypeList,
@@ -41,6 +38,8 @@ const BoardsEdit = () => {
 
     // monaco 에디터 스테이트 버그가 있어서 상태를 만들어 주고 상태가 업데이트 되면 렌더링 될수 있게 수정
     const [editState, setEeditState] = useState(null);
+    // error
+    const [error, setError] = useState([]);
 
     /**
      * change input value
@@ -60,6 +59,105 @@ const BoardsEdit = () => {
         } else {
             setBoardInfoData({ ...boardInfoData, [name]: value });
         }
+    };
+
+    /**
+     * 유효성 검사
+     * @param {object} save 데이터
+     */
+    const validate = (save) => {
+        let isInvalid = false;
+        let errList = [];
+
+        // 타이틀
+        if (!save.boardName || !REQUIRED_REGEX.test(save.boardName)) {
+            errList.push({
+                field: 'boardName',
+                reason: '게시판 명을 입력해 주세요',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 답변 true로 선택 후 답변 등급 선택 안했을 때
+        if (save.answYn === 'Y' && save.answLevel === '') {
+            errList.push({
+                field: 'answLevel',
+                reason: '답변 등급을 선택해 주세요',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 이메일 수신여부 true 선택 후 이메일을 입력 안했을 때
+        if (save.answYn === 'Y' && save.emailReceiveYn === 'Y' && !REQUIRED_REGEX.test(save.receiveEmail)) {
+            errList.push({
+                field: 'receiveEmail',
+                reason: '이메일을 입력해 주세요',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 이메일 발신여부 true 선택 후 이메일을 입력 안했을 때
+        if (save.emailSendYn === 'Y' && !REQUIRED_REGEX.test(save.sendEmail)) {
+            errList.push({
+                field: 'sendEmail',
+                reason: '이메일을 입력해 주세요',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 파일 true 선택 후 개수를 입력 안했을 때
+        if (save.fileYn === 'Y' && save.allowFileCnt === 0) {
+            errList.push({
+                field: 'allowFileCnt',
+                reason: '개수를 입력해 주세요',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 파일 true 선택 후 용량을 입력 안했을 때
+        if (save.fileYn === 'Y' && save.allowFileSize === 0) {
+            errList.push({
+                field: 'allowFileSize',
+                reason: '용량을 입력해 주세요',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 파일 true 선택 후 확장자를 입력 안했을 때
+        if (save.fileYn === 'Y' && !REQUIRED_REGEX.test(save.allowFileExt)) {
+            errList.push({
+                field: 'allowFileExt',
+                reason: '확장자를 선택해 주세요',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // // 입력 등급을 선택 안했을떄.
+        // if (!boardInfoData.insLevel) {
+        //     return {
+        //         state: false,
+        //         message: '입력 등급을 선택해 주세요.',
+        //     };
+        // }
+
+        // // 조회 등급을 선택 안했을떄.
+        // if (!boardInfoData.viewLevel) {
+        //     return {
+        //         state: false,
+        //         message: '조회 등급을 선택해 주세요.',
+        //     };
+        // }
+
+        // // 추천 항목을 선택 안했을떄.
+        // if (!boardInfoData.recomFlag) {
+        //     return {
+        //         state: false,
+        //         message: '추천을 선택해 주세요.',
+        //     };
+        // }
+
+        setError(errList);
+        return !isInvalid;
     };
 
     // form 값 체크 어드민 페이지 일떄.
@@ -101,181 +199,43 @@ const BoardsEdit = () => {
     //     };
     // };
 
-    // form 값 체크 서비스 페이지 일떄
-    const makeServiceFormData = () => {
-        let returnFormData = {
-            ...boardInfoData,
-            boardType: storeBoardType,
-        };
-
-        // 답변 checkbox 를 true 로 선택후 관련 등급을 선택 안했을 떄
-        if (boardInfoData.answYn === 'Y' && !boardInfoData.answLevel) {
-            return {
-                state: false,
-                message: '답변 등급을 선택해 주세요.',
-            };
-        }
-
-        // 댓글 checkbox 를 true 로 선택후 관련 등급을 선택 안했을떄.
-        // if (boardInfoData.replyYn === 'Y' && !boardInfoData.replyLevel) {
-        //     return {
-        //         state: false,
-        //         message: '댓글 등급을 선택해 주세요.',
-        //     };
-        // }
-
-        // 이메일 수신여부 checkbox 를 true 로 선택후 이메일을 입력 안했을떄.
-        if (boardInfoData.emailReceiveYn === 'Y' && !boardInfoData.receiveEmail) {
-            return {
-                state: false,
-                message: '이메일을 입력해 주세요.',
-            };
-        }
-
-        // 이메일 발신여부 checkbox 를 true 로 선택후 이메일을 입력 안했을떄.
-        if (boardInfoData.emailSendYn === 'Y' && !boardInfoData.sendEmail) {
-            return {
-                state: false,
-                message: '이메일을 입력해 주세요.',
-            };
-        }
-
-        // 파일 checkbox 를 true 로 선택후 개수를 입력 안했을떄.
-        if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileCnt) {
-            return {
-                state: false,
-                message: '개수를 입력해 주세요.',
-            };
-        }
-
-        // 파일 checkbox 를 true 로 선택후 용량를 입력 안했을떄.
-        if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileSize) {
-            return {
-                state: false,
-                message: '용량을 입력해 주세요.',
-            };
-        }
-
-        // 파일 checkbox 를 true 로 선택후 확장자를 입력 안했을떄.
-        if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileExt) {
-            return {
-                state: false,
-                message: '확장자를 선택 주세요.',
-            };
-        }
-
-        if (boardInfoData.fileYn === 'N') {
-            returnFormData = {
-                ...returnFormData,
-                allowFileExt: '',
-            };
-        }
-
-        // 입력 등급을 선택 안했을떄.
-        if (!boardInfoData.insLevel) {
-            return {
-                state: false,
-                message: '입력 등급을 선택해 주세요.',
-            };
-        }
-
-        // 조회 등급을 선택 안했을떄.
-        if (!boardInfoData.viewLevel) {
-            return {
-                state: false,
-                message: '조회 등급을 선택해 주세요.',
-            };
-        }
-
-        // 추천 항목을 선택 안했을떄.
-        if (!boardInfoData.recomFlag) {
-            return {
-                state: false,
-                message: '추천을 선택해 주세요.',
-            };
-        }
-
-        return {
-            state: true,
-            data: returnFormData,
-        };
-    };
-
-    // 저장 버튼.
+    /**
+     * 저장 버튼
+     */
     const handleClickSaveButton = () => {
-        let tempData = initialState.setMenu.boardInfo; // 기본 init 데이터
-        let formData = {}; // 폼 데이터
-
-        if (boardInfoData.boardName === '' || boardInfoData.boardName === null) {
-            messageBox.alert('게시판 명을 입력해 주세요.', () => {});
-            return false;
-        }
-
-        formData = makeServiceFormData();
-
-        // form 체크 실패면 해당 메시지 alert
-        if (formData.state === false) {
-            messageBox.alert(formData.message, () => {});
-            return false;
-        }
-
-        const tempFormData = formData.data;
-
-        // form 값을 체크후에 init 데이터와 조합
-        // null 처리를 하기 위해서 기존 init 데이터에 폼 체크 값을 추가 해줘서 api에 보낼 데이터 생성
-        Object.keys(tempFormData).forEach((key) => {
-            let value = tempFormData[key];
-
-            if (value === '') {
-                value = initialState.setMenu.boardInfo[key];
-            }
-
-            tempData = {
-                ...tempData,
-                [key]: value,
-            };
-        });
-
-        // boardId 값이 없으면 등록 있으면 수정
-        let type;
-        if (boardInfoData.boardId != null) {
-            type = 'update';
-        } else {
-            type = 'save';
-        }
-
-        dispatch(
-            saveBoardInfo({
-                type: type,
-                boardInfo: tempData,
-                callback: ({ header: { success, message }, body }) => {
-                    if (success === true) {
-                        toast.success(message);
-                        const { boardId } = body;
-                        if (body.boardId) {
-                            // 리스트를 다시 가지고 옴.
-                            dispatch(getSetMenuBoardsList());
-                            // 게시판 정보 값도 다시 가지고 옴.
-                            dispatch(getBoardInfo({ boardId: body.boardId }));
-                            history.push(`/${pagePathName}/${boardId}`);
-                        }
-                    } else {
-                        const { totalCnt, list } = body;
-                        if (totalCnt > 0 && Array.isArray(list)) {
-                            // 에러 메시지 확인.
-                            messageBox.alert(list[0].reason, () => {});
+        let saveObj = {
+            ...boardInfoData,
+            boardType,
+        };
+        if (validate(saveObj)) {
+            dispatch(
+                saveBoardInfo({
+                    boardInfo: saveObj,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                            if (body.boardId) {
+                                history.push(`${match.path}/${boardId}`);
+                            }
                         } else {
-                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert
-                            messageBox.alert(message, () => {});
+                            const { totalCnt, list } = body;
+                            if (totalCnt > 0 && Array.isArray(list)) {
+                                // 에러 메시지 확인
+                                messageBox.alert(list[0].reason, () => {});
+                            } else {
+                                // 에러이지만 에러메시지가 없으면 서버 메시지를 alert
+                                messageBox.alert(header.message, () => {});
+                            }
                         }
-                    }
-                },
-            }),
-        );
-        return;
+                    },
+                }),
+            );
+        }
     };
 
-    // 삭제 버튼 처리
+    /**
+     * 삭제 버튼
+     */
     const handleClickDeleteButton = () => {
         messageBox.confirm('삭제 하시겠습니까?', () => {
             dispatch(
@@ -285,7 +245,7 @@ const BoardsEdit = () => {
                         if (success === true) {
                             toast.success(message);
                             dispatch(getSetMenuBoardsList()); // 리스트를 다시 가지고 옴.
-                            history.push(`/${pagePathName}`);
+                            history.push(`${match.path}`);
                         } else {
                             const { totalCnt, list } = body;
                             if (totalCnt > 0 && Array.isArray(list)) {
@@ -308,7 +268,7 @@ const BoardsEdit = () => {
      * 취소 버튼
      */
     const handleClickCancleButton = () => {
-        history.push(`/${pagePathName}`);
+        history.push(`${match.path}`);
     };
 
     useEffect(() => {
@@ -377,7 +337,9 @@ const BoardsEdit = () => {
             footer
             footerClassName="d-flex justify-content-center"
             footerButtons={[
-                boardId && boardInfoData.boardUrl && { text: '미리보기', variant: 'outline-neutral', onClick: handleCLickBoardPriveButton, className: 'mr-1' },
+                boardId &&
+                    boardInfoData.headerContent &&
+                    boardInfoData.footerContent && { text: '미리보기', variant: 'outline-neutral', onClick: handleCLickBoardPriveButton, className: 'mr-1' },
                 { text: boardId ? '수정' : '저장', variant: 'positive', onClick: handleClickSaveButton, className: 'mr-1' },
                 boardId && { text: '삭제', variant: 'negative', onClick: handleClickDeleteButton, className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancleButton },
@@ -388,9 +350,10 @@ const BoardsEdit = () => {
                 boardInfoData={boardInfoData}
                 setBoardInfoData={setBoardInfoData}
                 items={items}
-                onChange={handleChangeValue}
-                // inputfieldDisabled={inputfieldDisabled}
+                onChangeValue={handleChangeValue}
                 loading={editState}
+                error={error}
+                setError={setError}
             />
         </MokaCard>
     );

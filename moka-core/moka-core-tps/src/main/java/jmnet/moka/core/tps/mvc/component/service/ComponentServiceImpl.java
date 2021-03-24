@@ -8,6 +8,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.mvc.articlepage.service.ArticlePageService;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
@@ -309,11 +310,29 @@ public class ComponentServiceImpl implements ComponentService {
 
     @Override
     @Transactional
-    public List<Component> insertComponents(List<Component> components, HistPublishDTO histPublishDTO)
+    public List<Component> insertComponents(List<Component> components)
             throws Exception {
+
+        //임시저장
+        HistPublishDTO histSaveDTO = HistPublishDTO
+                .builder()
+                .status(EditStatusCode.SAVE)
+                .approvalYn(MokaConstants.NO)
+                .build();
+        for (Component component : components) {
+            componentHistService.insertComponentHist(component, histSaveDTO);
+        }
+
+        //저장
+        HistPublishDTO histPublishDTO = HistPublishDTO
+                .builder()
+                .status(EditStatusCode.PUBLISH)
+                .approvalYn(MokaConstants.YES)
+                .build();
+
         List<Component> result = componentRepository.saveAll(components);
-        // 히스토리 생성
         componentHistService.insertComponentHistList(result, histPublishDTO);
+        
         return result;
     }
 

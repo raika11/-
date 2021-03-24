@@ -2,6 +2,7 @@ package jmnet.moka.web.push.mvc.sender.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
+import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -37,7 +38,7 @@ public class PushSendDTO {
      * 앱 일련번호
      */
     @ApiModelProperty(value = "앱 일련번호(1,2,3)", required = true)
-    private String[] appSeq;
+    private List<Integer> appSeq;
 
     /**
      * 요청일자
@@ -73,7 +74,8 @@ public class PushSendDTO {
      */
     @ApiModelProperty(value = "푸시기사 푸시종류(속보:T, 추천기사:S, 미리보는오늘:R, 뉴스룸레터:N)", required = true)
     @NotNull(message = "{wpush.error.notnull.pushType}")
-    @Pattern(regexp = "[T|S|R|N]{1}$", message = "{wpush.error.pattern.pushType}")
+    // 추가 될 수 있기 때문에 로직으로 검증해야 함.
+    //@Pattern(regexp = "[T|S|R|N|B]{1}$", message = "{wpush.error.pattern.pushType}")
     private String pushType;
 
     /**

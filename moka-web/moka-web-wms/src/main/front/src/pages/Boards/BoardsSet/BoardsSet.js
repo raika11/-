@@ -17,14 +17,11 @@ import BoardsEdit from './BoardsEdit';
 const BoardsSet = ({ match, displayName }) => {
     const matchPoints = useBreakpoint();
     const dispatch = useDispatch();
-    // 공통 구분값 URL
-    const { pagePathName, boardType } = useSelector((store) => ({
-        pagePathName: store.board.pagePathName,
-        boardType: store.board.boardType,
-    }));
+    // 게시판 타입 (서비스 또는 관리자)
+    const boardType = useSelector((store) => store.board.boardType);
 
     useEffect(() => {
-        // store boardType 값이 변경 되면 검색 옵션 처리후 리스트를 가지고 옵니다.
+        // store boardType 값이 변경 되면 검색 옵션 처리후 목록 조회
         if (boardType) {
             const tmpSearchOption = {
                 ...initialState.setMenu.search,
@@ -46,13 +43,13 @@ const BoardsSet = ({ match, displayName }) => {
             <Row className="m-0">
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     {/* 리스트 */}
-                    <BoardsList />
+                    <BoardsList match={match} />
                 </Col>
 
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
                         <Switch>
-                            <Route path={[`/${pagePathName}/add`, `/${pagePathName}/:boardId`]} exact render={() => <BoardsEdit />} />
+                            <Route path={[`${match.path}/add`, `${match.path}/:boardId`]} exact render={() => <BoardsEdit match={match} />} />
                         </Switch>
                     </Col>
                 )}
@@ -64,7 +61,7 @@ const BoardsSet = ({ match, displayName }) => {
                         render={() => (
                             <Col xs={7} className="absolute-top-right h-100 overlay-shadow p-0" style={{ zIndex: 2 }}>
                                 <Switch>
-                                    <Route path={[`/${pagePathName}/add`, `/${pagePathName}/:boardId`]} exact render={() => <BoardsEdit match={match} />} />
+                                    <Route path={[`${match.path}/add`, `${match.path}/:boardId`]} exact render={() => <BoardsEdit match={match} />} />
                                 </Switch>
                             </Col>
                         )}

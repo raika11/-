@@ -6,9 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
+import jmnet.moka.core.dps.api.handler.module.ModuleInterface;
 import jmnet.moka.core.dps.mvc.forward.Forward;
 import jmnet.moka.core.dps.mvc.forward.ForwardHandler;
 import jmnet.moka.core.dps.excepton.ApiException;
+import jmnet.moka.web.dps.module.membership.MembershipHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,13 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 
 	@Autowired
 	private ActionLogger actionLogger;
+
+	@Autowired
+	private MembershipHelper membershipHelper;
+
+	private static final String PARAM_REMOTE_IP = "remoteIP";
+	private static final String MEMBERSHIP_COOKIE = "cookie";
+	private static final String MEMBERSHIP_API = "api";
 
 	public MokaApiRequestHandler(ForwardHandler forwardHandler) {
 		super(forwardHandler);
@@ -75,6 +85,9 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
             ApiResolver apiResolver = new ApiResolver(request);
 			Map<String, String> httpParamMap = HttpHelper.getParamMap(request);
 
+			// remoteIp를 넣어준다.
+			httpParamMap.put(PARAM_REMOTE_IP, remoteIp);
+
             // Api가 존재하지 않을 경우
             if (this.apiRequestHelper.apiRequestExists(apiResolver) == false) {
 				Forward forward = this.forwardHandler.getForward(request);
@@ -92,14 +105,33 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 
             ApiContext apiContext = new ApiContext(this.apiRequestHelper, this.apiParameterChecker,
                     apiResolver, httpParamMap);
+			Api api = apiContext.getApi();
 
-			// Method가 일치하는지 확인한다.
-			if ( !apiContext.getApi().getMethod().matches(request.getMethod())) {
+			// HttpRequest Method가 일치하는지 확인한다.
+			if ( !api.getMethod().matches(request.getMethod())) {
 				actionLogger.fail(remoteIp, ActionType.API,
 						System.currentTimeMillis() - startTime,
 						String.format( "%s/%s : %s", apiResolver.getPath(),apiResolver.getId(),
 								"Method Not Allowed"));
 				return this.getMethodNotAllowedResponse(request, apiResolver);
+			}
+
+			// 멤버십 데이터가 필요할 경우
+			String membership = api.getMembership();
+			if ( membership != null) {
+				try {
+					if (membership.equals(MEMBERSHIP_COOKIE)) {
+						this.membershipHelper.setMembershipByCookie(apiContext);
+					} else if ( membership.equals(MEMBERSHIP_API)) {
+						this.membershipHelper.setMembershipByApi(apiContext);
+					}
+				}catch (Exception e) {
+					actionLogger.fail(remoteIp, ActionType.API,
+							System.currentTimeMillis() - startTime,
+							String.format( "%s/%s : %s", apiResolver.getPath(),apiResolver.getId(),
+									e.getMessage()));
+					return getMembershipErrorResponse(request, apiResolver);
+				}
 			}
 
             // ACL, Cross Origin 적용
@@ -126,7 +158,7 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 			if (accessControllAllowOrigin != null ) {
 				responseHeaders.set("Access-Control-Allow-Origin", accessControllAllowOrigin);
 			}
-			Api api = apiContext.getApi();
+
             if (cachedString != null) {
 				//async가 있을 경우에 async만 수행한다.
 				if ( api.hasAsyncRequest() ) {
@@ -139,10 +171,14 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 					if (api.isResultWrap()) {
 						resultObject = apiResult;
 					} else {
-						resultObject = apiResult.unwrap(ApiResult.MAIN_DATA);
+						if ( apiResult.containsKey(ApiResult.MAIN_DATA)) {
+							resultObject = apiResult.unwrap(ApiResult.MAIN_DATA);
+						} else { // ERROR일 경우 _DATA가 없음
+							resultObject = apiResult;
+						}
 					}
-					if ( apiContext.getApi().getContentType() != null) {
-						responseHeaders.set("Content-Type",apiContext.getApi().getContentType());
+					if ( api.getContentType() != null) {
+						responseHeaders.set("Content-Type", api.getContentType());
 						cachedString =
 								ApiCacheHelper.setCache(apiContext, this.cacheManager, resultObject);
 					} else {
@@ -225,4 +261,14 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 		}
 	}
 
+	private ResponseEntity<?> getMembershipErrorResponse(HttpServletRequest request,
+			ApiResolver apiResolver) {
+		// 멤버십 정보를 얻을 수 없을 경우
+		ApiResult errorResult = ApiResult.createApiErrorResult(
+				new ApiException("Membership Error", apiResolver.getPath(), apiResolver.getId()));
+		ResponseEntity<?> responseEntity = ResponseEntity.badRequest()
+														 .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
+														 .body(errorResult);
+		return responseEntity;
+	}
 }

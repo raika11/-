@@ -537,7 +537,6 @@ public abstract class AbstractPushSender implements Sender {
              * FCM에 푸시 요청
              */
             PushHttpResponse response = pushClient.push(null, pushMessage);
-            ;
 
             List<FcmResponseResultItem> results;
 

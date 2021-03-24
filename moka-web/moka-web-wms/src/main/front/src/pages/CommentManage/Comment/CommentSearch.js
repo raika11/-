@@ -108,9 +108,9 @@ const CommentSearch = ({ selectBannedItem }) => {
         setDefaultInputModalState(true);
     };
 
-    const handleCLickDeleteButton = () => {
-        messageBox.alert('서비스 준비 중입니다.');
-    };
+    // const handleCLickDeleteButton = () => {
+    //     messageBox.alert('서비스 준비 중입니다.');
+    // };
 
     // 최초 로딩시 목록 가지고 옴.
     useEffect(() => {
@@ -199,9 +199,9 @@ const CommentSearch = ({ selectBannedItem }) => {
                     <AuthButton variant="primary" className="mr-1 flex-shrink-0" onClick={handleClickBlockButton}>
                         등록
                     </AuthButton>
-                    <AuthButton variant="negative" className="flex-shrink-0" onClick={handleCLickDeleteButton}>
+                    {/* <AuthButton variant="negative" className="flex-shrink-0" onClick={handleCLickDeleteButton}>
                         삭제
-                    </AuthButton>
+                    </AuthButton> */}
                 </Col>
             </Form.Row>
 

@@ -252,4 +252,15 @@
       #{remoteIP, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
+
+  <!--북마크삭제-->
+  <select id="scrapDelete" parameterType="map" resultType="string" statementType="CALLABLE">
+    { call UPU_ARTICLE_SCRAP_UPD(
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{remoteIP, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
+  </select>
+
+
 </mapper>

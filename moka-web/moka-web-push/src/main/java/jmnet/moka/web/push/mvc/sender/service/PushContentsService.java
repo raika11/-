@@ -1,5 +1,6 @@
 package jmnet.moka.web.push.mvc.sender.service;
 
+import java.util.List;
 import java.util.Optional;
 import jmnet.moka.web.push.mvc.sender.dto.PushContentUsedYnSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
@@ -48,7 +49,7 @@ public interface PushContentsService {
      * @param relContentId 일련번호
      * @return 컨텐츠 정보
      */
-    Optional<PushContents> findByRelContentId(Long relContentId);
+    List<PushContents> findByRelContentId(Long relContentId);
 
     /**
      * 요청한 취소 정보가 취소 가능한 작업인지 체크한다.

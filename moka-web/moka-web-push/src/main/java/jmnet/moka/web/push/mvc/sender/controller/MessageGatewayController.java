@@ -2,6 +2,7 @@ package jmnet.moka.web.push.mvc.sender.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -89,30 +90,26 @@ public class MessageGatewayController extends AbstractCommonController {
                 throw new InvalidDataException(message);
             }
         }
+        PushContents pushContents = modelMapper.map(sendDTO, PushContents.class);
 
         /** Insert to TB_PUSH_CONTENTS the PushContent Info */
         try {
-            PushContents pushContents = modelMapper.map(sendDTO, PushContents.class);
             pushContentsService.savePushContents(pushContents);
         } catch (Exception e) {
             String message = msg("wpush.contents.error.insert");
             throw new Exception(message, e);
         }
 
-        PushContents pushContents = new PushContents();
-
         for (Integer appSeq : sendDTO.getAppSeq()) {
             /** Insert to TB_PUSH_CONTENTS_PROC the PushContentProc Info    */
             try {
-                pushContents = pushContentsService
-                        .findByRelContentId(sendDTO.getRelContentId())
-                        .orElseThrow(() -> {
-                            return new NoDataException(msg("wpush.contents.error.notnull"));
-                        });
+                List<PushContents> pushContentList = pushContentsService.findByRelContentId(sendDTO.getRelContentId());
 
                 PushContentsProcPK pushContentsProcPK = PushContentsProcPK
                         .builder()
-                        .contentSeq(pushContents.getContentSeq())
+                        .contentSeq(pushContentList
+                                .get(0)
+                                .getContentSeq())
                         .appSeq(appSeq)
                         .build();
 

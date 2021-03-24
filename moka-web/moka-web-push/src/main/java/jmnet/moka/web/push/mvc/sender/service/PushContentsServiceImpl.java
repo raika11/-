@@ -1,5 +1,6 @@
 package jmnet.moka.web.push.mvc.sender.service;
 
+import java.util.List;
 import java.util.Optional;
 import jmnet.moka.web.push.mvc.sender.dto.PushContentUsedYnSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
@@ -17,7 +18,7 @@ public class PushContentsServiceImpl implements PushContentsService {
     private PushContentsRepository pushContentsRepository;
 
     @Override
-    public Optional<PushContents> findByRelContentId(Long relContentId) {
+    public List<PushContents> findByRelContentId(Long relContentId) {
         return pushContentsRepository.findByRelContentId(relContentId);
     }
 

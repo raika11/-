@@ -37,6 +37,9 @@ const PodtyChannelModal = (props) => {
                 return {
                     ...element,
                     crtDt: crtDt,
+                    onClick: (row) => {
+                        window.open(`https://m.podty.me/cast/${row.castSrl}`);
+                    },
                 };
             }),
         );
@@ -69,7 +72,7 @@ const PodtyChannelModal = (props) => {
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 paging={false}
-                preventRowClickCell={['shareUrl']}
+                preventRowClickCell={['이동']}
             />
         </MokaModal>
     );

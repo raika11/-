@@ -6,7 +6,7 @@ import { MokaTable } from '@components';
 import { BASIC_DATEFORMAT, DISPLAY_PAGE_NUM } from '@/constants';
 import FileItemRenderer from './FileItemRenderer';
 import useBoardDefs from './BoardsContentsListAgGridColumns';
-import { GET_LIST_MENU_CONTENTS_LIST, changeListMenuSearchOption, clearListMenuContentsInfo, getListMenuContentsList, getListMenuContentsInfo } from '@store/board';
+import { GET_LIST_MENU_CONTENTS_LIST, changeListMenuSearchOption, getListMenuContentsList } from '@store/board';
 
 /**
  * 게시판 관리 > 게시글 관리 > 게시판 글 목록 AgGrid

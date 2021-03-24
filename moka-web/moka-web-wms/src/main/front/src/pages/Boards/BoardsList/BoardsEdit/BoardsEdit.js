@@ -77,7 +77,7 @@ const BoardsEdit = ({ match }) => {
         formData.append('titlePrefix1', editData.titlePrefix1);
         formData.append('titlePrefix2', editData.titlePrefix2);
 
-        editData.attaches.map((element, index) => {
+        editData.attaches.forEach((element, index) => {
             if (element.seqNo > 0) {
                 formData.append(`attaches[${index}].seqNo`, element.seqNo);
             } else {
@@ -85,10 +85,6 @@ const BoardsEdit = ({ match }) => {
                 formData.append(`attaches[${index}].seqNo`, 0);
             }
         });
-
-        for (let item of formData.entries()) {
-            console.log(item[0] + ', ' + item[1]);
-        }
 
         return formData;
     };

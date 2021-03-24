@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.board.repository;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
 import jmnet.moka.core.tps.mvc.board.entity.QBoardAttach;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <pre>
@@ -23,6 +24,7 @@ public class BoardAttachRepositorySupportImpl extends TpsQueryDslRepositorySuppo
     }
 
     @Override
+    @Transactional
     public void deleteByBoardSeq(Long boardSeq) {
         QBoardAttach qBoardAttach = QBoardAttach.boardAttach;
 

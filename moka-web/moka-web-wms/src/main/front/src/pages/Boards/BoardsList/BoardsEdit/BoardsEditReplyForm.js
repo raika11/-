@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -11,14 +11,10 @@ import ReplayNote from './ReplayNote';
  */
 const BoardsEditReplyForm = ({ data, onChangeFormData }) => {
     const { boardSeq, parentBoardSeq, reply } = useParams();
-    console.log(boardSeq, parentBoardSeq, reply);
 
     const userName = useSelector((store) => store.app.AUTH.userName);
-    const selectBoard = useSelector((store) => store.board.listMenu.selectBoard);
     const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
     const contentsReply = useSelector((store) => store.board.listMenu.contents.reply);
-
-    console.log(data);
 
     /**
      * 입력값 변경

@@ -118,13 +118,13 @@ export const changeListMenuReplyContents = createAction(CHANGE_LIST_MENU_REPLY_C
 /**
  * 게시글 정보 저장
  */
-export const [SAVE_BOARD_CONTENTS, SAVE_BOARD_CONTENTS_SUCCESS, SAVE_BOARD_CONTENTS_FAILURE] = createRequestActionTypes('board/SAVE_BOARD_CONTENTS');
+export const SAVE_BOARD_CONTENTS = 'board/SAVE_BOARD_CONTENTS';
 export const saveBoardContents = createAction(SAVE_BOARD_CONTENTS, ({ boardId, formData, callback }) => ({ boardId, formData, callback }));
 
 /**
  * 게시글 정보 수정
  */
-export const [UPDATE_BOARD_CONTENTS, UPDATE_BOARD_CONTENTS_SUCCESS, UPDATE_BOARD_CONTENTS_FAILURE] = createRequestActionTypes('board/UPDATE_BOARD_CONTENTS');
+export const UPDATE_BOARD_CONTENTS = 'board/UPDATE_BOARD_CONTENTS';
 export const updateBoardContents = createAction(UPDATE_BOARD_CONTENTS, ({ boardId, boardSeq, formData, callback }) => ({ boardId, boardSeq, formData, callback }));
 
 /**

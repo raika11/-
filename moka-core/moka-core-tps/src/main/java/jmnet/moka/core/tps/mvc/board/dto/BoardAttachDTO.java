@@ -1,8 +1,11 @@
 package jmnet.moka.core.tps.mvc.board.dto;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +22,9 @@ import lombok.Setter;
 @Builder
 @ApiModel("게시물 첨부파일 DTO")
 public class BoardAttachDTO implements Serializable {
+
+    public static final Type TYPE = new TypeReference<Set<BoardAttachDTO>>() {
+    }.getType();
 
     private static final long serialVersionUID = 1L;
 

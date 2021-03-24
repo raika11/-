@@ -33,6 +33,7 @@ import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
+import jmnet.moka.core.tps.mvc.board.dto.BoardAttachDTO;
 import jmnet.moka.core.tps.mvc.board.dto.BoardAttachSaveDTO;
 import jmnet.moka.core.tps.mvc.board.dto.BoardDTO;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSaveDTO;
@@ -215,10 +216,11 @@ public class BoardRestController extends AbstractCommonController {
 
         returnValue.setBoardInfo(boardInfo);
 
-        String attachMessage = saveAttachFiles(returnValue, boardDTO.getAttaches());
-
         // 결과리턴
         BoardDTO dto = modelMapper.map(returnValue, BoardDTO.class);
+
+        String attachMessage = saveAttachFiles(returnValue, dto, boardDTO.getAttaches());
+
         String successMsg = msg("tps.board.success.save");
         if (attachMessage.length() > 0) {
             successMsg += "\n" + attachMessage;
@@ -442,10 +444,10 @@ public class BoardRestController extends AbstractCommonController {
 
             Board returnValue = actionType == ActionType.UPDATE ? boardService.updateBoard(board) : boardService.insertBoard(board);
 
-            String attachMessage = saveAttachFiles(returnValue, boardAttachSaveDTOSet);
-
             // 결과리턴
             BoardDTO dto = modelMapper.map(returnValue, BoardDTO.class);
+
+            String attachMessage = saveAttachFiles(returnValue, dto, boardAttachSaveDTOSet);
 
             String successMsg = msg("tps.board.success.save");
             if (attachMessage.length() > 0) {
@@ -742,7 +744,7 @@ public class BoardRestController extends AbstractCommonController {
         }
     }
 
-    private String saveAttachFiles(Board board, List<BoardAttachSaveDTO> boardAttachSaveDTOSet) {
+    private String saveAttachFiles(Board board, BoardDTO boardDto, List<BoardAttachSaveDTO> boardAttachSaveDTOSet) {
         List<BoardAttach> attaches = board.getAttaches();
         List<BoardAttach> newAttaches = new ArrayList<>();
 
@@ -854,8 +856,11 @@ public class BoardRestController extends AbstractCommonController {
                 boardService.deleteAllBoardAttach(attaches);
             }
             if (newAttaches.size() > 0) {
-                board.setAttaches(newAttaches);
+                log.error("newAttaches {}", newAttaches.size());
+                boardDto.setAttaches(modelMapper.map(newAttaches, BoardAttachDTO.TYPE));
             }
+        } else { // 수정시 클라이언트로 부터 전달된 첨부파일 정보가 없을 경우 무조건 삭제 처리 한번 한다.
+            boardService.deleteAllBoardAttach(board.getBoardSeq());
         }
 
         return message.toString();

@@ -45,31 +45,27 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
      * 첨부 파일 등록
      */
     const handleChangeFile = (e) => {
-        // 게시판 설정 확장자 체크
-        let extCheck = false;
-        // let imageFiles = [];
-
-        try {
-            let tempFile = e.target.files[0].name.split('.');
-            let tempFileExt = tempFile[1];
-
-            if (selectBoard.allowFileExt.split(',').indexOf(tempFileExt) < 0) {
-                messageBox.alert(`해당 게시판의 첨부 파일은 (${selectBoard.allowFileExt}) 만 등록 가능합니다.`, () => {});
+        let imageFiles = [];
+        Array.from(e.target.files).forEach((f) => {
+            const fileName = f.name.split('.');
+            const fileExt = fileName[1];
+            if (selectBoard.allowFileExt.split(',').indexOf(fileExt) > 0) {
+                const fileUrl = URL.createObjectURL(f);
+                const imageData = { File: f, fileUrl };
+                imageFiles.push(imageData);
             } else {
-                extCheck = true;
+                // 허용하는 확장자가 아닐경우
+                messageBox.alert(`해당 게시판의 첨부 파일은 (${selectBoard.allowFileExt})확장자만 등록할 수 있습니다.`, () => {});
             }
-        } catch (e) {
-            throw e;
-        }
-
-        if (!extCheck) return;
+        });
 
         if (uploadFiles.length + 1 > selectBoard.allowFileCnt) {
             messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${selectBoard.allowFileCnt}개 입니다.`, () => {});
         } else {
             setUploadFiles([...uploadFiles, e.target.files[0]]);
         }
-        fileRef.current.value = '';
+
+        // fileRef.current.value = '';
     };
 
     /**
@@ -87,9 +83,10 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
      * 이미지 리스트 클릭시 새탭
      */
     const handleClickImageName = (element) => {
-        const { file_url } = element;
-        if (file_url) {
-            var win = window.open(file_url, '_blank');
+        console.log(element);
+        const { fileUrl } = element;
+        if (fileUrl) {
+            var win = window.open(fileUrl, '_blank');
             win.focus();
         }
     };
@@ -115,21 +112,16 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [uploadFiles]);
 
-    // useEffect(() => {
-    //     onChangeFormData({ content: data.content });
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [data.content]);
-
     useEffect(() => {
-        if (loading === false) {
+        if (!loading) {
             setUploadFiles(
                 data.attaches.map((element) => {
                     const { seqNo, orgFileName, filePath, fileName } = element;
-                    const file_url = PDS_URL && filePath && fileName ? `${PDS_URL}/${filePath}/${fileName}` : '';
+                    const fileUrl = PDS_URL && filePath && fileName ? `${PDS_URL}/${filePath}/${fileName}` : '';
                     return {
                         seqNo: seqNo,
                         name: orgFileName,
-                        file_url: file_url,
+                        fileUrl: fileUrl,
                     };
                 }),
             );
@@ -137,6 +129,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading]);
 
+    console.log(uploadFiles);
     return (
         <>
             <Form>

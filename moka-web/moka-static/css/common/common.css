@@ -367,11 +367,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
     .pc{display:none;}
 
-<<<<<<< HEAD
     .contents {width:100%;margin:0 auto;padding:20px 20px 120px;}
 
-=======
->>>>>>> 350d14fef77e64bc4b58aad9028b289dc2ced459
     .side_nav_mobile{width:100%;}
     .side_nav_mobile .form_select{padding-left:0;border:none;font-size:24px;font-weight:900;}
 

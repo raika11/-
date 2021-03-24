@@ -133,7 +133,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
             let waitDt = wait.regDt && wait.regDt.length > 10 ? wait.regDt.substr(0, 16) : wait.regDt;
             const isWait = moment(send.regDt).diff(wait.regDt) < 0;
             setTopTitleItem({
-                send: send && send.regMember && send.regMember.memberId ? `${send.regMember.memberId} | 전송 ${sendDt}` : '',
+                send: send && send.regMember && send.regMember.memberId ? `${send.regMember.memberId} | 저장 ${sendDt}` : '',
                 wait: wait && wait.regMember && wait.regMember.memberId ? `${wait.regMember.memberId} | 대기 ${waitDt}` : '',
                 isWait,
             });

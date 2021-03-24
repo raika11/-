@@ -14,8 +14,8 @@
     <!-- Responsive meta tag / 브라우저 확대 및 축소를 비활성화 / 접근성 문제 -->
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <!-- <link href="//stg-static.joongang.co.kr/css/plugin/swiper.css" rel="stylesheet"> -->
-    <link href="//stg-static.joongang.co.kr/css/plugin/swiper-bundle.css" rel="stylesheet">
+    <link href="//stg-static.joongang.co.kr/css/plugin/swiper.css" rel="stylesheet">
+    <!-- <link href="//stg-static.joongang.co.kr/css/plugin/swiper-bundle.css" rel="stylesheet"> -->
     <link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">
     <link href="//stg-static.joongang.co.kr/css/common/section.css" rel="stylesheet">
     
@@ -332,8 +332,9 @@
 <script>
     var swiper = new Swiper('.swiper-container', {
         
-        spaceBetween: 2000,
+        
         // slidesPerGroup: 1,
+        centeredSlides: true,
         loop: true,
         pagination: {
             el: '.swiper-pagination',
@@ -346,16 +347,20 @@
         },
         breakpoints: {
             1024: {
-                // spaceBetween: 0,
+                spaceBetween: 2000,
             },
             768: {
                 slidesPerView: 1,
                 spaceBetween: 36,
             },
-            280: {
+            767: {
                 slidesPerView: 1,
                 spaceBetween: 10,
-                centeredSlides: true,
+            },
+            280: {
+                slidesPerView: 1,
+                spaceBetween: 5,
+               
             },
             
         },

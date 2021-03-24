@@ -21,7 +21,7 @@ export const columnDefs = [
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
-        headerName: '작성자',
+        headerName: '등록자',
         field: 'regName',
         width: 100,
         cellStyle: { display: 'flex', alignItems: 'center' },

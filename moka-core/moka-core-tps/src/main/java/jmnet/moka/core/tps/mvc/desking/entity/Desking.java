@@ -243,7 +243,19 @@ public class Desking implements Serializable {
      */
     @Column(name = "ICON_FILE_NAME")
     private String iconFileName;
-    
+
+    /**
+     * 중요도
+     */
+    @Column(name = "CONTENT_PRIORITY")
+    private String contentPriority;
+
+    /**
+     * 재생시간
+     */
+    @Column(name = "DURATION")
+    private String duration;
+
     @PrePersist
     @PreUpdate
     public void prePersist() {

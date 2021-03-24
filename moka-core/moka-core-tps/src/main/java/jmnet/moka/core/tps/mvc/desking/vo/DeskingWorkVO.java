@@ -187,6 +187,14 @@ public class DeskingWorkVO implements Serializable {
     @ApiModelProperty("컴포넌트SEQ")
     private Long componentSeq;
 
+    @ApiModelProperty("중요도")
+    @Column(name = "CONTENT_PRIORITY")
+    private String contentPriority;
+
+    @ApiModelProperty("재생시간")
+    @Column(name = "DURATION")
+    private String duration;
+
     /**
      * 관련기사 추가
      *

@@ -19,6 +19,7 @@ import static jmnet.moka.common.template.Constants.EL_NEXT_PAGE;
 import static jmnet.moka.common.template.Constants.EL_OTHER_PAGE;
 import static jmnet.moka.common.template.Constants.EL_PREV_PAGE;
 import static jmnet.moka.common.template.Constants.EL_SET;
+import static jmnet.moka.common.template.Constants.INFO_ATTR_MAP;
 import static jmnet.moka.common.template.Constants.INFO_CONTENT;
 import static jmnet.moka.common.template.Constants.INFO_LINE;
 import static jmnet.moka.common.template.Constants.INFO_NODE_NAME;
@@ -96,11 +97,8 @@ public class TemplateElement extends TemplateNode {
 				|| EL_CURRENT_PAGE.equals(this.nodeName) 
 				|| EL_NEXT_PAGE.equals(this.nodeName)  ) {
 			map.put(INFO_CONTENT, this.children.toString());
-		} else {
-            for (Entry<String, String> entry : this.attributeMap.entrySet()) {
-                map.put(entry.getKey(), entry.getValue());
-            }
 		}
+		map.put(INFO_ATTR_MAP, this.attributeMap);
 		return map;
 	}
 

@@ -63,6 +63,16 @@ public class TemplateParserHelper {
                 itemDto.setOrder(order);
                 templateItemList.add(itemDto);
                 order++;
+                // relCp가 있을 경우 추가해 준다.
+                Map attributeMap = (Map)elementInfo.get(Constants.INFO_ATTR_MAP);
+                if ( attributeMap.containsKey(MokaConstants.ATTR_REL_CP)) {
+                    ParsedItemDTO relCpDto =  new ParsedItemDTO();
+                    relCpDto.setOrder(order);
+                    relCpDto.setId((String)attributeMap.get(MokaConstants.ATTR_REL_CP));
+                    relCpDto.setNodeName(MokaConstants.ITEM_COMPONENT);
+                    templateItemList.add(itemDto);
+                    order++;
+                }
             }
         }
         return templateItemList;

@@ -44,6 +44,9 @@ public class OvpVO implements Serializable {
     @ApiModelProperty("상태")
     private String state;
 
+    @ApiModelProperty("재생시간")
+    private String duration;
+
     @ApiModelProperty("생성일자")
     @DTODateTimeFormat
     private Date regDt;

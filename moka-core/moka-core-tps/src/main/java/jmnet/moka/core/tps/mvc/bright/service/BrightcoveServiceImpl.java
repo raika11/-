@@ -175,6 +175,9 @@ public class BrightcoveServiceImpl implements BrightcoveService {
                     .state(item.containsKey("state") ? item
                             .get("state")
                             .toString() : "ACTIVE")
+                    .id(item.containsKey("duration") ? item
+                            .get("duration")
+                            .toString() : null)
                     .regDt(created_at)
                     .build();
             returnList.add(ovp);

@@ -259,11 +259,12 @@ public class MemberJoinRestController extends AbstractCommonController {
         if (!same) {
             throw new PasswordNotMatchedException(msg("wms.login.error.PasswordNotMatchedException"));
         }
-
+        /*
         same = passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword());
         if (!same) {
             throw new PasswordNotMatchedException(msg("wms.login.error.PasswordUnMatchedException"));
         }
+        */
 
         // SMS 서버에 문자 발송 요청
         String smsAuth = "4885";
@@ -309,7 +310,7 @@ public class MemberJoinRestController extends AbstractCommonController {
                         .builder()
                         .groupCd(group.getGroupCd())
                         .memberId(member.getMemberId())
-                        .usedYn(group.getUsedYn())
+                        //.usedYn(group.getUsedYn())
                         .build();
                 memberService.insertGroupMember(groupMember);
             });

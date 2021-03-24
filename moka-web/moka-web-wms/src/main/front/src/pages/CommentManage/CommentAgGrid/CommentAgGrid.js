@@ -67,7 +67,6 @@ const CommentAgGrid = (props) => {
                     onColumnVisible={onColumnVisible}
                     onRowSelected={onRowSelected}
                     getRowHeight={getRowHeight}
-                    // rowSelected={rowSelected}
                     frameworkComponents={{
                         deleteButtonRenderer: DeleteButtonRenderer,
                         dateItemRenderer: DateItemRenderer,
@@ -75,10 +74,8 @@ const CommentAgGrid = (props) => {
                         banneButtonRenderer: BanneButtonRenderer,
                         historyButtonRenderer: HistoryButtonRenderer,
                         memSiteRenderer: MemSiteRenderer,
-                        // commentItemRenderer: CommentItemRenderer,
                     }}
                     preventRowClickCell={preventRowClickCell}
-                    // suppressRowClickSelection={false}
                 />
             </div>
             <div className="mt-3">

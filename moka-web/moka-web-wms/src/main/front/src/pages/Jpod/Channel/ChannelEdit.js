@@ -3,7 +3,7 @@ import produce from 'immer';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
-import { initialState, GET_CHNL, SAVE_CHNL, saveChnl, changeChnlInvalidList, clearChnl, getChnl, getChEpisodes } from '@store/jpod';
+import { initialState, GET_CHNL, SAVE_CHNL, saveChnl, changeChnlInvalidList, clearChnl, getChnl, getChnlEpsdList } from '@store/jpod';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaCard } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -73,6 +73,7 @@ const ChannelEdit = ({ match }) => {
             }
         }
         setTemp({ ...temp, [name]: date });
+        if (error[name]) setError({ ...error, [name]: false });
     };
 
     /**
@@ -246,6 +247,15 @@ const ChannelEdit = ({ match }) => {
             isInvalid = isInvalid || true;
         }
 
+        // 개설일 필수
+        if (!channel.chnlSdt) {
+            errList.push({
+                field: 'chnlSdt',
+                reason: '개설일을 선택해주세요',
+            });
+            isInvalid = isInvalid || true;
+        }
+
         dispatch(changeChnlInvalidList(errList));
         return !isInvalid;
     };
@@ -312,8 +322,10 @@ const ChannelEdit = ({ match }) => {
 
     useEffect(() => {
         if (chnlSeq) {
+            // 채널 상세
             dispatch(getChnl({ chnlSeq }));
-            dispatch(getChEpisodes({ chnlSeq }));
+            // 채널의 에피소드 목록 조회
+            dispatch(getChnlEpsdList({ search: { ...initialState.channel.channelEpisode.search, chnlSeq } }));
         } else {
             dispatch(clearChnl());
         }
@@ -327,6 +339,7 @@ const ChannelEdit = ({ match }) => {
     useEffect(() => {
         return () => {
             dispatch(clearChnl());
+            dispatch(changeChnlInvalidList([]));
         };
     }, [dispatch]);
 

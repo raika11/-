@@ -6,41 +6,29 @@ import * as act from './jpodAction';
 import * as api from './jpodApi';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
-const getReporterListSaga = callApiAfterActions(act.GET_REPORTER_LIST, api.getReporterList, (store) => store.jpod.reporter);
+/**
+ * 팟티 목록
+ */
 const getChannelPodtyListsaga = callApiAfterActions(act.GET_CHANNEL_PODTY_LIST, api.getPodtyChannels, (store) => store.jpod.podtyChannel);
 
+/**
+ * 채널 목록
+ */
 const getChnlList = createRequestSaga(act.GET_CHNL_LIST, api.getChnlList);
+
+/**
+ * 채널 상세
+ */
 const getChnl = createRequestSaga(act.GET_CHNL, api.getChnl);
+
+/**
+ * 채널 > 에피소드
+ */
+const getChnlEpsdList = createRequestSaga(act.GET_CHNL_EPSD_LIST, api.getEpisodes);
 
 const getEpisodesSaga = callApiAfterActions(act.GET_EPISODES, api.getEpisodes, (store) => store.jpod.episode.episodes);
 const getPodtyEpisodeListSaga = callApiAfterActions(act.GET_PODTY_EPISODE_LIST, api.getPodtyEpisodesList, (store) => store.jpod.podtyEpisode);
 const getEpisodeGubunChannelsSaga = callApiAfterActions(act.GET_EPISODE_GUBUN_CHANNELS, api.getEpisodeChannels, (store) => store.jpod.episode.channel);
-// const getChEpisodesSaga = callApiAfterActions(GET_CH_EPISODES, getChEpisodes, (payload) => payload);
-
-// 채널 목록에서 채널 정보 가지고 올때 에피소드 텝 목록 용.
-// 에피소드 목록 조회 api 와 같은 api 인제 파라미터가 다르고 store 를 구분 하려고 사용.
-function* getChEpisodesSaga({ payload: { chnlSeq } }) {
-    yield put(startLoading(act.GET_CH_EPISODES));
-    let response;
-    try {
-        response = yield call(api.getEpisodes, { search: { page: 0, sort: 'chnlSeq,desc', size: 20, chnlSeq: chnlSeq } });
-        const {
-            header: { success, message },
-        } = response.data;
-        if (success === true) {
-            yield put({ type: act.GET_CH_EPISODES_SUCCESS, payload: response.data });
-        } else {
-            // 에러 나면 서버 에러 메시지 토스트 전달.
-            toast.error(message);
-        }
-    } catch (e) {
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
-    }
-    yield put(finishLoading(act.GET_CH_EPISODES));
-}
 
 /**
  * 채널 저장
@@ -365,14 +353,19 @@ function* getJpodBoardSaga() {
 }
 
 export default function* jpodSaga() {
-    yield takeLatest(act.GET_REPORTER_LIST, getReporterListSaga); // 기자 검색 모달 리스트
-    yield takeLatest(act.GET_CHANNEL_PODTY_LIST, getChannelPodtyListsaga); // 팟티 검색 모달 리스트
+    /**
+     * 팟티
+     */
+    yield takeLatest(act.GET_CHANNEL_PODTY_LIST, getChannelPodtyListsaga);
 
-    // 채널
-    yield takeLatest(act.GET_CHNL_LIST, getChnlList); // 채널 리스트
-    yield takeLatest(act.GET_CHNL, getChnl); // 채널 정보
-    yield takeLatest(act.SAVE_CHNL, saveChnl); // 채널 저장
-    yield takeLatest(act.DELETE_CHNL, deleteChnl); // 채널 삭제 처리
+    /**
+     * 채널
+     */
+    yield takeLatest(act.GET_CHNL_LIST, getChnlList);
+    yield takeLatest(act.GET_CHNL, getChnl);
+    yield takeLatest(act.SAVE_CHNL, saveChnl);
+    yield takeLatest(act.DELETE_CHNL, deleteChnl);
+    yield takeLatest(act.GET_CHNL_EPSD_LIST, getChnlEpsdList);
 
     yield takeLatest(act.GET_EPISODES, getEpisodesSaga); // 에피소드 리스트 가지고 오기.
     yield takeLatest(act.GET_EPISODES_INFO, getEpisodesInfoSaga); // 에피소드 리스트 가지고 오기.
@@ -382,7 +375,6 @@ export default function* jpodSaga() {
     yield takeLatest(act.SAVE_JPOD_EPISODE, saveJpodEpisodeSaga); // 에피소드 등록.
     yield takeLatest(act.GET_BRIGHT_OVP, getBrightOvpSaga); // 브라이트 코브 목록 조회.
     yield takeLatest(act.SAVE_BRIGHTOVP, saveBrightovpSaga); // 브라이트 코브 저장.
-    yield takeLatest(act.GET_CH_EPISODES, getChEpisodesSaga); // 브라이트 코브 저장.
 
     // 보드
     yield takeLatest(act.GET_JPOD_NOTICE, getJpodNoticeSaga);

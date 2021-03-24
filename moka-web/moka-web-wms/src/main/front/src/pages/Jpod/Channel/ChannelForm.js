@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel, MokaInput } from '@components';
 import ReporterListModal from '@pages/Reporter/modals/ReporterListModal';
-import PodtyChannelModal from '@pages/Jpod/JpodModal/PodtyChannelModal';
+import PodtyChannelModal from '@pages/Jpod/modals/PodtyChannelModal';
 import MemberForm from './MemberForm';
 
 const ChannelForm = (props) => {
@@ -152,6 +152,7 @@ const ChannelForm = (props) => {
                         value="1234567"
                         id="day0"
                         onChange={onChange}
+                        isInvalid={error.chnlDy}
                         inputProps={{ label: '매일', custom: true, checked: (channel.chnlDy || '').includes('1234567') }}
                     />
                     <MokaInput
@@ -160,6 +161,7 @@ const ChannelForm = (props) => {
                         id="day1"
                         value="1"
                         onChange={onChange}
+                        isInvalid={error.chnlDy}
                         inputProps={{ label: '월', custom: true, checked: (channel.chnlDy || '').includes('1') }}
                     />
                     <MokaInput
@@ -168,6 +170,7 @@ const ChannelForm = (props) => {
                         id="day2"
                         value="2"
                         onChange={onChange}
+                        isInvalid={error.chnlDy}
                         inputProps={{ label: '화', custom: true, checked: (channel.chnlDy || '').includes('2') }}
                     />
                     <MokaInput
@@ -176,6 +179,7 @@ const ChannelForm = (props) => {
                         id="day3"
                         value="3"
                         onChange={onChange}
+                        isInvalid={error.chnlDy}
                         inputProps={{ label: '수', custom: true, checked: (channel.chnlDy || '').includes('3') }}
                     />
                     <MokaInput
@@ -184,6 +188,7 @@ const ChannelForm = (props) => {
                         id="day4"
                         value="4"
                         onChange={onChange}
+                        isInvalid={error.chnlDy}
                         inputProps={{ label: '목', custom: true, checked: (channel.chnlDy || '').includes('4') }}
                     />
                     <MokaInput
@@ -192,6 +197,7 @@ const ChannelForm = (props) => {
                         id="day5"
                         value="5"
                         onChange={onChange}
+                        isInvalid={error.chnlDy}
                         inputProps={{ label: '금', custom: true, checked: (channel.chnlDy || '').includes('5') }}
                     />
                     <MokaInput
@@ -200,6 +206,7 @@ const ChannelForm = (props) => {
                         id="day6"
                         value="6"
                         onChange={onChange}
+                        isInvalid={error.chnlDy}
                         inputProps={{ label: '토', custom: true, checked: (channel.chnlDy || '').includes('6') }}
                     />
                     <MokaInput
@@ -208,6 +215,7 @@ const ChannelForm = (props) => {
                         id="day7"
                         value="7"
                         onChange={onChange}
+                        isInvalid={error.chnlDy}
                         inputProps={{ label: '일', custom: true, checked: (channel.chnlDy || '').includes('7') }}
                     />
                 </div>

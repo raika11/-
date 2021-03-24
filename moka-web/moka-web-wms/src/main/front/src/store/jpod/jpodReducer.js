@@ -4,6 +4,7 @@ import { PAGESIZE_OPTIONS } from '@/constants';
 import * as act from './jpodAction';
 
 export const initialState = {
+    // 채널
     channel: {
         total: 0,
         list: [],
@@ -25,17 +26,14 @@ export const initialState = {
             usedYn: 'Y', // 사용유무
             chnlNm: '', // 채널명
             chnlMemo: '', // 채널소개
-            podtyUrl: '', // 팟티 채널
+            podtyUrl: '', // 팟티채널
             chnlSdt: null, // 채널 개설일
             chnlEdt: null, // 채널 종료일
             chnlDy: '', // 채널 방송 요일
-            podtyChnlSrl: `0`, // 파치태널SRL
+            podtyChnlSrl: `0`, // 팟티채널 Srl
             chnlImgFile: null, // 커버 파일
             chnlThumbFile: null, // 썸네일 파일
             chnlImgMobFile: null, // 모바일 파일
-            regDt: '',
-            seasonCnt: 0,
-            seasonNm: null,
             keywords: [],
             members: [],
             episodeStat: {
@@ -45,8 +43,10 @@ export const initialState = {
             },
         },
         invalidList: [],
-        channelInfoEpisode: {
+        channelEpisode: {
+            // 채널 > 에피소드
             list: [],
+            search: { page: 0, sort: 'chnlSeq,desc', size: 20, chnlSeq: null },
         },
     },
     // 진행자 기본값
@@ -61,6 +61,7 @@ export const initialState = {
         nickNm: '',
         seqNo: '',
     },
+    // 에피소드
     episode: {
         episodes: {
             total: 0,
@@ -181,6 +182,7 @@ export default handleActions(
         [act.CLEAR_CHNL]: (state) => {
             return produce(state, (draft) => {
                 draft.channel.channel = initialState.channel.channel;
+                draft.channel.channelEpisode = initialState.channel.channelEpisode;
             });
         },
         [act.CHANGE_CHNL_INVALID_LIST]: (state, { payload }) => {
@@ -193,48 +195,35 @@ export default handleActions(
                 draft.channel.search = payload;
             });
         },
-        // 채널 목록
+        /**
+         * 채널 목록
+         */
         [act.GET_CHNL_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.channel.list = body.list;
                 draft.channel.total = body.totalCnt;
             });
         },
-        // 채널 상세 정보
+        /**
+         * 채널 상세 정보
+         */
         [act.GET_CHNL_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.channel.channel = body;
             });
         },
         /**
+         * 채널 > 에피소드 리스트
+         */
+        [act.GET_CHNL_EPSD_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.channel.channelEpisode.list = body.list;
+            });
+        },
+
+        /**
          * 이 뒤부터 정리 필요함
          */
-        // 진행자(기자) 검색 모달 리스트.
-        [act.GET_REPORTER_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.reporter.list = body.list;
-                draft.reporter.total = body.totalCnt;
-            });
-        },
-        // 진행자 검색 모달
-        [act.CLEAR_REPORTER]: (state) => {
-            return produce(state, (draft) => {
-                draft.reporter = initialState.reporter;
-                draft.selectReporter = initialState.selectReporter;
-            });
-        },
-        // 기자 검색 모달 검색 옵션 처리
-        [act.CHANGE_REPORTER_SEARCH_OPTION]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.reporter.search = payload;
-            });
-        },
-        // 모달에서 본창으로 값 전달할(진행자 선택) store
-        [act.SELECT_REPORTER]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.selectReporter = payload;
-            });
-        },
         // 팟티 채널 검색 모달
         [act.CLEAR_CHANNEL_PODTY]: (state) => {
             return produce(state, (draft) => {
@@ -258,25 +247,6 @@ export default handleActions(
         [act.CHANGE_JPOD_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.channel.jpod.search = payload;
-            });
-        },
-        // 채널 리스트
-        [act.GET_CHANNELS_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.channel.jpod.list = body.list;
-                draft.channel.jpod.total = body.totalCnt;
-            });
-        },
-        // 채널 리스트에서 클릭시 데이터 가지고 오기
-        [act.GET_CHANNEL_INFO_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.channel.channelInfo = body;
-            });
-        },
-        // 채널 저장 수정 용 스토어 초기화
-        [act.CLEAR_CHANNEL_INFO]: (state) => {
-            return produce(state, (draft) => {
-                draft.channel.channelInfo = initialState.channel.channelInfo;
             });
         },
         // 에피소드 검색 옵션 처리
@@ -358,12 +328,6 @@ export default handleActions(
         [act.CHANGE_BRIGHTOVP_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 // draft.brightOvp.search = payload;
-            });
-        },
-        [act.GET_CH_EPISODES_SUCCESS]: (state, { payload: { body } }) => {
-            // console.log(payload);
-            return produce(state, (draft) => {
-                draft.channel.channelInfoEpisode.list = body.list;
             });
         },
         [act.CHANGE_JPOD_NOTICE_SEARCH_OPTION]: (state, { payload }) => {

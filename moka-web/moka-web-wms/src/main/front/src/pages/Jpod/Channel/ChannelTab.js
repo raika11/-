@@ -16,7 +16,7 @@ const ChannelTab = ({ match }) => {
             onSelectNave={(idx) => setActiveTabIdx(idx)}
             tabs={[
                 /**
-                 * 등록 수정
+                 * 채널 등록 수정
                  */
                 <ChannelEdit match={match} />,
                 /**

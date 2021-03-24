@@ -262,5 +262,13 @@
       )}
   </select>
 
+  <!--운세조회-->
+  <select id="unse" parameterType="map" resultType="map" statementType="CALLABLE">
+    { call UPU_ARTICLE_TODAY_UNSE_DTL_SEL(
+      #{tea, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{year, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
+  </select>
+
 
 </mapper>

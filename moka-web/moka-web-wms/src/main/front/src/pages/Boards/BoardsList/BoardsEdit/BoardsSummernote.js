@@ -20,7 +20,6 @@ const defaultProps = {
  */
 const BoardsSummernote = forwardRef((props, ref) => {
     const { contentValue, onChangeValue, onImageUpload } = props;
-    console.log(contentValue);
 
     return (
         <ReactSummernote

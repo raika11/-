@@ -218,8 +218,9 @@ public class MemberJoinRestController extends AbstractCommonController {
                     .getRemark()
                     .replace("\n", "<br>");
             String memberId = member.getMemberId();
+            String memberNm = member.getMemberNm();
 
-            sendEmail(mailTo, memberId, "N", remark);
+            sendEmail(mailTo, memberId, memberNm, "N", remark);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -259,11 +260,12 @@ public class MemberJoinRestController extends AbstractCommonController {
         if (!same) {
             throw new PasswordNotMatchedException(msg("wms.login.error.PasswordNotMatchedException"));
         }
-
+        /*
         same = passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword());
         if (!same) {
             throw new PasswordNotMatchedException(msg("wms.login.error.PasswordUnMatchedException"));
         }
+        */
 
         // SMS 서버에 문자 발송 요청
         String smsAuth = "4885";
@@ -309,7 +311,7 @@ public class MemberJoinRestController extends AbstractCommonController {
                         .builder()
                         .groupCd(group.getGroupCd())
                         .memberId(member.getMemberId())
-                        .usedYn(group.getUsedYn())
+                        //.usedYn(group.getUsedYn())
                         .build();
                 memberService.insertGroupMember(groupMember);
             });
@@ -391,7 +393,8 @@ public class MemberJoinRestController extends AbstractCommonController {
 
                 // 담당자에게 요청 Email 발송
                 String[] mailTo = toEmailAddress;
-                sendEmail(mailTo, memberId, "R", remark.replace("\n", "<br><br>"));
+                String memberNm = member.getMemberNm();
+                sendEmail(mailTo, memberId, memberNm, "R", remark.replace("\n", "<br><br>"));
             }
         }
 
@@ -425,11 +428,16 @@ public class MemberJoinRestController extends AbstractCommonController {
          */
     }
 
-    private void sendEmail(String[] to, String memberId, String status, String remark)
+    private void sendEmail(String[] to, String memberId, String memberNm, String status, String remark)
             throws Exception {
+
+        String title = "";
+
         if (status.equals("N")) {
+            title = "[중앙일보 Back Office] 계정 신청 - " + memberNm + "(" + memberId + "}";
             status = "신규";
         } else if (status.equals("R")) {
+            title = "[중앙일보 Back Office] 잠김 해제 신청 - " + memberNm + "(" + memberId + "}";
             status = "잠김 해제";
         }
 
@@ -438,7 +446,7 @@ public class MemberJoinRestController extends AbstractCommonController {
                 .from(fromEmailAddress)
                 .to(to)
                 .body("ID : " + memberId + "<br><br>" + "상태 : " + status + "<br><br>" + "비고 : " + remark)
-                .title(memberId + " " + status + " 신청")
+                .title(title)
                 .build());
     }
 }

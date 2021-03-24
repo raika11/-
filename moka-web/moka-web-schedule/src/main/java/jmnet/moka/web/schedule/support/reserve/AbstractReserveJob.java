@@ -2,6 +2,7 @@ package jmnet.moka.web.schedule.support.reserve;
 
 import java.util.Date;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
@@ -53,7 +54,7 @@ public abstract class AbstractReserveJob implements ReserveJob {
     public void finish(GenContentHistory history) {
         // todo 1. 처리 결과 TB_GEN_STATUS 테이블에 update 등 마무리 처리
 
-        //실행 완료 시 상태변경 후 저장
+        //실행 완료 시 history 저장
         history.setEndDt(new Date());
         jobContentService.updateGenContentHistory(history);
 
@@ -61,16 +62,28 @@ public abstract class AbstractReserveJob implements ReserveJob {
                 .getStatus()
                 .name());
 
-        //실행 완료 시 GenStatus 저장
         GenStatus scheduleResult = history
                 .getGenContent()
                 .getGenStatus();
-        
+
         //schedule 실행 결과가 성공
         if (history.getStatus() == StatusFlagType.DONE) {
             scheduleResult.setGenResult(StatusResultType.SUCCESS.getCode());
             scheduleResult.setErrMgs(StatusResultType.SUCCESS.getName());
         }
+        //schedule 실행 실패 + 에러메시지가 없는 경우
+        else if (McpString.isEmpty(scheduleResult.getErrMgs())) {
+            //작업 중 실패인 경우
+            if (history.getStatus() == StatusFlagType.FAILED_TASK) {
+                scheduleResult.setErrMgs(StatusResultType.FAILED_JOB.getName());
+            }
+            //그 외는 서버에러로 간주함
+            else {
+                scheduleResult.setErrMgs(StatusResultType.FAILED.getName());
+            }
+        }
+
+        //실행 완료 시 GenStatus 저장
         scheduleResult.setLastExecDt(new Date());
         scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
 
@@ -137,7 +150,4 @@ public abstract class AbstractReserveJob implements ReserveJob {
      */
     public abstract GenContentHistory invoke(GenContentHistory history);
 
-    protected boolean CallApi() {
-        return false;
-    }
 }

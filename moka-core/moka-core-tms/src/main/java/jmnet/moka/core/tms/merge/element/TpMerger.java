@@ -2,8 +2,11 @@ package jmnet.moka.core.tms.merge.element;
 
 import java.io.IOException;
 
+import jmnet.moka.common.template.exception.TemplateLoadException;
+import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
+import jmnet.moka.core.tms.template.parse.model.CpTemplateRoot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.Constants;
@@ -67,14 +70,24 @@ public class TpMerger extends MokaAbstractElementMerger {
         String indent = context.getCurrentIndent();
 
         MergeContext childContext = context.createChild();
-        String relcp = element.getAttribute(MokaConstants.ATTR_REL_CP);
-        if (McpString.isNotEmpty(relcp)) {
-            childContext.set(MokaConstants.ATTR_REL_CP, relcp);
-        }
+        String relCp = element.getAttribute(MokaConstants.ATTR_REL_CP);
 
         String cacheKey = makeCacheKey(element, (MokaTemplateRoot) templateRoot, childContext);
         if (isDebug == false && this.appendCached(KeyResolver.CACHE_TP_MERGE, cacheKey, sb)) {
             return;
+        }
+
+        // relCp가 있을 경우 컴포넌트의 데이터를 로딩한다.
+        if ( McpString.isNotEmpty(relCp)) {
+            CpTemplateRoot cpTemplateRoot = null;
+            try {
+                cpTemplateRoot = (CpTemplateRoot) ((MokaTemplateMerger) this.templateMerger).getParsedTemplate(MokaConstants.ITEM_COMPONENT, relCp);
+                // 컴포넌트에서 rowDataContext를 얻어온 context로 template을 merge한다.
+                childContext = cpTemplateRoot.getRowDataContext(templateMerger, context);
+            } catch (TemplateParseException | TemplateLoadException e) {
+                logger.warn("relCp matched Component is not exists or has error : {}", e);
+            }
+            childContext.set(MokaConstants.ATTR_REL_CP, relCp);
         }
 
         StringBuilder tpSb = new StringBuilder(2048);

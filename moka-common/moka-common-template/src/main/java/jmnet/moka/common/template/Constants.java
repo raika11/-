@@ -123,7 +123,7 @@ public class Constants {
     public final static String PARENT = "parent";	// parent Context 참조
     public final static String DEFAULT_DATA_NAME = RESERVED_VARIABLE_PREFIX + "RESULT";
     public final static String DEFAULT_LOOP_DATA_SELECT = ApiResult.MAIN_DATA;
-    public final static String DEFAULT_LOOP_DATA_SIZE = "DATA_SIZE";
+    public final static String DEFAULT_LOOP_DATA_SIZE = RESERVED_VARIABLE_PREFIX+ "DATA_SIZE";
     public final static String CURRENT_DATA_ID = RESERVED_VARIABLE_PREFIX + "CURRENT_DATA_ID"; // dataId 지정
 	public final static String LOOP_INDEX = RESERVED_VARIABLE_PREFIX +"INDEX";  // loop의 index
 	public final static String LOOP_TOTAL_INDEX = RESERVED_VARIABLE_PREFIX +"TOTAL_INDEX";  // (페이지-1)*건수 + loop의 index

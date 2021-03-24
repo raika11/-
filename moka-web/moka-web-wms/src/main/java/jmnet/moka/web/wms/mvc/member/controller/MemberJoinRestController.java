@@ -272,13 +272,14 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         member.setSmsAuth(smsAuth);
         member.setSmsExp(smsExp);
-
+        /*
         String remark = McpString.defaultValue(member.getRemark());
         if (McpString.isNotEmpty(remark)) {
             remark += "\n";
         }
         remark += "· " + memberRequestDTO.getRequestReason();
         member.setRemark(remark);
+         */
 
         memberService.updateMember(member);
 

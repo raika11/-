@@ -351,20 +351,13 @@
     </div>
 </body>
 <script>
-    $(document).ready(function(){
-        $( window ).resize( function() {
-            swiperMode();
-        })
-    });
-    // var swiper1 = new Swiper('.swiper-container.swiper1 ', {});
-    // var swiper2 = new Swiper('.swiper-container.swiper2 ', {});
-    
+
     document.onreadystatechange = function() { 
         // 모바일 브라우저 가로크기 체크
-        if (document.body.clientWidth > 768) {
-            $( ".swiper1" ).addClass('swiper-container');
-            $( ".swiper1 .card_group" ).addClass('swiper-wrapper');
-            $( ".swiper1 .card" ).addClass('swiper-slide');
+        if (document.body.clientWidth >= 768) {
+            $( ".swiper1, .swiper2" ).addClass('swiper-container ');
+            $( ".swiper1 .card_group, .swiper2 .card_group" ).addClass('swiper-wrapper');
+            $( ".swiper1 .card, .swiper2 .card" ).addClass('swiper-slide');
             var swiper1 = new Swiper('.swiper-container.swiper1 ', {
                 spaceBetween: 36,
                 slidesPerView: 4,
@@ -374,28 +367,40 @@
                 },
                 breakpoints: {
                     640: {
-                    spaceBetween: 20
+                    allowTouchMove: false,
+                    touchRatio: 0,
                     },
-                    1264: {
+                    1200: {
                     spaceBetween: 20
                     }
                 }
             });
-        } else {
-            $( ".swiper1 .swiper1" ).removeClass( 'swiper-container');
-            $( ".swiper1 .card_group" ).removeClass('swiper-wrapper');
-            $( ".swiper1 .card" ).removeClass('swiper-slide');
-            $( ".swiper1 .card" ).removeAttr( 'style' );
+            var swiper2 = new Swiper('.swiper-container.swiper2 ', {
+                spaceBetween: 36,
+                slidesPerView: 4,
+                navigation: {
+                    nextEl: '.swiper-button-next.case2',
+                    prevEl: '.swiper-button-prev.case2',
+                },
+                breakpoints: {
+                    640: {
+                    allowTouchMove: false,
+                    touchRatio: 0,
+                    },
+                    1200: {
+                    spaceBetween: 20
+                    }
+                }
+            });
         }
     };
 
     // 화면 사이즈별 
 	$(window).resize(function() { 
-		if (document.body.clientWidth > 768) {
-            
-            $( ".swiper1" ).addClass('swiper-container ');
-            $( ".swiper1 .card_group" ).addClass('swiper-wrapper');
-            $( ".swiper1 .card" ).addClass('swiper-slide');
+		if (document.body.clientWidth >= 768) {
+            $( ".swiper1, .swiper2" ).addClass('swiper-container ');
+            $( ".swiper1 .card_group, .swiper2 .card_group" ).addClass('swiper-wrapper');
+            $( ".swiper1 .card, .swiper2 .card" ).addClass('swiper-slide');
             var swiper1 = new Swiper('.swiper-container.swiper1 ', {
                 spaceBetween: 36,
                 slidesPerView: 4,
@@ -405,64 +410,39 @@
                 },
                 breakpoints: {
                     640: {
-                    spaceBetween: 20
+                    allowTouchMove: false,
+                    touchRatio: 0,
                     },
-                    1264: {
+                    1200: {
                     spaceBetween: 20
                     }
                 }
             });
-        } else {
-            $( ".swiper1" ).removeClass( 'swiper-container swiper-container-horizontal swiper-container-android');
-            $( ".swiper1 .card_group" ).removeClass('swiper-wrapper');
-            $( ".swiper1 .card" ).removeClass('swiper-slide');
-            $( ".swiper1 .card_group" ).removeAttr( 'style' );
-            $( ".swiper1 .card" ).removeAttr( 'style' );
+            var swiper2 = new Swiper('.swiper-container.swiper2 ', {
+                spaceBetween: 36,
+                slidesPerView: 4,
+                navigation: {
+                    nextEl: '.swiper-button-next.case2',
+                    prevEl: '.swiper-button-prev.case2',
+                },
+                breakpoints: {
+                    640: {
+                    allowTouchMove: false,
+                    touchRatio: 0,
+                    },
+                    1200: {
+                    spaceBetween: 20
+                    }
+                }
+            });
+        } else if (document.body.clientWidth <= 767) {
+            $( ".swiper1, .swiper2" ).removeClass( 'swiper-container swiper-container-horizontal swiper-container-android');
+            $( ".swiper1 .card_group, .swiper2 .card_group" ).removeClass('swiper-wrapper');
+            $( ".swiper1 .card, .swiper2 .card" ).removeClass('swiper-slide');
+            $( ".swiper1 .card_group, .swiper2 .card_group" ).removeAttr( 'style' );
+            $( ".swiper1 .card, .swiper2 .card" ).removeAttr( 'style' );
         }
 	});
-    
-    
-    var swiper2 = new Swiper('.swiper-container.swiper2', {
-        spaceBetween: 36,
-        slidesPerView: 4,
-        navigation: {
-            nextEl: '.swiper-button-next.case2',
-            prevEl: '.swiper-button-prev.case2',
-        },
-        breakpoints: {
-            640: {
-            spaceBetween: 20
-            },
-            1264: {
-            spaceBetween: 20
-            }
-        }
-    });
-    var init = false;
-
-    function swiperMode() {
-        let mobile = window.matchMedia('(min-width: 0px) and (max-width: 768px)');
-        let tablet = window.matchMedia('(min-width: 769px) and (max-width: 1024px)');
-        let desktop = window.matchMedia('(min-width: 1025px)');
-
-        if(desktop.matches || tablet.matches ) {
-
-            if (!init) {
-                init = true;
-                swiper1.update();
-                swiper2.update();
-                $('.swiper1, .swiper2').addClass('swiper-container');
-                $('.swiper1, .swiper2').children().addClass('swiper-wrapper');
-            }
-        } else if(mobile.matches) {
-            swiper1.destroy();
-            swiper2.destroy();
-            $('.swiper1, .swiper2').removeClass('swiper-container');
-            $('.swiper1, .swiper2').children().removeClass('swiper-wrapper');
-            init = false;
-        }
-    }
-    swiperMode();
 
 
 </script>

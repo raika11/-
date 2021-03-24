@@ -3,61 +3,41 @@ import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { Form, Col, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-
 import toast, { messageBox } from '@utils/toastUtil';
-
-// import { selectItem } from '@pages/Boards/BoardConst';
-// import { GET_BOARD_CONTENTS, clearBoardContents, changeSelectBoard, clearSelectBoard, getJpodNotice, getBoardContents } from '@store/jpod';
 import { GET_BOARD_CONTENTS, getJpodNotice, getBoardContents } from '@store/jpod';
-
-// import { uploadBoardContentsImage, updateBoardContents, saveBoardReply, saveBoardContents, deleteBoardContents } from '@store/board';
 import { uploadBoardContentsImage, updateBoardContents, saveBoardContents, deleteBoardContents } from '@store/board';
-
 import BoardRepoterSelect from '@pages/Boards/BoardsList/BoardsEdit/BoardRepoterSelect';
 import BoardsSummernote from '@pages/Boards/BoardsList/BoardsEdit/BoardsSummernote';
 
 /**
  * J팟 관리 - 공지 게시판 수정 / 등록
- *
- * 2021-03-03 15:51 게시판과 같은 UI 형태로 개발 되었다가 간단하게 변경 되어야 한다는 의견으로 인해
- * 기존 게시판과 같은 코드들중 필요 없는 항목들은 주석처리.
  */
 const NoticeEdit = ({ match }) => {
     const history = useHistory();
-    const params = useParams();
-    const boardId = useRef(null);
-    const boardSeq = useRef(null);
+    const { boardSeq, boardId } = useParams();
     const dispatch = useDispatch();
-    const parentBoardSeq = useRef(null);
 
     const { noticeInfo, loading, selectBoard, channelList } = useSelector((store) => ({
         noticeInfo: store.jpod.jpodNotice.noticeInfo,
-        // noticereply: store.jpod.jpodNotice.noticereply,
-        // boardList: store.jpod.jpodNotice.boardList,
         channelList: store.jpod.jpodNotice.channelList,
         selectBoard: store.jpod.jpodNotice.selectBoard,
         loading: store.loading[GET_BOARD_CONTENTS],
     }));
 
-    const [editState, setEditState] = useState(initialEditState); // 글보기, 글 수정, 답변 달기 , 답변 수정 기능에 edit 컴포넌트를 변경 시켜 주기 위해서 state 를 사용함.
     const [editData, setEditData] = useState({});
     const [selectReport, setSelectReport] = useState([]); // 기자 선택.
-    const [replyEditData, setReplyEditData] = useState({}); // 답변 정보가 저장 되는 state.
+    // const [replyEditData, setReplyEditData] = useState({}); // 답변 정보가 저장 되는 state.
 
     const [editContents, setEditContents] = useState('');
-    // const [replyEditContents, setReplyEditContents] = useState('');
     const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일.
     let fileinputRef = useRef(null);
 
     const resetEditData = () => {
-        // setEditData({});
         setEditData({
             ordNo: 1, // 순서 설정 : 일반.
             boardId: selectBoard.boardId, // 게시판 ID 값.
         });
         setUploadFiles([]);
-        // dispatch(clearBoardContents());
-        // dispatch(clearSelectBoard());
         fileinputRef.current = null;
     };
 
@@ -197,60 +177,6 @@ const NoticeEdit = ({ match }) => {
         );
     };
 
-    // 답글 등록 버튼 클릭 처리.
-    // const handleClickReplayButton = () => {
-    //     history.push(`${match.path}/${boardId.current}/${boardSeq.current}/reply`);
-    // };
-
-    // 답변 버튼 저장 클릭 처리.
-    // const handleClickReplaySaveButton = () => {
-    //     dispatch(
-    //         saveBoardReply({
-    //             boardId: boardId.current,
-    //             parentBoardSeq: parentBoardSeq.current,
-    //             boardSeq: boardSeq.current,
-    //             contents: {
-    //                 ...replyEditData,
-    //                 boardId: null,
-    //                 depth: 0,
-    //                 indent: 0,
-    //                 ordNo: editData.ordNo,
-    //                 channelId: editData.channelId,
-    //                 titlePrefix1: editData.titlePrefix1,
-    //                 titlePrefix2: editData.titlePrefix2,
-    //                 addr: editData.addr,
-    //             },
-    //             files: { attachFile: [] },
-    //             callback: ({ header: { success, message }, body }) => {
-    //                 if (success === true) {
-    //                     toast.success(message);
-    //                     history.push(`${match.path}/${body.boardId}/${body.parentBoardSeq}/reply/${body.boardSeq}`);
-    //                     dispatch(getJpodNotice());
-    //                 } else {
-    //                     const { totalCnt, list } = body;
-    //                     if (totalCnt > 0 && Array.isArray(list)) {
-    //                         // 에러 메시지 확인.
-    //                         messageBox.alert(list[0].reason, () => {});
-    //                     } else {
-    //                         // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
-    //                         messageBox.alert(message, () => {});
-    //                     }
-    //                 }
-    //             },
-    //         }),
-    //     );
-    // };
-
-    // 답변 취소 버튼 클릭 처리.
-    // const handleClickReplayCancleButton = () => {
-    //     if (noticeInfo.boardSeq === null) {
-    //         history.push(`${match.path}`);
-    //     } else {
-    //         history.push(`${match.path}/${boardId.current}/${boardSeq.current}`);
-    //         dispatch(getBoardContents({ boardId: boardId.current, boardSeq: boardSeq.current }));
-    //     }
-    // };
-
     // summernote 이미지 업로드 처리.
     const SummernoteImageUpload = (file) => {
         const formData = new FormData();
@@ -258,22 +184,21 @@ const NoticeEdit = ({ match }) => {
 
         dispatch(
             uploadBoardContentsImage({
-                boardId: boardId.current,
+                boardId: boardId,
                 imageForm: formData,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
                         toast.success(message);
-                        if (editState.mode === 'new' || editState.mode === 'modify') {
-                            setEditData({
-                                ...editData,
-                                content: `${editData.content} <img src="${body}">`,
-                            });
-                        } else {
-                            setReplyEditData({
-                                ...replyEditData,
-                                content: `${replyEditData.content} <img src="${body}">`,
-                            });
-                        }
+                        setEditData({
+                            ...editData,
+                            content: `${editData.content} <img src="${body}">`,
+                        });
+                        // else {
+                        //     setReplyEditData({
+                        //         ...replyEditData,
+                        //         content: `${replyEditData.content} <img src="${body}">`,
+                        //     });
+                        // }
                     } else {
                         const { totalCnt, list } = body;
                         if (totalCnt > 0 && Array.isArray(list)) {
@@ -289,170 +214,29 @@ const NoticeEdit = ({ match }) => {
         );
     };
 
-    // 이미지 추가 처리.
-    // const handleChangeFileInput = (event) => {
-    //     // 게시판 설정 확장자 체크.
-    //     let extCheck = false;
-    //     try {
-    //         let tempFile = event.target.files[0].name.split('.');
-    //         let tempFileExt = tempFile[1];
-
-    //         if (selectBoard.allowFileExt.replace(/ /g, '').split(',').indexOf(tempFileExt) < 0) {
-    //             messageBox.alert(`해당 게시판의 첨부 파일은 (${selectBoard.allowFileExt}) 만 등록 가능합니다.`, () => {});
-    //         } else {
-    //             extCheck = true;
-    //         }
-    //     } catch (e) {
-    //         throw e;
-    //     }
-
-    //     if (!extCheck) return;
-
-    //     if (uploadFiles.length + 1 > selectBoard.allowFileCnt) {
-    //         messageBox.alert('해당 게시판의 첨부 파일 최대 건수는 2개 입니다.', () => {});
-    //     } else {
-    //         setUploadFiles([...uploadFiles, event.target.files[0]]);
-    //     }
-    //     fileinputRef.current.value = '';
-    // };
-
-    // 이미지 리스트 클릭시 새텝
-    // const handleClickImageName = (element) => {
-    //     const { file_url } = element;
-    //     if (file_url) {
-    //         var win = window.open(file_url, '_blank');
-    //         win.focus();
-    //     }
-    // };
-
-    // 이미지 삭제 처리.
-    // const handleDeleteUploadFile = (stateIndex) => {
-    //     setUploadFiles(uploadFiles.filter((e, i) => i !== stateIndex));
-    // };
-
-    // 답변 데이터 변경시 스테이트 업데이트.
-    // const handleChangeReplyFormData = (e) => {
-    //     const { name, value } = e.target;
-    //     setReplyEditData({
-    //         ...replyEditData,
-    //         [name]: value,
-    //     });
-    // };
-
-    // url 이 변경 되었을 경우 처리. ( 에피소드 고유 번호 및 add )
     useEffect(() => {
-        // if (!isNaN(params.boardId) && boardId.current !== params.boardId) {
-        //     boardId.current = params.boardId;
-        // }
-
-        if (!isNaN(params.boardSeq) && boardSeq.current !== params.boardSeq) {
-            boardSeq.current = params.boardSeq;
-            setEditState({
-                mode: 'modify',
-                title: '게시글 수정',
-            });
-        } else if (history.location.pathname === `${match.path}/add` && boardSeq.current !== 'add') {
-            boardSeq.current = 'add';
-            resetEditData(); // 에디터 리셋.
-            setEditState({
-                mode: 'new',
-                title: '게시글 등록',
-            });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params]);
-
-    // 등록, 수정, 답변 등록 에 따른 라우터 파라미터 처리.
-    useEffect(() => {
-        // if (history.location.pathname === `${match.path}/${boardId.current}/${parentBoardSeq.current}/reply/${boardSeq.current}`) {
-        //     setEditState({
-        //         mode: 'reply',
-        //         title: '답변 수정',
-        //     });
-        // }
-
-        // if (history.location.pathname === `${match.path}/${boardId.current}/${boardSeq.current}/reply`) {
-        //     parentBoardSeq.current = null;
-        //     setReplyEditData({});
-        //     setEditState({
-        //         mode: 'reply',
-        //         title: '답변 등록',
-        //     });
-        // }
-
-        if (history.location.pathname === `${match.path}/${boardId.current}/${boardSeq.current}`) {
-            parentBoardSeq.current = null;
-            setEditState({
-                mode: 'modify',
-                title: '게시글 수정',
-            });
-        }
-
-        if (history.location.pathname === `${match.path}/${boardId.current}/add`) {
-            parentBoardSeq.current = null;
+        if (!boardSeq) {
             setEditData({});
             setEditContents(' ');
-            setEditState({
-                mode: 'new',
-                title: '게시글 등록',
-            });
+            resetEditData(); // 에디터 리셋.
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [history.location]);
+    }, [boardSeq]);
 
     useEffect(() => {
-        const setInfoData = (data) => {
+        if (loading && loading === false) {
             setEditData({
-                attaches: data.attaches,
-                boardId: data.boardId,
-                boardSeq: data.boardSeq,
-                channelId: data.channelId,
-                content: data.content,
-                declareCnt: data.declareCnt,
-                decomCnt: data.decomCnt,
-                delYn: data.delYn,
-                depth: data.depth,
-                indent: data.indent,
-                ordNo: data.ordNo,
-                parentBoardSeq: data.parentBoardSeq,
-                regName: data.regName,
-                title: data.title,
-                titlePrefix1: data.titlePrefix1,
-                titlePrefix2: data.titlePrefix2,
-                regDt: data.regDt,
-                modDt: data.modDt,
-                editorYn: data.boardInfo && data.boardInfo.editorYn,
-                regInfo: data.regDt && data.regDt.length > 16 ? `등록 일시: ${data.regDt.substr(0, 16)} ${data.regName}(${data.regId})` : '',
-                modInfo: data.modDt && data.modDt.length > 16 ? `수정 일시: ${data.modDt.substr(0, 16)} ${data.regName}(${data.regId})` : '',
+                ...noticeInfo,
+                editorYn: noticeInfo.boardInfo && noticeInfo.boardInfo.editorYn,
+                regInfo: noticeInfo.regDt && noticeInfo.regDt.length > 16 ? `등록 일시: ${noticeInfo.regDt.substr(0, 16)} ${noticeInfo.regName}(${noticeInfo.regId})` : '',
+                modInfo: noticeInfo.modDt && noticeInfo.modDt.length > 16 ? `수정 일시: ${noticeInfo.modDt.substr(0, 16)} ${noticeInfo.regName}(${noticeInfo.regId})` : '',
             });
-
-            // dispatch(changeSelectBoard(data.boardInfo));
-        };
-
-        // 정보 조회가 끝났을경우.
-        if (loading !== undefined && loading === false) {
-            setInfoData(noticeInfo);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading, noticeInfo]);
 
-    // 답변 정보 업데이트시.
-    // useEffect(() => {
-    //     setReplyEditData(noticereply);
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [noticereply]);
-
-    // 라우터 및 에디드 상태가 답변일때 초기화 처리.
-    // useEffect(() => {
-    //     // resetEditData();
-    //     if (editState.mode === 'reply' && history.location.pathname === `${match.path}/${boardId.current}/${boardSeq.current}/reply`) {
-    //         setReplyEditData(initialReplyEditState);
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [editState]);
-
-    // 게시글 내용이 변경 되었을때. ( 수정및 확인.)
     useEffect(() => {
+        // 게시글 내용이 변경 되었을때. (수정 및 확인)
         setEditData({
             ...editData,
             content: editContents,
@@ -460,24 +244,15 @@ const NoticeEdit = ({ match }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editContents]);
 
-    // 답변내용이 변경 되었을떄. ( 수정및 확인.)
-    // useEffect(() => {
-    //     setReplyEditData({
-    //         ...replyEditData,
-    //         content: replyEditContents,
-    //     });
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [replyEditContents]);
-
     useEffect(() => {
-        if (params && params.boardId && params.boardSeq) {
-            dispatch(getBoardContents({ boardId: params.boardId, boardSeq: params.boardSeq }));
+        if (boardId && boardSeq) {
+            dispatch(getBoardContents({ boardId: boardId, boardSeq: boardSeq }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        if (selectBoard.boardId !== undefined) {
+        if (selectBoard.boardId) {
             setEditData({
                 ...editData,
                 ordNo: 1, // 순서 설정 : 일반.
@@ -490,32 +265,16 @@ const NoticeEdit = ({ match }) => {
     return (
         <MokaCard
             className="w-100 flex-fill"
-            title={editState.title}
+            title={boardSeq ? '게시글 수정' : '게시글 등록'}
             loading={loading}
             bodyClassName="d-flex flex-column"
             footer
-            footerClassName="justify-content-center"
+            footerClassName="d-flex justify-content-center"
             footerAs={
                 <>
-                    {editState.mode === 'new' && (
-                        // 하단 버튼 등록 일때
-                        <>
-                            <Button variant="positive" className="mr-1" onClick={() => handleClickContentsSaveButton()}>
-                                저장
-                            </Button>
-                            <Button variant="negative" onClick={() => handleClickCancleButton()}>
-                                취소
-                            </Button>
-                        </>
-                    )}
-                    {editState.mode === 'modify' && (
+                    {boardSeq ? (
                         // 하단 버튼 보기, 수정 일때
                         <>
-                            {/* {selectBoard.answYn === 'Y' && (
-                                <Button variant="negative" className="mr-1" onClick={() => handleClickReplayButton()}>
-                                    답변
-                                </Button>
-                            )} */}
                             <Button variant="positive" className="mr-1" onClick={() => handleClickUpdateButton()}>
                                 수정
                             </Button>
@@ -526,371 +285,104 @@ const NoticeEdit = ({ match }) => {
                                 취소
                             </Button>
                         </>
-                    )}
-                    {/* {editState.mode === 'reply' && (
-                        // 하단 버튼 답글 일때
+                    ) : (
                         <>
-                            <Button variant="positive" className="mr-1" onClick={() => handleClickReplaySaveButton()}>
+                            <Button variant="positive" className="mr-1" onClick={() => handleClickContentsSaveButton()}>
                                 저장
                             </Button>
-                            <Button variant="negative" onClick={() => handleClickReplayCancleButton()}>
+                            <Button variant="negative" onClick={() => handleClickCancleButton()}>
                                 취소
                             </Button>
                         </>
-                    )} */}
+                    )}
                 </>
             }
         >
-            {(function () {
-                if (editState.mode === 'new' || editState.mode === 'modify') {
-                    // info
-                    return (
-                        <Form>
-                            {editState.mode === 'modify' && (
-                                <Form.Row>
-                                    <Col xs={6} className="ft-12">
-                                        {`${editData.regInfo ? editData.regInfo : ''}`}
-                                    </Col>
-                                    <Col xs={6} className="ft-12">
-                                        {`${editData.modInfo ? editData.modInfo : ''}`}
-                                    </Col>
-                                </Form.Row>
-                            )}
-                            {/* 채널 선택. */}
-                            {/* <Form.Row className="mb-2">
-                                <Col xs={6} className="p-0">
-                                    <MokaInputLabel
-                                        label="게시판 선택"
-                                        as="select"
-                                        id="boardId"
-                                        name="boardId"
-                                        value={editData.boardId}
-                                        onChange={(e) => {
-                                            if (e.target.value !== '') {
-                                                const temeBoardId = e.target.value;
-                                                const boardInfo = boardList.filter((e) => e.boardId === Number(temeBoardId));
-                                                // dispatch(changeSelectBoard(boardInfo[0]));
-                                            }
-                                            // handleChangeFormData(e);
-                                        }}
-                                    >
-                                        <option value="">게시판 전체</option>
-                                        {boardList.map((item, index) => (
-                                            <option key={index} value={item.boardId}>
-                                                {item.boardName}
-                                            </option>
-                                        ))}
-                                    </MokaInputLabel>
-                                </Col>
-                            </Form.Row> */}
-                            {/* <Form.Row className="mb-2">
-                                <Col xs={6} className="p-0">
-                                    <MokaInputLabel as="select" label="순서" name="ordNo" id="ordNo" value={editData.ordNo} onChange={(e) => handleChangeFormData(e)}>
-                                        <option value="">선택</option>
-                                        {selectItem.orderType.map((item, index) => (
-                                            <option key={index} value={item.value}>
-                                                {item.name}
-                                            </option>
-                                        ))}
-                                    </MokaInputLabel>
-                                </Col>
-                            </Form.Row> */}
-                            {(function () {
-                                // 게시판 등록시 채널을 기자로 선택 했을경우 기자 리스트를 보여줘야 하는데
-                                // 기자 리스트가 너무 많기 떄문에 검색기능을 할수 있게 MokaAutocomplete 를 사용
-                                if (selectBoard.channelType === 'BOARD_DIVC2' && channelList) {
-                                    return (
-                                        <>
-                                            {/* <Form.Row className="mb-2">
-                                                <Col xs={2.5} className="p-0 pt-2">
-                                                    <MokaInputLabel as="none" label="기자명"></MokaInputLabel>
-                                                </Col>
-                                                <MokaAutocomplete
-                                                    options={channalList}
-                                                    closeMenuOnSelect={true}
-                                                    searchIcon={true}
-                                                    // value={editData.channelId}
-                                                    value={1001}
-                                                    onChange={(e) => {
-                                                        setSelectReport(e);
-                                                    }}
-                                                />
-                                            </Form.Row> */}
-
-                                            <BoardRepoterSelect
-                                                ChannalList={channelList}
-                                                SelectValue={selectReport}
-                                                OnChange={(e) => {
-                                                    setSelectReport(e.value);
-                                                }}
-                                            />
-                                        </>
-                                    );
-                                } else {
-                                    // 게시판 등록시 기자명 이외에는 기본 select box를 사용.
-                                    if (channelList.length > 0) {
-                                        return (
-                                            <Form.Row className="mb-2">
-                                                <Col xs={6} className="p-0">
-                                                    <MokaInputLabel
-                                                        as="select"
-                                                        label="채널명"
-                                                        name="channelId"
-                                                        id="channelId"
-                                                        value={editData.channelId}
-                                                        onChange={(e) => handleChangeFormData(e)}
-                                                    >
-                                                        <option value="">선택</option>
-                                                        {channelList.map((item, index) => (
-                                                            <option key={index} value={item.value}>
-                                                                {item.name}
-                                                            </option>
-                                                        ))}
-                                                    </MokaInputLabel>
-                                                </Col>
-                                            </Form.Row>
-                                        );
-                                    }
-                                }
-                            })()}
-                            {/* 게시판 등록시 말머리1과 말머리2를 입력했을 경우 말머리1를 선택 할수 있게 */}
-                            {/* {(selectBoard.titlePrefix1 !== null || selectBoard.titlePrefix2 !== null) && ( */}
-                            {/* <Form.Row className="mb-2"> */}
-                            {/* 말머리1 */}
-                            {/* {selectBoard.titlePrefix1 !== null && (
-                                        <Col xs={6} className="p-0 pr-20">
-                                            <MokaInputLabel
-                                                as="select"
-                                                label="말머리1"
-                                                name="titlePrefix1"
-                                                id="titlePrefix1"
-                                                value={editData.titlePrefix1}
-                                                onChange={(e) => handleChangeFormData(e)}
-                                            >
-                                                <option value="">선택</option>
-                                                <option value={selectBoard.titlePrefix1}>{selectBoard.titlePrefix1}</option>
-                                            </MokaInputLabel>
-                                        </Col>
-                                    )} */}
-
-                            {/* 말머리2*/}
-                            {/* {selectBoard.titlePrefix2 !== null && (
-                                        <Col xs={6} className="p-0 pl-20">
-                                            <MokaInputLabel
-                                                as="select"
-                                                label="말머리2"
-                                                name="titlePrefix2"
-                                                id="titlePrefix2"
-                                                value={editData.titlePrefix2}
-                                                onChange={(e) => handleChangeFormData(e)}
-                                            >
-                                                <option value="">선택</option>
-                                                <option value={selectBoard.titlePrefix2}>{selectBoard.titlePrefix2}</option>
-                                            </MokaInputLabel>
-                                        </Col>
-                                    )} */}
-                            {/* </Form.Row> */}
-                            {/* )} */}
-                            {/* 주소 */}
-                            {/* 2021-01-06 14:35 추후 논의로 결정하기로. */}
-                            {/* <Form.Row className="mb-2">
-                                <Col className="p-0">
-                                    <MokaInputLabel
-                                        label="주소"
-                                        className="mb-0"
-                                        id="addr"
-                                        name="addr"
-                                        placeholder={'주소'}
-                                        value={editData.addr}
-                                        onChange={(e) => handleChangeFormData(e)}
-                                    />
-                                </Col>
-                            </Form.Row> */}
-                            {/* 제목 */}
-                            <Form.Row className="mb-2">
-                                <Col className="p-0">
-                                    <MokaInput
-                                        className="mb-0"
-                                        id="title"
-                                        name="title"
-                                        placeholder={'제목을 입력해 주세요.'}
-                                        value={editData.title}
-                                        onChange={(e) => handleChangeFormData(e)}
-                                    />
-                                </Col>
-                            </Form.Row>
-                            {/* 내용 */}
-                            {(function () {
-                                // 게시판 등록시 에디터 사용 유무로 본문은 에디터로 보여 줍니다.
-                                if (selectBoard.editorYn === 'Y') {
-                                    return (
-                                        <Form.Row className="mb-2">
-                                            <Col className="p-0">
-                                                <BoardsSummernote
-                                                    contentValue={editData.content}
-                                                    onChangeValue={(value) => {
-                                                        setEditContents(value);
-                                                    }}
-                                                    onImageUpload={(e) => SummernoteImageUpload(e)}
-                                                />
-                                            </Col>
-                                        </Form.Row>
-                                    );
-                                } else {
-                                    // 에디터 설정을 안했을 경우는 textarea 로 보여줍니다.
-                                    return (
-                                        <Form.Row className="mb-2">
-                                            <Col className="p-0">
-                                                <MokaInputLabel
-                                                    as="textarea"
-                                                    className="mb-2"
-                                                    inputClassName="resize-none"
-                                                    inputProps={{ rows: 6 }}
-                                                    id="content"
-                                                    name="content"
-                                                    value={editData.content}
-                                                    onChange={(e) => handleChangeFormData(e)}
-                                                />
-                                            </Col>
-                                        </Form.Row>
-                                    );
-                                }
-                            })()}
-                            {/* <hr className="divider" /> */}
-                            {(function () {
-                                // 게시판 등롱시 파일 업로드 활성화 선택시
-                                // if (selectBoard.fileYn === 'Y') {
-                                //     return (
-                                //         <>
-                                //             <Form.Row>
-                                //                 <Col xs={4} className="p-0">
-                                //                     <MokaInputLabel label={`첨부파일`} as="none" className="mb-2" />
-                                //                 </Col>
-                                //                 <Col xs={8} className="p-0 text-right">
-                                //                     <div className="file btn btn-sm btn-primary" style={{ position: 'relative', overflow: 'hidden' }}>
-                                //                         등록
-                                //                         <input
-                                //                             type="file"
-                                //                             name="file"
-                                //                             ref={fileinputRef}
-                                //                             // onClick={(e) => (fileinputRef.current = e)}
-                                //                             onChange={(e) => handleChangeFileInput(e)}
-                                //                             style={{
-                                //                                 position: 'absolute',
-                                //                                 fontSize: '50px',
-                                //                                 opacity: '0',
-                                //                                 right: '0',
-                                //                                 top: '0',
-                                //                             }}
-                                //                         />
-                                //                     </div>
-                                //                 </Col>
-                                //             </Form.Row>
-                                //             <hr />
-                                //             {uploadFiles.map((element, index) => {
-                                //                 return (
-                                //                     <Form.Row className="mb-0 pt-1" key={index}>
-                                //                         <Form.Row className="w-100" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
-                                //                             <Col xs={11} className="w-100 h-100 d-flex align-items-center justify-content-start">
-                                //                                 <div onClick={() => handleClickImageName(element)}>{element.name}</div>
-                                //                             </Col>
-                                //                             <Col>
-                                //                                 <MokaTableEditCancleButton onClick={() => handleDeleteUploadFile(index)} />
-                                //                             </Col>
-                                //                         </Form.Row>
-                                //                     </Form.Row>
-                                //                 );
-                                //             })}
-                                //         </>
-                                //     );
-                                // }
-                            })()}
-                        </Form>
-                    );
-                } else if (editState.mode === 'reply') {
-                    // 대답.
-                    // return (
-                    //     <Form>
-                    //         <Form.Row className="mb-2">
-                    //             <Col className="p-0">
-                    //                 <MokaInputLabel
-                    //                     label="제목"
-                    //                     labelWidth={80}
-                    //                     className="mb-0"
-                    //                     id="Rtitle"
-                    //                     name="title"
-                    //                     value={replyEditData.title}
-                    //                     onChange={(e) => handleChangeReplyFormData(e)}
-                    //                 />
-                    //             </Col>
-                    //         </Form.Row>
-                    //         {/* 내용 */}
-                    //         {(function () {
-                    //             if (editState && selectBoard.editorYn === 'N') {
-                    //                 // 에디터 설정을 안했을 경우는 textarea 로 보여줍니다.
-                    //                 return (
-                    //                     <Form.Row className="mb-2">
-                    //                         <Col className="p-0">
-                    //                             <MokaInputLabel
-                    //                                 as="textarea"
-                    //                                 className="mb-2"
-                    //                                 inputClassName="resize-none"
-                    //                                 inputProps={{ rows: 6 }}
-                    //                                 id="Rcontent"
-                    //                                 name="content"
-                    //                                 value={replyEditData.content}
-                    //                                 onChange={(e) => setReplyEditContents(e.target.value)}
-                    //                             />
-                    //                         </Col>
-                    //                     </Form.Row>
-                    //                 );
-                    //             } else {
-                    //                 // 게시판 등록시 에디터 사용 유무로 본문은 에디터로 보여 줍니다.
-                    //                 return (
-                    //                     <Form.Row className="mb-2">
-                    //                         <Suspense>
-                    //                             <Col>
-                    //                                 <BoardsSummernote
-                    //                                     contentValue={replyEditData.content}
-                    //                                     editChange={(value) => setReplyEditContents(value)}
-                    //                                     editImageUpload={(e) => SummernoteImageUpload(e)}
-                    //                                 />
-                    //                             </Col>
-                    //                         </Suspense>
-                    //                     </Form.Row>
-                    //                 );
-                    //             }
-                    //         })()}
-                    //         <Form.Row>
-                    //             <Col xs={7} className="p-0">
-                    //                 <MokaInputLabel
-                    //                     label="등록자"
-                    //                     labelWidth={80}
-                    //                     id="regName"
-                    //                     name="regName"
-                    //                     value={replyEditData.regName}
-                    //                     onChange={(e) => handleChangeReplyFormData(e)}
-                    //                 />
-                    //             </Col>
-                    //         </Form.Row>
-                    //     </Form>
-                    // );
-                }
-            })()}
+            <Form>
+                {boardSeq && (
+                    <Form.Row>
+                        <Col xs={6} className="ft-12">
+                            {`${editData.regInfo ? editData.regInfo : ''}`}
+                        </Col>
+                        <Col xs={6} className="ft-12">
+                            {`${editData.modInfo ? editData.modInfo : ''}`}
+                        </Col>
+                    </Form.Row>
+                )}
+                {selectBoard.channelType === 'BOARD_DIVC2' && channelList && (
+                    // 게시판 등록시 채널을 기자로 선택 했을경우 기자 리스트를 보여줘야 하는데 // 기자 리스트가 너무 많기 떄문에 검색기능을 할수 있게 MokaAutocomplete 를 사용
+                    <>
+                        <BoardRepoterSelect
+                            ChannalList={channelList}
+                            SelectValue={selectReport}
+                            OnChange={(e) => {
+                                setSelectReport(e.value);
+                            }}
+                        />
+                    </>
+                )}
+                {channelList.length > 0 && (
+                    // 게시판 등록시 기자명 이외에는 기본 select box를 사용.
+                    <Form.Row className="mb-2">
+                        <Col xs={6} className="p-0">
+                            <MokaInputLabel as="select" label="채널명" name="channelId" id="channelId" value={editData.channelId} onChange={(e) => handleChangeFormData(e)}>
+                                <option value="">선택</option>
+                                {channelList.map((item, index) => (
+                                    <option key={index} value={item.value}>
+                                        {item.name}
+                                    </option>
+                                ))}
+                            </MokaInputLabel>
+                        </Col>
+                    </Form.Row>
+                )}
+                {/* 제목 */}
+                <Form.Row className="mb-2">
+                    <Col className="p-0">
+                        <MokaInput
+                            className="mb-0"
+                            id="title"
+                            name="title"
+                            placeholder={'제목을 입력해 주세요.'}
+                            value={editData.title}
+                            onChange={(e) => handleChangeFormData(e)}
+                        />
+                    </Col>
+                </Form.Row>
+                {/* 내용 */}
+                {selectBoard.editorYn === 'Y' ? (
+                    // 게시판 등록시 에디터 사용 유무로 본문은 에디터로 보여 줍니다.
+                    <Form.Row className="mb-2">
+                        <Col className="p-0">
+                            <BoardsSummernote
+                                contentValue={editData.content}
+                                onChangeValue={(value) => {
+                                    setEditContents(value);
+                                }}
+                                onImageUpload={(e) => SummernoteImageUpload(e)}
+                            />
+                        </Col>
+                    </Form.Row>
+                ) : (
+                    // 에디터 설정을 안했을 경우는 textarea 로 보여줍니다.
+                    <Form.Row className="mb-2">
+                        <Col className="p-0">
+                            <MokaInputLabel
+                                as="textarea"
+                                className="mb-2"
+                                inputClassName="resize-none"
+                                inputProps={{ rows: 6 }}
+                                id="content"
+                                name="content"
+                                value={editData.content}
+                                onChange={(e) => handleChangeFormData(e)}
+                            />
+                        </Col>
+                    </Form.Row>
+                )}
+            </Form>
         </MokaCard>
     );
 };
-
-// 에디트 상태 및 에디트 타이틀 명.
-const initialEditState = {
-    mode: 'new',
-    title: '게시글 등록',
-};
-
-// 기본 답변 버튼 눌렀을 경우 내용.
-// const initialReplyEditState = {
-//     title: 're: ',
-//     content: '',
-// };
 
 export default NoticeEdit;

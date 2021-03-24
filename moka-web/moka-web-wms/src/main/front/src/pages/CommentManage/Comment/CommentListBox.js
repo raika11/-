@@ -227,6 +227,7 @@ const CommentListBox = ({ setSelectBannedItem }) => {
 
     return (
         <CommentAgGrid
+            suppressRowClickSelection
             loading={loading}
             columnDefs={columnDefs}
             total={total}

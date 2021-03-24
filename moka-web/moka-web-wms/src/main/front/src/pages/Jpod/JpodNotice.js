@@ -15,7 +15,7 @@ import NoticeEdit from '@pages/Jpod/JpodNotice/NoticeEdit';
 /**
  * J팟 관리 - 공지 게시판
  */
-const JpodChannel = ({ match }) => {
+const JpodChannel = ({ match, displayName }) => {
     const dispatch = useDispatch();
     const matchPoints = useBreakpoint();
 
@@ -29,10 +29,10 @@ const JpodChannel = ({ match }) => {
         };
     }, [dispatch]);
 
-    // 최초 로딩시 목록 가져오기.
     useEffect(() => {
+        // 최초 로딩시 목록 가져오기
         dispatch(getJpodBoard());
-        dispatch(getBoardChannelList()); // J팟 채널 목록.
+        dispatch(getBoardChannelList()); // J팟 채널 목록
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -46,8 +46,8 @@ const JpodChannel = ({ match }) => {
     return (
         <Container className="p-0 position-relative" fluid>
             <Helmet>
-                <title>공지게시판 관리</title>
-                <meta name="description" content="공지게시판 관리페이지입니다." />
+                <title>{displayName}</title>
+                <meta name="description" content={`${displayName} 페이지 입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 

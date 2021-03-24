@@ -162,7 +162,7 @@
 @media (max-width:767px) {
 
     /***************************************    catalog     ************************************/
-    .catalog_home.swiper-container{width:100vw;margin-left:-20px;padding: 0 20px;}
+    .catalog_home.swiper-container{/*width:100vw;margin-left:-20px;*/padding: 0 20px;}
     .catalog_home.swiper-container .swiper-slide div:nth-child(2) .text_wrap{position:relative;padding:0 30px;left:unset;top:unset;transform:translate(0, 0%);}
     .text_wrap {margin-top:16px;}
     .title_wrap h2.subtitle span {display:none;}

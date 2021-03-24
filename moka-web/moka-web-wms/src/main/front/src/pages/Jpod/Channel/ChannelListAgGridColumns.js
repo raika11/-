@@ -16,7 +16,7 @@ export const columnDefs = [
         headerName: '이미지',
         field: 'chnlThumb',
         cellRenderer: 'imageRenderer',
-        width: 78,
+        width: 56,
     },
     {
         headerName: '채널명',
@@ -29,7 +29,7 @@ export const columnDefs = [
     {
         headerName: '설명',
         field: 'chnlMemo',
-        width: 100,
+        width: 130,
         flex: 1,
         tooltipField: 'chnlMemo',
         cellStyle: {
@@ -46,22 +46,22 @@ export const columnDefs = [
         },
     },
     {
-        headerName: '\t사용',
+        headerName: '사용',
         field: 'usedYn',
-        width: 80,
+        width: 40,
         cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '회차',
         field: 'roundinfo',
-        width: 100,
+        width: 42,
         cellStyle: { display: 'flex', alignItems: 'center' },
         tooltipField: 'roundinfo',
     },
     {
         headerName: '구독',
         field: 'subscribe',
-        width: 50,
+        width: 42,
         cellStyle: { display: 'flex', alignItems: 'center' },
         tooltipField: 'subscribe',
     },

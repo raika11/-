@@ -231,7 +231,7 @@ const ColumnistEdit = ({ match }) => {
                         <Button variant="searching" className="flex-shrink-0" onClick={() => setShowModal(true)}>
                             기자검색
                         </Button>
-                        <ReporterListModal show={showModal} onHide={() => setShowModal(false)} onClick={addReporter} />
+                        <ReporterListModal show={showModal} onHide={() => setShowModal(false)} onRowClicked={addReporter} />
                     </Col>
                 </Form.Row>
 

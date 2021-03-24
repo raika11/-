@@ -1,5 +1,6 @@
 import qs from 'qs';
 import instance from '@store/commons/axios';
+import { objectToFormData } from '@utils/convertUtil';
 
 /**
  * 기자관리 목록 조회
@@ -19,30 +20,24 @@ export const getPodtyChannels = () => {
     });
 };
 
-/**
- * 채널 목록 조회
- */
-export const getJpods = ({ search }) => {
+// 채널 목록 조회
+export const getChnlList = ({ search }) => {
     return instance.get(`/api/jpods?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 채널 정보 조회
- */
-export const getJpodsInfo = ({ chnlSeq }) => {
+// 채널 정보 조회
+export const getChnl = ({ chnlSeq }) => {
     return instance.get(`/api/jpods/${chnlSeq}`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 채널 저장
- */
-export const saveJpodChannel = ({ channelinfo }) => {
+// 채널 등록
+export const postChnl = ({ chnl }) => {
     return instance
-        .post(`/api/jpods`, channelinfo, {
+        .post(`/api/jpods`, objectToFormData(chnl), {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -52,12 +47,10 @@ export const saveJpodChannel = ({ channelinfo }) => {
         });
 };
 
-/**
- * 채널 수정
- */
-export const updateJpodChannel = ({ chnlSeq, channelinfo }) => {
+// 채널 수정
+export const putChnl = ({ chnl }) => {
     return instance
-        .put(`/api/jpods/${chnlSeq}`, channelinfo, {
+        .put(`/api/jpods/${chnl.chnlSeq}`, objectToFormData(chnl), {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -67,10 +60,8 @@ export const updateJpodChannel = ({ chnlSeq, channelinfo }) => {
         });
 };
 
-/**
- * 채널 삭제
- */
-export const deleteJpodChannel = ({ chnlSeq }) => {
+// 채널 삭제
+export const deleteChnl = ({ chnlSeq }) => {
     return instance.delete(`/api/jpods/${chnlSeq}`).catch((err) => {
         throw err;
     });

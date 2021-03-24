@@ -3,6 +3,9 @@ import { MokaIconTabs, MokaIcon } from '@components';
 import ChannelEdit from './ChannelEdit';
 import ChannelEpisode from './ChannelEpisode';
 
+/**
+ * J팟 관리 > 채널 > 탭
+ */
 const ChannelTab = ({ match }) => {
     const [, setActiveTabIdx] = useState(0);
 
@@ -13,11 +16,11 @@ const ChannelTab = ({ match }) => {
             onSelectNave={(idx) => setActiveTabIdx(idx)}
             tabs={[
                 /**
-                 * 등록 수정.
+                 * 등록 수정
                  */
                 <ChannelEdit match={match} />,
                 /**
-                 * 에피소드 리스트.
+                 * 에피소드 리스트
                  */
                 <ChannelEpisode match={match} />,
             ]}
@@ -27,7 +30,7 @@ const ChannelTab = ({ match }) => {
                 { title: 'info', text: 'Info' },
                 { title: '에피소드', icon: <MokaIcon iconName="fal-file" /> },
             ]}
-            hasHotkeys={true}
+            hasHotkeys
         />
     );
 };

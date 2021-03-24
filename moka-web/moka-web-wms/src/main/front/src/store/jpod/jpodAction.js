@@ -5,8 +5,31 @@ export const CLEAR_STORE = 'jpod/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 
 /**
- * 진행자 검색 모달
+ * 채널 관련 액션
  */
+export const CLEAR_CHNL = 'jpod/CLEAR_CHNL';
+export const clearChnl = createAction(CLEAR_CHNL);
+export const CHANGE_CHNL_SEARCH_OPTION = 'jpod/CHANGE_CHNL_SEARCH_OPTION';
+export const changeChnlSearchOption = createAction(CHANGE_CHNL_SEARCH_OPTION, (search) => search);
+export const CHANGE_CHNL_INVALID_LIST = 'jpod/CHANGE_CHNL_INVALID_LIST';
+export const changeChnlInvalidList = createAction(CHANGE_CHNL_INVALID_LIST, (invalidList) => invalidList);
+// 채널 목록
+export const [GET_CHNL_LIST, GET_CHNL_LIST_SUCCESS, GET_CHNL_LIST_FAILURE] = createRequestActionTypes('jpod/GET_CHNL_LIST');
+export const getChnlList = createAction(GET_CHNL_LIST, ({ search, callback }) => ({ search, callback }));
+// 채널 정보
+export const [GET_CHNL, GET_CHNL_SUCCESS, GET_CHNL_FAILURE] = createRequestActionTypes('jpod/GET_CHNL');
+export const getChnl = createAction(GET_CHNL, ({ chnlSeq, callback }) => ({ chnlSeq, callback }));
+// 채널 저장
+export const SAVE_CHNL = 'jpod/SAVE_CHNL';
+export const saveChnl = createAction(SAVE_CHNL, ({ chnl, callback }) => ({ chnl, callback }));
+// 채널 삭제
+export const DELETE_CHNL = createRequestActionTypes('jpod/DELETE_CHNL');
+export const deleteChnl = createAction(DELETE_CHNL, ({ chnlSeq, callback }) => ({ chnlSeq, callback }));
+
+/**
+ * 에피소드 관련 액션
+ */
+// 진행자 검색 모달
 export const CLEAR_REPORTER = 'jpod/CLEAR_REPORTER';
 export const clearReporter = createAction(CLEAR_REPORTER);
 export const CHANGE_REPORTER_SEARCH_OPTION = 'jpod/CHANGE_REPORTER_SEARCH_OPTION';

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@components';
 import { columnDefs } from './EpisodeListAgGridColumns';
 import { clearSelectArticleList } from '@store/survey/quiz';
-import { GET_EPISODES, changeEpisodesSearchOption, getEpisodes, getChannelInfo, getEpisodesInfo } from '@store/jpod';
+import { GET_EPISODES, changeEpisodesSearchOption, getEpisodes, getChnl, getEpisodesInfo } from '@store/jpod';
 
 /**
  * J팟 관리 - 에피소드 AgGrid
@@ -25,7 +25,7 @@ const EpisodeListAgGrid = ({ match }) => {
     // 목록 클릭 했을때.
     const handleClickListRow = ({ chnlSeq, epsdSeq }) => {
         if (chnlSeq !== episodeInfo.chnlSeq) {
-            dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
+            dispatch(getChnl({ chnlSeq: chnlSeq }));
         }
         dispatch(clearSelectArticleList());
         dispatch(getEpisodesInfo({ chnlSeq: chnlSeq, epsdSeq: epsdSeq }));

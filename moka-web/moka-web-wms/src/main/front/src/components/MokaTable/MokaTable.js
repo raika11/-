@@ -10,6 +10,7 @@ import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 import ImageRenderer from './MokaTableImageRenderer';
 import UsedYnRenderer from './MokaTableUsedYnRenderer';
 import SwitchRenderer from './MokaTableSwitchRenderer';
+import ButtonRenderer from './MokaTableButtonRenderer';
 
 const propTypes = {
     ...paginationPropTypes,
@@ -318,7 +319,13 @@ const MokaTable = forwardRef((props, ref) => {
                     rowSelection={rowSelection}
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
-                    frameworkComponents={{ imageRenderer: ImageRenderer, usedYnRenderer: UsedYnRenderer, switchRenderer: SwitchRenderer, ...frameworkComponents }}
+                    frameworkComponents={{
+                        imageRenderer: ImageRenderer,
+                        usedYnRenderer: UsedYnRenderer,
+                        switchRenderer: SwitchRenderer,
+                        buttonRenderer: ButtonRenderer,
+                        ...frameworkComponents,
+                    }}
                     onColumnResized={onColumnResized}
                     onColumnVisible={onColumnVisible}
                     enableMultiRowDragging={rowSelection === 'multiple'}

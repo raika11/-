@@ -2,6 +2,9 @@
 /* Small devices (portrait phones, landscape phones, less than 767px) */
 /* No media query this is the default */
 
+/* contents layout */
+.contents.section {padding-top: 30px; padding-bottom: 60px;}
+
 /* header */
 .header_nav_area {padding: 0 0 18px !important; border-top: 0 !important; border-bottom: 4px solid #000;}
 .header_nav .nav .nav_item {display:inline-block;}
@@ -10,7 +13,7 @@
 /***************************************    general     ************************************/
 .section.general .component {padding: 18px 0 40px; border-top: 1px solid #000;}
 
-.section.general .component.showcase {padding: 40px 0; border-top: 0;}
+.section.general .component.showcase {padding: 40px 0 20px; border-top: 0;}
 .section.general .component.showcase .card {margin-bottom: 18px; padding-bottom: 30px; border-bottom: 1px solid #ddd;}
 .section.general .component.showcase .card:last-child {margin-bottom: 0; padding-bottom: 0; border-bottom: 0;}
 .section.general .component.showcase .card_image {margin-bottom: 18px;}
@@ -48,6 +51,8 @@
 
 /* Medium devices (tablet + pc, 768px and up) */
 @media (min-width:768px) {
+    .contents.section {padding-top: 88px; padding-bottom: 60px;}
+
     .header_nav_wrap {align-items: flex-end; flex-wrap: nowrap;}
     .header_nav .nav .nav_item {margin-right: 24px;}
     .header_nav .nav .nav_item .nav_link {color: #000; font-size: 14px;}
@@ -65,7 +70,7 @@
 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
-    .contents.section {padding: 88px 0 100px;}
+    .contents.section {padding-bottom: 100px;}
 
     .header_nav .nav .nav_item {margin-right: 30px;}
     .header_nav .nav .nav_item .nav_link {font-size: 16px;}

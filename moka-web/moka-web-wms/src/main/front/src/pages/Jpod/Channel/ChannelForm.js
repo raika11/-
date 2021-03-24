@@ -266,11 +266,11 @@ const ChannelForm = (props) => {
                 ref={img1Ref}
                 inputProps={{
                     height: 80,
-                    img: channel.chnlImg,
+                    img: channel.chnlImg ? `${channel.chnlImg}?t=${new Date().getTime()}` : null,
                     // selectAccept: ['image/jpeg'],
+                    setFileValue: (file) => onChangeImg('chnlImgFile', file),
                     deleteButton: true,
                 }}
-                onChange={(file) => onChangeImg('chnlImgFile', file)}
             />
             <Form.Row>
                 <Col xs={8} className="p-0 pr-32">
@@ -293,10 +293,10 @@ const ChannelForm = (props) => {
                         ref={img2Ref}
                         inputProps={{
                             height: 80,
-                            img: channel.chnlImgMob,
+                            img: channel.chnlImgMob ? `${channel.chnlImgMob}?t=${new Date().getTime()}` : null,
+                            setFileValue: (file) => onChangeImg('chnlImgMobFile', file),
                             deleteButton: true,
                         }}
-                        onChange={(file) => onChangeImg('chnlImgMobFile', file)}
                     />
                 </Col>
                 <Col xs={4} className="p-0">
@@ -318,10 +318,10 @@ const ChannelForm = (props) => {
                         ref={img3Ref}
                         inputProps={{
                             height: 80,
-                            img: channel.chnlThumb,
+                            img: channel.chnlThumb ? `${channel.chnlThumb}?t=${new Date().getTime()}` : null,
+                            setFileValue: (file) => onChangeImg('chnlThumbFile', file),
                             deleteButton: true,
                         }}
-                        onChange={(file) => onChangeImg('chnlThumbFile', file)}
                     />
                 </Col>
             </Form.Row>

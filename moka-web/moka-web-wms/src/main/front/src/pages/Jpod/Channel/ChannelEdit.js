@@ -183,7 +183,7 @@ const ChannelEdit = ({ match }) => {
     const handleChangeImg = (name, file) => {
         setTemp({
             ...temp,
-            [name]: file[0],
+            [name]: file,
         });
     };
 

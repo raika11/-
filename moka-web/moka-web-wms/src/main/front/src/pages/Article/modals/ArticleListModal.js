@@ -236,12 +236,14 @@ const ArticleListModal = (props) => {
     }, [show]);
 
     useEffect(() => {
-        if (gridInstance) {
-            // onRowClicked가 변경되어서 모든 cell의 onClick 이벤트 update 쳐줘야함
-            const allrows = getAllRowData(gridInstance.api);
-            gridInstance.api.applyTransaction({ update: allrows.map((r) => ({ ...r, onClick: handleRowClicked })) });
-        }
-    }, [gridInstance, handleRowClicked]);
+        setRowData(
+            rowData.map((row) => ({
+                ...row,
+                onClick: handleRowClicked,
+            })),
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [handleRowClicked]);
 
     return (
         <MokaModal title="기사 검색" show={show} onHide={handelHide} size="lg" width={1000} height={800} bodyClassName="d-flex flex-column" draggable>

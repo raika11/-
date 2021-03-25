@@ -104,7 +104,7 @@ const ChannelEdit = ({ match }) => {
             }),
         );
         if (error.members) {
-            setError({ ...error, memebers: false });
+            setError({ ...error, members: false });
         }
     };
 
@@ -119,7 +119,7 @@ const ChannelEdit = ({ match }) => {
             }),
         );
         if (error.members) {
-            setError({ ...error, memebers: false });
+            setError({ ...error, members: false });
         }
     };
 
@@ -134,7 +134,7 @@ const ChannelEdit = ({ match }) => {
             }),
         );
         if (error.members) {
-            setError({ ...error, memebers: false });
+            setError({ ...error, members: false });
         }
     };
 
@@ -152,7 +152,7 @@ const ChannelEdit = ({ match }) => {
 
             const duplicated = members.filter((mem) => mem.memRepSeq === reporter.repSeq);
             if (duplicated.length > 0) {
-                toast.warning('중복된 진행자는 등록 할수 없습니다');
+                toast.warning('중복된 진행자는 등록할 수 없습니다');
                 return;
             }
 
@@ -171,7 +171,7 @@ const ChannelEdit = ({ match }) => {
             });
             setMembers(nm);
             if (error.members) {
-                setError({ ...error, memebers: false });
+                setError({ ...error, members: false });
             }
         },
         [chnlSeq, error, members],

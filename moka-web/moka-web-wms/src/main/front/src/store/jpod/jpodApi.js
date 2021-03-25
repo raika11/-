@@ -2,18 +2,7 @@ import qs from 'qs';
 import instance from '@store/commons/axios';
 import { objectToFormData } from '@utils/convertUtil';
 
-/**
- * 기자관리 목록 조회
- */
-export const getReporterList = ({ search }) => {
-    return instance.get(`/api/reporters?${qs.stringify(search)}`).catch((err) => {
-        throw err;
-    });
-};
-
-/**
- * Podty 에피소트 목록 조회
- */
+// Podty 목록 조회
 export const getPodtyChannels = () => {
     return instance.get(`/api/podty/channels`).catch((err) => {
         throw err;
@@ -67,31 +56,44 @@ export const deleteChnl = ({ chnlSeq }) => {
     });
 };
 
-/**
- * 에피소드 목록 조회
- */
-export const getEpisodes = ({ search }) => {
+// 에피소드 목록 조회
+export const getEpsdList = ({ search }) => {
     return instance.get(`/api/jpod/episodes?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 에피소드 정보 조회
- */
-export const getEpisodesInfo = ({ chnlSeq, epsdSeq }) => {
+// 에피소드 정보 조회
+export const getEpsd = ({ chnlSeq, epsdSeq }) => {
     return instance.get(`/api/jpod/${chnlSeq}/episodes/${epsdSeq}`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 에피소드 채널 조회
- */
-export const getEpisodeChannels = ({ search }) => {
-    return instance.get(`/api/jpods?${qs.stringify(search)}`).catch((err) => {
-        throw err;
-    });
+// 에피소드 등록
+export const postEpsd = ({ epsd }) => {
+    return instance
+        .post(`/api/jpod/${epsd.chnlSeq}/episodes`, objectToFormData(epsd), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// 에피소드 수정
+export const putEpsd = ({ epsd }) => {
+    return instance
+        .put(`/api/jpod/${epsd.chnlSeq}/episodes/${epsd.epsdSeq}`, objectToFormData(epsd), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
 
 /**
@@ -101,36 +103,6 @@ export const getPodtyEpisodesList = ({ castSrl }) => {
     return instance.get(`/api/podty/channels/${castSrl}/episodes`).catch((err) => {
         throw err;
     });
-};
-
-/**
- * 에피소드 등록 처리
- */
-export const saveJpodEpisode = ({ chnlSeq, episodeinfo }) => {
-    return instance
-        .post(`/api/jpod/${chnlSeq}/episodes`, episodeinfo, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        .catch((err) => {
-            throw err;
-        });
-};
-
-/**
- * 에피소드 업데이트 처리
- */
-export const updateJpodEpisode = ({ chnlSeq, epsdSeq, episodeinfo }) => {
-    return instance
-        .put(`/api/jpod/${chnlSeq}/episodes/${epsdSeq}`, episodeinfo, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        .catch((err) => {
-            throw err;
-        });
 };
 
 /**

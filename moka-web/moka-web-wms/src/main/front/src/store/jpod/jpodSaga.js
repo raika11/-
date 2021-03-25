@@ -11,6 +11,11 @@ import * as api from './jpodApi';
 const getChannelPodtyListsaga = callApiAfterActions(act.GET_CHANNEL_PODTY_LIST, api.getPodtyChannels, (store) => store.jpod.podtyChannel);
 
 /**
+ * 모든 채널 목록 조회
+ */
+const getTotalChnlList = callApiAfterActions(act.GET_TOTAL_CHNL_LIST, api.getChnlList, ({ jpod }) => jpod.totalChannel.search);
+
+/**
  * 채널 목록
  */
 const getChnlList = createRequestSaga(act.GET_CHNL_LIST, api.getChnlList);
@@ -23,11 +28,19 @@ const getChnl = createRequestSaga(act.GET_CHNL, api.getChnl);
 /**
  * 채널 > 에피소드
  */
-const getChnlEpsdList = createRequestSaga(act.GET_CHNL_EPSD_LIST, api.getEpisodes);
+const getChnlEpsdList = createRequestSaga(act.GET_CHNL_EPSD_LIST, api.getEpsdList);
 
-const getEpisodesSaga = callApiAfterActions(act.GET_EPISODES, api.getEpisodes, (store) => store.jpod.episode.episodes);
+/**
+ * 에피소드 목록
+ */
+const getEpsdList = createRequestSaga(act.GET_EPSD_LIST, api.getEpsdList);
+
+/**
+ * 에피소드 상세
+ */
+const getEpsd = createRequestSaga(act.GET_EPSD, api.getEpsd);
+
 const getPodtyEpisodeListSaga = callApiAfterActions(act.GET_PODTY_EPISODE_LIST, api.getPodtyEpisodesList, (store) => store.jpod.podtyEpisode);
-const getEpisodeGubunChannelsSaga = callApiAfterActions(act.GET_EPISODE_GUBUN_CHANNELS, api.getEpisodeChannels, (store) => store.jpod.episode.channel);
 
 /**
  * 채널 저장
@@ -77,33 +90,46 @@ function* saveChnl({ payload: { chnl, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
-// 에피소드 정보 등록 수정.
-function* saveJpodEpisodeSaga({ payload: { chnlSeq, epsdSeq, episodeinfo, callback } }) {
-    yield put(startLoading(act.SAVE_JPOD_EPISODE));
-
+/**
+ * 에피소드 저장
+ */
+function* saveEpsd({ payload: { epsd, callback } }) {
+    const ACTION = act.SAVE_EPSD;
     let callbackData = {};
     let response;
 
+    yield put(startLoading(ACTION));
     try {
-        if (chnlSeq && epsdSeq) {
-            response = yield call(api.updateJpodEpisode, { chnlSeq: chnlSeq, epsdSeq: epsdSeq, episodeinfo: episodeinfo });
+        if (epsd.chnlSeq && epsd.epsdSeq) {
+            response = yield call(api.putEpsd, { epsd });
         } else {
-            response = yield call(api.saveJpodEpisode, { chnlSeq: chnlSeq, episodeinfo: episodeinfo });
+            response = yield call(api.postEpsd, { epsd });
         }
-
         callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 다시 검색
+            const search = yield select(({ jpod }) => jpod.episode.search);
+            yield put({ type: act.GET_EPSD_LIST, payload: { search } });
+        } else {
+            const { body } = response.data;
+            if (body && body.list && Array.isArray(body.list)) {
+                // invalidList 셋팅
+                yield put({
+                    type: act.CHANGE_EPSD_INVALID_LIST,
+                    payload: body.list,
+                });
+            }
+        }
     } catch (e) {
         callbackData = errorResponse(e);
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
     }
+
     if (typeof callback === 'function') {
         yield call(callback, callbackData);
     }
 
-    yield put(finishLoading(act.SAVE_JPOD_EPISODE));
+    yield put(finishLoading(ACTION));
 }
 
 /**
@@ -133,31 +159,6 @@ function* deleteChnl({ payload: { chnlSeq, callback } }) {
     }
 
     yield put(finishLoading(ACTION));
-}
-
-function* getEpisodesInfoSaga({ payload: { chnlSeq, epsdSeq } }) {
-    yield put(startLoading(act.GET_EPISODES_INFO));
-
-    let response;
-    try {
-        response = yield call(api.getEpisodesInfo, { chnlSeq: chnlSeq, epsdSeq: epsdSeq });
-        const {
-            header: { success, message },
-        } = response.data;
-        if (success === true) {
-            yield put({ type: act.GET_EPISODES_INFO_SUCCESS, payload: response.data });
-        } else {
-            // 에러 나면 서버 에러 메시지 토스트 전달.
-            toast.error(message);
-        }
-    } catch (e) {
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
-    }
-
-    yield put(finishLoading(act.GET_EPISODES_INFO));
 }
 
 // 브라이트 코브 목록 조회.
@@ -329,6 +330,11 @@ export default function* jpodSaga() {
     yield takeLatest(act.GET_CHANNEL_PODTY_LIST, getChannelPodtyListsaga);
 
     /**
+     * 모든 채널 조회 (useTotal === Y)
+     */
+    yield takeLatest(act.GET_TOTAL_CHNL_LIST, getTotalChnlList);
+
+    /**
      * 채널
      */
     yield takeLatest(act.GET_CHNL_LIST, getChnlList);
@@ -340,11 +346,10 @@ export default function* jpodSaga() {
     /**
      * 에피소드
      */
-    yield takeLatest(act.GET_EPISODES, getEpisodesSaga); // 에피소드 리스트 가지고 오기.
-    yield takeLatest(act.GET_EPISODES_INFO, getEpisodesInfoSaga); // 에피소드 리스트 가지고 오기.
+    yield takeLatest(act.GET_EPSD_LIST, getEpsdList);
+    yield takeLatest(act.GET_EPSD, getEpsd);
+    yield takeLatest(act.SAVE_EPSD, saveEpsd);
     yield takeLatest(act.GET_PODTY_EPISODE_LIST, getPodtyEpisodeListSaga); // 에피소드 리스트 가지고 오기.
-    yield takeLatest(act.GET_EPISODE_GUBUN_CHANNELS, getEpisodeGubunChannelsSaga); // 에피소드 구분용 채널 리스트 가지고 오기 ( 등록, 수정, 검색 등에 사용).
-    yield takeLatest(act.SAVE_JPOD_EPISODE, saveJpodEpisodeSaga); // 에피소드 등록.
 
     yield takeLatest(act.GET_BRIGHT_OVP, getBrightOvpSaga); // 브라이트 코브 목록 조회.
     yield takeLatest(act.SAVE_BRIGHTOVP, saveBrightovpSaga); // 브라이트 코브 저장.

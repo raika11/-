@@ -36,6 +36,7 @@ export const initialState = {
             chnlImgMobFile: null, // 모바일 파일
             keywords: [],
             members: [],
+            seasonCnt: 0,
             episodeStat: {
                 lastEpsoNo: null,
                 unusedCnt: 0,
@@ -61,6 +62,16 @@ export const initialState = {
         nickNm: '',
         seqNo: '',
     },
+    // 모든 채널 목록 (에피소드의 selectbox, 공지의 selectbox)
+    totalChannel: {
+        search: {
+            page: 0,
+            sort: 'chnlSeq,desc',
+            usedYn: 'Y',
+            useTotal: 'Y',
+        },
+        list: [],
+    },
     // 에피소드
     episode: {
         total: 0,
@@ -76,6 +87,11 @@ export const initialState = {
             chnlSeq: null,
             podtyChnlSrl: null,
         },
+        searchTypeList: [
+            { id: '', name: '사용여부전체' },
+            { id: 'Y', name: '사용' },
+            { id: 'N', name: '미사용' },
+        ],
         episode: {
             articles: [],
             epsdFile: null,
@@ -92,15 +108,7 @@ export const initialState = {
             usedYn: 'Y',
             viewCnt: 0,
         },
-        channel: {
-            search: {
-                page: 0,
-                sort: 'chnlSeq,desc',
-                usedYn: 'Y',
-                useTotal: 'Y',
-            },
-            list: [],
-        },
+        invalidList: [],
     },
     // 공지 게시판
     jpodNotice: {
@@ -121,18 +129,6 @@ export const initialState = {
             keyword: '',
         },
         contents: {},
-    },
-    reporter: {
-        total: 0,
-        list: [],
-        search: {
-            page: 0,
-            size: PAGESIZE_OPTIONS[0],
-            sort: 'repSeq,asc',
-            searchType: 'all',
-            keyword: '',
-            usePaging: 'Y',
-        },
     },
     podtyChannel: {
         total: 0,
@@ -164,6 +160,14 @@ export const initialState = {
 export default handleActions(
     {
         [act.CLEAR_STORE]: () => initialState,
+        /**
+         * 모든 채널 목록 조회
+         */
+        [act.GET_TOTAL_CHNL_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.totalChannel.list = body.list;
+            });
+        },
         /**
          * 채널 관련
          */
@@ -211,23 +215,28 @@ export default handleActions(
         /**
          * 에피소드 관련
          */
-        [act.CHANGE_EPISODES_SEARCH_OPTION]: (state, { payload }) => {
+        [act.CLEAR_EPSD]: (state) => {
+            return produce(state, (draft) => {
+                draft.episode.episode = initialState.episode.episode;
+            });
+        },
+        [act.CHANGE_EPSD_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.episode.search = payload;
             });
         },
-        [act.GET_EPISODES_SUCCESS]: (state, { payload: { body } }) => {
+        [act.CHANGE_EPSD_INVALID_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.episode.invalidList = payload;
+            });
+        },
+        [act.GET_EPSD_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.episode.list = body.list;
                 draft.episode.total = body.totalCnt;
             });
         },
-        [act.CLEAR_EPISODE_INFO]: (state) => {
-            return produce(state, (draft) => {
-                draft.episode.episode = initialState.episode.episode;
-            });
-        },
-        [act.GET_EPISODES_INFO_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_EPSD_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.episode.episode = body;
             });
@@ -264,12 +273,6 @@ export default handleActions(
         [act.CHANGE_PODTY_EPISODE_CASTSRL]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.podtyEpisode.castSrl = payload;
-            });
-        },
-        // 에피소드 에서 사용할 채널 목록(검색 , 등록, 수정)
-        [act.GET_EPISODE_GUBUN_CHANNELS_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.episode.channel.list = body.list;
             });
         },
         // 에피소드 에서 사용할 채널 목록(검색 , 등록, 수정)

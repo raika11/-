@@ -5,6 +5,13 @@ export const CLEAR_STORE = 'jpod/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 
 /**
+ * 모든 채널을 조회
+ * 채널별 에피소드, 채널별 공지 등
+ */
+export const [GET_TOTAL_CHNL_LIST, GET_TOTAL_CHNL_LIST_SUCCESS] = createRequestActionTypes('jpod/GET_TOTAL_CHNL_LIST');
+export const getTotalChnlList = createAction(GET_TOTAL_CHNL_LIST, () => {});
+
+/**
  * 채널 관련 액션
  */
 export const CLEAR_CHNL = 'jpod/CLEAR_CHNL';
@@ -25,13 +32,28 @@ export const saveChnl = createAction(SAVE_CHNL, ({ chnl, callback }) => ({ chnl,
 // 채널 삭제
 export const DELETE_CHNL = createRequestActionTypes('jpod/DELETE_CHNL');
 export const deleteChnl = createAction(DELETE_CHNL, ({ chnlSeq, callback }) => ({ chnlSeq, callback }));
-// 에피소드 목록 조회(채널 정보에 필요한 에피소드 목록)
+// 채널 > 에피소드탭 목록 조회
 export const [GET_CHNL_EPSD_LIST, GET_CHNL_EPSD_LIST_SUCCESS] = createRequestActionTypes('jpod/GET_CHNL_EPSD_LIST');
 export const getChnlEpsdList = createAction(GET_CHNL_EPSD_LIST, ({ search, callback }) => ({ search, callback }));
 
 /**
  * 에피소드 관련 액션
  */
+export const CLEAR_EPSD = 'jpod/CLEAR_EPSD';
+export const clearEpsd = createAction(CLEAR_EPSD);
+export const CHANGE_EPSD_SEARCH_OPTION = 'jpod/CHANGE_EPSD_SEARCH_OPTION';
+export const changeEpsdSearchOption = createAction(CHANGE_EPSD_SEARCH_OPTION, (search) => search);
+export const CHANGE_EPSD_INVALID_LIST = 'jpod/CHANGE_EPSD_INVALID_LIST';
+export const changeEpsdInvalidList = createAction(CHANGE_EPSD_INVALID_LIST, (invalidList) => invalidList);
+// 에피소드 목록
+export const [GET_EPSD_LIST, GET_EPSD_LIST_SUCCESS, GET_EPSD_LIST_FAILURE] = createRequestActionTypes('jpod/GET_EPSD_LIST');
+export const getEpsdList = createAction(GET_EPSD_LIST, ({ search, callback }) => ({ search, callback }));
+// 에피소드 정보
+export const [GET_EPSD, GET_EPSD_SUCCESS, GET_EPSD_FAILURE] = createRequestActionTypes('jpod/GET_EPSD');
+export const getEpsd = createAction(GET_EPSD, ({ chnlSeq, epsdSeq, callback }) => ({ chnlSeq, epsdSeq, callback }));
+// 에피소드 저장
+export const SAVE_EPSD = 'jpod/SAVE_EPSD';
+export const saveEpsd = createAction(SAVE_EPSD, ({ epsd, callback }) => ({ epsd, callback }));
 
 /**
  * 팟티검색 모달
@@ -72,46 +94,6 @@ export const [SAVE_BRIGHTOVP, SAVE_BRIGHTOVP_SUCCESS, SAVE_BRIGHTOVP_FAILURE] = 
 export const saveBrightovp = createAction(SAVE_BRIGHTOVP, ({ ovpdata, callback }) => ({ ovpdata, callback }));
 export const CHANGE_BRIGHTOVP_SEARCH_OPTION = 'jpod/CHANGE_BRIGHTOVP_SEARCH_OPTION';
 export const changeBrightovpSearchOption = createAction(CHANGE_BRIGHTOVP_SEARCH_OPTION, (actions) => actions);
-
-/* 에피소드 */
-export const CLEAR_EPISODE = 'jpod/CLEAR_EPISODE';
-export const clearEpisode = createAction(CLEAR_EPISODE);
-
-/**
- * 검색 옵션 변경
- */
-export const CHANGE_EPISODES_SEARCH_OPTION = 'jpod/CHANGE_EPISODES_SEARCH_OPTION';
-export const changeEpisodesSearchOption = createAction(CHANGE_EPISODES_SEARCH_OPTION, (actions) => actions);
-
-/**
- * 채널 목록 조회(등록, 수정, 검색등에 사용)
- */
-export const [GET_EPISODE_GUBUN_CHANNELS, GET_EPISODE_GUBUN_CHANNELS_SUCCESS, GET_EPISODE_GUBUN_CHANNELS_FAILURE] = createRequestActionTypes('jpod/GET_EPISODE_GUBUN_CHANNELS');
-export const getEpisodeGubunChannels = createAction(GET_EPISODE_GUBUN_CHANNELS, (actions) => actions);
-
-/**
- * 에피소드 목록 조회(에피소드 관리 목록)
- */
-export const [GET_EPISODES, GET_EPISODES_SUCCESS, GET_EPISODES_FAILURE] = createRequestActionTypes('jpod/GET_EPISODES');
-export const getEpisodes = createAction(GET_EPISODES, (actions) => actions);
-
-/**
- * 에피소드 정보 초기화
- */
-export const CLEAR_EPISODE_INFO = 'jpod/CLEAR_EPISODE_INFO';
-export const clearEpisodeInfo = createAction(CLEAR_EPISODE_INFO);
-
-/**
- * 에피소드 정보 조회
- */
-export const [GET_EPISODES_INFO, GET_EPISODES_INFO_SUCCESS, GET_EPISODES_INFO_FAILURE] = createRequestActionTypes('jpod/GET_EPISODES_INFO');
-export const getEpisodesInfo = createAction(GET_EPISODES_INFO, ({ chnlSeq, epsdSeq }) => ({ chnlSeq, epsdSeq }));
-
-/**
- * 채널 등록, 수정
- */
-export const [SAVE_JPOD_EPISODE, SAVE_JPOD_EPISODE_SUCCESS, SAVE_JPOD_EPISODE_FAILURE] = createRequestActionTypes('jpod/SAVE_JPOD_EPISODE');
-export const saveJpodEpisode = createAction(SAVE_JPOD_EPISODE, ({ chnlSeq, epsdSeq, episodeinfo, callback }) => ({ chnlSeq, epsdSeq, episodeinfo, callback }));
 
 /**
  * 공지 게시판 관련 액션

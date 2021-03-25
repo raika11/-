@@ -16,6 +16,7 @@ const ChannelEpisode = () => {
     }));
     const [episodeStat, setEpisodeStat] = useState(initialState.channel.channel.episodeStat);
     const [episodeTitle, setEpisodeTitle] = useState('');
+    const [rowData, setRowData] = useState([]);
 
     /**
      * row 클릭
@@ -30,6 +31,16 @@ const ChannelEpisode = () => {
         setEpisodeTitle(channel?.chnlNm);
         setEpisodeStat(channel?.episodeStat);
     }, [channel]);
+
+    useEffect(() => {
+        setRowData(
+            list.map((li) => ({
+                ...li,
+                seasonNo: `시즌${li.seasonNo > 0 ? li.seasonNo : ''}`,
+                playTime: (li.playTime || '').slice(0, 5),
+            })),
+        );
+    }, [list]);
 
     return (
         <MokaCard className="w-100 flex-fill" bodyClassName="d-flex flex-column" title={`${episodeTitle} 에피소드 목록`}>
@@ -50,7 +61,7 @@ const ChannelEpisode = () => {
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={channelEpisodeColumnDefs}
-                rowData={list.map((l) => ({ ...l, seasonNo: `시즌${l.seasonNo > 0 ? l.seasonNo : ''}` }))}
+                rowData={rowData}
                 onRowNodeId={(data) => data.epsdSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}

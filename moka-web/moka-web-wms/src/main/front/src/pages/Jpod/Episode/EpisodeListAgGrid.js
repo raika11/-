@@ -1,58 +1,55 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@components';
 import { columnDefs } from './EpisodeListAgGridColumns';
-import { clearSelectArticleList } from '@store/survey/quiz';
-import { GET_EPISODES, changeEpisodesSearchOption, getEpisodes, getChnl, getEpisodesInfo } from '@store/jpod';
+import { GET_EPSD_LIST, changeEpsdSearchOption, getEpsdList } from '@store/jpod';
 
 /**
- * J팟 관리 - 에피소드 AgGrid
+ * J팟 관리 > 에피소드 > AgGrid
  */
 const EpisodeListAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    // 스토어 연결.
-    const total = useSelector((store) => store.jpod.episode.total);
-    const search = useSelector((store) => store.jpod.episode.search);
-    const list = useSelector((store) => store.jpod.episode.list);
-    const episode = useSelector((store) => store.jpod.episode.episode);
-    const loading = useSelector((store) => store.loading[GET_EPISODES]);
+    const loading = useSelector(({ loading }) => loading[GET_EPSD_LIST]);
+    const { total, search, list, episode } = useSelector(({ jpod }) => jpod.episode);
+    const [rowData, setRowData] = useState([]);
 
-    // const selectArticleItem = useSelector((store) => store.quiz.selectArticle.item);
-    // const selectArticleList = useSelector((store) => store.quiz.selectArticle.list);
+    /**
+     * row 클릭
+     */
+    const handleRowClicked = ({ chnlSeq, epsdSeq }) => history.push(`${match.path}/${chnlSeq}/${epsdSeq}`);
 
-    // 목록 클릭 했을때.
-    const handleClickListRow = ({ chnlSeq, epsdSeq }) => {
-        if (chnlSeq !== episode.chnlSeq) {
-            dispatch(getChnl({ chnlSeq: chnlSeq }));
-        }
-        dispatch(clearSelectArticleList());
-        dispatch(getEpisodesInfo({ chnlSeq: chnlSeq, epsdSeq: epsdSeq }));
-        history.push(`${match.path}/${chnlSeq}/${epsdSeq}`);
-    };
-
-    // grid 에서 상태 변경시 리스트를 가지고 오기.
+    /**
+     * 테이블 검색 옵션 변경
+     */
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
             let temp = { ...search, [key]: value };
-            if (key !== 'page') {
-                temp['page'] = 0;
-            }
-            dispatch(changeEpisodesSearchOption(temp));
-            dispatch(getEpisodes());
+            if (key !== 'page') temp['page'] = 0;
+            dispatch(changeEpsdSearchOption(temp));
+            dispatch(getEpsdList({ search: temp }));
         },
         [dispatch, search],
     );
+
+    useEffect(() => {
+        setRowData(
+            list.map((li) => ({
+                ...li,
+                seasonNo: `시즌${li.seasonNo > 0 ? li.seasonNo : ''}`,
+                playTime: (li.playTime || '').slice(0, 5),
+            })),
+        );
+    }, [list]);
 
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
-            rowData={list}
-            rowHeight={80}
+            rowData={rowData}
             onRowNodeId={(data) => data.epsdSeq}
-            onRowClicked={handleClickListRow}
+            onRowClicked={handleRowClicked}
             loading={loading}
             total={total}
             page={search.page}

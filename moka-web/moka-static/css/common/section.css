@@ -52,11 +52,8 @@
 .case_unique [class*="swiper-button-next"] { right: -30px; }
 .case_unique [class*="swiper-button-prev"] { left: -30px; }
 .case_unique .page_title { margin-bottom: 30px; padding-bottom: 11px; border-bottom: 4px solid #000; }
-.case_unique .top_area_wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; margin-top: 30px; padding: 12px 0; border-top: 1px solid #000; }
 .case_unique .top_area_wrap .sub_title { display: flex; align-items: center; }
 .case_unique .top_area_wrap .sub_title .fa_arrow_right_b { margin-left: 4px; }
-.case_unique .top_area_wrap.type1 { border-width: 2px; }
-.case_unique .top_area_wrap.type1 .sub_title { font-size: 20px; }
 /* 임시 아이콘 이미지 변경시 소스 수정해야됨 */
 .fa_rect_w { width: 15px; height: 10px; border: 1.5px solid #fff;  }
 .fa_rect_w::after { content: ''; position: absolute; left: 6px; top: 4px; width: 12px; height: 8px; border: 1.5px solid #fff; }

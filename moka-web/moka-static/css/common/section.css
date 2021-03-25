@@ -187,16 +187,16 @@
 .border_type1 {border-top:1px solid #000;}
 
 
-
-.pr_lg12{padding-right:12px;}
-
-.pl_lg24{padding-left:24px;}
+/* padding */
 
 
-.top_area_wrap {display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;height:60px;margin-top:30px;padding:12px 0;border-top:3px solid #000;}
-.top_area_wrap .sub_title {display:flex;align-items: center;font-size:18px;font-weight:bold;line-height:1.44;letter-spacing:-0.28px;color:#000;}
-.top_area_wrap .sub_title span {padding-left:20px;color:#888;font-size:13px;font-weight:400;}
 
+
+
+
+
+/* flex */
+.flex_reverse {flex-wrap: wrap-reverse;}
 
 .catalog_home.swiper-container {width:100%;}
 .catalog_home.swiper-container .swiper-slide div:nth-child(2) {position:relative;}
@@ -224,11 +224,11 @@
 .sns_wrap .title { font-size: 18px;font-weight: bold;letter-spacing: -0.48px;color: #000;}
 .sns_wrap.instagram {background: #d6249f;background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);box-shadow: 0px 3px 10px rgba(0,0,0,.25);}
 
-/* flex wrap */
-/* 많이본 기사 */
-.rank .card{margin-bottom: 30px;}
-.rank .img_thumbnail {width:90px;}
 
+/* 많이본 기사 - rank*/
+.card_group.rank .card{margin-bottom:30px;}
+.card_group.rank .lank_count{font-size:46px;line-height:1.22;letter-spacing:-0.42px;}
+.card_group.rank .card_body{padding-right:20px;}
 
 
 
@@ -257,9 +257,9 @@
     .catalog .card_group{width:calc(100% + 20px);max-width:unset;margin-left:-10px;}
     .catalog .card_group .card{position:relative;padding:16px 10px 14px;}
     .catalog .card_group .card:before{content:'';position:absolute;top:0;left:10px;display:block;width:calc(100% - 20px);height:1px;background:#e2e2e2;}
-    .catalog .rank .card_image{float:right;width:35%;margin-left:19px;margin-bottom:0;}
+    
 
-    .catalog .flex {flex-wrap: wrap-reverse;}
+    
 
 
 
@@ -270,6 +270,10 @@
 /* Medium devices (tablet + pc, 768px and up) */
 @media (min-width:768px) {
 
+    /* padding */
+    .pr_md7 {padding-right:7px;}
+    .pl_md13 {padding-left:13px;}
+
     /* catalog main swiper */
     .catalog_home.swiper-container .swiper-pagination {left:66.666667%;transform:translateX(20px);}
 
@@ -277,6 +281,9 @@
     /* card */
     .catalog .card_group{width:calc(100% + 20px);max-width:unset;margin-left:-10px;}
     .catalog .card_group .card{padding:0 10px;}
+
+    /* rank */
+    .card_group.rank .lank_count{font-size:36px;line-height:1.22;letter-spacing:-0.33px;}
 
 
 
@@ -287,7 +294,9 @@
 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
+    .pr_lg12{padding-right:12px;}
 
+    .pl_lg24{padding-left:24px;}
     
     /***************************************    catalog     ************************************/
     .catalog_home.swiper-container .swiper-pagination {transform:translateX(36px);}

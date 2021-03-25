@@ -198,40 +198,9 @@
 /* common 으로 옮길것들 */
 
 
-/* 말줄임 */
-.ellip {display:inline-block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;white-space:normal;text-align:left;word-wrap:break-word;display:-webkit-box;-webkit-box-orient:vertical;}
-
-/* border */
-.bdr_top {border-top-style:solid;}
-.bdr_right {border-right-style:solid;}
-.bdr_bottom {border-bottom-style:solid;}
-.bdr_left {border-left-style:solid;}
-
-.bdr_width1 {border-width:1px !important;}
-.bdr_width2 {border-width:2px !important;}
-.bdr_width3 {border-width:3px !important;}
-.bdr_width4 {border-width:4px !important;}
-
-.bdr_black {border-color:#000;}
-.border_type1 {border-top:1px solid #000;}
-
-
-/* padding */
-
-
-
-
-
-
-
-/* flex */
-
-
 .catalog_home.swiper-container {width:100%;}
 .catalog_home.swiper-container .swiper-slide div:nth-child(2) {position:relative;}
 .catalog_home.swiper-container .swiper-slide div:nth-child(2) .text_wrap {position:absolute;padding:0 30px;left:0;top:50%;transform:translate(0, -50%);}
-
-
 
 
 .text_wrap {width:100%;}
@@ -257,13 +226,8 @@
 
 
 /* 많이본 기사 - rank*/
-/* .card_group.rank{flex-direction: column} */
-
 .card_group.rank .lank_count {line-height:1.22;letter-spacing:-0.42px;}
 .card_group.rank .card_image {margin-bottom:0;padding-left:20px;background-color:transparent;}
-
-/* .ad_wrap{flex-direction: column} */
-
 
 
 
@@ -296,20 +260,10 @@
     .catalog .card_group.rank .card:first-child{padding-top:0;}
     .catalog .card_group.rank .card:first-child:before{display:none;}
 
-    
-
-
-
-    
-
 }
 
 /* Medium devices (tablet + pc, 768px and up) */
 @media (min-width:768px) {
-
-    /* padding */
-    .pr_md7 {padding-right:7px;}
-    .pl_md13 {padding-left:13px;}
 
     /* catalog main swiper */
     .catalog_home.swiper-container .swiper-pagination {left:66.666667%;transform:translateX(20px);}
@@ -325,16 +279,11 @@
 
 
 
-
-
-
 }
 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
-    .pr_lg12{padding-right:12px;}
-
-    .pl_lg24{padding-left:24px;}
+    
     
     /***************************************    catalog     ************************************/
     .catalog_home.swiper-container .swiper-pagination {transform:translateX(36px);}

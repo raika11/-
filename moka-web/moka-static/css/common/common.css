@@ -162,6 +162,8 @@ section{width:100%;}
 
 /** 말줄임 **/
 .el {overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical;}
+.ellip {display:inline-block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;white-space:normal;text-align:left;word-wrap:break-word;display:-webkit-box;-webkit-box-orient:vertical;}
+
 
 /** position **/
 .position_re {position: relative;}
@@ -367,10 +369,33 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 /* 텍스트 간 구분선 */
 .div_line::before {content: ''; display: inline-block; width: 1px; height: 12px; margin: 0 16px; background-color: #d8d8d8;}
 
-/* swiper */
+
+
+
+
+/*** border ***/
+/* border 위치 */
+.bdr_top {border-top-style:solid;}
+.bdr_right {border-right-style:solid;}
+.bdr_bottom {border-bottom-style:solid;}
+.bdr_left {border-left-style:solid;}
+
+/* border 두께 */
+.bdr_width1 {border-width:1px !important;}
+.bdr_width2 {border-width:2px !important;}
+.bdr_width3 {border-width:3px !important;}
+.bdr_width4 {border-width:4px !important;}
+
+/* border 색상 */
+.bdr_black {border-color:#000;}
+
+/* border 기타 */
+.border_type1 {border-top:1px solid #000;}
+
+
+/*** swiper ***/
 :root {--swiper-theme-color: #000;}
 .swiper-scrollbar{background:transparent;}
-
 
 /* Mobile devices (mobile, 375px and down) */
 @media (max-width:375px) {
@@ -465,6 +490,10 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
     .side_nav_mobile{display:none;}
 
+    /* padding */
+    .pr_md7 {padding-right:7px;}
+    .pl_md13 {padding-left:13px;}
+
     /* font size */
     .fs_md32{font-size:32px;}
     .fs_md30{font-size:30px;}
@@ -550,6 +579,10 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .footer_wrap {max-width: 1200px;}
 
     .contents{padding-left:0;padding-right:0;}
+
+    /* padding */
+    .pr_lg12{padding-right:12px;}
+    .pl_lg24{padding-left:24px;}
 
     /* main{padding:0px;} */
 

@@ -6,9 +6,11 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
-import { GET_JPOD_NOTICE_CONTENTS, getJpodNoticeContents, clearJpodBoardContents } from '@store/jpod';
+import { initialState, GET_JPOD_NOTICE_CONTENTS, getJpodNoticeContents, clearJpodBoardContents } from '@store/jpod';
 import { uploadBoardContentsImage, updateBoardContents, saveBoardContents, deleteBoardContents } from '@store/board';
 import BoardsSummernote from '@pages/Boards/BoardsList/BoardsEdit/BoardsSummernote';
+import NoticeEditForm from './NoticeEditForm';
+import NoticeEditReplyForm from './NoticeEditReplyForm';
 
 /**
  * J팟 관리 - 공지 게시판 수정 / 등록
@@ -23,7 +25,7 @@ const NoticeEdit = ({ match }) => {
     const contents = useSelector((store) => store.jpod.jpodNotice.contents);
     const loading = useSelector((store) => store.loading[GET_JPOD_NOTICE_CONTENTS]);
 
-    const [editData, setEditData] = useState({});
+    const [temp, setTemp] = useState(initialState.jpodNotice.contents);
     // const [replyEditData, setReplyEditData] = useState({}); // 답변 정보가 저장 되는 state.
 
     const [editContents, setEditContents] = useState('');
@@ -39,16 +41,14 @@ const NoticeEdit = ({ match }) => {
     //     fileinputRef.current = null;
     // };
 
-    // 게시글 데이터 변경시 스테이트 업데이트.
-    const handleChangeFormData = useCallback(
-        (e) => {
-            const { name, value } = e.target;
-            setEditData({
-                ...editData,
-                [name]: value,
-            });
+    /**
+     * 입력값 변경
+     */
+    const handleChangeValue = useCallback(
+        (formData) => {
+            setTemp({ ...temp, ...formData });
         },
-        [editData],
+        [temp],
     );
 
     // // 벨리데이션 체크
@@ -184,44 +184,46 @@ const NoticeEdit = ({ match }) => {
     /**
      * 답변 저장
      */
-    //  const handleClickSaveReply = () => {
-    //     dispatch(
-    //         saveBoardReply({
-    //             boardId: boardId,
-    //             parentBoardSeq: parentBoardSeq,
-    //             boardSeq: boardSeq,
-    //             contents: {
-    //                 boardId: null,
-    //                 title: editReplyData.title,
-    //                 content: editReplyData.content,
-    //                 depth: editData.depth + 1,
-    //                 indent: editData.indent + 1,
-    //                 ordNo: editData.ordNo,
-    //                 channelId: parentBoardSeq && reply ? contentsReply.channelId : editData.channelId,
-    //                 titlePrefix1: parentBoardSeq && reply ? contentsReply.titlePrefix1 : editData.titlePrefix1,
-    //                 titlePrefix2: parentBoardSeq && reply ? contentsReply.titlePrefix2 : editData.titlePrefix2,
-    //             },
-    //             files: { attachFile: [] },
-    //             callback: ({ header: { success, message }, body }) => {
-    //                 if (success === true) {
-    //                     toast.success(message);
-    //                     history.push(`${match.path}/${boardId}/${body.parentBoardSeq}`);
-    //                     dispatch(getListMenuContentsList(boardId));
-    //                     dispatch(getListMenuContentsInfo({ boardId: boardId, boardSeq: boardSeq }));
-    //                 } else {
-    //                     const { totalCnt, list } = body;
-    //                     if (totalCnt > 0 && Array.isArray(list)) {
-    //                         // 에러 메시지 확인
-    //                         messageBox.alert(list[0].reason, () => {});
-    //                     } else {
-    //                         // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함
-    //                         messageBox.alert(message, () => {});
-    //                     }
-    //                 }
-    //             },
-    //         }),
-    //     );
-    // };
+    const handleClickReplaySave = () => {
+        //     dispatch(
+        //         saveBoardReply({
+        //             boardId: boardId,
+        //             parentBoardSeq: parentBoardSeq,
+        //             boardSeq: boardSeq,
+        //             contents: {
+        //                 boardId: null,
+        //                 title: editReplyData.title,
+        //                 content: editReplyData.content,
+        //                 depth: editData.depth + 1,
+        //                 indent: editData.indent + 1,
+        //                 ordNo: editData.ordNo,
+        //                 channelId: parentBoardSeq && reply ? contentsReply.channelId : editData.channelId,
+        //                 titlePrefix1: parentBoardSeq && reply ? contentsReply.titlePrefix1 : editData.titlePrefix1,
+        //                 titlePrefix2: parentBoardSeq && reply ? contentsReply.titlePrefix2 : editData.titlePrefix2,
+        //             },
+        //             files: { attachFile: [] },
+        //             callback: ({ header: { success, message }, body }) => {
+        //                 if (success === true) {
+        //                     toast.success(message);
+        //                     history.push(`${match.path}/${boardId}/${body.parentBoardSeq}`);
+        //                     dispatch(getListMenuContentsList(boardId));
+        //                     dispatch(getListMenuContentsInfo({ boardId: boardId, boardSeq: boardSeq }));
+        //                 } else {
+        //                     const { totalCnt, list } = body;
+        //                     if (totalCnt > 0 && Array.isArray(list)) {
+        //                         // 에러 메시지 확인
+        //                         messageBox.alert(list[0].reason, () => {});
+        //                     } else {
+        //                         // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함
+        //                         messageBox.alert(message, () => {});
+        //                     }
+        //                 }
+        //             },
+        //         }),
+        //     );
+    };
+
+    const handleClickReplayDelete = () => {};
 
     // summernote 이미지 업로드 처리.
     const summerNoteImageUpload = (file) => {
@@ -284,8 +286,11 @@ const NoticeEdit = ({ match }) => {
         if (jpodBoard.boardId && boardSeq) {
             dispatch(getJpodNoticeContents({ boardId: jpodBoard.boardId, boardSeq: boardSeq }));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [jpodBoard, boardSeq]);
+    }, [jpodBoard, boardSeq, dispatch]);
+
+    useEffect(() => {
+        setTemp(contents);
+    }, [contents]);
 
     return (
         <MokaCard
@@ -322,71 +327,45 @@ const NoticeEdit = ({ match }) => {
                             </Button>
                         </>
                     )}
+                    {boardSeq &&
+                        reply &&
+                        (parentBoardSeq ? (
+                            // 답변 조회
+                            <>
+                                <Button variant="positive" className="mr-1" onClick={handleClickReplaySave}>
+                                    수정
+                                </Button>
+                                <Button variant="negative" className="mr-1" onClick={handleClickReplayDelete}>
+                                    삭제
+                                </Button>
+                                <Button variant="negative" onClick={handleClickCancel}>
+                                    취소
+                                </Button>
+                            </>
+                        ) : (
+                            // 답변 등록
+                            <>
+                                <Button variant="positive" className="mr-1" onClick={handleClickReplaySave}>
+                                    저장
+                                </Button>
+                                <Button variant="negative" onClick={handleClickCancel}>
+                                    취소
+                                </Button>
+                            </>
+                        ))}
                 </>
             }
         >
-            <Form>
-                {boardSeq && (
-                    <Form.Row>
-                        <Col xs={6} className="ft-12">
-                            {`${editData.regInfo ? editData.regInfo : ''}`}
-                        </Col>
-                        <Col xs={6} className="ft-12">
-                            {`${editData.modInfo ? editData.modInfo : ''}`}
-                        </Col>
-                    </Form.Row>
-                )}
-                {channelList.length > 0 && (
-                    // 게시판 등록시 기자명 이외에는 기본 select box를 사용.
-                    <Form.Row className="mb-2">
-                        <Col xs={6} className="p-0">
-                            <MokaInputLabel as="select" label="채널명" name="channelId" id="channelId" value={editData.channelId} onChange={handleChangeFormData}>
-                                <option value="">선택</option>
-                                {channelList.map((item, index) => (
-                                    <option key={index} value={item.value}>
-                                        {item.name}
-                                    </option>
-                                ))}
-                            </MokaInputLabel>
-                        </Col>
-                    </Form.Row>
-                )}
-                {/* 제목 */}
-                <Form.Row className="mb-2">
-                    <Col className="p-0">
-                        <MokaInput className="mb-0" id="title" name="title" placeholder="제목을 입력해 주세요." value={editData.title} onChange={handleChangeFormData} />
-                    </Col>
-                </Form.Row>
-                {/* 내용 */}
-                {jpodBoard.editorYn === 'Y' ? (
-                    <Form.Row className="mb-2">
-                        <Col className="p-0">
-                            <BoardsSummernote
-                                contentValue={editData.content}
-                                onChangeValue={(value) => {
-                                    setEditContents(value);
-                                }}
-                                onImageUpload={summerNoteImageUpload}
-                            />
-                        </Col>
-                    </Form.Row>
+            <>
+                {reply ? (
+                    <NoticeEditReplyForm
+                    // data={editReplyData}
+                    // onChangeFormData={handleChangeEditData}
+                    />
                 ) : (
-                    <Form.Row className="mb-2">
-                        <Col className="p-0">
-                            <MokaInputLabel
-                                as="textarea"
-                                className="mb-2"
-                                inputClassName="resize-none"
-                                inputProps={{ rows: 6 }}
-                                id="content"
-                                name="content"
-                                value={editData.content}
-                                onChange={handleChangeFormData}
-                            />
-                        </Col>
-                    </Form.Row>
+                    <NoticeEditForm data={temp} onChange={handleChangeValue} />
                 )}
-            </Form>
+            </>
         </MokaCard>
     );
 };

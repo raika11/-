@@ -7,25 +7,21 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaInputLabel, MokaInput, MokaTableEditCancleButton } from '@components';
 import { messageBox } from '@utils/toastUtil';
-import { getBoardChannelList, GET_LIST_MENU_CONTENTS_INFO } from '@store/board';
-import BoardRepoterSelect from './BoardRepoterSelect';
-import BoardsNote from './BoardsNote';
+import BoardsNote from '@/pages/Boards/BoardsList/BoardsEdit/BoardsNote';
 
 /**
- * 게시판 관리 > 게시글 관리 > 게시판 편집 폼
+ * J팟 관리 > 공지 게시판 > 게시글 편집 폼
  */
-const BoardsEditForm = ({ data, onChangeFormData }) => {
+const NoticeEditForm = ({ data, onChange }) => {
     const dispatch = useDispatch();
     const { boardSeq, parentBoardSeq } = useParams();
 
     const PDS_URL = useSelector((store) => store.app.PDS_URL);
-    const selectBoard = useSelector((store) => store.board.listMenu.selectBoard);
-    const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
-    const loading = useSelector((store) => store.loading[GET_LIST_MENU_CONTENTS_INFO]);
-
-    const [channalList, setChannalList] = useState([]); // 채널 선택
+    const jpodBoard = useSelector((store) => store.jpod.jpodNotice.jpodBoard);
+    const channelList = useSelector((store) => store.jpod.jpodNotice.channelList);
+    const contents = useSelector((store) => store.jpod.jpodNotice.contents);
     const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일
-    let fileRef = useRef(null);
+    const fileRef = useRef(null);
 
     /**
      * 입력값 변경
@@ -35,9 +31,9 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         const { name, value, checked, type } = e.target;
 
         if (type === 'checkbox') {
-            onChangeFormData({ [name]: checked === true ? 'Y' : 'N' });
+            onChange({ [name]: checked === true ? 'Y' : 'N' });
         } else {
-            onChangeFormData({ [name]: value });
+            onChange({ [name]: value });
         }
     };
 
@@ -49,23 +45,21 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         Array.from(e.target.files).forEach((f) => {
             const fileName = f.name.split('.');
             const fileExt = fileName[1];
-            if (selectBoard.allowFileExt.split(',').indexOf(fileExt) > 0) {
+            if (jpodBoard.allowFileExt.split(',').indexOf(fileExt) > 0) {
                 const fileUrl = URL.createObjectURL(f);
                 const imageData = { File: f, fileUrl };
                 imageFiles.push(imageData);
             } else {
                 // 허용하는 확장자가 아닐경우
-                messageBox.alert(`해당 게시판의 첨부 파일은 (${selectBoard.allowFileExt})확장자만 등록할 수 있습니다.`, () => {});
+                messageBox.alert(`해당 게시판의 첨부 파일은 (${jpodBoard.allowFileExt})확장자만 등록할 수 있습니다.`, () => {});
             }
         });
 
-        if (uploadFiles.length + 1 > selectBoard.allowFileCnt) {
-            messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${selectBoard.allowFileCnt}개 입니다.`, () => {});
+        if (uploadFiles.length + 1 > jpodBoard.allowFileCnt) {
+            messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${jpodBoard.allowFileCnt}개 입니다.`, () => {});
         } else {
             setUploadFiles([...uploadFiles, e.target.files[0]]);
         }
-
-        // fileRef.current.value = '';
     };
 
     /**
@@ -91,28 +85,12 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
     };
 
     useEffect(() => {
-        if (selectBoard && selectBoard.channelType) {
-            // BOARD_DIVC1 -> JPOD
-            // BOARD_DIVC2 -> 기자
-            dispatch(
-                getBoardChannelList({
-                    type: selectBoard.channelType,
-                    callback: (element) => {
-                        if (typeof element === 'object') setChannalList(element);
-                        else return;
-                    },
-                }),
-            );
-        }
-    }, [dispatch, selectBoard]);
-
-    useEffect(() => {
-        onChangeFormData({ attaches: uploadFiles });
+        onChange({ attaches: uploadFiles });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [uploadFiles]);
 
     useEffect(() => {
-        if (!loading) {
+        if (data.attaches) {
             setUploadFiles(
                 data.attaches.map((element) => {
                     const { seqNo, orgFileName, filePath, fileName } = element;
@@ -126,27 +104,19 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loading]);
+    }, []);
 
     return (
         <>
             <Form>
                 {boardSeq && !parentBoardSeq && (
                     <>
-                        <Form.Row className="mb-2">
-                            <Col xs={6} className="p-0 d-flex align-items-center">
-                                <MokaInputLabel label="등록일시" as="none" />
-                                <div>
-                                    <p className="mb-0">{data.boardSeq && data.regDt ? `${data.regDt}` : ''}</p>
-                                    <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
-                                </div>
+                        <Form.Row>
+                            <Col xs={6} className="p-0">
+                                <p className="mb-0">{data.boardSeq && data.regDt ? `${data.regDt} ${data.regName}(${data.regId})` : ''}</p>
                             </Col>
-                            <Col xs={6} className="p-0 d-flex align-items-center">
-                                <MokaInputLabel label="수정일시" as="none" />
-                                <div>
-                                    <p className="mb-0">{data.boardSeq && data.modDt ? `${data.modDt}` : ''}</p>
-                                    <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
-                                </div>
+                            <Col xs={6} className="p-0">
+                                <p className="mb-0">{data.boardSeq && data.modDt ? `${data.modDt} ${data.regName}(${data.regId})` : ''}</p>
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2 align-items-center">
@@ -154,7 +124,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                 <MokaInputLabel label="조회수" as="none" />
                                 <p className="mb-0">{data.viewCnt}</p>
                             </Col>
-                            {selectBoard.recomFlag === '1' && (
+                            {jpodBoard.recomFlag === '1' && (
                                 <Col className="p-0 d-flex justify-content-center">
                                     <MokaInputLabel label="추천" as="none" />
                                     <MokaIcon className="mr-2" iconName="fad-thumbs-up" size="1x" />
@@ -163,13 +133,13 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                     <p className="mb-0">{data.decomCnt}</p>
                                 </Col>
                             )}
-                            {selectBoard.recomFlag === '2' && (
+                            {jpodBoard.recomFlag === '2' && (
                                 <Col className="p-0 d-flex justify-content-center">
                                     <MokaIcon className="mr-2" iconName="fad-thumbs-up" size="1x" />
                                     <p className="mb-0">{data.recomCnt}</p>
                                 </Col>
                             )}
-                            {selectBoard.declareYn === 'Y' && (
+                            {jpodBoard.declareYn === 'Y' && (
                                 <Col className="p-0 d-flex justify-content-center">
                                     <MokaInputLabel label="신고" as="none" />
                                     <p className="mb-0">{data.declareCnt}</p>
@@ -178,42 +148,28 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                         </Form.Row>
                     </>
                 )}
-                {/* 채널 게시판일 때 */}
-                {loading === false &&
-                    (selectBoard.channelType === 'BOARD_DIVC2' ? (
-                        // 기자
-                        <BoardRepoterSelect
-                            channalList={channalList}
-                            selectValue={data.channelId}
-                            onChange={(value) => {
-                                onChangeFormData({
-                                    channelId: value,
-                                });
-                            }}
-                        />
-                    ) : (
-                        channalList.length > 0 && (
-                            <Form.Row className="mb-2">
-                                <Col xs={6} className="p-0">
-                                    <MokaInputLabel as="select" label="채널명" name="channelId" value={data.channelId} onChange={handleChangeValue}>
-                                        <option value="">선택</option>
-                                        {channalList.map((item, index) => (
-                                            <option key={index} value={item.value}>
-                                                {item.name}
-                                            </option>
-                                        ))}
-                                    </MokaInputLabel>
-                                </Col>
-                            </Form.Row>
-                        )
-                    ))}
-                {selectBoard.boardId && (selectBoard.titlePrefixNm1 || selectBoard.titlePrefixNm2) && (
+                {/* J팟 채널 목록 */}
+                {channelList.length > 0 && (
                     <Form.Row className="mb-2">
-                        {selectBoard.titlePrefixNm1 && (
+                        <Col xs={6} className="p-0">
+                            <MokaInputLabel as="select" label="채널명" name="channelId" value={data.channelId} onChange={handleChangeValue}>
+                                <option value="">선택</option>
+                                {channelList.map((item, index) => (
+                                    <option key={index} value={item.value}>
+                                        {item.name}
+                                    </option>
+                                ))}
+                            </MokaInputLabel>
+                        </Col>
+                    </Form.Row>
+                )}
+                {jpodBoard.boardId && (jpodBoard.titlePrefixNm1 || jpodBoard.titlePrefixNm2) && (
+                    <Form.Row className="mb-2">
+                        {jpodBoard.titlePrefixNm1 && (
                             <Col xs={6} className="p-0 pr-20">
-                                <MokaInputLabel as="select" label={selectBoard.titlePrefixNm1} name="titlePrefix1" value={data.titlePrefix1} onChange={handleChangeValue}>
+                                <MokaInputLabel as="select" label={jpodBoard.titlePrefixNm1} name="titlePrefix1" value={data.titlePrefix1} onChange={handleChangeValue}>
                                     <option value="">선택</option>
-                                    {selectBoard.titlePrefix1
+                                    {jpodBoard.titlePrefix1
                                         .replaceAll(' ', '')
                                         .split(',')
                                         .map((item, index) => (
@@ -225,11 +181,11 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                             </Col>
                         )}
 
-                        {selectBoard.titlePrefixNm2 && (
+                        {jpodBoard.titlePrefixNm2 && (
                             <Col xs={6} className="p-0 pl-20">
-                                <MokaInputLabel as="select" label={selectBoard.titlePrefixNm2} name="titlePrefix2" value={data.titlePrefix2} onChange={handleChangeValue}>
+                                <MokaInputLabel as="select" label={jpodBoard.titlePrefixNm2} name="titlePrefix2" value={data.titlePrefix2} onChange={handleChangeValue}>
                                     <option value="">선택</option>
-                                    {selectBoard.titlePrefix2
+                                    {jpodBoard.titlePrefix2
                                         .replaceAll(' ', '')
                                         .split(',')
                                         .map((item, index) => (
@@ -279,7 +235,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                     </Col>
                 </Form.Row>
                 {/* 기획서에 백오피스는 설정과 관계 없이 에디터를 표현한다고 textarea 는 주석처리. */}
-                {/* {selectBoard.editorYn === 'N' ? (
+                {/* {jpodBoard.editorYn === 'N' ? (
                     <Form.Row className="mb-2">
                         <Col className="p-0">
                             <MokaInputLabel
@@ -292,16 +248,16 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                 // onChange={handleChangeValue}
                                 onChange={(e) => {
                                     dispatch(changeListMenuContent({ content: e.target.value }));
-                                    onChangeFormData(e);
+                                    onChange(e);
                                 }}
                             />
                         </Col>
                     </Form.Row>
                 ) : ( */}
-                <BoardsNote data={data.content} onChangeFormData={onChangeFormData} />
+                <BoardsNote data={data.content} onChangeFormData={onChange} />
                 {/* )} */}
 
-                {selectBoard.fileYn === 'Y' && (
+                {jpodBoard.fileYn === 'Y' && (
                     <>
                         <Form.Row>
                             <Col xs={4} className="p-0">
@@ -332,24 +288,24 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                     </>
                 )}
 
-                {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('EMAIL') >= 0 && (
+                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('EMAIL') >= 0 && (
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label="이메일" value={contentsInfo.email} inputProps={{ readOnly: true, plaintext: true }} />
+                        <MokaInputLabel label="이메일" value={contents.email} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
-                {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('MOBILE_POHONE') >= 0 && (
+                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('MOBILE_POHONE') >= 0 && (
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label="휴대폰 번호" value={contentsInfo.mobilePhone} inputProps={{ readOnly: true, plaintext: true }} />
+                        <MokaInputLabel label="휴대폰 번호" value={contents.mobilePhone} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
-                {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('ADDR') >= 0 && (
+                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('ADDR') >= 0 && (
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label="주소" value={contentsInfo.addr} inputProps={{ readOnly: true, plaintext: true }} />
+                        <MokaInputLabel label="주소" value={contents.addr} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
-                {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('URL') >= 0 && (
+                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('URL') >= 0 && (
                     <Form.Row>
-                        <MokaInputLabel label="URL" value={contentsInfo.url} inputProps={{ readOnly: true, plaintext: true }} />
+                        <MokaInputLabel label="URL" value={contents.url} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
             </Form>
@@ -357,4 +313,4 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
     );
 };
 
-export default BoardsEditForm;
+export default NoticeEditForm;

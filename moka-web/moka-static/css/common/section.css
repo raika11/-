@@ -82,8 +82,6 @@
     .card_in .card_body .headline { color: #111; line-height: 28px; }
     .card_in .card_body .description { color: #777; line-height: 23px; }
     .case_unique [class*="swiper-button-prev"], .case_unique [class*="swiper-button-next"] { display: none; }
-
-
 }
 
 /* Medium devices (tablet + pc, 768px and up) */
@@ -130,7 +128,7 @@
 
     /***************************************    unique     ************************************/
     .card_in .card_body .description { max-width: 55%; }
-
+    .case_unique [class*="swiper-button-prev"], .case_unique [class*="swiper-button-next"] { display: none; }
 }
 
 /* Large devices (desktops, 1024px and up) */
@@ -167,10 +165,11 @@
 
 
     /***************************************    catalog     ************************************/
-    
-    
 
 
+
+    /***************************************    catalog     ************************************/
+    .case_unique [class*="swiper-button-prev"], .case_unique [class*="swiper-button-next"] { display: block; }
 }
 
 /* X-Large devices (large desktops, 1200px and up) */

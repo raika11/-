@@ -20,7 +20,7 @@
 
 .section.general .component.correct_noti {padding: 15px 0; border-top: 0;}
 
-.section .component.fb_area {margin-bottom: 50px; padding: 25px 30px 25px 40px; border-top: 0;}
+.section .component.fb_area {margin-bottom: 50px; padding: 25px 30px 25px 40px !important; border-top: 0;}
 .section .component.fb_area .fa_facebook {margin-right: 12px;}
 
 .section.general .component.latest_area .sub_title {margin-bottom: 18px;}

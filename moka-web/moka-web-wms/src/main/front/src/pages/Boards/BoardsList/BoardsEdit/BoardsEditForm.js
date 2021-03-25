@@ -10,6 +10,7 @@ import { messageBox } from '@utils/toastUtil';
 import { getBoardChannelList, GET_LIST_MENU_CONTENTS_INFO } from '@store/board';
 import BoardRepoterSelect from './BoardRepoterSelect';
 import BoardsNote from './BoardsNote';
+import { Link } from 'react-router-dom';
 
 /**
  * 게시판 관리 > 게시글 관리 > 게시판 편집 폼
@@ -46,26 +47,24 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
      */
     const handleChangeFile = (e) => {
         let imageFiles = [];
-        Array.from(e.target.files).forEach((f) => {
-            const fileName = f.name.split('.');
-            const fileExt = fileName[1];
-            if (selectBoard.allowFileExt.split(',').indexOf(fileExt) > 0) {
-                const fileUrl = URL.createObjectURL(f);
-                const imageData = { File: f, fileUrl };
-                imageFiles.push(imageData);
-            } else {
-                // 허용하는 확장자가 아닐경우
-                messageBox.alert(`해당 게시판의 첨부 파일은 (${selectBoard.allowFileExt})확장자만 등록할 수 있습니다.`, () => {});
-            }
-        });
 
         if (uploadFiles.length + 1 > selectBoard.allowFileCnt) {
             messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${selectBoard.allowFileCnt}개 입니다.`, () => {});
         } else {
-            setUploadFiles([...uploadFiles, e.target.files[0]]);
+            Array.from(e.target.files).forEach((f) => {
+                const fileName = f.name.split('.');
+                const fileExt = fileName[1];
+                if (selectBoard.allowFileExt.split(',').indexOf(fileExt) > -1) {
+                    imageFiles.push(f);
+                } else {
+                    // 허용하는 확장자가 아닐경우
+                    messageBox.alert(`해당 게시판의 첨부 파일은 (${selectBoard.allowFileExt})확장자만 등록할 수 있습니다.`, () => {});
+                }
+            });
         }
 
-        // fileRef.current.value = '';
+        const arr = uploadFiles.concat(imageFiles);
+        setUploadFiles(arr);
     };
 
     /**
@@ -115,12 +114,13 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         if (!loading) {
             setUploadFiles(
                 data.attaches.map((element) => {
-                    const { seqNo, orgFileName, filePath, fileName } = element;
+                    const { seqNo, orgFileName, filePath, fileName, fileSize } = element;
                     const fileUrl = PDS_URL && filePath && fileName ? `${PDS_URL}/${filePath}/${fileName}` : '';
                     return {
                         seqNo: seqNo,
                         name: orgFileName,
                         fileUrl: fileUrl,
+                        fileSize: fileSize,
                     };
                 }),
             );
@@ -319,6 +319,9 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                 <Form.Row className="mb-0 pt-1" key={index}>
                                     <Form.Row className="w-100" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
                                         <Col xs={11} className="w-100 h-100 d-flex align-items-center justify-content-start">
+                                            {/* <Link to={element.fileUrl} target="_blank" download>
+                                                {element.name}
+                                            </Link> */}
                                             <div onClick={() => handleClickImageName(element)}>{element.name}</div>
                                         </Col>
                                         <Col>

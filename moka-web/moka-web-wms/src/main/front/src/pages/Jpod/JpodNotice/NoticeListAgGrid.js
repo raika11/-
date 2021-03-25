@@ -11,17 +11,19 @@ import { GET_JPOD_NOTICE_LIST, changeJpodNoticeSearchOption, getJpodNoticeList }
  * J팟 관리 - 공지 게시판 AgGrid
  */
 const NoticeListAgGrid = ({ match }) => {
-    const { boardSeq, parentBoardSeq, reply } = useParams();
+    const { boardSeq } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
 
     // 스토어 연결
-    const { search, list, total, channelList, loading } = useSelector(
+    const { search, list, total, channelList, contents, reply, loading } = useSelector(
         (store) => ({
             search: store.jpod.jpodNotice.search,
             list: store.jpod.jpodNotice.list,
             total: store.jpod.jpodNotice.total,
             channelList: store.jpod.jpodNotice.channelList,
+            contents: store.jpod.jpodNotice.contents,
+            reply: store.jpod.jpodNotice.reply,
             loading: store.loading[GET_JPOD_NOTICE_LIST],
         }),
         shallowEqual,
@@ -31,8 +33,12 @@ const NoticeListAgGrid = ({ match }) => {
     /**
      * 목록 클릭
      */
-    const handleClickRow = ({ boardSeq }) => {
-        history.push(`${match.path}/${boardSeq}`);
+    const handleClickRow = ({ boardSeq, parentBoardSeq }) => {
+        if (parentBoardSeq !== boardSeq) {
+            history.push(`${match.path}/${parentBoardSeq}/reply/${boardSeq}`);
+        } else {
+            history.push(`${match.path}/${boardSeq}`);
+        }
     };
 
     /**
@@ -76,7 +82,7 @@ const NoticeListAgGrid = ({ match }) => {
             page={search.page}
             size={search.size}
             onChangeSearchOption={handleChangeSearchOption}
-            selected={boardSeq}
+            selected={contents.boardSeq || reply.boardSeq}
         />
     );
 };

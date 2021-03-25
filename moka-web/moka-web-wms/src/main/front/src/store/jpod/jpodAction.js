@@ -98,8 +98,8 @@ export const changeBrightovpSearchOption = createAction(CHANGE_BRIGHTOVP_SEARCH_
 /**
  * 공지 게시판 관련 액션
  */
-export const CLEAR_JPOD_BOARD_CONTENTS = 'jpod/CLEAR_JPOD_BOARD_CONTENTS';
-export const clearJpodBoardContents = createAction(CLEAR_JPOD_BOARD_CONTENTS);
+export const CLEAR_JPOD_NOTICE_CONTENTS = 'jpod/CLEAR_JPOD_NOTICE_CONTENTS';
+export const clearJpodNoticeContents = createAction(CLEAR_JPOD_NOTICE_CONTENTS);
 export const CHANGE_JPOD_NOTICE_SEARCH_OPTION = 'jpod/CHANGE_JPOD_NOTICE_SEARCH_OPTION';
 export const changeJpodNoticeSearchOption = createAction(CHANGE_JPOD_NOTICE_SEARCH_OPTION, (search) => search);
 
@@ -118,3 +118,21 @@ export const getJpodNoticeList = createAction(GET_JPOD_NOTICE_LIST, (...actions)
 // J팟 공지 게시글 상세 조회
 export const [GET_JPOD_NOTICE_CONTENTS, GET_JPOD_NOTICE_CONTENTS_SUCCESS] = createRequestActionTypes('jpod/GET_JPOD_NOTICE_CONTENTS');
 export const getJpodNoticeContents = createAction(GET_JPOD_NOTICE_CONTENTS, ({ boardId, boardSeq }) => ({ boardId, boardSeq }));
+
+// J팟 공지 게시글 저장 (등록, 수정)
+export const SAVE_JPOD_NOTICE_CONTENTS = 'jpod/SAVE_JPOD_NOTICE_CONTENTS';
+export const saveJpodBoardContents = createAction(SAVE_JPOD_NOTICE_CONTENTS, ({ boardContents, callback }) => ({ boardContents, callback }));
+
+// J팟 공지 게시글 삭제
+export const DELETE_JPOD_NOTICE_CONTENTS = 'board/DELETE_JPOD_NOTICE_CONTENTS';
+export const deleteJpodNoticeContents = createAction(DELETE_JPOD_NOTICE_CONTENTS, ({ boardId, boardSeq, callback }) => ({ boardId, boardSeq, callback }));
+
+// J팟 공지 게시글 답변 저장
+export const SAVE_JPOD_NOTICE_REPLY = 'board/SAVE_JPOD_NOTICE_REPLY';
+export const saveJpodNoticeReply = createAction(SAVE_JPOD_NOTICE_REPLY, ({ boardId, parentBoardSeq, boardSeq, contents, callback }) => ({
+    boardId,
+    parentBoardSeq,
+    boardSeq,
+    contents,
+    callback,
+}));

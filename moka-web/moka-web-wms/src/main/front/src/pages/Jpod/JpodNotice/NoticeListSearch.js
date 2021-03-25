@@ -57,7 +57,12 @@ const NoticeListSearch = ({ match }) => {
      * 초기화
      */
     const handleClickReset = () => {
-        setSearch({ ...initialState.jpodNotice.search, boardId: jpodBoard.boardId });
+        setSearch({
+            ...initialState.jpodNotice.search,
+            boardId: jpodBoard.boardId,
+            startDt: moment().startOf('day').format(DB_DATEFORMAT),
+            endDt: moment().endOf('day').format(DB_DATEFORMAT),
+        });
     };
 
     /**

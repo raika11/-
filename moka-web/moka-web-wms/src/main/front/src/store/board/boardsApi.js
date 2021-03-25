@@ -159,9 +159,9 @@ export const getBoardReportersChannalList = () => {
 /**
  * 게시판 게시글 등록
  */
-export const saveBoardContents = ({ PostData: { boardId, formData } }) => {
+export const postBoardContents = ({ boardContents }) => {
     return instance
-        .post(`/api/boards/${boardId}/contents`, formData, {
+        .post(`/api/boards/${boardContents.boardId}/contents`, objectToFormData(boardContents), {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -174,9 +174,9 @@ export const saveBoardContents = ({ PostData: { boardId, formData } }) => {
 /**
  * 게시판 게시글 수정
  */
-export const updateBoardContents = ({ boardId, boardSeq, formData }) => {
+export const putBoardContents = ({ boardContents }) => {
     return instance
-        .put(`/api/boards/${boardId}/contents/${boardSeq}`, formData, {
+        .put(`/api/boards/${boardContents.boardId}/contents/${boardContents.boardSeq}`, objectToFormData(boardContents), {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -189,7 +189,7 @@ export const updateBoardContents = ({ boardId, boardSeq, formData }) => {
 /**
  * 게시판 게시글 답변 저장
  */
-export const saveBoardReply = ({ boardId, parentBoardSeq, contents, files }) => {
+export const postBoardReply = ({ boardId, parentBoardSeq, contents, files }) => {
     return instance
         .post(`/api/boards/${boardId}/contents/${parentBoardSeq}/reply`, makeBoardContentsFormData({ files: files, contentsData: contents }), {
             headers: {
@@ -204,7 +204,7 @@ export const saveBoardReply = ({ boardId, parentBoardSeq, contents, files }) => 
 /**
  * 게시판 게시글 답변 수정
  */
-export const updateBoardReply = ({ boardId, parentBoardSeq, boardSeq, contents, files }) => {
+export const putBoardReply = ({ boardId, parentBoardSeq, boardSeq, contents, files }) => {
     return instance
         .put(`/api/boards/${boardId}/contents/${parentBoardSeq}/replys/${boardSeq}`, makeBoardContentsFormData({ files: files, contentsData: contents }), {
             headers: {

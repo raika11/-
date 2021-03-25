@@ -128,7 +128,80 @@ export const initialState = {
             channelId: '',
             keyword: '',
         },
-        contents: {},
+        contents: {
+            boardSeq: null,
+            boardId: null,
+            parentBoardSeq: null,
+            regName: '',
+            regId: '',
+            depth: 0,
+            indent: 0,
+            viewCnt: 0,
+            recomCnt: 0,
+            decomCnt: 0,
+            declareCnt: 0,
+            delYn: 'N',
+            regIp: '',
+            boardInfo: {},
+            attaches: [],
+            channelId: 0,
+            titlePrefix1: '',
+            titlePrefix2: '',
+            title: '',
+            ordNo: 99,
+            content: '',
+            pwd: null,
+            addr: null,
+            pushReceiveYn: 'N',
+            emailReceiveYn: 'N',
+            appOs: null,
+            devDiv: null,
+            token: null,
+            email: '',
+            mobilePhone: null,
+            url: null,
+            jpodChannel: null,
+            regDt: null,
+            modDt: null,
+            maxDepth: 0,
+        },
+        reply: {
+            addr: null,
+            appOs: null,
+            attaches: [],
+            boardId: null,
+            boardInfo: {},
+            boardSeq: null,
+            channelId: 0,
+            content: '',
+            declareCnt: 0,
+            decomCnt: 0,
+            delYn: 'N',
+            depth: 0,
+            devDiv: null,
+            email: '',
+            emailReceiveYn: 'N',
+            indent: 0,
+            jpodChannel: null,
+            maxDepth: 0,
+            mobilePhone: null,
+            modDt: null,
+            ordNo: 99,
+            parentBoardSeq: null,
+            pushReceiveYn: 'N',
+            pwd: null,
+            recomCnt: 0,
+            regDt: null,
+            regId: '',
+            regIp: '',
+            regName: '',
+            title: '',
+            titlePrefix1: '',
+            titlePrefix2: '',
+            token: null,
+            url: null,
+            viewCnt: 0,
+        },
     },
     podtyChannel: {
         total: 0,
@@ -316,7 +389,7 @@ export default handleActions(
         /**
          * J팟 공지 게시판 관련
          */
-        [act.CLEAR_JPOD_BOARD_CONTENTS]: (state) => {
+        [act.CLEAR_JPOD_NOTICE_CONTENTS]: (state) => {
             return produce(state, (draft) => {
                 draft.jpodNotice.contents = initialState.jpodNotice.contents;
             });
@@ -352,9 +425,18 @@ export default handleActions(
             });
         },
         [act.GET_JPOD_NOTICE_CONTENTS_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.jpodNotice.contents = body;
-            });
+            const { boardSeq, parentBoardSeq } = body;
+            if (boardSeq === parentBoardSeq) {
+                return produce(state, (draft) => {
+                    draft.jpodNotice.contents = body;
+                    draft.jpodNotice.reply = initialState.jpodNotice.reply;
+                });
+            } else {
+                return produce(state, (draft) => {
+                    draft.jpodNotice.contents = initialState.jpodNotice.contents;
+                    draft.jpodNotice.reply = body;
+                });
+            }
         },
     },
     initialState,

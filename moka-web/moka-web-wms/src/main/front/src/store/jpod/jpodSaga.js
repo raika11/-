@@ -4,6 +4,7 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { createRequestSaga, callApiAfterActions, errorResponse } from '@store/commons/saga';
 import * as act from './jpodAction';
 import * as api from './jpodApi';
+import { deleteBoardContents, postBoardContents, putBoardContents, postBoardReply, putBoardReply } from '../board/boardsApi';
 
 /**
  * 팟티 목록
@@ -323,6 +324,127 @@ function* getJpodNoticeContents({ payload: { boardId, boardSeq } }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * J팟 공지 게시판 게시글 저장
+ */
+function* saveJpodNoticeContents({ payload: { boardContents, callback } }) {
+    const ACTION = act.SAVE_JPOD_NOTICE_CONTENTS;
+    let callbackData, response;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        // 등록, 수정 분기
+        response = yield call(boardContents.boardSeq ? putBoardContents : postBoardContents, { boardContents });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 조회
+            const search = yield select(({ jpod }) => jpod.jpodNotice.search);
+
+            yield put({
+                type: act.GET_JPOD_NOTICE_LIST,
+                payload: { search },
+            });
+        } else {
+            toast.error(callbackData.header?.message);
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * J팟 공지 게시판 게시글 삭제
+ */
+function* deleteJpodNoticeContents({ payload: { boardId, boardSeq, callback } }) {
+    const ACTION = act.DELETE_JPOD_NOTICE_CONTENTS;
+    let callbackData, response;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        response = yield call(deleteBoardContents, { boardId: boardId, boardSeq: boardSeq });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 조회
+            const search = yield select(({ jpod }) => jpod.jpodNotice.search);
+
+            yield put({
+                type: act.GET_JPOD_NOTICE_LIST,
+                payload: { search },
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * J팟 공지 게시판 답변 등록 및 수정
+ */
+function* saveJpodNoticeReply({ payload: { boardId, parentBoardSeq, boardSeq, contents, callback } }) {
+    const ACTION = act.SAVE_JPOD_NOTICE_REPLY;
+    let callbackData, response;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        // 등록 수정 분기
+        if (!parentBoardSeq) {
+            // 답변 등록
+            response = yield call(postBoardReply, {
+                boardId: boardId,
+                parentBoardSeq: boardSeq,
+                contents: contents,
+                files: [], // 답변은 첨부 파일이 없어서 null 처리
+            });
+        } else {
+            // 답변 수정
+            response = yield call(putBoardReply, {
+                boardId: boardId,
+                parentBoardSeq: parentBoardSeq,
+                boardSeq: boardSeq,
+                contents: contents,
+                files: [], // 답변은 첨부 파일이 없어서 null 처리
+            });
+        }
+        callbackData = response.data;
+        if (response.data.header.success) {
+            // 목록 조회
+            const search = yield select(({ jpod }) => jpod.jpodNotice.search);
+
+            yield put({
+                type: act.GET_JPOD_NOTICE_LIST,
+                payload: { search },
+            });
+        } else {
+            toast.error(callbackData.header?.message);
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
 export default function* jpodSaga() {
     /**
      * 팟티
@@ -361,4 +483,7 @@ export default function* jpodSaga() {
     yield takeLatest(act.GET_JPOD_CHANNEL_LIST, getBoardChannelList);
     yield takeLatest(act.GET_JPOD_NOTICE_LIST, getJpodNoticeList);
     yield takeLatest(act.GET_JPOD_NOTICE_CONTENTS, getJpodNoticeContents);
+    yield takeLatest(act.SAVE_JPOD_NOTICE_CONTENTS, saveJpodNoticeContents);
+    yield takeLatest(act.DELETE_JPOD_NOTICE_CONTENTS, deleteJpodNoticeContents);
+    yield takeLatest(act.SAVE_JPOD_NOTICE_REPLY, saveJpodNoticeReply);
 }

@@ -1,14 +1,19 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaCard, MokaInputLabel, MokaInput } from '@components';
+import { MokaCard } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
-import { initialState, GET_JPOD_NOTICE_CONTENTS, getJpodNoticeContents, clearJpodBoardContents } from '@store/jpod';
-import { uploadBoardContentsImage, updateBoardContents, saveBoardContents, deleteBoardContents } from '@store/board';
-import BoardsSummernote from '@pages/Boards/BoardsList/BoardsEdit/BoardsSummernote';
+import {
+    initialState,
+    GET_JPOD_NOTICE_CONTENTS,
+    getJpodNoticeContents,
+    clearJpodNoticeContents,
+    saveJpodBoardContents,
+    deleteJpodNoticeContents,
+    saveJpodNoticeReply,
+} from '@store/jpod';
+import { uploadBoardContentsImage, updateBoardContents } from '@store/board';
 import NoticeEditForm from './NoticeEditForm';
 import NoticeEditReplyForm from './NoticeEditReplyForm';
 
@@ -21,25 +26,13 @@ const NoticeEdit = ({ match }) => {
     const dispatch = useDispatch();
 
     const jpodBoard = useSelector((store) => store.jpod.jpodNotice.jpodBoard);
-    const channelList = useSelector((store) => store.jpod.jpodNotice.channelList);
     const contents = useSelector((store) => store.jpod.jpodNotice.contents);
+    const storeReply = useSelector((store) => store.jpod.jpodNotice.reply);
     const loading = useSelector((store) => store.loading[GET_JPOD_NOTICE_CONTENTS]);
 
-    const [temp, setTemp] = useState(initialState.jpodNotice.contents);
-    // const [replyEditData, setReplyEditData] = useState({}); // 답변 정보가 저장 되는 state.
-
-    const [editContents, setEditContents] = useState('');
-    const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일.
-    let fileinputRef = useRef(null);
-
-    // const resetEditData = () => {
-    //     setEditData({
-    //         ordNo: 1, // 순서 설정 : 일반.
-    //         boardId: selectBoard.boardId, // 게시판 ID 값.
-    //     });
-    //     setUploadFiles([]);
-    //     fileinputRef.current = null;
-    // };
+    const [title, setTitle] = useState('');
+    const [temp, setTemp] = useState(initialState.jpodNotice.contents); // 게시글 정보
+    const [replyTemp, setReplyTemp] = useState(initialState.jpodNotice.reply); // 답변 정보
 
     /**
      * 입력값 변경
@@ -51,98 +44,44 @@ const NoticeEdit = ({ match }) => {
         [temp],
     );
 
-    // // 벨리데이션 체크
-    // const checkValidation = () => {
-    //     if (!editData.boardId || editData.boardId === null || editData.boardId === undefined) {
-    //         messageBox.alert('게시판을 선택해 주세요.');
-    //         return true;
-    //     }
-
-    //     return false;
-    // };
+    const handleChangeReplyValue = useCallback(
+        (formData) => {
+            setReplyTemp({ ...replyTemp, ...formData });
+        },
+        [replyTemp],
+    );
 
     /**
      * 저장
      */
-    const handleClickSavePost = () => {
-        //     // 게시판과 다르게 게시판을 선택해야 등록 할수 있어서 체크.
-        //     if (checkValidation()) {
-        //         return;
-        //     }
-        //     delete editData.regInfo;
-        //     delete editData.modInfo;
-        //     dispatch(
-        //         saveBoardContents({
-        //             boardId: editData.boardId,
-        //             contents: {
-        //                 ...editData,
-        //                 channelId: editData.channelId,
-        //                 boardId: null,
-        //                 depth: 0,
-        //                 indent: 0,
-        //             },
-        //             files: uploadFiles,
-        //             callback: ({ header: { success, message }, body }) => {
-        //                 if (success === true) {
-        //                     toast.success(message);
-        //                     history.push(`${match.path}/${body.boardId}/${body.boardSeq}`);
-        //                     dispatch(getJpodNotice());
-        //                     dispatch(getBoardContents({ boardId: body.boardId, boardSeq: body.boardSeq }));
-        //                 } else {
-        //                     const { totalCnt, list } = body;
-        //                     if (totalCnt > 0 && Array.isArray(list)) {
-        //                         // 에러 메시지 확인.
-        //                         messageBox.alert(list[0].reason, () => {});
-        //                     } else {
-        //                         // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
-        //                         messageBox.alert(message, () => {});
-        //                     }
-        //                 }
-        //             },
-        //         }),
-        //     );
-    };
+    const handleClickBoardSave = () => {
+        let saveObj = {
+            ...temp,
+            boardId: jpodBoard.boardId,
+            boardSeq: boardSeq ? boardSeq : null,
+        };
 
-    /**
-     * 수정
-     */
-    const handleClickUpdate = () => {
-        //     if (checkValidation()) {
-        //         return;
-        //     }
-        //     delete editData.regInfo;
-        //     delete editData.modInfo;
-        //     dispatch(
-        //         updateBoardContents({
-        //             boardId: editData.boardId,
-        //             boardSeq: boardSeq.current,
-        //             contents: {
-        //                 ...editData,
-        //                 boardId: null,
-        //                 channelId: editData.channelId,
-        //                 depth: 0,
-        //                 indent: 0,
-        //             },
-        //             files: uploadFiles,
-        //             callback: ({ header: { success, message }, body }) => {
-        //                 if (success === true) {
-        //                     toast.success(message);
-        //                     history.push(`${match.path}/${body.boardId}/${body.boardSeq}`);
-        //                     dispatch(getJpodNotice());
-        //                     dispatch(getBoardContents({ boardId: body.boardId, boardSeq: body.boardSeq }));
-        //                 } else {
-        //                     const { totalCnt, list } = body;
-        //                     if (totalCnt > 0 && Array.isArray(list)) {
-        //                         // 에러 메시지 확인.
-        //                         messageBox.alert(list[0].reason, () => {});
-        //                     } else {
-        //                         // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
-        //                         messageBox.alert(message, () => {});
-        //                     }
-        //                 }
-        //             },
-        //         }),
-        //     );
+        if (jpodBoard.boardId) {
+            dispatch(
+                saveJpodBoardContents({
+                    boardContents: saveObj,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                            history.push(`${match.path}/${body.boardSeq}`);
+                        } else {
+                            if (Array.isArray(body.list)) {
+                                // 에러 메시지 확인.
+                                messageBox.alert(body.list[0].reason, () => {});
+                            } else {
+                                // 에러이지만 에러메시지가 없으면 서버 메시지를 alert
+                                messageBox.alert(header.message, () => {});
+                            }
+                        }
+                    },
+                }),
+            );
+        }
     };
 
     /**
@@ -150,77 +89,82 @@ const NoticeEdit = ({ match }) => {
      */
     const handleClickCancel = () => {
         history.push(`${match.path}`);
-        dispatch(clearJpodBoardContents());
     };
 
     /**
      * 삭제
      */
     const handleClickDelete = () => {
-        //     dispatch(
-        //         deleteBoardContents({
-        //             boardId: editData.boardId,
-        //             boardSeq: boardSeq.current,
-        //             callback: ({ header: { success, message }, body }) => {
-        //                 if (success === true) {
-        //                     toast.success(message);
-        //                     history.push(`${match.path}`);
-        //                     dispatch(getJpodNotice());
-        //                 } else {
-        //                     const { totalCnt, list } = body;
-        //                     if (totalCnt > 0 && Array.isArray(list)) {
-        //                         // 에러 메시지 확인.
-        //                         messageBox.alert(list[0].reason, () => {});
-        //                     } else {
-        //                         // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
-        //                         messageBox.alert(message, () => {});
-        //                     }
-        //                 }
-        //             },
-        //         }),
-        //     );
+        messageBox.confirm('삭제 하시겠습니까?', () => {
+            dispatch(
+                deleteJpodNoticeContents({
+                    boardId: jpodBoard.boardId,
+                    boardSeq: boardSeq,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                            history.push(`${match.path}`);
+                        } else {
+                            if (Array.isArray(body.list)) {
+                                // 에러 메시지 확인.
+                                messageBox.alert(body.list[0].reason, () => {});
+                            } else {
+                                // 에러이지만 에러메시지가 없으면 서버 메시지를 alert
+                                messageBox.alert(header.message, () => {});
+                            }
+                        }
+                    },
+                }),
+            );
+        });
     };
+
+    /**
+     * 답변 등록
+     */
+    const handleClickReplay = () => {
+        history.push(`${match.path}/${boardSeq}/reply`);
+    };
+
+    console.log(boardSeq, parentBoardSeq, reply);
+    console.log(temp);
 
     /**
      * 답변 저장
      */
     const handleClickReplaySave = () => {
-        //     dispatch(
-        //         saveBoardReply({
-        //             boardId: boardId,
-        //             parentBoardSeq: parentBoardSeq,
-        //             boardSeq: boardSeq,
-        //             contents: {
-        //                 boardId: null,
-        //                 title: editReplyData.title,
-        //                 content: editReplyData.content,
-        //                 depth: editData.depth + 1,
-        //                 indent: editData.indent + 1,
-        //                 ordNo: editData.ordNo,
-        //                 channelId: parentBoardSeq && reply ? contentsReply.channelId : editData.channelId,
-        //                 titlePrefix1: parentBoardSeq && reply ? contentsReply.titlePrefix1 : editData.titlePrefix1,
-        //                 titlePrefix2: parentBoardSeq && reply ? contentsReply.titlePrefix2 : editData.titlePrefix2,
-        //             },
-        //             files: { attachFile: [] },
-        //             callback: ({ header: { success, message }, body }) => {
-        //                 if (success === true) {
-        //                     toast.success(message);
-        //                     history.push(`${match.path}/${boardId}/${body.parentBoardSeq}`);
-        //                     dispatch(getListMenuContentsList(boardId));
-        //                     dispatch(getListMenuContentsInfo({ boardId: boardId, boardSeq: boardSeq }));
-        //                 } else {
-        //                     const { totalCnt, list } = body;
-        //                     if (totalCnt > 0 && Array.isArray(list)) {
-        //                         // 에러 메시지 확인
-        //                         messageBox.alert(list[0].reason, () => {});
-        //                     } else {
-        //                         // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함
-        //                         messageBox.alert(message, () => {});
-        //                     }
-        //                 }
-        //             },
-        //         }),
-        //     );
+        dispatch(
+            saveJpodNoticeReply({
+                boardId: jpodBoard.boardId,
+                parentBoardSeq: parentBoardSeq,
+                boardSeq: boardSeq,
+                contents: {
+                    // boardId: null,
+                    title: replyTemp.title,
+                    content: replyTemp.content,
+                    depth: temp.depth + 1,
+                    indent: temp.indent + 1,
+                    ordNo: temp.ordNo,
+                    channelId: temp.channelId,
+                    titlePrefix1: temp.titlePrefix1,
+                    titlePrefix2: temp.titlePrefix2,
+                },
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                        history.push(`${match.path}/${body.parentBoardSeq}/reply/${body.boardSeq}`);
+                    } else {
+                        if (Array.isArray(body.list)) {
+                            // 에러 메시지 확인
+                            messageBox.alert(body.list[0].reason, () => {});
+                        } else {
+                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert
+                            messageBox.alert(header.message, () => {});
+                        }
+                    }
+                },
+            }),
+        );
     };
 
     const handleClickReplayDelete = () => {};
@@ -261,41 +205,43 @@ const NoticeEdit = ({ match }) => {
         //     );
     };
 
-    // useEffect(() => {
-    //     if (!boardSeq) {
-    //         setEditData({});
-    //         setEditContents(' ');
-    //         resetEditData(); // 에디터 리셋.
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [boardSeq]);
-
-    // useEffect(() => {
-    //     if (loading && loading === false) {
-    //         setEditData({
-    //             ...noticeInfo,
-    //             editorYn: noticeInfo.boardInfo && noticeInfo.boardInfo.editorYn,
-    //             regInfo: noticeInfo.regDt && noticeInfo.regDt.length > 16 ? `등록 일시: ${noticeInfo.regDt.substr(0, 16)} ${noticeInfo.regName}(${noticeInfo.regId})` : '',
-    //             modInfo: noticeInfo.modDt && noticeInfo.modDt.length > 16 ? `수정 일시: ${noticeInfo.modDt.substr(0, 16)} ${noticeInfo.regName}(${noticeInfo.regId})` : '',
-    //         });
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [loading, noticeInfo]);
-
     useEffect(() => {
+        // J팟 게시판이 존재하고 boardSeq params가 있으면 게시글 상세 조회 없으면 조회값 초기화
         if (jpodBoard.boardId && boardSeq) {
             dispatch(getJpodNoticeContents({ boardId: jpodBoard.boardId, boardSeq: boardSeq }));
+        } else if (jpodBoard.boardId && !boardSeq) {
+            dispatch(clearJpodNoticeContents());
         }
     }, [jpodBoard, boardSeq, dispatch]);
 
     useEffect(() => {
+        // store의 조회 값이 변경 되면 local state 변경
         setTemp(contents);
     }, [contents]);
+
+    useEffect(() => {
+        // store의 조회 값이 변경 되면 local state 변경
+        setReplyTemp(storeReply);
+    }, [storeReply]);
+
+    useEffect(() => {
+        if (boardSeq) {
+            if (parentBoardSeq && reply) {
+                setTitle('답변 수정');
+            } else if (!parentBoardSeq && reply) {
+                setTitle('답변 등록');
+            } else {
+                setTitle('게시글 수정');
+            }
+        } else {
+            setTitle('게시글 등록');
+        }
+    }, [boardSeq, parentBoardSeq, reply]);
 
     return (
         <MokaCard
             className="w-100 flex-fill"
-            title={boardSeq ? '게시글 수정' : '게시글 등록'}
+            title={title}
             loading={loading}
             bodyClassName="d-flex flex-column"
             footer
@@ -305,7 +251,7 @@ const NoticeEdit = ({ match }) => {
                     {!boardSeq && (
                         // 게시글 등록
                         <>
-                            <Button variant="positive" className="mr-1" onClick={handleClickSavePost}>
+                            <Button variant="positive" className="mr-1" onClick={handleClickBoardSave}>
                                 저장
                             </Button>
                             <Button variant="negative" onClick={handleClickCancel}>
@@ -313,10 +259,15 @@ const NoticeEdit = ({ match }) => {
                             </Button>
                         </>
                     )}
-                    {boardSeq && (
+                    {boardSeq && !parentBoardSeq && !reply && (
                         // 게시글 조회
                         <>
-                            <Button variant="positive" className="mr-1" onClick={handleClickUpdate}>
+                            {jpodBoard.answYn === 'Y' && (
+                                <Button variant="outline-neutral" className="mr-1" onClick={handleClickReplay}>
+                                    답변
+                                </Button>
+                            )}
+                            <Button variant="positive" className="mr-1" onClick={handleClickBoardSave}>
                                 수정
                             </Button>
                             <Button variant="negative" className="mr-1" onClick={handleClickDelete}>
@@ -332,10 +283,15 @@ const NoticeEdit = ({ match }) => {
                         (parentBoardSeq ? (
                             // 답변 조회
                             <>
+                                {jpodBoard.answYn === 'Y' && (
+                                    <Button variant="negative" className="mr-1" onClick={handleClickReplay}>
+                                        답변
+                                    </Button>
+                                )}
                                 <Button variant="positive" className="mr-1" onClick={handleClickReplaySave}>
                                     수정
                                 </Button>
-                                <Button variant="negative" className="mr-1" onClick={handleClickReplayDelete}>
+                                <Button variant="negative" className="mr-1" onClick={handleClickDelete}>
                                     삭제
                                 </Button>
                                 <Button variant="negative" onClick={handleClickCancel}>
@@ -356,16 +312,7 @@ const NoticeEdit = ({ match }) => {
                 </>
             }
         >
-            <>
-                {reply ? (
-                    <NoticeEditReplyForm
-                    // data={editReplyData}
-                    // onChangeFormData={handleChangeEditData}
-                    />
-                ) : (
-                    <NoticeEditForm data={temp} onChange={handleChangeValue} />
-                )}
-            </>
+            <>{reply ? <NoticeEditReplyForm data={replyTemp} onChange={handleChangeReplyValue} /> : <NoticeEditForm data={temp} onChange={handleChangeValue} />}</>
         </MokaCard>
     );
 };

@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaInputLabel, MokaInput, MokaTableEditCancleButton } from '@components';
 import { messageBox } from '@utils/toastUtil';
+import { GET_JPOD_NOTICE_CONTENTS } from '@store/jpod';
 import BoardsNote from '@/pages/Boards/BoardsList/BoardsEdit/BoardsNote';
 
 /**
@@ -20,6 +21,8 @@ const NoticeEditForm = ({ data, onChange }) => {
     const jpodBoard = useSelector((store) => store.jpod.jpodNotice.jpodBoard);
     const channelList = useSelector((store) => store.jpod.jpodNotice.channelList);
     const contents = useSelector((store) => store.jpod.jpodNotice.contents);
+    const loading = useSelector((store) => store.loading[GET_JPOD_NOTICE_CONTENTS]);
+
     const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일
     const fileRef = useRef(null);
 
@@ -42,24 +45,26 @@ const NoticeEditForm = ({ data, onChange }) => {
      */
     const handleChangeFile = (e) => {
         let imageFiles = [];
-        Array.from(e.target.files).forEach((f) => {
-            const fileName = f.name.split('.');
-            const fileExt = fileName[1];
-            if (jpodBoard.allowFileExt.split(',').indexOf(fileExt) > 0) {
-                const fileUrl = URL.createObjectURL(f);
-                const imageData = { File: f, fileUrl };
-                imageFiles.push(imageData);
-            } else {
-                // 허용하는 확장자가 아닐경우
-                messageBox.alert(`해당 게시판의 첨부 파일은 (${jpodBoard.allowFileExt})확장자만 등록할 수 있습니다.`, () => {});
-            }
-        });
 
         if (uploadFiles.length + 1 > jpodBoard.allowFileCnt) {
             messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${jpodBoard.allowFileCnt}개 입니다.`, () => {});
         } else {
-            setUploadFiles([...uploadFiles, e.target.files[0]]);
+            Array.from(e.target.files).forEach((f, idx) => {
+                const fileName = f.name.split('.');
+                const fileExt = fileName[1];
+                if (jpodBoard.allowFileExt.split(',').indexOf(fileExt) > -1) {
+                    const seqNo = idx;
+                    const imageData = { seqNo, attachFile: f };
+                    imageFiles.push(imageData);
+                } else {
+                    // 허용하는 확장자가 아닐경우
+                    messageBox.alert(`해당 게시판의 첨부 파일은 (${jpodBoard.allowFileExt})확장자만 등록할 수 있습니다.`, () => {});
+                }
+            });
         }
+
+        const arr = uploadFiles.concat(imageFiles);
+        setUploadFiles(arr);
     };
 
     /**
@@ -85,48 +90,65 @@ const NoticeEditForm = ({ data, onChange }) => {
     };
 
     useEffect(() => {
+        if (!contents.boardSeq) {
+            setUploadFiles([]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        // 로컬 파일 목록 업데이트 하면 파일 업로드 목록 변경
         onChange({ attaches: uploadFiles });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [uploadFiles]);
 
     useEffect(() => {
-        if (data.attaches) {
+        if (!loading) {
             setUploadFiles(
-                data.attaches.map((element) => {
-                    const { seqNo, orgFileName, filePath, fileName } = element;
+                data.attaches.map((file) => {
+                    const { filePath, fileName } = file;
                     const fileUrl = PDS_URL && filePath && fileName ? `${PDS_URL}/${filePath}/${fileName}` : '';
                     return {
-                        seqNo: seqNo,
-                        name: orgFileName,
-                        fileUrl: fileUrl,
+                        attachFile: {
+                            ...file,
+                            fileUrl: fileUrl,
+                        },
                     };
                 }),
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [loading]);
 
     return (
         <>
             <Form>
                 {boardSeq && !parentBoardSeq && (
                     <>
-                        <Form.Row>
-                            <Col xs={6} className="p-0">
-                                <p className="mb-0">{data.boardSeq && data.regDt ? `${data.regDt} ${data.regName}(${data.regId})` : ''}</p>
+                        <Form.Row className="mb-2">
+                            <Col xs={6} className="p-0 d-flex align-items-center">
+                                <MokaInputLabel label="등록일시" as="none" />
+                                <div>
+                                    <p className="mb-0">{data.boardSeq && data.regDt ? `${data.regDt}` : ''}</p>
+                                    <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
+                                </div>
                             </Col>
-                            <Col xs={6} className="p-0">
-                                <p className="mb-0">{data.boardSeq && data.modDt ? `${data.modDt} ${data.regName}(${data.regId})` : ''}</p>
+                            <Col xs={6} className="p-0 d-flex align-items-center">
+                                <MokaInputLabel label="수정일시" as="none" />
+                                <div>
+                                    <p className="mb-0">{data.boardSeq && data.modDt ? `${data.modDt}` : ''}</p>
+                                    <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
+                                </div>
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2 align-items-center">
-                            <Col className="p-0 d-flex">
+                            <Col xs={4} className="p-0 d-flex">
                                 <MokaInputLabel label="조회수" as="none" />
                                 <p className="mb-0">{data.viewCnt}</p>
                             </Col>
                             {jpodBoard.recomFlag === '1' && (
-                                <Col className="p-0 d-flex justify-content-center">
-                                    <MokaInputLabel label="추천" as="none" />
+                                <Col xs={5} className="p-0 d-flex">
+                                    <MokaInputLabel label="추천/비추천" as="none" />
                                     <MokaIcon className="mr-2" iconName="fad-thumbs-up" size="1x" />
                                     <p className="mb-0 mr-4">{data.recomCnt}</p>
                                     <MokaIcon className="mr-2" iconName="fad-thumbs-down" size="1x" />
@@ -134,13 +156,14 @@ const NoticeEditForm = ({ data, onChange }) => {
                                 </Col>
                             )}
                             {jpodBoard.recomFlag === '2' && (
-                                <Col className="p-0 d-flex justify-content-center">
+                                <Col xs={5} className="p-0 d-flex">
+                                    <MokaInputLabel label="추천" as="none" />
                                     <MokaIcon className="mr-2" iconName="fad-thumbs-up" size="1x" />
                                     <p className="mb-0">{data.recomCnt}</p>
                                 </Col>
                             )}
                             {jpodBoard.declareYn === 'Y' && (
-                                <Col className="p-0 d-flex justify-content-center">
+                                <Col xs={3} className="p-0 d-flex">
                                     <MokaInputLabel label="신고" as="none" />
                                     <p className="mb-0">{data.declareCnt}</p>
                                 </Col>
@@ -154,65 +177,69 @@ const NoticeEditForm = ({ data, onChange }) => {
                         <Col xs={6} className="p-0">
                             <MokaInputLabel as="select" label="채널명" name="channelId" value={data.channelId} onChange={handleChangeValue}>
                                 <option value="">선택</option>
-                                {channelList.map((item, index) => (
-                                    <option key={index} value={item.value}>
-                                        {item.name}
+                                {channelList.map((chnl) => (
+                                    <option key={chnl.value} value={chnl.value}>
+                                        {chnl.name}
                                     </option>
                                 ))}
                             </MokaInputLabel>
                         </Col>
                     </Form.Row>
                 )}
+                {/* 분류 */}
                 {jpodBoard.boardId && (jpodBoard.titlePrefixNm1 || jpodBoard.titlePrefixNm2) && (
                     <Form.Row className="mb-2">
                         {jpodBoard.titlePrefixNm1 && (
-                            <Col xs={6} className="p-0 pr-20">
+                            <Col xs={6} className={jpodBoard.titlePrefixNm2 ? 'p-0 pr-20' : 'p-0'}>
                                 <MokaInputLabel as="select" label={jpodBoard.titlePrefixNm1} name="titlePrefix1" value={data.titlePrefix1} onChange={handleChangeValue}>
                                     <option value="">선택</option>
-                                    {jpodBoard.titlePrefix1
-                                        .replaceAll(' ', '')
-                                        .split(',')
-                                        .map((item, index) => (
-                                            <option key={index} value={item}>
-                                                {item}
-                                            </option>
-                                        ))}
+                                    {jpodBoard.titlePrefix1 &&
+                                        jpodBoard.titlePrefix1
+                                            .replaceAll(' ', '')
+                                            .split(',')
+                                            .map((prefix, idx) => (
+                                                <option key={idx} value={prefix}>
+                                                    {prefix}
+                                                </option>
+                                            ))}
                                 </MokaInputLabel>
                             </Col>
                         )}
 
                         {jpodBoard.titlePrefixNm2 && (
-                            <Col xs={6} className="p-0 pl-20">
+                            <Col xs={6} className={jpodBoard.titlePrefixNm1 ? 'p-0 pl-20' : 'p-0'}>
                                 <MokaInputLabel as="select" label={jpodBoard.titlePrefixNm2} name="titlePrefix2" value={data.titlePrefix2} onChange={handleChangeValue}>
                                     <option value="">선택</option>
-                                    {jpodBoard.titlePrefix2
-                                        .replaceAll(' ', '')
-                                        .split(',')
-                                        .map((item, index) => (
-                                            <option key={index} value={item}>
-                                                {item}
-                                            </option>
-                                        ))}
+                                    {jpodBoard.titlePrefix2 &&
+                                        jpodBoard.titlePrefix2
+                                            .replaceAll(' ', '')
+                                            .split(',')
+                                            .map((prefix, idx) => (
+                                                <option key={idx} value={prefix}>
+                                                    {prefix}
+                                                </option>
+                                            ))}
                                 </MokaInputLabel>
                             </Col>
                         )}
                     </Form.Row>
                 )}
-
-                <Form.Row className="mb-2 align-items-center">
-                    <MokaInputLabel label="노출 순서" type="number" name="ordNo" placeholder={'노출순서'} value={data.ordNo} onChange={handleChangeValue} />
-                    <p className="mb-0 ml-20 text-neutral">
-                        * 공지 글과 같이 상단에 노출되는 경우는 <br />
-                        적은 숫자(예: 0)로 입력해주세요
-                    </p>
-                </Form.Row>
+                {jpodBoard.ordYn === 'Y' && (
+                    <Form.Row className="mb-2 align-items-center">
+                        <MokaInputLabel label="노출 순서" type="number" name="ordNo" placeholder="노출순서" value={data.ordNo} onChange={handleChangeValue} />
+                        <p className="mb-0 ml-20 text-neutral">
+                            * 공지 글과 같이 상단에 노출되는 경우는 <br />
+                            적은 숫자(예: 0)로 입력해주세요
+                        </p>
+                    </Form.Row>
+                )}
                 <Form.Row className="mb-2 align-items-center">
                     <MokaInputLabel
                         as="switch"
                         name="pushReceiveYn"
                         id="pushReceiveYn"
-                        label="답변 PUSH 수신"
-                        inputProps={{ custom: true, checked: data.pushReceiveYn === 'Y', disabled: true }}
+                        label="PUSH"
+                        inputProps={{ custom: true, checked: data.pushReceiveYn === 'Y', disabled: boardSeq && !parentBoardSeq }}
                         onChange={handleChangeValue}
                     />
                     <p className="mb-0 ml-2">답변에 대한 APP 푸쉬를 받을 수 있습니다.</p>
@@ -230,33 +257,23 @@ const NoticeEditForm = ({ data, onChange }) => {
                     <MokaInputLabel label="이메일" labelWidth={40} className="flex-fill" name="email" placeholder="이메일" value={data.email} onChange={handleChangeValue} />
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col className="p-0">
-                        <MokaInput className="mb-0" name="title" placeholder="제목을 입력해 주세요." value={data.title} onChange={handleChangeValue} />
-                    </Col>
+                    <MokaInput className="mb-0" name="title" placeholder="제목을 입력해 주세요." value={data.title} onChange={handleChangeValue} />
                 </Form.Row>
-                {/* 기획서에 백오피스는 설정과 관계 없이 에디터를 표현한다고 textarea 는 주석처리. */}
-                {/* {jpodBoard.editorYn === 'N' ? (
+                {jpodBoard.editorYn === 'N' ? (
                     <Form.Row className="mb-2">
-                        <Col className="p-0">
-                            <MokaInputLabel
-                                as="textarea"
-                                className="mb-2"
-                                inputClassName="resize-none"
-                                inputProps={{ rows: 6 }}
-                                name="content"
-                                value={data.content}
-                                // onChange={handleChangeValue}
-                                onChange={(e) => {
-                                    dispatch(changeListMenuContent({ content: e.target.value }));
-                                    onChange(e);
-                                }}
-                            />
-                        </Col>
+                        <MokaInputLabel
+                            as="textarea"
+                            className="flex-fill"
+                            inputClassName="resize-none"
+                            inputProps={{ rows: 6 }}
+                            name="content"
+                            value={data.content}
+                            onChange={handleChangeValue}
+                        />
                     </Form.Row>
-                ) : ( */}
-                <BoardsNote data={data.content} onChangeFormData={onChange} />
-                {/* )} */}
-
+                ) : (
+                    <BoardsNote data={data.content} onChangeFormData={onChange} />
+                )}
                 {jpodBoard.fileYn === 'Y' && (
                     <>
                         <Form.Row>
@@ -264,18 +281,18 @@ const NoticeEditForm = ({ data, onChange }) => {
                                 <MokaInputLabel label="첨부파일" as="none" className="mb-2" />
                             </Col>
                             <Col xs={8} className="p-0 text-right">
-                                <Button variant="positive" className="mr-1" onClick={() => fileRef.current.click()}>
+                                <Button variant="positive" onClick={() => fileRef.current.click()}>
                                     등록
                                 </Button>
                                 <input type="file" ref={fileRef} onChange={handleChangeFile} className="d-none" />
                             </Col>
                         </Form.Row>
-                        {uploadFiles.map((element, index) => {
+                        {uploadFiles.map((file, index) => {
                             return (
                                 <Form.Row className="mb-0 pt-1" key={index}>
                                     <Form.Row className="w-100" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
                                         <Col xs={11} className="w-100 h-100 d-flex align-items-center justify-content-start">
-                                            <div onClick={() => handleClickImageName(element)}>{element.name}</div>
+                                            <div onClick={() => handleClickImageName(file.attachFile)}>{file.attachFile.orgFileName || file.attachFile.name}</div>
                                         </Col>
                                         <Col>
                                             <MokaTableEditCancleButton onClick={() => handleDeleteUploadFile(index)} />
@@ -288,22 +305,22 @@ const NoticeEditForm = ({ data, onChange }) => {
                     </>
                 )}
 
-                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('EMAIL') >= 0 && (
+                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('EMAIL') > -1 && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel label="이메일" value={contents.email} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
-                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('MOBILE_POHONE') >= 0 && (
+                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('MOBILE_POHONE') > -1 && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel label="휴대폰 번호" value={contents.mobilePhone} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
-                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('ADDR') >= 0 && (
+                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('ADDR') > -1 && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel label="주소" value={contents.addr} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>
                 )}
-                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('URL') >= 0 && (
+                {jpodBoard.allowItem && jpodBoard.allowItem.split(',').indexOf('URL') > -1 && (
                     <Form.Row>
                         <MokaInputLabel label="URL" value={contents.url} inputProps={{ readOnly: true, plaintext: true }} />
                     </Form.Row>

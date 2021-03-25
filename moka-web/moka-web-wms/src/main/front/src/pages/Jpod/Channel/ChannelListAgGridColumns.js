@@ -67,26 +67,34 @@ export const columnDefs = [
     },
 ];
 
+// 채널 > 에피소드 테이블
 export const channelEpisodeColumnDefs = [
     {
         headerName: 'ID',
         field: 'epsdSeq',
-        width: 50,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        tooltipField: 'epsdSeq',
+        cellStyle: { lineHeight: '43px' },
+        width: 40,
+    },
+    {
+        headerName: '시즌',
+        field: 'seasonNo',
+        width: 55,
+        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '회차',
         field: 'epsdNo',
-        width: 50,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        tooltipField: 'epsdNo',
+        cellStyle: { lineHeight: '43px' },
+        width: 60,
     },
     {
-        headerName: '에피소드 명',
+        headerName: '에피소드명',
         field: 'epsdNm',
         tooltipField: 'epsdNm',
-        width: 100,
-        flex: 1,
-        cellStyle: {},
+        cellStyle: { lineHeight: '43px' },
+        width: 130,
     },
     {
         headerName: '설명',
@@ -98,11 +106,11 @@ export const channelEpisodeColumnDefs = [
         cellStyle: {
             boxSizing: 'border-box',
             whiteSpace: 'normal',
-            lineHeight: '20px',
+            lineHeight: '18px',
             fontSize: '14px',
-            height: '50px',
+            height: '43px',
             display: '-webkit-box',
-            paddingTop: '5px',
+            paddingTop: '3px',
             '-webkit-line-clamp': 2,
             '-webkit-box-orient': 'vertical',
             overflow: 'hidden',
@@ -112,19 +120,19 @@ export const channelEpisodeColumnDefs = [
     {
         headerName: '방송일',
         field: 'epsdDate',
+        cellStyle: { lineHeight: '43px' },
         width: 100,
-        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '재생시간',
         field: 'playTime',
-        width: 100,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellStyle: { lineHeight: '43px' },
+        width: 85,
     },
     {
         headerName: '사용',
         field: 'usedYn',
-        width: 80,
+        width: 40,
         cellRenderer: 'usedYnRenderer',
     },
 ];

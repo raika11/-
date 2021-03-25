@@ -30,8 +30,6 @@ const popover = (
  */
 const DetailRelationForm = (props) => {
     const { addMode, component, setComponent, inputTag, error, setError } = props;
-
-    // state
     const [templateModalShow, setTemplateModalShow] = useState(false);
     const [datasetModalShow, setDatasetModalShow] = useState(false);
     // const [formModalShow, setFormModalShow] = useState(false);
@@ -46,9 +44,11 @@ const DetailRelationForm = (props) => {
         const { name, value, checked } = e.target;
 
         if (name === 'dataType') {
+            // 데이터 on => 기존 데이터셋의 dataType을 셋팅한다
+            const originType = component?.dataset?.autoCreateYn === 'Y' ? DATA_TYPE_AUTO : DATA_TYPE_DESK;
             setComponent({
                 ...component,
-                dataType: checked ? DATA_TYPE_DESK : DATA_TYPE_NONE,
+                dataType: checked ? originType : DATA_TYPE_NONE,
             });
         } else {
             setComponent({

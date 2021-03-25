@@ -12,7 +12,7 @@ import EpisodeList from '@pages/Jpod/Episode/EpisodeList';
 import EpisodeEdit from '@pages/Jpod/Episode/EpisodeEdit';
 
 /**
- * J팟 관리 - 에피소드
+ * J팟 관리 > 에피소드
  */
 const JpodEpisode = ({ match, displayName }) => {
     const dispatch = useDispatch();
@@ -37,27 +37,28 @@ const JpodEpisode = ({ match, displayName }) => {
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     <EpisodeList match={match} />
                 </Col>
+
                 {/* 등록 / 수정 */}
-                {(matchPoints.md || matchPoints.lg) && (
-                    <Col md={5} className="p-0">
-                        <Switch>
-                            <Route path={[`${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]} exact render={() => <EpisodeEdit match={match} />} />
-                        </Switch>
-                    </Col>
-                )}
-                {(matchPoints.xs || matchPoints.sm) && (
-                    <Switch>
-                        <Route
-                            path={[`${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]}
-                            exact
-                            render={() => (
+                <Switch>
+                    <Route
+                        path={[`${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]}
+                        exact
+                        render={() => {
+                            if (matchPoints.md || matchPoints.lg) {
+                                return (
+                                    <Col md={5} className="p-0">
+                                        <EpisodeEdit match={match} />
+                                    </Col>
+                                );
+                            }
+                            return (
                                 <Col xs={7} className="absolute-top-right h-100 overlay-shadow p-0" style={{ zIndex: 2 }}>
                                     <EpisodeEdit match={match} />
                                 </Col>
-                            )}
-                        />
-                    </Switch>
-                )}
+                            );
+                        }}
+                    />
+                </Switch>
             </Row>
         </Container>
     );

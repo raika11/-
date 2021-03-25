@@ -9,7 +9,8 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { MokaCard, MokaInputLabel, MokaInput, MokaIcon } from '@components';
-import { PodtyEpisodeModal, RepoterModal, PodCastModal } from '@pages/Jpod/JpodModal';
+import ReporterListModal from '@pages/Reporter/modals/ReporterListModal';
+import { PodtyEpisodeModal, PodCastModal } from '@pages/Jpod/modals';
 import { initialState, GET_EPISODES_INFO, saveJpodEpisode, getEpisodesInfo, clearEpisodeInfo, getEpisodes } from '@store/jpod';
 import { clearSelectArticleList, selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -55,7 +56,7 @@ const ChannelEdit = (props) => {
 
     // store 연결
     const channelList = useSelector((store) => store.jpod.episode.channel.list);
-    const channelInfo = useSelector((store) => store.jpod.channel.channelInfo);
+    const channel = useSelector((store) => store.jpod.channel.channel);
     // const search = useSelector((store) => store.jpod.episode.episodes.search);
     const episodeInfo = useSelector((store) => store.jpod.episode.episodeInfo);
     const selectReporter = useSelector((store) => store.jpod.selectReporter);
@@ -738,7 +739,7 @@ const ChannelEdit = (props) => {
                     <div style={{ width: 150 }}>
                         <MokaInputLabel label={`회차`} className="mr-2" name="epsdNo" id="epsdNo" value={editData.epsdNo} onChange={handleEditDataChange} />
                     </div>
-                    <p className="mb-0">마지막 회차: {channelInfo.episodeStat.lastEpsoNo ? `${channelInfo.episodeStat.lastEpsoNo}회` : ''}</p>
+                    <p className="mb-0">마지막 회차: {channel.episodeStat.lastEpsoNo ? `${channel.episodeStat.lastEpsoNo}회` : ''}</p>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
@@ -1094,13 +1095,7 @@ const ChannelEdit = (props) => {
                 }}
             />
             {/* 진행자 검색 모달. */}
-            <RepoterModal
-                show={reporterModalState}
-                selectType={selectRepoterType}
-                onHide={() => {
-                    setReporterModalState(false);
-                }}
-            />
+            <ReporterListModal show={reporterModalState} selectType={selectRepoterType} onHide={() => setReporterModalState(false)} />
             {/* 팟캐스트 등록 검색 모달. */}
             <PodCastModal
                 show={podCastModalState}

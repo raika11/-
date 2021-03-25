@@ -1,14 +1,23 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
+import { MokaInput, MokaIcon, MokaOverlayTooltipButton, MokaPrependLinkInput } from '@components';
 
 const MemberForm = ({ index, member, onChangeMember, onDeleteMember, onResetMember }) => {
     return (
         <div className="d-flex p-2">
             <div className="flex-fill">
                 <div className="d-flex mb-2">
-                    <MokaInput name="memRepSeq" className="mr-2" value={member.memRepSeq} onChange={(e) => onChangeMember(e, index)} placeholder="기자번호" disabled />
-                    <MokaInput name="memNm" className="mr-2" value={member.memNm} onChange={(e) => onChangeMember(e, index)} placeholder="기자명" />
+                    <MokaPrependLinkInput
+                        className="mr-2"
+                        linkText={member.memRepSeq ? `ID: ${member.memRepSeq}` : 'ID'}
+                        inputList={{
+                            placeholder: '기자명',
+                            className: 'bg-white',
+                            name: 'memNm',
+                            value: member.memNm,
+                            onChange: (e) => onChangeMember(e, index),
+                        }}
+                    />
                     <MokaInput name="memMemo" className="mr-2" value={member.memMemo} onChange={(e) => onChangeMember(e, index)} placeholder="직책" />
                     <MokaInput name="nickNm" className="mr-2" value={member.nickNm} onChange={(e) => onChangeMember(e, index)} placeholder="닉네임" />
                     <Button variant="negative" className="flex-shrink-0" onClick={() => onResetMember(index)}>

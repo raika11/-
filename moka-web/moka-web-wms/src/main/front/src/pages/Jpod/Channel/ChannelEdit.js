@@ -3,7 +3,7 @@ import produce from 'immer';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
-import { initialState, GET_CHNL, SAVE_CHNL, saveChnl, changeChnlInvalidList, clearChnl, getChnl, getChEpisodes } from '@store/jpod';
+import { initialState, GET_CHNL, SAVE_CHNL, saveChnl, changeChnlInvalidList, clearChnl, getChnl, getChnlEpsdList } from '@store/jpod';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaCard } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -73,6 +73,7 @@ const ChannelEdit = ({ match }) => {
             }
         }
         setTemp({ ...temp, [name]: date });
+        if (error[name]) setError({ ...error, [name]: false });
     };
 
     /**
@@ -143,7 +144,8 @@ const ChannelEdit = ({ match }) => {
     const reporterToMember = useCallback(
         (reporter) => {
             const fakeIdx = members.findIndex((e) => !e.memMemo && !e.memNm && !e.memRepSeq && !e.nickNm && !e.seqNo);
-            if (fakeIdx < 0 || fakeIdx > 5) {
+            const insertIdx = members.length < 6 ? (fakeIdx > -1 ? fakeIdx || members.length : fakeIdx && members.length) : fakeIdx;
+            if (insertIdx < 0 || insertIdx > 5) {
                 toast.warning('진행자는 6명까지 선택할 수 있습니다');
                 return;
             }
@@ -155,7 +157,7 @@ const ChannelEdit = ({ match }) => {
             }
 
             const nm = produce(members, (draft) => {
-                draft[fakeIdx] = {
+                draft[insertIdx] = {
                     seqNo: null,
                     chnlSeq: chnlSeq ? Number(chnlSeq) : null,
                     selectType: 'CM',
@@ -246,6 +248,15 @@ const ChannelEdit = ({ match }) => {
             isInvalid = isInvalid || true;
         }
 
+        // 개설일 필수
+        if (!channel.chnlSdt) {
+            errList.push({
+                field: 'chnlSdt',
+                reason: '개설일을 선택해주세요',
+            });
+            isInvalid = isInvalid || true;
+        }
+
         dispatch(changeChnlInvalidList(errList));
         return !isInvalid;
     };
@@ -305,15 +316,18 @@ const ChannelEdit = ({ match }) => {
             chnlSdt: chnlSdt.isValid() ? chnlSdt : null,
             chnlEdt: chnlEdt.isValid() ? chnlEdt : null,
         });
-        // 진행자 기본 6명
-        setMembers([...(channel.members || []), ...[1, 2, 3, 4, 5, 6].map(() => initialState.initMember)].slice(0, 6));
+        setMembers(channel.members || []);
+        // 진행자 기본 6명 => 왜 이렇게 해야하는지?;; 기획서 상에 적힌 조건이 없어서 이건 제거함
+        // setMembers([...(channel.members || []), ...[1, 2, 3, 4, 5, 6].map(() => initialState.initMember)].slice(0, 6));
         setKeywordText((channel.keywords || []).map((k) => k.keyword).join(', '));
     }, [channel]);
 
     useEffect(() => {
         if (chnlSeq) {
+            // 채널 상세
             dispatch(getChnl({ chnlSeq }));
-            dispatch(getChEpisodes({ chnlSeq }));
+            // 채널의 에피소드 목록 조회
+            dispatch(getChnlEpsdList({ search: { ...initialState.channel.channelEpisode.search, chnlSeq } }));
         } else {
             dispatch(clearChnl());
         }
@@ -327,6 +341,7 @@ const ChannelEdit = ({ match }) => {
     useEffect(() => {
         return () => {
             dispatch(clearChnl());
+            dispatch(changeChnlInvalidList([]));
         };
     }, [dispatch]);
 

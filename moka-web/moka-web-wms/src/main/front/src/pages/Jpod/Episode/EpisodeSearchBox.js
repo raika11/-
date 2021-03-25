@@ -12,15 +12,15 @@ import { initialState, changeEpisodesSearchOption, getEpisodes, getEpisodeGubunC
 import toast from '@utils/toastUtil';
 
 /**
- * J팟 관리 - 에피소드 리스트 검색
+ * J팟 관리 > 에피소드 > 목록 > 검색
  */
 const EpisodeSearchBox = (props) => {
     const { match } = props;
     const history = useHistory();
     const dispatch = useDispatch();
-    const storeSearch = useSelector((store) => store.jpod.episode.episodes.search);
+    const storeSearch = useSelector((store) => store.jpod.episode.search);
     const channelList = useSelector((store) => store.jpod.episode.channel.list);
-    const [searchData, setSearchData] = useState(initialState.episode.episodes.search);
+    const [searchData, setSearchData] = useState(initialState.episode.search);
 
     // 검색 항목 변경시 스테이트 업데이트.
     const handleSearchChange = (e) => {

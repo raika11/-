@@ -101,7 +101,7 @@
     .section.general .component > .row > *:last-child {margin-right: 0; padding-right: 0;}
     .section.general .component.header_nav_area > .row > * {padding-right: 0;}
     .section.general .component.showcase > .row > * {padding-right: 0;}    
-    .section.general .component .sub_title {margin-bottom: 20px;}
+    .section.general .component .sub_title {margin-bottom: 19px;}
 
     .section.general .component.showcase {padding: 20px 0;}
     .section.general .component.showcase .card {border-right: 1px solid #e2e2e2;}

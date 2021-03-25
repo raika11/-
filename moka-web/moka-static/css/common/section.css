@@ -12,7 +12,7 @@
 .header_nav .nav .nav_item .nav_link {display:inline-block; width:100%; color: #111; font-size: 16px; font-weight: 500;}
 
 /***************************************    general     ************************************/
-.section.general .component {padding: 18px 0 40px; border-top: 1px solid #000;}
+.section.general .component {padding: 18px 0 40px; border-top: 1px solid #000; overflow: hidden;}
 
 .section.general .card {overflow: hidden;}
 

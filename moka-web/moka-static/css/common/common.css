@@ -186,6 +186,7 @@ section{width:100%;}
 .flex_justify_around {justify-content: space-around;}
 .flex_wrap {flex-wrap: wrap;}
 .flex_nowrap {flex-wrap: nowrap;}
+.flex_reverse {flex-wrap: wrap-reverse;}
 .flex_row_reverse {display: flex; flex-direction: row-reverse;}
 .flex_col_reverse {display: flex; flex-direction: column-reverse;}
 

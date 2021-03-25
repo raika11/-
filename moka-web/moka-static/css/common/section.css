@@ -225,7 +225,7 @@
 
 
 /* flex */
-.flex_reverse {flex-wrap: wrap-reverse;}
+
 
 .catalog_home.swiper-container {width:100%;}
 .catalog_home.swiper-container .swiper-slide div:nth-child(2) {position:relative;}
@@ -249,17 +249,20 @@
 .top_area_wrap .sub_title {line-height:1.44;letter-spacing:-0.28px;}
 .top_area_wrap .sub_title span {padding-left:20px;color:#888;font-size:13px;font-weight:400;}
 
-.fa_instagram {background-image:url('https://t1.daumcdn.net/cfile/tistory/99B6AB485D09F2132A');background-size:100% auto;overflow:hidden;text-indent: -99999px;}
+.fa_instagram {background-image:url('https://t1.daumcdn.net/cfile/tistory/99B6AB485D09F2132A');background-size:100% auto;overflow:hidden;text-indent:-99999px;}
 .sns_area {padding: 25px 30px 25px 40px !important;}
 .sns_area .sns_title {line-height:27px;;}
 .sns_area .fa {vertical-align: middle;}
-.sns_area .fa_instagram {width:26px;height:26px;margin-right: 12px;border-radius:100%;line-height: 26px;}
+.sns_area .fa_instagram {width:26px;height:26px;margin-right: 12px;border-radius:100%;line-height:26px;}
 
 
 /* 많이본 기사 - rank*/
+/* .card_group.rank{flex-direction: column} */
 .card_group.rank .card {margin-bottom:30px;}
 .card_group.rank .lank_count {font-size:46px;line-height:1.22;letter-spacing:-0.42px;}
 .card_group.rank .card_image {padding-left:20px;background-color:transparent;}
+
+/* .ad_wrap{flex-direction: column} */
 
 
 

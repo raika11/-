@@ -16,13 +16,15 @@ const ChannelEpisode = () => {
     }));
     const [episodeStat, setEpisodeStat] = useState(initialState.channel.channel.episodeStat);
     const [episodeTitle, setEpisodeTitle] = useState('');
-    const [selectEpsdSeq, setSelectEpsdSeq] = useState(null);
 
     /**
      * row 클릭
      * @param {object} data rowData
      */
-    const handleRowClicked = (data) => setSelectEpsdSeq(data.epsdSeq);
+    const handleRowClicked = (data) => {
+        // 별도 액션 없음
+        // window.open(`/jpod-episode/${data.chnlSeq}/${data.epsdSeq}`);
+    };
 
     useEffect(() => {
         setEpisodeTitle(channel?.chnlNm);
@@ -48,12 +50,11 @@ const ChannelEpisode = () => {
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={channelEpisodeColumnDefs}
-                rowData={list}
+                rowData={list.map((l) => ({ ...l, seasonNo: `시즌${l.seasonNo > 0 ? l.seasonNo : ''}` }))}
                 onRowNodeId={(data) => data.epsdSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 paging={false}
-                selected={selectEpsdSeq}
             />
         </MokaCard>
     );

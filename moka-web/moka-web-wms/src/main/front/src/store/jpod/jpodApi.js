@@ -157,38 +157,30 @@ export const saveBrightOvp = ({ ovpdata }) => {
         });
 };
 
-/**
- * 게시판 게시글 리스트
- */
-export const getNoticesList = ({ boardId, search }) => {
-    return instance.get(`/api/boards/${boardId}/contents?${qs.stringify(search)}`).catch((err) => {
-        throw err;
-    });
-};
-
-/**
- * J팟 채널 게시판 조회
- */
-export const getBoardInfo = ({ search }) => {
+// J팟 채널 게시판 조회
+export const getJpodBoard = ({ search }) => {
     return instance.get(`/api/board-info?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 게시판 게시글 정보
- */
-export const getBoardContentsInfo = ({ boardId, boardSeq }) => {
-    return instance.get(`/api/boards/${boardId}/contents/${boardSeq}`).catch((err) => {
+// J팟 채널 목록 조회
+export const getBoardJpodChannalList = () => {
+    return instance.get(`/api/jpods?usedYn=Y`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 보드 채널 목록 가지고 오기 (jpod)
- */
-export const getBoardJpodChannalList = () => {
-    return instance.get(`/api/jpods?usedYn=Y`).catch((err) => {
+// J팟 공지 게시판 목록 조회
+export const getJpodNoticeList = ({ search }) => {
+    return instance.get(`/api/boards/${search.boardId}/contents?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+// J팟 공지 게시판 상세 조회
+export const getJpodNoticeContents = ({ boardId, boardSeq }) => {
+    return instance.get(`/api/boards/${boardId}/contents/${boardSeq}`).catch((err) => {
         throw err;
     });
 };

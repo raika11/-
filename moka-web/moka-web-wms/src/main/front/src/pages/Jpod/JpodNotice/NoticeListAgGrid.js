@@ -1,28 +1,28 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import moment from 'moment';
 import { MokaTable } from '@components';
-import { BASIC_DATEFORMAT, DISPLAY_PAGE_NUM } from '@/constants';
+import { BASIC_DATEFORMAT } from '@/constants';
 import columnDefs from './NoticeListAgGridColumns';
-import { GET_JPOD_NOTICE, getBoardContents, changeJpodNoticeSearchOption, getJpodNotice } from '@store/jpod';
+import { GET_JPOD_NOTICE_LIST, changeJpodNoticeSearchOption, getJpodNoticeList } from '@store/jpod';
 
 /**
  * J팟 관리 - 공지 게시판 AgGrid
  */
 const NoticeListAgGrid = ({ match }) => {
-    const { boardSeq } = useParams();
-    const dispatch = useDispatch();
+    const { boardSeq, parentBoardSeq, reply } = useParams();
     const history = useHistory();
+    const dispatch = useDispatch();
 
     // 스토어 연결
     const { search, list, total, channelList, loading } = useSelector(
         (store) => ({
-            search: store.jpod.jpodNotice.jpodNotices.search,
-            list: store.jpod.jpodNotice.jpodNotices.list,
-            total: store.jpod.jpodNotice.jpodNotices.total,
+            search: store.jpod.jpodNotice.search,
+            list: store.jpod.jpodNotice.list,
+            total: store.jpod.jpodNotice.total,
             channelList: store.jpod.jpodNotice.channelList,
-            loading: store.loading[GET_JPOD_NOTICE],
+            loading: store.loading[GET_JPOD_NOTICE_LIST],
         }),
         shallowEqual,
     );
@@ -31,7 +31,7 @@ const NoticeListAgGrid = ({ match }) => {
     /**
      * 목록 클릭
      */
-    const handleClickListRow = ({ boardSeq }) => {
+    const handleClickRow = ({ boardSeq }) => {
         history.push(`${match.path}/${boardSeq}`);
     };
 
@@ -43,8 +43,7 @@ const NoticeListAgGrid = ({ match }) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        dispatch(changeJpodNoticeSearchOption(temp));
-        dispatch(getJpodNotice());
+        dispatch(getJpodNoticeList(changeJpodNoticeSearchOption(temp)));
     };
 
     useEffect(() => {
@@ -71,12 +70,11 @@ const NoticeListAgGrid = ({ match }) => {
             rowData={rowData}
             rowHeight={40}
             onRowNodeId={(row) => row.boardSeq}
-            onRowClicked={handleClickListRow}
+            onRowClicked={handleClickRow}
             loading={loading}
             total={total}
             page={search.page}
             size={search.size}
-            displayPageNum={DISPLAY_PAGE_NUM}
             onChangeSearchOption={handleChangeSearchOption}
             selected={boardSeq}
         />

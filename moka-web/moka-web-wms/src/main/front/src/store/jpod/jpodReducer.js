@@ -102,26 +102,25 @@ export const initialState = {
             list: [],
         },
     },
+    // 공지 게시판
     jpodNotice: {
-        jpodNotices: {
-            total: 0,
-            list: [],
-            search: {
-                page: 0,
-                sort: 'boardId,desc',
-                size: PAGESIZE_OPTIONS[0],
-                usedYn: 'Y',
-                searchType: '',
-                keyword: '',
-                delYn: 'N',
-            },
-        },
-        boardList: [],
+        jpodBoard: {},
         channelList: [],
-        noticeInfo: {},
-        selectBoard: {
-            answYn: 'N',
+        total: 0,
+        list: [],
+        error: null,
+        search: {
+            boardId: null,
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            startDt: null,
+            endDt: null,
+            usedYn: 'Y',
+            delYn: 'N',
+            channelId: '',
+            keyword: '',
         },
+        contents: {},
     },
     reporter: {
         total: 0,
@@ -306,45 +305,52 @@ export default handleActions(
             });
         },
         // 기자 검색 모달 검색 옵션 처리
-        [act.CHANGE_BRIGHTOVP_SEARCH_OPTION]: (state, { payload }) => {
+        [act.CHANGE_BRIGHTOVP_SEARCH_OPTION]: (state) => {
             return produce(state, (draft) => {
                 // draft.brightOvp.search = payload;
             });
         },
+        /**
+         * J팟 공지 게시판 관련
+         */
+        [act.CLEAR_JPOD_BOARD_CONTENTS]: (state) => {
+            return produce(state, (draft) => {
+                draft.jpodNotice.contents = initialState.jpodNotice.contents;
+            });
+        },
         [act.CHANGE_JPOD_NOTICE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.jpodNotice.jpodNotices.search = payload;
+                draft.jpodNotice.search = payload;
             });
         },
-        [act.GET_JPOD_NOTICE_SUCCESS]: (state, { payload: { list, totalCnt } }) => {
+        [act.GET_JPOD_BOARD_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.jpodNotice.jpodNotices.list = list;
-                draft.jpodNotice.jpodNotices.total = totalCnt;
+                draft.jpodNotice.jpodBoard = body.list[0];
+                draft.jpodNotice.search.boardId = body.list[0].boardId;
             });
         },
-        [act.GET_BOARD_CHANNEL_LIST_SUCCESS]: (state, { payload }) => {
+        [act.GET_JPOD_CHANNEL_LIST_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.jpodNotice.channelList = payload;
             });
         },
-        [act.GET_JPOD_BOARD_SUCCESS]: (state, { payload }) => {
+        [act.GET_JPOD_NOTICE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.jpodNotice.boardList = payload;
+                draft.jpodNotice.total = body.totalCnt;
+                draft.jpodNotice.list = body.list;
+                draft.jpodNotice.error = initialState.jpodNotice.error;
             });
         },
-        [act.GET_BOARD_CONTENTS_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_JPOD_NOTICE_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.jpodNotice.noticeInfo = body;
+                draft.jpodNotice.total = initialState.jpodNotice.total;
+                draft.jpodNotice.list = initialState.jpodNotice.list;
+                draft.jpodNotice.error = payload;
             });
         },
-        [act.CHANGE_SELECT_BOARD]: (state, { payload }) => {
+        [act.GET_JPOD_NOTICE_CONTENTS_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.jpodNotice.selectBoard = payload;
-            });
-        },
-        [act.CLEAR_SELECT_BOARD]: (state) => {
-            return produce(state, (draft) => {
-                draft.jpodNotice.selectBoard = initialState.jpodNotice.selectBoard;
+                draft.jpodNotice.contents = body;
             });
         },
     },

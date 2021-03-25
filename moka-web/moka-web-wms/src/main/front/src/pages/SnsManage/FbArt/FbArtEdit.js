@@ -244,7 +244,7 @@ const FbArtEdit = () => {
                                     </React.Fragment>
                                 }
                             />
-                            <MokaImageInput className="mb-1" img={edit.fb.imgUrl} width={192} deleteButton={true} isUsedDefaultImage={true} />
+                            <MokaImageInput className="mb-1" img={edit.fb.imgUrl} width={192} deleteButton />
                         </div>
                     </Col>
                     <Col xs={6} className="p-0 align-items-center pt-3">

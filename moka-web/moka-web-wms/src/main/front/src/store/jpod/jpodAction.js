@@ -114,47 +114,25 @@ export const [SAVE_JPOD_EPISODE, SAVE_JPOD_EPISODE_SUCCESS, SAVE_JPOD_EPISODE_FA
 export const saveJpodEpisode = createAction(SAVE_JPOD_EPISODE, ({ chnlSeq, epsdSeq, episodeinfo, callback }) => ({ chnlSeq, epsdSeq, episodeinfo, callback }));
 
 /**
- * 공지 게시판
+ * 공지 게시판 관련 액션
  */
-
-/**
- * 검색 옵션 변경
- */
+export const CLEAR_JPOD_BOARD_CONTENTS = 'jpod/CLEAR_JPOD_BOARD_CONTENTS';
+export const clearJpodBoardContents = createAction(CLEAR_JPOD_BOARD_CONTENTS);
 export const CHANGE_JPOD_NOTICE_SEARCH_OPTION = 'jpod/CHANGE_JPOD_NOTICE_SEARCH_OPTION';
-export const changeJpodNoticeSearchOption = createAction(CHANGE_JPOD_NOTICE_SEARCH_OPTION, (actions) => actions);
+export const changeJpodNoticeSearchOption = createAction(CHANGE_JPOD_NOTICE_SEARCH_OPTION, (search) => search);
 
-/**
- * 선택한 보드 정보(설정 정보들 저장)
- */
-export const CLEAR_SELECT_BOARD = 'jpod/CLEAR_SELECT_BOARD';
-export const clearSelectBoard = createAction(CLEAR_SELECT_BOARD);
-
-export const CHANGE_SELECT_BOARD = 'jpod/CHANGE_SELECT_BOARD';
-export const changeSelectBoard = createAction(CHANGE_SELECT_BOARD, (actions) => actions);
-
-/**
- * j팟 게시판 목록 조회
- */
-export const [GET_JPOD_BOARD, GET_JPOD_BOARD_SUCCESS, GET_JPOD_BOARD_FAILURE] = createRequestActionTypes('jpod/GET_JPOD_BOARD');
+// J팟 채널 게시판을 조회
+export const [GET_JPOD_BOARD, GET_JPOD_BOARD_SUCCESS] = createRequestActionTypes('jpod/GET_JPOD_BOARD');
 export const getJpodBoard = createAction(GET_JPOD_BOARD);
 
-/**
- * j팟 공지 게시글 목록 조회
- */
-export const [GET_JPOD_NOTICE, GET_JPOD_NOTICE_SUCCESS, GET_JPOD_NOTICE_FAILURE] = createRequestActionTypes('jpod/GET_JPOD_NOTICE');
-export const getJpodNotice = createAction(GET_JPOD_NOTICE);
+// 게시판 channalType목록 조회
+export const [GET_JPOD_CHANNEL_LIST, GET_JPOD_CHANNEL_LIST_SUCCESS] = createRequestActionTypes('jpod/GET_JPOD_CHANNEL_LIST');
+export const getJpodChannelList = createAction(GET_JPOD_CHANNEL_LIST);
 
-export const [GET_BOARD_CONTENTS, GET_BOARD_CONTENTS_SUCCESS, GET_BOARD_CONTENTS_FAILURE] = createRequestActionTypes('jpod/GET_BOARD_CONTENTS');
-export const getBoardContents = createAction(GET_BOARD_CONTENTS, ({ boardId, boardSeq }) => ({ boardId, boardSeq }));
+// J팟 공지 게시글 목록 조회
+export const [GET_JPOD_NOTICE_LIST, GET_JPOD_NOTICE_LIST_SUCCESS, GET_JPOD_NOTICE_LIST_FAILURE] = createRequestActionTypes('jpod/GET_JPOD_NOTICE_LIST');
+export const getJpodNoticeList = createAction(GET_JPOD_NOTICE_LIST, (...actions) => actions);
 
-/**
- * 에피소드 정보 초기화
- */
-export const CLEAR_BOARD_CONTENTS = 'jpod/CLEAR_BOARD_CONTENTS';
-export const clearBoardContents = createAction(CLEAR_BOARD_CONTENTS);
-
-/**
- * 게시판 channalType 별 목록 가지고 오기. ( store 를 거치지 않고 call back 으로 목록 전달.)
- */
-export const [GET_BOARD_CHANNEL_LIST, GET_BOARD_CHANNEL_LIST_SUCCESS, GET_BOARD_CHANNEL_LIST_FAILURE] = createRequestActionTypes('jpod/GET_BOARD_CHANNEL_LIST');
-export const getBoardChannelList = createAction(GET_BOARD_CHANNEL_LIST);
+// J팟 공지 게시글 상세 조회
+export const [GET_JPOD_NOTICE_CONTENTS, GET_JPOD_NOTICE_CONTENTS_SUCCESS] = createRequestActionTypes('jpod/GET_JPOD_NOTICE_CONTENTS');
+export const getJpodNoticeContents = createAction(GET_JPOD_NOTICE_CONTENTS, ({ boardId, boardSeq }) => ({ boardId, boardSeq }));

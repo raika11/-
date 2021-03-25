@@ -169,10 +169,18 @@
 
   <!-- digitalSpecial -->
   <select id="digitalSpecial" parameterType="hashmap" resultType="map">
-    select *
-    from tb_15re_special_page_mgt
-    where SEQ_NO = #{digitalSpecialId}
+    SELECT *
+    FROM TB_15RE_SPECIAL_PAGE_MGT
+    WHERE SEQ_NO = #{digitalSpecialId}
       AND USED_YN = 'Y'
+  </select>
+
+  <!--issueInfo-->
+  <select id="issueInfo" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_MOKA_PACKAGE_SEL(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
   </select>
 
   <!--issue-->

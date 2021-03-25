@@ -52,16 +52,6 @@ const BoardsEditReplyForm = ({ data, onChangeFormData }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // useEffect(() => {
-    //     onChangeFormData({
-    //         target: {
-    //             name: 'content',
-    //             value: data.content,
-    //         },
-    //     });
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [data.content]);
-
     return (
         <Form>
             <Form.Row className="mb-2">

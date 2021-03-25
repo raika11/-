@@ -67,6 +67,7 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
             JSONArray items = (JSONArray) jsonObject.get("items");
             for (Object item : items) {
                 JSONObject tmp = (JSONObject) item;
+                log.debug("tmp : {}", tmp);
 
                 OvpSetJpotMetaJobDTO param = new OvpSetJpotMetaJobDTO();
                 param.setStatDate(now);
@@ -76,7 +77,17 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
                 param.setPlayPv((Long) tmp.get("play_request"));
                 param.setPlayUv(0L);
                 param.setPlayTime((Long) tmp.get("video_seconds_viewed"));
-                param.setCompleteCnt((Long) tmp.get("video_engagement_100"));
+                log.debug("tmpValue : {} : {}", tmp.get("video_engagement_100"), tmp
+                        .get("video_engagement_100")
+                        .getClass());
+                if (tmp
+                        .get("video_engagement_100")
+                        .getClass() == Double.class) {
+                    param.setCompleteCnt(Math.round((Double) tmp.get("video_engagement_100")));
+                } else {
+                    param.setCompleteCnt((Long) tmp.get("video_engagement_100"));
+                }
+
 
                 //데이터 갱신 procedure 실행
                 int result = ovpSetJpotMetaJobMapper.findOne(param);
@@ -92,6 +103,7 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
             setFinish(success);
 
         } catch (Exception e) {
+            e.printStackTrace();
             log.error(e.toString());
             setFinish(StatusResultType.FAILED_JOB, e.getMessage());
         }

@@ -20,8 +20,8 @@
 
 .section.general .component.correct_noti {padding: 15px 0; border-top: 0;}
 
-.section.general .component.fb_area {margin-bottom: 50px; padding: 25px 30px 25px 40px; border-top: 0;}
-.section.general .component.fb_area .fa_facebook {margin-right: 12px;}
+.section .component.fb_area {margin-bottom: 50px; padding: 25px 30px 25px 40px; border-top: 0;}
+.section .component.fb_area .fa_facebook {margin-right: 12px;}
 
 .section.general .component.latest_area .sub_title {margin-bottom: 18px;}
 .section.general .latest_area .card {margin-bottom: 20px; padding-bottom: 30px; border-bottom: 1px solid #ddd;}
@@ -107,8 +107,8 @@
 
     .section.general .component.showcase {padding: 20px 0 0;}
     .section.general .component.showcase .card {margin-bottom: 20px; padding-bottom: 20px;}
-    .section.general .component.showcase .card.top_1 .card_image {margin-right: 20px;}
-    .section.general .component.showcase .card.top_2 .card_image {margin-right: 20px;}
+    .section.general .component.showcase .card.top_1 .card_body {padding-left: 20px;}
+    .section.general .component.showcase .card.top_2 .card_body {padding-left: 20px;}
     .section.general .component.showcase .card.top_3 {margin-bottom: 0;}
     .section.general .component.showcase .card_group {display: flex;}
     .section.general .component.showcase .card_group .card {padding-right: 10px; padding-left: 10px;}
@@ -151,8 +151,8 @@
     .section.general .component.showcase {padding: 40px 0 20px;}
     .section.general .component.showcase .card {margin-bottom: 18px; padding-bottom: 30px;}
     .section.general .component.showcase .card.top_1 {border-bottom: 0;}
-    .section.general .component.showcase .card.top_1 .card_image {margin-right: 0;}
-    .section.general .component.showcase .card.top_2 .card_image {margin-right: 0;}
+    .section.general .component.showcase .card.top_1 .card_body {padding-left: 0;}
+    .section.general .component.showcase .card.top_2 .card_body {padding-left: 0;}
     .section.general .component.showcase .card.top_3 {margin-bottom: 18px;}
     .section.general .component.showcase .card_group {display: flex; flex-direction: column;}
     .section.general .component.showcase .card_group .card {padding-right: 0; padding-left: 0;}

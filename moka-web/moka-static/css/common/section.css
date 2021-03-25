@@ -14,16 +14,9 @@
 /***************************************    general     ************************************/
 .section.general .component {padding: 18px 0 40px; border-top: 1px solid #000; overflow: hidden;}
 
-.section.general .card {overflow: hidden;}
-
 .section.general .component.showcase {padding: 20px 0 18px; border-top: 0;}
 .section.general .component.showcase .card {margin-bottom: 18px; padding-bottom: 30px; border-bottom: 1px solid #ddd;}
 .section.general .component.showcase .card_group {display: flex;}
-.section.general .component.showcase .card_image {margin-bottom: 18px;}
-.section.general .component.showcase .card_image.img_left {float: none; margin-right: 0; margin-bottom: 0 !important;}
-.section.general .component.showcase .card_image.img_left .img_thumbnail.w460 {width: 100%;}
-.section.general .component.showcase .card_image.img_left .img_thumbnail.w220 {width: 100%;}
-.section.general .component.showcase .card_image.img_right .img_thumbnail {width: 78px;}
 
 .section.general .component.correct_noti {padding: 15px 0; border-top: 0;}
 
@@ -32,12 +25,9 @@
 
 .section.general .component.latest_area .sub_title {margin-bottom: 18px;}
 .section.general .latest_area .card {margin-bottom: 20px; padding-bottom: 30px; border-bottom: 1px solid #ddd;}
-.section.general .latest_area .img_thumbnail {width: 211px;}
 
 .section.general .component.view_lank_area .sub_title {margin-bottom: 18px;}
 .section.general .view_lank_area .card {margin-bottom: 30px;}
-.section.general .view_lank_area .card_image {display: block;}
-.section.general .view_lank_area .img_thumbnail {width: 86px;}
 
 
 
@@ -107,23 +97,23 @@
     .header_nav_wrap .btn_area {position: absolute; right: 16px; bottom: 16px; width: auto;}
 
     /***************************************    general     ************************************/
+    .section.general {overflow: hidden;}
     .section.general .component {padding: 18px 0 30px;}
-    .section.general .component .row > * {padding-right: 20px;}
-    .section.general .component .row.no_grid > * {margin-right: 20px; padding-right: 0;}
-    .section.general .component .row > *:last-child {margin-right: 0; padding-right: 0;}
-    .section.general .component.header_nav_area .row > * {padding-right: 0;}
-    .section.general .component.showcase .row > * {padding-right: 0;}
+    .section.general .component > .row > * {padding-right: 20px;}
+    .section.general .component > .row.no_grid > * {margin-right: 20px; padding-right: 0;}
+    .section.general .component > .row > *:last-child {margin-right: 0; padding-right: 0;}
+    .section.general .component.header_nav_area > .row > * {padding-right: 0;}
+    .section.general .component.showcase > .row > * {padding-right: 0;}
 
     .section.general .component.showcase {padding: 20px 0 0;}
     .section.general .component.showcase .card {margin-bottom: 20px; padding-bottom: 20px;}
+    .section.general .component.showcase .card.top_1 .card_image {margin-right: 20px;}
+    .section.general .component.showcase .card.top_2 .card_image {margin-right: 20px;}
     .section.general .component.showcase .card.top_3 {margin-bottom: 0;}
     .section.general .component.showcase .card_group {display: flex;}
     .section.general .component.showcase .card_group .card {padding-right: 10px; padding-left: 10px;}
     .section.general .component.showcase .card_group .card:first-child {padding-left: 0;}
     .section.general .component.showcase .card_group .card:last-child {padding-right: 0;}
-    .section.general .component.showcase .card_image.img_left {float: left; margin-right: 20px; margin-bottom: 0 !important;}
-    .section.general .component.showcase .card_image.img_left .img_thumbnail.w460 {width: 460px;}
-    .section.general .component.showcase .card_image.img_left .img_thumbnail.w220 {width: 220px;}
     
     .section.general .component.correct_noti {padding: 16px 0;}
 
@@ -131,7 +121,6 @@
     .section.general .component.latest_area .sub_title {margin-bottom: 23px;}
     .section.general .component.view_lank_area {float: right; width: 31.333333%; padding-bottom: 0;}
     .section.general .component.view_lank_area .sub_title {margin-bottom: 23px;}
-    .section.general .view_lank_area .card_image {display: none;}
     .section.general .component.banner_area {float: right; width: 31.333333%; height: 213px; padding: 0; border-top: 0;}
 
 
@@ -154,28 +143,26 @@
 
     /***************************************    general     ************************************/
     .section.general .component {padding: 18px 0 50px;}
-    .section.general .component .row > * {padding-right: 36px;}
-    .section.general .component.showcase .row > * {padding-right: 36px;}
-    .section.general .component .row.no_grid > * {margin-right: 36px; padding-right: 0;}
-    .section.general .component .row > *:last-child {margin-right: 0; padding-right: 0;}
+    .section.general .component > .row > * {padding-right: 36px;}
+    .section.general .component.showcase > .row > * {padding-right: 36px;}
+    .section.general .component > .row.no_grid > * {margin-right: 36px; padding-right: 0;}
+    .section.general .component > .row > *:last-child {margin-right: 0; padding-right: 0;}
 
     .section.general .component.showcase {padding: 40px 0 20px;}
     .section.general .component.showcase .card {margin-bottom: 18px; padding-bottom: 30px;}
     .section.general .component.showcase .card.top_1 {border-bottom: 0;}
+    .section.general .component.showcase .card.top_1 .card_image {margin-right: 0;}
+    .section.general .component.showcase .card.top_2 .card_image {margin-right: 0;}
     .section.general .component.showcase .card.top_3 {margin-bottom: 18px;}
     .section.general .component.showcase .card_group {display: flex; flex-direction: column;}
     .section.general .component.showcase .card_group .card {padding-right: 0; padding-left: 0;}
     .section.general .component.showcase .card_group .card:last-child {margin-bottom: 0; padding-bottom: 0; border-bottom: 0;}
-    .section.general .component.showcase .card_image.img_left {float: none; margin-right: 0; margin-bottom: 0 !important;}
-    .section.general .component.showcase .card_image.img_left .img_thumbnail.w460 {width: auto;}
-    .section.general .component.showcase .card_image.img_left .img_thumbnail.w220 {width: auto;}
 
     .section.general .component.correct_noti {padding: 18px 0 21px; border-top: 1px solid #e2e2e2;}
 
     .section.general .component.latest_area {margin-right: 36px;}
     .section.general .component.latest_area .sub_title {margin-bottom: 30px;}
     .section.general .component.view_lank_area .sub_title {margin-bottom: 30px;}
-    .section.general .view_lank_area .card_image {display: block;}
     .section.general .component.banner_area {height: 366px;}
 
 

@@ -255,7 +255,7 @@
 .sns_wrap {display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:20px auto;padding:16px 20px;background:#f7faff;}
 .sns_wrap .title { font-size: 18px;font-weight: bold;letter-spacing: -0.48px;color: #000;}
 .sns_wrap.instagram {background: #d6249f;background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);box-shadow: 0px 3px 10px rgba(0,0,0,.25);}
-
+.fa_instagram{width:26px;height:26px;border-radius:100%;background-image:url('https://t1.daumcdn.net/cfile/tistory/99B6AB485D09F2132A');background-size:100% auto;overflow:hidden;text-indent:-999999px;}
 
 /* 많이본 기사 - rank*/
 .card_group.rank .card{margin-bottom:30px;}

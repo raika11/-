@@ -4,7 +4,6 @@
 
 /* contents layout */
 .contents.section {padding-top: 30px; padding-bottom: 60px;}
-.component .sub_title {margin-bottom: 20px;}
 
 /* header */
 .header_nav_area {padding: 0 0 18px !important; border-top: 0 !important; border-bottom: 4px solid #000;}
@@ -13,21 +12,25 @@
 
 /***************************************    general     ************************************/
 .section.general .component {padding: 18px 0 40px; border-top: 1px solid #000; overflow: hidden;}
+.section.general .component .sub_title {margin-bottom: 20px;}
 
 .section.general .component.showcase {padding: 20px 0 18px; border-top: 0;}
-.section.general .component.showcase .card {margin-bottom: 18px; padding-bottom: 30px; border-bottom: 1px solid #ddd;}
+.section.general .component.showcase .card {border-top: 1px solid #ddd;}
+.section.general .component.showcase .card:first-child {border-top: 0;}
 .section.general .component.showcase .card_group {display: flex;}
 
-.section.general .component.correct_noti {padding: 15px 0; border-top: 0;}
+.section.general .component.correct_noti {padding: 15px 0; border-top: 1px solid #e2e2e2;}
 
 .section .component.fb_area {margin-bottom: 50px; padding: 25px 30px 25px 40px !important; border-top: 0;}
 .section .component.fb_area .fa_facebook {margin-right: 12px;}
 
 .section.general .component.latest_area .sub_title {margin-bottom: 18px;}
-.section.general .latest_area .card {margin-bottom: 20px; padding-bottom: 30px; border-bottom: 1px solid #ddd;}
+.section.general .latest_area .card {margin-bottom: 20px; margin-top: 30px;}
 
 .section.general .component.view_lank_area .sub_title {margin-bottom: 18px;}
 .section.general .view_lank_area .card {margin-bottom: 30px;}
+
+.section.general .component.banner_area {padding: 0; border-top: 0; height: 100%;}
 
 
 
@@ -52,11 +55,8 @@
 .case_unique [class*="swiper-button-next"] { right: -30px; }
 .case_unique [class*="swiper-button-prev"] { left: -30px; }
 .case_unique .page_title { margin-bottom: 30px; padding-bottom: 11px; border-bottom: 4px solid #000; }
-.case_unique .top_area_wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; margin-top: 30px; padding: 12px 0; border-top: 1px solid #000; }
 .case_unique .top_area_wrap .sub_title { display: flex; align-items: center; }
 .case_unique .top_area_wrap .sub_title .fa_arrow_right_b { margin-left: 4px; }
-.case_unique .top_area_wrap.type1 { border-width: 2px; }
-.case_unique .top_area_wrap.type1 .sub_title { font-size: 20px; }
 /* 임시 아이콘 이미지 변경시 소스 수정해야됨 */
 .fa_rect_w { width: 15px; height: 10px; border: 1.5px solid #fff;  }
 .fa_rect_w::after { content: ''; position: absolute; left: 6px; top: 4px; width: 12px; height: 8px; border: 1.5px solid #fff; }
@@ -82,14 +82,11 @@
     .card_in .card_body .headline { color: #111; line-height: 28px; }
     .card_in .card_body .description { color: #777; line-height: 23px; }
     .case_unique [class*="swiper-button-prev"], .case_unique [class*="swiper-button-next"] { display: none; }
-
-
 }
 
 /* Medium devices (tablet + pc, 768px and up) */
 @media (min-width:768px) {
     .contents.section .page_title {margin-right: 24px;}
-    .component .sub_title {margin-bottom: 20px;}
 
     .header_nav_wrap {align-items: flex-end; flex-wrap: nowrap;}
     .header_nav .nav .nav_item {margin-right: 24px;}
@@ -103,13 +100,14 @@
     .section.general .component > .row.no_grid > * {margin-right: 20px; padding-right: 0;}
     .section.general .component > .row > *:last-child {margin-right: 0; padding-right: 0;}
     .section.general .component.header_nav_area > .row > * {padding-right: 0;}
-    .section.general .component.showcase > .row > * {padding-right: 0;}
+    .section.general .component.showcase > .row > * {padding-right: 0;}    
+    .section.general .component .sub_title {margin-bottom: 19px;}
 
-    .section.general .component.showcase {padding: 20px 0 0;}
-    .section.general .component.showcase .card {margin-bottom: 20px; padding-bottom: 20px;}
+    .section.general .component.showcase {padding: 20px 0;}
+    .section.general .component.showcase .card {border-right: 1px solid #e2e2e2;}
+    .section.general .component.showcase .card:last-child {border-right: 0;}
     .section.general .component.showcase .card.top_1 .card_body {padding-left: 20px;}
     .section.general .component.showcase .card.top_2 .card_body {padding-left: 20px;}
-    .section.general .component.showcase .card.top_3 {margin-bottom: 0;}
     .section.general .component.showcase .card_group {display: flex;}
     .section.general .component.showcase .card_group .card {padding-right: 10px; padding-left: 10px;}
     .section.general .component.showcase .card_group .card:first-child {padding-left: 0;}
@@ -121,7 +119,7 @@
     .section.general .component.latest_area .sub_title {margin-bottom: 23px;}
     .section.general .component.view_lank_area {float: right; width: 31.333333%; padding-bottom: 0;}
     .section.general .component.view_lank_area .sub_title {margin-bottom: 23px;}
-    .section.general .component.banner_area {float: right; width: 31.333333%; height: 213px; padding: 0; border-top: 0;}
+    .section.general .component.banner_area {float: right; width: 31.333333%; height: 213px;}
 
 
     /***************************************    catalog     ************************************/
@@ -130,13 +128,12 @@
 
     /***************************************    unique     ************************************/
     .card_in .card_body .description { max-width: 55%; }
-
+    .case_unique [class*="swiper-button-prev"], .case_unique [class*="swiper-button-next"] { display: none; }
 }
 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
     .contents.section {padding-top: 88px; padding-bottom: 100px;}
-    .component .sub_title {margin-bottom: 23px;}
 
     .header_nav .nav .nav_item {margin-right: 30px;}
     .header_nav .nav .nav_item .nav_link {font-size: 16px;}
@@ -147,16 +144,15 @@
     .section.general .component.showcase > .row > * {padding-right: 36px;}
     .section.general .component > .row.no_grid > * {margin-right: 36px; padding-right: 0;}
     .section.general .component > .row > *:last-child {margin-right: 0; padding-right: 0;}
+    .component.general .sub_title {margin-bottom: 23px;}
 
-    .section.general .component.showcase {padding: 40px 0 20px;}
-    .section.general .component.showcase .card {margin-bottom: 18px; padding-bottom: 30px;}
-    .section.general .component.showcase .card.top_1 {border-bottom: 0;}
+    .section.general .component.showcase {padding: 40px 0 36px;}
+    .section.general .component.showcase .card {margin-top: 30px; padding-top: 18px; border-right: 0;}
+    .section.general .component.showcase .card:first-child {margin-top: 0; padding-top: 0; border-top: 0;}
     .section.general .component.showcase .card.top_1 .card_body {padding-left: 0;}
     .section.general .component.showcase .card.top_2 .card_body {padding-left: 0;}
-    .section.general .component.showcase .card.top_3 {margin-bottom: 18px;}
     .section.general .component.showcase .card_group {display: flex; flex-direction: column;}
     .section.general .component.showcase .card_group .card {padding-right: 0; padding-left: 0;}
-    .section.general .component.showcase .card_group .card:last-child {margin-bottom: 0; padding-bottom: 0; border-bottom: 0;}
 
     .section.general .component.correct_noti {padding: 18px 0 21px; border-top: 1px solid #e2e2e2;}
 
@@ -167,10 +163,11 @@
 
 
     /***************************************    catalog     ************************************/
-    
-    
 
 
+
+    /***************************************    catalog     ************************************/
+    .case_unique [class*="swiper-button-prev"], .case_unique [class*="swiper-button-next"] { display: block; }
 }
 
 /* X-Large devices (large desktops, 1200px and up) */

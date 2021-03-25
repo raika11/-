@@ -352,7 +352,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 .card_body .headline + .description {padding-top:8px;}
 .card_body .description {color: #777; font-size: 15px; line-height: 23px; word-break: break-all;}
 .card_body .byline {padding-top:8px; color:#aaa; font-size: 13px; line-height: 21px;}
-.card_image {margin-bottom: 12px;}
+.card_image {margin-bottom: 16px;}
 .card_image img {width: 100%;}
 .card .view_lank {position: absolute; font-size: 46px;}
 .card .view_lank + .card_body {padding-left: 40px;}
@@ -615,6 +615,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     /* card*/
     .card_body .description {color: #444; font-size: 14px; line-height: 22px;}
     .card_body .byline {line-height: 22px;}
+    .card_image {margin-bottom: 12px;}
     .card .view_lank {font-size: 44px;}
 
 }

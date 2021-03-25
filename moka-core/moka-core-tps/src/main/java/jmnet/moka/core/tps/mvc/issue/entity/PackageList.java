@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.pkg.entity;
+package jmnet.moka.core.tps.mvc.issue.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
@@ -19,9 +19,9 @@ import lombok.Setter;
  * <pre>
  *
  * Project : moka-springboot-parent
- * Package : jmnet.moka.core.tps.mvc.packagae.entity
+ * Package : jmnet.moka.core.tps.mvc.issue.entity
  * ClassName : PackageList
- * Created : 2021-03-19 New
+ * Created : 2021-03-19
  * </pre>
  *
  * @author stsoon
@@ -40,9 +40,6 @@ public class PackageList implements Serializable {
     @Id
     @Column(name = "SEQ_NO")
     private Long seqNo;
-
-    //    @Column(name = "PKG_SEQ")
-    //    private Long pkgSeq;
 
     @Column(name = "CAT_DIV")
     private String catDiv;

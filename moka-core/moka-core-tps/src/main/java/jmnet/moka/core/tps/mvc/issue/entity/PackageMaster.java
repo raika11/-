@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.pkg.entity;
+package jmnet.moka.core.tps.mvc.issue.entity;
 
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,9 +23,9 @@ import lombok.Setter;
  * <pre>
  *
  * Project : moka-springboot-parent
- * Package : jmnet.moka.core.tps.mvc.packagae.entity
+ * Package : jmnet.moka.core.tps.mvc.issue.entity
  * ClassName : PackageMaster (Package는 예약어라서 오류발생)
- * Created : 2021-03-19 New
+ * Created : 2021-03-19
  * </pre>
  *
  * @author stsoon
@@ -94,12 +93,7 @@ public class PackageMaster extends BaseAudit {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "packageMaster", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST})
     private Set<PackageKeyword> packageKeywords = new LinkedHashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "packageMaster", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "packageMaster")
     private Set<PackageList> packageLists = new LinkedHashSet<>();
 
-    @Transient
-    private Long articleCount;
-
-    @Transient
-    private Date lastArticleUpdateDate;
 }

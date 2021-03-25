@@ -1,7 +1,7 @@
-package jmnet.moka.core.tps.mvc.pkg.repository;
+package jmnet.moka.core.tps.mvc.issue.repository;
 
-import jmnet.moka.core.tps.mvc.pkg.dto.PackageSearchDTO;
-import jmnet.moka.core.tps.mvc.pkg.entity.PackageMaster;
+import jmnet.moka.core.tps.mvc.issue.dto.PackageSearchDTO;
+import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import org.springframework.data.domain.Page;
 
 /**

@@ -1,7 +1,7 @@
-package jmnet.moka.core.tps.mvc.pkg.repository;
+package jmnet.moka.core.tps.mvc.issue.repository;
 
 import java.util.Optional;
-import jmnet.moka.core.tps.mvc.pkg.entity.PackageMaster;
+import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

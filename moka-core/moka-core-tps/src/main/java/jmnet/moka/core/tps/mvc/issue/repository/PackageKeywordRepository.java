@@ -1,6 +1,6 @@
-package jmnet.moka.core.tps.mvc.pkg.repository;
+package jmnet.moka.core.tps.mvc.issue.repository;
 
-import jmnet.moka.core.tps.mvc.pkg.entity.PackageKeyword;
+import jmnet.moka.core.tps.mvc.issue.entity.PackageKeyword;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

@@ -144,7 +144,7 @@ const ChannelEdit = ({ match }) => {
     const reporterToMember = useCallback(
         (reporter) => {
             const fakeIdx = members.findIndex((e) => !e.memMemo && !e.memNm && !e.memRepSeq && !e.nickNm && !e.seqNo);
-            const insertIdx = members.length < 6 ? fakeIdx && members.length : fakeIdx;
+            const insertIdx = members.length < 6 ? (fakeIdx > -1 ? fakeIdx || members.length : fakeIdx && members.length) : fakeIdx;
             if (insertIdx < 0 || insertIdx > 5) {
                 toast.warning('진행자는 6명까지 선택할 수 있습니다');
                 return;
@@ -316,8 +316,9 @@ const ChannelEdit = ({ match }) => {
             chnlSdt: chnlSdt.isValid() ? chnlSdt : null,
             chnlEdt: chnlEdt.isValid() ? chnlEdt : null,
         });
-        // 진행자 기본 6명
-        setMembers([...(channel.members || []), ...[1, 2, 3, 4, 5, 6].map(() => initialState.initMember)].slice(0, 6));
+        setMembers(channel.members || []);
+        // 진행자 기본 6명 => 왜 이렇게 해야하는지?;; 기획서 상에 적힌 조건이 없어서 이건 제거함
+        // setMembers([...(channel.members || []), ...[1, 2, 3, 4, 5, 6].map(() => initialState.initMember)].slice(0, 6));
         setKeywordText((channel.keywords || []).map((k) => k.keyword).join(', '));
     }, [channel]);
 

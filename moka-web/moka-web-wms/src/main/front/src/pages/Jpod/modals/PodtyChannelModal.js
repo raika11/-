@@ -2,31 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { MokaModal, MokaTable } from '@components';
 import { columnDefs } from './PodtyChannelModalGridColumns';
 import { useSelector, useDispatch } from 'react-redux';
-import { GET_CHANNEL_PODTY_LIST, getChannelPodtyList, clearChannelPodty, selectChannelPodty } from '@store/jpod';
+import { GET_CHANNEL_PODTY_LIST, getChannelPodtyList, clearChannelPodty } from '@store/jpod';
 
 /**
- * 팟티 검색 모달.
+ * 팟티 검색 모달
  */
 const PodtyChannelModal = (props) => {
+    const { show, onHide, onRowClicked } = props;
     const dispatch = useDispatch();
-    const { show, onHide } = props;
     const [rowData, setRowData] = useState([]);
+    const list = useSelector(({ jpod }) => jpod.podtyChannel.list);
+    const loading = useSelector(({ loading }) => loading[GET_CHANNEL_PODTY_LIST]);
 
-    const list = useSelector((store) => store.jpod.podtyChannel.list);
-    const loading = useSelector((store) => store.loading[GET_CHANNEL_PODTY_LIST]);
-
-    // 닫기 버튼
+    /**
+     * 닫기
+     */
     const handleClickHide = () => {
         onHide();
     };
 
-    // 목록 클릭 store 를 업데이트후 모달창 닫기.
-    const handleClickListRow = ({ info }) => {
-        dispatch(selectChannelPodty(info));
+    /**
+     * row 클릭
+     * @param {object} podty 팟티 데이터
+     */
+    const handleRowClicked = (podty) => {
+        onRowClicked(podty);
         onHide();
     };
 
-    // store list 가 변경되면 grid 목록 업데이트.
     useEffect(() => {
         setRowData(
             list.map((element) => {
@@ -34,44 +37,42 @@ const PodtyChannelModal = (props) => {
                 return {
                     ...element,
                     crtDt: crtDt,
-                    info: element,
+                    onClick: (row) => {
+                        window.open(`https://m.podty.me/cast/${row.castSrl}`);
+                    },
                 };
             }),
         );
-    }, [list]);
+    }, [list, onRowClicked]);
 
-    // 모달창이 열리면 팟티 목록 가져오기.
     useEffect(() => {
         if (show) {
             dispatch(getChannelPodtyList());
         } else {
             dispatch(clearChannelPodty());
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]);
+    }, [dispatch, show]);
 
     return (
         <MokaModal
-            width={900}
+            width={750}
             show={show}
             onHide={handleClickHide}
-            title={`팟티 채널 리스트`}
-            size="xl"
+            title="팟티 채널 리스트"
+            size="lg"
             bodyClassName="overflow-x-hidden custom-scroll"
-            footerClassName="d-flex justify-content-center"
             buttons={[{ text: '닫기', variant: 'negative', onClick: handleClickHide }]}
-            draggable
+            centered
         >
             <MokaTable
-                className="overflow-hidden flex-fill"
+                agGridHeight={450}
                 columnDefs={columnDefs}
                 rowData={rowData}
-                rowHeight={50}
                 onRowNodeId={(data) => data.castSrl}
-                onRowClicked={handleClickListRow}
+                onRowClicked={handleRowClicked}
                 loading={loading}
                 paging={false}
-                preventRowClickCell={['shareUrl']}
+                preventRowClickCell={['이동']}
             />
         </MokaModal>
     );

@@ -1,7 +1,7 @@
-export const columnDefs = [
+export default [
     {
         headerName: '번호',
-        field: 'boardId',
+        field: 'boardSeq',
         width: 50,
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
@@ -15,29 +15,28 @@ export const columnDefs = [
     {
         headerName: '제목',
         field: 'title',
-        width: 100,
         flex: 1,
         tooltipField: 'title',
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '등록자',
-        field: 'regName',
+        field: 'regInfo',
         width: 100,
         cellStyle: { display: 'flex', alignItems: 'center' },
-        tooltipField: 'regName',
+        tooltipField: 'regInfo',
     },
     {
         headerName: '작성일자',
         field: 'regDt',
-        width: 150,
+        width: 140,
         cellStyle: { display: 'flex', alignItems: 'center' },
         tooltipField: 'regDt',
     },
     {
         headerName: '조회',
         field: 'viewCnt',
-        width: 80,
+        width: 50,
         cellStyle: { display: 'flex', alignItems: 'center' },
         tooltipField: 'viewCnt',
     },

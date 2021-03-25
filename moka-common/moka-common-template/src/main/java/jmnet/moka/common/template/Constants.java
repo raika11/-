@@ -105,7 +105,8 @@ public class Constants {
 	public final static String INFO_CONTENT= "content";
     public final static String INFO_CUSTOM = "custom";
 	public final static String INFO_ERROR= "error";
-		
+	public final static String INFO_ATTR_MAP= "attributeMap";
+
 	/* Component JSON */
 	public final static String COMPONENT_ID = "componentId";
 	public final static String COMPONENT_NAME = "name";

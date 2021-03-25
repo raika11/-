@@ -2,20 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { selectItem } from '@pages/Jpod/JpodConst';
+import { useDispatch, useSelector } from 'react-redux';
 import { DB_DATEFORMAT } from '@/constants';
 import moment from 'moment';
-import { initialState, changeJpodSearchOption, getChannels } from '@store/jpod';
+import { initialState, changeChnlSearchOption, getChnlList } from '@store/jpod';
 import toast from '@utils/toastUtil';
 
+/**
+ * J팟관리 > 채널 > 검색
+ */
 const ChannelSearchBox = ({ match }) => {
-    const [searchData, setSearchData] = useState(initialState.channel.jpod.search);
     const history = useHistory();
     const dispatch = useDispatch();
+    const storeSearch = useSelector(({ jpod }) => jpod.channel.search);
+    const [searchData, setSearchData] = useState(initialState.channel.search);
 
-    // 검색 항목 변경시 스테이트 업데이트.
-    const handleSearchChange = (e) => {
+    /**
+     * 입력값 변경
+     * @param {object} 이벤트
+     */
+    const handleChangeValue = (e) => {
         const { name, value } = e.target;
         setSearchData({
             ...searchData,
@@ -23,130 +29,127 @@ const ChannelSearchBox = ({ match }) => {
         });
     };
 
-    // 검색 버튼 처리.
-    const handleClickSearchButton = () => {
-        dispatch(
-            changeJpodSearchOption({
-                ...searchData,
-                startDt: searchData.startDt ? moment(searchData.startDt).format(DB_DATEFORMAT) : '',
-                endDt: searchData.endDt ? moment(searchData.endDt).format(DB_DATEFORMAT) : '',
-            }),
-        );
-        dispatch(getChannels());
+    /**
+     * 검색
+     */
+    const handleSearch = () => {
+        const startDt = moment(searchData.startDt).isValid() ? moment(searchData.startDt).format(DB_DATEFORMAT) : null;
+        const endDt = moment(searchData.endDt).isValid() ? moment(searchData.endDt).format(DB_DATEFORMAT) : null;
+
+        const ns = {
+            ...searchData,
+            startDt,
+            endDt,
+        };
+
+        dispatch(changeChnlSearchOption(ns));
+        dispatch(getChnlList({ search: ns }));
     };
 
-    // 초기화 버튼 클릭.
-    const handleClickSearchResetButton = () => {
-        setSearchData(initialState.channel.jpod.search);
-        dispatch(changeJpodSearchOption(initialState.channel.jpod.search));
-        // history.push(`${match.path}`);
-        // dispatch(getChannels());
+    /**
+     * 검색조건 초기화
+     */
+    const handleReset = () => {
+        dispatch(changeChnlSearchOption(initialState.channel.search));
     };
 
-    // 등록 버튼
-    const handleNewButton = () => {
-        history.push(`${match.path}/add`);
-    };
+    /**
+     * 채널 등록
+     */
+    const handleAdd = () => history.push(`${match.path}/add`);
 
-    // 검색 날짜 변경 처리.
-    const handleDateChange = (name, date) => {
+    /**
+     * 검색 날짜 변경
+     */
+    const handleChangeDate = (name, date) => {
         if (name === 'startDt') {
-            const startDt = new Date(date);
-            const endDt = new Date(searchData.endDt);
-
-            if (startDt > endDt) {
-                toast.warning('시작일은 종료일 보다 클 수 없습니다.');
+            const diff = moment(date).diff(moment(searchData.endDt));
+            if (diff > 0) {
+                toast.warning('시작일은 종료일보다 클 수 없습니다.');
                 return;
             }
         } else if (name === 'endDt') {
-            const startDt = new Date(searchData.startDt);
-            const endDt = new Date(date);
-
-            if (endDt < startDt) {
-                toast.warning('종료일은 시작일 보다 작을 수 없습니다.');
+            const diff = moment(date).diff(moment(searchData.startDt));
+            if (diff < 0) {
+                toast.warning('종료일은 시작일보다 작을 수 없습니다.');
                 return;
             }
         }
-
-        setSearchData({
-            ...searchData,
-            [name]: date,
-        });
+        setSearchData({ ...searchData, [name]: date });
     };
 
-    // 최초 로딩시 목록 가져오기.
     useEffect(() => {
-        dispatch(getChannels());
+        let ssd = moment(storeSearch.startDt, DB_DATEFORMAT);
+        if (!ssd.isValid()) ssd = null;
+        let esd = moment(storeSearch.endDt, DB_DATEFORMAT);
+        if (!esd.isValid()) esd = null;
+
+        setSearchData({
+            ...storeSearch,
+            startDt: ssd,
+            endDt: esd,
+        });
+    }, [storeSearch]);
+
+    useEffect(() => {
+        dispatch(getChnlList({ search: searchData }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
-        <>
-            <Form>
-                <Form.Row className="d-flex mb-3">
-                    <div style={{ width: 160 }} className="pr-2">
-                        <MokaInput
-                            as="dateTimePicker"
-                            className="mb-0"
-                            name="startDt"
-                            id="startDt"
-                            value={searchData.startDt}
-                            onChange={(param) => {
-                                // const selectDate = param._d;
-                                // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                                handleDateChange('startDt', param);
-                            }}
-                            inputProps={{ timeFormat: null, timeDefault: 'start' }}
-                        />
-                    </div>
-                    <div style={{ width: 160 }} className="pr-2">
-                        <MokaInput
-                            as="dateTimePicker"
-                            className="mb-0"
-                            name="endDt"
-                            id="endDt"
-                            value={searchData.endDt}
-                            onChange={(param) => {
-                                // const selectDate = param._d;
-                                // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                                handleDateChange('endDt', param);
-                            }}
-                            inputProps={{ timeFormat: null, timeDefault: 'end' }}
-                        />
-                    </div>
-                    <div className="mr-2">
-                        <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
-                            <option value="">전체</option>
-                            {selectItem.usedYn.map((item, index) => (
-                                <option key={index} value={item.value}>
-                                    {item.name}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </div>
-                    <div className="mr-1" style={{ width: 300 }}>
-                        <MokaSearchInput
-                            id="keyword"
-                            name="keyword"
-                            placeholder={'검색어를 입력해 주세요.'}
-                            value={searchData.keyword}
-                            onChange={(e) => handleSearchChange(e)}
-                            onSearch={() => handleClickSearchButton()}
-                        />
-                    </div>
-                    <div className="mr-1">
-                        <Button variant="negative" onClick={() => handleClickSearchResetButton()}>
-                            초기화
-                        </Button>
-                    </div>
-                    <div>
-                        <Button variant="positive" onClick={() => handleNewButton()}>
-                            등록
-                        </Button>
-                    </div>
-                </Form.Row>
-            </Form>
-        </>
+        <Form.Row className="mb-14">
+            {/* 시작일, 종료일 */}
+            <div style={{ width: 160 }} className="mr-2">
+                <MokaInput
+                    as="dateTimePicker"
+                    name="startDt"
+                    id="startDt"
+                    value={searchData.startDt}
+                    onChange={(date) => handleChangeDate('startDt', date)}
+                    inputProps={{ timeFormat: null, timeDefault: 'start', style: { width: 160 } }}
+                />
+            </div>
+            <div style={{ width: 160 }} className="mr-2">
+                <MokaInput
+                    as="dateTimePicker"
+                    name="endDt"
+                    id="endDt"
+                    value={searchData.endDt}
+                    onChange={(date) => handleChangeDate('endDt', date)}
+                    inputProps={{ timeFormat: null, timeDefault: 'end' }}
+                />
+            </div>
+
+            {/* 검색 조건 */}
+            <div className="flex-shrink-0 mr-2">
+                <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={handleSearch}>
+                    {initialState.channel.searchTypeList.map((item, index) => (
+                        <option key={index} value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
+                </MokaInput>
+            </div>
+
+            {/* 검색어 */}
+            <MokaSearchInput
+                id="keyword"
+                name="keyword"
+                placeholder="검색어를 입력하세요"
+                value={searchData.keyword}
+                className="mr-1 flex-fill"
+                onChange={handleChangeValue}
+                onSearch={handleSearch}
+            />
+
+            {/* 버튼 */}
+            <Button variant="negative" className="mr-1 flex-shrink-0" onClick={handleReset}>
+                초기화
+            </Button>
+            <Button variant="positive" className="flex-shrink-0" onClick={handleAdd}>
+                등록
+            </Button>
+        </Form.Row>
     );
 };
 

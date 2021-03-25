@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaSearchInput, MokaTable } from '@components';
 import { messageBox } from '@utils/toastUtil';
+import { getAllRowData } from '@utils/agGridUtil';
 import { initialState, getReporterListModal, GET_REPORTER_LIST_MODAL } from '@store/reporter';
 import columnDefs from './ReporterListModalColumns';
 
 const propTypes = {
     show: PropTypes.bool,
     onHide: PropTypes.func,
-    onClick: PropTypes.func,
+    /**
+     * row click (add버튼)
+     */
+    onRowClicked: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -17,12 +21,26 @@ const defaultProps = {};
  * 기자 목록 모달
  */
 const ReporterListModal = (props) => {
-    const { show, onHide, onClick } = props;
+    const { show, onHide, onRowClicked } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_REPORTER_LIST_MODAL]);
+    const [gridInstance, setGridInstance] = useState(null);
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
     const [total, setTotal] = useState(0);
+
+    /**
+     * row 클릭
+     * @param {object} data data
+     */
+    const handleRowClicked = useCallback(
+        (row) => {
+            if (onRowClicked) {
+                onRowClicked(row);
+            }
+        },
+        [onRowClicked],
+    );
 
     /**
      * 기자 조회 함수
@@ -45,7 +63,7 @@ const ReporterListModal = (props) => {
                                         (reporter.r2CdNm ? `${reporter.r2CdNm} / ` : '') +
                                         (reporter.r3CdNm ? `${reporter.r3CdNm} / ` : '') +
                                         (reporter.r4CdNm ? `${reporter.r4CdNm}` : ''),
-                                    onClick,
+                                    onClick: handleRowClicked,
                                 })),
                             );
                             setTotal(body.totalCnt);
@@ -56,7 +74,7 @@ const ReporterListModal = (props) => {
                 }),
             );
         },
-        [search, dispatch, onClick],
+        [search, dispatch, handleRowClicked],
     );
 
     /**
@@ -100,6 +118,14 @@ const ReporterListModal = (props) => {
     };
 
     useEffect(() => {
+        if (gridInstance) {
+            // onRowClicked가 변경되어서 모든 cell의 onClick 이벤트 update 쳐줘야함
+            const allrows = getAllRowData(gridInstance.api);
+            gridInstance.api.applyTransaction({ update: allrows.map((r) => ({ ...r, onClick: handleRowClicked })) });
+        }
+    }, [gridInstance, handleRowClicked]);
+
+    useEffect(() => {
         if (show) {
             getReporterList({});
         } else {
@@ -135,6 +161,7 @@ const ReporterListModal = (props) => {
                 total={total}
                 page={search.page}
                 size={search.size}
+                setGridInstance={setGridInstance}
                 onChangeSearchOption={changeTableSearchOption}
             />
         </MokaModal>

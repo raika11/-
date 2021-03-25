@@ -33,6 +33,7 @@ const BoardsEditReplyForm = ({ data, onChangeFormData }) => {
                 원본 게시글<br />
                 ----------------------------------------------<br />
                 <br />
+                제목 : ${contentsInfo.title}<br /><br />
                 ${contentsInfo.content}`;
 
             onChangeFormData({

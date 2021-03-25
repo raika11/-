@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { messageBox } from '@utils/toastUtil';
+import { getAllRowData } from '@utils/agGridUtil';
 import { CodeAutocomplete } from '@pages/commons';
 import SourceSelector from '@pages/commons/SourceSelector';
 import { DB_DATEFORMAT } from '@/constants';
@@ -32,6 +33,7 @@ const ArticleListModal = (props) => {
     const { show, onHide, onRowClicked } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST_MODAL]);
+    const [gridInstance, setGridInstance] = useState(null);
     const [period, setPeriod] = useState([0, 'days']);
     const [search, setSearch] = useState(initialSearch);
     const [type] = useState('JOONGANG');
@@ -233,6 +235,14 @@ const ArticleListModal = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]);
 
+    useEffect(() => {
+        if (gridInstance) {
+            // onRowClicked가 변경되어서 모든 cell의 onClick 이벤트 update 쳐줘야함
+            const allrows = getAllRowData(gridInstance.api);
+            gridInstance.api.applyTransaction({ update: allrows.map((r) => ({ ...r, onClick: handleRowClicked })) });
+        }
+    }, [gridInstance, handleRowClicked]);
+
     return (
         <MokaModal title="기사 검색" show={show} onHide={handelHide} size="lg" width={1000} height={800} bodyClassName="d-flex flex-column" draggable>
             <div>
@@ -309,6 +319,7 @@ const ArticleListModal = (props) => {
 
             <MokaTable
                 className="article-list overflow-hidden flex-fill"
+                setGridInstance={setGridInstance}
                 headerHeight={50}
                 columnDefs={columnDefs}
                 rowData={rowData}

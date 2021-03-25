@@ -1,4 +1,4 @@
-import { DB_DATEFORMAT, PAGESIZE_OPTIONS } from '@/constants';
+import { PAGESIZE_OPTIONS } from '@/constants';
 import { handleActions } from 'redux-actions';
 import * as action from '@store/snsManage/snsAction';
 import produce from 'immer';

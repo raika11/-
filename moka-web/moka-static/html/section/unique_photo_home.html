@@ -334,7 +334,7 @@
                             </div>
                         </li>
                     </ul>
-                    <button type="button" class="card_more col_sm12 col_md12 col_lg12 fs_sm20 fs_md14 fs_lg14 fw_m font_gray7">최신 기사 더보기<i class="fa fa_arrow_down_g"></i></button>
+                    <button type="button" class="card_more col_sm12 col_md12 col_lg12 fs_sm14 fs_md14 fs_lg14 fw_m font_gray7">최신 기사 더보기<i class="fa fa_arrow_down_g"></i></button>
                 </div>
 
             <!-- // contents -->
@@ -355,9 +355,12 @@
     document.onreadystatechange = function() { 
         // 모바일 브라우저 가로크기 체크
         if (document.body.clientWidth >= 768) {
-            $( ".swiper1, .swiper2" ).addClass('swiper-container ');
-            $( ".swiper1 .card_group, .swiper2 .card_group" ).addClass('swiper-wrapper');
-            $( ".swiper1 .card, .swiper2 .card" ).addClass('swiper-slide');
+            $( ".swiper1" ).addClass('swiper-container ');
+            $( ".swiper2" ).addClass('swiper-container ');
+            $( ".swiper1 .card_group" ).addClass('swiper-wrapper');
+            $( ".swiper2 .card_group" ).addClass('swiper-wrapper');
+            $( ".swiper1 .card" ).addClass('swiper-slide');
+            $( ".swiper2 .card" ).addClass('swiper-slide');
             var swiper1 = new Swiper('.swiper-container.swiper1 ', {
                 spaceBetween: 36,
                 slidesPerView: 4,
@@ -436,11 +439,16 @@
                 }
             });
         } else if (document.body.clientWidth <= 767) {
-            $( ".swiper1, .swiper2" ).removeClass( 'swiper-container swiper-container-horizontal swiper-container-android');
-            $( ".swiper1 .card_group, .swiper2 .card_group" ).removeClass('swiper-wrapper');
-            $( ".swiper1 .card, .swiper2 .card" ).removeClass('swiper-slide');
-            $( ".swiper1 .card_group, .swiper2 .card_group" ).removeAttr( 'style' );
-            $( ".swiper1 .card, .swiper2 .card" ).removeAttr( 'style' );
+            $( ".swiper1" ).removeClass( 'swiper-container swiper-container-horizontal swiper-container-android');
+            $( ".swiper2" ).removeClass( 'swiper-container swiper-container-horizontal swiper-container-android');
+            $( ".swiper1 .card_group" ).removeClass('swiper-wrapper');
+            $( ".swiper2 .card_group" ).removeClass('swiper-wrapper');
+            $( ".swiper1 .card" ).removeClass('swiper-slide');
+            $( ".swiper2 .card" ).removeClass('swiper-slide');
+            $( ".swiper1 .card_group" ).removeAttr( 'style' );
+            $( ".swiper2 .card_group" ).removeAttr( 'style' );
+            $( ".swiper1 .card" ).removeAttr( 'style' );
+            $( ".swiper2 .card" ).removeAttr( 'style' );
         }
 	});
 

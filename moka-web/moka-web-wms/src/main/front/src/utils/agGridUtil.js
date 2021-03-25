@@ -35,6 +35,16 @@ export const getDisplayedRows = (gridApi) => {
 };
 
 /**
+ * ag grid의 모든 row node 조회
+ * @param {object} gridApi agGrid api
+ */
+export const getAllRows = (gridApi) => {
+    let row = [];
+    gridApi.forEachNode((node) => row.push(node));
+    return row;
+};
+
+/**
  * ag grid의 모든 row Data 조회
  * @param {object} gridApi agGrid api
  */

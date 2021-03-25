@@ -65,11 +65,6 @@ const propTypes = {
      * @default
      */
     deleteButton: PropTypes.bool,
-    /**
-     * 에러 이미지 사용
-     * @default
-     */
-    isUsedDefaultImage: PropTypes.bool,
 };
 const defaultProps = {
     width: 171,
@@ -82,7 +77,6 @@ const defaultProps = {
     alt: '이미지',
     selectAccept: [],
     deleteButton: false,
-    isUsedDefaultImage: false,
 };
 
 /**
@@ -90,7 +84,7 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = forwardRef((props, ref) => {
-    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton, isUsedDefaultImage } = props;
+    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton } = props;
 
     // state
     const [imgSrc, setImgSrc] = useState(null);
@@ -120,7 +114,9 @@ const MokaImageInput = forwardRef((props, ref) => {
         defaultRef.current.classList.remove('d-flex');
     }, []);
 
-    // 기본 얼럿 메시지 유지를 위해.
+    /**
+     * 기본 alert 메시지 유지
+     */
     const handleEtcAlert = (message) => {
         alertProps.body = message;
         setAlert(true);
@@ -128,21 +124,18 @@ const MokaImageInput = forwardRef((props, ref) => {
         alertProps.body = '이미지파일만 등록할 수 있습니다';
     };
 
+    /**
+     * 이미지 로드 실패
+     */
     const handleErrorImage = (e) => {
-        if (isUsedDefaultImage) {
-            e.target.src = img_logo;
-            wrapRef.current.classList.add('onerror-image-wrap');
-            e.target.classList.add('onerror-image');
-        }
+        imageHide();
     };
 
+    /**
+     * 이미지 로드 성공
+     */
     const handleLoadImage = (e) => {
-        if (isUsedDefaultImage) {
-            if (e.target.src.replace(window.location.origin, '') !== img_logo) {
-                wrapRef.current.classList.remove('onerror-image-wrap');
-                e.target.classList.remove('onerror-image');
-            }
-        }
+        imageShow();
     };
 
     /**
@@ -155,13 +148,9 @@ const MokaImageInput = forwardRef((props, ref) => {
         if (inputRef.current) {
             inputRef.current.value = null;
         }
-
-        if (isUsedDefaultImage && imgRef.current) {
-            imgRef.current.classList.remove('onerror-image');
-        }
         imageHide();
         setAlert(false);
-    }, [setFileValue, isUsedDefaultImage, imageHide]);
+    }, [setFileValue, imageHide]);
 
     /**
      * 파일 드롭
@@ -199,12 +188,8 @@ const MokaImageInput = forwardRef((props, ref) => {
 
     useEffect(() => {
         setImgSrc(img);
-        if (img) {
-            imageShow();
-        } else {
-            imageHide();
-        }
-    }, [img, imageShow, imageHide]);
+        img ? imageShow() : imageHide();
+    }, [imageHide, imageShow, img]);
 
     // 리턴 ref 설정
     useImperativeHandle(
@@ -235,11 +220,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         {...rootProps}
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
-                        onClick={(e) => {
-                            if (alert === false && imgSrc === null) {
-                                rootProps.onClick(e);
-                            }
-                        }}
+                        onClick={(e) => (!imgSrc ? rootProps.onClick(e) : null)}
                         className={clsx(
                             'd-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white overflow-hidden',
                             className,
@@ -272,25 +253,18 @@ const MokaImageInput = forwardRef((props, ref) => {
                         <input {...inputProps} accept="image/*" />
 
                         {/* alert */}
-                        <div className="absolute-top">
-                            <MokaAlert {...alertProps} show={alert}>
-                                {alertProps.heading && <MokaAlert.Heading>{alertProps.heading}</MokaAlert.Heading>}
-                                <p>{alertProps.body}</p>
-                            </MokaAlert>
-                        </div>
+                        {alert && (
+                            <div className="absolute-top">
+                                <MokaAlert {...alertProps} show>
+                                    {alertProps.heading && <MokaAlert.Heading>{alertProps.heading}</MokaAlert.Heading>}
+                                    <p>{alertProps.body}</p>
+                                </MokaAlert>
+                            </div>
+                        )}
 
                         {/* default text */}
-                        <span
-                            className="absolute-top w-100 h-100 d-flex align-items-center justify-content-center pointer-events-none p-3"
-                            ref={defaultRef}
-                            style={{ whiteSpace: 'pre-wrap' }}
-                        >
-                            {alert === false && (
-                                <>
-                                    <MokaIcon iconName="fal-cloud-upload" className="mr-2" />
-                                    Drop files to attach, or browse
-                                </>
-                            )}
+                        <span className="absolute-top w-100 h-100 input-border onerror-image-wrap" ref={defaultRef}>
+                            {!alert && <Figure.Image src={img_logo} className="center-image onerror-image" alt="error" />}
                         </span>
 
                         {/* drag over mask */}

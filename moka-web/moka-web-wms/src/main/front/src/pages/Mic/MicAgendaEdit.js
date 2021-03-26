@@ -14,22 +14,19 @@ import MicAgendaForm from './components/MicAgendaForm/index';
 moment.locale('ko');
 
 /**
- * 시민 마이크 아젠다 등록, 수정
+ * 시민 마이크 > 아젠다 등록, 수정
  */
 const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { agndSeq } = useParams();
     const loading = useSelector(({ loading }) => loading[GET_MIC_AGENDA] || loading[SAVE_MIC_AGENDA]);
-    const { agenda, categoryAllList, invalidList } = useSelector(({ mic }) => ({
-        agenda: mic.agenda,
-        categoryAllList: mic.category.list,
-        invalidList: mic.invalidList,
-    }));
+    const { agenda, invalidList } = useSelector(({ mic }) => mic);
+    const categoryAllList = useSelector(({ mic }) => mic.category.list);
     const AGENDA_ARTICLE_PROGRESS = useSelector(({ app }) => app.AGENDA_ARTICLE_PROGRESS); //  기사화 단계
     const codes = useSelector(({ poll }) => poll.codes); // 투표 모달에 쓰는 데이터
-    const [temp, setTemp] = useState(initialState.agenda);
-    const [gridInstance, setGridInstance] = useState(null);
+    const [temp, setTemp] = useState(initialState.agenda); // 수정가능한 데이터
+    const [gridInstance, setGridInstance] = useState(null); // 기사 ag-grid
     const [error, setError] = useState({});
 
     /**

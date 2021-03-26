@@ -14,6 +14,7 @@ import TextForm from './TextForm';
 import TitleLocForm from './TitleLocForm';
 import TitlePrefixForm from './TitlePrefixForm';
 import VodUrlForm from './VodUrlForm';
+import ContentPriorityForm from './ContentPriorityForm';
 import mapping, { fontSizeObj } from '@pages/Desking/deskingPartMapping';
 
 const propTypes = {
@@ -239,6 +240,10 @@ const EditDeskingWorkModal = (props) => {
                 // 영상
                 else if (partKey === 'VOD_URL') {
                     return <VodUrlForm show={show} key={partKey} temp={temp} setTemp={setTemp} />;
+                }
+                // 중요도
+                else if (partKey === 'CONTENT_PRIORITY') {
+                    return <ContentPriorityForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
                 }
                 // 그 외
                 else if (mappingData) {

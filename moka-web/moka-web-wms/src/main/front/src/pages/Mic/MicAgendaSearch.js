@@ -10,7 +10,7 @@ import CategoryModal from './modals/CategoryModal';
 import OrderModal from './modals/OrderModal';
 
 /**
- * 시민 마이크 아젠다 검색
+ * 시민 마이크 > 아젠다 검색
  */
 const MicAgendaSearch = ({ match }) => {
     const history = useHistory();

@@ -76,9 +76,15 @@ export const channelEpisodeColumnDefs = [
         width: 40,
     },
     {
+        headerName: '시즌',
+        field: 'seasonNo',
+        width: 55,
+    },
+    {
         headerName: '회차',
         field: 'epsdNo',
         tooltipField: 'epsdNo',
+
         width: 60,
     },
     {
@@ -86,37 +92,17 @@ export const channelEpisodeColumnDefs = [
         field: 'epsdNm',
         tooltipField: 'epsdNm',
         width: 130,
-    },
-    {
-        headerName: '설명',
-        field: 'epsdMemo',
-        width: 100,
         flex: 1,
-        tooltipField: 'epsdMemo',
-        // autoHeight: true,
-        // cellStyle: {
-        //     boxSizing: 'border-box',
-        //     whiteSpace: 'normal',
-        //     lineHeight: '20px',
-        //     fontSize: '14px',
-        //     height: '50px',
-        //     display: '-webkit-box',
-        //     paddingTop: '5px',
-        //     '-webkit-line-clamp': 2,
-        //     '-webkit-box-orient': 'vertical',
-        //     overflow: 'hidden',
-        //     cursor: 'pointer',
-        // },
     },
     {
         headerName: '방송일',
         field: 'epsdDate',
-        width: 100,
+        width: 90,
     },
     {
         headerName: '재생시간',
         field: 'playTime',
-        width: 85,
+        width: 64,
     },
     {
         headerName: '사용',

@@ -118,12 +118,14 @@ const ReporterListModal = (props) => {
     };
 
     useEffect(() => {
-        if (gridInstance) {
-            // onRowClicked가 변경되어서 모든 cell의 onClick 이벤트 update 쳐줘야함
-            const allrows = getAllRowData(gridInstance.api);
-            gridInstance.api.applyTransaction({ update: allrows.map((r) => ({ ...r, onClick: handleRowClicked })) });
-        }
-    }, [gridInstance, handleRowClicked]);
+        setRowData(
+            rowData.map((row) => ({
+                ...row,
+                onClick: handleRowClicked,
+            })),
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [handleRowClicked]);
 
     useEffect(() => {
         if (show) {

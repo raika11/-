@@ -10,7 +10,6 @@ import {
     getListMenuContentsInfo,
     clearListMenuContentsInfo,
     saveBoardContents,
-    updateBoardContents,
     getListMenuContentsList,
     saveBoardReply,
     deleteBoardContents,
@@ -86,6 +85,10 @@ const BoardsEdit = ({ match }) => {
             }
         });
 
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
+
         return formData;
     };
 
@@ -135,31 +138,31 @@ const BoardsEdit = ({ match }) => {
         } else {
             formData = makeAdminFormData();
         }
-        dispatch(
-            updateBoardContents({
-                boardId: boardId,
-                boardSeq: boardSeq,
-                formData: formData,
-                callback: ({ header: { success, message }, body }) => {
-                    if (success === true) {
-                        toast.success(message);
-                        const { boardSeq } = body;
-                        history.push(`${match.path}/${boardId}/${boardSeq}`);
-                        dispatch(getListMenuContentsList(boardId));
-                        dispatch(getListMenuContentsInfo({ boardId: boardId, boardSeq: boardSeq }));
-                    } else {
-                        const { totalCnt, list } = body;
-                        if (totalCnt > 0 && Array.isArray(list)) {
-                            // 에러 메시지 확인.
-                            messageBox.alert(list[0].reason, () => {});
-                        } else {
-                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
-                            messageBox.alert(message, () => {});
-                        }
-                    }
-                },
-            }),
-        );
+        // dispatch(
+        //     updateBoardContents({
+        //         boardId: boardId,
+        //         boardSeq: boardSeq,
+        //         formData: formData,
+        //         callback: ({ header: { success, message }, body }) => {
+        //             if (success === true) {
+        //                 toast.success(message);
+        //                 const { boardSeq } = body;
+        //                 history.push(`${match.path}/${boardId}/${boardSeq}`);
+        //                 dispatch(getListMenuContentsList(boardId));
+        //                 dispatch(getListMenuContentsInfo({ boardId: boardId, boardSeq: boardSeq }));
+        //             } else {
+        //                 const { totalCnt, list } = body;
+        //                 if (totalCnt > 0 && Array.isArray(list)) {
+        //                     // 에러 메시지 확인.
+        //                     messageBox.alert(list[0].reason, () => {});
+        //                 } else {
+        //                     // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
+        //                     messageBox.alert(message, () => {});
+        //                 }
+        //             }
+        //         },
+        //     }),
+        // );
     };
 
     /**

@@ -22,12 +22,14 @@ import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
 import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeDTO;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeDetailDTO;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisode;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeDetail;
+import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeRelArt;
 import jmnet.moka.core.tps.mvc.jpod.service.JpodEpisodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -162,6 +164,7 @@ public class JpodEpisodeRestController extends AbstractCommonController {
 
             // insert
             jpodEpisode = uploadImage(jpodEpisode, shrImgFile, katalkImgFile);
+
             JpodEpisodeDetail returnValue = jpodEpisodeService.insertJpodEpisode(jpodEpisode);
 
 
@@ -391,6 +394,18 @@ public class JpodEpisodeRestController extends AbstractCommonController {
         String[] pathAndName = McpFile.getFilepathAndName(saveFilePath);
 
         return ftpHelper.delete(FtpHelper.PDS, pathAndName[0], pathAndName[1]);
+    }
+
+    private void articleEscapeHtml(JpodEpisodeDetail jpodEpisode) {
+        if (jpodEpisode.getArticles() != null && jpodEpisode
+                .getArticles()
+                .size() > 0) {
+            for (JpodEpisodeRelArt art : jpodEpisode.getArticles()) {
+                if (McpString.isNotEmpty(art.getRelTitle())) {
+                    art.setRelTitle(ArticleEscapeUtil.htmlEscape(art.getRelTitle()));
+                }
+            }
+        }
     }
 
 }

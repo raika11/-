@@ -195,108 +195,88 @@ function* getListMenuContentsList({ payload: boardId }) {
 const getListMenuContentsInfo = createRequestSaga(act.GET_LIST_MENU_CONTENTS_INFO, api.getBoardContentsInfo);
 
 /**
- * 게시글 등록
+ * 게시글 저장
  */
-function* saveBoardContents({ payload: { boardId, formData, callback } }) {
-    yield put(startLoading(act.SAVE_BOARD_CONTENTS));
+function* saveBoardContents({ payload: { boardContents, callback } }) {
+    const ACTION = act.SAVE_BOARD_CONTENTS;
+    let callbackData, response;
 
-    let callbackData = {};
-    let response;
+    yield put(startLoading(ACTION));
 
     try {
-        const PostData = {
-            boardId: boardId,
-            formData: formData,
-        };
-        response = yield call(api.saveBoardContents, { PostData });
+        // 등록, 수정 분기
+        response = yield call(boardContents.boardSeq ? api.putBoardContents : api.postBoardContents, { boardContents });
         callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 조회
+            const search = yield select(({ board }) => board.listMenu.contentsList.search);
+
+            yield put({
+                type: act.GET_LIST_MENU_CONTENTS_LIST,
+                payload: { search },
+            });
+        } else {
+            toast.error(callbackData.header?.message);
+        }
     } catch (e) {
         callbackData = errorResponse(e);
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
     }
+
     if (typeof callback === 'function') {
         yield call(callback, callbackData);
     }
 
-    yield put(finishLoading(act.SAVE_BOARD_CONTENTS));
-}
-
-/**
- * 게시글 수정
- */
-function* updateBoardContents({ payload: { boardId, boardSeq, formData, callback } }) {
-    yield put(startLoading(act.UPDATE_BOARD_CONTENTS));
-
-    let callbackData = {};
-    let response;
-
-    try {
-        response = yield call(api.updateBoardContents, {
-            boardId: boardId,
-            boardSeq: boardSeq,
-            formData: formData,
-        });
-        callbackData = response.data;
-    } catch (e) {
-        callbackData = errorResponse(e);
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
-    }
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-
-    yield put(finishLoading(act.UPDATE_BOARD_CONTENTS));
+    yield put(finishLoading(ACTION));
 }
 
 /**
  * 게시글 삭제
  */
 function* deleteBoardContents({ payload: { boardId, boardSeq, callback } }) {
-    yield put(startLoading(act.DELETE_BOARD_CONTENTS));
+    const ACTION = act.DELETE_BOARD_CONTENTS;
+    let callbackData, response;
 
-    let callbackData = {};
-    let response;
+    yield put(startLoading(ACTION));
 
     try {
-        response = yield call(api.deleteBoardContents, {
-            boardId: boardId,
-            boardSeq: boardSeq,
-        });
+        response = yield call(api.deleteBoardContents, { boardId: boardId, boardSeq: boardSeq });
         callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 조회
+            const search = yield select(({ board }) => board.listMenu.contentsList.search);
+
+            yield put({
+                type: act.GET_LIST_MENU_CONTENTS_LIST,
+                payload: { search },
+            });
+        }
     } catch (e) {
         callbackData = errorResponse(e);
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
     }
+
     if (typeof callback === 'function') {
         yield call(callback, callbackData);
     }
 
-    yield put(finishLoading(act.DELETE_BOARD_CONTENTS));
+    yield put(finishLoading(ACTION));
 }
 
 /**
  * 답변 등록 및 수정
  */
 function* saveBoardReply({ payload: { boardId, parentBoardSeq, boardSeq, contents, callback } }) {
-    yield put(startLoading(act.SAVE_BOARD_REPLY));
+    const ACTION = act.SAVE_BOARD_REPLY;
+    let callbackData, response;
 
-    let callbackData = {};
-    let response;
+    yield put(startLoading(ACTION));
 
     try {
         // 등록 수정 분기
         if (!parentBoardSeq) {
             // 답변 등록
-            response = yield call(api.saveBoardReply, {
+            response = yield call(api.postBoardReply, {
                 boardId: boardId,
                 parentBoardSeq: boardSeq,
                 contents: contents,
@@ -304,7 +284,7 @@ function* saveBoardReply({ payload: { boardId, parentBoardSeq, boardSeq, content
             });
         } else {
             // 답변 수정
-            response = yield call(api.updateBoardReply, {
+            response = yield call(api.putBoardReply, {
                 boardId: boardId,
                 parentBoardSeq: parentBoardSeq,
                 boardSeq: boardSeq,
@@ -312,20 +292,27 @@ function* saveBoardReply({ payload: { boardId, parentBoardSeq, boardSeq, content
                 files: [], // 답변은 첨부 파일이 없어서 null 처리
             });
         }
-
         callbackData = response.data;
+        if (response.data.header.success) {
+            // 목록 조회
+            const search = yield select(({ board }) => board.listMenu.contentsList.search);
+
+            yield put({
+                type: act.GET_LIST_MENU_CONTENTS_LIST,
+                payload: { search },
+            });
+        } else {
+            toast.error(callbackData.header?.message);
+        }
     } catch (e) {
         callbackData = errorResponse(e);
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
     }
+
     if (typeof callback === 'function') {
         yield call(callback, callbackData);
     }
 
-    yield put(finishLoading(act.SAVE_BOARD_REPLY));
+    yield put(finishLoading(ACTION));
 }
 
 /**
@@ -370,8 +357,7 @@ export default function* boardsSaga() {
     yield takeLatest(act.GET_LIST_MENU_CONTENTS_LIST, getListMenuContentsList); // 게시글 게시판 글 목록 조회
     yield takeLatest(act.GET_LIST_MENU_CONTENTS_INFO, getListMenuContentsInfo); // 게시글 게시판 상세 조회
 
-    yield takeLatest(act.SAVE_BOARD_CONTENTS, saveBoardContents); // 게시글 등록
-    yield takeLatest(act.UPDATE_BOARD_CONTENTS, updateBoardContents); // 게시글 수정
+    yield takeLatest(act.SAVE_BOARD_CONTENTS, saveBoardContents); // 게시글 저장 (등록, 수정)
     yield takeLatest(act.DELETE_BOARD_CONTENTS, deleteBoardContents); // 게시글 삭제
     yield takeLatest(act.SAVE_BOARD_REPLY, saveBoardReply); // 게시글 답변 등록
 

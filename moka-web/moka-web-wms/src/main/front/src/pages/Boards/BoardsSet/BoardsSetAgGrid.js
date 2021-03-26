@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { MokaTable } from '@components';
 import { BASIC_DATEFORMAT, DISPLAY_PAGE_NUM } from '@/constants';
-import { changeSetMenuSearchOption, GET_SET_MENU_BOARD_LIST } from '@store/board';
+import { getSetMenuBoardsList, changeSetMenuSearchOption, GET_SET_MENU_BOARD_LIST } from '@store/board';
 
 import { columnDefs } from './BoardsSetAgGridColumns';
 import ButtonRenderer from './components/ButtonRenderer';
@@ -41,7 +41,7 @@ const BoardsSetAgGrid = ({ match }) => {
             if (key !== 'page') {
                 temp['page'] = 0;
             }
-            dispatch(changeSetMenuSearchOption(temp));
+            dispatch(getSetMenuBoardsList(changeSetMenuSearchOption(temp)));
         },
         [dispatch, search],
     );

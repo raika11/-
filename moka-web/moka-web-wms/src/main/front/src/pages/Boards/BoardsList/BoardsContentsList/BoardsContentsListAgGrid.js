@@ -20,6 +20,8 @@ const BoardsContentsListAgGrid = () => {
     const search = useSelector((store) => store.board.listMenu.contentsList.search);
     const list = useSelector((store) => store.board.listMenu.contentsList.list);
     const selectBoard = useSelector((store) => store.board.listMenu.selectBoard);
+    const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
+    const contentsReply = useSelector((store) => store.board.listMenu.contents.reply);
     const loading = useSelector((store) => store.loading[GET_LIST_MENU_CONTENTS_LIST]);
 
     const [columnsState] = useBoardDefs(selectBoard);
@@ -94,7 +96,7 @@ const BoardsContentsListAgGrid = () => {
                     size={search.size}
                     displayPageNum={DISPLAY_PAGE_NUM}
                     onChangeSearchOption={handleChangeSearchOption}
-                    // selected={boardSeq}
+                    selected={contentsInfo.boardSeq || contentsReply.boardSeq}
                     frameworkComponents={{ fileItemRenderer: FileItemRenderer }}
                 />
             )}

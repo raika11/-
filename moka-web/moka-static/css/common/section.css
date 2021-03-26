@@ -174,7 +174,7 @@
 
     .section.general .component.correct_noti {padding: 18px 0 21px; border-top: 1px solid #e2e2e2;}
 
-    .section.general .component.latest_area {margin-right: 36px;}
+    /* .section.general .component.latest_area {margin-right: 36px;} */
     .section.general .component.latest_area .sub_title {margin-bottom: 30px;}
     .section.general .latest_area .card {margin-bottom: 20px; padding-bottom: 30px;}
 

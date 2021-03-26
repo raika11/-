@@ -127,16 +127,20 @@ const NoticeEditForm = ({ data, onChange }) => {
                 {boardSeq && !parentBoardSeq && (
                     <>
                         <Form.Row className="mb-2">
-                            <Col xs={6} className="p-0 d-flex align-items-center">
-                                <MokaInputLabel label="등록일시" as="none" />
-                                <p className="mb-0">{data.boardSeq && data.regDt ? `${data.regDt}` : ''}</p>
-                                <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
-                            </Col>
-                            <Col xs={6} className="p-0 d-flex align-items-center justify-content-end">
-                                <MokaInputLabel label="수정일시" as="none" labelWidth={50} />
-                                <p className="mb-0">{data.boardSeq && data.modDt ? `${data.modDt}` : ''}</p>
-                                <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
-                            </Col>
+                            {data.boardSeq && data.regDt && (
+                                <Col xs={6} className="p-0 d-flex align-items-center">
+                                    <MokaInputLabel label="등록일시" as="none" labelWidth={50} />
+                                    <p className="mb-0">{data.regDt || ''}</p>
+                                    <p className="mb-0">{data.regName && data.regId && `${data.regName}(${data.regId})`}</p>
+                                </Col>
+                            )}
+                            {data.boardSeq && data.modDt && (
+                                <Col xs={6} className="p-0 d-flex align-items-center justify-content-end">
+                                    <MokaInputLabel label="수정일시" as="none" labelWidth={50} />
+                                    <p className="mb-0">{data.modDt || ''}</p>
+                                    <p className="mb-0">{data.regName && data.regId && `${data.regName}(${data.regId})`}</p>
+                                </Col>
+                            )}
                         </Form.Row>
                         <Form.Row className="mb-2 align-items-center">
                             <Col xs={4} className="p-0 d-flex">

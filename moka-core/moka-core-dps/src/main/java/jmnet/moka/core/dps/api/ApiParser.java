@@ -22,6 +22,7 @@ import jmnet.moka.common.TimeHumanizer;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.dps.api.model.Acl;
 import jmnet.moka.core.dps.api.model.Api;
+import jmnet.moka.core.dps.api.model.ApiCallRequest;
 import jmnet.moka.core.dps.api.model.ApiConfig;
 import jmnet.moka.core.dps.api.model.DbRequest;
 import jmnet.moka.core.dps.api.model.DefaultApiConfig;
@@ -365,6 +366,10 @@ public class ApiParser {
             if (resultName == null || resultName.length() == 0) {
                 resultName = ApiResult.MAIN_DATA;
             }
+            String apiPath = requestEl.getAttribute(ATTR_API_PATH);
+            String apiId = requestEl.getAttribute(ATTR_API_ID);
+            String keys = requestEl.getAttribute(ATTR_KEYS);
+
             String textContent = requestEl
                     .getTextContent()
                     .trim();
@@ -378,15 +383,15 @@ public class ApiParser {
             } else if (type.equals(Request.TYPE_SCRIPT)) {
                 api.addRequest(new ScriptRequest(type, async, resultName, textContent));
             } else if (type.equals(Request.TYPE_PURGE)) {
-                String apiPath = requestEl.getAttribute(ATTR_API_PATH);
-                String apiId = requestEl.getAttribute(ATTR_API_ID);
-                String keys = requestEl.getAttribute(ATTR_KEYS);
+
                 api.addRequest(new PurgeRequest(type, apiPath, apiId, keys, async));
             } else if (type.equals(Request.TYPE_MODULE)) {
                 if (McpString.isNullOrEmpty(textContent) == false) {
                     textContent = textContent.trim();
                 }
                 api.addRequest(new ModuleRequest(type, textContent, methodName, async, resultName));
+            } else if (type.equals(Request.TYPE_API_CALL)) {
+                api.addRequest(new ApiCallRequest(type, async, resultName, apiPath, apiId));
             } else if (type.equals(Request.TYPE_SAMPLE)) {
                 api.addRequest(new SampleRequest(type, async, resultName, textContent));
             } else {

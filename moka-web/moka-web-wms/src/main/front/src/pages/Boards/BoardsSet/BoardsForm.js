@@ -10,7 +10,7 @@ import FileExtSelector from './components/FileExtSelector';
 /**
  * 게시판 관리 > 전체 게시판 > 편집 폼(등록, 수정)
  */
-const BoardsForm = ({ loading, channelTypeList, boardInfoData, onChange, error, setError }) => {
+const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError }) => {
     const { boardInfo } = useSelector((store) => ({
         boardInfo: store.board.setMenu.boardInfo,
     }));
@@ -86,8 +86,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, onChange, error, 
     useEffect(() => {
         // Monaco 에디터 내용을 따로 스테이트 저장해서 상위에 전달
         onChange({
-            name: 'headerContent',
-            value: tmpHeaderContent,
+            headerContent: tmpHeaderContent,
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tmpHeaderContent]);
@@ -95,8 +94,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, onChange, error, 
     useEffect(() => {
         // Monaco 에디터 내용을 따로 스테이트 저장해서 상위에 전달
         onChange({
-            name: 'footerContent',
-            value: tmpFooterContent,
+            footerContent: tmpFooterContent,
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tmpFooterContent]);
@@ -105,7 +103,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, onChange, error, 
         // Monaco 에디터 내용 처리
         setTmpHeaderContent(boardInfo.headerContent);
         setTmpFooterContent(boardInfo.footerContent);
-    }, [loading, boardInfo]);
+    }, [boardInfo]);
 
     return (
         <Form>

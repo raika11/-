@@ -153,12 +153,6 @@ export default handleActions(
                 draft.setMenu.search = payload;
             });
         },
-        // 게시판 검색 옵션 클리어
-        [act.CLEAR_SET_MENU_SEARCH_OPTION]: (state) => {
-            return produce(state, (draft) => {
-                draft.setMenu.search = initialState.setMenu.search;
-            });
-        },
         // list 메뉴 검색 옵션 처리
         [act.CHANGE_LIST_MENU_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {

@@ -29,10 +29,10 @@ export const DateItemRenderer = (props) => {
     const firstTime = value && value.length > 10 ? value.substr(0, 10) : value;
     const thirdTime = value && value.length > 10 ? value.substr(10, 6) : value;
     return (
-        <>
+        <div className="h-100 d-flex flex-column justify-content-center">
             <p className="mb-0">{firstTime}</p>
             <p className="mb-0">{thirdTime}</p>
-        </>
+        </div>
     );
 };
 

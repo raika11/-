@@ -145,9 +145,10 @@ const ReporterListModal = (props) => {
             onHide={handleHide}
             title="기자 검색"
             size="xl"
-            bodyClassName="overflow-x-hidden custom-scroll"
+            bodyClassName="d-flex flex-column"
             footerClassName="d-flex justify-content-center"
             width={970}
+            height={800}
             centered
             draggable
         >
@@ -155,7 +156,7 @@ const ReporterListModal = (props) => {
                 <MokaSearchInput name="keyword" value={search.keyword} onChange={handleSearchOption} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
             </div>
             <MokaTable
-                agGridHeight={600}
+                className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(reporter) => reporter.repSeq}

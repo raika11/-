@@ -62,7 +62,7 @@ const defaultProps = {
  */
 const MemberForm = ({ index, member, onChangeMember, onDeleteMember, onResetMember }) => {
     return (
-        <div className="d-flex p-2">
+        <div className="d-flex w-100 p-2">
             {/* 입력폼 */}
             <div className="flex-fill">
                 <div className="d-flex mb-2">

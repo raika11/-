@@ -9,7 +9,7 @@ import { initialState, GET_EPSD, SAVE_EPSD, saveEpsd, getEpsd, clearEpsd } from 
 import toast, { messageBox } from '@utils/toastUtil';
 import EpisodeForm from './component/EpisodeForm';
 
-// 진행자 선택 삭제시에 필요한 Object
+// 출연진 기본값
 const reporterInit = {
     chnlSeq: '',
     desc: '',
@@ -23,24 +23,16 @@ const reporterInit = {
 };
 
 /**
- * J팟 관리 > 에피소드 > 수정
+ * J팟 관리 > 에피소드 > 등록, 수정
  */
 const ChannelEdit = (props) => {
     const { match } = props;
     const { chnlSeq, epsdSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-
     const channelList = useSelector(({ jpod }) => jpod.totalChannel.list);
     const episode = useSelector(({ jpod }) => jpod.episode.episode);
-
-    // const [podtyChnlSrl, setPodtyChnlSrl] = useState('');
-    // const [seasonCnt, setSeasonCnt] = useState(0);
-    // const [podCastModalState, setPodCastModalState] = useState(false); // 팟캐스트 모달용 스테이트
-
     const loading = useSelector(({ loading }) => loading[GET_EPSD] || loading[SAVE_EPSD]);
-
-    // hj
     const [temp, setTemp] = useState(initialState.episode.episode);
     const [cpMembers, setCpMembers] = useState([]);
     const [egMembers, setEgMembers] = useState([]);
@@ -49,7 +41,6 @@ const ChannelEdit = (props) => {
     const [selectedChannel, setSelectedChannel] = useState(initialState.channel.channel);
     const [gridInstance, setGridInstance] = useState(null);
 
-    // const selectPodtyEpisode = useSelector((store) => store.jpod.selectPodtyEpisode);
     // const selectBrightOvp = useSelector((store) => store.jpod.selectBrightOvp);
 
     /**
@@ -200,24 +191,17 @@ const ChannelEdit = (props) => {
     );
 
     /**
-     * 채널 셀렉트 박스 선택시 팟티 채널 셋팅
+     * 팟티 선택 시 에피소드 데이터 변경
      */
-    const handleChangeChnl = (e) => {
-        // const { value } = e.target;
-        // try {
-        //     const { podtychnlsrl } = e.target.selectedOptions[0].dataset;
-        //     setEditData({ ...editData, chnlSeq: value });
-        //     setPodtyChnlSrl(String(podtychnlsrl));
-        // } catch (err) {
-        //     setEditData({ ...editData, chnlSeq: '' });
-        //     setPodtyChnlSrl('');
-        // }
+    const handleSelectPodty = (podtyData) => {
+        setTemp({ ...temp, podtyEpsdSrl: podtyData.castSrl, epsdNm: podtyData.title, epsdMemo: podtyData.summary, jpodType: 'A', epsdFile: podtyData.shareUrl });
     };
 
     /**
-     * 벨리데이션
+     * 유효성 검사
+     * @param {object} episode 검증 대상
      */
-    const checkValidation = () => {
+    const validate = (episode) => {
         // if (!editData.chnlSeq || editData.chnlSeq === '') {
         //     messageBox.alert('채널을 선택해 주세요.', () => {});
         //     return true;
@@ -230,8 +214,9 @@ const ChannelEdit = (props) => {
      * 정보 저장 버튼
      */
     const handleSave = () => {
-        // 벨리데이션 체크.
-        if (checkValidation()) {
+        let saveData = temp;
+
+        if (validate(saveData)) {
             return;
         }
 
@@ -373,141 +358,6 @@ const ChannelEdit = (props) => {
     const handleCancle = () => history.push(`${match.path}`);
 
     // useEffect(() => {
-    //     // 선택된 채널의 시즌 정보를 가져와 시즌 목록 생성
-    //     const targetIdx = channelList.findIndex((c) => editData.chnlSeq === c.chnlSeq);
-    //     if (targetIdx > -1) {
-    //         setSeasonCnt(channelList[targetIdx].seasonCnt);
-    //         setPodtyChnlSrl(String(channelList[targetIdx].podtyChnlSrl));
-    //     }
-
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [editData.chnlSeq]);
-
-    // useEffect(() => {
-    //     // store 에서 에피소드 값이 변경이 되변 정보 스테이트를 업데이트 해준다.
-    //     const setBasic = (element) => {
-    //         // 에피소드 기본 데이터.
-    //         setEditData({
-    //             usedYn: element.usedYn,
-    //             chnlSeq: element.chnlSeq,
-    //             podtyEpsdSrl: element.podtyEpsdSrl,
-    //             epsdNm: element.epsdNm,
-    //             epsdMemo: element.epsdMemo,
-    //             epsdNo: element.epsdNo,
-    //             epsdDate: element.epsdDate,
-    //             epsdFile: element.epsdFile,
-    //             playTime: element.playTime,
-    //             jpodType: element.jpodType === null ? 'A' : element.jpodType,
-    //             katalkImg: element.katalkImg,
-    //             playCnt: element.playCnt,
-    //             shrImg: element.shrImg,
-    //             epsdSeq: element.epsdSeq,
-    //             likeCnt: element.likeCnt,
-    //             replyCnt: element.replyCnt,
-    //             scbCnt: element.scbCnt,
-    //             shareCnt: element.shareCnt,
-    //             viewCnt: element.viewCnt,
-    //             seasonNo: element.seasonNo,
-    //             keywords: element.keywords && Array.isArray(element.keywords) ? element.keywords.map((e) => e.keyword).join(', ') : element.keywords,
-    //         });
-    //     };
-
-    //     // 진행자 리스트.
-    //     const setMember = (element) => {
-    //         const listCp = element.filter((e) => e.memDiv === 'CP'); // 고정 패널.
-    //         setEditSelectCPRepoters(
-    //             listCp.map((element) => {
-    //                 return {
-    //                     chnlSeq: element?.chnlSeq || '',
-    //                     desc: element?.desc || '',
-    //                     epsdSeq: element?.epsdSeq || '',
-    //                     memDiv: element?.memDiv || '',
-    //                     memMemo: element?.memMemo || '',
-    //                     memNm: element?.memNm || '',
-    //                     memRepSeq: element?.memRepSeq || '',
-    //                     nickNm: element?.nickNm || '',
-    //                     seqNo: element?.seqNo || '',
-    //                 };
-    //             }),
-    //         );
-
-    //         const listEg = element.filter((e) => e.memDiv === 'EG'); // 게스트.
-    //         setEditSelectEGRepoters(
-    //             listEg.map((element) => {
-    //                 return {
-    //                     chnlSeq: element?.chnlSeq || '',
-    //                     desc: element?.desc || '',
-    //                     epsdSeq: element?.epsdSeq || '',
-    //                     memDiv: element?.memDiv || '',
-    //                     memMemo: element?.memMemo || '',
-    //                     memNm: element?.memNm || '',
-    //                     memRepSeq: element?.memRepSeq || '',
-    //                     nickNm: element?.nickNm || '',
-    //                     seqNo: element?.seqNo || '',
-    //                 };
-    //             }),
-    //         );
-    //     };
-
-    //     // 기사 정보 설정.
-    //     const setArticle = (element) => {
-    //         dispatch(
-    //             selectArticleListChange(
-    //                 element.map((e) => {
-    //                     return {
-    //                         contentId: e.id.totalId,
-    //                         title: e.relTitle,
-    //                         linkUrl: e.relLink,
-    //                         linkTarget: e.relLinkTarget,
-    //                     };
-    //                 }),
-    //             ),
-    //         );
-    //         dispatch(
-    //             selectArticleItemChange(
-    //                 element.map((e) => {
-    //                     return {
-    //                         contentId: e.id.totalId,
-    //                         title: e.relTitle,
-    //                         linkUrl: e.relLink,
-    //                         linkTarget: e.relLinkTarget,
-    //                     };
-    //                 }),
-    //             ),
-    //         );
-    //     };
-
-    //     // store 에 episodeInfo가 변경이 되었지만 초기값과 같다면 아무 것도 하지 않는다.
-    //     if (episodeInfo === initialState.episode.episodeInfo) {
-    //         resetEditData();
-    //         return;
-    //     }
-
-    //     // 값 변경시 state 변경 처리.
-    //     if (episodeInfo && episodeInfo !== initialState.episode.episodeInfo) {
-    //         setBasic(episodeInfo);
-    //         setMember(episodeInfo.members);
-    //         setArticle(episodeInfo.articles);
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [episodeInfo]);
-
-    // useEffect(() => {
-    //     // 팟티 에피소드검색 모달에서 선택시 해당 값을 정보창에도 변경 시켜준다.
-    //     if (Object.keys(selectPodtyEpisode).length > 0) {
-    //         setEditData({
-    //             ...editData,
-    //             podtyEpsdSrl: selectPodtyEpisode.episodeSrl,
-    //             epsdNm: selectPodtyEpisode.title,
-    //             epsdMemo: selectPodtyEpisode.summary,
-    //             epsdFile: selectPodtyEpisode.enclosure,
-    //             playTime: selectPodtyEpisode.duration,
-    //         });
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [selectPodtyEpisode]);
-
-    // useEffect(() => {
     //     // 브라이트 코브 값이 선택되서 store 가 변경되면 정보창에서 변경 시켜 준다.
     //     if (selectBrightOvp.id && selectBrightOvp.name) {
     //         setEditData({
@@ -587,6 +437,7 @@ const ChannelEdit = (props) => {
                 // field 변경
                 onChange={handleChangeValue}
                 onChangeImg={handleChangeImg}
+                onSelectPodty={handleSelectPodty}
                 // 출연자 변경 함수
                 addMember={addMember}
                 reporterToMember={reporterToMember}

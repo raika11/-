@@ -46,27 +46,19 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
      * 첨부 파일 등록
      */
     const handleChangeFile = (e) => {
-        let imageFiles = [];
+        let tempFile = e.target.files[0].name.split('.');
+        let tempFileExt = tempFile[1];
 
-        if (uploadFiles.length + 1 > selectBoard.allowFileCnt) {
-            messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${selectBoard.allowFileCnt}개 입니다.`, () => {});
+        if (selectBoard.allowFileExt?.split(',').indexOf(tempFileExt) < 0) {
+            // 허용하는 확장자가 아닐경우
+            messageBox.alert(`해당 게시판의 첨부 파일은 (${selectBoard.allowFileExt})확장자만 등록할 수 있습니다.`, () => {});
         } else {
-            Array.from(e.target.files).forEach((f, idx) => {
-                const fileName = f.name.split('.');
-                const fileExt = fileName[1];
-                if (selectBoard.allowFileExt.split(',').indexOf(fileExt) > -1) {
-                    const seqNo = idx;
-                    const imageData = { seqNo, attachFile: f };
-                    imageFiles.push(imageData);
-                } else {
-                    // 허용하는 확장자가 아닐경우
-                    messageBox.alert(`해당 게시판의 첨부 파일은 (${selectBoard.allowFileExt})확장자만 등록할 수 있습니다.`, () => {});
-                }
-            });
+            if (uploadFiles.length + 1 > selectBoard.allowFileCnt) {
+                messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${selectBoard.allowFileCnt}개 입니다.`, () => {});
+            } else {
+                setUploadFiles([...uploadFiles, e.target.files[0]]);
+            }
         }
-
-        const arr = uploadFiles.concat(imageFiles);
-        setUploadFiles(arr);
     };
 
     /**
@@ -108,7 +100,19 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
     }, [dispatch, selectBoard]);
 
     useEffect(() => {
-        onChangeFormData({ attaches: uploadFiles });
+        let imageData;
+
+        onChangeFormData({
+            attaches: uploadFiles.map((f) => {
+                if (f.seqNo > 0) {
+                    imageData = { seqNo: f.seqNo };
+                } else {
+                    imageData = { attachFile: f, seqNo: 0 };
+                }
+
+                return imageData;
+            }),
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [uploadFiles]);
 
@@ -117,13 +121,12 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         if (!loading) {
             setUploadFiles(
                 data.attaches.map((file) => {
-                    const { filePath, fileName } = file;
+                    const { seqNo, orgFileName, filePath, fileName } = file;
                     const fileUrl = PDS_URL && filePath && fileName ? `${PDS_URL}/${filePath}/${fileName}` : '';
                     return {
-                        attachFile: {
-                            ...file,
-                            fileUrl: fileUrl,
-                        },
+                        seqNo: seqNo,
+                        name: orgFileName,
+                        fileUrl: fileUrl,
                     };
                 }),
             );
@@ -144,7 +147,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                     <>
                         <Form.Row className="mb-2">
                             <Col xs={6} className="p-0 d-flex align-items-center">
-                                <MokaInputLabel label="등록일시" as="none" labelWidth={50} />
+                                <MokaInputLabel label="등록일시" as="none" />
                                 <p className="mb-0">{data.boardSeq && data.regDt ? `${data.regDt}` : ''}</p>
                                 <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
                             </Col>
@@ -343,7 +346,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                             {/* <Link to={element.fileUrl} target="_blank" download>
                                                 {element.name}
                                             </Link> */}
-                                            <div onClick={() => handleClickImageName(file.attachFile)}>{file.attachFile.orgFileName || file.attachFile.name}</div>
+                                            <div onClick={() => handleClickImageName(file.attachFile)}>{file.name}</div>
                                         </Col>
                                         <Col>
                                             <MokaTableEditCancleButton onClick={() => handleDeleteUploadFile(index)} />

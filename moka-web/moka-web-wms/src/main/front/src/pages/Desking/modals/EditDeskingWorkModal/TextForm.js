@@ -4,15 +4,15 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaInputLabel } from '@components';
 
+const defaultProps = {
+    urlRegex: /[Uu]rl$/,
+};
+
 /**
  * deskingPartMapping에서 text 형식의 기본 Input
  * 링크는 타겟 셀렉트 박스 자동 생성
  * 링크타겟을 받는 DTO 필드는 ~Target으로 고정
  */
-const defaultProps = {
-    urlRegex: /[Uu]rl$/,
-};
-
 const TextForm = ({ mappingData, urlRegex, temp, onChange, error }) => {
     const { as, field, label, errorCheck, ...mappingProps } = mappingData;
     const isUrl = urlRegex.test(field);

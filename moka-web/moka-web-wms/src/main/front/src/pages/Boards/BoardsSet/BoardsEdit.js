@@ -138,45 +138,6 @@ const BoardsEdit = ({ match }) => {
         return !isInvalid;
     };
 
-    // form 값 체크 어드민 페이지 일떄.
-    // const makeAdminFormData = () => {
-    //     let returnFormData = {
-    //         ...boardInfoData,
-    //         boardType: storeBoardType,
-    //     };
-
-    //     // 파일 등록
-    //     // 파일 등록 선택후 개수 입력 안했을때.
-    //     if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileCnt) {
-    //         return {
-    //             state: false,
-    //             message: '개수를 입력해 주세요.',
-    //         };
-    //     }
-
-    //     // 파일 등록 선택후 용량 입력 안했을때.
-    //     if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileSize) {
-    //         return {
-    //             state: false,
-    //             message: '용량을 입력해 주세요.',
-    //         };
-    //     }
-
-    //     // 파일 등록 선택후 확장자 입력 안했을때.
-    //     if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileExt) {
-    //         return {
-    //             state: false,
-    //             message: '확장자를 선택해 주세요.',
-    //         };
-    //     }
-
-    //     return {
-    //         state: true,
-    //         data: returnFormData,
-    //         message: '',
-    //     };
-    // };
-
     /**
      * 저장 버튼
      */

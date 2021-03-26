@@ -37,9 +37,7 @@ const initContentInfo = {
     jpodChannel: null,
     regDt: '',
     modDt: '',
-    // boardSeq: null,
-    // regInfo: '',
-    // modInfo: '',
+    boardSeq: null,
 };
 
 export const initialState = {

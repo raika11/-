@@ -379,7 +379,7 @@ function* saveJpodNoticeReply({ payload: { boardId, parentBoardSeq, boardSeq, co
             // 답변 등록
             response = yield call(postBoardReply, {
                 boardId: boardId,
-                parentBoardSeq: boardSeq,
+                parentBoardSeq: contents.parentBoardSeq || boardSeq,
                 contents: contents,
                 files: [], // 답변은 첨부 파일이 없어서 null 처리
             });

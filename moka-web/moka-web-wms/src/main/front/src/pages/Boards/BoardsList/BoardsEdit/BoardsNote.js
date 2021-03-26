@@ -10,10 +10,11 @@ import BoardsSummernote from './BoardsSummernote';
 /**
  * 게시판 관리 > 게시글 관리 > 게시판 편집 폼 > 게시글 썸머노트 편집
  */
-const BoardsNote = ({ data, onChangeFormData }) => {
+const BoardsNote = ({ data, onChangeFormData, jpodBoardId }) => {
     const dispatch = useDispatch();
     const { boardId } = useParams();
     const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
+    const jpodContents = useSelector((store) => store.jpod.jpodNotice.contents);
     const [noteData, setNoteData] = useState(data);
 
     /**
@@ -25,11 +26,11 @@ const BoardsNote = ({ data, onChangeFormData }) => {
 
         dispatch(
             uploadBoardContentsImage({
-                boardId: boardId,
+                boardId: boardId || jpodBoardId,
                 imageForm: formData,
                 callback: ({ header, body }) => {
                     if (header.success) {
-                        let tempContent = `${contentsInfo.content} <img src="${body}">`;
+                        let tempContent = `${contentsInfo.content || jpodContents.content} <img src="${body}">`;
                         onChangeFormData({ content: tempContent });
                     } else {
                         if (Array.isArray(body.list)) {

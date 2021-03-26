@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
@@ -14,7 +14,6 @@ import BoardsNote from '@/pages/Boards/BoardsList/BoardsEdit/BoardsNote';
  * J팟 관리 > 공지 게시판 > 게시글 편집 폼
  */
 const NoticeEditForm = ({ data, onChange }) => {
-    const dispatch = useDispatch();
     const { boardSeq, parentBoardSeq } = useParams();
 
     const PDS_URL = useSelector((store) => store.app.PDS_URL);
@@ -90,11 +89,10 @@ const NoticeEditForm = ({ data, onChange }) => {
     };
 
     useEffect(() => {
-        if (!contents.boardSeq) {
+        if (!boardSeq) {
             setUploadFiles([]);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [boardSeq]);
 
     useEffect(() => {
         // 로컬 파일 목록 업데이트 하면 파일 업로드 목록 변경
@@ -272,7 +270,7 @@ const NoticeEditForm = ({ data, onChange }) => {
                         />
                     </Form.Row>
                 ) : (
-                    <BoardsNote data={data.content} onChangeFormData={onChange} />
+                    <BoardsNote data={data.content} jpodBoardId={jpodBoard.boardId} onChangeFormData={onChange} />
                 )}
                 {jpodBoard.fileYn === 'Y' && (
                     <>

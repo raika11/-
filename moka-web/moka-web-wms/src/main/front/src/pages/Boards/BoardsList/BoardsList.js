@@ -53,7 +53,7 @@ const BoardsList = ({ match, displayName }) => {
                                 `${match.path}/:boardId/:parentBoardSeq/:reply/:boardSeq`,
                             ]}
                             exact
-                            render={() => <BoardsContentsList />}
+                            render={() => <BoardsContentsList match={match} />}
                         />
                     </Switch>
                 </Col>

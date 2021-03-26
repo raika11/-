@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import moment from 'moment';
 import { MokaTable } from '@components';
@@ -11,7 +11,6 @@ import { GET_JPOD_NOTICE_LIST, changeJpodNoticeSearchOption, getJpodNoticeList }
  * J팟 관리 - 공지 게시판 AgGrid
  */
 const NoticeListAgGrid = ({ match }) => {
-    const { boardSeq } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
 

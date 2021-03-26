@@ -213,7 +213,6 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             <hr className="divider" />
 
             {/* 관련기사 1,2,3,4 */}
-            {/* <RelArticleForm agenda={agenda} onChange={onChange} /> */}
             <RelArticleTable agenda={agenda} gridInstance={gridInstance} setGridInstance={setGridInstance} />
         </Form>
     );

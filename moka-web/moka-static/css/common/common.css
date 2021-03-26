@@ -194,12 +194,8 @@ section{width:100%;}
 
 /** float **/
 .flt_l {float: left;}
-.flt_l::after {content: ''; display: table; clear: both;}
 .flt_r {float: right;}
-.flt_r::after {content: ''; display: table; clear: both;}
-.clearfix::before,
-.clearfix::after {content: " "; display: table;}
-.clearfix::after {clear: both;}
+.clearfix::after {display: block; clear: both; content: '';}
 
 /** margin **/
 .mt_6 {margin-top: 6px;}

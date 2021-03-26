@@ -64,6 +64,7 @@
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
+    .header_nav_area {padding: 0 0 13px !important; border-top: 0 !important; border-bottom: 1px solid #000;}
     .header_nav_area .page_title {margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #e2e2e2;}
     .header_nav .nav .nav_item {margin-right: 26px;}
     .swiper-container.catalog_home .swiper-button-prev, .swiper-container.catalog_home .swiper-button-next{display:none;}

@@ -40,6 +40,7 @@
 .case_unique .card_image .fa_rect_w { position: absolute; right: 14px; bottom: 12px; }
 .case_unique .card_group.trend { margin-top: -20px; margin: -20px -18px 0; }
 .case_unique .card_group.trend .col_lg4 { margin-top: 20px; padding: 0 18px; }
+.case_unique .card_group.trend .card_body .headline { line-height: 26px; }
 .case_unique .component .card_more { display: flex; align-items: center; justify-content: center; margin-top: 30px; padding: 20px 0; border-top: 1px solid #e2e2e2; }
 .case_unique .component .card_more .fa_arrow_down_g { margin-left: 8px; }
 .swiper-wrapper.card_group  { flex-wrap: nowrap; }

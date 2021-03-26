@@ -197,8 +197,12 @@ const BoardsEdit = ({ match }) => {
         });
     };
 
-    const handleCLickBoardPriveButton = () => {
-        window.open(boardInfoData.boardUrl);
+    /**
+     * 미리보기
+     */
+    const handleClickBoardPriview = () => {
+        const previewboard = window.open(``, '미리보기');
+        previewboard.document.write(`<html><head></head><body><header>${boardInfo.headerContent}</header><footer>${boardInfo.footerContent}</footer></body></html>`);
     };
 
     /**
@@ -233,7 +237,7 @@ const BoardsEdit = ({ match }) => {
             footerButtons={[
                 boardId &&
                     boardInfoData.headerContent &&
-                    boardInfoData.footerContent && { text: '미리보기', variant: 'outline-neutral', onClick: handleCLickBoardPriveButton, className: 'mr-1' },
+                    boardInfoData.footerContent && { text: '미리보기', variant: 'outline-neutral', onClick: handleClickBoardPriview, className: 'mr-1' },
                 { text: boardId ? '수정' : '저장', variant: 'positive', onClick: handleClickSaveButton, className: 'mr-1' },
                 boardId && { text: '삭제', variant: 'negative', onClick: handleClickDeleteButton, className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancleButton },

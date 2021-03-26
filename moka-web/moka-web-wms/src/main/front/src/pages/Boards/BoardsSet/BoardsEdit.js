@@ -26,12 +26,7 @@ const BoardsEdit = ({ match }) => {
         shallowEqual,
     );
 
-    // 게시판 폼 필드값
     const [boardInfoData, setBoardInfoData] = useState(initialState.setMenu.boardInfo);
-
-    // monaco 에디터 스테이트 버그가 있어서 상태를 만들어 주고 상태가 업데이트 되면 렌더링 될수 있게 수정
-    const [editState, setEeditState] = useState(null);
-    // error
     const [error, setError] = useState({});
 
     /**
@@ -267,15 +262,6 @@ const BoardsEdit = ({ match }) => {
         setBoardInfoData(boardInfo);
     }, [boardInfo]);
 
-    useEffect(() => {
-        // Monaco 에디터 렌더링 때 참조할 state 처리
-        if (loading === false && boardId === undefined) {
-            setEeditState(false);
-        } else {
-            setEeditState(loading);
-        }
-    }, [boardId, loading]);
-
     return (
         <MokaCard
             title={`게시판 ${boardId ? '수정' : '등록'}`}
@@ -297,7 +283,6 @@ const BoardsEdit = ({ match }) => {
                 boardInfoData={boardInfoData}
                 setBoardInfoData={setBoardInfoData}
                 onChange={handleChangeValue}
-                loading={editState}
                 error={error}
                 setError={setError}
             />

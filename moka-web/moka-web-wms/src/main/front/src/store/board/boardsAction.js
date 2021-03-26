@@ -40,8 +40,6 @@ export const getBoardChannelList = createAction(GET_BOARD_CHANNEL_LIST, ({ type,
  */
 export const CHANGE_SET_MENU_SEARCH_OPTION = 'board/CHANGE_SET_MENU_SEARCH_OPTION';
 export const changeSetMenuSearchOption = createAction(CHANGE_SET_MENU_SEARCH_OPTION, (actions) => actions);
-export const CLEAR_SET_MENU_SEARCH_OPTION = 'board/CLEAR_SET_MENU_SEARCH_OPTION';
-export const clearSetMenuSearchOption = createAction(CLEAR_SET_MENU_SEARCH_OPTION);
 
 /**
  * 전체 게시판 목록 조회

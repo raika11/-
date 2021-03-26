@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
-import { initialState, changeSetMenuSearchOption, clearSetMenuSearchOption, getSetMenuBoardsList } from '@store/board';
+import { initialState, changeSetMenuSearchOption, getSetMenuBoardsList } from '@store/board';
 
 /**
  * 게시판 관리 > 전체 게시판 > 게시판 목록 검색
@@ -19,33 +19,32 @@ const BoardsListSearch = ({ match }) => {
         boardType: store.board.boardType,
         storeSearch: store.board.setMenu.search,
     }));
-    const [searchData, setSearchData] = useState(initialState.setMenu.search);
+    const [search, setSearch] = useState(initialState.setMenu.search);
 
     /**
      * input value
      */
     const handleSearchChange = (e) => {
         const { name, value } = e.target;
-        setSearchData({ ...searchData, [name]: value });
+        setSearch({ ...search, [name]: value });
     };
 
     /**
-     * 검색 버튼
+     * 검색
      */
     const handleClickSearchButton = () => {
-        dispatch(getSetMenuBoardsList(changeSetMenuSearchOption(searchData)));
+        dispatch(getSetMenuBoardsList(changeSetMenuSearchOption({ ...search, page: 0 })));
     };
 
     /**
-     * 초기화 버튼
+     * 초기화
      */
     const handleClickSearchResetButton = () => {
-        dispatch(clearSetMenuSearchOption()); // 스토어 검색 옵션 초기화
-        const tmpSearchOption = {
+        // 보드 타입(S: 서비스, A: 관리자)
+        setSearch({
             ...initialState.setMenu.search,
-            boardType: boardType, // store 공통 구분값에서 보드 타입을 가지고 온다. (S: 서비스, A: 관리자)
-        };
-        setSearchData(tmpSearchOption);
+            boardType: boardType,
+        });
     };
 
     /**
@@ -58,7 +57,7 @@ const BoardsListSearch = ({ match }) => {
     useEffect(() => {
         // 공통 구분값 boardType이 업데이트되면 검색 옵션, store 겁색 옵션 설정
         if (boardType) {
-            setSearchData({
+            setSearch({
                 ...storeSearch,
                 boardType: boardType,
             });
@@ -67,13 +66,13 @@ const BoardsListSearch = ({ match }) => {
     }, [boardType]);
 
     useEffect(() => {
-        setSearchData(storeSearch);
+        setSearch(storeSearch);
     }, [storeSearch]);
 
     return (
         <Form.Row className="mb-14">
             <Col xs={2} className="p-0 pr-2">
-                <MokaInput as="select" name="usedYn" value={searchData.usedYn} onChange={handleSearchChange}>
+                <MokaInput as="select" name="usedYn" value={search.usedYn} onChange={handleSearchChange}>
                     <option value="">전체</option>
                     <option value="Y">사용</option>
                     <option value="N">중지</option>
@@ -84,7 +83,7 @@ const BoardsListSearch = ({ match }) => {
                 name="keyword"
                 className="flex-fill mr-1"
                 placeholder="게시판명, 설명"
-                value={searchData.keyword}
+                value={search.keyword}
                 onChange={handleSearchChange}
                 onSearch={handleClickSearchButton}
             />

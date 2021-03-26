@@ -103,30 +103,6 @@ export const getPodtyEpisodesList = ({ castSrl }) => {
     });
 };
 
-/**
- * 브라이트 코브 몰록 조회
- */
-export const getBrightOvp = ({ search }) => {
-    return instance.get(`/api/ovp?${qs.stringify(search)}`).catch((err) => {
-        throw err;
-    });
-};
-
-/**
- * 브라이트 코브 저장
- */
-export const saveBrightOvp = ({ ovpdata }) => {
-    return instance
-        .post(`/api/ovp`, ovpdata, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        .catch((err) => {
-            throw err;
-        });
-};
-
 // J팟 채널 게시판 조회
 export const getJpodBoard = ({ search }) => {
     return instance.get(`/api/board-info?${qs.stringify(search)}`).catch((err) => {

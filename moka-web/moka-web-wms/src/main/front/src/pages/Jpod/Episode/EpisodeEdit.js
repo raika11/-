@@ -194,7 +194,15 @@ const ChannelEdit = (props) => {
      * 팟티 선택 시 에피소드 데이터 변경
      */
     const handleSelectPodty = (podtyData) => {
-        setTemp({ ...temp, podtyEpsdSrl: podtyData.castSrl, epsdNm: podtyData.title, epsdMemo: podtyData.summary, jpodType: 'A', epsdFile: podtyData.shareUrl });
+        setTemp({
+            ...temp,
+            podtyEpsdSrl: podtyData.episodeSrl,
+            epsdNm: podtyData.title,
+            epsdMemo: podtyData.summary,
+            jpodType: (podtyData?.type || 'a').slice(0, 1).toUpperCase(),
+            epsdFile: podtyData.enclosure,
+            playTime: podtyData.duration,
+        });
     };
 
     /**

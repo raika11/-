@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Form, Col } from 'react-bootstrap';
 import { MokaModal, MokaInputLabel } from '@components';
 import { useDispatch } from 'react-redux';
-import { saveBrightovp } from '@store/jpod';
+import { savePodcast } from '@store/jpod';
 import toast, { messageBox } from '@utils/toastUtil';
 
 // 기본 정보 설정.
@@ -10,10 +10,12 @@ const editinitialState = {
     epsdNm: '',
 };
 
-// 파일 업로드 모달창.
-const PodCastUploadModal = (props) => {
-    const dispatch = useDispatch();
+/**
+ * J팟 관리 > 에피소드 > 팟캐스트 모달 > 팟캐스트 업로드 모달
+ */
+const PodcastUploadModal = (props) => {
     const { show, onHide, epsdNm } = props;
+    const dispatch = useDispatch();
 
     const fileinputRef = useRef(null);
     const [editData, setEditData] = useState(editinitialState);
@@ -31,7 +33,7 @@ const PodCastUploadModal = (props) => {
         formData.append(`name`, editData.title);
 
         dispatch(
-            saveBrightovp({
+            savePodcast({
                 ovpdata: formData,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
@@ -166,4 +168,4 @@ const PodCastUploadModal = (props) => {
     );
 };
 
-export default PodCastUploadModal;
+export default PodcastUploadModal;

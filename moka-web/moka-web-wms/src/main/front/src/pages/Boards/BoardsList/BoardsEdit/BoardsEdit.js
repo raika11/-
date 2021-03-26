@@ -10,7 +10,6 @@ import {
     getListMenuContentsInfo,
     clearListMenuContentsInfo,
     saveBoardContents,
-    getListMenuContentsList,
     saveBoardReply,
     deleteBoardContents,
 } from '@store/board';
@@ -26,7 +25,6 @@ const BoardsEdit = ({ match }) => {
     const { boardId, boardSeq, parentBoardSeq, reply } = useParams();
     const dispatch = useDispatch();
 
-    const storeBoardType = useSelector((store) => store.board.boardType);
     const selectBoard = useSelector((store) => store.board.listMenu.selectBoard);
     const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
     const contentsReply = useSelector((store) => store.board.listMenu.contents.reply);
@@ -42,7 +40,6 @@ const BoardsEdit = ({ match }) => {
     const handleChangeEditData = useCallback(
         (formData) => {
             setEditData({ ...editData, ...formData });
-            // const { name, value, checked, type } = e.target;
         },
         [editData],
     );
@@ -53,116 +50,38 @@ const BoardsEdit = ({ match }) => {
     const handleChangeReplyData = useCallback(
         (formData) => {
             setEditReplyData({ ...editReplyData, ...formData });
-            // const { name, value } = e.target;
         },
         [editReplyData],
     );
 
     /**
-     * 서비스 게시글 폼 데이터
-     */
-    const makeServiceFormData = () => {
-        const formData = new FormData();
-        formData.append('depth', 0);
-        formData.append('indent', 0);
-        formData.append('channelId', editData.channelId);
-        formData.append('content', editData.content);
-        formData.append('ordNo', editData.ordNo);
-        formData.append('title', editData.title);
-        formData.append('pushReceiveYn', editData.pushReceiveYn);
-        formData.append('emailReceiveYn', editData.emailReceiveYn);
-        formData.append('email', editData.email || '');
-
-        formData.append('titlePrefix1', editData.titlePrefix1);
-        formData.append('titlePrefix2', editData.titlePrefix2);
-
-        editData.attaches.forEach((element, index) => {
-            if (element.seqNo > 0) {
-                formData.append(`attaches[${index}].seqNo`, element.seqNo);
-            } else {
-                formData.append(`attaches[${index}].attachFile`, element);
-                formData.append(`attaches[${index}].seqNo`, 0);
-            }
-        });
-
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
-
-        return formData;
-    };
-
-    const makeAdminFormData = () => {};
-
-    /**
      * 게시글 저장
      */
     const handleClickContentsSave = () => {
-        let formData; // 폼데이터
-        if (storeBoardType === 'S') {
-            formData = makeServiceFormData();
-        } else {
-            formData = makeAdminFormData();
-        }
+        let saveObj = {
+            ...editData,
+            boardId: boardId,
+            boardSeq: boardSeq || null,
+        };
         dispatch(
             saveBoardContents({
-                boardId: boardId,
-                formData: formData,
-                callback: ({ header: { success, message }, body }) => {
-                    if (success === true) {
-                        dispatch(getListMenuContentsList(boardId));
-                        toast.success(message);
+                boardContents: saveObj,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        toast.success(header.message);
                         history.push(`${match.path}/${boardId}/${body.boardSeq}`);
                     } else {
-                        const { totalCnt, list } = body;
-                        if (totalCnt > 0 && Array.isArray(list)) {
+                        if (Array.isArray(body.list)) {
                             // 에러 메시지 확인.
-                            messageBox.alert(list[0].reason, () => {});
+                            messageBox.alert(body.list[0].reason, () => {});
                         } else {
-                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
-                            messageBox.alert(message, () => {});
+                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert
+                            messageBox.alert(header.message, () => {});
                         }
                     }
                 },
             }),
         );
-    };
-
-    /**
-     * 게시글 수정
-     */
-    const handleClickUpdate = () => {
-        let formData = {}; // 폼데이터
-        if (storeBoardType === 'S') {
-            formData = makeServiceFormData();
-        } else {
-            formData = makeAdminFormData();
-        }
-        // dispatch(
-        //     updateBoardContents({
-        //         boardId: boardId,
-        //         boardSeq: boardSeq,
-        //         formData: formData,
-        //         callback: ({ header: { success, message }, body }) => {
-        //             if (success === true) {
-        //                 toast.success(message);
-        //                 const { boardSeq } = body;
-        //                 history.push(`${match.path}/${boardId}/${boardSeq}`);
-        //                 dispatch(getListMenuContentsList(boardId));
-        //                 dispatch(getListMenuContentsInfo({ boardId: boardId, boardSeq: boardSeq }));
-        //             } else {
-        //                 const { totalCnt, list } = body;
-        //                 if (totalCnt > 0 && Array.isArray(list)) {
-        //                     // 에러 메시지 확인.
-        //                     messageBox.alert(list[0].reason, () => {});
-        //                 } else {
-        //                     // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
-        //                     messageBox.alert(message, () => {});
-        //                 }
-        //             }
-        //         },
-        //     }),
-        // );
     };
 
     /**
@@ -174,19 +93,17 @@ const BoardsEdit = ({ match }) => {
                 deleteBoardContents({
                     boardId: boardId,
                     boardSeq: boardSeq,
-                    callback: ({ header: { success, message }, body }) => {
-                        if (success === true) {
-                            toast.success(message);
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            toast.success(header.message);
                             history.push(`${match.path}/${boardId}`);
-                            dispatch(getListMenuContentsList(boardId));
                         } else {
-                            const { totalCnt, list } = body;
-                            if (totalCnt > 0 && Array.isArray(list)) {
+                            if (Array.isArray(body.list)) {
                                 // 에러 메시지 확인.
-                                messageBox.alert(list[0].reason, () => {});
+                                messageBox.alert(body.list[0].reason, () => {});
                             } else {
-                                // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
-                                messageBox.alert(message, () => {});
+                                // 에러이지만 에러메시지가 없으면 서버 메시지를 alert
+                                messageBox.alert(header.message, () => {});
                             }
                         }
                     },
@@ -196,21 +113,21 @@ const BoardsEdit = ({ match }) => {
     };
 
     /**
-     * 게시글 취소 버튼
+     * 게시글 취소
      */
     const handleClickCancle = () => {
         history.push(`${match.path}/${boardId}`);
     };
 
     /**
-     * 답변 등록 버튼
+     * 답변 등록
      */
     const handleClickReplay = () => {
         history.push(`${match.path}/${boardId}/${boardSeq}/reply`);
     };
 
     /**
-     * 답변 저장 버튼
+     * 답변 저장
      */
     const handleClickReplaySave = () => {
         dispatch(
@@ -219,42 +136,33 @@ const BoardsEdit = ({ match }) => {
                 parentBoardSeq: parentBoardSeq,
                 boardSeq: boardSeq,
                 contents: {
-                    boardId: null,
+                    // boardId: null,
                     title: editReplyData.title,
                     content: editReplyData.content,
                     depth: editData.depth + 1,
                     indent: editData.indent + 1,
                     ordNo: editData.ordNo,
-                    channelId: parentBoardSeq && reply ? contentsReply.channelId : editData.channelId,
-                    titlePrefix1: parentBoardSeq && reply ? contentsReply.titlePrefix1 : editData.titlePrefix1,
-                    titlePrefix2: parentBoardSeq && reply ? contentsReply.titlePrefix2 : editData.titlePrefix2,
+                    channelId: editData.channelId,
+                    titlePrefix1: editData.titlePrefix1,
+                    titlePrefix2: editData.titlePrefix2,
                 },
-                files: { attachFile: [] },
-                callback: ({ header: { success, message }, body }) => {
-                    if (success === true) {
-                        toast.success(message);
-                        history.push(`${match.path}/${boardId}/${body.parentBoardSeq}`);
-                        dispatch(getListMenuContentsList(boardId));
-                        dispatch(getListMenuContentsInfo({ boardId: boardId, boardSeq: boardSeq }));
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                        history.push(`${match.path}/${boardId}/${body.parentBoardSeq}/reply/${body.boardSeq}`);
                     } else {
-                        const { totalCnt, list } = body;
-                        if (totalCnt > 0 && Array.isArray(list)) {
+                        if (Array.isArray(body.list)) {
                             // 에러 메시지 확인
-                            messageBox.alert(list[0].reason, () => {});
+                            messageBox.alert(body.list[0].reason, () => {});
                         } else {
-                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함
-                            messageBox.alert(message, () => {});
+                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert
+                            messageBox.alert(header.message, () => {});
                         }
                     }
                 },
             }),
         );
     };
-
-    /**
-     * 답변 삭제 버튼
-     */
-    const handleClickReplayDelete = () => {};
 
     useEffect(() => {
         if (boardId && boardSeq) {
@@ -314,11 +222,11 @@ const BoardsEdit = ({ match }) => {
                         // 게시글 조회
                         <>
                             {selectBoard.answYn === 'Y' && (
-                                <Button variant="negative" className="mr-1" onClick={handleClickReplay}>
+                                <Button variant="outline-neutral" className="mr-1" onClick={handleClickReplay}>
                                     답변
                                 </Button>
                             )}
-                            <Button variant="positive" className="mr-1" onClick={handleClickUpdate}>
+                            <Button variant="positive" className="mr-1" onClick={handleClickContentsSave}>
                                 수정
                             </Button>
                             <Button variant="negative" className="mr-1" onClick={handleClickDelete}>
@@ -334,10 +242,15 @@ const BoardsEdit = ({ match }) => {
                         (parentBoardSeq ? (
                             // 답변 조회
                             <>
+                                {selectBoard.answYn === 'Y' && (
+                                    <Button variant="outline-neutral" className="mr-1" onClick={handleClickReplay}>
+                                        답변
+                                    </Button>
+                                )}
                                 <Button variant="positive" className="mr-1" onClick={handleClickReplaySave}>
                                     수정
                                 </Button>
-                                <Button variant="negative" className="mr-1" onClick={handleClickReplayDelete}>
+                                <Button variant="negative" className="mr-1" onClick={handleClickDelete}>
                                     삭제
                                 </Button>
                                 <Button variant="negative" onClick={handleClickCancle}>

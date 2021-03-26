@@ -33,7 +33,6 @@ const BoardsSummernote = forwardRef((props, ref) => {
             }}
             onChange={(value) => onChangeValue(value)}
             onImageUpload={(e) => onImageUpload(e)}
-            // onBlur={(value) => onChangeValue(value)}
         />
     );
 });

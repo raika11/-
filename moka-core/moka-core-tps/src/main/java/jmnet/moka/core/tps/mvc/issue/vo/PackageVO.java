@@ -78,7 +78,7 @@ public class PackageVO implements Serializable {
     /**
      * 기사 수
      */
-    @Column(name = "ART_CNT")
+    @Column(name = "ARTICLE_COUNT")
     private Integer artCnt;
 
     /**
@@ -131,4 +131,16 @@ public class PackageVO implements Serializable {
     @Column(name = "REP_LIST")
     private String repList;
 
+    /**
+     * 생성일
+     */
+    @Column(name = "REG_DT")
+    private String regDt;
+
+    /**
+     * 최신기사 업데이트
+     */
+    @DTODateTimeFormat
+    @Column(name = "LAST_ARTIBLE_UPDATE_DATE")
+    private Date lastArticleUpdateDate;
 }

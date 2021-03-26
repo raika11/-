@@ -6,7 +6,7 @@
   <!-- 패키지목록 조회-->
   <select id="findAll" parameterType="PackageSearchDTO" resultType="PackageVO"
     statementType="CALLABLE">
-    { call UPA_MOKA_PACKAGE_LIST_SEL(
+    { call __UPA_MOKA_PACKAGE_LIST_SEL(
     #{startDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
     #{endDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
     #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
@@ -48,6 +48,16 @@
 
     #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+
+    <choose>
+      <when test="sort != null and sort.size != 0">
+        #{sort[0]},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
     #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
     ) }

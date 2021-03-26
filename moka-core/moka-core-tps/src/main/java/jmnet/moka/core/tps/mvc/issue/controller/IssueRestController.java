@@ -4,10 +4,18 @@
 
 package jmnet.moka.core.tps.mvc.issue.controller;
 
+import com.twelvemonkeys.util.LinkedSet;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -17,8 +25,10 @@ import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.mvc.issue.dto.PackageKeywordDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageMasterDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageSearchDTO;
+import jmnet.moka.core.tps.mvc.issue.entity.PackageKeyword;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import jmnet.moka.core.tps.mvc.issue.service.PackageService;
 import jmnet.moka.core.tps.mvc.issue.vo.PackageVO;
@@ -50,6 +60,12 @@ public class IssueRestController extends AbstractCommonController {
         this.packageService = packageService;
     }
 
+    /**
+     * 패키지 목록 조회
+     *
+     * @param search 패키지 일련번호
+     * @return 검색 결과
+     */
     @ApiOperation(value = "패키지목록조회")
     @GetMapping
     public ResponseEntity<?> getPackageList(@Valid @SearchParam PackageSearchDTO search)
@@ -79,7 +95,7 @@ public class IssueRestController extends AbstractCommonController {
      * @param pkgSeq 패키지 일련번호
      * @return 검색 결과
      */
-    @ApiOperation(value = "패키지 데이터 조회")
+    @ApiOperation(value = "패키지 조회")
     @GetMapping("/{pkgSeq}")
     public ResponseEntity<?> getPackage(
             @ApiParam("패키지 일련번호") @PathVariable("pkgSeq") /* @Min(value = 0, message = "{tps.article.error.min.totalId}") */ Long pkgSeq)
@@ -119,6 +135,21 @@ public class IssueRestController extends AbstractCommonController {
         }
 
         PackageMaster packageMaster = modelMapper.map(packageMasterDTO, PackageMaster.class);
+
+        AtomicLong kwdOrd = new AtomicLong();
+        // 키워드는 마지막에 순번 확인
+        List<PackageKeyword> categories = Arrays
+                .stream(packageMasterDTO
+                        .getCatList()
+                        .split(","))
+                .map(category -> PackageKeyword
+                        .builder()
+                        .packageMaster(packageMaster)
+                        .catDiv("C")
+                        .keyword(category)
+                        .kwdOrd(kwdOrd.incrementAndGet())
+                        .build())
+                .collect(Collectors.toList());
 
         // 등록
         PackageMaster returnValue = packageService.insertPackage(packageMaster);
@@ -167,5 +198,144 @@ public class IssueRestController extends AbstractCommonController {
                 .isPresent();
         ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
+     * 화면표시용 데이터로 tansform
+     *
+     * @param dataDto 디비 엔티티 맵핑된 데이터
+     * @return 화면 표시용 데이터
+     */
+    private PackageMasterDTO transformDataToViewDto(PackageMasterDTO dataDto) {
+        Set<PackageKeywordDTO> keywords = dataDto
+                .getPackageKeywords()
+                .stream()
+                .filter(keyword -> keyword.getCatDiv() != "C")
+                .collect(Collectors.groupingBy(PackageKeywordDTO::getOrdno))
+                .values()
+                .stream()
+                .map(group -> group
+                        .stream()
+                        .sorted(Comparator.comparingLong(PackageKeywordDTO::getKwdOrd))
+                        .reduce(PackageKeywordDTO
+                                .builder()
+                                .keyword("")
+                                .schCondi("")
+                                .build(), (stored, newDto) -> {
+                            return newDto
+                                    .toBuilder()
+                                    .keyword(stored.getKeyword() + "," + newDto.getKeyword())
+                                    .schCondi(stored.getSchCondi() + "," + newDto.getSchCondi())
+                                    .build();
+                        }))
+                .map(keyword -> {
+                    Set<String> keywordSet = new LinkedSet<>();
+                    Set<String> schCondiSet = new LinkedSet<>();
+                    Arrays
+                            .stream(keyword
+                                    .getKeyword()
+                                    .split(","))
+                            .filter(kwd -> kwd.length() > 0 && kwd != "null")
+                            .forEach(kwd -> keywordSet.add(kwd));
+                    Arrays
+                            .stream(keyword
+                                    .getSchCondi()
+                                    .replace("null", "")
+                                    .split(","))
+                            .filter(condi -> condi.length() > 0 && condi != "null")
+                            .forEach(condi -> schCondiSet.add(condi));
+                    keyword.setKeyword(String.join(",", keywordSet));
+                    keyword.setSchCondi(String.join(",", schCondiSet));
+                    return keyword;
+                })
+                .collect(Collectors.toSet());
+        // 카테고리
+        dataDto.setCatList(String.join(",", dataDto
+                .getPackageKeywords()
+                .stream()
+                .filter(keyword -> keyword.getCatDiv() == "C")
+                .map(keyword -> keyword.getKeyword())
+                .collect(Collectors.toList())));
+        dataDto.setPackageKeywords(keywords);
+        return dataDto;
+    }
+
+    /**
+     * 검색조건 c(T,K) * 키워드 c(keyword1, keyword2) + 카테고리 c(xxxx,xxxx) 데이터 파싱
+     *
+     * @param viewDto 화면 표시용 데이터 디비 엔티티 맵핑된 데이터
+     * @return 디비 엔티티 맵핑된 데이터
+     */
+    private List<PackageKeywordDTO> transformViewToDto(PackageMasterDTO viewDto) {
+        List<PackageKeywordDTO> keywords = new LinkedList<>();
+        Integer categoryOrderNumber = viewDto
+                .getPackageKeywords()
+                .size();
+        viewDto
+                .getPackageKeywords()
+                .stream()
+                .forEach(keyword -> {
+                    AtomicLong kwdOrd = new AtomicLong();
+                    Arrays
+                            .stream(keyword
+                                    .getKeyword()
+                                    .split(","))
+                            .forEach(kwd -> {
+                                keywords.add(keyword
+                                        .toBuilder()
+                                        .schCondi(null)
+                                        .keyword(kwd)
+                                        .kwdOrd(kwdOrd.incrementAndGet())
+                                        .build());
+                            });
+                });
+        // 검색 조건있는경우
+        viewDto
+                .getPackageKeywords()
+                .stream()
+                .filter(keyword -> Optional
+                        .ofNullable(keyword.getSchCondi())
+                        .isPresent())
+                .forEach(keyword -> {
+                    Arrays
+                            .stream(keyword
+                                    .getSchCondi()
+                                    .split(","))
+                            .forEach(schCondi -> {
+                                AtomicLong kwdOrd = new AtomicLong();
+                                Arrays
+                                        .stream(keyword
+                                                .getKeyword()
+                                                .split(","))
+                                        .forEach(kwd -> {
+                                            keywords.add(keyword
+                                                    .toBuilder()
+                                                    .schCondi(schCondi)
+                                                    .keyword(kwd)
+                                                    .kwdOrd(kwdOrd.incrementAndGet())
+                                                    .build());
+                                        });
+                            });
+                });
+        // 카테고리
+        if (viewDto.getCatList() != null && viewDto
+                .getCatList()
+                .length() > 0) {
+            AtomicLong kwdOrd = new AtomicLong();
+            Arrays
+                    .stream(viewDto
+                            .getCatList()
+                            .split(","))
+                    .forEach((category) -> {
+                        keywords.add(PackageKeywordDTO
+                                .builder()
+                                .catDiv("C")
+                                .keyword(category)
+                                .kwdOrd(kwdOrd.incrementAndGet())
+                                .ordno(categoryOrderNumber + kwdOrd.get())
+                                .build());
+                    });
+        }
+        return keywords;
     }
 }

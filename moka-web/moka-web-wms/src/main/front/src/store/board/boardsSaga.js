@@ -1,11 +1,13 @@
 import { takeLatest, put, select, call } from 'redux-saga/effects';
-import toast from '@/utils/toastUtil';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
 import * as act from './boardsAction';
 import * as api from './boardsApi';
+import toast from '@/utils/toastUtil';
 
-// 게시판 채널 리스트
+/**
+ * 게시판 채널 리스트
+ */
 function* getBoardChannelTypeList({ callback }) {
     yield put(startLoading(act.GET_BOARD_CHANNEL_TYPE_LIST));
     let response, callbackData;
@@ -15,7 +17,6 @@ function* getBoardChannelTypeList({ callback }) {
         callbackData = response.data;
 
         if (response.data.header.success) {
-            // yield put({ type: GET_SET_MENU_BOARD_INFO_SUCCESS, payload: response.data });
             const { list } = response.data.body;
             const resultList = list.map((element) => {
                 return {
@@ -210,11 +211,9 @@ function* saveBoardContents({ payload: { boardContents, callback } }) {
 
         if (response.data.header.success) {
             // 목록 조회
-            const search = yield select(({ board }) => board.listMenu.contentsList.search);
-
             yield put({
                 type: act.GET_LIST_MENU_CONTENTS_LIST,
-                payload: { search },
+                payload: boardContents.boardId,
             });
         } else {
             toast.error(callbackData.header?.message);
@@ -245,11 +244,9 @@ function* deleteBoardContents({ payload: { boardId, boardSeq, callback } }) {
 
         if (response.data.header.success) {
             // 목록 조회
-            const search = yield select(({ board }) => board.listMenu.contentsList.search);
-
             yield put({
                 type: act.GET_LIST_MENU_CONTENTS_LIST,
-                payload: { search },
+                payload: boardId,
             });
         }
     } catch (e) {
@@ -295,11 +292,9 @@ function* saveBoardReply({ payload: { boardId, parentBoardSeq, boardSeq, content
         callbackData = response.data;
         if (response.data.header.success) {
             // 목록 조회
-            const search = yield select(({ board }) => board.listMenu.contentsList.search);
-
             yield put({
                 type: act.GET_LIST_MENU_CONTENTS_LIST,
-                payload: { search },
+                payload: boardId,
             });
         } else {
             toast.error(callbackData.header?.message);
@@ -319,10 +314,10 @@ function* saveBoardReply({ payload: { boardId, parentBoardSeq, boardSeq, content
  * 게시글 썸머노트 이미지 등록
  */
 function* uploadBoardContentsImage({ payload: { boardId, imageForm, callback } }) {
-    yield put(startLoading(act.UPLOAD_BOARD_CONTENTS_IMAGE));
+    const ACTION = act.UPLOAD_BOARD_CONTENTS_IMAGE;
+    let callbackData, response;
 
-    let callbackData = {};
-    let response;
+    yield put(startLoading(ACTION));
 
     try {
         response = yield call(api.uploadBoardContentImage, {
@@ -330,18 +325,19 @@ function* uploadBoardContentsImage({ payload: { boardId, imageForm, callback } }
             imageForm: imageForm,
         });
         callbackData = response.data;
+
+        if (!response.data.header.success) {
+            toast.error(callbackData.header?.message);
+        }
     } catch (e) {
         callbackData = errorResponse(e);
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
     }
+
     if (typeof callback === 'function') {
         yield call(callback, callbackData);
     }
 
-    yield put(finishLoading(act.UPLOAD_BOARD_CONTENTS_IMAGE));
+    yield put(finishLoading(ACTION));
 }
 
 export default function* boardsSaga() {

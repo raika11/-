@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { messageBox } from '@utils/toastUtil';
 import { MokaInputLabel, MokaInput } from '@components';
-import { PodtyEpisodeModal, PodCastModal } from '@pages/Jpod/modals';
+import { PodtyEpisodeModal, PodcastModal } from '@pages/Jpod/modals';
 import PannelForm from './PannelForm';
 import RelArticleTable from './RelArticleTable';
 
@@ -197,7 +197,7 @@ const EpisodeForm = ({
                     <Button variant="positive" className="mr-3 flex-shrink-0" onClick={() => setPodcastShow(true)}>
                         등록
                     </Button>
-                    <PodCastModal show={podcastshow} onHide={() => setPodcastShow(false)} />
+                    <PodcastModal show={podcastshow} onHide={() => setPodcastShow(false)} />
 
                     <div style={{ width: 250 }}>
                         <MokaInputLabel label="재생시간" labelWidth={50} name="playTime" value={episode.playTime} onChange={onChange} />

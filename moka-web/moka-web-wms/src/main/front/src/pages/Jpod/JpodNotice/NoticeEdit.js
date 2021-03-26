@@ -126,9 +126,6 @@ const NoticeEdit = ({ match }) => {
         history.push(`${match.path}/${boardSeq}/reply`);
     };
 
-    console.log(boardSeq, parentBoardSeq, reply);
-    console.log(temp);
-
     /**
      * 답변 저장
      */
@@ -284,7 +281,7 @@ const NoticeEdit = ({ match }) => {
                             // 답변 조회
                             <>
                                 {jpodBoard.answYn === 'Y' && (
-                                    <Button variant="negative" className="mr-1" onClick={handleClickReplay}>
+                                    <Button variant="outline-neutral" className="mr-1" onClick={handleClickReplay}>
                                         답변
                                     </Button>
                                 )}
@@ -312,7 +309,7 @@ const NoticeEdit = ({ match }) => {
                 </>
             }
         >
-            <>{reply ? <NoticeEditReplyForm data={replyTemp} onChange={handleChangeReplyValue} /> : <NoticeEditForm data={temp} onChange={handleChangeValue} />}</>
+            {reply ? <NoticeEditReplyForm data={replyTemp} onChange={handleChangeReplyValue} /> : <NoticeEditForm data={temp} onChange={handleChangeValue} />}
         </MokaCard>
     );
 };

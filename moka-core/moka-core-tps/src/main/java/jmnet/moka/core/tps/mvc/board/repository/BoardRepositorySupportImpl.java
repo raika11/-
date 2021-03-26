@@ -53,6 +53,15 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
                 .from(board);
 
         query.where(qBoard.boardId.eq(boardId));
+
+        if (McpString.isNotEmpty(searchDTO.getDelYn())) {
+            query.where(qBoard.boardId
+                    .eq(boardId)
+                    .and(qBoard.delYn.eq(searchDTO.getDelYn())));
+        } else {
+            query.where(qBoard.boardId.eq(boardId));
+        }
+
         subQuery.where(board.boardId
                 .eq(boardId)
                 .and(board.depth.eq(0)));
@@ -70,10 +79,6 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
 
         if (McpString.isNotEmpty(searchDTO.getTitlePrefix1())) {
             subQuery.where(board.titlePrefix1.eq(searchDTO.getTitlePrefix1()));
-        }
-
-        if (McpString.isNotEmpty(searchDTO.getDelYn())) {
-            subQuery.where(board.delYn.eq(searchDTO.getDelYn()));
         }
 
         if (McpString.isNotEmpty(searchDTO.getAnswYn())) {

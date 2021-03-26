@@ -144,18 +144,14 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                     <>
                         <Form.Row className="mb-2">
                             <Col xs={6} className="p-0 d-flex align-items-center">
-                                <MokaInputLabel label="등록일시" as="none" />
-                                <div>
-                                    <p className="mb-0">{data.boardSeq && data.regDt ? `${data.regDt}` : ''}</p>
-                                    <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
-                                </div>
+                                <MokaInputLabel label="등록일시" as="none" labelWidth={50} />
+                                <p className="mb-0">{data.boardSeq && data.regDt ? `${data.regDt}` : ''}</p>
+                                <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
                             </Col>
-                            <Col xs={6} className="p-0 d-flex align-items-center">
-                                <MokaInputLabel label="수정일시" as="none" />
-                                <div>
-                                    <p className="mb-0">{data.boardSeq && data.modDt ? `${data.modDt}` : ''}</p>
-                                    <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
-                                </div>
+                            <Col xs={6} className="p-0 d-flex align-items-center justify-content-end">
+                                <MokaInputLabel label="수정일시" as="none" labelWidth={50} />
+                                <p className="mb-0">{data.boardSeq && data.modDt ? `${data.modDt}` : ''}</p>
+                                <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2 align-items-center">
@@ -225,8 +221,15 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                 {selectBoard.boardId && (selectBoard.titlePrefixNm1 || selectBoard.titlePrefixNm2) && (
                     <Form.Row className="mb-2">
                         {selectBoard.titlePrefixNm1 && (
-                            <Col xs={6} className={selectBoard.titlePrefixNm2 ? 'p-0 pr-20' : 'p-0'}>
-                                <MokaInputLabel as="select" label={selectBoard.titlePrefixNm1} name="titlePrefix1" value={data.titlePrefix1} onChange={handleChangeValue}>
+                            <Col xs={6} className={selectBoard.titlePrefixNm2 ? 'p-0 pr-2' : 'p-0'}>
+                                <MokaInputLabel
+                                    as="select"
+                                    label={selectBoard.titlePrefixNm1}
+                                    labelWidth={71}
+                                    name="titlePrefix1"
+                                    value={data.titlePrefix1}
+                                    onChange={handleChangeValue}
+                                >
                                     <option value="">선택</option>
                                     {selectBoard.titlePrefix1 &&
                                         selectBoard.titlePrefix1
@@ -242,8 +245,15 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                         )}
 
                         {selectBoard.titlePrefixNm2 && (
-                            <Col xs={6} className={selectBoard.titlePrefixNm1 ? 'p-0 pl-20' : 'p-0'}>
-                                <MokaInputLabel as="select" label={selectBoard.titlePrefixNm2} name="titlePrefix2" value={data.titlePrefix2} onChange={handleChangeValue}>
+                            <Col xs={6} className="p-0">
+                                <MokaInputLabel
+                                    as="select"
+                                    label={selectBoard.titlePrefixNm2}
+                                    labelWidth={71}
+                                    name="titlePrefix2"
+                                    value={data.titlePrefix2}
+                                    onChange={handleChangeValue}
+                                >
                                     <option value="">선택</option>
                                     {selectBoard.titlePrefix2 &&
                                         selectBoard.titlePrefix2

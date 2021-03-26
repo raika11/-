@@ -79,7 +79,7 @@ const BoardsSetAgGrid = ({ match }) => {
             frameworkComponents={{
                 buttonRenderer: ButtonRenderer,
             }}
-            preventRowClickCell={['button']}
+            preventRowClickCell={['buttonInfo']}
         />
     );
 };

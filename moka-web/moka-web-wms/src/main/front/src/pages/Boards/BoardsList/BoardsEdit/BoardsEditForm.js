@@ -193,15 +193,17 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                     (selectBoard.channelType === 'BOARD_DIVC2' ? (
                         // 기자
                         <Form.Row className="mb-2">
-                            <BoardRepoterSelect
-                                channalList={channalList}
-                                selectValue={data.channelId}
-                                onChange={(value) => {
-                                    onChangeFormData({
-                                        channelId: value,
-                                    });
-                                }}
-                            />
+                            <Col xs={8} className="p-0">
+                                <BoardRepoterSelect
+                                    channalList={channalList}
+                                    selectValue={data.channelId}
+                                    onChange={(value) => {
+                                        onChangeFormData({
+                                            channelId: value,
+                                        });
+                                    }}
+                                />
+                            </Col>
                         </Form.Row>
                     ) : (
                         channalList.length > 0 && (
@@ -293,7 +295,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                     <MokaInput className="mb-0" name="title" placeholder="제목을 입력해 주세요." value={data.title} onChange={handleChangeValue} />
                 </Form.Row>
                 {selectBoard.editorYn === 'N' ? (
-                    <Form.Row className="mb-2">
+                    <Form.Row className="mb-4">
                         <Col className="p-0">
                             <MokaInputLabel
                                 as="textarea"
@@ -312,7 +314,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
 
                 {selectBoard.fileYn === 'Y' && (
                     <>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={4} className="p-0">
                                 <MokaInputLabel label="첨부파일" as="none" className="mb-2" />
                             </Col>
@@ -343,7 +345,6 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                         <hr className="divider" />
                     </>
                 )}
-
                 {selectBoard.allowItem && selectBoard.allowItem.split(',').indexOf('EMAIL') > -1 && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel label="이메일" value={contentsInfo.email} inputProps={{ readOnly: true, plaintext: true }} />

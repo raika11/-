@@ -8,16 +8,15 @@ import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
 import { initialState, changeListMenuSearchOption, getListMenuContentsList } from '@store/board';
-// import toast from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 
 /**
  * 게시판 관리 > 게시글 관리 > 게시판 글 목록 검색
  */
-const BoardContentsSearch = () => {
+const BoardContentsSearch = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { boardId } = useParams();
-    const pagePathName = useSelector((store) => store.board.pagePathName);
     const selectBoard = useSelector((store) => store.board.listMenu.selectBoard);
     const storeSearch = useSelector((store) => store.board.listMenu.contentsList.search);
 
@@ -32,7 +31,7 @@ const BoardContentsSearch = () => {
     };
 
     /**
-     * 검색 버튼
+     * 검색
      */
     const handleClickSearch = () => {
         let ns = {
@@ -46,44 +45,46 @@ const BoardContentsSearch = () => {
     };
 
     /**
-     * 초기화 버튼
+     * 초기화
      */
     const handleClickReset = () => {
-        dispatch(changeListMenuSearchOption());
+        let ns = {
+            ...initialState.listMenu.contentsList.search,
+            startDt: moment().startOf('day').format(DB_DATEFORMAT),
+            endDt: moment().endOf('day').format(DB_DATEFORMAT),
+        };
+        dispatch(changeListMenuSearchOption(ns));
     };
 
     /**
-     * 등록 버튼
+     * 등록
      */
     const handleClickAdd = () => {
-        // dispatch(clearListMenuContentsInfo());
-        history.push(`/${pagePathName}/${boardId}/add`);
+        history.push(`${match.path}/${boardId}/add`);
     };
 
-    // const handleDateChange = (name, date) => {
-    //     if (name === 'startDt') {
-    //         const startDt = new Date(date);
-    //         const endDt = new Date(search.endDt);
+    /**
+     * 검색 날짜 변경 처리.
+     * @param {string} name target 이름
+     * @param {object} date 날짜 객체
+     */
+    const handleDateChange = (name, date) => {
+        if (name === 'startDt') {
+            const diff = moment(date).diff(moment(search.endDt));
+            if (diff > 0) {
+                toast.warning('시작일은 종료일보다 클 수 없습니다.');
+                return;
+            }
+        } else if (name === 'endDt') {
+            const diff = moment(date).diff(moment(search.startDt));
+            if (diff < 0) {
+                toast.warning('종료일은 시작일보다 작을 수 없습니다.');
+                return;
+            }
+        }
 
-    //         if (startDt > endDt) {
-    //             toast.warning('시작일은 종료일 보다 클 수 없습니다.');
-    //             return;
-    //         }
-    //     } else if (name === 'endDt') {
-    //         const startDt = new Date(search.startDt);
-    //         const endDt = new Date(date);
-
-    //         if (endDt < startDt) {
-    //             toast.warning('종료일은 시작일 보다 작을 수 없습니다.');
-    //             return;
-    //         }
-    //     }
-
-    //     setSearch({
-    //         ...search,
-    //         [name]: date,
-    //     });
-    // };
+        setSearch({ ...search, [name]: date });
+    };
 
     useEffect(() => {
         let startDt = moment(storeSearch.startDt, DB_DATEFORMAT);
@@ -103,7 +104,7 @@ const BoardContentsSearch = () => {
         const date = new Date();
         const startDt = moment(date).startOf('day').format(DB_DATEFORMAT);
         const endDt = moment(date).endOf('day').format(DB_DATEFORMAT);
-        const ns = { ...initialState.listMenu.contentsList.search, startDt, endDt };
+        const ns = { ...search, startDt, endDt };
         if (boardId) {
             dispatch(changeListMenuSearchOption(ns));
             dispatch(getListMenuContentsList(boardId));
@@ -124,13 +125,7 @@ const BoardContentsSearch = () => {
                         id="startDt"
                         value={search.startDt}
                         inputProps={{ timeFormat: null, timeDefault: 'start' }}
-                        onChange={(date) => {
-                            if (typeof date === 'object') {
-                                setSearch({ ...search, startDt: date });
-                            } else if (date === '') {
-                                setSearch({ ...search, startDt: null });
-                            }
-                        }}
+                        onChange={(date) => handleDateChange('startDt', date)}
                     />
 
                     {/* 종료 날짜 */}
@@ -141,13 +136,7 @@ const BoardContentsSearch = () => {
                         id="endDt"
                         value={search.endDt}
                         inputProps={{ timeFormat: null, timeDefault: 'end' }}
-                        onChange={(date) => {
-                            if (typeof date === 'object') {
-                                setSearch({ ...search, endDt: date });
-                            } else if (date === '') {
-                                setSearch({ ...search, endDt: null });
-                            }
-                        }}
+                        onChange={(date) => handleDateChange('endDt', date)}
                     />
                 </Col>
 

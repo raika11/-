@@ -65,6 +65,11 @@ const propTypes = {
      * @default
      */
     deleteButton: PropTypes.bool,
+    /**
+     * input의 accept
+     * @default
+     */
+    accept: PropTypes.string,
 };
 const defaultProps = {
     width: 171,
@@ -77,6 +82,7 @@ const defaultProps = {
     alt: '이미지',
     selectAccept: [],
     deleteButton: false,
+    accept: 'image/*',
 };
 
 /**
@@ -84,7 +90,7 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = forwardRef((props, ref) => {
-    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton } = props;
+    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton, accept } = props;
 
     // state
     const [imgSrc, setImgSrc] = useState(null);
@@ -250,7 +256,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         )}
 
                         {/* input file */}
-                        <input {...inputProps} accept="image/*" />
+                        <input {...inputProps} accept={accept} />
 
                         {/* alert */}
                         {alert && (

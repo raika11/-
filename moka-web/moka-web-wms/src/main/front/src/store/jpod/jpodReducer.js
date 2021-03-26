@@ -87,7 +87,6 @@ export const initialState = {
         episode: {
             articles: [],
             epsdFile: null,
-            epsdSeq: 0,
             keywords: [],
             likeCnt: 0,
             members: [],
@@ -99,6 +98,7 @@ export const initialState = {
             shareCnt: 0,
             usedYn: 'Y',
             viewCnt: 0,
+            jpodType: 'A',
         },
         invalidList: [],
         podty: {

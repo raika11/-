@@ -1,46 +1,52 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Form, Col } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { MokaModal, MokaInputLabel } from '@components';
-import { useDispatch } from 'react-redux';
-import { savePodcast } from '@store/jpod';
+import { useDispatch, useSelector } from 'react-redux';
+import { savePodcast, SAVE_PODCAST } from '@store/jpod';
 import toast, { messageBox } from '@utils/toastUtil';
-
-// 기본 정보 설정.
-const editinitialState = {
-    epsdNm: '',
-};
 
 /**
  * J팟 관리 > 에피소드 > 팟캐스트 모달 > 팟캐스트 업로드 모달
+ *
+ * 브라이트코브 서버가 실서버라 테스트 못함!!!
  */
 const PodcastUploadModal = (props) => {
-    const { show, onHide, epsdNm } = props;
+    const { show, onHide, selectedChannel } = props;
     const dispatch = useDispatch();
+    const loading = useSelector(({ loading }) => loading[SAVE_PODCAST]);
+    const fileRef = useRef(null);
+    const [temp, setTemp] = useState({});
+    const [tag, setTag] = useState('');
+    const [error, setError] = useState({});
 
-    const fileinputRef = useRef(null);
-    const [editData, setEditData] = useState(editinitialState);
-    const [selectFile, setSelectFile] = useState(null);
-
-    // 닫기 버튼
-    const handleClickHide = () => {
+    /**
+     * 닫기
+     */
+    const handleHide = () => {
+        setTemp({});
+        setTag('');
+        setError({});
         onHide();
     };
 
-    // 저장 버튼 클릭.
-    const handleClickSaveButton = () => {
-        var formData = new FormData();
-        formData.append(`mediaFile`, selectFile);
-        formData.append(`name`, editData.title);
+    /**
+     * 저장
+     */
+    const handleSave = () => {
+        const saveData = { ...temp, tag: [tag] };
+
+        if (!saveData.title || saveData.title === '') {
+            setError({ ...error, title: true });
+            return;
+        }
 
         dispatch(
             savePodcast({
-                ovpdata: formData,
+                ovpdata: saveData,
                 callback: ({ header: { success, message }, body }) => {
-                    if (success === true) {
+                    if (success) {
                         toast.success(message);
-                        const { chnlSeq, epsdSeq } = body;
-                        if ((chnlSeq, epsdSeq)) {
-                        }
+                        handleHide();
                     } else {
                         const { totalCnt, list } = body;
                         if (totalCnt > 0 && Array.isArray(list)) {
@@ -56,115 +62,62 @@ const PodcastUploadModal = (props) => {
         );
     };
 
-    // 정보 변경 처리.
-    const handleChangeEditData = (e) => {
-        const { name, value } = e.target;
-        setEditData({
-            ...editData,
-            [name]: value,
-        });
+    /**
+     * 입력값 변경
+     * @param {object} e 이벤트
+     */
+    const handleChangeValue = (e) => {
+        const { name, value, files } = e.target;
+
+        if (name === 'tag') {
+            setTag(value);
+        } else if (name === 'mediaFile') {
+            setTemp({
+                ...temp,
+                [name]: files[0],
+            });
+        } else {
+            setTemp({
+                ...temp,
+                [name]: value,
+            });
+        }
+
+        if (error[name]) setError({ ...error, [name]: false });
     };
 
-    // 파일 선택시 처리.
-    const handleChangeSelectFile = (e) => {
-        setSelectFile(e.target.files[0]);
-        setEditData({
-            ...editData,
-            input_file: e.target.files[0].name,
-        });
-    };
-
-    // 최초 모달창 로딩시 채널명 설정.
     useEffect(() => {
-        setEditData({
-            ...editData,
-            epsdNm: epsdNm,
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        if (show) {
+            setTag(selectedChannel.chnlNm);
+        }
+    }, [selectedChannel.chnlNm, show]);
 
     return (
-        <>
-            <MokaModal
-                width={900}
-                show={show}
-                onHide={handleClickHide}
-                title={`브라이트 코브 업로드`}
-                size="md"
-                bodyClassName="overflow-x-hidden custom-scroll"
-                footerClassName="d-flex justify-content-center"
-                buttons={[
-                    { text: '저장', variant: 'positive', onClick: handleClickSaveButton },
-                    { text: '닫기', variant: 'negative', onClick: handleClickHide },
-                ]}
-                draggable
-            >
-                <Form>
-                    <Form.Row className="mb-2">
-                        <Col className="p-0">
-                            <MokaInputLabel
-                                label={`채널명`}
-                                labelWidth={64}
-                                className="mb-0"
-                                id="epsdNm"
-                                name="epsdNm"
-                                placeholder=""
-                                value={editData.epsdNm}
-                                onChange={(e) => handleChangeEditData(e)}
-                            />
-                        </Col>
-                    </Form.Row>
-                    <Form.Row className="mb-2">
-                        <Col className="p-0">
-                            <MokaInputLabel
-                                label={`제목`}
-                                labelWidth={64}
-                                className="mb-0"
-                                id="title"
-                                name="title"
-                                placeholder=""
-                                value={editData.title}
-                                onChange={(e) => handleChangeEditData(e)}
-                            />
-                        </Col>
-                    </Form.Row>
-                    <Form.Row className="mb-2">
-                        <Col xs={10} className="p-0">
-                            <MokaInputLabel
-                                label={`파일`}
-                                labelWidth={64}
-                                className="mb-0"
-                                id="input_file"
-                                name="input_file"
-                                placeholder=""
-                                ref={fileinputRef}
-                                value={editData.input_file}
-                                onChange={(e) => handleChangeEditData(e)}
-                            />
-                        </Col>
-                        <Col xs={2} className="p-0 text-right">
-                            <div className="file btn btn-primary" style={{ position: 'relative', overflow: 'hidden' }}>
-                                파일선택
-                                <input
-                                    type="file"
-                                    name="file"
-                                    ref={fileinputRef}
-                                    // onClick={(e) => (fileinputRef.current = e)}
-                                    onChange={(e) => handleChangeSelectFile(e)}
-                                    style={{
-                                        position: 'absolute',
-                                        fontSize: '50px',
-                                        opacity: '0',
-                                        right: '0',
-                                        top: '0',
-                                    }}
-                                />
-                            </div>
-                        </Col>
-                    </Form.Row>
-                </Form>
-            </MokaModal>
-        </>
+        <MokaModal
+            width={600}
+            show={show}
+            onHide={handleHide}
+            title="미디어 업로드"
+            size="md"
+            bodyClassName="overflow-x-hidden custom-scroll"
+            buttons={[
+                { text: '저장', variant: 'positive', onClick: handleSave },
+                { text: '닫기', variant: 'negative', onClick: handleHide },
+            ]}
+            loading={loading}
+            id="podcast-upload-modal"
+            centered
+        >
+            <MokaInputLabel label="채널명" className="mb-2" id="tag" name="tag" placeholder="" value={tag} onChange={handleChangeValue} />
+            <MokaInputLabel label="제목" className="mb-2" id="title" name="title" placeholder="" value={temp.title} onChange={handleChangeValue} isInvalid={error.title} required />
+            <Form.Row className="mb-2">
+                <MokaInputLabel label="파일" id="filename" className="flex-fill mr-2" value={temp.mediaFile?.name} disabled />
+                <input type="file" className="d-none" name="mediaFile" ref={fileRef} onChange={handleChangeValue} />
+                <Button variant="searching" className="flex-shrink-0" onClick={() => fileRef.current.click()}>
+                    파일선택
+                </Button>
+            </Form.Row>
+        </MokaModal>
     );
 };
 

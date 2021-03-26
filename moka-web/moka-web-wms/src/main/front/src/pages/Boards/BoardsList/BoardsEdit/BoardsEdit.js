@@ -115,7 +115,7 @@ const BoardsEdit = ({ match }) => {
     /**
      * 게시글 취소
      */
-    const handleClickCancle = () => {
+    const handleClickCancel = () => {
         history.push(`${match.path}/${boardId}`);
     };
 
@@ -136,15 +136,15 @@ const BoardsEdit = ({ match }) => {
                 parentBoardSeq: parentBoardSeq,
                 boardSeq: boardSeq,
                 contents: {
-                    // boardId: null,
+                    parentBoardSeq: contentsReply?.parentBoardSeq,
                     title: editReplyData.title,
                     content: editReplyData.content,
-                    depth: editData.depth + 1,
-                    indent: editData.indent + 1,
-                    ordNo: editData.ordNo,
-                    channelId: editData.channelId,
-                    titlePrefix1: editData.titlePrefix1,
-                    titlePrefix2: editData.titlePrefix2,
+                    depth: contentsInfo.boardId ? editData.maxDepth + 1 : contentsReply.depth,
+                    indent: contentsInfo.boardId ? editData.indent + 1 : contentsReply.indent + 1,
+                    ordNo: editData.ordNo || editReplyData.ordNo,
+                    channelId: editData.channelId || editReplyData.channelId,
+                    titlePrefix1: editData.titlePrefix1 || editReplyData.titlePrefix1,
+                    titlePrefix2: editData.titlePrefix2 || editReplyData.titlePrefix2,
                 },
                 callback: ({ header, body }) => {
                     if (header.success) {
@@ -213,7 +213,7 @@ const BoardsEdit = ({ match }) => {
                             <Button variant="positive" className="mr-1" onClick={handleClickContentsSave}>
                                 저장
                             </Button>
-                            <Button variant="negative" onClick={handleClickCancle}>
+                            <Button variant="negative" onClick={handleClickCancel}>
                                 취소
                             </Button>
                         </>
@@ -232,7 +232,7 @@ const BoardsEdit = ({ match }) => {
                             <Button variant="negative" className="mr-1" onClick={handleClickDelete}>
                                 삭제
                             </Button>
-                            <Button variant="negative" onClick={handleClickCancle}>
+                            <Button variant="negative" onClick={handleClickCancel}>
                                 취소
                             </Button>
                         </>
@@ -253,7 +253,7 @@ const BoardsEdit = ({ match }) => {
                                 <Button variant="negative" className="mr-1" onClick={handleClickDelete}>
                                     삭제
                                 </Button>
-                                <Button variant="negative" onClick={handleClickCancle}>
+                                <Button variant="negative" onClick={handleClickCancel}>
                                     취소
                                 </Button>
                             </>
@@ -263,7 +263,7 @@ const BoardsEdit = ({ match }) => {
                                 <Button variant="positive" className="mr-1" onClick={handleClickReplaySave}>
                                     저장
                                 </Button>
-                                <Button variant="negative" onClick={handleClickCancle}>
+                                <Button variant="negative" onClick={handleClickCancel}>
                                     취소
                                 </Button>
                             </>

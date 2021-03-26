@@ -474,6 +474,10 @@ $rel-row-hover-color: darken($rel-row-color, 5);
     .ag-body-viewport-wrapper {
         overflow: visible !important;
     }
+
+    .ag-react-container {
+        overflow: hidden;
+    }
 }
 
 // ag-grid icon

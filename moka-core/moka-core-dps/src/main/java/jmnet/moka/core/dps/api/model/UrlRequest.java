@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import jmnet.moka.core.dps.api.handler.UrlRequestHandler;
 
-public class UrlRequest implements Request {
+public class UrlRequest extends AbstractRequest {
 	
 	private static List<String> emptyList = new ArrayList<String>();
 	private String type;
@@ -17,9 +17,7 @@ public class UrlRequest implements Request {
 	private List<String> exclude = emptyList;
 	
 	public UrlRequest(String type, boolean async, String resultName, String url, String include, String exclude, String selector) {
-		this.type = type;
-		this.async = async;
-		this.resultName = resultName;
+		super(type, async, resultName);
 		this.url = url;
 		this.selector = selector;
 		if ( include != null && include.length() > 0) {

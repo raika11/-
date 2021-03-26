@@ -575,8 +575,6 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .contents,
     .footer_wrap {max-width: 1200px;}
 
-    .contents {padding-left:0;padding-right:0;}
-
     /* padding */
     .pr_lg12 {padding-right:12px;}
     .pl_lg24 {padding-left:24px;}
@@ -654,5 +652,5 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
 /* X-Large devices (large desktops, 1200px and up) */
 @media (min-width:1200px) {
-    
+    .contents{padding-left:0;padding-right:0;}
 }

@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Button } from 'react-bootstrap';
-import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
+import { MODAL_PAGESIZE_OPTIONS, DB_DATEFORMAT } from '@/constants';
 import { messageBox } from '@utils/toastUtil';
 import { initialState, GET_PODCAST_LIST, getPodcastList, clearPodcast, changePodcastSearchOption } from '@store/jpod';
 import { MokaModal, MokaTable } from '@components';
@@ -13,7 +14,7 @@ import { columnDefs } from './PodcastModalColumns';
  * 파일 업로드(브라이트코브에 업로드)
  */
 const PodcastModal = (props) => {
-    const { show, onHide, epsdNm, onRowClicked } = props;
+    const { show, onHide, onRowClicked, selectedChannel } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_PODCAST_LIST]);
     const { list, total, search } = useSelector(({ jpod }) => jpod.podcast);
@@ -81,11 +82,11 @@ const PodcastModal = (props) => {
     useEffect(() => {
         setRowData(
             list.map((data, idx) => {
-                let regDt = data.created_at && data.created_at.length > 10 ? data.created_at.substr(0, 10) : data.created_at;
                 return {
                     ...data,
                     idx: `${data.id}_${idx}`,
-                    stateText: data.state === 'ACTIVE' ? '정상' : '비정상',
+                    stateText: data.state === 'ACTIVE' ? '정상' : '대기',
+                    regDt: moment(data.regDt, DB_DATEFORMAT).format('YYYY-MM-DD LTS'),
                     onClick: handleRowClicked,
                 };
             }),
@@ -93,7 +94,16 @@ const PodcastModal = (props) => {
     }, [list, handleRowClicked]);
 
     return (
-        <MokaModal width={750} show={show} onHide={handleHide} title="팟캐스트 등록" size="lg" bodyClassName="overflow-x-hidden custom-scroll d-flex flex-column" centered>
+        <MokaModal
+            width={750}
+            show={show}
+            onHide={handleHide}
+            title="팟캐스트 등록"
+            size="lg"
+            bodyClassName="overflow-x-hidden custom-scroll d-flex flex-column"
+            id="podcast-modal"
+            centered
+        >
             <Form.Row className="d-flex mb-14 d-flex justify-content-end">
                 <Button variant="outline-neutral" className="mr-1 flex-shrink-0" onClick={() => handleReload()}>
                     새로고침
@@ -101,7 +111,7 @@ const PodcastModal = (props) => {
                 <Button variant="positive" className="flex-shrink-0" onClick={() => setUploadShow(true)}>
                     업로드
                 </Button>
-                <PodcastUploadModal show={uploadShow} epsdNm={epsdNm} onHide={() => setUploadShow(false)} />
+                <PodcastUploadModal show={uploadShow} onHide={() => setUploadShow(false)} selectedChannel={selectedChannel} />
             </Form.Row>
 
             <MokaTable
@@ -113,7 +123,7 @@ const PodcastModal = (props) => {
                 total={total}
                 page={list.page}
                 size={list.size}
-                pageSize={MODAL_PAGESIZE_OPTIONS}
+                pageSizes={MODAL_PAGESIZE_OPTIONS}
                 onChangeSearchOption={handleChangeSearchOption}
             />
         </MokaModal>

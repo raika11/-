@@ -1,6 +1,5 @@
 package jmnet.moka.core.tps.mvc.bright.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
@@ -40,16 +39,16 @@ public class BrightRestController extends AbstractCommonController {
     @Autowired
     private BrightcoveService brightcoveService;
 
-    @ApiOperation(value = "jpod ovp 목록 조회 예제")
-    @GetMapping("/ovp")
-    public ResponseEntity<?> getOvpList(OvpSearchDTO ovpSearchDTO)
-            throws JsonProcessingException {
-
-        ovpSearchDTO.setFolderId(jpodFolderId);
-
-        return new ResponseEntity<>(brightcoveService.findAllOvp(ovpSearchDTO), HttpStatus.OK);
-
-    }
+    //    @ApiOperation(value = "jpod ovp 목록 조회 예제")
+    //    @GetMapping("/ovp")
+    //    public ResponseEntity<?> getOvpList(OvpSearchDTO ovpSearchDTO)
+    //            throws JsonProcessingException {
+    //
+    //        ovpSearchDTO.setFolderId(jpodFolderId);
+    //
+    //        return new ResponseEntity<>(brightcoveService.findAllOvp(ovpSearchDTO), HttpStatus.OK);
+    //
+    //    }
 
     @ApiOperation(value = "OVP 동영상 조회")
     @GetMapping("/bright/videos")

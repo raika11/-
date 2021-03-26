@@ -70,12 +70,6 @@ function* saveChnl({ payload: { chnl, callback } }) {
         callbackData = response.data;
 
         if (response.data.header.success) {
-            // // 성공 액션 실행 => 데이터 업데이트 치면 안됨 관련 정보를 빠져서 옴
-            // yield put({
-            //     type: act.GET_CHNL_SUCCESS,
-            //     payload: response.data,
-            // });
-
             // 목록 다시 검색
             const search = yield select(({ jpod }) => jpod.channel.search);
             yield put({ type: act.GET_CHNL_LIST, payload: { search } });
@@ -385,7 +379,7 @@ function* saveJpodNoticeReply({ payload: { boardId, parentBoardSeq, boardSeq, co
             // 답변 등록
             response = yield call(postBoardReply, {
                 boardId: boardId,
-                parentBoardSeq: boardSeq,
+                parentBoardSeq: contents.parentBoardSeq || boardSeq,
                 contents: contents,
                 files: [], // 답변은 첨부 파일이 없어서 null 처리
             });

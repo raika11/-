@@ -179,13 +179,15 @@ public class ComponentHistServiceImpl implements ComponentHistService {
                 .perPageCount(workVO.getPerPageCount())// 페이지편집에서 수정할 수 있는 컴포넌트정보
                 .build();
 
-        // 네이버채널
         if (templateSeq != null) {
+            // 네이버채널일때 템플릿변경있음.
             String messageT = messageByLocale.get("tps.common.error.no-data");
             Template template = templateService
                     .findTemplateBySeq(workVO.getTemplateSeq())
                     .orElseThrow(() -> new NoDataException(messageT));
             history.setTemplate(template);
+        } else {
+            history.setTemplate(component.getTemplate());
         }
 
         ComponentHist componentHist = this.insertComponentHist(history);

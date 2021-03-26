@@ -6,35 +6,22 @@ import java.util.List;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.dps.api.handler.PurgeRequestHandler;
 
-public class PurgeRequest implements Request {
+public class PurgeRequest extends AbstractRequest {
 
-	private String type;
     private String apiPath;
     private String apiId;
     private List<String> keyList;;
-    private boolean async;
-	
-	
+
     public PurgeRequest(String type, String apiPath, String apiId, String keys, boolean async) {
-		this.type = type;
+        super(type, async, "PURGE");
 		this.apiPath = apiPath;
         this.apiId = apiId;
-        this.async = async;
-
         if (McpString.isNotEmpty(keys)) {
             String[] keysplit = keys.trim().split("\\s+");
             this.keyList = Arrays.asList(keysplit);
         } else {
             this.keyList = new ArrayList<String>(0);
         }
-	}
-
-	public String getType() {
-		return this.type;
-	}
-	
-	public boolean getAsync() {
-		return this.async;
 	}
 
     public String getApiPath() {
@@ -53,13 +40,5 @@ public class PurgeRequest implements Request {
 	public Class<?> getHandlerClass() {
         return PurgeRequestHandler.class;
 	}
-	
-	public String toString() {
-		return String.join("/", this.type);
-	}
 
-    @Override
-    public String getResultName() {
-        return "PURGE";
-    }
 }

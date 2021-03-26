@@ -49,18 +49,10 @@ export const initialState = {
             list: [],
             search: { page: 0, sort: 'chnlSeq,desc', size: 20, chnlSeq: null },
         },
-    },
-    // 진행자 기본값
-    initMember: {
-        chnlSeq: '',
-        desc: '',
-        epsdSeq: '',
-        memDiv: '',
-        memMemo: '',
-        memNm: '',
-        memRepSeq: null,
-        nickNm: '',
-        seqNo: '',
+        podty: {
+            total: 0,
+            list: [],
+        },
     },
     // 모든 채널 목록 (에피소드의 selectbox, 공지의 selectbox)
     totalChannel: {
@@ -109,6 +101,10 @@ export const initialState = {
             viewCnt: 0,
         },
         invalidList: [],
+        podty: {
+            total: 0,
+            list: [],
+        },
     },
     // 공지 게시판
     jpodNotice: {
@@ -203,15 +199,6 @@ export const initialState = {
             viewCnt: 0,
         },
     },
-    podtyChannel: {
-        total: 0,
-        list: [],
-    },
-    podtyEpisode: {
-        castSrl: '',
-        total: 0,
-        list: [],
-    },
     brightOvp: {
         total: 0,
         list: [],
@@ -225,8 +212,6 @@ export const initialState = {
         },
     },
     selectReporter: null,
-    selectPodtyChannel: {},
-    selectPodtyEpisode: {},
     selectBrightOvp: {},
 };
 
@@ -286,6 +271,20 @@ export default handleActions(
             });
         },
         /**
+         * 채널 > 팟티 관련
+         */
+        [act.CLEAR_PODTY_CHNL]: (state) => {
+            return produce(state, (draft) => {
+                draft.channel.podty = initialState.channel.podty;
+            });
+        },
+        [act.GET_PODTY_CHNL_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.channel.podty.list = body.list;
+                draft.channel.podty.total = body.totalCnt;
+            });
+        },
+        /**
          * 에피소드 관련
          */
         [act.CLEAR_EPSD]: (state) => {
@@ -314,53 +313,24 @@ export default handleActions(
                 draft.episode.episode = body;
             });
         },
+        /**
+         * 에피소드 > 팟티 관련
+         */
+        [act.CLEAR_PODTY_EPSD]: (state) => {
+            return produce(state, (draft) => {
+                draft.episode.podty = initialState.episode.podty;
+            });
+        },
+        [act.GET_PODTY_EPSD_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.episode.podty.list = body.list;
+                draft.episode.podty.total = body.totalCnt;
+            });
+        },
 
         /**
          * 이 뒤부터 정리 필요함
          */
-        // 팟티 채널 검색 모달
-        [act.CLEAR_CHANNEL_PODTY]: (state) => {
-            return produce(state, (draft) => {
-                draft.podtyChannel = initialState.podtyChannel;
-            });
-        },
-        // 팟티 검색 모달 리스트
-        [act.GET_CHANNEL_PODTY_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.podtyChannel.list = body.list;
-                draft.podtyChannel.total = body.totalCnt;
-            });
-        },
-        // 팟티검색 모달에서 선택시 본창으로 값 전달할 스테이트
-        [act.SELECT_CHANNEL_PODTY]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.selectPodtyChannel = payload;
-            });
-        },
-        // 팟티 에피소드 리셋
-        [act.CLEAR_PODTY_EPISODE]: (state) => {
-            return produce(state, (draft) => {
-                draft.podtyEpisode = initialState.podtyEpisode;
-            });
-        },
-        [act.CHANGE_PODTY_EPISODE_CASTSRL]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.podtyEpisode.castSrl = payload;
-            });
-        },
-        // 에피소드 에서 사용할 채널 목록(검색 , 등록, 수정)
-        [act.GET_PODTY_EPISODE_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.podtyEpisode.list = body.list;
-                draft.podtyEpisode.total = body.totalCnt;
-            });
-        },
-        // 에피소드 에서 사용할 채널 목록(검색 , 등록, 수정)
-        [act.SELECT_PODTY_EPISODE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.selectPodtyEpisode = payload;
-            });
-        },
         // 브라이트 코브 초기화
         [act.CLEAR_BRIGHT_OVP]: (state) => {
             return produce(state, (draft) => {

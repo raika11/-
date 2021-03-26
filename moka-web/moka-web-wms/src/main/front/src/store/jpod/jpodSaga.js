@@ -7,11 +7,6 @@ import * as api from './jpodApi';
 import { deleteBoardContents, postBoardContents, putBoardContents, postBoardReply, putBoardReply } from '../board/boardsApi';
 
 /**
- * 팟티 목록
- */
-const getChannelPodtyListsaga = callApiAfterActions(act.GET_CHANNEL_PODTY_LIST, api.getPodtyChannels, (store) => store.jpod.podtyChannel);
-
-/**
  * 모든 채널 목록 조회
  */
 const getTotalChnlList = callApiAfterActions(act.GET_TOTAL_CHNL_LIST, api.getChnlList, ({ jpod }) => jpod.totalChannel.search);
@@ -32,6 +27,11 @@ const getChnl = createRequestSaga(act.GET_CHNL, api.getChnl);
 const getChnlEpsdList = createRequestSaga(act.GET_CHNL_EPSD_LIST, api.getEpsdList);
 
 /**
+ * 채널 > 팟티
+ */
+const getPodtyChnlList = createRequestSaga(act.GET_PODTY_CHNL_LIST, api.getPodtyChannels);
+
+/**
  * 에피소드 목록
  */
 const getEpsdList = createRequestSaga(act.GET_EPSD_LIST, api.getEpsdList);
@@ -41,7 +41,10 @@ const getEpsdList = createRequestSaga(act.GET_EPSD_LIST, api.getEpsdList);
  */
 const getEpsd = createRequestSaga(act.GET_EPSD, api.getEpsd);
 
-const getPodtyEpisodeListSaga = callApiAfterActions(act.GET_PODTY_EPISODE_LIST, api.getPodtyEpisodesList, (store) => store.jpod.podtyEpisode);
+/**
+ * 에피소드 > 팟티
+ */
+const getPodtyEpsdList = createRequestSaga(act.GET_PODTY_EPSD_LIST, api.getPodtyEpisodesList);
 
 /**
  * 채널 저장
@@ -447,11 +450,6 @@ function* saveJpodNoticeReply({ payload: { boardId, parentBoardSeq, boardSeq, co
 
 export default function* jpodSaga() {
     /**
-     * 팟티
-     */
-    yield takeLatest(act.GET_CHANNEL_PODTY_LIST, getChannelPodtyListsaga);
-
-    /**
      * 모든 채널 조회 (useTotal === Y)
      */
     yield takeLatest(act.GET_TOTAL_CHNL_LIST, getTotalChnlList);
@@ -464,6 +462,7 @@ export default function* jpodSaga() {
     yield takeLatest(act.SAVE_CHNL, saveChnl);
     yield takeLatest(act.DELETE_CHNL, deleteChnl);
     yield takeLatest(act.GET_CHNL_EPSD_LIST, getChnlEpsdList);
+    yield takeLatest(act.GET_PODTY_CHNL_LIST, getPodtyChnlList);
 
     /**
      * 에피소드
@@ -471,7 +470,7 @@ export default function* jpodSaga() {
     yield takeLatest(act.GET_EPSD_LIST, getEpsdList);
     yield takeLatest(act.GET_EPSD, getEpsd);
     yield takeLatest(act.SAVE_EPSD, saveEpsd);
-    yield takeLatest(act.GET_PODTY_EPISODE_LIST, getPodtyEpisodeListSaga); // 에피소드 리스트 가지고 오기.
+    yield takeLatest(act.GET_PODTY_EPSD_LIST, getPodtyEpsdList);
 
     yield takeLatest(act.GET_BRIGHT_OVP, getBrightOvpSaga); // 브라이트 코브 목록 조회.
     yield takeLatest(act.SAVE_BRIGHTOVP, saveBrightovpSaga); // 브라이트 코브 저장.

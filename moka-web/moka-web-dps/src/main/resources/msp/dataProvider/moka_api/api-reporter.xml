@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+  -->
+
+<apiConfig>
+
+  <!--기자 목록-->
+  <api id="reporter">
+    <description>기자 목록을 조회한다.</description>
+    <parameter>
+      <name desc="기자명">^.{0,1000}$</name>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.reporter.reporter</request>
+    <request type="script" resultName="_TOTAL">
+      var result = $ac.getAllResult();
+      result.get("PARAM_MAP").get("total");
+    </request>
+    <keys>
+      name
+      #paging
+    </keys>
+  </api>
+
+  <!--컬럼니스트 목록-->
+  <api id="columnist">
+    <description>컬럼니스트 목록을 조회한다.</description>
+    <parameter>
+      <name desc="컬럼니스트명">^.{0,1000}$</name>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.reporter.columnist</request>
+    <request type="script" resultName="_TOTAL">
+      var result = $ac.getAllResult();
+      result.get("PARAM_MAP").get("total");
+    </request>
+    <keys>
+      name
+      #paging
+    </keys>
+  </api>
+
+
+</apiConfig>
+

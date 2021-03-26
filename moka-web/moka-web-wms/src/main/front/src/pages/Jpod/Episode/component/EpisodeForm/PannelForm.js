@@ -24,7 +24,7 @@ const PannelForm = ({ label, memDiv, members, addMember, onChangeMember, onDelet
 
             {members.length === 0 && (
                 <div className="d-flex mb-2 p-3 d-flex justify-content-center rounded-lg color-gray-900" style={{ backgroundColor: '#f4f7f9' }}>
-                    {label}이 없습니다.
+                    {label}이 없습니다
                 </div>
             )}
             {members.map((member, index) => (

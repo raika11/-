@@ -167,7 +167,7 @@ public class DpsApiAutoConfiguration {
                 .paths(new Predicate<String>() {
                     @Override
                     public boolean apply(String input) {
-                        return !input.startsWith("/command/"); // /command/로 시작하지 않으면..
+                        return !input.startsWith("/command/") && !input.equals("/"); // /command/로 시작하지 않으면..
                     }
                 })
                 .build()

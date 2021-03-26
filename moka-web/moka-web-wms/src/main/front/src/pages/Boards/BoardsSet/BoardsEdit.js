@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { MokaCard } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
+import { invalidListToError } from '@utils/convertUtil';
 import { REQUIRED_REGEX } from '@/utils/regexUtil';
 import { initialState, clearSetmenuBoardInfo, GET_SET_MENU_BOARD_INFO, getBoardInfo, getSetMenuBoardsList, saveBoardInfo, deleteBoard } from '@store/board';
 import BoardsForm from './BoardsForm';
@@ -28,38 +29,20 @@ const BoardsEdit = ({ match }) => {
     // 게시판 폼 필드값
     const [boardInfoData, setBoardInfoData] = useState(initialState.setMenu.boardInfo);
 
-    // 게시판 체크박스 컬럼 state
-    const [items, setItems] = useState({
-        ADDR: false,
-        MOBILE_POHONE: false,
-        EMAIL: false,
-        URL: false,
-    });
-
     // monaco 에디터 스테이트 버그가 있어서 상태를 만들어 주고 상태가 업데이트 되면 렌더링 될수 있게 수정
     const [editState, setEeditState] = useState(null);
     // error
-    const [error, setError] = useState([]);
+    const [error, setError] = useState({});
 
     /**
      * change input value
      */
-    const handleChangeValue = (e) => {
-        const { name, value, checked, type } = e.target;
-        if (name === 'usedYn' || name === 'emailReceiveYn' || name === 'answPushYn' || name === 'emailSendYn' || name === 'pushYn' || name === 'fileYn' || name === 'ordYn') {
-            setBoardInfoData({ ...boardInfoData, [name]: checked ? 'Y' : 'N' });
-        } else if (type === 'checkbox') {
-            // 답변 checkbox 버튼 checked시 답변메일 발신, 답변 PUSH 발송 활성화
-            if (name === 'allowItem') {
-                // 로컬 state 사용 컬럼 상태 업데이트
-                setItems({ ...items, [value]: checked ? true : false });
-            } else {
-                setBoardInfoData({ ...boardInfoData, [name]: checked ? 'Y' : 'N' });
-            }
-        } else {
-            setBoardInfoData({ ...boardInfoData, [name]: value });
-        }
-    };
+    const handleChangeValue = useCallback(
+        (formData) => {
+            setBoardInfoData({ ...boardInfoData, ...formData });
+        },
+        [boardInfoData],
+    );
 
     /**
      * 유효성 검사
@@ -156,7 +139,7 @@ const BoardsEdit = ({ match }) => {
         //     };
         // }
 
-        setError(errList);
+        setError(invalidListToError(errList));
         return !isInvalid;
     };
 
@@ -214,9 +197,7 @@ const BoardsEdit = ({ match }) => {
                     callback: ({ header, body }) => {
                         if (header.success) {
                             toast.success(header.message);
-                            if (body.boardId) {
-                                history.push(`${match.path}/${boardId}`);
-                            }
+                            history.push(`${match.path}/${body.boardId}`);
                         } else {
                             const { totalCnt, list } = body;
                             if (totalCnt > 0 && Array.isArray(list)) {
@@ -275,6 +256,7 @@ const BoardsEdit = ({ match }) => {
         // boardId param이 존재하면 상세 조회, boardInfo초기화
         if (boardId) {
             dispatch(getBoardInfo(boardId));
+            setError({});
         } else {
             dispatch(clearSetmenuBoardInfo());
         }
@@ -284,41 +266,6 @@ const BoardsEdit = ({ match }) => {
         // 스토어 데이터 로컬에 셋팅
         setBoardInfoData(boardInfo);
     }, [boardInfo]);
-
-    useEffect(() => {
-        let itemArr = [];
-        Object.keys(items).forEach((i) => {
-            if (items[i]) {
-                itemArr.push(i);
-            }
-        });
-
-        if (itemArr.length > 0) {
-            setBoardInfoData({ ...boardInfoData, allowItem: itemArr.join(',') });
-        } else {
-            setBoardInfoData({ ...boardInfoData, allowItem: '' });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [items]);
-
-    useEffect(() => {
-        // allowItem이 있으면 로컬 체크박스 컬럼 state 변경
-        if (boardInfoData.allowItem) {
-            let ai = boardInfoData.allowItem.split(',');
-            const findItem = (el) => ai.find((i) => i === el);
-
-            setItems({
-                ...items,
-                ADDR: findItem('ADDR') ? true : false,
-                MOBILE_POHONE: findItem('MOBILE_POHONE') ? true : false,
-                EMAIL: findItem('EMAIL') ? true : false,
-                URL: findItem('URL') ? true : false,
-            });
-        } else {
-            setItems({ ...items, ADDR: false, MOBILE_POHONE: false, EMAIL: false, URL: false });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [boardInfoData.allowItem]);
 
     useEffect(() => {
         // Monaco 에디터 렌더링 때 참조할 state 처리
@@ -349,8 +296,7 @@ const BoardsEdit = ({ match }) => {
                 channelTypeList={channelTypeList}
                 boardInfoData={boardInfoData}
                 setBoardInfoData={setBoardInfoData}
-                items={items}
-                onChangeValue={handleChangeValue}
+                onChange={handleChangeValue}
                 loading={editState}
                 error={error}
                 setError={setError}

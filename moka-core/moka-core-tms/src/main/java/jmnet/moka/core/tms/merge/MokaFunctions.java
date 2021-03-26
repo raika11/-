@@ -1,10 +1,20 @@
 package jmnet.moka.core.tms.merge;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
 import jmnet.moka.common.template.merge.Functions;
+import jmnet.moka.common.utils.KoreanCalender;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
@@ -160,4 +170,82 @@ public class MokaFunctions extends Functions {
 		}
 		return sourceName;
 	}
+
+	/** 웹 페이지 날짜 관련 함수 **/
+	private static final DateTimeFormatter DTF_YMDHM_DEFAULT = DateTimeFormatter
+			.ofPattern("yyyy. M. d HH:mm")
+			.withZone(ZoneId.of(MokaConstants.JSON_DATE_TIME_ZONE));
+	private static final DateTimeFormatter DTF_YMDHM_COMPACT = DateTimeFormatter
+			.ofPattern("M. d HH:mm")
+			.withZone(ZoneId.of(MokaConstants.JSON_DATE_TIME_ZONE));
+	private static final DateTimeFormatter DTF_YMD = DateTimeFormatter
+			.ofPattern("yyyy. M. d")
+			.withZone(ZoneId.of(MokaConstants.JSON_DATE_TIME_ZONE));
+	private static final DateTimeFormatter DTF_MD = DateTimeFormatter
+			.ofPattern("M. d")
+			.withZone(ZoneId.of(MokaConstants.JSON_DATE_TIME_ZONE));
+	private static final DateTimeFormatter DTF_YMDE = DateTimeFormatter
+			.ofPattern("yyyy. M. d E요일")
+			.withZone(ZoneId.of(MokaConstants.JSON_DATE_TIME_ZONE));
+	private static final int SEC_MIN = 60;
+	private static final int SEC_HOUR = 60*60;
+	private static final int SEC_DAY = 60*60*24;
+	private static final String TYPE_DEFAULT = "default";
+	private static final String TYPE_COMPACT = "compact";
+	private static final String TYPE_WEEKDAY = "weekday";
+
+	public String timeAgo(String dateTime) {
+		LocalDateTime dt = LocalDateTime.parse(dateTime, MokaConstants.dtf);
+		LocalDateTime now = LocalDateTime.now();
+		Duration duration = Duration.between(dt, now);
+		long seconds = duration.getSeconds();
+		if ( seconds < 60 ) { // 1분 이내
+			return "방금 전";
+		} else if ( seconds < SEC_HOUR) { //1시간 이내
+			return String.format("%d분 전",(int)Math.floor(seconds / SEC_MIN));
+		} else if ( seconds < SEC_DAY) { //24시간 이내
+			return String.format("%d시간 전",(int)Math.floor(seconds / SEC_HOUR));
+		}
+		return dateTime(dateTime);
+	}
+
+	public String dateTime(String dateTime) {
+		return dateTime(dateTime, TYPE_DEFAULT);
+	}
+
+	public String dateTime(String dateTime, String type) {
+		if ( type.equalsIgnoreCase(TYPE_DEFAULT)) {
+			LocalDateTime dt = LocalDateTime.parse(dateTime, MokaConstants.dtf);
+			return dt.format(DTF_YMDHM_DEFAULT);
+		} else if ( type.equalsIgnoreCase(TYPE_COMPACT)) {
+			LocalDateTime dt = LocalDateTime.parse(dateTime, MokaConstants.dtf);
+			return dt.format(DTF_YMDHM_COMPACT);
+		} else if ( type.equalsIgnoreCase(TYPE_WEEKDAY)) {
+			LocalDateTime dt = LocalDateTime.parse(dateTime, MokaConstants.dtf);
+			return dt.format(DTF_YMDE);
+		}
+		return dateTime;
+	}
+
+	public String dateBetween(String startDateTime, String endDateTime) {
+		LocalDateTime start = LocalDateTime.parse(startDateTime, MokaConstants.dtf);
+		LocalDateTime end = LocalDateTime.parse(endDateTime, MokaConstants.dtf);
+		if ( start.getYear() == end.getYear() ) {
+			return String.format("%s ~ %s",start.format(DTF_YMD),end.format(DTF_MD));
+		} else {
+			return String.format("%s ~ %s",start.format(DTF_YMD),end.format(DTF_YMD));
+		}
+	}
+
+	public String lunar(String dateTime) {
+		LocalDateTime dt = LocalDateTime.parse(dateTime, MokaConstants.dtf);
+		String yyyymmdd = String.format("%04d%02d%02d", dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth());
+		String lunarData = KoreanCalender.sol2lun(yyyymmdd);
+		String[] splits = lunarData.split("\\|");
+		String month = splits[0].substring(4,6);
+		String day = splits[0].substring(6,8);
+		return "음력 " + (month.startsWith("0")? month.substring(1): month) +". "
+				+ (day.startsWith("0")? day.substring(1): day) + (splits[1].equals("0")?"":"[윤]");
+	}
+
 }

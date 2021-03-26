@@ -4,12 +4,17 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { createRequestSaga, callApiAfterActions, errorResponse } from '@store/commons/saga';
 import * as act from './jpodAction';
 import * as api from './jpodApi';
-import { PAGESIZE_OPTIONS } from '@/constants';
+import { deleteBoardContents, postBoardContents, putBoardContents, postBoardReply, putBoardReply } from '../board/boardsApi';
 
 /**
  * 팟티 목록
  */
 const getChannelPodtyListsaga = callApiAfterActions(act.GET_CHANNEL_PODTY_LIST, api.getPodtyChannels, (store) => store.jpod.podtyChannel);
+
+/**
+ * 모든 채널 목록 조회
+ */
+const getTotalChnlList = callApiAfterActions(act.GET_TOTAL_CHNL_LIST, api.getChnlList, ({ jpod }) => jpod.totalChannel.search);
 
 /**
  * 채널 목록
@@ -24,11 +29,19 @@ const getChnl = createRequestSaga(act.GET_CHNL, api.getChnl);
 /**
  * 채널 > 에피소드
  */
-const getChnlEpsdList = createRequestSaga(act.GET_CHNL_EPSD_LIST, api.getEpisodes);
+const getChnlEpsdList = createRequestSaga(act.GET_CHNL_EPSD_LIST, api.getEpsdList);
 
-const getEpisodesSaga = callApiAfterActions(act.GET_EPISODES, api.getEpisodes, (store) => store.jpod.episode.episodes);
+/**
+ * 에피소드 목록
+ */
+const getEpsdList = createRequestSaga(act.GET_EPSD_LIST, api.getEpsdList);
+
+/**
+ * 에피소드 상세
+ */
+const getEpsd = createRequestSaga(act.GET_EPSD, api.getEpsd);
+
 const getPodtyEpisodeListSaga = callApiAfterActions(act.GET_PODTY_EPISODE_LIST, api.getPodtyEpisodesList, (store) => store.jpod.podtyEpisode);
-const getEpisodeGubunChannelsSaga = callApiAfterActions(act.GET_EPISODE_GUBUN_CHANNELS, api.getEpisodeChannels, (store) => store.jpod.episode.channel);
 
 /**
  * 채널 저장
@@ -78,33 +91,46 @@ function* saveChnl({ payload: { chnl, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
-// 에피소드 정보 등록 수정.
-function* saveJpodEpisodeSaga({ payload: { chnlSeq, epsdSeq, episodeinfo, callback } }) {
-    yield put(startLoading(act.SAVE_JPOD_EPISODE));
-
+/**
+ * 에피소드 저장
+ */
+function* saveEpsd({ payload: { epsd, callback } }) {
+    const ACTION = act.SAVE_EPSD;
     let callbackData = {};
     let response;
 
+    yield put(startLoading(ACTION));
     try {
-        if (chnlSeq && epsdSeq) {
-            response = yield call(api.updateJpodEpisode, { chnlSeq: chnlSeq, epsdSeq: epsdSeq, episodeinfo: episodeinfo });
+        if (epsd.chnlSeq && epsd.epsdSeq) {
+            response = yield call(api.putEpsd, { epsd });
         } else {
-            response = yield call(api.saveJpodEpisode, { chnlSeq: chnlSeq, episodeinfo: episodeinfo });
+            response = yield call(api.postEpsd, { epsd });
         }
-
         callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 다시 검색
+            const search = yield select(({ jpod }) => jpod.episode.search);
+            yield put({ type: act.GET_EPSD_LIST, payload: { search } });
+        } else {
+            const { body } = response.data;
+            if (body && body.list && Array.isArray(body.list)) {
+                // invalidList 셋팅
+                yield put({
+                    type: act.CHANGE_EPSD_INVALID_LIST,
+                    payload: body.list,
+                });
+            }
+        }
     } catch (e) {
         callbackData = errorResponse(e);
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
     }
+
     if (typeof callback === 'function') {
         yield call(callback, callbackData);
     }
 
-    yield put(finishLoading(act.SAVE_JPOD_EPISODE));
+    yield put(finishLoading(ACTION));
 }
 
 /**
@@ -134,31 +160,6 @@ function* deleteChnl({ payload: { chnlSeq, callback } }) {
     }
 
     yield put(finishLoading(ACTION));
-}
-
-function* getEpisodesInfoSaga({ payload: { chnlSeq, epsdSeq } }) {
-    yield put(startLoading(act.GET_EPISODES_INFO));
-
-    let response;
-    try {
-        response = yield call(api.getEpisodesInfo, { chnlSeq: chnlSeq, epsdSeq: epsdSeq });
-        const {
-            header: { success, message },
-        } = response.data;
-        if (success === true) {
-            yield put({ type: act.GET_EPISODES_INFO_SUCCESS, payload: response.data });
-        } else {
-            // 에러 나면 서버 에러 메시지 토스트 전달.
-            toast.error(message);
-        }
-    } catch (e) {
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
-    }
-
-    yield put(finishLoading(act.GET_EPISODES_INFO));
 }
 
 // 브라이트 코브 목록 조회.
@@ -225,131 +226,223 @@ function* saveBrightovpSaga({ payload: { ovpdata, callback } }) {
     yield put(finishLoading(act.SAVE_BRIGHTOVP));
 }
 
-// 게시판 게시글 리스트 가지고 오기.
-function* getJpodNoticeSaga() {
-    yield put(startLoading(act.GET_JPOD_NOTICE));
+/**
+ * J팟 채널 게시판 조회
+ */
+function* getJpodBoard() {
+    const ACTION = act.GET_JPOD_BOARD;
+    let callbackData, response;
 
-    let response;
+    yield put(startLoading(ACTION));
+
     try {
-        const search = yield select((store) => store.jpod.jpodNotice.jpodNotices.search);
-        const selectBoard = yield select((store) => store.jpod.jpodNotice.selectBoard);
-
-        response = yield call(api.getNoticesList, {
-            boardId: selectBoard.boardId,
-            search: search,
-        });
-        const {
-            header: { success, message },
-        } = response.data;
-        if (success === true) {
-            yield put({ type: act.GET_JPOD_NOTICE_SUCCESS, payload: response.data.body });
-        } else {
-            // 에러 나면 서버 에러 메시지 토스트 전달.
-            toast.error(message);
-        }
-    } catch (e) {
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
-    }
-
-    yield put(finishLoading(act.GET_JPOD_NOTICE));
-}
-
-// 게시글 정보 가지고 오기.
-function* getListmenuContentsInfoSaga({ payload: { boardId, boardSeq } }) {
-    yield put(startLoading(act.GET_BOARD_CONTENTS));
-
-    let response;
-    try {
-        response = yield call(api.getBoardContentsInfo, { boardId: boardId, boardSeq: boardSeq });
-        const {
-            header: { success, message },
-        } = response.data;
-        if (success === true) {
-            yield put({ type: act.GET_BOARD_CONTENTS_SUCCESS, payload: response.data });
-        } else {
-            // 에러 나면 서버 에러 메시지 토스트 전달.
-            toast.error(message);
-        }
-    } catch (e) {
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
-    }
-
-    yield put(finishLoading(act.GET_BOARD_CONTENTS));
-}
-
-// 게시판 채널 (JPOD, 기자) 리스트 가지고 와서 조합 해서 store 에 저장.
-function* getBoardChannelListSaga() {
-    yield put(startLoading(act.GET_BOARD_CHANNEL_LIST));
-    let response;
-    try {
-        response = yield call(api.getBoardJpodChannalList);
-
-        const {
-            header: { success, message },
-            body: { list },
-        } = response.data;
-
-        if (success === true) {
-            let tempList = list.map((data) => {
-                return {
-                    name: data.chnlNm,
-                    value: data.chnlSeq,
-                };
-            });
-            yield put({ type: act.GET_BOARD_CHANNEL_LIST_SUCCESS, payload: tempList });
-        } else {
-            toast.error(message);
-        }
-    } catch (e) {
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
-    }
-
-    yield put(finishLoading(act.GET_BOARD_CHANNEL_LIST));
-}
-
-function* getJpodBoardSaga() {
-    yield put(startLoading(act.GET_JPOD_BOARD));
-    let response;
-    try {
-        response = yield call(api.getBoardInfo, {
-            // J팟 게시판 리트스트 가지고 오기.
+        response = yield call(api.getJpodBoard, {
+            // J팟 채널 게시판은 한 개만 존재함
             search: {
-                page: 0,
-                sort: 'boardId,desc',
-                size: PAGESIZE_OPTIONS[0],
                 usedYn: 'Y',
                 boardType: 'S',
                 channelType: 'BOARD_DIVC1',
             },
         });
 
-        const {
-            header: { success, message },
-            body: { list },
-        } = response.data;
+        callbackData = response.data;
 
-        if (success === true) {
-            yield put({ type: act.GET_JPOD_BOARD_SUCCESS, payload: list });
+        if (response.data.header.success) {
+            yield put({ type: act.GET_JPOD_BOARD_SUCCESS, payload: callbackData });
+            const search = yield select(({ jpod }) => jpod.jpodNotice.search);
+            yield put({ type: act.CHANGE_JPOD_NOTICE_SEARCH_OPTION, payload: { ...search, boardId: callbackData.body.list[0].boardId } });
         } else {
-            toast.error(message);
+            toast.error(callbackData.header.message);
         }
     } catch (e) {
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
+        callbackData = errorResponse(e);
     }
 
-    yield put(finishLoading(act.GET_JPOD_BOARD));
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 게시판 채널 (JPOD) 목록 조회
+ */
+function* getBoardChannelList() {
+    const ACTION = act.GET_JPOD_CHANNEL_LIST;
+    let callbackData, response;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        response = yield call(api.getBoardJpodChannalList);
+
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            let tempList = callbackData.body.list.map((data) => {
+                return {
+                    name: data.chnlNm,
+                    value: data.chnlSeq,
+                };
+            });
+            yield put({ type: act.GET_JPOD_CHANNEL_LIST_SUCCESS, payload: tempList });
+        } else {
+            toast.error(callbackData.header.message);
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * J팟 공지 게시판 목록 조회
+ */
+export const getJpodNoticeList = callApiAfterActions(act.GET_JPOD_NOTICE_LIST, api.getJpodNoticeList, (store) => store.jpod.jpodNotice);
+
+/**
+ * J팟 공지 게시판 상세 조회
+ */
+function* getJpodNoticeContents({ payload: { boardId, boardSeq } }) {
+    const ACTION = act.GET_JPOD_NOTICE_CONTENTS;
+    let callbackData, response;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        response = yield call(api.getJpodNoticeContents, { boardId: boardId, boardSeq: boardSeq });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({ type: act.GET_JPOD_NOTICE_CONTENTS_SUCCESS, payload: callbackData });
+        } else {
+            // 에러
+            toast.error(callbackData.header.message);
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * J팟 공지 게시판 게시글 저장
+ */
+function* saveJpodNoticeContents({ payload: { boardContents, callback } }) {
+    const ACTION = act.SAVE_JPOD_NOTICE_CONTENTS;
+    let callbackData, response;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        // 등록, 수정 분기
+        response = yield call(boardContents.boardSeq ? putBoardContents : postBoardContents, { boardContents });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 조회
+            const search = yield select(({ jpod }) => jpod.jpodNotice.search);
+
+            yield put({
+                type: act.GET_JPOD_NOTICE_LIST,
+                payload: { search },
+            });
+        } else {
+            toast.error(callbackData.header?.message);
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * J팟 공지 게시판 게시글 삭제
+ */
+function* deleteJpodNoticeContents({ payload: { boardId, boardSeq, callback } }) {
+    const ACTION = act.DELETE_JPOD_NOTICE_CONTENTS;
+    let callbackData, response;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        response = yield call(deleteBoardContents, { boardId: boardId, boardSeq: boardSeq });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 조회
+            const search = yield select(({ jpod }) => jpod.jpodNotice.search);
+
+            yield put({
+                type: act.GET_JPOD_NOTICE_LIST,
+                payload: { search },
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * J팟 공지 게시판 답변 등록 및 수정
+ */
+function* saveJpodNoticeReply({ payload: { boardId, parentBoardSeq, boardSeq, contents, callback } }) {
+    const ACTION = act.SAVE_JPOD_NOTICE_REPLY;
+    let callbackData, response;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        // 등록 수정 분기
+        if (!parentBoardSeq) {
+            // 답변 등록
+            response = yield call(postBoardReply, {
+                boardId: boardId,
+                parentBoardSeq: boardSeq,
+                contents: contents,
+                files: [], // 답변은 첨부 파일이 없어서 null 처리
+            });
+        } else {
+            // 답변 수정
+            response = yield call(putBoardReply, {
+                boardId: boardId,
+                parentBoardSeq: parentBoardSeq,
+                boardSeq: boardSeq,
+                contents: contents,
+                files: [], // 답변은 첨부 파일이 없어서 null 처리
+            });
+        }
+        callbackData = response.data;
+        if (response.data.header.success) {
+            // 목록 조회
+            const search = yield select(({ jpod }) => jpod.jpodNotice.search);
+
+            yield put({
+                type: act.GET_JPOD_NOTICE_LIST,
+                payload: { search },
+            });
+        } else {
+            toast.error(callbackData.header?.message);
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
 }
 
 export default function* jpodSaga() {
@@ -357,6 +450,11 @@ export default function* jpodSaga() {
      * 팟티
      */
     yield takeLatest(act.GET_CHANNEL_PODTY_LIST, getChannelPodtyListsaga);
+
+    /**
+     * 모든 채널 조회 (useTotal === Y)
+     */
+    yield takeLatest(act.GET_TOTAL_CHNL_LIST, getTotalChnlList);
 
     /**
      * 채널
@@ -370,18 +468,22 @@ export default function* jpodSaga() {
     /**
      * 에피소드
      */
-    yield takeLatest(act.GET_EPISODES, getEpisodesSaga); // 에피소드 리스트 가지고 오기.
-    yield takeLatest(act.GET_EPISODES_INFO, getEpisodesInfoSaga); // 에피소드 리스트 가지고 오기.
+    yield takeLatest(act.GET_EPSD_LIST, getEpsdList);
+    yield takeLatest(act.GET_EPSD, getEpsd);
+    yield takeLatest(act.SAVE_EPSD, saveEpsd);
     yield takeLatest(act.GET_PODTY_EPISODE_LIST, getPodtyEpisodeListSaga); // 에피소드 리스트 가지고 오기.
-    yield takeLatest(act.GET_EPISODE_GUBUN_CHANNELS, getEpisodeGubunChannelsSaga); // 에피소드 구분용 채널 리스트 가지고 오기 ( 등록, 수정, 검색 등에 사용).
-    yield takeLatest(act.SAVE_JPOD_EPISODE, saveJpodEpisodeSaga); // 에피소드 등록.
 
     yield takeLatest(act.GET_BRIGHT_OVP, getBrightOvpSaga); // 브라이트 코브 목록 조회.
     yield takeLatest(act.SAVE_BRIGHTOVP, saveBrightovpSaga); // 브라이트 코브 저장.
 
-    // 보드
-    yield takeLatest(act.GET_JPOD_NOTICE, getJpodNoticeSaga);
-    yield takeLatest(act.GET_BOARD_CONTENTS, getListmenuContentsInfoSaga);
-    yield takeLatest(act.GET_BOARD_CHANNEL_LIST, getBoardChannelListSaga);
-    yield takeLatest(act.GET_JPOD_BOARD, getJpodBoardSaga);
+    /**
+     * 공지 게시판
+     */
+    yield takeLatest(act.GET_JPOD_BOARD, getJpodBoard);
+    yield takeLatest(act.GET_JPOD_CHANNEL_LIST, getBoardChannelList);
+    yield takeLatest(act.GET_JPOD_NOTICE_LIST, getJpodNoticeList);
+    yield takeLatest(act.GET_JPOD_NOTICE_CONTENTS, getJpodNoticeContents);
+    yield takeLatest(act.SAVE_JPOD_NOTICE_CONTENTS, saveJpodNoticeContents);
+    yield takeLatest(act.DELETE_JPOD_NOTICE_CONTENTS, deleteJpodNoticeContents);
+    yield takeLatest(act.SAVE_JPOD_NOTICE_REPLY, saveJpodNoticeReply);
 }

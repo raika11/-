@@ -486,7 +486,7 @@ public class MemberRestController extends AbstractCommonController {
             menuService.saveMenuAuth(memberId, MenuAuthTypeCode.MEMBER, menuAuths
                     .stream()
                     .map(menuAuthSimpleDTO -> modelMapper.map(menuAuthSimpleDTO, MenuAuth.class))
-                    .collect(Collectors.toList()), true);
+                    .collect(Collectors.toList()), false);
 
             ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.member.success.update.menu-auth"));
 

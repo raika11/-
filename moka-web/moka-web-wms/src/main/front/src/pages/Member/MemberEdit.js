@@ -28,7 +28,7 @@ const MemberEdit = ({ match }) => {
     const [remarkError, setRemarkError] = useState(false);
     const [statusError, setStatusError] = useState(false);
 
-    const [groupNames, setGroupNames] = useState('');
+    const [memberGroupInfo, setMemberGroupInfo] = useState('');
 
     const { member, loading, statusList, invalidList } = useSelector(
         (store) => ({
@@ -59,11 +59,12 @@ const MemberEdit = ({ match }) => {
         setTmpExpireDt(member.expireDt || '');
         setRemark(member.remark || '');
 
-        let groupNms = '';
+        let groupInfo = '';
         if (!commonUtil.isEmpty(groupMembers) && groupMembers instanceof Array) {
-            groupNms = groupMembers.map((groupInfo) => groupInfo.group.groupKorNm).join(', ');
+            console.log(groupMembers);
+            groupInfo = groupMembers.map((groupInfo) => `${groupInfo.group.groupKorNm}(${groupInfo.group.groupCd})`).join(', ');
         }
-        setGroupNames(groupNms);
+        setMemberGroupInfo(groupInfo);
     }, [member]);
 
     /**
@@ -199,7 +200,7 @@ const MemberEdit = ({ match }) => {
                 {/* 소속 */}
                 <MokaInputLabel className="mb-2" label="소속" value={member.dept} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 그룹 */}
-                <MokaInputLabel className="mb-2" label="그룹" value={groupNames} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="그룹" value={memberGroupInfo} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 상태 */}
                 <MokaInputLabel
                     as="select"

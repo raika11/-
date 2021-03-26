@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet';
-import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import clsx from 'clsx';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { clearStore } from '@store/jpod';
+import { clearStore, getJpodBoard } from '@store/jpod';
 import useBreakpoint from '@hooks/useBreakpoint';
-import { getBoardChannelList, getJpodBoard, changeSelectBoard } from '@store/jpod';
 import NoticeList from '@pages/Jpod/JpodNotice/NoticeList';
 import NoticeEdit from '@pages/Jpod/JpodNotice/NoticeEdit';
 
@@ -19,10 +18,6 @@ const JpodChannel = ({ match, displayName }) => {
     const dispatch = useDispatch();
     const matchPoints = useBreakpoint();
 
-    const { boardList } = useSelector((store) => ({
-        boardList: store.jpod.jpodNotice.boardList,
-    }));
-
     useEffect(() => {
         return () => {
             dispatch(clearStore());
@@ -30,18 +25,9 @@ const JpodChannel = ({ match, displayName }) => {
     }, [dispatch]);
 
     useEffect(() => {
-        // 최초 로딩시 목록 가져오기
+        // 최초 로딩시 JPOD 게시판 조회
         dispatch(getJpodBoard());
-        dispatch(getBoardChannelList()); // J팟 채널 목록
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        if (boardList.length > 0) {
-            dispatch(changeSelectBoard(boardList[0]));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [boardList]);
+    }, [dispatch]);
 
     return (
         <Container className="p-0 position-relative" fluid>

@@ -10,33 +10,93 @@ import FileExtSelector from './components/FileExtSelector';
 /**
  * 게시판 관리 > 전체 게시판 > 편집 폼(등록, 수정)
  */
-const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeValue, error, setError }) => {
+const BoardsForm = ({ loading, channelTypeList, boardInfoData, onChange, error, setError }) => {
     const { boardInfo } = useSelector((store) => ({
         boardInfo: store.board.setMenu.boardInfo,
     }));
 
-    // Monaco 에디터 내용 설정용 스테이트.
+    // 게시판 체크박스 컬럼 state
+    const [items, setItems] = useState({
+        ADDR: false,
+        MOBILE_POHONE: false,
+        EMAIL: false,
+        URL: false,
+    });
+
+    // Monaco 에디터 내용 설정용 스테이트
     const [tmpHeaderContent, setTmpHeaderContent] = useState('');
     const [tmpFooterContent, setTmpFooterContent] = useState('');
 
+    const handleChangeValue = (e) => {
+        const { name, value, checked, type } = e.target;
+        if (name === 'usedYn' || name === 'emailReceiveYn' || name === 'answPushYn' || name === 'emailSendYn' || name === 'pushYn' || name === 'fileYn' || name === 'ordYn') {
+            onChange({ [name]: checked ? 'Y' : 'N' });
+        } else if (type === 'checkbox') {
+            // 답변 checkbox 버튼 checked시 답변메일 발신, 답변 PUSH 발송 활성화
+            if (name === 'allowItem') {
+                // 로컬 state 사용 컬럼 상태 업데이트
+                setItems({ ...items, [value]: checked ? true : false });
+            } else {
+                onChange({ [name]: checked ? 'Y' : 'N' });
+            }
+        } else {
+            onChange({ [name]: value });
+        }
+
+        if (error[name]) {
+            setError({ ...error, [name]: false });
+        }
+    };
+
+    useEffect(() => {
+        let itemArr = [];
+        Object.keys(items).forEach((i) => {
+            if (items[i]) {
+                itemArr.push(i);
+            }
+        });
+
+        if (itemArr.length > 0) {
+            onChange({ allowItem: itemArr.join(',') });
+        } else {
+            onChange({ allowItem: '' });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [items]);
+
+    useEffect(() => {
+        // allowItem이 있으면 로컬 체크박스 컬럼 state 변경
+        if (boardInfoData.allowItem) {
+            let ai = boardInfoData.allowItem.split(',');
+            const findItem = (el) => ai.find((i) => i === el);
+
+            setItems({
+                ...items,
+                ADDR: findItem('ADDR') ? true : false,
+                MOBILE_POHONE: findItem('MOBILE_POHONE') ? true : false,
+                EMAIL: findItem('EMAIL') ? true : false,
+                URL: findItem('URL') ? true : false,
+            });
+        } else {
+            setItems({ ...items, ADDR: false, MOBILE_POHONE: false, EMAIL: false, URL: false });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [boardInfoData.allowItem]);
+
     useEffect(() => {
         // Monaco 에디터 내용을 따로 스테이트 저장해서 상위에 전달
-        onChangeValue({
-            target: {
-                name: 'headerContent',
-                value: tmpHeaderContent,
-            },
+        onChange({
+            name: 'headerContent',
+            value: tmpHeaderContent,
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tmpHeaderContent]);
 
     useEffect(() => {
         // Monaco 에디터 내용을 따로 스테이트 저장해서 상위에 전달
-        onChangeValue({
-            target: {
-                name: 'footerContent',
-                value: tmpFooterContent,
-            },
+        onChange({
+            name: 'footerContent',
+            value: tmpFooterContent,
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tmpFooterContent]);
@@ -57,7 +117,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     id="usedYn"
                     label="사용"
                     inputProps={{ custom: true, checked: boardInfoData.usedYn === 'Y' ? true : false }}
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     value={boardInfoData.usedYn}
                 />
             </Form.Row>
@@ -68,7 +128,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                 name="boardName"
                 placeholder="게시판명"
                 value={boardInfoData.boardName}
-                onChange={(e) => onChangeValue(e)}
+                onChange={handleChangeValue}
                 isInvalid={error.boardName}
                 required
             />
@@ -82,42 +142,28 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                 inputProps={{ rows: 4 }}
                 placeholder="게시판 설명"
                 value={boardInfoData.boardDesc}
-                onChange={(e) => onChangeValue(e)}
+                onChange={handleChangeValue}
             />
             {/* 분류1 */}
             <Form.Row className="mb-2">
-                <MokaInputLabel
-                    label="분류1"
-                    name="titlePrefixNm1"
-                    className="mr-2"
-                    value={boardInfoData.titlePrefixNm1}
-                    onChange={(e) => onChangeValue(e)}
-                    placeholder="분류 명 입력"
-                />
+                <MokaInputLabel label="분류1" name="titlePrefixNm1" className="mr-2" value={boardInfoData.titlePrefixNm1} onChange={handleChangeValue} placeholder="분류 명 입력" />
                 <MokaInputLabel
                     className="flex-fill"
                     name="titlePrefix1"
                     placeholder="분류 값 (,) 포함 100자 이내 입력 가능"
                     value={boardInfoData.titlePrefix1}
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                 />
             </Form.Row>
             {/* 분류2 */}
             <Form.Row className="mb-2">
-                <MokaInputLabel
-                    label="분류2"
-                    name="titlePrefixNm2"
-                    className="mr-2"
-                    value={boardInfoData.titlePrefixNm2}
-                    onChange={(e) => onChangeValue(e)}
-                    placeholder="분류 명 입력"
-                />
+                <MokaInputLabel label="분류2" name="titlePrefixNm2" className="mr-2" value={boardInfoData.titlePrefixNm2} onChange={handleChangeValue} placeholder="분류 명 입력" />
                 <MokaInputLabel
                     name="titlePrefix2"
                     className="flex-fill"
                     placeholder="분류 값 (,) 포함 100자 이내 입력 가능"
                     value={boardInfoData.titlePrefix2}
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                 />
             </Form.Row>
 
@@ -128,42 +174,42 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     as="checkbox"
                     name="editorYn"
                     id="editorYn"
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     inputProps={{ label: '에디터', custom: true, checked: boardInfoData.editorYn === 'Y' ? true : false }}
                 />
                 <MokaInput
                     as="checkbox"
                     name="answYn"
                     id="answYn"
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     inputProps={{ label: '답변', custom: true, checked: boardInfoData.answYn === 'Y' ? true : false }}
                 />
                 <MokaInput
                     as="checkbox"
                     name="replyYn"
                     id="replyYn"
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     inputProps={{ label: '댓글', custom: true, checked: boardInfoData.replyYn === 'Y' ? true : false }}
                 />
                 <MokaInput
                     as="checkbox"
                     name="declareYn"
                     id="declareYn"
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     inputProps={{ label: '신고', custom: true, checked: boardInfoData.declareYn === 'Y' ? true : false }}
                 />
                 <MokaInput
                     as="checkbox"
                     name="captchaYn"
                     id="captchaYn"
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     inputProps={{ label: '캡챠', custom: true, checked: boardInfoData.captchaYn === 'Y' ? true : false }}
                 />
                 <MokaInput
                     as="checkbox"
                     name="secretYn"
                     id="secretYn"
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     inputProps={{ label: '비밀글', custom: true, checked: boardInfoData.secretYn === 'Y' ? true : false }}
                 />
             </Form.Row>
@@ -179,7 +225,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     label="답변 메일"
                     inputProps={{ custom: true, checked: boardInfoData.emailReceiveYn === 'Y' ? true : false }}
                     disabled={boardInfoData.answYn !== 'Y' ? true : false}
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                 />
 
                 {/* 이메일 */}
@@ -190,7 +236,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     placeholder="이메일"
                     value={boardInfoData.receiveEmail}
                     isInvalid={error.receiveEmail}
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     disabled={boardInfoData.answYn !== 'Y' || boardInfoData.emailReceiveYn !== 'Y' ? true : false}
                 />
             </Form.Row>
@@ -205,7 +251,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     label="PUSH 발송"
                     inputProps={{ custom: true, label: '답변', checked: boardInfoData.answPushYn === 'Y' ? true : false }}
                     disabled={boardInfoData.answYn !== 'Y' ? true : false}
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     value={boardInfoData.answPushYn}
                 />
 
@@ -214,7 +260,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     name="pushYn"
                     id="pushYn"
                     inputProps={{ custom: true, label: '작성글', checked: boardInfoData.pushYn === 'Y' ? true : false }}
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     value={boardInfoData.pushYn}
                 />
             </Form.Row>
@@ -229,7 +275,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     className="mr-40"
                     label="게시물 메일"
                     inputProps={{ custom: true, checked: boardInfoData.emailSendYn === 'Y' ? true : false }}
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                 />
 
                 {/* 발신 이메일 */}
@@ -240,7 +286,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     placeholder="이메일"
                     isInvalid={error.sendEmail}
                     value={boardInfoData.sendEmail}
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     disabled={boardInfoData.emailSendYn !== 'Y' ? true : false}
                 />
             </Form.Row>
@@ -248,7 +294,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
             <Form.Row className="mb-2">
                 {/* 입력 권한 */}
                 <Col xs={6} className="p-0 pr-40">
-                    <MokaInputLabel label="입력 권한" as="select" name="insLevel" id="insLevel" value={boardInfoData.insLevel} onChange={(e) => onChangeValue(e)}>
+                    <MokaInputLabel label="입력 권한" as="select" name="insLevel" id="insLevel" value={boardInfoData.insLevel} onChange={handleChangeValue}>
                         <option value="">선택</option>
                         <option value="0">전체</option>
                         <option value="1">회원</option>
@@ -258,7 +304,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
 
                 {/* 조회 권한 */}
                 <Col xs={6} className="p-0">
-                    <MokaInputLabel label="조회 권한" as="select" name="viewLevel" id="viewLevel" value={boardInfoData.viewLevel} onChange={(e) => onChangeValue(e)}>
+                    <MokaInputLabel label="조회 권한" as="select" name="viewLevel" id="viewLevel" value={boardInfoData.viewLevel} onChange={handleChangeValue}>
                         <option value="">선택</option>
                         <option value="0">전체</option>
                         <option value="1">회원</option>
@@ -273,7 +319,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     <MokaInputLabel
                         label="답변 권한"
                         as="select"
-                        onChange={(e) => onChangeValue(e)}
+                        onChange={handleChangeValue}
                         name="answLevel"
                         id="answLevel"
                         value={boardInfoData.answLevel}
@@ -289,7 +335,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
 
                 {/* 추천 */}
                 <Col xs={6} className="p-0">
-                    <MokaInputLabel label="추천" as="select" name="recomFlag" id="recomFlag" value={boardInfoData.recomFlag} onChange={(e) => onChangeValue(e)}>
+                    <MokaInputLabel label="추천" as="select" name="recomFlag" id="recomFlag" value={boardInfoData.recomFlag} onChange={handleChangeValue}>
                         <option value="">선택</option>
                         <option value="0">미사용</option>
                         <option value="1">추천/비추천</option>
@@ -301,7 +347,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
             {/* 채널 */}
             <Form.Row className="mb-2">
                 <Col xs={6} className="p-0 pr-40">
-                    <MokaInputLabel label="채널" as="select" name="channelType" id="channelType" value={boardInfoData.channelType} onChange={(e) => onChangeValue(e)}>
+                    <MokaInputLabel label="채널" as="select" name="channelType" id="channelType" value={boardInfoData.channelType} onChange={handleChangeValue}>
                         <option value="">선택</option>
                         {channelTypeList.map((item, index) => (
                             <option key={index} value={item.dtlCd}>
@@ -321,7 +367,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     label="파일"
                     className="mr-2"
                     inputProps={{ custom: true, checked: boardInfoData.fileYn === 'Y' ? true : false }}
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                 />
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInputLabel
@@ -330,7 +376,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                         name="allowFileCnt"
                         value={boardInfoData.allowFileCnt}
                         isInvalid={error.allowFileCnt}
-                        onChange={(e) => onChangeValue(e)}
+                        onChange={handleChangeValue}
                         disabled={boardInfoData.fileYn !== 'Y' ? true : false}
                     />
                 </Col>
@@ -342,7 +388,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                         placeholder="용량(MB)"
                         value={boardInfoData.allowFileSize}
                         isInvalid={error.allowFileSize}
-                        onChange={(e) => onChangeValue(e)}
+                        onChange={handleChangeValue}
                         disabled={boardInfoData.fileYn !== 'Y' ? true : false}
                     />
                 </Col>
@@ -356,18 +402,14 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     disabled={boardInfoData.fileYn !== 'Y' ? true : false}
                     onChange={(value) => {
                         if (value.indexOf('all') > -1) {
-                            onChangeValue({
-                                target: {
-                                    name: 'allowFileExt',
-                                    value: 'zip,xls,xlsx,ppt,doc,hwp,jpg,png,gif',
-                                },
+                            onChange({
+                                name: 'allowFileExt',
+                                value: 'zip,xls,xlsx,ppt,doc,hwp,jpg,png,gif',
                             });
                         } else {
-                            onChangeValue({
-                                target: {
-                                    name: 'allowFileExt',
-                                    value: value,
-                                },
+                            onChange({
+                                name: 'allowFileExt',
+                                value: value,
                             });
                         }
                         setError({ ...error, allowFileExt: false });
@@ -386,7 +428,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     name="allowItem"
                     id="ADDR"
                     value="ADDR"
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     inputProps={{
                         label: '주소',
                         custom: true,
@@ -400,7 +442,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     name="allowItem"
                     id="MOBILE_POHONE"
                     value="MOBILE_POHONE"
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     inputProps={{
                         label: '휴대폰',
                         custom: true,
@@ -414,7 +456,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     name="allowItem"
                     id="EMAIL"
                     value="EMAIL"
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     inputProps={{
                         label: '이메일',
                         custom: true,
@@ -428,7 +470,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     name="allowItem"
                     id="URL"
                     value="URL"
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     inputProps={{
                         label: 'URL',
                         custom: true,
@@ -445,7 +487,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
                     id="ordYn"
                     label="순서 지정"
                     inputProps={{ custom: true, checked: boardInfoData.ordYn === 'Y' ? true : false }}
-                    onChange={(e) => onChangeValue(e)}
+                    onChange={handleChangeValue}
                     value={boardInfoData.ordYn}
                 />
                 <p className="mb-0 ft-12 text-neutral">&#8251; 게시물 순서를 사용자가 변경 가능</p>
@@ -468,7 +510,7 @@ const BoardsForm = ({ loading, channelTypeList, boardInfoData, items, onChangeVa
             </Form.Row>
 
             {/* 서비스 URL */}
-            <MokaInputLabel label="서비스\n페이지 URL" id="boardUrl" name="boardUrl" value={boardInfoData.boardUrl} onChange={(e) => onChangeValue(e)} />
+            <MokaInputLabel label="서비스\n페이지 URL" id="boardUrl" name="boardUrl" value={boardInfoData.boardUrl} onChange={handleChangeValue} />
         </Form>
     );
 };

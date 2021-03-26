@@ -36,6 +36,7 @@ export const initialState = {
             chnlImgMobFile: null, // 모바일 파일
             keywords: [],
             members: [],
+            seasonCnt: 0,
             episodeStat: {
                 lastEpsoNo: null,
                 unusedCnt: 0,
@@ -61,6 +62,16 @@ export const initialState = {
         nickNm: '',
         seqNo: '',
     },
+    // 모든 채널 목록 (에피소드의 selectbox, 공지의 selectbox)
+    totalChannel: {
+        search: {
+            page: 0,
+            sort: 'chnlSeq,desc',
+            usedYn: 'Y',
+            useTotal: 'Y',
+        },
+        list: [],
+    },
     // 에피소드
     episode: {
         total: 0,
@@ -76,6 +87,11 @@ export const initialState = {
             chnlSeq: null,
             podtyChnlSrl: null,
         },
+        searchTypeList: [
+            { id: '', name: '사용여부전체' },
+            { id: 'Y', name: '사용' },
+            { id: 'N', name: '미사용' },
+        ],
         episode: {
             articles: [],
             epsdFile: null,
@@ -92,47 +108,99 @@ export const initialState = {
             usedYn: 'Y',
             viewCnt: 0,
         },
-        channel: {
-            search: {
-                page: 0,
-                sort: 'chnlSeq,desc',
-                usedYn: 'Y',
-                useTotal: 'Y',
-            },
-            list: [],
-        },
+        invalidList: [],
     },
+    // 공지 게시판
     jpodNotice: {
-        jpodNotices: {
-            total: 0,
-            list: [],
-            search: {
-                page: 0,
-                sort: 'boardId,desc',
-                size: PAGESIZE_OPTIONS[0],
-                usedYn: 'Y',
-                searchType: '',
-                keyword: '',
-                delYn: 'N',
-            },
-        },
-        boardList: [],
+        jpodBoard: {},
         channelList: [],
-        noticeInfo: {},
-        selectBoard: {
-            answYn: 'N',
-        },
-    },
-    reporter: {
         total: 0,
         list: [],
+        error: null,
         search: {
+            boardId: null,
             page: 0,
             size: PAGESIZE_OPTIONS[0],
-            sort: 'repSeq,asc',
-            searchType: 'all',
+            startDt: null,
+            endDt: null,
+            usedYn: 'Y',
+            delYn: 'N',
+            channelId: '',
             keyword: '',
-            usePaging: 'Y',
+        },
+        contents: {
+            boardSeq: null,
+            boardId: null,
+            parentBoardSeq: null,
+            regName: '',
+            regId: '',
+            depth: 0,
+            indent: 0,
+            viewCnt: 0,
+            recomCnt: 0,
+            decomCnt: 0,
+            declareCnt: 0,
+            delYn: 'N',
+            regIp: '',
+            boardInfo: {},
+            attaches: [],
+            channelId: 0,
+            titlePrefix1: '',
+            titlePrefix2: '',
+            title: '',
+            ordNo: 99,
+            content: '',
+            pwd: null,
+            addr: null,
+            pushReceiveYn: 'N',
+            emailReceiveYn: 'N',
+            appOs: null,
+            devDiv: null,
+            token: null,
+            email: '',
+            mobilePhone: null,
+            url: null,
+            jpodChannel: null,
+            regDt: null,
+            modDt: null,
+            maxDepth: 0,
+        },
+        reply: {
+            addr: null,
+            appOs: null,
+            attaches: [],
+            boardId: null,
+            boardInfo: {},
+            boardSeq: null,
+            channelId: 0,
+            content: '',
+            declareCnt: 0,
+            decomCnt: 0,
+            delYn: 'N',
+            depth: 0,
+            devDiv: null,
+            email: '',
+            emailReceiveYn: 'N',
+            indent: 0,
+            jpodChannel: null,
+            maxDepth: 0,
+            mobilePhone: null,
+            modDt: null,
+            ordNo: 99,
+            parentBoardSeq: null,
+            pushReceiveYn: 'N',
+            pwd: null,
+            recomCnt: 0,
+            regDt: null,
+            regId: '',
+            regIp: '',
+            regName: '',
+            title: '',
+            titlePrefix1: '',
+            titlePrefix2: '',
+            token: null,
+            url: null,
+            viewCnt: 0,
         },
     },
     podtyChannel: {
@@ -165,6 +233,14 @@ export const initialState = {
 export default handleActions(
     {
         [act.CLEAR_STORE]: () => initialState,
+        /**
+         * 모든 채널 목록 조회
+         */
+        [act.GET_TOTAL_CHNL_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.totalChannel.list = body.list;
+            });
+        },
         /**
          * 채널 관련
          */
@@ -212,23 +288,28 @@ export default handleActions(
         /**
          * 에피소드 관련
          */
-        [act.CHANGE_EPISODES_SEARCH_OPTION]: (state, { payload }) => {
+        [act.CLEAR_EPSD]: (state) => {
+            return produce(state, (draft) => {
+                draft.episode.episode = initialState.episode.episode;
+            });
+        },
+        [act.CHANGE_EPSD_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.episode.search = payload;
             });
         },
-        [act.GET_EPISODES_SUCCESS]: (state, { payload: { body } }) => {
+        [act.CHANGE_EPSD_INVALID_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.episode.invalidList = payload;
+            });
+        },
+        [act.GET_EPSD_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.episode.list = body.list;
                 draft.episode.total = body.totalCnt;
             });
         },
-        [act.CLEAR_EPISODE_INFO]: (state) => {
-            return produce(state, (draft) => {
-                draft.episode.episode = initialState.episode.episode;
-            });
-        },
-        [act.GET_EPISODES_INFO_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_EPSD_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.episode.episode = body;
             });
@@ -268,12 +349,6 @@ export default handleActions(
             });
         },
         // 에피소드 에서 사용할 채널 목록(검색 , 등록, 수정)
-        [act.GET_EPISODE_GUBUN_CHANNELS_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.episode.channel.list = body.list;
-            });
-        },
-        // 에피소드 에서 사용할 채널 목록(검색 , 등록, 수정)
         [act.GET_PODTY_EPISODE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.podtyEpisode.list = body.list;
@@ -306,46 +381,62 @@ export default handleActions(
             });
         },
         // 기자 검색 모달 검색 옵션 처리
-        [act.CHANGE_BRIGHTOVP_SEARCH_OPTION]: (state, { payload }) => {
+        [act.CHANGE_BRIGHTOVP_SEARCH_OPTION]: (state) => {
             return produce(state, (draft) => {
                 // draft.brightOvp.search = payload;
             });
         },
+        /**
+         * J팟 공지 게시판 관련
+         */
+        [act.CLEAR_JPOD_NOTICE_CONTENTS]: (state) => {
+            return produce(state, (draft) => {
+                draft.jpodNotice.contents = initialState.jpodNotice.contents;
+            });
+        },
         [act.CHANGE_JPOD_NOTICE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.jpodNotice.jpodNotices.search = payload;
+                draft.jpodNotice.search = payload;
             });
         },
-        [act.GET_JPOD_NOTICE_SUCCESS]: (state, { payload: { list, totalCnt } }) => {
+        [act.GET_JPOD_BOARD_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.jpodNotice.jpodNotices.list = list;
-                draft.jpodNotice.jpodNotices.total = totalCnt;
+                draft.jpodNotice.jpodBoard = body.list[0];
+                draft.jpodNotice.search.boardId = body.list[0].boardId;
             });
         },
-        [act.GET_BOARD_CHANNEL_LIST_SUCCESS]: (state, { payload }) => {
+        [act.GET_JPOD_CHANNEL_LIST_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.jpodNotice.channelList = payload;
             });
         },
-        [act.GET_JPOD_BOARD_SUCCESS]: (state, { payload }) => {
+        [act.GET_JPOD_NOTICE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.jpodNotice.boardList = payload;
+                draft.jpodNotice.total = body.totalCnt;
+                draft.jpodNotice.list = body.list;
+                draft.jpodNotice.error = initialState.jpodNotice.error;
             });
         },
-        [act.GET_BOARD_CONTENTS_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_JPOD_NOTICE_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.jpodNotice.noticeInfo = body;
+                draft.jpodNotice.total = initialState.jpodNotice.total;
+                draft.jpodNotice.list = initialState.jpodNotice.list;
+                draft.jpodNotice.error = payload;
             });
         },
-        [act.CHANGE_SELECT_BOARD]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.jpodNotice.selectBoard = payload;
-            });
-        },
-        [act.CLEAR_SELECT_BOARD]: (state) => {
-            return produce(state, (draft) => {
-                draft.jpodNotice.selectBoard = initialState.jpodNotice.selectBoard;
-            });
+        [act.GET_JPOD_NOTICE_CONTENTS_SUCCESS]: (state, { payload: { body } }) => {
+            const { boardSeq, parentBoardSeq } = body;
+            if (boardSeq === parentBoardSeq) {
+                return produce(state, (draft) => {
+                    draft.jpodNotice.contents = body;
+                    draft.jpodNotice.reply = initialState.jpodNotice.reply;
+                });
+            } else {
+                return produce(state, (draft) => {
+                    draft.jpodNotice.contents = initialState.jpodNotice.contents;
+                    draft.jpodNotice.reply = body;
+                });
+            }
         },
     },
     initialState,

@@ -41,7 +41,7 @@ const JpodEpisode = ({ match, displayName }) => {
                 {/* 등록 / 수정 */}
                 <Switch>
                     <Route
-                        path={[`${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]}
+                        path={[`${match.path}/add`, `${match.path}/:chnlSeq/:epsdSeq`]}
                         exact
                         render={() => {
                             if (matchPoints.md || matchPoints.lg) {

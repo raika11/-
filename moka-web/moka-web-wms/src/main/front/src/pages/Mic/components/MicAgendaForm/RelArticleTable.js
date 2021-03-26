@@ -55,7 +55,7 @@ const RelArticleTable = ({ agenda, gridInstance, setGridInstance }) => {
      * 드래그 후 ordNo 정렬
      * @param {object} params grid instance
      */
-    const handleDragEnd = (params) => {
+    const handleRowDragEnd = (params) => {
         const displayedRows = getDisplayedRows(params.api);
         const ordered = displayedRows.map((data, idx) => ({
             ...data,
@@ -94,7 +94,7 @@ const RelArticleTable = ({ agenda, gridInstance, setGridInstance }) => {
                 columnDefs={columnDefs}
                 paging={false}
                 suppressMoveWhenRowDragging
-                onDragEnd={handleDragEnd}
+                onRowDragEnd={handleRowDragEnd}
                 setGridInstance={setGridInstance}
             />
 

@@ -2,7 +2,7 @@ import qs from 'qs';
 import instance from '@store/commons/axios';
 import { objectToFormData } from '@utils/convertUtil';
 
-// Podty 목록 조회
+// 채널 > 팟티 목록 조회
 export const getPodtyChannels = () => {
     return instance.get(`/api/podty/channels`).catch((err) => {
         throw err;
@@ -96,9 +96,7 @@ export const putEpsd = ({ epsd }) => {
         });
 };
 
-/**
- * Podty 에피소드 목록 조회 (모달)
- */
+// 에피소드 > 팟티 목록 조회
 export const getPodtyEpisodesList = ({ castSrl }) => {
     return instance.get(`/api/podty/channels/${castSrl}/episodes`).catch((err) => {
         throw err;

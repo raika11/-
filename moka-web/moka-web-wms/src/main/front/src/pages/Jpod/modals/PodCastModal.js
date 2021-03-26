@@ -6,8 +6,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { GET_BRIGHT_OVP, getBrightOvp, clearBrightOvp, selectBrightovp, changeBrightovpSearchOption } from '@store/jpod';
 import PodCastUploadModal from './PodCastUploadModal';
 import { DISPLAY_PAGE_NUM } from '@/constants';
+
 /**
- * 파일 업로드, 브라이트 코브 관련 모달창.
+ * J팟 관리 > 에피소드 > 팟 캐스트 모달
+ * 파일 업로드(브라이트코브에 업로드)
  */
 const PodCastModal = (props) => {
     const dispatch = useDispatch();

@@ -2,26 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaModal, MokaTable } from '@components';
 import { columnDefs } from './PodtyEpisodeModalGridColumns';
-import { GET_PODTY_EPISODE_LIST, getPodtyEpisodeList, selectPodtyEpisode, changePodtyEpisodeCastsrl } from '@store/jpod';
+import { messageBox } from '@utils/toastUtil';
+import { GET_PODTY_EPSD_LIST, getPodtyEpsdList, clearPodtyEpsd } from '@store/jpod';
 
 /**
- * 팟티 에피소드 검색 모달.
+ * J팟 관리 > 에피소드 > 팟티 목록 모달
  */
 const PodtyEpisodeModal = (props) => {
-    const { show, onHide, podtyChnlSrl } = props;
+    const { show, onHide, onRowClicked, castSrl } = props;
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
+    const list = useSelector(({ jpod }) => jpod.episode.podty.list);
+    const loading = useSelector(({ loading }) => loading[GET_PODTY_EPSD_LIST]);
 
-    const list = useSelector((store) => store.jpod.podtyEpisode.list);
-    const loading = useSelector((store) => store.loading[GET_PODTY_EPISODE_LIST]);
-
-    // 목록 클릭 store 를 업데이트후 모달창 닫기.
-    const handleClickListRow = ({ info }) => {
-        dispatch(selectPodtyEpisode(info));
+    /**
+     * row 클릭
+     */
+    const handleRowClicked = (podty) => {
+        onRowClicked(podty);
         onHide();
     };
 
-    // store list 가 변경되면 grid 목록 업데이트.
     useEffect(() => {
         setRowData(
             list.map((element) => {
@@ -29,50 +30,51 @@ const PodtyEpisodeModal = (props) => {
                 return {
                     ...element,
                     crtDt: crtDt,
-                    podtyChnlSrl: podtyChnlSrl,
-                    info: element,
+                    onClick: (row) => {
+                        window.open(`https://m.podty.me/cast/${row.castSrl}`);
+                    },
                 };
             }),
         );
-    }, [list, podtyChnlSrl]);
+    }, [list]);
 
     useEffect(() => {
-        // 모달창이 열리면 팟티 목록 가져오고, 닫으면 목록 초기화.
         if (show) {
-            dispatch(getPodtyEpisodeList());
+            dispatch(
+                getPodtyEpsdList({
+                    castSrl,
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
+        } else {
+            dispatch(clearPodtyEpsd());
         }
-    }, [dispatch, show]);
-
-    useEffect(() => {
-        // 에피소드 정보에서 채널 선택해서 스토어 변경되면 Castsrl 값 설정.
-        if (podtyChnlSrl) {
-            dispatch(changePodtyEpisodeCastsrl(podtyChnlSrl));
-        }
-    }, [dispatch, podtyChnlSrl]);
+    }, [castSrl, dispatch, show]);
 
     return (
         <MokaModal
-            size="xl"
-            width={1200}
-            height={820}
+            size="lg"
+            width={750}
             show={show}
             onHide={onHide}
-            title={`팟티 에피소드 리스트`}
-            bodyClassName="overflow-y-hidden h-100"
-            footerClassName="d-flex justify-content-center"
+            title="팟티 에피소드 리스트"
+            bodyClassName="overflow-y-hidden custom-scroll"
             buttons={[{ text: '닫기', variant: 'negative', onClick: onHide }]}
-            draggable
+            centered
         >
             <MokaTable
-                className="h-100"
+                agGridHeight={450}
                 columnDefs={columnDefs}
                 rowData={rowData}
-                rowHeight={80}
                 onRowNodeId={(data) => data.episodeSrl}
-                onRowClicked={handleClickListRow}
+                onRowClicked={handleRowClicked}
                 loading={loading}
                 paging={false}
-                preventRowClickCell={['shareUrl']}
+                preventRowClickCell={['이동']}
             />
         </MokaModal>
     );

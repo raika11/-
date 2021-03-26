@@ -10,6 +10,19 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import ChannelForm from './ChannelForm';
 
+// 진행자 기본데이터
+const initMember = {
+    chnlSeq: '',
+    desc: '',
+    epsdSeq: '',
+    memDiv: '',
+    memMemo: '',
+    memNm: '',
+    memRepSeq: null,
+    nickNm: '',
+    seqNo: '',
+};
+
 /**
  * J팟 관리 > 채널 > 수정
  */
@@ -83,7 +96,7 @@ const ChannelEdit = ({ match }) => {
         if (members.length < 6) {
             setMembers(
                 produce(members, (draft) => {
-                    draft.push(initialState.initMember);
+                    draft.push(initMember);
                 }),
             );
         } else {
@@ -130,7 +143,7 @@ const ChannelEdit = ({ match }) => {
     const handleResetMember = (index) => {
         setMembers(
             produce(members, (draft) => {
-                draft[index] = initialState.initMember;
+                draft[index] = initMember;
             }),
         );
         if (error.members) {
@@ -318,7 +331,7 @@ const ChannelEdit = ({ match }) => {
         });
         setMembers(channel.members || []);
         // 진행자 기본 6명 => 왜 이렇게 해야하는지?;; 기획서 상에 적힌 조건이 없어서 이건 제거함
-        // setMembers([...(channel.members || []), ...[1, 2, 3, 4, 5, 6].map(() => initialState.initMember)].slice(0, 6));
+        // setMembers([...(channel.members || []), ...[1, 2, 3, 4, 5, 6].map(() => initMember)].slice(0, 6));
         setKeywordText((channel.keywords || []).map((k) => k.keyword).join(', '));
     }, [channel]);
 

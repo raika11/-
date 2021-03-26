@@ -17,6 +17,7 @@ const EpisodeForm = ({
     keywordText,
     onChange,
     onChangeImg,
+    onSelectPodty,
     addMember,
     reporterToMember,
     onChangeMember,
@@ -90,10 +91,10 @@ const EpisodeForm = ({
                     value={episode.podtyEpsdSrl}
                     onChange={onChange}
                 />
-                <Button variant="searching" className="flex-shrink-0" onClick={findPodty}>
+                <Button variant="searching" className="flex-shrink-0" onClick={findPodty} disabled={!selectedChannel?.podtyChnlSrl}>
                     팟티 에피소드 검색
                 </Button>
-                <PodtyEpisodeModal show={podtyShow} podtyChnlSrl={episode.podtyEpsdSrl} onHide={() => setPodtyShow(false)} />
+                <PodtyEpisodeModal show={podtyShow} castSrl={selectedChannel?.podtyChnlSrl} onHide={() => setPodtyShow(false)} onRowClicked={onSelectPodty} />
             </Form.Row>
 
             {/* 에피소드 명 */}
@@ -115,7 +116,7 @@ const EpisodeForm = ({
             <Form.Row className="mb-2">
                 <Col xs={5} className="p-0 pr-32">
                     <MokaInputLabel label="시즌 및 회차" className="flex-fill" as="select" name="seasonNo" id="seasonNo" value={episode.seasonNo} onChange={onChange}>
-                        <option value="">시즌 해당 없음</option>
+                        <option value="0">시즌 해당 없음</option>
                         {[...Array(selectedChannel.seasonCnt || 0)].map((n, idx) => {
                             return (
                                 <option key={idx} value={idx + 1}>
@@ -125,10 +126,10 @@ const EpisodeForm = ({
                         })}
                     </MokaInputLabel>
                 </Col>
-                <Col xs={2} className="p-0 pr-2">
+                <Col xs={3} className="p-0 pr-2">
                     <MokaInputLabel label="회차" labelWidth={35} name="epsdNo" id="epsdNo" value={episode.epsdNo} onChange={onChange} />
                 </Col>
-                <Col xs={5} className="p-0 d-flex align-items-center">
+                <Col xs={4} className="p-0 d-flex align-items-center">
                     <p className="mb-0">마지막 회차: {selectedChannel?.episodeStat?.lastEpsoNo ? `${selectedChannel?.episodeStat?.lastEpsoNo}회` : ''}</p>
                 </Col>
             </Form.Row>
@@ -190,10 +191,9 @@ const EpisodeForm = ({
 
             {/* 팟캐스트 파일 등록 */}
             <Form.Row className="mb-2">
-                <MokaInputLabel as="none" label="url" />
+                <MokaInputLabel as="none" label="URL" />
                 <div className="px-2 flex-fill d-flex align-items-center" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
                     <MokaInput name="epsdFile" className="mr-2" id="epsdFile" value={episode.epsdFile} onChange={onChange} />
-                    {/* handleClickAddPodCast */}
                     <Button variant="positive" className="mr-3 flex-shrink-0" onClick={() => setPodcastShow(true)}>
                         등록
                     </Button>
@@ -230,7 +230,7 @@ const EpisodeForm = ({
                                 }
                                 ref={img1Ref}
                                 inputProps={{
-                                    img: episode.shrImgFile ? `${episode.shrImgFile}?t=${new Date().getTime()}` : null,
+                                    img: episode.shrImgFile,
                                     setFileValue: (file) => onChangeImg('shrImgFile', file),
                                     deleteButton: true,
                                 }}
@@ -254,7 +254,7 @@ const EpisodeForm = ({
                                 }
                                 ref={img2Ref}
                                 inputProps={{
-                                    img: episode.katalkImg ? `${episode.katalkImg}?t=${new Date().getTime()}` : null,
+                                    img: episode.katalkImg,
                                     setFileValue: (file) => onChangeImg('katalkImg', file),
                                     deleteButton: true,
                                 }}

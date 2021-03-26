@@ -1,21 +1,18 @@
-import React from 'react';
-import { ChannelMoveButtonRenderer } from './ModalGridRenderer';
-
-export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 export const columnDefs = [
     {
         headerName: '에피소드명',
         field: 'title',
         width: 200,
-        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '21px' },
+        cellStyle: { paddingTop: '5px', paddingBottom: '5px', display: 'flex', alignItems: 'center', lineHeight: '18px' },
         tooltipField: 'title',
         wrapText: true,
+        autoHeight: true,
     },
     {
         headerName: '게시일',
         field: 'crtDt',
         width: 90,
-        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '21px' },
+        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '18px' },
         tooltipField: 'crtDt',
     },
     {
@@ -29,16 +26,15 @@ export const columnDefs = [
         headerName: '소개',
         field: 'summary',
         flex: 1,
-        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: 'initial', paddingTop: '5px', paddingBottom: '5px' },
+        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: 'initial', paddingTop: '5px', paddingBottom: '5px', lineHeight: '18px' },
         tooltipField: 'summary',
         wrapText: true,
         autoHeight: true,
     },
     {
         headerName: '보기',
-        field: 'shareUrl',
-        width: 60,
-        cellStyle: { display: 'flex', alignItems: 'center' },
-        cellRendererFramework: (params) => <ChannelMoveButtonRenderer shareUrl={params.value} />,
+        field: '이동',
+        width: 58,
+        cellRenderer: 'buttonRenderer',
     },
 ];

@@ -35,6 +35,11 @@ export const deleteChnl = createAction(DELETE_CHNL, ({ chnlSeq, callback }) => (
 // 채널 > 에피소드탭 목록 조회
 export const [GET_CHNL_EPSD_LIST, GET_CHNL_EPSD_LIST_SUCCESS] = createRequestActionTypes('jpod/GET_CHNL_EPSD_LIST');
 export const getChnlEpsdList = createAction(GET_CHNL_EPSD_LIST, ({ search, callback }) => ({ search, callback }));
+// 채널 > 팟티 목록 조회
+export const CLEAR_PODTY_CHNL = 'jpod/CLEAR_PODTY_CHNL';
+export const clearPodtyChnl = createAction(CLEAR_PODTY_CHNL);
+export const [GET_PODTY_CHNL_LIST, GET_PODTY_CHNL_LIST_SUCCESS] = createRequestActionTypes('jpod/GET_PODTY_CHNL_LIST');
+export const getPodtyChnlList = createAction(GET_PODTY_CHNL_LIST, ({ callback }) => ({ callback }));
 
 /**
  * 에피소드 관련 액션
@@ -54,28 +59,11 @@ export const getEpsd = createAction(GET_EPSD, ({ chnlSeq, epsdSeq, callback }) =
 // 에피소드 저장
 export const SAVE_EPSD = 'jpod/SAVE_EPSD';
 export const saveEpsd = createAction(SAVE_EPSD, ({ epsd, callback }) => ({ epsd, callback }));
-
-/**
- * 팟티검색 모달
- */
-export const CLEAR_CHANNEL_PODTY = 'jpod/CLEAR_CHANNEL_PODTY';
-export const clearChannelPodty = createAction(CLEAR_CHANNEL_PODTY);
-export const [GET_CHANNEL_PODTY_LIST, GET_CHANNEL_PODTY_LIST_SUCCESS, GET_CHANNEL_PODTY_LIST_FAILURE] = createRequestActionTypes('jpod/GET_CHANNEL_PODTY_LIST');
-export const getChannelPodtyList = createAction(GET_CHANNEL_PODTY_LIST, (actions) => actions);
-export const SELECT_CHANNEL_PODTY = 'jpod/SELECT_CHANNEL_PODTY';
-export const selectChannelPodty = createAction(SELECT_CHANNEL_PODTY, (actions) => actions);
-
-/**
- * 팟티 에피소드 모달
- */
-export const CLEAR_PODTY_EPISODE = 'jpod/CLEAR_PODTY_EPISODE';
-export const clearPodtyEpisode = createAction(CLEAR_PODTY_EPISODE);
-export const CHANGE_PODTY_EPISODE_CASTSRL = 'jpod/CHANGE_PODTY_EPISODE_CASTSRL';
-export const changePodtyEpisodeCastsrl = createAction(CHANGE_PODTY_EPISODE_CASTSRL, (actions) => actions);
-export const [GET_PODTY_EPISODE_LIST, GET_PODTY_EPISODE_LIST_SUCCESS, GET_PODTY_EPISODE_LIST_FAILURE] = createRequestActionTypes('jpod/GET_PODTY_EPISODE_LIST');
-export const getPodtyEpisodeList = createAction(GET_PODTY_EPISODE_LIST, (actions) => actions);
-export const SELECT_PODTY_EPISODE = 'jpod/SELECT_PODTY_EPISODE';
-export const selectPodtyEpisode = createAction(SELECT_PODTY_EPISODE, (actions) => actions);
+// 에피소드 > 팟티 목록 조회
+export const CLEAR_PODTY_EPSD = 'jpod/CLEAR_PODTY_EPSD';
+export const clearPodtyEpsd = createAction(CLEAR_PODTY_EPSD);
+export const [GET_PODTY_EPSD_LIST, GET_PODTY_EPSD_LIST_SUCCESS] = createRequestActionTypes('jpod/GET_PODTY_EPSD_LIST');
+export const getPodtyEpsdList = createAction(GET_PODTY_EPSD_LIST, ({ castSrl, callback }) => ({ castSrl, callback }));
 
 /**
  * 팟캐스트 모달 > 브라이트 코브 목록 초기화

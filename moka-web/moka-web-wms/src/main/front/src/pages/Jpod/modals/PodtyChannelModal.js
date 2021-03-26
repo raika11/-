@@ -2,22 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { MokaModal, MokaTable } from '@components';
 import { columnDefs } from './PodtyChannelModalGridColumns';
 import { useSelector, useDispatch } from 'react-redux';
-import { GET_CHANNEL_PODTY_LIST, getChannelPodtyList, clearChannelPodty } from '@store/jpod';
+import { messageBox } from '@utils/toastUtil';
+import { GET_PODTY_CHNL_LIST, getPodtyChnlList, clearPodtyChnl } from '@store/jpod';
 
 /**
- * 팟티 검색 모달
+ * J팟 관리 > 채널 > 팟티 목록 모달
  */
 const PodtyChannelModal = (props) => {
     const { show, onHide, onRowClicked } = props;
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
-    const list = useSelector(({ jpod }) => jpod.podtyChannel.list);
-    const loading = useSelector(({ loading }) => loading[GET_CHANNEL_PODTY_LIST]);
+    const list = useSelector(({ jpod }) => jpod.channel.podty.list);
+    const loading = useSelector(({ loading }) => loading[GET_PODTY_CHNL_LIST]);
 
     /**
      * 닫기
      */
-    const handleClickHide = () => {
+    const handleHide = () => {
         onHide();
     };
 
@@ -47,9 +48,17 @@ const PodtyChannelModal = (props) => {
 
     useEffect(() => {
         if (show) {
-            dispatch(getChannelPodtyList());
+            dispatch(
+                getPodtyChnlList({
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
         } else {
-            dispatch(clearChannelPodty());
+            dispatch(clearPodtyChnl());
         }
     }, [dispatch, show]);
 
@@ -57,11 +66,11 @@ const PodtyChannelModal = (props) => {
         <MokaModal
             width={750}
             show={show}
-            onHide={handleClickHide}
+            onHide={handleHide}
             title="팟티 채널 리스트"
             size="lg"
             bodyClassName="overflow-x-hidden custom-scroll"
-            buttons={[{ text: '닫기', variant: 'negative', onClick: handleClickHide }]}
+            buttons={[{ text: '닫기', variant: 'negative', onClick: handleHide }]}
             centered
         >
             <MokaTable

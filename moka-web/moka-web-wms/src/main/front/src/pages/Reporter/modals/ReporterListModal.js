@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaSearchInput, MokaTable } from '@components';
 import { messageBox } from '@utils/toastUtil';
-import { getAllRowData } from '@utils/agGridUtil';
 import { initialState, getReporterListModal, GET_REPORTER_LIST_MODAL } from '@store/reporter';
 import columnDefs from './ReporterListModalColumns';
 
@@ -24,7 +23,7 @@ const ReporterListModal = (props) => {
     const { show, onHide, onRowClicked } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_REPORTER_LIST_MODAL]);
-    const [gridInstance, setGridInstance] = useState(null);
+    const [setGridInstance] = useState(null);
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
     const [total, setTotal] = useState(0);
@@ -118,16 +117,6 @@ const ReporterListModal = (props) => {
     };
 
     useEffect(() => {
-        setRowData(
-            rowData.map((row) => ({
-                ...row,
-                onClick: handleRowClicked,
-            })),
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [handleRowClicked]);
-
-    useEffect(() => {
         if (show) {
             getReporterList({});
         } else {
@@ -137,6 +126,18 @@ const ReporterListModal = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]);
+
+    useEffect(() => {
+        if (show) {
+            setRowData(
+                rowData.map((row) => ({
+                    ...row,
+                    onClick: handleRowClicked,
+                })),
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show, handleRowClicked]);
 
     return (
         <MokaModal

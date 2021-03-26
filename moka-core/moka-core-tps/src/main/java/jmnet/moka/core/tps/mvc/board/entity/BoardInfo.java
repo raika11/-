@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.board.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -290,4 +291,27 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
     @Column(name = "FOOTER_CONTENT")
     private String footerContent;
 
+    /**
+     * 등록자ID
+     */
+    @Column(name = "REG_ID")
+    private String regId;
+
+    /**
+     * 수정자ID
+     */
+    @Column(name = "MOD_ID")
+    private String modId;
+
+    /**
+     * 등록일시
+     */
+    @Column(name = "REG_DT")
+    private Date regDt;
+
+    /**
+     * 수정일시
+     */
+    @Column(name = "MOD_DT")
+    private Date modDt;
 }

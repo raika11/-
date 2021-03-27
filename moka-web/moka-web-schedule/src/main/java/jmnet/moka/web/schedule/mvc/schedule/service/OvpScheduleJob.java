@@ -11,8 +11,11 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.brightcove.BrightcoveCredentailVO;
 import jmnet.moka.core.common.brightcove.BrightcoveProperties;
 import jmnet.moka.web.schedule.mvc.brightcove.service.BrightcoveService;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.mvc.schedule.vo.OvpVideoRssVO;
 import jmnet.moka.web.schedule.support.StatusResultType;
+import jmnet.moka.web.schedule.support.common.FileUpload;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +48,9 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
     protected String type;
 
     @Override
-    public void invoke() {
+    public void invoke(GenContent info) {
+        GenContent scheduleInfo = info;
+        GenStatus scheduleResult = info.getGenStatus();
 
         BrightcoveCredentailVO credentail = brightcoveService.getClientCredentials();
 
@@ -108,16 +113,21 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
                         .build());
             }
 
-            boolean success = stringFileUpload(generateNewsbriefingByGoogle(rssList));
-            log.debug("file upload : {}", success);
+            //boolean success = stringFileUpload(generateNewsbriefingByGoogle(rssList));
+            FileUpload fileUpload = new FileUpload(scheduleInfo, mokaCrypt);
+            boolean success = fileUpload.stringFileUpload(generateNewsbriefingByGoogle(rssList), "");
+
+            //업로드 성공 시 GenStatus.content에 파일생성에 사용된 String 저장
+            if (success) {
+                scheduleResult.setContent(generateNewsbriefingByGoogle(rssList));
+            }
 
             //AbstractSchduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
-            //임시로 성공/실패만 입력 + 그외 입력값은 입력정의 필요
-            setFinish(success);
+            setFinish(success, info);
 
         } catch (Exception ex) {
             log.error(ex.toString());
-            setFinish(StatusResultType.FAILED_JOB, ex.getMessage());
+            setFinish(StatusResultType.FAILED_JOB, ex.getMessage(), info);
         }
     }
 

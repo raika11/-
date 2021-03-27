@@ -3,7 +3,10 @@ package jmnet.moka.web.schedule.mvc.schedule.service;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.support.StatusResultType;
+import jmnet.moka.web.schedule.support.common.FileUpload;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,7 +27,10 @@ import org.springframework.stereotype.Component;
 public class NdayTimerJob extends AbstractScheduleJob {
 
     @Override
-    public void invoke() {
+    public void invoke(GenContent info) {
+        GenContent scheduleInfo = info;
+        GenStatus scheduleResult = info.getGenStatus();
+        
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -83,16 +89,22 @@ public class NdayTimerJob extends AbstractScheduleJob {
             stringBuffer.append(" };");
             log.debug("string : {}", stringBuffer);
 
-            boolean success = stringFileUpload(stringBuffer.toString());
-            log.debug("file upload : {}", success);
+            //boolean success = stringFileUpload(stringBuffer.toString());
+            FileUpload fileUpload = new FileUpload(scheduleInfo, mokaCrypt);
+            boolean success = fileUpload.stringFileUpload(stringBuffer.toString(), "");
+
+            //업로드 성공 시 GenStatus.content에 파일생성에 사용된 String 저장
+            if (success) {
+                scheduleResult.setContent(stringBuffer.toString());
+            }
 
             //AbstractScheduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
-            setFinish(success);
+            setFinish(success, info);
 
         } catch (Exception e) {
             //e.printStackTrace();
             log.error(e.toString());
-            setFinish(StatusResultType.FAILED_JOB, e.getMessage());
+            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), info);
         }
 
     }

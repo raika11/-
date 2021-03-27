@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -81,4 +79,10 @@ public class GenStatus implements Serializable {
      */
     @Column(name = "ERR_MSG")
     private String errMgs;
+
+    /**
+     * 작업 실행 내용
+     */
+    @Column(name = "CONTENT")
+    private String content;
 }

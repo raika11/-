@@ -1,5 +1,7 @@
 package jmnet.moka.web.schedule.mvc.schedule.service;
 
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,9 +22,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class DummyScheduleJob extends AbstractScheduleJob {
     @Override
-    public void invoke() {
+    public void invoke(GenContent info) {
+        GenContent scheduleInfo = info;
+        GenStatus scheduleResult = info.getGenStatus();
+        
         log.debug("task 실행!!");
-        log.debug("jobSeq : "+ scheduleInfo.getJobSeq());
-        log.debug("period : "+ scheduleInfo.getPeriod());
+        log.debug("jobSeq : " + scheduleInfo.getJobSeq());
+        log.debug("period : " + scheduleInfo.getPeriod());
     }
 }

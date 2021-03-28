@@ -202,7 +202,7 @@ public class DpsApiAutoConfiguration {
     }
 
     @Bean(name = "periodicTaskManager")
-    @DependsOn(value = {"apiParameterChecker", "apiRequestHelper"})
+    @DependsOn(value = {"apiParameterChecker", "apiRequestHelper", "apiRequestHandlerMapping"})
     public ApiPeriodicTaskManager periodicTaskManager()
             throws Exception {
         ApiPeriodicTaskManager periodicTaskManager = new ApiPeriodicTaskManager(appContext, periodicScheduler(), apiRequestHelper());

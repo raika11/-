@@ -21,6 +21,8 @@ import jmnet.moka.core.dps.api.ApiResolver;
 import jmnet.moka.core.dps.api.ext.AsyncRequestContext;
 import jmnet.moka.core.dps.api.ext.AsyncRequestTask;
 import jmnet.moka.core.dps.api.ext.AsyncRequestTaskManager;
+import jmnet.moka.core.dps.api.handler.DbRequestHandler;
+import jmnet.moka.core.dps.api.model.DbRequest;
 import jmnet.moka.core.dps.mvc.forward.Forward;
 import jmnet.moka.core.dps.mvc.forward.ForwardHandler;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
@@ -173,6 +175,14 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
             RequestHandler requestHandler = this.getRequestHandler(handlerClass);
             if (asyncOnly == false && request.getAsync() == false) {
                 ApiResult result = requestHandler.processRequest(apiContext);
+                Map<String, Object> paramMap = null;
+                // procedure의 PARAM_MAP 제거 및 임시보관
+                if ( request instanceof DbRequest ) {
+                    DbRequest dbRequest = (DbRequest) request;
+                    if ( dbRequest.getDmlType().equals(DbRequest.DML_TYPE_PROCEDURE)) {
+                        paramMap = (Map<String, Object>) result.remove(DbRequestHandler.PARAM_MAP);
+                    }
+                }
                 if (request.getResultName().equals(ApiResult.MAIN_DATA)) {
                     if (allResult == null) {
                         allResult = result;
@@ -189,6 +199,12 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
                         allResult = new ApiResult();
                     }
                     allResult.addApiResult(request.getResultName(), result);
+                }
+                // procedure의 TOTAL처리
+                if ( paramMap != null ) {
+                    DbRequest dbRequest = (DbRequest) request;
+                    Object totalValue = paramMap.get(dbRequest.getTotal());
+                    allResult.addApiResult(ApiResult.MAIN_TOTAL,ApiResult.createApiResult(totalValue));
                 }
             } else if (request.getAsync()) {
                 AsyncRequestContext asyncRequestContext = new AsyncRequestContext(apiContext);

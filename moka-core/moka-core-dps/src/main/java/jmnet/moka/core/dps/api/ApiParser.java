@@ -345,7 +345,7 @@ public class ApiParser {
             String totalAttr = requestEl.getAttribute(ATTR_TOTAL);
             String asyncAttr = requestEl.getAttribute(ATTR_ASYNC);
             boolean eval = false;
-            boolean total = false;
+//            boolean total = false;
             boolean async = false;
             String resultName = requestEl.getAttribute(ATTR_RESULTNAME);
             String setNames = requestEl.getAttribute(ATTR_SETNAMES);
@@ -357,9 +357,9 @@ public class ApiParser {
             if (evalAttr != null && evalAttr.length() != 0) {
                 eval = evalAttr.equalsIgnoreCase("Y") ? true : false;
             }
-            if (totalAttr != null && totalAttr.length() != 0) {
-                total = totalAttr.equalsIgnoreCase("Y") ? true : false;
-            }
+//            if (totalAttr != null && totalAttr.length() != 0) {
+//                total = totalAttr.equalsIgnoreCase("Y") ? true : false;
+//            }
             if (asyncAttr != null && asyncAttr.length() != 0) {
                 async = asyncAttr.equalsIgnoreCase("Y") ? true : false;
             }
@@ -375,7 +375,7 @@ public class ApiParser {
                     .trim();
             if (type.equals(Request.TYPE_DB)) {
                 String dmlType = requestEl.getAttribute(ATTR_DML_TYPE);
-                api.addRequest(new DbRequest(type, eval, async, resultName, setNames, textContent, total, dmlType));
+                api.addRequest(new DbRequest(type, eval, async, resultName, setNames, textContent, totalAttr, dmlType));
             } else if (type.equals(Request.TYPE_URL)) {
                 String include = requestEl.getAttribute(ATTR_INCLUDE);
                 String exclude = requestEl.getAttribute(ATTR_EXCLUDE);
@@ -383,7 +383,6 @@ public class ApiParser {
             } else if (type.equals(Request.TYPE_SCRIPT)) {
                 api.addRequest(new ScriptRequest(type, async, resultName, textContent));
             } else if (type.equals(Request.TYPE_PURGE)) {
-
                 api.addRequest(new PurgeRequest(type, apiPath, apiId, keys, async));
             } else if (type.equals(Request.TYPE_MODULE)) {
                 if (McpString.isNullOrEmpty(textContent) == false) {

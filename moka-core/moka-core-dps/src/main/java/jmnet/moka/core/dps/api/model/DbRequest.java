@@ -15,10 +15,11 @@ public class DbRequest extends AbstractRequest {
     private boolean eval;
     private String setNames;
     private String mapperId;
-    private boolean total;
+//    private boolean total;
+    private String total;
     private String dmlType;
 
-    public DbRequest(String type, boolean eval, boolean async, String resultName, String setNames, String mapperId, boolean total, String dmlType) {
+    public DbRequest(String type, boolean eval, boolean async, String resultName, String setNames, String mapperId, String total, String dmlType) {
         super(type, async, resultName);
         this.eval = eval;
         this.setNames = setNames;
@@ -48,13 +49,17 @@ public class DbRequest extends AbstractRequest {
     }
 
     public String getResultName() {
-        if (this.total) {
+        if (this.isTotal()) {
             return ApiResult.MAIN_TOTAL;
         }
         return this.resultName;
     }
 
     public boolean isTotal() {
+        return this.total.equalsIgnoreCase("Y");
+    }
+
+    public String getTotal() {
         return this.total;
     }
 

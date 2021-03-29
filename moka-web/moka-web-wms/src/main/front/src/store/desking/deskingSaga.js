@@ -165,6 +165,9 @@ const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
     const existRow = component.deskingWorks.filter((desking) => desking.contentId === cid);
     if (existRow && existRow.length > 0) return DRAG_STOP_RESULT.existRow;
 
+    // 영상기사 체크
+    const isOvp = data.ovpYn === 'Y';
+
     let appendData = null;
     if (data.gridType === 'ARTICLE') {
         const { areaComp, domain } = etc;
@@ -203,9 +206,10 @@ const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
             linkTarget: '_self',
             boxUrl: null,
             boxTarget: '_self',
-            thumbFileName: data.artPdsThumb,
+            thumbFileName: !isOvp ? data.artPdsThumb : data.ovpThumb,
             rel: true,
             relSeqs: null,
+            duration: data.duration,
         };
     }
 
@@ -228,6 +232,9 @@ const makeRowNode = (data, contentOrd, component, etc) => {
     // 이미 존재하는 기사 => 에러
     const existRow = component.deskingWorks.filter((desking) => desking.contentId === cid);
     if (existRow && existRow.length > 0) return DRAG_STOP_RESULT.existRow;
+
+    // 영상기사 체크
+    const isOvp = data.ovpYn === 'Y';
 
     let appendData = null;
     if (data.gridType === 'ARTICLE') {
@@ -270,9 +277,10 @@ const makeRowNode = (data, contentOrd, component, etc) => {
             linkTarget: '_self',
             boxUrl: null,
             boxTarget: '_self',
-            thumbFileName: data.artPdsThumb,
+            thumbFileName: !isOvp ? data.artPdsThumb : data.ovpThumb,
             rel: false,
             relSeqs: null,
+            duration: data.duration,
         };
     } else if (data.gridType === 'DESKING') {
         // 편집 컴포넌트영역 -> 편집컴포넌트 이동

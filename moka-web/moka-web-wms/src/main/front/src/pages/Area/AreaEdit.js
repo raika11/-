@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Form1 from './components/AreaFormDepth1';
 import Form2 from './components/AreaFormDepth2';
+import Form3 from './components/AreaFormDepth3';
 import { messageBox } from '@utils/toastUtil';
 import { PageListModal } from '@pages/Page/modals';
 
@@ -58,7 +59,7 @@ const AreaEdit = (props) => {
             )}
             {/* 3뎁스 폼 */}
             {selectedDepth === 3 && (
-                <Form2
+                <Form3
                     {...rest}
                     setModalShow={setModalShow}
                     setModalDomainId={setModalDomainId}

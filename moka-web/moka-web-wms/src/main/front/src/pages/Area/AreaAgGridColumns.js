@@ -27,7 +27,8 @@ const columnDefs = [
     {
         headerName: '',
         field: 'delete',
-        width: 36,
+        width: 30,
+        maxWidth: 30,
         cellStyle: { textAlign: 'center' },
         cellRendererFramework: (row) => {
             const { data } = row;

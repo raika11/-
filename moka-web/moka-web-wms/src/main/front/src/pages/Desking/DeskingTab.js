@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 import { MokaIconTabs, MokaIcon } from '@components';
 import { DeskingArticleTab, ComponentWorkPreview, HistoryList } from './components';
 
+/**
+ * 홈 섹션편집 > 미리보기 탭
+ */
 const DeskingTabs = ({ componentAgGridInstances }) => {
-    const { componentList, isNaverChannel } = useSelector(({ desking }) => ({
-        componentList: desking.list,
-        isNaverChannel: desking.isNaverChannel,
-    }));
+    const { list: componentList, isNaverChannel, isNaverStand } = useSelector(({ desking }) => desking);
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     return (
@@ -25,7 +25,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                     /**
                      * 미리보기
                      */
-                    <ComponentWorkPreview show={activeTabIdx === 0} componentList={componentList} isNaverChannel={isNaverChannel} />,
+                    <ComponentWorkPreview show={activeTabIdx === 0} componentList={componentList} isNaverChannel={isNaverChannel} isNaverStand={isNaverStand} />,
                     /**
                      * 기사보기
                      */

@@ -55,6 +55,18 @@ public class LoginLog implements Serializable {
     private String successYn;
 
     /**
+     * 에러코드
+     */
+    @Column(name = "ERR_CD")
+    private String errCd;
+
+    /**
+     * 에러메시지
+     */
+    @Column(name = "ERR_MSG")
+    private String errMsg;
+
+    /**
      * 등록일시
      */
     @Column(name = "REG_DT", updatable = false)

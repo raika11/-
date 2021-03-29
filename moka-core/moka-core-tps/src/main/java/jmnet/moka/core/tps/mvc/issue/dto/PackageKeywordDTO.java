@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.apache.ibatis.type.Alias;
 
 /**
@@ -28,7 +29,8 @@ import org.apache.ibatis.type.Alias;
 @NoArgsConstructor
 @Setter
 @Getter
-@Builder
+@ToString
+@Builder(toBuilder = true)
 @Alias("PackageKeywordDTO")
 public class PackageKeywordDTO implements Serializable {
 

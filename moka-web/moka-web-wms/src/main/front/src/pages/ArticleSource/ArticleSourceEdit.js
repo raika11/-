@@ -85,25 +85,23 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
     const checkSaveSource = useCallback(() => {
         const saveObj = { ...temp, add: sourceCode ? false : true };
 
-        if (!sourceCode) {
-            if (validate(saveObj)) {
-                if (saveObj.add === true && disabledBtn === false) {
-                    toast.warning('매체 코드 중복 검사를 해주세요');
-                } else {
-                    dispatch(
-                        saveArticleSource({
-                            source: saveObj,
-                            callback: ({ header, body }) => {
-                                if (header.success) {
-                                    toast.success(header.message);
-                                    history.push(`${match.path}/${body.sourceCode}`);
-                                } else {
-                                    toast.fail(header.message);
-                                }
-                            },
-                        }),
-                    );
-                }
+        if (validate(saveObj)) {
+            if (saveObj.add && !disabledBtn) {
+                toast.warning('매체 코드 중복 검사를 해주세요');
+            } else {
+                dispatch(
+                    saveArticleSource({
+                        source: saveObj,
+                        callback: ({ header, body }) => {
+                            if (header.success) {
+                                toast.success(header.message);
+                                history.push(`${match.path}/${body.sourceCode}`);
+                            } else {
+                                toast.fail(header.message);
+                            }
+                        },
+                    }),
+                );
             }
         }
     }, [disabledBtn, dispatch, history, match.path, sourceCode, temp, validate]);

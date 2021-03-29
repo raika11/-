@@ -1,5 +1,6 @@
 import { takeLatest, takeEvery, put, call, select } from 'redux-saga/effects';
 import produce from 'immer';
+import moment from 'moment';
 import { createRequestSaga, errorResponse } from '@store/commons/saga';
 import { getRowIndex } from '@utils/agGridUtil';
 import { getMoveMode } from '@utils/deskingUtil';
@@ -8,6 +9,8 @@ import { unescapeHtmlArticle } from '@utils/convertUtil';
 import * as api from './deskingApi';
 import * as act from './deskingAction';
 import { DEFAULT_LANG } from '@/constants';
+
+moment.locale('ko');
 
 const DRAG_STOP_RESULT = {
     existRow: { success: false, message: '이미 존재하는 기사입니다' },
@@ -167,6 +170,8 @@ const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
 
     // 영상기사 체크
     const isOvp = data.ovpYn === 'Y';
+    const du = Number((data.duration || '').replace(/(.*)\d{3}/, '$1'));
+    const duration = isOvp ? moment.unix(du).utc().format('mm:ss') : null;
 
     let appendData = null;
     if (data.gridType === 'ARTICLE') {
@@ -209,7 +214,7 @@ const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
             thumbFileName: !isOvp ? data.artPdsThumb : data.ovpThumb,
             rel: true,
             relSeqs: null,
-            duration: data.duration,
+            duration,
         };
     }
 
@@ -235,6 +240,8 @@ const makeRowNode = (data, contentOrd, component, etc) => {
 
     // 영상기사 체크
     const isOvp = data.ovpYn === 'Y';
+    const du = Number((data.duration || '').replace(/(.*)\d{3}/, '$1'));
+    const duration = isOvp ? moment.unix(du).utc().format('mm:ss') : null;
 
     let appendData = null;
     if (data.gridType === 'ARTICLE') {
@@ -280,7 +287,7 @@ const makeRowNode = (data, contentOrd, component, etc) => {
             thumbFileName: !isOvp ? data.artPdsThumb : data.ovpThumb,
             rel: false,
             relSeqs: null,
-            duration: data.duration,
+            duration,
         };
     } else if (data.gridType === 'DESKING') {
         // 편집 컴포넌트영역 -> 편집컴포넌트 이동

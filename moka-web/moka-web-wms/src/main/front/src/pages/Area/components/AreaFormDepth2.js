@@ -3,8 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
 import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
-import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
+import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput, MokaIcon } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
 import { initialState, SAVE_AREA, DELETE_AREA, GET_AREA_MODAL, saveArea, changeInvalidList } from '@store/area';
 import { initialState as componentState, getComponentListModal } from '@store/component';
@@ -17,6 +19,24 @@ import ContainerSelector from './ContainerSelector';
 import AreaComp from './AreaComp';
 import ComponentLoadBox from './ComponentLoadBox';
 import ContainerLoadBox from './ContainerLoadBox';
+
+/**
+ * 미리보기 리소스 설명하는 popover
+ */
+const popover = (
+    <Popover id="popover-area-info">
+        <Popover.Title>미리보기 리소스</Popover.Title>
+        <Popover.Content className="user-select-text">
+            페이지편집에서 미리보기를 서비스하기 위한 리소스를 추가하세요.
+            <br />
+            (서비스 화면과 별도로 설정해야합니다.)
+            <br />
+            변환된 html은 <span>{`\$\{SYSTEM_AREA\}`}</span> 토큰을 사용하세요.
+            <br />
+            예약어는 <span>{`\$\{reserved.예약어\}`}</span> 토큰을 사용하세요.
+        </Popover.Content>
+    </Popover>
+);
 
 /**
  * 편집영역 2뎁스, 3뎁스 폼
@@ -546,7 +566,19 @@ const AreaFormDepth2 = (props) => {
 
                 {/* 미리보기 리소스 */}
                 <Form.Row style={{ height: 200 }}>
-                    <MokaInputLabel label="미리보기\n리소스" as="none" />
+                    <MokaInputLabel
+                        label={
+                            <React.Fragment>
+                                미리보기
+                                <br />
+                                리소스
+                                <OverlayTrigger overlay={popover} trigger={['click']}>
+                                    <MokaIcon iconName="fas-info-circle" className="ml-1 color-info cursor-pointer" />
+                                </OverlayTrigger>
+                            </React.Fragment>
+                        }
+                        as="none"
+                    />
                     <div className="flex-fill input-border overflow-hidden">
                         <MokaEditorCore defaultValue={temp.previewRsrc} value={previewRsrc} onBlur={(value) => setPreviewRsrc(value)} fullWindowButton />
                     </div>

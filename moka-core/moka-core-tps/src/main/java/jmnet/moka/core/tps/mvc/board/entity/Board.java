@@ -17,7 +17,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -107,12 +106,10 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     private Date regDt;
 
     /**
-     * 수정자
+     * 수정자ID
      */
-    @NotFound(action = NotFoundAction.IGNORE)
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "MOD_ID", insertable = false, updatable = false)
-    private MemberSimpleInfo modMember;
+    @Column(name = "MOD_ID")
+    private String modId;
 
     /**
      * 수정일시

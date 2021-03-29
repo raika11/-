@@ -17,7 +17,6 @@ import jmnet.moka.core.tps.mvc.board.entity.QBoard;
 import jmnet.moka.core.tps.mvc.board.entity.QBoardInfo;
 import jmnet.moka.core.tps.mvc.board.entity.QJpodBoard;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodChannel;
-import jmnet.moka.core.tps.mvc.member.entity.QMemberSimpleInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -278,7 +277,6 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
     public Optional<Board> findByBoardSeq(Long boardSeq) {
         QBoard qBoard = QBoard.board;
         QBoardInfo qBoardInfo = QBoardInfo.boardInfo;
-        QMemberSimpleInfo modMember = QMemberSimpleInfo.memberSimpleInfo;
 
         JPQLQuery<Board> query = from(qBoard);
 
@@ -288,7 +286,6 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
 
         Board board = query
                 .innerJoin(qBoard.boardInfo, qBoardInfo)
-                .innerJoin(qBoard.modMember, modMember)
                 .fetchJoin()
                 .fetchFirst();
 

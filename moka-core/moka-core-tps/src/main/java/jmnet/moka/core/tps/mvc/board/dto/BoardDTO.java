@@ -14,7 +14,6 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodChannelDTO;
-import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -75,12 +74,6 @@ public class BoardDTO {
      */
     @ApiModelProperty("등록자ID")
     private String regId;
-
-    /**
-     * 수정자
-     */
-    @ApiModelProperty(hidden = true)
-    private MemberSimpleDTO modMember;
 
     /**
      * 뎁스

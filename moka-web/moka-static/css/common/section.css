@@ -20,8 +20,10 @@
 .section .component.fb_area {border-top: 0;}
 .section .component.fb_area .fa_facebook {margin-right: 10px;}
 
+.section.general .component.latest_area {border-top: 3px solid #000;}
 .section.general .component.latest_area .sub_title {margin-bottom: 18px;}
 
+.section.general .component.view_lank_area {border-top: 3px solid #000;}
 .section.general .component.view_lank_area .sub_title {margin-bottom: 18px;}
 
 .section.general .component.banner_area {padding: 0; border-top: 0; height: 100%;}

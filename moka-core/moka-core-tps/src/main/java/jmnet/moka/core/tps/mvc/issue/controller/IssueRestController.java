@@ -156,13 +156,18 @@ public class IssueRestController extends AbstractCommonController {
     public ResponseEntity<?> postPackage(@RequestBody @Valid PackageMasterDTO packageMasterDTO)
             throws InvalidDataException, Exception {
         if (packageMasterDTO.getPkgSeq() != null) {
-            throw new MokaException("A new package cannot already hava an pkgSeq.");
+            throw new MokaException(msg("tps.common.error.duplicated.key"));
         }
 
         PackageMaster packageMaster = modelMapper.map(packageMasterDTO, PackageMaster.class);
 
         // 등록
         PackageMaster returnValue = packageService.insertPackage(packageMaster);
+
+        // 결과리턴
+        PackageMasterDTO dto = modelMapper.map(returnValue, PackageMasterDTO.class);
+        ResultDTO<PackageMasterDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.insert"));
+
         tpsLogger.success(ActionType.INSERT);
         return new ResponseEntity<>(packageMaster, HttpStatus.OK);
     }
@@ -180,7 +185,7 @@ public class IssueRestController extends AbstractCommonController {
     public ResponseEntity<?> postPackageGroupByOrdno(@RequestBody @Valid PackageMasterDTO packageMasterDTO)
             throws InvalidDataException, Exception {
         if (packageMasterDTO.getPkgSeq() != null) {
-            throw new MokaException("A new package cannot already hava an pkgSeq.");
+            throw new MokaException(msg("tps.common.error.duplicated.key"));
         }
 
         // transform
@@ -190,8 +195,14 @@ public class IssueRestController extends AbstractCommonController {
 
         // 등록
         PackageMaster returnValue = packageService.insertPackage(packageMaster);
+
+        // 결과리턴
+        PackageMasterDTO dto = modelMapper.map(returnValue, PackageMasterDTO.class);
+        ResultDTO<PackageMasterDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.insert"));
+
         tpsLogger.success(ActionType.INSERT);
-        return new ResponseEntity<>(packageMaster, HttpStatus.OK);
+        //        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
@@ -208,14 +219,19 @@ public class IssueRestController extends AbstractCommonController {
             @RequestBody @Valid PackageMasterDTO packageMasterDTO)
             throws InvalidDataException, Exception {
         if (packageMasterDTO.getPkgSeq() == null) {
-            throw new MokaException("pkgSeq is not null.");
+            throw new MokaException(msg("tps.common.error.no-data"));
         }
 
         PackageMaster packageMaster = modelMapper.map(packageMasterDTO, PackageMaster.class);
         // 수정
         PackageMaster returnValue = packageService.updatePackage(packageMaster);
+
+        // 결과리턴
+        PackageMasterDTO dto = modelMapper.map(returnValue, PackageMasterDTO.class);
+        ResultDTO<PackageMasterDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.update"));
+
         tpsLogger.success(ActionType.UPDATE);
-        return new ResponseEntity<>(packageMaster, HttpStatus.OK);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
@@ -241,8 +257,13 @@ public class IssueRestController extends AbstractCommonController {
         PackageMaster packageMaster = modelMapper.map(packageMasterDTO, PackageMaster.class);
         // 수정
         PackageMaster returnValue = packageService.updatePackage(packageMaster);
+
+        // 결과리턴
+        PackageMasterDTO dto = modelMapper.map(returnValue, PackageMasterDTO.class);
+        ResultDTO<PackageMasterDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.update"));
+
         tpsLogger.success(ActionType.UPDATE);
-        return new ResponseEntity<>(packageMaster, HttpStatus.OK);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
@@ -341,25 +362,25 @@ public class IssueRestController extends AbstractCommonController {
         //        Integer categoryOrderNumber = viewDto
         //                .getPackageKeywords()
         //                .size();
-        viewDto
-                .getPackageKeywords()
-                .stream()
-                .forEach(keyword -> {
-                    AtomicLong kwdOrd = new AtomicLong();
-                    Arrays
-                            .stream(keyword
-                                    .getKeyword()
-                                    .split(","))
-                            .forEach(kwd -> {
-                                keywords.add(keyword
-                                        .toBuilder()
-                                        .schCondi(null)
-                                        .keyword(kwd)
-                                        .kwdOrd(kwdOrd.incrementAndGet())
-                                        .build());
-                            });
-                });
-        // 검색 조건있는경우
+        //        viewDto
+        //                .getPackageKeywords()
+        //                .stream()
+        //                .forEach(keyword -> {
+        //                    AtomicLong kwdOrd = new AtomicLong();
+        //                    Arrays
+        //                            .stream(keyword
+        //                                    .getKeyword()
+        //                                    .split(","))
+        //                            .forEach(kwd -> {
+        //                                keywords.add(keyword
+        //                                        .toBuilder()
+        //                                        .schCondi(null)
+        //                                        .keyword(kwd)
+        //                                        .kwdOrd(kwdOrd.incrementAndGet())
+        //                                        .build());
+        //                            });
+        //                });
+        // 검색 조건있는경우 (하나는 있어야 된다고함)
         viewDto
                 .getPackageKeywords()
                 .stream()
@@ -410,7 +431,9 @@ public class IssueRestController extends AbstractCommonController {
                 .toBuilder()
                 .catList(viewDto
                         .getCatList()
-                        .substring(0, 29))
+                        .substring(0, Math.min(29, viewDto
+                                .getCatList()
+                                .length())))
                 .packageKeywords(keywords)
                 .build();
     }

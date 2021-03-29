@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
@@ -142,6 +143,7 @@ public class PackageMasterDTO implements Serializable {
      * 키워드 목록
      */
     @Builder.Default
+    @Valid
     @ApiModelProperty("키워드 목록")
     private Set<PackageKeywordDTO> packageKeywords = new LinkedHashSet<>();
 }

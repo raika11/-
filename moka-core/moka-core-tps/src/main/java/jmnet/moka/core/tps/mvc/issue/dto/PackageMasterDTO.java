@@ -8,12 +8,16 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * <pre>
@@ -31,7 +35,7 @@ import org.apache.ibatis.type.Alias;
 @NoArgsConstructor
 @Setter
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @Alias("PackageMasterDTO")
 public class PackageMasterDTO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -55,18 +59,19 @@ public class PackageMasterDTO implements Serializable {
      * 패키지 유형
      */
     @ApiModelProperty("패키지 유형")
+    @Pattern(regexp = "^(T)|(I)|(S)$", message = "{tps.issue.error.pattern.div}")
     private String pkgDiv;
-
-    /**
-     * 패키지 일련번호
-     */
-    @ApiModelProperty("패키지 일련번호")
-    private String seasonNo;
 
     /**
      * 시즌넘버
      */
     @ApiModelProperty("시즌넘버")
+    private String seasonNo;
+
+    /**
+     * 회차 표시
+     */
+    @ApiModelProperty("회차 표시")
     private String episView;
 
     /**
@@ -103,35 +108,42 @@ public class PackageMasterDTO implements Serializable {
      * 패키지 타이틀
      */
     @ApiModelProperty("패키지 타이틀")
+    @Length(max = 100, message = "TODO : ")
     private String pkgTitle;
 
     /**
      * 패키지 설명
      */
     @ApiModelProperty("패키지 설명")
+    @Length(max = 1000, message = "TODO : ")
     private String pkgDesc;
 
     /**
      * 추천 패키지 리스트
      */
     @ApiModelProperty("추천 패키지 리스트")
+    @Length(max = 200, message = "TODO : ")
     private String recommPkg;
 
     /**
      * 예약일시
      */
-    @ApiModelProperty("패키지 일련번호")
+    @ApiModelProperty("예약일시")
+    @DTODateTimeFormat
     private Date reservDt;
 
     /**
      * 최종 업데이트 일시
      */
-    @ApiModelProperty("패키지 일련번호")
+    @ApiModelProperty("최종 업데이트 일시")
+    @DTODateTimeFormat
     private Date updDt;
 
     /**
      * 키워드 목록
      */
+    @Builder.Default
+    @Valid
     @ApiModelProperty("키워드 목록")
     private Set<PackageKeywordDTO> packageKeywords = new LinkedHashSet<>();
 }

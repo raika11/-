@@ -191,7 +191,7 @@
       #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       'Y',
-      #{totalCount, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
       ) }
   </select>
 

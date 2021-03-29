@@ -133,6 +133,9 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
                     boolean exists = groupwareUserInfo != null && McpString.isNotEmpty(groupwareUserInfo.getUserName());
 
                     if (!exists) {
+
+                        loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.GROUPWARE_AUTHNUMBER_ERROR.getCode()));
+                        loginLog.setErrMsg(messageByLocale.get("wms.login.error.GroupwareUserNotFoundException"));
                         throw new GroupwareUserNotFoundException(messageByLocale.get("wms.login.error.GroupwareUserNotFoundException"));
                     }
                 } catch (GroupWareException ex) {
@@ -140,14 +143,30 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
                      * 그룹웨어 관련 오류 메세지 처리
                      */
                     if (ex.getErrorCode() == UnauthrizedErrorCode.GROUPWARE_AUTHNUMBER_ERROR) {
+
+                        loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.GROUPWARE_AUTHNUMBER_ERROR.getCode()));
+                        loginLog.setErrMsg(messageByLocale.get("wms.login.error.GroupwareUserNotFoundException"));
+
                         throw new GroupwareUserNotFoundException(messageByLocale.get("wms.login.error.GroupwareUserNotFoundException"));
                     }
                     if (ex.getErrorCode() == UnauthrizedErrorCode.GROUPWARE_AUTHNUMBER_PARSING_ERROR) {
+
+                        loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.GROUPWARE_AUTHNUMBER_PARSING_ERROR.getCode()));
+                        loginLog.setErrMsg(messageByLocale.get("wms.login.error.groupware-authnumber"));
+
                         throw new GroupWareUserStatusException(ex.getErrorCode(), messageByLocale.get("wms.login.error.groupware-authnumber"));
                     }
                     if (ex.getErrorCode() == UnauthrizedErrorCode.GROUPWARE_USER_PARSING_ERROR) {
+
+                        loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.GROUPWARE_USER_PARSING_ERROR.getCode()));
+                        loginLog.setErrMsg(messageByLocale.get("wms.login.error.groupware-userinfo"));
+
                         throw new GroupWareUserStatusException(ex.getErrorCode(), messageByLocale.get("wms.login.error.groupware-userinfo"));
                     }
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.GROUPWARE_USER_PARSING_ERROR.getCode()));
+                    loginLog.setErrMsg(messageByLocale.get("wms.login.error.groupware-userinfo"));
+
                     throw new GroupWareUserStatusException(ex.getErrorCode(), messageByLocale.get("wms.login.error.groupware"));
                 }
             }
@@ -155,6 +174,10 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
 
             // 2. 회원 정보가 없으면 로그 테이블에 이력 남기고 UsernameNotFoundException 발생
             if (userDetails == null) {
+
+                loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.USERNAME_NOTFOUND.getCode()));
+                loginLog.setErrMsg(messageByLocale.get("wms.login.error.UsernameNotFoundException"));
+
                 throw new WmsUsernameNotFoundException(messageByLocale.get("wms.login.error.UsernameNotFoundException"));
             }
 
@@ -164,12 +187,20 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
                 if (errorCnt < passwordErrorLimit) { // 오류 한도 초과 전
                     String errMsg = messageByLocale.get("wms.login.error.BadCredentials", errorCnt, passwordErrorLimit);
                     memberService.addMemberLoginErrorCount(userId);
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.PASSWORD_UNMATCHED.getCode()));
+                    loginLog.setErrMsg(errMsg);
+
                     throw new WmsBadCredentialsException(errMsg, errorCnt);
                 } else {// 한도가 초과한 경우
                     String errMsg = messageByLocale.get("wms.login.error.limit-excesss-bad-credentials", McpDate.nowDateStr());
                     if (userDetails.getErrorCnt() + 1 == passwordErrorLimit) { // 현재 오류 횟수가 한도와 동일한 경우 update
                         memberService.updateMemberStatus(userId, MemberStatusCode.P, passwordErrorLimit, errMsg);
                     }
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.PASSWORD_LIMIT.getCode()));
+                    loginLog.setErrMsg(errMsg);
+
                     throw new LimitExcessBadCredentialsException(
                             messageByLocale.get("wms.login.error.LimitExcessBadCredentialsException", passwordErrorLimit), passwordErrorLimit);
                 }
@@ -179,20 +210,48 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
             if (MemberStatusCode.Y != userDetails.getStatus()) {
                 if (MemberStatusCode.P == userDetails.getStatus()) { // 잠김 상태
                     if (userDetails.getErrorCnt() == passwordErrorLimit) { // 비밀번호 입력 오류 잠김 상태
+
+                        loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.USER_STATUS.getCode()));
+                        loginLog.setErrMsg(messageByLocale.get("wms.login.error.limit-excesss-bad-credentials-locked", passwordErrorLimit));
+
                         throw new LimitExcessBadCredentialsException(
                                 messageByLocale.get("wms.login.error.limit-excesss-bad-credentials-locked", passwordErrorLimit), passwordErrorLimit);
                     } else { // 비밀번호 갱신 만료일이 지나 잠김 상태
+
+                        loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.USER_STATUS.getCode()));
+                        loginLog.setErrMsg(messageByLocale.get("wms.login.error.PasswordUnchangedException"));
+
                         throw new PasswordUnchangedException(messageByLocale.get("wms.login.error.PasswordUnchangedException"));
                     }
                 } else if (MemberStatusCode.I == userDetails.getStatus()) {// 사용 신청 중인 상태 - 인증번호 인증 전
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.USER_STATUS.getCode()));
+                    loginLog.setErrMsg(messageByLocale.get("wms.login.error.NewUserSmsAuthRequiredException"));
+
                     throw new NewUserSmsAuthRequiredException(messageByLocale.get("wms.login.error.NewUserSmsAuthRequiredException"));
                 } else if (MemberStatusCode.N == userDetails.getStatus()) {// 사용 신청 상태
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.USER_STATUS.getCode()));
+                    loginLog.setErrMsg(messageByLocale.get("wms.login.error.BeforeNewApprovalException"));
+
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.BeforeNewApprovalException"));
                 } else if (MemberStatusCode.R == userDetails.getStatus()) {// 잠김 해제 요청 상태
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.USER_STATUS.getCode()));
+                    loginLog.setErrMsg(messageByLocale.get("wms.login.error.BeforeUnlockApprovalException"));
+
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.BeforeUnlockApprovalException"));
                 } else if (MemberStatusCode.D == userDetails.getStatus()) { // 사용 중지 상태
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.USER_STATUS.getCode()));
+                    loginLog.setErrMsg(messageByLocale.get("wms.login.error.StopUsingException"));
+
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.StopUsingException"));
                 } else { // 기타 계정 오류
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.USER_STATUS.getCode()));
+                    loginLog.setErrMsg(messageByLocale.get("wms.login.error.InsufficientAuthenticationException"));
+
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.InsufficientAuthenticationException"));
                 }
             }
@@ -202,6 +261,10 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
                 if (McpDate.term(userDetails.getExpireDt()) < 0) {
                     String errMsg = messageByLocale.get("wms.login.error.expire-date", McpDate.nowDateStr());
                     memberService.updateMemberStatus(userId, MemberStatusCode.P, userDetails.getErrorCnt(), errMsg);
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.USER_STATUS.getCode()));
+                    loginLog.setErrMsg(messageByLocale.get("wms.login.error.AccountExpiredException"));
+
                     throw new AccountExpiredException(messageByLocale.get("wms.login.error.AccountExpiredException"));
                 }
             }
@@ -222,6 +285,10 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
                 if (McpDate.dayTerm(userDetails.getPasswordModDt()) < -(passwordUnchangedLockDays)) {
                     String errMsg = messageByLocale.get("wms.login.error.password-unchanged-lock", McpDate.nowDateStr());
                     memberService.updateMemberStatus(userId, MemberStatusCode.P, userDetails.getErrorCnt(), errMsg);
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.PASSWORD_LIMIT.getCode()));
+                    loginLog.setErrMsg(messageByLocale.get("wms.login.error.PasswordUnchangedException"));
+
                     throw new PasswordUnchangedException(
                             messageByLocale.get("wms.login.error.PasswordUnchangedException", passwordUnchangedLockDays));
                 }
@@ -270,5 +337,4 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
         return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication) || WmsJwtAuthenticationToken.class.isAssignableFrom(
                 authentication));
     }
-
 }

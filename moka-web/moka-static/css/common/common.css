@@ -73,6 +73,32 @@ span {display: inline-block;}
 .header .uh .btn_navbar .icon_navbar:after {top: 16px;}
 .header .uh .right_area {position: absolute; right: 20px;}
 /* .header .uh .right_area .btn_myinfo {margin-right: 10px;} */
+.header.sticky_top {
+    opacity: 1;
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in
+}
+@-webkit-keyframes fadeIn {
+    0% {opacity: 0}
+
+    50% {opacity: 0}
+
+    100% {opacity: 1}
+}
+
+@keyframes fadeIn {
+    0% {opacity: 0}
+
+    50% {opacity: 0}
+
+    100% {opacity: 1}
+}
 
 /** footer **/
 .footer{display:block; width:100%; min-height:100px; background: #e8e8e8;}
@@ -462,18 +488,18 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .lh_sm14 {line-height: 14px;}
 
     /* grid */
-    .col_sm1 {flex:0 0 auto;width:calc(100% / 12 * 1);}
-    .col_sm2 {flex:0 0 auto;width:calc(100% / 12 * 2);}
-    .col_sm3 {flex:0 0 auto;width:calc(100% / 12 * 3);}
-    .col_sm4 {flex:0 0 auto;width:calc(100% / 12 * 4);}
-    .col_sm5 {flex:0 0 auto;width:calc(100% / 12 * 5);}
-    .col_sm6 {flex:0 0 auto;width:calc(100% / 12 * 6);}
-    .col_sm7 {flex:0 0 auto;width:calc(100% / 12 * 7);}
-    .col_sm8 {flex:0 0 auto;width:calc(100% / 12 * 8);}
-    .col_sm9 {flex:0 0 auto;width:calc(100% / 12 * 9);}
-    .col_sm10 {flex:0 0 auto;width:calc(100% / 12 * 10);}
-    .col_sm11 {flex:0 0 auto;width:calc(100% / 12 * 11);}
-    .col_sm12 {flex:0 0 auto;width:calc(100% / 12 * 12);}
+    .row > .col_sm1 {flex:0 0 auto;width:calc(100% / 12 * 1);}
+    .row > .col_sm2 {flex:0 0 auto;width:calc(100% / 12 * 2);}
+    .row > .col_sm3 {flex:0 0 auto;width:calc(100% / 12 * 3);}
+    .row > .col_sm4 {flex:0 0 auto;width:calc(100% / 12 * 4);}
+    .row > .col_sm5 {flex:0 0 auto;width:calc(100% / 12 * 5);}
+    .row > .col_sm6 {flex:0 0 auto;width:calc(100% / 12 * 6);}
+    .row > .col_sm7 {flex:0 0 auto;width:calc(100% / 12 * 7);}
+    .row > .col_sm8 {flex:0 0 auto;width:calc(100% / 12 * 8);}
+    .row > .col_sm9 {flex:0 0 auto;width:calc(100% / 12 * 9);}
+    .row > .col_sm10 {flex:0 0 auto;width:calc(100% / 12 * 10);}
+    .row > .col_sm11 {flex:0 0 auto;width:calc(100% / 12 * 11);}
+    .row > .col_sm12 {flex:0 0 auto;width:calc(100% / 12 * 12);}
 
     /* 말줄임 */
     .el.el_sm1 {white-space: nowrap;}
@@ -486,6 +512,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .pagination {display:none;}
 
     /* card */
+    .img_right_sm:first-child {padding-top: 15px; border-top: 1px solid #e2e2e2;}
     .img_right_sm .card_body {padding-right: 15px;}
     .img_right_sm .card_image {margin-bottom: 0;}
 }
@@ -548,18 +575,18 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
     /* grid */
     .row.no_grid {display: flex; flex-wrap: nowrap; justify-content: space-between;}
-    .col_md1 {flex:0 0 auto;width:calc(100% / 12 * 1);}
-    .col_md2 {flex:0 0 auto;width:calc(100% / 12 * 2);}
-    .col_md3 {flex:0 0 auto;width:calc(100% / 12 * 3);}
-    .col_md4 {flex:0 0 auto;width:calc(100% / 12 * 4);}
-    .col_md5 {flex:0 0 auto;width:calc(100% / 12 * 5);}
-    .col_md6 {flex:0 0 auto;width:calc(100% / 12 * 6);}
-    .col_md7 {flex:0 0 auto;width:calc(100% / 12 * 7);}
-    .col_md8 {flex:0 0 auto;width:calc(100% / 12 * 8);}
-    .col_md9 {flex:0 0 auto;width:calc(100% / 12 * 9);}
-    .col_md10 {flex:0 0 auto;width:calc(100% / 12 * 10);}
-    .col_md11 {flex:0 0 auto;width:calc(100% / 12 * 11);}
-    .col_md12 {flex:0 0 auto;width:calc(100% / 12 * 12);}
+    .row > .col_md1 {flex:0 0 auto;width:calc(100% / 12 * 1);}
+    .row > .col_md2 {flex:0 0 auto;width:calc(100% / 12 * 2);}
+    .row > .col_md3 {flex:0 0 auto;width:calc(100% / 12 * 3);}
+    .row > .col_md4 {flex:0 0 auto;width:calc(100% / 12 * 4);}
+    .row > .col_md5 {flex:0 0 auto;width:calc(100% / 12 * 5);}
+    .row > .col_md6 {flex:0 0 auto;width:calc(100% / 12 * 6);}
+    .row > .col_md7 {flex:0 0 auto;width:calc(100% / 12 * 7);}
+    .row > .col_md8 {flex:0 0 auto;width:calc(100% / 12 * 8);}
+    .row > .col_md9 {flex:0 0 auto;width:calc(100% / 12 * 9);}
+    .row > .col_md10 {flex:0 0 auto;width:calc(100% / 12 * 10);}
+    .row > .col_md11 {flex:0 0 auto;width:calc(100% / 12 * 11);}
+    .row > .col_md12 {flex:0 0 auto;width:calc(100% / 12 * 12);}
 
     /* 말줄임 */
     .el.el_md1 {white-space: nowrap;}
@@ -642,18 +669,18 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .lh_lg14 {line-height: 14px;}
 
     /* grid */
-    .col_lg1 {flex:0 0 auto;width:calc(100% / 12 * 1);}
-    .col_lg2 {flex:0 0 auto;width:calc(100% / 12 * 2);}
-    .col_lg3 {flex:0 0 auto;width:calc(100% / 12 * 3);}
-    .col_lg4 {flex:0 0 auto;width:calc(100% / 12 * 4);}
-    .col_lg5 {flex:0 0 auto;width:calc(100% / 12 * 5);}
-    .col_lg6 {flex:0 0 auto;width:calc(100% / 12 * 6);}
-    .col_lg7 {flex:0 0 auto;width:calc(100% / 12 * 7);}
-    .col_lg8 {flex:0 0 auto;width:calc(100% / 12 * 8);}
-    .col_lg9 {flex:0 0 auto;width:calc(100% / 12 * 9);}
-    .col_lg10 {flex:0 0 auto;width:calc(100% / 12 * 10);}
-    .col_lg11 {flex:0 0 auto;width:calc(100% / 12 * 11);}
-    .col_lg12 {flex:0 0 auto;width:calc(100% / 12 * 12);}
+    .row > .col_lg1 {flex:0 0 auto;width:calc(100% / 12 * 1);}
+    .row > .col_lg2 {flex:0 0 auto;width:calc(100% / 12 * 2);}
+    .row > .col_lg3 {flex:0 0 auto;width:calc(100% / 12 * 3);}
+    .row > .col_lg4 {flex:0 0 auto;width:calc(100% / 12 * 4);}
+    .row > .col_lg5 {flex:0 0 auto;width:calc(100% / 12 * 5);}
+    .row > .col_lg6 {flex:0 0 auto;width:calc(100% / 12 * 6);}
+    .row > .col_lg7 {flex:0 0 auto;width:calc(100% / 12 * 7);}
+    .row > .col_lg8 {flex:0 0 auto;width:calc(100% / 12 * 8);}
+    .row > .col_lg9 {flex:0 0 auto;width:calc(100% / 12 * 9);}
+    .row > .col_lg10 {flex:0 0 auto;width:calc(100% / 12 * 10);}
+    .row > .col_lg11 {flex:0 0 auto;width:calc(100% / 12 * 11);}
+    .row > .col_lg12 {flex:0 0 auto;width:calc(100% / 12 * 12);}
 
     /* 말줄임 */
     .el.el_lg1 {white-space: nowrap;}

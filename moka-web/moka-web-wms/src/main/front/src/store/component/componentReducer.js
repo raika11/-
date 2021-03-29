@@ -46,7 +46,6 @@ export const initialState = {
         domain: {},
         template: {},
         dataset: {},
-        skin: {},
         dataType: 'NONE',
         periodYn: 'N',
         schServiceType: 'all',

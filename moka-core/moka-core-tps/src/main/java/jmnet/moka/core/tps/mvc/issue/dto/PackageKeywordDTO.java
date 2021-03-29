@@ -5,11 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
+import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.apache.ibatis.type.Alias;
 
 /**
@@ -28,7 +30,8 @@ import org.apache.ibatis.type.Alias;
 @NoArgsConstructor
 @Setter
 @Getter
-@Builder
+@ToString
+@Builder(toBuilder = true)
 @Alias("PackageKeywordDTO")
 public class PackageKeywordDTO implements Serializable {
 
@@ -59,6 +62,7 @@ public class PackageKeywordDTO implements Serializable {
      * 검색 조건
      */
     @ApiModelProperty("검색 조건")
+    @Pattern(regexp = "^((T)|(K)|(K,T)|(T,K))$", message = "{tps.issue.error.pattern.schCondi}")
     private String schCondi;
 
     /**

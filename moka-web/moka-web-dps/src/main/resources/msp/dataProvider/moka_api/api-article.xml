@@ -56,11 +56,7 @@
       <todaypress desc="오늘중앙" default="N">^[Y|N]{1}$</todaypress>
       <total desc="총건수사용" default="Y">^[Y|N]{1}$</total>
     </parameter>
-    <request dmlType="sp" setNames="_DATA,SOURCES">dps.article.list</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("totalCount");
-    </request>
+    <request dmlType="sp" setNames="_DATA,SOURCES" outParam="_TOTAL">dps.article.list</request>
     <keys>
       sources
       scodes
@@ -88,11 +84,7 @@
     <parameter>
       <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>
     </parameter>
-    <request dmlType="sp" setNames="_DATA,RDATA">dps.article.desking</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("total");
-    </request>
+    <request dmlType="sp" setNames="_DATA,RDATA" outParam="_TOTAL">dps.article.desking</request>
     <keys>
       ids
       #paging

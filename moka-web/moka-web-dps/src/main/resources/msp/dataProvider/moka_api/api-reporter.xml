@@ -11,11 +11,7 @@
     <parameter>
       <name desc="기자명">^.{0,1000}$</name>
     </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.reporter.reporter</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("total");
-    </request>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.reporter.reporter</request>
     <keys>
       name
       #paging
@@ -28,11 +24,7 @@
     <parameter>
       <name desc="컬럼니스트명">^.{0,1000}$</name>
     </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.reporter.columnist</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("total");
-    </request>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.reporter.columnist</request>
     <keys>
       name
       #paging

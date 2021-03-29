@@ -5,6 +5,48 @@
 
 <apiConfig>
 
+  <!-- 댓글 차단ID 목록  period="*/5 * * * * *"-->
+  <api id="comment.blockid" expire="2m">
+    <description>댓글 차단ID 목록을 조회한다.</description>
+    <parameter>
+      <div desc="태그타입" require="Y" default="U">^[I|U|W]$</div>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.comment.banned</request>
+  </api>
+
+  <!-- 댓글 차단IP 목록 -->
+  <api id="comment.blockip" expire="2m">
+    <description>댓글 차단IP 목록을 조회한다.</description>
+    <parameter>
+      <div desc="태그타입" require="Y" default="I">^[I|U|W]$</div>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.comment.banned</request>
+  </api>
+
+  <!-- 댓글 금지어 목록 -->
+  <api id="comment.blockword" expire="2m">
+    <description>댓글 금지어 목록을 조회한다.</description>
+    <parameter>
+      <div desc="태그타입" require="Y" default="W">^[I|U|W]$</div>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.comment.banned</request>
+  </api>
+
+  <!--  <api id="comment.insert" membership="cookie">-->
+  <!--    <description>댓글을 등록한다</description>-->
+  <!--    <parameter>-->
+  <!--      <parent desc="부모댓글SEQ" default="0" type="number">^[0-9]$</parent>-->
+  <!--      <contentId desc="기사ID 또는 기자SEQ">^[0-9]$</contentId>-->
+  <!--      <remoteIp/>-->
+  <!--    </parameter>-->
+  <!--    <request dmlType="sp" setNames="_DATA">dps.comment.commentInsert</request>-->
+  <!--    <keys>-->
+  <!--      parent-->
+  <!--      contentId-->
+  <!--      content-->
+  <!--      referer-->
+  <!--    </keys>-->
+  <!--  </api>-->
 
 </apiConfig>
 

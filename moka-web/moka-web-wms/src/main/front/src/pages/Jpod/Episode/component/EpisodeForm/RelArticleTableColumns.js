@@ -7,7 +7,7 @@ export default [
         rowDrag: true,
         width: 24,
         maxWidth: 24,
-        rowDragText: (params) => params.rowNode.data.relTitle,
+        rowDragText: (params) => params.rowNode.data.relTitle || '제목없음',
     },
     {
         headerName: '',

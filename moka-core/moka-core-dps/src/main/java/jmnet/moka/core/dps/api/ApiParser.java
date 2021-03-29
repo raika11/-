@@ -22,6 +22,7 @@ import jmnet.moka.common.TimeHumanizer;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.dps.api.model.Acl;
 import jmnet.moka.core.dps.api.model.Api;
+import jmnet.moka.core.dps.api.model.ApiCallRequest;
 import jmnet.moka.core.dps.api.model.ApiConfig;
 import jmnet.moka.core.dps.api.model.DbRequest;
 import jmnet.moka.core.dps.api.model.DefaultApiConfig;
@@ -344,7 +345,7 @@ public class ApiParser {
             String totalAttr = requestEl.getAttribute(ATTR_TOTAL);
             String asyncAttr = requestEl.getAttribute(ATTR_ASYNC);
             boolean eval = false;
-            boolean total = false;
+//            boolean total = false;
             boolean async = false;
             String resultName = requestEl.getAttribute(ATTR_RESULTNAME);
             String setNames = requestEl.getAttribute(ATTR_SETNAMES);
@@ -356,21 +357,25 @@ public class ApiParser {
             if (evalAttr != null && evalAttr.length() != 0) {
                 eval = evalAttr.equalsIgnoreCase("Y") ? true : false;
             }
-            if (totalAttr != null && totalAttr.length() != 0) {
-                total = totalAttr.equalsIgnoreCase("Y") ? true : false;
-            }
+//            if (totalAttr != null && totalAttr.length() != 0) {
+//                total = totalAttr.equalsIgnoreCase("Y") ? true : false;
+//            }
             if (asyncAttr != null && asyncAttr.length() != 0) {
                 async = asyncAttr.equalsIgnoreCase("Y") ? true : false;
             }
             if (resultName == null || resultName.length() == 0) {
                 resultName = ApiResult.MAIN_DATA;
             }
+            String apiPath = requestEl.getAttribute(ATTR_API_PATH);
+            String apiId = requestEl.getAttribute(ATTR_API_ID);
+            String keys = requestEl.getAttribute(ATTR_KEYS);
+
             String textContent = requestEl
                     .getTextContent()
                     .trim();
             if (type.equals(Request.TYPE_DB)) {
                 String dmlType = requestEl.getAttribute(ATTR_DML_TYPE);
-                api.addRequest(new DbRequest(type, eval, async, resultName, setNames, textContent, total, dmlType));
+                api.addRequest(new DbRequest(type, eval, async, resultName, setNames, textContent, totalAttr, dmlType));
             } else if (type.equals(Request.TYPE_URL)) {
                 String include = requestEl.getAttribute(ATTR_INCLUDE);
                 String exclude = requestEl.getAttribute(ATTR_EXCLUDE);
@@ -378,15 +383,14 @@ public class ApiParser {
             } else if (type.equals(Request.TYPE_SCRIPT)) {
                 api.addRequest(new ScriptRequest(type, async, resultName, textContent));
             } else if (type.equals(Request.TYPE_PURGE)) {
-                String apiPath = requestEl.getAttribute(ATTR_API_PATH);
-                String apiId = requestEl.getAttribute(ATTR_API_ID);
-                String keys = requestEl.getAttribute(ATTR_KEYS);
                 api.addRequest(new PurgeRequest(type, apiPath, apiId, keys, async));
             } else if (type.equals(Request.TYPE_MODULE)) {
                 if (McpString.isNullOrEmpty(textContent) == false) {
                     textContent = textContent.trim();
                 }
                 api.addRequest(new ModuleRequest(type, textContent, methodName, async, resultName));
+            } else if (type.equals(Request.TYPE_API_CALL)) {
+                api.addRequest(new ApiCallRequest(type, async, resultName, apiPath, apiId));
             } else if (type.equals(Request.TYPE_SAMPLE)) {
                 api.addRequest(new SampleRequest(type, async, resultName, textContent));
             } else {

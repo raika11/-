@@ -9,7 +9,7 @@ import toast from '@utils/toastUtil';
 import { initialState, changeSeoMetaSearchOptions, getSeoMetaList } from '@store/seoMeta';
 
 /**
- * SEO 메타 검색
+ * SEO 메타 관리 > 검색
  */
 const SEOMetaSearch = () => {
     const dispatch = useDispatch();
@@ -24,7 +24,12 @@ const SEOMetaSearch = () => {
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
         if (name === 'dateType') {
+            // 기간 설정
+            const nt = new Date();
+            const endDt = moment(nt).endOf('day');
+            const startDt = moment(nt).startOf(value).startOf('day');
             setDateType(value);
+            setSearch({ ...search, startDt, endDt });
         } else {
             setSearch({ ...search, [name]: value });
         }
@@ -72,13 +77,12 @@ const SEOMetaSearch = () => {
     }, [search.startDt, search.endDt]);
 
     useEffect(() => {
-        // 날짜 타입에 따른 셋팅 && SEO 메타 목록 조회
         const nt = new Date();
         const ns = { ...search, startDt: moment(nt).startOf('day'), endDt: moment(nt).endOf('day') };
         setSearch(ns);
         handleSearch(ns);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dateType]);
+    }, []);
 
     return (
         <Form className="mb-14">
@@ -86,9 +90,9 @@ const SEOMetaSearch = () => {
                 {/* 날짜 선택 */}
                 <div className="mr-2 flex-shrink-0">
                     <MokaInput as="select" name="dateType" onChange={handleChangeValue} value={dateType}>
-                        <option value="today">오늘</option>
-                        <option value="thisWeek">이번주</option>
-                        <option value="thisMonth">이번달</option>
+                        <option value="day">오늘</option>
+                        <option value="isoWeek">이번주</option>
+                        <option value="month">이번달</option>
                     </MokaInput>
                 </div>
 

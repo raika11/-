@@ -37,7 +37,7 @@ const GifDropzone = (props) => {
                     const id = `${moment().format('YYYYMMDDsss')}_${idx}`;
                     const preview = URL.createObjectURL(f);
                     // thumbPath: preview, imageOnlnPath: `${IMAGE_PROXY_API}${encodeURIComponent(preview)}`
-                    const imageData = { id: id, File: f, preview, dataType: 'local' };
+                    const imageData = { id: id, File: f, preview, dataType: 'local', imageOnlnPath: preview, thumbPath: preview };
                     imageFiles.push(imageData);
                 } else {
                     // 이미지 파일이 아닌경우
@@ -198,7 +198,7 @@ const GifDropzone = (props) => {
                         gifWidth={cropWidth}
                         gifHeight={cropHeight}
                         imgList={imgList.map((image) =>
-                            image.imageOnlnPath.startsWith('blob:') ? image.imageOnlnPath : `${IMAGE_PROXY_API}${encodeURIComponent(image.imageOnlnPath)}`,
+                            (image.imageOnlnPath || '').startsWith('blob:') ? image.imageOnlnPath : `${IMAGE_PROXY_API}${encodeURIComponent(image.imageOnlnPath)}`,
                         )}
                     />
 

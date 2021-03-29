@@ -4,6 +4,7 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { createRequestSaga, callApiAfterActions, errorResponse } from '@store/commons/saga';
 import * as act from './jpodAction';
 import * as api from './jpodApi';
+import * as brightApi from '@store/bright/brightApi';
 import { deleteBoardContents, postBoardContents, putBoardContents, postBoardReply, putBoardReply } from '../board/boardsApi';
 
 /**
@@ -47,6 +48,11 @@ const getEpsd = createRequestSaga(act.GET_EPSD, api.getEpsd);
 const getPodtyEpsdList = createRequestSaga(act.GET_PODTY_EPSD_LIST, api.getPodtyEpisodesList);
 
 /**
+ * 팟캐스트 목록
+ */
+const getPodcastList = createRequestSaga(act.GET_PODCAST_LIST, brightApi.getVideoList);
+
+/**
  * 채널 저장
  */
 function* saveChnl({ payload: { chnl, callback } }) {
@@ -64,12 +70,6 @@ function* saveChnl({ payload: { chnl, callback } }) {
         callbackData = response.data;
 
         if (response.data.header.success) {
-            // // 성공 액션 실행 => 데이터 업데이트 치면 안됨 관련 정보를 빠져서 옴
-            // yield put({
-            //     type: act.GET_CHNL_SUCCESS,
-            //     payload: response.data,
-            // });
-
             // 목록 다시 검색
             const search = yield select(({ jpod }) => jpod.channel.search);
             yield put({ type: act.GET_CHNL_LIST, payload: { search } });
@@ -165,68 +165,36 @@ function* deleteChnl({ payload: { chnlSeq, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
-// 브라이트 코브 목록 조회.
-function* getBrightOvpSaga() {
-    yield put(startLoading(act.GET_BRIGHT_OVP));
-
-    let response;
-    try {
-        const search = yield select((state) => state.jpod.brightOvp.search);
-        response = yield call(api.getBrightOvp, { search: search });
-        const {
-            status,
-            data: { body },
-        } = response;
-        if (status !== 200) {
-            throw new Error('네트워크가 불안정 합니다. 다시 시도해 주세요.');
-        }
-        const resultObject = JSON.parse(body);
-        const list = resultObject.map((element) => {
-            return {
-                id: element.id,
-                account_id: element.account_id,
-                name: element.name,
-                complete: element.complete,
-                state: element.state,
-                created_at: element.created_at,
-            };
-        });
-        yield put({ type: act.GET_BRIGHT_OVP_SUCCESS, payload: { list: list, total: list.length } });
-    } catch (e) {
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
-    }
-
-    yield put(finishLoading(act.GET_BRIGHT_OVP));
-}
-
-// 브라이트 코브 저장.
-function* saveBrightovpSaga({ payload: { ovpdata, callback } }) {
-    yield put(startLoading(act.SAVE_BRIGHTOVP));
-
+/**
+ * 팟캐스트 저장
+ */
+function* savePodcast({ payload: { ovpdata, callback } }) {
+    const ACTION = act.SAVE_PODCAST;
     let callbackData = {};
     let response;
 
+    yield put(startLoading(ACTION));
     try {
-        if (ovpdata) {
-            response = yield call(api.saveBrightOvp, { ovpdata: ovpdata });
-        }
-
+        response = yield call(brightApi.saveOvp, { ovpdata });
         callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 다시 조회
+            const search = yield select(({ jpod }) => jpod.podcast.search);
+            yield put({
+                type: act.GET_PODCAST_LIST,
+                payload: { search },
+            });
+        }
     } catch (e) {
         callbackData = errorResponse(e);
-        const {
-            header: { message },
-        } = errorResponse(e);
-        toast.error(message);
     }
+
     if (typeof callback === 'function') {
         yield call(callback, callbackData);
     }
 
-    yield put(finishLoading(act.SAVE_BRIGHTOVP));
+    yield put(finishLoading(ACTION));
 }
 
 /**
@@ -411,7 +379,7 @@ function* saveJpodNoticeReply({ payload: { boardId, parentBoardSeq, boardSeq, co
             // 답변 등록
             response = yield call(postBoardReply, {
                 boardId: boardId,
-                parentBoardSeq: boardSeq,
+                parentBoardSeq: contents.parentBoardSeq || boardSeq,
                 contents: contents,
                 files: [], // 답변은 첨부 파일이 없어서 null 처리
             });
@@ -472,8 +440,11 @@ export default function* jpodSaga() {
     yield takeLatest(act.SAVE_EPSD, saveEpsd);
     yield takeLatest(act.GET_PODTY_EPSD_LIST, getPodtyEpsdList);
 
-    yield takeLatest(act.GET_BRIGHT_OVP, getBrightOvpSaga); // 브라이트 코브 목록 조회.
-    yield takeLatest(act.SAVE_BRIGHTOVP, saveBrightovpSaga); // 브라이트 코브 저장.
+    /**
+     * 팟캐스트
+     */
+    yield takeLatest(act.GET_PODCAST_LIST, getPodcastList);
+    yield takeLatest(act.SAVE_PODCAST, savePodcast);
 
     /**
      * 공지 게시판

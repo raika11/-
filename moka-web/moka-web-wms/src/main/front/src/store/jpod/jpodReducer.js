@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
-import { PAGESIZE_OPTIONS } from '@/constants';
+import { PAGESIZE_OPTIONS, MODAL_PAGESIZE_OPTIONS } from '@/constants';
 import * as act from './jpodAction';
 
 export const initialState = {
@@ -87,7 +87,6 @@ export const initialState = {
         episode: {
             articles: [],
             epsdFile: null,
-            epsdSeq: 0,
             keywords: [],
             likeCnt: 0,
             members: [],
@@ -99,6 +98,7 @@ export const initialState = {
             shareCnt: 0,
             usedYn: 'Y',
             viewCnt: 0,
+            jpodType: 'A',
         },
         invalidList: [],
         podty: {
@@ -199,12 +199,13 @@ export const initialState = {
             viewCnt: 0,
         },
     },
-    brightOvp: {
+    // 팟캐스트 목록
+    podcast: {
         total: 0,
         list: [],
         search: {
             page: 0,
-            size: 20,
+            size: MODAL_PAGESIZE_OPTIONS[0],
             searchType: 'all',
             keyword: '',
             useTotal: 'Y',
@@ -327,35 +328,28 @@ export default handleActions(
                 draft.episode.podty.total = body.totalCnt;
             });
         },
-
+        /**
+         * 팟캐스트 관련
+         */
+        [act.CLEAR_PODCAST]: (state) => {
+            return produce(state, (draft) => {
+                draft.podcast = initialState.podcast;
+            });
+        },
+        [act.CHANGE_PODCAST_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.podcast.search = payload;
+            });
+        },
+        [act.GET_PODCAST_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.podcast.list = body.list;
+                draft.podcast.total = body.totalCnt;
+            });
+        },
         /**
          * 이 뒤부터 정리 필요함
          */
-        // 브라이트 코브 초기화
-        [act.CLEAR_BRIGHT_OVP]: (state) => {
-            return produce(state, (draft) => {
-                draft.brightOvp = initialState.brightOvp;
-            });
-        },
-        // 브라이트 코브 목록
-        [act.GET_BRIGHT_OVP_SUCCESS]: (state, { payload: { list, total } }) => {
-            return produce(state, (draft) => {
-                draft.brightOvp.list = list;
-                draft.brightOvp.total = total;
-            });
-        },
-        // 브라이트 코브 목록
-        [act.SELECT_BRIGHTOVP]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.selectBrightOvp = payload;
-            });
-        },
-        // 기자 검색 모달 검색 옵션 처리
-        [act.CHANGE_BRIGHTOVP_SEARCH_OPTION]: (state) => {
-            return produce(state, (draft) => {
-                // draft.brightOvp.search = payload;
-            });
-        },
         /**
          * J팟 공지 게시판 관련
          */

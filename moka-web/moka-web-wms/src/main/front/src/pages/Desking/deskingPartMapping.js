@@ -15,6 +15,8 @@ export const deskingPartList = [
     { title: '리드문', id: 'BODY_HEAD' },
     { title: 'URL', id: 'LINK_URL' },
     { title: '영상', id: 'VOD_URL' },
+    { title: '중요도', id: 'CONTENT_PRIORITY' },
+    { title: '재생시간', id: 'DURATION' },
 ].map((part, index) => ({ ...part, index }));
 
 // 제목의 폰트 사이즈 리스트 (편집영역에서 사용)
@@ -82,5 +84,13 @@ export default {
         field: 'linkUrl',
         label: 'URL',
         placeholder: 'URL을 입력하세요',
+    },
+    // 재생 시간
+    DURATION: {
+        as: 'input',
+        type: 'text',
+        field: 'duration',
+        label: '재생 시간',
+        placeholder: '재생 시간을 입력하세요',
     },
 };

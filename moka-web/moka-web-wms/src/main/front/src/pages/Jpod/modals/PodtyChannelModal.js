@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { MokaModal, MokaTable } from '@components';
-import { columnDefs } from './PodtyChannelModalGridColumns';
 import { useSelector, useDispatch } from 'react-redux';
 import { messageBox } from '@utils/toastUtil';
 import { GET_PODTY_CHNL_LIST, getPodtyChnlList, clearPodtyChnl } from '@store/jpod';
+import { MokaModal, MokaTable } from '@components';
+import { columnDefs } from './PodtyChannelModalColumns';
 
 /**
  * J팟 관리 > 채널 > 팟티 목록 모달
@@ -39,7 +39,7 @@ const PodtyChannelModal = (props) => {
                     ...element,
                     crtDt: crtDt,
                     onClick: (row) => {
-                        window.open(`https://m.podty.me/cast/${row.castSrl}`);
+                        window.open(row.shareUrl);
                     },
                 };
             }),

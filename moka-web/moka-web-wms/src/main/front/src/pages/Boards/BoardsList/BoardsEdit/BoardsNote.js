@@ -10,36 +10,35 @@ import BoardsSummernote from './BoardsSummernote';
 /**
  * 게시판 관리 > 게시글 관리 > 게시판 편집 폼 > 게시글 썸머노트 편집
  */
-const BoardsNote = ({ data, onChangeFormData }) => {
+const BoardsNote = ({ data, onChangeFormData, jpodBoardId }) => {
     const dispatch = useDispatch();
     const { boardId } = useParams();
     const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
+    const jpodContents = useSelector((store) => store.jpod.jpodNotice.contents);
     const [noteData, setNoteData] = useState(data);
 
     /**
      * summernote 이미지 업로드 처리
      */
-    const SummernoteImageUpload = (files) => {
+    const summerNoteImageUpload = (files) => {
         const formData = new FormData();
         formData.append('attachFile', files[0]);
 
         dispatch(
             uploadBoardContentsImage({
-                boardId: boardId,
+                boardId: boardId || jpodBoardId,
                 imageForm: formData,
-                callback: ({ header: { success, message }, body }) => {
-                    if (success === true) {
-                        let tempContent = `${contentsInfo.content} <img src="${body}">`;
-                        // dispatch(changeListMenuContents({ content: tempContent }));
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        let tempContent = `${contentsInfo.content || jpodContents.content} <img src="${body}">`;
                         onChangeFormData({ content: tempContent });
                     } else {
-                        const { totalCnt, list } = body;
-                        if (totalCnt > 0 && Array.isArray(list)) {
-                            // 에러 메시지 확인.
-                            messageBox.alert(list[0].reason, () => {});
+                        if (Array.isArray(body.list)) {
+                            // 에러 메시지 확인
+                            messageBox.alert(body.list[0].reason, () => {});
                         } else {
-                            // body에 에러메시지가 없으면 서버 메시지를 alert 함.
-                            messageBox.alert(message, () => {});
+                            // body에 에러메시지가 없으면 서버 메시지를 alert
+                            messageBox.alert(header.message, () => {});
                         }
                     }
                 },
@@ -58,10 +57,9 @@ const BoardsNote = ({ data, onChangeFormData }) => {
                 <BoardsSummernote
                     contentValue={data}
                     onChangeValue={(value) => {
-                        // dispatch(changeListMenuContents({ content: value }));
                         setNoteData(value);
                     }}
-                    onImageUpload={(e) => SummernoteImageUpload(e)}
+                    onImageUpload={(e) => summerNoteImageUpload(e)}
                 />
             </Col>
         </Form.Row>

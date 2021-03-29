@@ -13,7 +13,6 @@ import {
     deleteJpodNoticeContents,
     saveJpodNoticeReply,
 } from '@store/jpod';
-import { uploadBoardContentsImage, updateBoardContents } from '@store/board';
 import NoticeEditForm from './NoticeEditForm';
 import NoticeEditReplyForm from './NoticeEditReplyForm';
 
@@ -126,9 +125,6 @@ const NoticeEdit = ({ match }) => {
         history.push(`${match.path}/${boardSeq}/reply`);
     };
 
-    console.log(boardSeq, parentBoardSeq, reply);
-    console.log(temp);
-
     /**
      * 답변 저장
      */
@@ -139,15 +135,15 @@ const NoticeEdit = ({ match }) => {
                 parentBoardSeq: parentBoardSeq,
                 boardSeq: boardSeq,
                 contents: {
-                    // boardId: null,
+                    parentBoardSeq: storeReply?.parentBoardSeq,
                     title: replyTemp.title,
                     content: replyTemp.content,
-                    depth: temp.depth + 1,
-                    indent: temp.indent + 1,
-                    ordNo: temp.ordNo,
-                    channelId: temp.channelId,
-                    titlePrefix1: temp.titlePrefix1,
-                    titlePrefix2: temp.titlePrefix2,
+                    depth: contents.boardId ? temp.maxDepth + 1 : storeReply.depth,
+                    indent: contents.boardId ? temp.indent + 1 : storeReply.indent + 1,
+                    ordNo: temp.ordNo || replyTemp.ordNo,
+                    channelId: temp.channelId || replyTemp.channelId,
+                    titlePrefix1: temp.titlePrefix1 || replyTemp.titlePrefix1,
+                    titlePrefix2: temp.titlePrefix2 || replyTemp.titlePrefix2,
                 },
                 callback: ({ header, body }) => {
                     if (header.success) {
@@ -165,44 +161,6 @@ const NoticeEdit = ({ match }) => {
                 },
             }),
         );
-    };
-
-    const handleClickReplayDelete = () => {};
-
-    // summernote 이미지 업로드 처리.
-    const summerNoteImageUpload = (file) => {
-        //     const formData = new FormData();
-        //     formData.append('attachFile', file[0]);
-        //     dispatch(
-        //         uploadBoardContentsImage({
-        //             boardId: editData.boardId,
-        //             imageForm: formData,
-        //             callback: ({ header: { success, message }, body }) => {
-        //                 if (success === true) {
-        //                     toast.success(message);
-        //                     setEditData({
-        //                         ...editData,
-        //                         content: `${editData.content} <img src="${body}">`,
-        //                     });
-        //                     // else {
-        //                     //     setReplyEditData({
-        //                     //         ...replyEditData,
-        //                     //         content: `${replyEditData.content} <img src="${body}">`,
-        //                     //     });
-        //                     // }
-        //                 } else {
-        //                     const { totalCnt, list } = body;
-        //                     if (totalCnt > 0 && Array.isArray(list)) {
-        //                         // 에러 메시지 확인.
-        //                         messageBox.alert(list[0].reason, () => {});
-        //                     } else {
-        //                         // body에 에러메시지가 없으면 서버 메시지를 alert 함.
-        //                         messageBox.alert(message, () => {});
-        //                     }
-        //                 }
-        //             },
-        //         }),
-        //     );
     };
 
     useEffect(() => {
@@ -284,7 +242,7 @@ const NoticeEdit = ({ match }) => {
                             // 답변 조회
                             <>
                                 {jpodBoard.answYn === 'Y' && (
-                                    <Button variant="negative" className="mr-1" onClick={handleClickReplay}>
+                                    <Button variant="outline-neutral" className="mr-1" onClick={handleClickReplay}>
                                         답변
                                     </Button>
                                 )}
@@ -312,7 +270,7 @@ const NoticeEdit = ({ match }) => {
                 </>
             }
         >
-            <>{reply ? <NoticeEditReplyForm data={replyTemp} onChange={handleChangeReplyValue} /> : <NoticeEditForm data={temp} onChange={handleChangeValue} />}</>
+            {reply ? <NoticeEditReplyForm data={replyTemp} onChange={handleChangeReplyValue} /> : <NoticeEditForm data={temp} onChange={handleChangeValue} />}
         </MokaCard>
     );
 };

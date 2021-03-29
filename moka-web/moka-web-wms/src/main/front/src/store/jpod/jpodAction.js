@@ -1,6 +1,9 @@
 import { createAction } from 'redux-actions';
 import { createRequestActionTypes } from '@store/commons/saga';
 
+/**
+ * 스토어 초기화
+ */
 export const CLEAR_STORE = 'jpod/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 
@@ -66,22 +69,18 @@ export const [GET_PODTY_EPSD_LIST, GET_PODTY_EPSD_LIST_SUCCESS] = createRequestA
 export const getPodtyEpsdList = createAction(GET_PODTY_EPSD_LIST, ({ castSrl, callback }) => ({ castSrl, callback }));
 
 /**
- * 팟캐스트 모달 > 브라이트 코브 목록 초기화
+ * 팟캐스트 관련
  */
-export const CLEAR_BRIGHT_OVP = 'jpod/CLEAR_BRIGHT_OVP';
-export const clearBrightOvp = createAction(CLEAR_BRIGHT_OVP);
-
-/**
- * 팟캐스트 모달 > 브라이트 코브 목록 조회
- */
-export const [GET_BRIGHT_OVP, GET_BRIGHT_OVP_SUCCESS, GET_BRIGHT_OVP_FAILURE] = createRequestActionTypes('jpod/GET_BRIGHT_OVP');
-export const getBrightOvp = createAction(GET_BRIGHT_OVP, (actions) => actions);
-export const SELECT_BRIGHTOVP = 'jpod/SELECT_BRIGHTOVP';
-export const selectBrightovp = createAction(SELECT_BRIGHTOVP, (actions) => actions);
-export const [SAVE_BRIGHTOVP, SAVE_BRIGHTOVP_SUCCESS, SAVE_BRIGHTOVP_FAILURE] = createRequestActionTypes('jpod/SAVE_BRIGHTOVP');
-export const saveBrightovp = createAction(SAVE_BRIGHTOVP, ({ ovpdata, callback }) => ({ ovpdata, callback }));
-export const CHANGE_BRIGHTOVP_SEARCH_OPTION = 'jpod/CHANGE_BRIGHTOVP_SEARCH_OPTION';
-export const changeBrightovpSearchOption = createAction(CHANGE_BRIGHTOVP_SEARCH_OPTION, (actions) => actions);
+export const CLEAR_PODCAST = 'jpod/CLEAR_PODCAST';
+export const clearPodcast = createAction(CLEAR_PODCAST);
+export const CHANGE_PODCAST_SEARCH_OPTION = 'jpod/CHANGE_PODCAST_SEARCH_OPTION';
+export const changePodcastSearchOption = createAction(CHANGE_PODCAST_SEARCH_OPTION, (search) => search);
+// 팟캐스트 목록
+export const [GET_PODCAST_LIST, GET_PODCAST_LIST_SUCCESS] = createRequestActionTypes('jpod/GET_PODCAST_LIST');
+export const getPodcastList = createAction(GET_PODCAST_LIST, ({ search, callback }) => ({ search, callback }));
+// 팟캐스트 저장
+export const SAVE_PODCAST = 'jpod/SAVE_PODCAST';
+export const savePodcast = createAction(SAVE_PODCAST, ({ ovpdata, callback }) => ({ ovpdata, callback }));
 
 /**
  * 공지 게시판 관련 액션

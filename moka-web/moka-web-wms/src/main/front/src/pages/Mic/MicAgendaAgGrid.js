@@ -7,7 +7,7 @@ import { messageBox } from '@utils/toastUtil';
 import columnDefs from './MicAgendaAgGridColumns';
 
 /**
- * 시민 마이크 아젠다 목록
+ * 시민 마이크 > 아젠다 목록
  */
 const MicAgendaAgGrid = ({ match }) => {
     const history = useHistory();

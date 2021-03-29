@@ -13,7 +13,7 @@ export default [
         field: 'ordNo',
         width: 30,
         maxWidth: 30,
-        valueGetter: (params) => replaceNo(params.data.ordNo),
+        valueGetter: (params) => replaceNo(params.node.rowIndex + 1),
         cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
     },
     {

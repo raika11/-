@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { MokaModal, MokaTable } from '@components';
-import { columnDefs } from './PodtyEpisodeModalGridColumns';
 import { messageBox } from '@utils/toastUtil';
 import { GET_PODTY_EPSD_LIST, getPodtyEpsdList, clearPodtyEpsd } from '@store/jpod';
+import { MokaModal, MokaTable } from '@components';
+import { columnDefs } from './PodtyEpisodeModalColumns';
 
 /**
  * J팟 관리 > 에피소드 > 팟티 목록 모달
@@ -31,7 +31,7 @@ const PodtyEpisodeModal = (props) => {
                     ...element,
                     crtDt: crtDt,
                     onClick: (row) => {
-                        window.open(`https://m.podty.me/cast/${row.castSrl}`);
+                        window.open(row.shareUrl);
                     },
                 };
             }),

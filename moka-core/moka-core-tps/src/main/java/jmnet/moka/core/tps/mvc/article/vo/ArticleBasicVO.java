@@ -191,6 +191,18 @@ public class ArticleBasicVO implements Serializable {
     private String contentType;
 
     /**
+     * 재생시간
+     */
+    @Column(name = "DURATION")
+    private String duration;
+
+    /**
+     * OVP이미지경로
+     */
+    @Column(name = "OVP_THUMB")
+    private String ovpThumb;
+
+    /**
      * 백오피스에서 중지(E)/삭제(D) 여부
      */
     @Column(name = "IUD")

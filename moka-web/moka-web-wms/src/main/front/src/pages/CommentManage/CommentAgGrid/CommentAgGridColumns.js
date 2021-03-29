@@ -29,7 +29,7 @@ export const columnDefs = [
     {
         headerName: '댓글내용',
         field: 'cont',
-        tooltipField: 'cont',
+        //tooltipField: 'cont',
         flex: 1,
         //autoHeight: true,
         //resizable: true,
@@ -41,9 +41,8 @@ export const columnDefs = [
             display: '-webkit-box',
             '-webkit-line-clamp': '2',
             '-webkit-box-orient': 'vertical',
-            paddingTop: '5px',
-            paddingBottom: '5px',
-            overflow: 'hidden',
+            paddingTop: '13px',
+            paddingBottom: '13px',
             cursor: 'pointer',
         },
         cellRendererFramework: (param) => {

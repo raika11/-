@@ -196,9 +196,9 @@ const CommentListBox = ({ setSelectBannedItem }) => {
                     onClickTitle: (params) => {
                         const { api: gridApi, rowIndex, reactContainer } = params;
                         const row = gridApi.getDisplayedRowAtIndex(rowIndex);
-                        const contHeight = reactContainer.querySelector('span').clientHeight;
-                        if (row.rowHeight === 54) {
-                            row.setRowHeight(contHeight + 10);
+                        const contHeight = reactContainer.querySelector('span').clientHeight + 26;
+                        if (row.rowHeight < contHeight) {
+                            row.setRowHeight(contHeight);
                         } else {
                             gridApi.resetRowHeights();
                         }
@@ -238,7 +238,7 @@ const CommentListBox = ({ setSelectBannedItem }) => {
             onRowSelected={handleGridRowSelected}
             onColumnResized={onColumnResized}
             onColumnVisible={onColumnVisible}
-            rowHeight={54}
+            rowHeight={49}
             //onCellClicked={handleOnCellClicked}
             //onRowDoubleClicked={handleDoubleClickListRow}
             onGridReady={onGridReady}

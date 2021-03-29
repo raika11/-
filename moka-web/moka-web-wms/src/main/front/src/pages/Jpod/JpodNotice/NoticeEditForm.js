@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
@@ -14,7 +14,6 @@ import BoardsNote from '@/pages/Boards/BoardsList/BoardsEdit/BoardsNote';
  * J팟 관리 > 공지 게시판 > 게시글 편집 폼
  */
 const NoticeEditForm = ({ data, onChange }) => {
-    const dispatch = useDispatch();
     const { boardSeq, parentBoardSeq } = useParams();
 
     const PDS_URL = useSelector((store) => store.app.PDS_URL);
@@ -44,27 +43,19 @@ const NoticeEditForm = ({ data, onChange }) => {
      * 첨부 파일 등록
      */
     const handleChangeFile = (e) => {
-        let imageFiles = [];
+        let tempFile = e.target.files[0].name.split('.');
+        let tempFileExt = tempFile[1];
 
-        if (uploadFiles.length + 1 > jpodBoard.allowFileCnt) {
-            messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${jpodBoard.allowFileCnt}개 입니다.`, () => {});
+        if (jpodBoard.allowFileExt?.split(',').indexOf(tempFileExt) < 0) {
+            // 허용하는 확장자가 아닐경우
+            messageBox.alert(`해당 게시판의 첨부 파일은 (${jpodBoard.allowFileExt})확장자만 등록할 수 있습니다.`, () => {});
         } else {
-            Array.from(e.target.files).forEach((f, idx) => {
-                const fileName = f.name.split('.');
-                const fileExt = fileName[1];
-                if (jpodBoard.allowFileExt.split(',').indexOf(fileExt) > -1) {
-                    const seqNo = idx;
-                    const imageData = { seqNo, attachFile: f };
-                    imageFiles.push(imageData);
-                } else {
-                    // 허용하는 확장자가 아닐경우
-                    messageBox.alert(`해당 게시판의 첨부 파일은 (${jpodBoard.allowFileExt})확장자만 등록할 수 있습니다.`, () => {});
-                }
-            });
+            if (uploadFiles.length + 1 > jpodBoard.allowFileCnt) {
+                messageBox.alert(`해당 게시판의 첨부 파일 최대 건수는 ${jpodBoard.allowFileCnt}개 입니다.`, () => {});
+            } else {
+                setUploadFiles([...uploadFiles, e.target.files[0]]);
+            }
         }
-
-        const arr = uploadFiles.concat(imageFiles);
-        setUploadFiles(arr);
     };
 
     /**
@@ -90,15 +81,26 @@ const NoticeEditForm = ({ data, onChange }) => {
     };
 
     useEffect(() => {
-        if (!contents.boardSeq) {
+        if (!boardSeq) {
             setUploadFiles([]);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [boardSeq]);
 
     useEffect(() => {
         // 로컬 파일 목록 업데이트 하면 파일 업로드 목록 변경
-        onChange({ attaches: uploadFiles });
+        let imageData;
+
+        onChange({
+            attaches: uploadFiles.map((f) => {
+                if (f.seqNo > 0) {
+                    imageData = { seqNo: f.seqNo };
+                } else {
+                    imageData = { attachFile: f, seqNo: 0 };
+                }
+
+                return imageData;
+            }),
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [uploadFiles]);
 
@@ -106,13 +108,12 @@ const NoticeEditForm = ({ data, onChange }) => {
         if (!loading) {
             setUploadFiles(
                 data.attaches.map((file) => {
-                    const { filePath, fileName } = file;
+                    const { seqNo, orgFileName, filePath, fileName } = file;
                     const fileUrl = PDS_URL && filePath && fileName ? `${PDS_URL}/${filePath}/${fileName}` : '';
                     return {
-                        attachFile: {
-                            ...file,
-                            fileUrl: fileUrl,
-                        },
+                        seqNo: seqNo,
+                        name: orgFileName,
+                        fileUrl: fileUrl,
                     };
                 }),
             );
@@ -126,20 +127,20 @@ const NoticeEditForm = ({ data, onChange }) => {
                 {boardSeq && !parentBoardSeq && (
                     <>
                         <Form.Row className="mb-2">
-                            <Col xs={6} className="p-0 d-flex align-items-center">
-                                <MokaInputLabel label="등록일시" as="none" />
-                                <div>
-                                    <p className="mb-0">{data.boardSeq && data.regDt ? `${data.regDt}` : ''}</p>
-                                    <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
-                                </div>
-                            </Col>
-                            <Col xs={6} className="p-0 d-flex align-items-center">
-                                <MokaInputLabel label="수정일시" as="none" />
-                                <div>
-                                    <p className="mb-0">{data.boardSeq && data.modDt ? `${data.modDt}` : ''}</p>
-                                    <p className="mb-0">{data.boardSeq && data.regName && data.regId ? `${data.regName}(${data.regId})` : ''}</p>
-                                </div>
-                            </Col>
+                            {data.boardSeq && data.regDt && (
+                                <Col xs={6} className="p-0 d-flex align-items-center">
+                                    <MokaInputLabel label="등록일시" as="none" labelWidth={50} />
+                                    <p className="mb-0">{data.regDt || ''}</p>
+                                    <p className="mb-0">{data.regName && data.regId && `${data.regName}(${data.regId})`}</p>
+                                </Col>
+                            )}
+                            {data.boardSeq && data.modDt && (
+                                <Col xs={6} className="p-0 d-flex align-items-center justify-content-end">
+                                    <MokaInputLabel label="수정일시" as="none" labelWidth={50} />
+                                    <p className="mb-0">{data.modDt || ''}</p>
+                                    <p className="mb-0">{data.regName && data.regId && `${data.regName}(${data.regId})`}</p>
+                                </Col>
+                            )}
                         </Form.Row>
                         <Form.Row className="mb-2 align-items-center">
                             <Col xs={4} className="p-0 d-flex">
@@ -272,7 +273,7 @@ const NoticeEditForm = ({ data, onChange }) => {
                         />
                     </Form.Row>
                 ) : (
-                    <BoardsNote data={data.content} onChangeFormData={onChange} />
+                    <BoardsNote data={data.content} jpodBoardId={jpodBoard.boardId} onChangeFormData={onChange} />
                 )}
                 {jpodBoard.fileYn === 'Y' && (
                     <>
@@ -292,7 +293,7 @@ const NoticeEditForm = ({ data, onChange }) => {
                                 <Form.Row className="mb-0 pt-1" key={index}>
                                     <Form.Row className="w-100" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
                                         <Col xs={11} className="w-100 h-100 d-flex align-items-center justify-content-start">
-                                            <div onClick={() => handleClickImageName(file.attachFile)}>{file.attachFile.orgFileName || file.attachFile.name}</div>
+                                            <div onClick={() => handleClickImageName(file.attachFile)}>{file.name}</div>
                                         </Col>
                                         <Col>
                                             <MokaTableEditCancleButton onClick={() => handleDeleteUploadFile(index)} />

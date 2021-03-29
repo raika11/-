@@ -74,6 +74,10 @@ public class AreaDTO implements Serializable {
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
+    @ApiModelProperty("컴포넌트/컨테이너 사용여부")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.area.error.pattern.compYn}")
+    private String compYn = MokaConstants.NO;
+
     @ApiModelProperty("페이지")
     private PageSimpleDTO page;
 

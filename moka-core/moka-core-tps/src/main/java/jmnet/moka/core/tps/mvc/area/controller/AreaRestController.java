@@ -132,21 +132,26 @@ public class AreaRestController extends AbstractCommonController {
 
     private ResultMapDTO getAreaInfo(Area area, String message)
             throws Exception {
-        // 컨테이너의 관련cp변경시 에러표현하고, 로딩시키지는 않는다.
-        // 페이지의 컨테이너의 컴포넌트가 변경된 경우도 에러표현하고, 로딩시키지는 않는다.
+        boolean bComp = area
+                .getCompYn()
+                .equals(MokaConstants.YES);
         AreaCompLoadDTO areaCompLoadDTO = new AreaCompLoadDTO();
-        Map<String, Object> check = areaService.checkAreaComp(area);
-        if ((long) check.get("byPage") < 0) {
-            areaCompLoadDTO.setByPage(true);  // true이면 해당 컴포넌트 미존재
-            areaCompLoadDTO.setByPageMessage(msg("tps.areaComp.error.bypage"));
-        }
-        if ((long) check.get("byContainer") < 0) {
-            areaCompLoadDTO.setByContainer(true);  // true이면 해당 컨테이너 미존재
-            areaCompLoadDTO.setByContainerMessage(msg("tps.areaComp.error.bycontainer"));
-        }
-        if ((long) check.get("byContainerComp") < 0) {
-            areaCompLoadDTO.setByContainerComp(true); // true이면 해당 컨테이너내에 컴포넌트 미존재
-            areaCompLoadDTO.setByContainerCompMessage(msg("tps.areaComp.error.bycontainer-comp"));
+        if (bComp) {
+            // 컨테이너의 관련cp변경시 에러표현하고, 로딩시키지는 않는다.
+            // 페이지의 컨테이너의 컴포넌트가 변경된 경우도 에러표현하고, 로딩시키지는 않는다.
+            Map<String, Object> check = areaService.checkAreaComp(area);
+            if ((long) check.get("byPage") < 0) {
+                areaCompLoadDTO.setByPage(true);  // true이면 해당 컴포넌트 미존재
+                areaCompLoadDTO.setByPageMessage(msg("tps.areaComp.error.bypage"));
+            }
+            if ((long) check.get("byContainer") < 0) {
+                areaCompLoadDTO.setByContainer(true);  // true이면 해당 컨테이너 미존재
+                areaCompLoadDTO.setByContainerMessage(msg("tps.areaComp.error.bycontainer"));
+            }
+            if ((long) check.get("byContainerComp") < 0) {
+                areaCompLoadDTO.setByContainerComp(true); // true이면 해당 컨테이너내에 컴포넌트 미존재
+                areaCompLoadDTO.setByContainerCompMessage(msg("tps.areaComp.error.bycontainer-comp"));
+            }
         }
 
         AreaDTO areaDTO = modelMapper.map(area, AreaDTO.class);
@@ -156,7 +161,7 @@ public class AreaRestController extends AbstractCommonController {
         }
 
         // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
-        if (areaDTO
+        if (bComp && areaDTO
                 .getAreaDiv()
                 .equals(MokaConstants.ITEM_COMPONENT)) {
             areaService.compsToComp(areaDTO);
@@ -332,24 +337,28 @@ public class AreaRestController extends AbstractCommonController {
                     tpsLogger.fail(actionType, message, true);
                 }
 
-                // Div==CP일때, 컴포넌트가 없으면 에러
                 if (area
-                        .getAreaDiv()
-                        .equals(MokaConstants.ITEM_COMPONENT) && area.getAreaComp() == null) {
-                    String message = msg("tps.area.error.notnull.areaComp");
-                    invalidList.add(new InvalidDataDTO("areaComp", message));
-                    tpsLogger.fail(actionType, message, true);
-                }
+                        .getCompYn()
+                        .equals(MokaConstants.YES)) {
+                    // Div==CP일때, 컴포넌트가 없으면 에러
+                    if (area
+                            .getAreaDiv()
+                            .equals(MokaConstants.ITEM_COMPONENT) && area.getAreaComp() == null) {
+                        String message = msg("tps.area.error.notnull.areaComp");
+                        invalidList.add(new InvalidDataDTO("areaComp", message));
+                        tpsLogger.fail(actionType, message, true);
+                    }
 
-                // Div==CT일때, 컨테이너에 컴포넌트가 없으면 에러
-                if (area
-                        .getAreaDiv()
-                        .equals(MokaConstants.ITEM_CONTAINER) && (area.getAreaComps() == null || area
-                        .getAreaComps()
-                        .size() <= 0)) {
-                    String message = msg("tps.area.error.notnull.areaComps");
-                    invalidList.add(new InvalidDataDTO("areaComps", message));
-                    tpsLogger.fail(actionType, message, true);
+                    // Div==CT일때, 컨테이너에 컴포넌트가 없으면 에러
+                    if (area
+                            .getAreaDiv()
+                            .equals(MokaConstants.ITEM_CONTAINER) && (area.getAreaComps() == null || area
+                            .getAreaComps()
+                            .size() <= 0)) {
+                        String message = msg("tps.area.error.notnull.areaComps");
+                        invalidList.add(new InvalidDataDTO("areaComps", message));
+                        tpsLogger.fail(actionType, message, true);
+                    }
                 }
             }
         }

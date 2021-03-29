@@ -136,7 +136,7 @@ const NoticeEditForm = ({ data, onChange }) => {
                             {data.boardSeq && data.modDt && (
                                 <Col xs={5} className="p-0 d-flex align-items-center justify-content-end">
                                     <MokaInputLabel label="수정일시" as="none" labelWidth={50} />
-                                    <p className="mb-0">{`${data.modDt || ''} ${data.modId || ''}`}</p>
+                                    <p className="mb-0">{`${data.modDt} ${data.modId || ''}`}</p>
                                 </Col>
                             )}
                         </Form.Row>
@@ -291,7 +291,7 @@ const NoticeEditForm = ({ data, onChange }) => {
                                 <Form.Row className="mb-0 pt-1" key={index}>
                                     <Form.Row className="w-100" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
                                         <Col xs={11} className="w-100 h-100 d-flex align-items-center justify-content-start">
-                                            <div onClick={() => handleClickImageName(file.attachFile)}>{file.name}</div>
+                                            <div onClick={() => handleClickImageName(file)}>{file.name}</div>
                                         </Col>
                                         <Col>
                                             <MokaTableEditCancleButton onClick={() => handleDeleteUploadFile(index)} />

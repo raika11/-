@@ -196,10 +196,18 @@ const ChannelEdit = ({ match }) => {
      * @param {*} file 파일데이터
      */
     const handleChangeImg = (name, file) => {
-        setTemp({
-            ...temp,
-            [name]: file,
-        });
+        if (file) {
+            setTemp({
+                ...temp,
+                [name]: file,
+            });
+        } else {
+            setTemp({
+                ...temp,
+                [name]: file,
+                [name.replace('File', '')]: null,
+            });
+        }
     };
 
     /**
@@ -281,12 +289,15 @@ const ChannelEdit = ({ match }) => {
         let saveData = temp;
 
         // keyword 셋팅
-        const keywords = keywordText.split(',').map((k, idx) => ({
-            keyword: k.trim(),
-            chnlSeq,
-            epsdSeq: 0,
-            ordNo: idx + 1,
-        }));
+        const keywords = keywordText
+            .split(',')
+            .filter((k) => k.trim())
+            .map((k, idx) => ({
+                keyword: k.trim(),
+                chnlSeq,
+                epsdSeq: 0,
+                ordNo: idx + 1,
+            }));
         saveData.keywords = keywords;
 
         // 진행자 셋팅
@@ -361,7 +372,7 @@ const ChannelEdit = ({ match }) => {
     return (
         <MokaCard
             className="w-100 flex-fill"
-            title={`J팟 채널 ${!chnlSeq ? '등록' : '정보'}`}
+            title={`J팟 채널 ${!chnlSeq ? '등록' : '수정'}`}
             loading={loading}
             footerButtons={[
                 {

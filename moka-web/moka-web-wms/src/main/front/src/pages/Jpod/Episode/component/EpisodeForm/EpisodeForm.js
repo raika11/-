@@ -12,12 +12,14 @@ const EpisodeForm = ({
     selectedChannel,
     channelList,
     episode,
+    error,
     cpMembers,
     egMembers,
     keywordText,
     onChange,
     onChangeImg,
     onSelectPodty,
+    onSelectPodcast,
     addMember,
     reporterToMember,
     onChangeMember,
@@ -45,13 +47,13 @@ const EpisodeForm = ({
 
     useEffect(() => {
         // 키가 바뀌면 이미지미리보기 제거
-        if (img1Ref.current && !episode.shrImgFile) {
+        if (img1Ref.current && !episode.shrImg) {
             img1Ref.current.deleteFile();
         }
         if (img2Ref.current && !episode.katalkImg) {
             img2Ref.current.deleteFile();
         }
-    }, [episode.epsdSeq, episode.katalkImg, episode.shrImgFile]);
+    }, [episode.epsdSeq, episode.katalkImg, episode.shrImg]);
 
     return (
         <div>
@@ -69,7 +71,7 @@ const EpisodeForm = ({
             {/* 채널 선택 */}
             <Form.Row className="mb-2">
                 <Col xs={6} className="p-0">
-                    <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" value={episode.chnlSeq} onChange={onChange} required>
+                    <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" value={episode.chnlSeq} onChange={onChange} isInvalid={error.chnlSeq} required>
                         <option hidden>채널 선택</option>
                         {channelList.map((ch) => (
                             <option key={ch.chnlSeq} value={ch.chnlSeq} data-podtychnlsrl={ch.podtyChnlSrl}>
@@ -91,14 +93,24 @@ const EpisodeForm = ({
                     value={episode.podtyEpsdSrl}
                     onChange={onChange}
                 />
-                <Button variant="searching" className="flex-shrink-0" onClick={findPodty} disabled={!selectedChannel?.podtyChnlSrl}>
+                <Button variant="searching" className="flex-shrink-0" onClick={findPodty}>
                     팟티 에피소드 검색
                 </Button>
                 <PodtyEpisodeModal show={podtyShow} castSrl={selectedChannel?.podtyChnlSrl} onHide={() => setPodtyShow(false)} onRowClicked={onSelectPodty} />
             </Form.Row>
 
             {/* 에피소드 명 */}
-            <MokaInputLabel label="에피소드명" id="epsdNm" name="epsdNm" placeholder="" className="mb-2" value={episode.epsdNm} onChange={onChange} />
+            <MokaInputLabel
+                label="에피소드명"
+                id="epsdNm"
+                name="epsdNm"
+                placeholder=""
+                className="mb-2"
+                value={episode.epsdNm}
+                onChange={onChange}
+                isInvalid={error.epsdNm}
+                required
+            />
 
             {/* 에피소드 내용 */}
             <MokaInputLabel
@@ -110,6 +122,8 @@ const EpisodeForm = ({
                 name="epsdMemo"
                 value={episode.epsdMemo}
                 onChange={onChange}
+                isInvalid={error.epsdMemo}
+                required
             />
 
             {/* 시즌, 회차 */}
@@ -197,7 +211,7 @@ const EpisodeForm = ({
                     <Button variant="positive" className="mr-3 flex-shrink-0" onClick={() => setPodcastShow(true)}>
                         등록
                     </Button>
-                    <PodcastModal show={podcastshow} onHide={() => setPodcastShow(false)} />
+                    <PodcastModal show={podcastshow} onHide={() => setPodcastShow(false)} onRowClicked={onSelectPodcast} selectedChannel={selectedChannel} />
 
                     <div style={{ width: 250 }}>
                         <MokaInputLabel label="재생시간" labelWidth={50} name="playTime" value={episode.playTime} onChange={onChange} />
@@ -214,7 +228,7 @@ const EpisodeForm = ({
                         <Col xs={6} className="p-0 pr-3">
                             <MokaInputLabel
                                 as="imageFile"
-                                name="shrImgFile"
+                                name="shrImg"
                                 inputClassName="flex-fill"
                                 labelClassName="justify-content-end"
                                 label={
@@ -230,9 +244,10 @@ const EpisodeForm = ({
                                 }
                                 ref={img1Ref}
                                 inputProps={{
-                                    img: episode.shrImgFile,
+                                    img: episode.shrImg,
                                     setFileValue: (file) => onChangeImg('shrImgFile', file),
                                     deleteButton: true,
+                                    accept: 'image/jpeg',
                                 }}
                             />
                         </Col>
@@ -255,8 +270,9 @@ const EpisodeForm = ({
                                 ref={img2Ref}
                                 inputProps={{
                                     img: episode.katalkImg,
-                                    setFileValue: (file) => onChangeImg('katalkImg', file),
+                                    setFileValue: (file) => onChangeImg('katalkImgFile', file),
                                     deleteButton: true,
+                                    accept: 'image/jpeg',
                                 }}
                             />
                         </Col>

@@ -32,6 +32,7 @@ import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.group.service.GroupService;
 import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuAuthSimpleDTO;
@@ -187,6 +188,13 @@ public class GroupRestController extends AbstractCommonController {
 
             // 결과리턴
             GroupDTO dto = modelMapper.map(returnValue, GroupDTO.class);
+            MemberInfo memberInfo = memberService
+                    .findMemberById(returnValue.getRegId())
+                    .get();
+            if (memberInfo != null) {
+                dto.setRegMember(modelMapper.map(memberInfo, MemberSimpleDTO.class));
+            }
+
             ResultDTO<GroupDTO> resultDto = new ResultDTO<>(dto);
 
             // 액션 로그에 성공 로그 출력
@@ -224,13 +232,16 @@ public class GroupRestController extends AbstractCommonController {
         newGroup.setGroupCd(groupCd);
 
         // 오리진 데이터 조회
-        groupService
+        GroupInfo currentGroup = groupService
                 .findGroupById(newGroup.getGroupCd())
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
 
 
         try {
+            newGroup.setRegDt(currentGroup.getRegDt());
+            newGroup.setRegId(currentGroup.getRegId());
+            newGroup.setRegMember(currentGroup.getRegMember());
             // update
             GroupInfo returnValue = groupService.updateGroup(newGroup);
 

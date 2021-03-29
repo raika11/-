@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MokaInputLabel, MokaInput, MokaIcon } from '@components';
 import { clearReporter, getReporter, saveReporter } from '@store/reporter';
 import toast, { messageBox } from '@utils/toastUtil';
+import commonUtil from '@utils/commonUtil';
 
 const ReporterInput = ({ label, value }) => (
     <div className="d-flex align-items-center">
@@ -75,6 +76,25 @@ const ReporterEdit = ({ match }) => {
     }, [dispatch, paramSeq]);
 
     useEffect(() => {
+        let typeCode = 'R1: 중앙일보 기자';
+
+        if (!commonUtil.isEmpty(reporter.r1CdNm)) {
+            typeCode = `R1: ${reporter.r1CdNm}`;
+        }
+
+        typeCode += ', R2:';
+        if (!commonUtil.isEmpty(reporter.jplusRepDiv)) {
+            typeCode += ` ${reporter.jplusRepDiv}`;
+        }
+
+        if (!commonUtil.isEmpty(reporter.jplusRepDiv) && !commonUtil.isEmpty(reporter.r2CdNm)) {
+            typeCode += ' -';
+        }
+
+        if (!commonUtil.isEmpty(reporter.r2CdNm)) {
+            typeCode += ` ${reporter.r2CdNm}`;
+        }
+
         setTemp({
             ...reporter,
             usedYn: reporter.usedYn || 'N',
@@ -84,6 +104,7 @@ const ReporterEdit = ({ match }) => {
             rMail3: reporter.repEmail2 || ''.split('|')[2] || '',
             rMail4: reporter.repEmail2 || ''.split('|')[3] || '',
             modDt: reporter.modDt && reporter.modDt.length > 10 ? reporter.modDt.substr(0, 11) : reporter.modDt,
+            typeCode,
         });
     }, [reporter]);
 
@@ -120,12 +141,12 @@ const ReporterEdit = ({ match }) => {
 
                 <div className="flex-fill d-flex flex-column ml-4">
                     {/* 기자 정보 */}
-                    <div className="d-flex align-items-center justify-content-between">
+                    <div className="d-flex align-items-center justify-content-center mb-14">
                         <div className="d-flex flex-column">
-                            <p className="mb-2">
+                            {/*<p className="mb-2">
                                 <span className="h3 mr-1">{temp.repName}</span>
                                 <span className="h3 font-weight-normal">기자</span>
-                            </p>
+                            </p>*/}
                             <div className="d-flex">
                                 <MokaInput
                                     className="mr-gutter"
@@ -144,7 +165,9 @@ const ReporterEdit = ({ match }) => {
                                 />
                             </div>
                         </div>
-                        <div className="d-flex align-items-center">
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                        <div>
                             <Button variant="positive" className="mr-1" onClick={handleClickSave}>
                                 저장
                             </Button>
@@ -153,9 +176,9 @@ const ReporterEdit = ({ match }) => {
                             </Button>
                         </div>
                     </div>
+                    <div className="text-right">최종 수정일: {temp.modDt}</div>
 
                     {/* 최종 수정일 */}
-                    <div className="text-right">최종 수정일: {temp.modDt}</div>
                 </div>
             </div>
 
@@ -170,7 +193,7 @@ const ReporterEdit = ({ match }) => {
                         <ReporterInput label="표시 직책" value={temp.repTitle || '-'} />
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
+                {/*<Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
                         <ReporterInput label="소속 1" value={temp.r1CdNm || '-'} />
                     </Col>
@@ -185,10 +208,10 @@ const ReporterEdit = ({ match }) => {
                     <Col xs={6} className="p-0">
                         <ReporterInput label="소속 4" value={temp.r4CdNm || '-'} />
                     </Col>
-                </Form.Row>
+                </Form.Row>*/}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <ReporterInput label="타입코드" value={temp.jplusRepDiv || '-'} />
+                        <ReporterInput label="타입코드" value={temp.typeCode || '중앙일보 기자'} />
                     </Col>
                     <Col xs={6} className="p-0">
                         <ReporterInput label="집배신 이메일" value={temp.repEmail1 || '-'} />
@@ -228,12 +251,12 @@ const ReporterEdit = ({ match }) => {
                         <ReporterInput label="JNET 이메일1" value={temp.rMail1 || '-'} />
                     </Col>
                     <Col xs={6} className="p-0">
-                        <ReporterInput label="JNET 이메일3" value={temp.rMail3 || '-'} />
+                        <ReporterInput label="JNET 이메일2" value={temp.rMail2 || '-'} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <ReporterInput label="JNET 이메일2" value={temp.rMail2 || '-'} />
+                        <ReporterInput label="JNET 이메일3" value={temp.rMail3 || '-'} />
                     </Col>
                     <Col xs={6} className="p-0">
                         <ReporterInput label="JNET 이메일4" value={temp.rMail4 || '-'} />

@@ -8,7 +8,7 @@ export const columnDefs = [
     {
         headerName: '제목',
         field: 'name',
-        width: 250,
+        width: 200,
         flex: 1,
         tooltipField: 'name',
     },
@@ -21,7 +21,7 @@ export const columnDefs = [
     {
         headerName: '등록일',
         field: 'regDt',
-        width: 80,
+        width: 175,
         tooltipField: 'regDt',
     },
 ];

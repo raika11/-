@@ -2,43 +2,22 @@ package jmnet.moka.core.dps.api.model;
 
 import jmnet.moka.core.dps.api.handler.ScriptRequestHandler;
 
-public class ScriptRequest implements Request {
+public class ScriptRequest extends AbstractRequest {
+    private String scriptContent;
 
-	private String type;
-	private boolean async;
-	private String resultName;
-	private String scriptContent;
-	
-	
-	public ScriptRequest(String type, boolean async, String resultName, String scriptContent) {
-		this.type = type;
-		this.async = async;
-		this.resultName = resultName;
-		this.scriptContent = scriptContent;
-	}
 
-	public String getType() {
-		return this.type;
-	}
-	
-	public boolean getAsync() {
-		return this.async;
-	}
+    public ScriptRequest(String type, boolean async, String resultName, String scriptContent) {
+        super(type, async, resultName);
+        this.scriptContent = scriptContent;
+    }
 
-	public String getResultName() {
-		return this.resultName;
-	}
-	
-	public String getScriptContent( ) {
-		return this.scriptContent;
-	}
-	
-	@Override
-	public Class<?> getHandlerClass() {
-		return ScriptRequestHandler.class;
-	}
-	
-	public String toString() {
-		return String.join("/", this.type);
-	}
+    public String getScriptContent() {
+        return this.scriptContent;
+    }
+
+    @Override
+    public Class<?> getHandlerClass() {
+        return ScriptRequestHandler.class;
+    }
+
 }

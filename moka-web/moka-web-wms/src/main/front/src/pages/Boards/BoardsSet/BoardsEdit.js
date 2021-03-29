@@ -26,12 +26,7 @@ const BoardsEdit = ({ match }) => {
         shallowEqual,
     );
 
-    // 게시판 폼 필드값
     const [boardInfoData, setBoardInfoData] = useState(initialState.setMenu.boardInfo);
-
-    // monaco 에디터 스테이트 버그가 있어서 상태를 만들어 주고 상태가 업데이트 되면 렌더링 될수 있게 수정
-    const [editState, setEeditState] = useState(null);
-    // error
     const [error, setError] = useState({});
 
     /**
@@ -143,45 +138,6 @@ const BoardsEdit = ({ match }) => {
         return !isInvalid;
     };
 
-    // form 값 체크 어드민 페이지 일떄.
-    // const makeAdminFormData = () => {
-    //     let returnFormData = {
-    //         ...boardInfoData,
-    //         boardType: storeBoardType,
-    //     };
-
-    //     // 파일 등록
-    //     // 파일 등록 선택후 개수 입력 안했을때.
-    //     if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileCnt) {
-    //         return {
-    //             state: false,
-    //             message: '개수를 입력해 주세요.',
-    //         };
-    //     }
-
-    //     // 파일 등록 선택후 용량 입력 안했을때.
-    //     if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileSize) {
-    //         return {
-    //             state: false,
-    //             message: '용량을 입력해 주세요.',
-    //         };
-    //     }
-
-    //     // 파일 등록 선택후 확장자 입력 안했을때.
-    //     if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileExt) {
-    //         return {
-    //             state: false,
-    //             message: '확장자를 선택해 주세요.',
-    //         };
-    //     }
-
-    //     return {
-    //         state: true,
-    //         data: returnFormData,
-    //         message: '',
-    //     };
-    // };
-
     /**
      * 저장 버튼
      */
@@ -241,8 +197,12 @@ const BoardsEdit = ({ match }) => {
         });
     };
 
-    const handleCLickBoardPriveButton = () => {
-        window.open(boardInfoData.boardUrl);
+    /**
+     * 미리보기
+     */
+    const handleClickBoardPriview = () => {
+        const previewboard = window.open(``, '미리보기');
+        previewboard.document.write(`<html><head></head><body><header>${boardInfo.headerContent}</header><footer>${boardInfo.footerContent}</footer></body></html>`);
     };
 
     /**
@@ -267,15 +227,6 @@ const BoardsEdit = ({ match }) => {
         setBoardInfoData(boardInfo);
     }, [boardInfo]);
 
-    useEffect(() => {
-        // Monaco 에디터 렌더링 때 참조할 state 처리
-        if (loading === false && boardId === undefined) {
-            setEeditState(false);
-        } else {
-            setEeditState(loading);
-        }
-    }, [boardId, loading]);
-
     return (
         <MokaCard
             title={`게시판 ${boardId ? '수정' : '등록'}`}
@@ -286,7 +237,7 @@ const BoardsEdit = ({ match }) => {
             footerButtons={[
                 boardId &&
                     boardInfoData.headerContent &&
-                    boardInfoData.footerContent && { text: '미리보기', variant: 'outline-neutral', onClick: handleCLickBoardPriveButton, className: 'mr-1' },
+                    boardInfoData.footerContent && { text: '미리보기', variant: 'outline-neutral', onClick: handleClickBoardPriview, className: 'mr-1' },
                 { text: boardId ? '수정' : '저장', variant: 'positive', onClick: handleClickSaveButton, className: 'mr-1' },
                 boardId && { text: '삭제', variant: 'negative', onClick: handleClickDeleteButton, className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancleButton },
@@ -297,7 +248,6 @@ const BoardsEdit = ({ match }) => {
                 boardInfoData={boardInfoData}
                 setBoardInfoData={setBoardInfoData}
                 onChange={handleChangeValue}
-                loading={editState}
                 error={error}
                 setError={setError}
             />

@@ -1,28 +1,6 @@
-// import instance from '../commons/axios';
 import qs from 'qs';
 import instance from '@store/commons/axios';
 import { objectToFormData } from '@utils/convertUtil';
-
-export const insertBoard = ({ file }) => {
-    var formData = new FormData();
-    formData.append('attaches[0].attachFile', file);
-    formData.append('attaches[0].seqNo', 0);
-    formData.append('attaches[1].seqNo', 11);
-
-    formData.append('content', '내용');
-    formData.append('title', '타이틀');
-    formData.append('pwd', '1111');
-
-    return instance
-        .post(`/api/boards/2/contents`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        .catch((err) => {
-            throw err;
-        });
-};
 
 const makeBoardContentsFormData = ({ files, contentsData }) => {
     var formData = new FormData();
@@ -49,36 +27,28 @@ const makeBoardContentsFormData = ({ files, contentsData }) => {
     return formData;
 };
 
-/**
- * 게시판 채널 리스트
- */
+// 게시판 채널 리스트
 export const getBoardChannelList = () => {
     return instance.get(`/api/codemgt-grps/BOARD_DIVC/codemgts?grpCd=BOARD_DIVC`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 게시판 리스트
- */
+// 게시판 리스트
 export const getBoardInfoList = ({ search }) => {
     return instance.get(`/api/board-info?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 게시판 상세 조회
- */
+// 게시판 상세 조회
 export const getBoardInfo = (boardId) => {
     return instance.get(`/api/board-info/${boardId}`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 게시판 등록
- */
+// 게시판 등록
 export const postBoardInfo = ({ boardInfo }) => {
     return instance
         .post(`/api/board-info`, objectToFormData(boardInfo), {
@@ -91,9 +61,7 @@ export const postBoardInfo = ({ boardInfo }) => {
         });
 };
 
-/**
- * 게시판 수정
- */
+// 게시판 수정
 export const putBoardInfo = ({ boardInfo }) => {
     return instance
         .put(`/api/board-info/${boardInfo.boardId}`, objectToFormData(boardInfo), {
@@ -106,36 +74,28 @@ export const putBoardInfo = ({ boardInfo }) => {
         });
 };
 
-/**
- * 게시판 삭제
- */
+// 게시판 삭제
 export const deleteBoard = ({ boardId }) => {
     return instance.delete(`/api/board-info/${boardId}`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 게시글 게시판 그룹 목록
- */
+// 게시글 게시판 그룹 목록
 export const getBoardGroup = () => {
     return instance.get(`/api/board-info/groups`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 게시글 게시판 목록
- */
+// 게시글 게시판 목록
 export const getBoardContentsList = ({ boardId, search }) => {
     return instance.get(`/api/boards/${boardId}/contents?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 게시글 게시판 상세 조회
- */
+// 게시글 게시판 상세 조회
 export const getBoardContentsInfo = ({ boardId, boardSeq }) => {
     return instance.get(`/api/boards/${boardId}/contents/${boardSeq}`).catch((err) => {
         throw err;
@@ -156,9 +116,7 @@ export const getBoardReportersChannalList = () => {
     });
 };
 
-/**
- * 게시판 게시글 등록
- */
+// 게시판 게시글 등록
 export const postBoardContents = ({ boardContents }) => {
     return instance
         .post(`/api/boards/${boardContents.boardId}/contents`, objectToFormData(boardContents), {
@@ -171,9 +129,7 @@ export const postBoardContents = ({ boardContents }) => {
         });
 };
 
-/**
- * 게시판 게시글 수정
- */
+// 게시판 게시글 수정
 export const putBoardContents = ({ boardContents }) => {
     return instance
         .put(`/api/boards/${boardContents.boardId}/contents/${boardContents.boardSeq}`, objectToFormData(boardContents), {
@@ -186,9 +142,7 @@ export const putBoardContents = ({ boardContents }) => {
         });
 };
 
-/**
- * 게시판 게시글 답변 저장
- */
+// 게시판 게시글 답변 저장
 export const postBoardReply = ({ boardId, parentBoardSeq, contents, files }) => {
     return instance
         .post(`/api/boards/${boardId}/contents/${parentBoardSeq}/reply`, makeBoardContentsFormData({ files: files, contentsData: contents }), {
@@ -201,9 +155,7 @@ export const postBoardReply = ({ boardId, parentBoardSeq, contents, files }) => 
         });
 };
 
-/**
- * 게시판 게시글 답변 수정
- */
+// 게시판 게시글 답변 수정
 export const putBoardReply = ({ boardId, parentBoardSeq, boardSeq, contents, files }) => {
     return instance
         .put(`/api/boards/${boardId}/contents/${parentBoardSeq}/replys/${boardSeq}`, makeBoardContentsFormData({ files: files, contentsData: contents }), {
@@ -216,18 +168,14 @@ export const putBoardReply = ({ boardId, parentBoardSeq, boardSeq, contents, fil
         });
 };
 
-/**
- * 게시판 게시글 삭제
- */
+// 게시판 게시글 삭제
 export const deleteBoardContents = ({ boardId, boardSeq }) => {
     return instance.delete(`/api/boards/${boardId}/contents/${boardSeq}`).catch((err) => {
         throw err;
     });
 };
 
-/**
- * 게시판 본문 이미지 저장
- */
+// 게시판 본문 이미지 저장
 export const uploadBoardContentImage = ({ boardId, imageForm }) => {
     return instance
         .post(`/api/boards/${boardId}/image`, imageForm, {

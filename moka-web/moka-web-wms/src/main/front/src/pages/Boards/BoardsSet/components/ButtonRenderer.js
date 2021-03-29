@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
+import { messageBox } from '@utils/toastUtil';
 
 const ButtonRenderer = ({ value: { boardId, boardUrl } }) => {
     return (
@@ -18,9 +19,10 @@ const ButtonRenderer = ({ value: { boardId, boardUrl } }) => {
                 variant="outline-table-btn"
                 className="mr-0"
                 onClick={() => {
-                    if (boardUrl) {
-                        window.open(boardUrl);
-                    }
+                    messageBox.alert('서비스 준비 중입니다.');
+                    // if (boardUrl) {
+                    //     window.open(boardUrl);
+                    // }
                 }}
                 size="sm"
             >

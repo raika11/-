@@ -53,7 +53,9 @@ export default function useBoardDefs(selectBoard) {
                 columnDefs.push({
                     headerName: titlePrefixNm1,
                     field: 'titlePrefix1',
-                    cellStyle: { display: 'flex', alignItems: 'center' },
+                    cellStyle: {
+                        paddingTop: '8px',
+                    },
                     width: 80,
                     tooltipField: 'titlePrefix1',
                 });
@@ -63,7 +65,9 @@ export default function useBoardDefs(selectBoard) {
                 columnDefs.push({
                     headerName: titlePrefixNm2,
                     field: 'titlePrefix2',
-                    cellStyle: { display: 'flex', alignItems: 'center' },
+                    cellStyle: {
+                        paddingTop: '8px',
+                    },
                     tooltipField: 'titlePrefix2',
                     width: 80,
                 });
@@ -73,7 +77,9 @@ export default function useBoardDefs(selectBoard) {
                 headerName: '제목',
                 field: 'title',
                 flex: 1,
-                cellStyle: { display: 'flex', alignItems: 'center' },
+                cellStyle: {
+                    paddingTop: '8px',
+                },
                 tooltipField: 'title',
             });
 

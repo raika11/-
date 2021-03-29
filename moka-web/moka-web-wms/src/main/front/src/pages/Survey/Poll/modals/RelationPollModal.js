@@ -81,10 +81,10 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
             setSearch(initialState);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]);
+    }, [show, search]);
 
     return (
-        <MokaModal title="관련 투표 팝업" show={show} onHide={onHide} size="md" width={600} loading={loading} draggable>
+        <MokaModal title="관련 투표 추가" show={show} onHide={onHide} size="md" width={600} loading={loading} draggable>
             <RelationPollModalSearchComponent onSearch={setSearch} searchOptions={search} />
             <RelationPollModalAgGridComponent
                 rowData={rows}

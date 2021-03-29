@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaInputLabel } from '@components';
-import ReplayNote from './ReplayNote';
+import ReplyNote from './ReplyNote';
 
 /**
  * 게시판 관리 > 게시글 관리 > 게시판 편집 답변 폼
@@ -33,12 +33,10 @@ const BoardsEditReplyForm = ({ data, onChangeFormData }) => {
                 <br />
                 원본 게시글<br />
                 <hr class="divider">
-                <br />
-                <br /><br />
-                ${contentsInfo.content}`;
+                ${contentsInfo.content || contentsReply.content}`;
 
             onChangeFormData({
-                title: `Re: ${contentsInfo.title} `,
+                title: `Re: ${contentsInfo.title || contentsReply.title}`,
                 content: tempContent,
                 regName: userName,
             });
@@ -51,7 +49,7 @@ const BoardsEditReplyForm = ({ data, onChangeFormData }) => {
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [parentBoardSeq]);
 
     return (
         <Form>
@@ -73,7 +71,7 @@ const BoardsEditReplyForm = ({ data, onChangeFormData }) => {
                     />
                 </Form.Row>
             ) : (
-                <ReplayNote data={data.content} onChangeFormData={onChangeFormData} />
+                <ReplyNote data={data.content} onChangeFormData={onChangeFormData} />
             )}
             <Form.Row>
                 <Col xs={7} className="p-0">

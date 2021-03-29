@@ -11,11 +11,10 @@ import { GET_LIST_MENU_CONTENTS_LIST, changeListMenuSearchOption, getListMenuCon
 /**
  * 게시판 관리 > 게시글 관리 > 게시판 글 목록 AgGrid
  */
-const BoardsContentsListAgGrid = () => {
+const BoardsContentsListAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { boardId } = useParams();
-    const pagePathName = useSelector((store) => store.board.pagePathName);
     const total = useSelector((store) => store.board.listMenu.contentsList.total);
     const search = useSelector((store) => store.board.listMenu.contentsList.search);
     const list = useSelector((store) => store.board.listMenu.contentsList.list);
@@ -34,10 +33,10 @@ const BoardsContentsListAgGrid = () => {
     const handleOnRowClicked = (row) => {
         // 게시글의 답변이 없으면
         if (row.boardSeq === row.parentBoardSeq) {
-            history.push(`/${pagePathName}/${row.boardId}/${row.boardSeq}`);
+            history.push(`${match.path}/${row.boardId}/${row.boardSeq}`);
         } else {
             // 게시글의 답변이 있으면
-            history.push(`/${pagePathName}/${row.boardId}/${row.parentBoardSeq}/reply/${row.boardSeq}`);
+            history.push(`${match.path}/${row.boardId}/${row.parentBoardSeq}/reply/${row.boardSeq}`);
         }
     };
 

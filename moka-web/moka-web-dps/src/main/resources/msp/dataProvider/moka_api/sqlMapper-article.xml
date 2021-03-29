@@ -203,54 +203,6 @@
       ) }
   </select>
 
-  <!--reporter-->
-  <select id="reporter" parameterType="map" resultType="map" resultMap="map"
-    statementType="CALLABLE">
-    {call UPU_15RE_REPORTER_LIST_SEL(
-      #{name, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      'Y',
-      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
-      ) }
-  </select>
-
-  <!--columnist-->
-  <select id="columnist" parameterType="map" resultType="map" resultMap="map"
-    statementType="CALLABLE">
-    {call UPU_COLUMNIST_LIST_SEL(
-      #{name, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      'Y',
-      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
-      ) }
-  </select>
-
-  <!--jpod 채널-->
-  <select id="jpodChannel" parameterType="map" resultType="map" resultMap="map"
-    statementType="CALLABLE">
-    {call UPU_JPOD_CHANNEL_LIST_SEL(
-      #{name, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      'Y',
-      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
-      ) }
-  </select>
-
-  <!--jpod 에피소드-->
-  <select id="jpodEpisode" parameterType="map" resultType="map" resultMap="map"
-    statementType="CALLABLE">
-    {call UPU_JPOD_EPISODE_LIST_SEL(
-      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      'Y',
-      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
-      ) }
-  </select>
-
   <!--북마크등록-->
   <select id="scrapInsert" parameterType="map" resultType="string" statementType="CALLABLE">
     { call UPU_ARTICLE_SCRAP_INS(

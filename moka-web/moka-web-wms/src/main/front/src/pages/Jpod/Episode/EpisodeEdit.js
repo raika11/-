@@ -5,8 +5,10 @@ import produce from 'immer';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaCard } from '@components';
-import { initialState, GET_EPSD, SAVE_EPSD, saveEpsd, getEpsd, clearEpsd } from '@store/jpod';
+import { initialState, GET_EPSD, SAVE_EPSD, saveEpsd, getEpsd, clearEpsd, changeEpsdInvalidList } from '@store/jpod';
+import { invalidListToError } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
+import { getDisplayedRows } from '@utils/agGridUtil';
 import EpisodeForm from './component/EpisodeForm';
 
 // 출연진 기본값
@@ -31,17 +33,15 @@ const ChannelEdit = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const channelList = useSelector(({ jpod }) => jpod.totalChannel.list);
-    const episode = useSelector(({ jpod }) => jpod.episode.episode);
+    const { episode, invalidList } = useSelector(({ jpod }) => jpod.episode);
     const loading = useSelector(({ loading }) => loading[GET_EPSD] || loading[SAVE_EPSD]);
     const [temp, setTemp] = useState(initialState.episode.episode);
-    const [cpMembers, setCpMembers] = useState([]);
-    const [egMembers, setEgMembers] = useState([]);
+    const [cpMembers, setCpMembers] = useState([]); // 출연진(고정패널)
+    const [egMembers, setEgMembers] = useState([]); // 출연진(게스트)
     const [keywordText, setKeywordText] = useState('');
     const [error, setError] = useState({});
-    const [selectedChannel, setSelectedChannel] = useState(initialState.channel.channel);
-    const [gridInstance, setGridInstance] = useState(null);
-
-    // const selectBrightOvp = useSelector((store) => store.jpod.selectBrightOvp);
+    const [selectedChannel, setSelectedChannel] = useState(initialState.channel.channel); // 선택한 채널 데이터
+    const [gridInstance, setGridInstance] = useState(null); // 기사의 ag-grid instance
 
     /**
      * 입력값 변경
@@ -52,9 +52,13 @@ const ChannelEdit = (props) => {
 
         if (name === 'usedYn') {
             setTemp({ ...temp, [name]: checked ? 'Y' : 'N' });
+        } else if (name === 'keywordText') {
+            setKeywordText(value);
         } else {
             setTemp({ ...temp, [name]: value });
         }
+
+        if (error[name]) setError({ ...error, [name]: false });
     };
 
     /**
@@ -63,10 +67,18 @@ const ChannelEdit = (props) => {
      * @param {*} file 파일데이터
      */
     const handleChangeImg = (name, file) => {
-        setTemp({
-            ...temp,
-            [name]: file,
-        });
+        if (file) {
+            setTemp({
+                ...temp,
+                [name]: file,
+            });
+        } else {
+            setTemp({
+                ...temp,
+                [name]: file,
+                [name.replace('File', '')]: null,
+            });
+        }
     };
 
     /**
@@ -192,6 +204,7 @@ const ChannelEdit = (props) => {
 
     /**
      * 팟티 선택 시 에피소드 데이터 변경
+     * @param {object} podtyData 팟티 데이터
      */
     const handleSelectPodty = (podtyData) => {
         setTemp({
@@ -203,6 +216,24 @@ const ChannelEdit = (props) => {
             epsdFile: podtyData.enclosure,
             playTime: podtyData.duration,
         });
+
+        setError({
+            ...error,
+            epsdNm: false,
+            epsdMemo: false,
+        });
+    };
+
+    /**
+     * 팟캐스트 선택 시 에피소드 데이터 변경 => jpodType은 어떻게 되는건지??
+     * @param {object} podcastData 팟캐스트 데이터
+     */
+    const handleSelectPodcast = (podcastData) => {
+        setTemp({
+            ...temp,
+            epsdFile: podcastData.id,
+            playTime: podcastData.duration,
+        });
     };
 
     /**
@@ -210,171 +241,98 @@ const ChannelEdit = (props) => {
      * @param {object} episode 검증 대상
      */
     const validate = (episode) => {
-        // if (!editData.chnlSeq || editData.chnlSeq === '') {
-        //     messageBox.alert('채널을 선택해 주세요.', () => {});
-        //     return true;
-        // }
+        let isInvalid = false;
+        let errList = [];
 
-        return false;
+        // 채널
+        if (!episode.chnlSeq) {
+            errList.push({
+                field: 'chnlSeq',
+                reason: '채널을 선택하세요',
+            });
+            isInvalid = isInvalid || true;
+            toast.warning('채널을 선택하세요');
+        }
+
+        // 에피소드명
+        if (!episode.epsdNm) {
+            errList.push({
+                field: 'epsdNm',
+                reason: '',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 에피소드 소개
+        if (!episode.epsdMemo) {
+            errList.push({
+                field: 'epsdMemo',
+                reason: '',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        dispatch(changeEpsdInvalidList(errList));
+        return !isInvalid;
     };
 
     /**
      * 정보 저장 버튼
      */
     const handleSave = () => {
-        let saveData = temp;
+        const cs = selectedChannel?.chnlSeq;
+        let saveData = { ...temp, chnlSeq: cs };
+
+        // keyword 셋팅
+        const keywords = keywordText
+            .split(',')
+            .filter((k) => k.trim())
+            .map((k, idx) => ({
+                keyword: k.trim(),
+                chnlSeq: cs,
+                epsdSeq,
+                ordNo: idx + 1,
+            }));
+        saveData.keywords = keywords;
+
+        // 출연자 셋팅
+        const cpm = cpMembers.filter((m) => m.memNm).map((m) => ({ ...m, chnlSeq: cs, epsdSeq }));
+        const egm = egMembers.filter((m) => m.memNm).map((m) => ({ ...m, chnlSeq: cs, epsdSeq }));
+        saveData.members = [...cpm, ...egm];
+
+        // articles 셋팅
+        const articles = getDisplayedRows(gridInstance.api).map((row, idx) => ({
+            ...row,
+            id: { ...row.id, chnlSeq: cs, epsdSeq },
+            ordNo: idx + 1,
+        }));
+        saveData.articles = articles;
+
+        // 방송일
+        const epsdDate = moment(saveData.epsdDate).isValid() ? moment(saveData.epsdDate).format('YYYY-MM-DD') : null;
+        saveData.epsdDate = epsdDate;
 
         if (validate(saveData)) {
-            return;
+            dispatch(
+                saveEpsd({
+                    epsd: saveData,
+                    callback: ({ header: { success, message }, body }) => {
+                        if (success) {
+                            toast.success(message);
+                            history.push(`${match.path}/${body.chnlSeq}/${body.epsdSeq}`);
+                        } else {
+                            messageBox.alert(message);
+                        }
+                    },
+                }),
+            );
         }
-
-        // 진행자 배열을 담아둘 index 번호용
-        // let memberCount = 0;
-
-        // var formData = new FormData();
-
-        // // const selectChnlSeq = editData.chnlSeq; // 업데이트 시 사용할 에피소트 고유 번호.
-
-        // formData.append(`chnlSeq`, editData.chnlSeq); // 채널
-        // formData.append(`epsdSeq`, editData.epsdSeq); // 채널
-
-        // formData.append(`epsdNo`, editData.epsdNo); // 에피소드 회차
-        // formData.append(`usedYn`, editData.usedYn); // 사용유무
-        // formData.append(`playTime`, editData.playTime); // 재생시간
-        // formData.append(`epsdDate`, moment(editData.epsdDate).format('YYYY-MM-DD')); // 에피소드 등록일
-        // formData.append(`podtyEpsdSrl`, editData.podtyEpsdSrl); // 파티 에피소드SRL
-        // formData.append(`jpodType`, editData.jpodType); // 팟캐스트 타입
-
-        // formData.append(`epsdNm`, editData.epsdNm); // 에피소드 명
-        // formData.append(`epsdFile`, editData.epsdFile); // 에피소드 파일 링크
-        // formData.append(`epsdMemo`, editData.epsdMemo); // 에피소드 소개
-        // formData.append(`seasonNo`, editData.seasonNo); // 시즌 번호
-
-        // if (editData.shrImg) {
-        //     formData.append(`shrImg`, editData.shrImg); // 이미지
-        // }
-
-        // if (editData.katalkImg) {
-        //     formData.append(`katalkImg`, editData.katalkImg); // 카카오톡 이미지
-        // }
-
-        // // 태그
-        // editData.keywords &&
-        //     editData.keywords.length > 0 &&
-        //     editData.keywords.split(',').map((e, index) => {
-        //         formData.append(`keywords[${index}].ordNo`, index);
-        //         formData.append(`keywords[${index}].keyword`, e);
-        //         return false;
-        //     });
-
-        // // 선택한 진행자(고정패널)가 있을경우 form 값에 순서대로 추가.
-        // editSelectCPRepoters.map((element) => {
-        //     const memDiv = !element.memDiv || element.memDiv === undefined ? 'CP' : element.memDiv;
-        //     const memNm = !element.memNm || element.memNm === undefined ? '' : element.memNm;
-        //     const memRepSeq = !element.memRepSeq || element.memRepSeq === undefined ? '' : element.memRepSeq;
-        //     const nickNm = !element.nickNm || element.nickNm === undefined ? '' : element.nickNm;
-        //     const memMemo = !element.memMemo || element.memMemo === undefined ? '' : element.memMemo;
-        //     const desc = !element.desc || element.desc === undefined ? '' : element.desc;
-
-        //     if (memNm) {
-        //         formData.append(`members[${memberCount}].memDiv`, memDiv);
-        //         formData.append(`members[${memberCount}].memNm`, memNm);
-        //         formData.append(`members[${memberCount}].memRepSeq`, memRepSeq);
-        //         formData.append(`members[${memberCount}].nickNm`, nickNm);
-        //         formData.append(`members[${memberCount}].memMemo`, memMemo);
-        //         formData.append(`members[${memberCount}].desc`, desc);
-        //         memberCount++;
-        //     }
-        //     return [];
-        // });
-
-        // // 선택한 진행자(게스트)가 있을경우 form 값에 순서대로 추가.
-        // editSelectEGRepoters.map((element) => {
-        //     const memDiv = !element.memDiv || element.memDiv === undefined ? 'EG' : element.memDiv;
-        //     const memNm = !element.memNm || element.memNm === undefined ? '' : element.memNm;
-        //     const memRepSeq = !element.memRepSeq || element.memRepSeq === undefined ? '' : element.memRepSeq;
-        //     const nickNm = !element.nickNm || element.nickNm === undefined ? '' : element.nickNm;
-        //     const memMemo = !element.memMemo || element.memMemo === undefined ? '' : element.memMemo;
-        //     const desc = !element.desc || element.desc === undefined ? '' : element.desc;
-
-        //     if (memNm) {
-        //         formData.append(`members[${memberCount}].memDiv`, memDiv);
-        //         formData.append(`members[${memberCount}].memNm`, memNm);
-        //         formData.append(`members[${memberCount}].memRepSeq`, memRepSeq);
-        //         formData.append(`members[${memberCount}].nickNm`, nickNm);
-        //         formData.append(`members[${memberCount}].memMemo`, memMemo);
-        //         formData.append(`members[${memberCount}].desc`, desc);
-        //         memberCount++;
-        //     }
-        //     return [];
-        // });
-
-        // // 파일 추가.
-        // if (shrImgFile) {
-        //     formData.append(`shrImgFile`, shrImgFile[0]);
-        // }
-
-        // // 파일 추가.
-        // if (katalkImgFile) {
-        //     formData.append(`katalkImgFile`, katalkImgFile[0]);
-        // }
-
-        // selectArticleItem.map((item, index) => {
-        //     if (item.contentId) {
-        //         formData.append(`articles[${index}].id.totalId`, item.contentId);
-        //     }
-        //     formData.append(`articles[${index}].ordNo`, index);
-        //     formData.append(`articles[${index}].relTitle`, item.title);
-        //     formData.append(`articles[${index}].relLink`, item.linkUrl);
-        //     formData.append(`articles[${index}].relLinkTarget`, item.linkTarget ? item.linkTarget : 'S');
-        //     return item;
-        // });
-
-        // dispatch(
-        //     saveEpsd({
-        //         chnlSeq: Number(editData.chnlSeq),
-        //         epsdSeq: Number(editData.epsdSeq),
-        //         episodeinfo: formData,
-        //         callback: ({ header: { success, message }, body }) => {
-        //             if (success === true) {
-        //                 toast.success(message);
-        //                 const { chnlSeq, epsdSeq } = body;
-        //                 if ((chnlSeq, epsdSeq)) {
-        //                     // 등록 및 수정 성공시 store 값 초기화 후 다시 데이터를 가지고 옴.
-        //                     dispatch(clearEpsd());
-        //                     dispatch(getEpsd({ chnlSeq: chnlSeq, epsdSeq: epsdSeq }));
-        //                     history.push(`${match.path}/${chnlSeq}/${epsdSeq}`);
-        //                 }
-        //             } else {
-        //                 const { totalCnt, list } = body;
-        //                 if (totalCnt > 0 && Array.isArray(list)) {
-        //                     // 에러 메시지 확인.
-        //                     messageBox.alert(list[0].reason, () => {});
-        //                 } else {
-        //                     // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
-        //                     messageBox.alert(message, () => {});
-        //                 }
-        //             }
-        //         },
-        //     }),
-        // );
     };
 
     /**
      * 취소
      */
     const handleCancle = () => history.push(`${match.path}`);
-
-    // useEffect(() => {
-    //     // 브라이트 코브 값이 선택되서 store 가 변경되면 정보창에서 변경 시켜 준다.
-    //     if (selectBrightOvp.id && selectBrightOvp.name) {
-    //         setEditData({
-    //             ...editData,
-    //             epsdFile: selectBrightOvp.id,
-    //         });
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [selectBrightOvp]);
 
     useEffect(() => {
         if (chnlSeq && epsdSeq) {
@@ -392,6 +350,7 @@ const ChannelEdit = (props) => {
         } else {
             dispatch(clearEpsd());
         }
+        setError({});
     }, [chnlSeq, dispatch, epsdSeq]);
 
     useEffect(() => {
@@ -413,8 +372,13 @@ const ChannelEdit = (props) => {
     }, [temp.chnlSeq, channelList]);
 
     useEffect(() => {
+        setError(invalidListToError(invalidList));
+    }, [invalidList]);
+
+    useEffect(() => {
         return () => {
             dispatch(clearEpsd());
+            dispatch(changeEpsdInvalidList([]));
         };
     }, [dispatch]);
 
@@ -425,7 +389,7 @@ const ChannelEdit = (props) => {
             loading={loading}
             footerButtons={[
                 {
-                    text: epsdSeq ? '수정' : '삭제',
+                    text: epsdSeq ? '수정' : '등록',
                     variant: 'positive',
                     onClick: handleSave,
                     className: 'mr-1',
@@ -439,6 +403,7 @@ const ChannelEdit = (props) => {
                 channelList={channelList}
                 selectedChannel={selectedChannel}
                 episode={temp}
+                error={error}
                 cpMembers={cpMembers}
                 egMembers={egMembers}
                 keywordText={keywordText}
@@ -446,6 +411,7 @@ const ChannelEdit = (props) => {
                 onChange={handleChangeValue}
                 onChangeImg={handleChangeImg}
                 onSelectPodty={handleSelectPodty}
+                onSelectPodcast={handleSelectPodcast}
                 // 출연자 변경 함수
                 addMember={addMember}
                 reporterToMember={reporterToMember}

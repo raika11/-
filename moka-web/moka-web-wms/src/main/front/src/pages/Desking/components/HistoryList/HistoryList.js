@@ -147,6 +147,7 @@ const HistoryList = (props) => {
         setRowData(
             HistoryList.map((arr) => ({
                 ...arr,
+                regId: `${arr.regNm}(${arr.regId})`,
                 handleClickLoad,
             })),
         );

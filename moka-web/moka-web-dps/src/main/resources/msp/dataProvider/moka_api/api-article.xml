@@ -117,17 +117,10 @@
       <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
     </parameter>
     <request dmlType="sp" setNames="_DATA">dps.article.issueInfo</request>
-    <!--
-    <request type="script" resultName="LIST">
-      var result = $arh.apiRequest("moka_api","issue", $a);
-      var a = new("java.util.HashMap");
-      a.put("_DATA",result.get("_DATA"));
-      a.put("_TOTAL",result.get("_TOTAL"));
-      a;
-    </request>
-    -->
+    <request type="apiCall" resultName="LIST" apiId="issue"/>
     <keys>
       id
+      #paging
     </keys>
   </api>
 
@@ -137,11 +130,7 @@
     <parameter>
       <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
     </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.article.issue</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("totalCount");
-    </request>
+    <request dmlType="sp" setNames="_DATA" total="totalCount">dps.article.issue</request>
     <keys>
       id
       #paging
@@ -160,72 +149,6 @@
     </keys>
   </api>
 
-  <!--기자 목록-->
-  <api id="reporter">
-    <description>기자 목록을 조회한다.</description>
-    <parameter>
-      <name desc="기자명">^.{0,1000}$</name>
-    </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.article.reporter</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("total");
-    </request>
-    <keys>
-      name
-      #paging
-    </keys>
-  </api>
-
-  <!--컬럼니스트 목록-->
-  <api id="columnist">
-    <description>컬럼니스트 목록을 조회한다.</description>
-    <parameter>
-      <name desc="컬럼니스트명">^.{0,1000}$</name>
-    </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.article.columnist</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("total");
-    </request>
-    <keys>
-      name
-      #paging
-    </keys>
-  </api>
-
-  <!--J팟 채널 목록-->
-  <api id="jpod.channel">
-    <description>J팟 채널 목록을 조회한다.</description>
-    <parameter>
-      <name desc="채널명">^.{0,1000}$</name>
-    </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.article.jpodChannel</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("total");
-    </request>
-    <keys>
-      #paging
-    </keys>
-  </api>
-
-  <!--J팟 에피소드 목록-->
-  <api id="jpod">
-    <description>J팟 에피소드 목록을 조회한다.</description>
-    <parameter>
-      <id desc="채널ID" type="number" require="Y">^[0-9]{1,9}$</id>
-    </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.article.jpodEpisode</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("total");
-    </request>
-    <keys>
-      id
-      #paging
-    </keys>
-  </api>
 
   <!--북마크등록-->
   <api id="scrap.insert" membership="cookie">

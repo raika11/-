@@ -37,9 +37,7 @@ const initContentInfo = {
     jpodChannel: null,
     regDt: '',
     modDt: '',
-    // boardSeq: null,
-    // regInfo: '',
-    // modInfo: '',
+    boardSeq: null,
 };
 
 export const initialState = {
@@ -151,12 +149,6 @@ export default handleActions(
         [act.CHANGE_SET_MENU_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.setMenu.search = payload;
-            });
-        },
-        // 게시판 검색 옵션 클리어
-        [act.CLEAR_SET_MENU_SEARCH_OPTION]: (state) => {
-            return produce(state, (draft) => {
-                draft.setMenu.search = initialState.setMenu.search;
             });
         },
         // list 메뉴 검색 옵션 처리

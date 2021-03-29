@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaInputLabel } from '@components';
-import ReplayNote from '@/pages/Boards/BoardsList/BoardsEdit/ReplayNote';
+import ReplyNote from '@/pages/Boards/BoardsList/BoardsEdit/ReplyNote';
 
 /**
  * J팟 관리 > 공지 게시판 > 게시글 답변 편집 폼
@@ -34,12 +34,10 @@ const NoticeEditReplyForm = ({ data, onChange }) => {
                 <br />
                 원본 게시글<br />
                 <hr class="divider">
-                <br />
-                <br /><br />
-                ${contents.content}`;
+                ${contents.content || storeReply.content}`;
 
             onChange({
-                title: `Re: ${contents.title} `,
+                title: `Re: ${contents.title || storeReply.title}`,
                 content: tempContent,
                 regName: userName,
             });
@@ -52,7 +50,7 @@ const NoticeEditReplyForm = ({ data, onChange }) => {
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [parentBoardSeq]);
 
     return (
         <Form>
@@ -90,7 +88,7 @@ const NoticeEditReplyForm = ({ data, onChange }) => {
                     />
                 </Form.Row>
             ) : (
-                <ReplayNote data={data.content} onChangeFormData={onChange} />
+                <ReplyNote data={data.content} onChangeFormData={onChange} jpodBoardId={jpodBoard.boardId} />
             )}
             {/* 등록자 */}
             <Form.Row>

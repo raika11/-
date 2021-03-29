@@ -2,7 +2,6 @@ package jmnet.moka.web.schedule.support.system;
 
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
-import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.mvc.gen.service.GenContentService;
 import jmnet.moka.web.schedule.support.StatusFlagType;
 import jmnet.moka.web.schedule.support.reserve.AbstractReserveJob;
@@ -34,47 +33,53 @@ public class InstantJobHandler {
     @Autowired
     private ApplicationContext context;
 
-    public boolean runInstantJob(GenContent info){
+    public boolean runInstantJob(GenContent info) {
 
-        if(info.getJobType().equals("S")){
+        if (info
+                .getJobType()
+                .equals("S")) {
             return runScheduleJob(info);
-        }
-        else if(info.getJobType().equals("R")){
+        } else if (info
+                .getJobType()
+                .equals("R")) {
             return runReserveJob(info);
         }
 
         return false;
     }
 
-    private boolean runScheduleJob(GenContent info){
+    private boolean runScheduleJob(GenContent info) {
         boolean result = false;
-        try{
+        try {
             AbstractScheduleJob job = (AbstractScheduleJob) context.getBean(Class.forName(info.getProgrameNm()));
             job.doTask(info);
-            //AbstractScheduleJob에 실행결과를 받아오기 위한 부분 추가
-            GenStatus scheduleResult = job.getFinish();
 
             //실행결과가 성공
-            if(scheduleResult.getGenResult() == 200L){
+            if (info
+                    .getGenStatus()
+                    .getGenResult() == 200L) {
                 result = true;
             }
 
-        }catch (Exception  e) {
+        } catch (Exception e) {
             log.error("InstantJobHandler > runScheduleJob fail :{}", e);
         }
 
         return result;
     }
 
-    private boolean runReserveJob(GenContent info){
+    private boolean runReserveJob(GenContent info) {
         boolean result = false;
-        try{
+        try {
             //조회된 history가 없다면 실행실패
             GenContentHistory history = jobContentService
                     .findGenContentHistory(info.getJobSeq())
                     .orElseThrow();
-            log.debug("history seqNo : "+ history.getSeqNo());
-            log.debug("history GenStatus jobSeq : "+ history.getGenContent().getGenStatus().getJobSeq());
+            log.debug("history seqNo : " + history.getSeqNo());
+            log.debug("history GenStatus jobSeq : " + history
+                    .getGenContent()
+                    .getGenStatus()
+                    .getJobSeq());
 
             AbstractReserveJob job = (AbstractReserveJob) context.getBean(Class.forName(info.getProgrameNm()));
             //info에 해당하는 history를 사용하여 asyncTask 대신 invoke 직접 실행
@@ -83,11 +88,11 @@ public class InstantJobHandler {
             job.finish(history);
 
             //실행결과가 성공
-            if(history.getStatus() == StatusFlagType.DONE){
+            if (history.getStatus() == StatusFlagType.DONE) {
                 result = true;
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("InstantJobHandler > runReserveJob fail :{}", e);
         }
 

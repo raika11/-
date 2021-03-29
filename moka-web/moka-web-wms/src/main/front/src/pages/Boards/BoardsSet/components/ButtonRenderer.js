@@ -2,6 +2,9 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { messageBox } from '@utils/toastUtil';
 
+/**
+ * 게시판 버튼
+ */
 const ButtonRenderer = ({ value: { boardId, boardUrl } }) => {
     return (
         <div className="d-flex align-items-center h-100">
@@ -19,12 +22,14 @@ const ButtonRenderer = ({ value: { boardId, boardUrl } }) => {
                 variant="outline-table-btn"
                 className="mr-0"
                 onClick={() => {
-                    messageBox.alert('서비스 준비 중입니다.');
-                    // if (boardUrl) {
-                    //     window.open(boardUrl);
-                    // }
+                    if (boardUrl) {
+                        window.open(boardUrl);
+                    } else {
+                        messageBox.alert('서비스 준비 중입니다.');
+                    }
                 }}
                 size="sm"
+                disabled={boardUrl ? false : true}
             >
                 프론트 확인
             </Button>

@@ -65,9 +65,7 @@ const ArticleSource = (props) => {
                 <Route
                     path={[`${match.path}/add`, `${match.path}/:sourceCode`]}
                     exact
-                    render={({ match }) => {
-                        const { params } = match;
-
+                    render={() => {
                         return (
                             <MokaCard
                                 className="flex-fill"
@@ -75,7 +73,7 @@ const ArticleSource = (props) => {
                                 footer
                                 footerButtons={[
                                     { text: '코드 매핑', variant: 'outline-neutral', className: 'mr-1', onClick: handleClickMapping },
-                                    { text: params?.sourceCode ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
+                                    { text: match.params?.sourceCode ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
                                     { text: '취소', variant: 'negative', onClick: handleClickCancel },
                                 ]}
                             >

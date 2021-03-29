@@ -486,6 +486,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .pagination {display:none;}
 
     /* card */
+    .img_right_sm:first-child {padding-top: 15px; border-top: 1px solid #e2e2e2;}
     .img_right_sm .card_body {padding-right: 15px;}
     .img_right_sm .card_image {margin-bottom: 0;}
 }

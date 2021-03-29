@@ -75,6 +75,7 @@ public class ApiParser {
     private static final String ATTR_METHOD_NAME = "methodName";
     private static final String ATTR_SELECTOR = "selector";
     private static final String ATTR_TOTAL = "total";
+    private static final String ATTR_OUT_PARAM = "outParam";
     private static final String ATTR_DML_TYPE = "dmlType";
     private static final String ATTR_INCLUDE = "include";
     private static final String ATTR_EXCLUDE = "exclude";
@@ -345,21 +346,22 @@ public class ApiParser {
             String totalAttr = requestEl.getAttribute(ATTR_TOTAL);
             String asyncAttr = requestEl.getAttribute(ATTR_ASYNC);
             boolean eval = false;
-//            boolean total = false;
+            boolean total = false;
             boolean async = false;
             String resultName = requestEl.getAttribute(ATTR_RESULTNAME);
             String setNames = requestEl.getAttribute(ATTR_SETNAMES);
             String methodName = requestEl.getAttribute(ATTR_METHOD_NAME);
             String selector = requestEl.getAttribute(ATTR_SELECTOR);
+            String outParam = requestEl.getAttribute(ATTR_OUT_PARAM);
             if (type == null || type.length() == 0) {
                 type = Request.TYPE_DB;
             }
             if (evalAttr != null && evalAttr.length() != 0) {
                 eval = evalAttr.equalsIgnoreCase("Y") ? true : false;
             }
-//            if (totalAttr != null && totalAttr.length() != 0) {
-//                total = totalAttr.equalsIgnoreCase("Y") ? true : false;
-//            }
+            if (totalAttr != null && totalAttr.length() != 0) {
+                total = totalAttr.equalsIgnoreCase("Y") ? true : false;
+            }
             if (asyncAttr != null && asyncAttr.length() != 0) {
                 async = asyncAttr.equalsIgnoreCase("Y") ? true : false;
             }
@@ -375,7 +377,7 @@ public class ApiParser {
                     .trim();
             if (type.equals(Request.TYPE_DB)) {
                 String dmlType = requestEl.getAttribute(ATTR_DML_TYPE);
-                api.addRequest(new DbRequest(type, eval, async, resultName, setNames, textContent, totalAttr, dmlType));
+                api.addRequest(new DbRequest(type, eval, async, resultName, setNames, textContent, total, dmlType, outParam));
             } else if (type.equals(Request.TYPE_URL)) {
                 String include = requestEl.getAttribute(ATTR_INCLUDE);
                 String exclude = requestEl.getAttribute(ATTR_EXCLUDE);

@@ -176,11 +176,13 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
             if (asyncOnly == false && request.getAsync() == false) {
                 ApiResult result = requestHandler.processRequest(apiContext);
                 Map<String, Object> paramMap = null;
-                // procedure의 PARAM_MAP 제거 및 임시보관
+                List<String> outParamList = null;
+                // procedure의 OUT 파라미터 처리를 위해 PARAM_MAP 제거 및 임시보관
                 if ( request instanceof DbRequest ) {
                     DbRequest dbRequest = (DbRequest) request;
                     if ( dbRequest.getDmlType().equals(DbRequest.DML_TYPE_PROCEDURE)) {
                         paramMap = (Map<String, Object>) result.remove(DbRequestHandler.PARAM_MAP);
+                        outParamList = dbRequest.getOutParamList();
                     }
                 }
                 if (request.getResultName().equals(ApiResult.MAIN_DATA)) {
@@ -200,11 +202,12 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
                     }
                     allResult.addApiResult(request.getResultName(), result);
                 }
-                // procedure의 TOTAL처리
-                if ( paramMap != null ) {
-                    DbRequest dbRequest = (DbRequest) request;
-                    Object totalValue = paramMap.get(dbRequest.getTotal());
-                    allResult.addApiResult(ApiResult.MAIN_TOTAL,ApiResult.createApiResult(totalValue));
+                // procedure의 OUT 파라미터 값 처리
+                if ( paramMap != null && outParamList != null) {
+                    for ( String outParam : outParamList) {
+                        Object outValue = paramMap.get(outParam);
+                        allResult.addApiResult(outParam,ApiResult.createApiResult(outValue));
+                    }
                 }
             } else if (request.getAsync()) {
                 AsyncRequestContext asyncRequestContext = new AsyncRequestContext(apiContext);

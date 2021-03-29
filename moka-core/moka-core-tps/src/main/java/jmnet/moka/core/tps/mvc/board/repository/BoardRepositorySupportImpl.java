@@ -278,7 +278,6 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
     public Optional<Board> findByBoardSeq(Long boardSeq) {
         QBoard qBoard = QBoard.board;
         QBoardInfo qBoardInfo = QBoardInfo.boardInfo;
-        QMemberSimpleInfo regMember = QMemberSimpleInfo.memberSimpleInfo;
         QMemberSimpleInfo modMember = QMemberSimpleInfo.memberSimpleInfo;
 
         JPQLQuery<Board> query = from(qBoard);
@@ -289,7 +288,6 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
 
         Board board = query
                 .innerJoin(qBoard.boardInfo, qBoardInfo)
-                .innerJoin(qBoard.regMember, regMember)
                 .innerJoin(qBoard.modMember, modMember)
                 .fetchJoin()
                 .fetchFirst();

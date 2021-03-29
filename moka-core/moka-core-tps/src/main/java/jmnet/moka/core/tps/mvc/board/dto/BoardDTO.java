@@ -77,13 +77,6 @@ public class BoardDTO {
     private String regId;
 
     /**
-     * 등록자
-     */
-    @ApiModelProperty(hidden = true)
-    private MemberSimpleDTO regMember;
-
-
-    /**
      * 수정자
      */
     @ApiModelProperty(hidden = true)

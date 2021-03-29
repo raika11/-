@@ -147,24 +147,30 @@ const AreaFormDepth2 = (props) => {
             return;
         }
 
+        const isCmp = temp.cmpYn === 'Y';
+
         let save = {
             ...temp,
             depth, // depth 변경
             ordNo: temp.areaSeq ? temp.ordNo : list.length + 1, // 수정 등록 분기쳐서 ordNo 셋팅
             sourceCode,
             domain,
-            page: { pageSeq: page.pageSeq, pageName: page.pageName, pageUrl: page.pageUrl },
+            page: isCmp ? { pageSeq: page.pageSeq, pageName: page.pageName, pageUrl: page.pageUrl } : null,
             parent: { areaSeq: parent.areaSeq },
-            previewRsrc,
+            previewRsrc: isCmp ? previewRsrc : null,
         };
-        if (temp.areaDiv === ITEM_CP) {
+        if (isCmp && temp.areaDiv === ITEM_CP) {
             save.container = null;
             save.areaComps = null;
             save.areaComp = { ...areaComp, component, ordNo: 1 };
-        } else {
+        } else if (isCmp) {
             save.container = container;
             save.areaComp = null;
             save.areaComps = areaComps;
+        } else {
+            save.container = null;
+            save.areaComp = null;
+            save.areaComps = null;
         }
 
         if (validate(save)) {
@@ -326,16 +332,6 @@ const AreaFormDepth2 = (props) => {
             if (name === 'usedYn') {
                 setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
             } else if (name === 'cmpYn') {
-                // N이면 데이터 날림
-                if (!checked) {
-                    setPreviewRsrc('');
-                    setAreaComp({});
-                    setAreaComps([]);
-                    setComponent({});
-                    setContainer({});
-                    setPage({});
-                    setError({});
-                }
                 setTemp({ ...temp, cmpYn: checked ? 'Y' : 'N' });
             } else if (name === 'areaDiv') {
                 setTemp({ ...temp, areaDiv: value });

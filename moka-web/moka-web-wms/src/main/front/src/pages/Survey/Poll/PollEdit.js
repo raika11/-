@@ -57,8 +57,15 @@ const PollEdit = ({ onDelete }) => {
         } else {
             let isValid = true;
             if (name === 'allowAnswCnt') {
-                if (edit.itemCnt < value) {
-                    toast.warning('허용답변수가 답변수보다 크거나 같습니다.');
+                if (edit.itemCnt <= value) {
+                    messageBox.alert('허용 답변 수가 보기 개수보다 크거나 같습니다.\n보기 개수보다 작게 설정해 주세요.');
+                    isValid = false;
+                }
+            }
+
+            if (name === 'itemCnt') {
+                if (edit.allowAnswCnt >= value) {
+                    messageBox.alert('허용 답변 수가 보기 개수보다 크거나 같습니다.\n보기 개수보다 작게 설정해 주세요.');
                     isValid = false;
                 }
             }
@@ -80,22 +87,33 @@ const PollEdit = ({ onDelete }) => {
         const itemCnt = edit.itemCnt;
         const gap = itemCnt - pollItems.length;
 
-        if (gap > 0) {
-            for (let count = 0; count < gap; count++) {
-                const orderNo = pollItems.length + 1;
-                pollItems.push({ ...tempItem, orderNo });
+        if (itemCnt > edit.allowAnswCnt) {
+            if (gap > 0) {
+                for (let count = 0; count < gap; count++) {
+                    const orderNo = pollItems.length + 1;
+                    pollItems.push({ ...tempItem, orderNo });
+                }
+            } else if (gap < 0) {
+                pollItems = pollItems.slice(0, itemCnt);
             }
-        } else if (gap < 0) {
-            pollItems = pollItems.slice(0, itemCnt);
+
+            setEdit(
+                produce(edit, (draft) => {
+                    draft.pollItems = pollItems;
+                }),
+            );
+
+            setIsSet(true);
+        } else {
+            setEdit(
+                produce(edit, (draft) => {
+                    draft.allowAnswCnt = poll.allowAnswCnt;
+                    draft.itemCnt = poll.itemCnt;
+                    draft.pollItems = poll.pollItems;
+                }),
+            );
+            messageBox.alert('허용 답변 수가 보기 개수보다 크거나 같습니다.\n보기 개수보다 작게 설정해 주세요.');
         }
-
-        setEdit(
-            produce(edit, (draft) => {
-                draft.pollItems = pollItems;
-            }),
-        );
-
-        setIsSet(true);
     };
 
     const handleClickSave = () => {

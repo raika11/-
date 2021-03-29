@@ -65,14 +65,14 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
         //info에 해당하는 GenStatus가 없는 경우 생성(작업시작 전 작업실패 상태)
         GenStatus scheduleResult = info.getGenStatus();
         if (scheduleResult == null) {
-            scheduleResult = jobStatusService.insertGenStatusInit(info.getJobSeq());
+            info.setGenStatus(jobStatusService.insertGenStatusInit(info.getJobSeq()));
         }
         //GenStatus가 존재하는 경우 작업시작 전 작업실패 상태로 갱신 (에러발생 시 shutdown 되는 경우로 인해 완료 시 성공처리)
         else {
             scheduleResult.setGenResult(StatusResultType.BEFORE_EXECUTE.getCode());
             scheduleResult.setErrMgs(StatusResultType.BEFORE_EXECUTE.getName());
             scheduleResult.setLastExecDt(new Date());
-            scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
+            jobStatusService.updateGenStatus(scheduleResult);
         }
     }
 

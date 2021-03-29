@@ -107,14 +107,6 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     private Date regDt;
 
     /**
-     * 등록자
-     */
-    @NotFound(action = NotFoundAction.IGNORE)
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
-    private MemberSimpleInfo regMember;
-
-    /**
      * 수정자
      */
     @NotFound(action = NotFoundAction.IGNORE)

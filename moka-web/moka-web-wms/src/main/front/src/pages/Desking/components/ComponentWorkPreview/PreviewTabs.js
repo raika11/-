@@ -28,20 +28,25 @@ const PreviewTabs = ({ show, isNaverChannel, componentList }) => {
                 onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                 className="w-100 h-100"
                 activeKey={activeTabIdx}
-                tabNavs={['Wide', 'PC', 'Tablet', 'Mobile']}
+                tabNavs={[
+                    !isNaverChannel && { idx: 0, name: 'Wide' },
+                    !isNaverChannel && { idx: 1, name: 'PC' },
+                    !isNaverChannel && { idx: 2, name: 'Tablet' },
+                    { idx: 3, name: 'Mobile' },
+                ].filter(Boolean)}
                 tabs={[
                     /**
                      * Wide 미리보기
                      */
-                    <CommonPreview show={show && activeTabIdx === 0} componentList={componentList} breakpoint="wide" isNaverChannel={isNaverChannel} />,
+                    <CommonPreview show={show && activeTabIdx === 0} componentList={componentList} breakpoint="wide" />,
                     /**
                      * PC 미리보기
                      */
-                    <CommonPreview show={show && activeTabIdx === 1} componentList={componentList} breakpoint="pc" isNaverChannel={isNaverChannel} />,
+                    <CommonPreview show={show && activeTabIdx === 1} componentList={componentList} breakpoint="pc" />,
                     /**
                      * Tablet 미리보기
                      */
-                    <CommonPreview show={show && activeTabIdx === 2} componentList={componentList} breakpoint="tablet" isNaverChannel={isNaverChannel} />,
+                    <CommonPreview show={show && activeTabIdx === 2} componentList={componentList} breakpoint="tablet" />,
                     /**
                      * Mobile 미리보기
                      */

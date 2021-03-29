@@ -2,10 +2,13 @@ package jmnet.moka.web.schedule.mvc.schedule.service;
 
 import java.util.List;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.mvc.mybatis.dto.JReporterListJobDTO;
 import jmnet.moka.web.schedule.mvc.mybatis.mapper.JReporterListJobMapper;
 import jmnet.moka.web.schedule.mvc.mybatis.vo.JReporterVO;
 import jmnet.moka.web.schedule.support.StatusResultType;
+import jmnet.moka.web.schedule.support.common.FileUpload;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +33,11 @@ public class JReporterListJob extends AbstractScheduleJob {
     private JReporterListJobMapper jReporterListJobMapper;
 
     @Override
-    public void invoke() {
-        boolean success = false;
+    public void invoke(GenContent info) {
+        GenContent scheduleInfo = info;
+        GenStatus scheduleResult = info.getGenStatus();
 
+        boolean success = false;
         List<JReporterVO> list = jReporterListJobMapper.findAll(new JReporterListJobDTO());
 
         try {
@@ -101,16 +106,22 @@ public class JReporterListJob extends AbstractScheduleJob {
 
                 //log.debug("string : {}", stringBuffer);
 
-                success = stringFileUpload(stringBuffer.toString());
-                log.debug("file upload : {}", success);
+                //success = stringFileUpload(stringBuffer.toString());
+                FileUpload fileUpload = new FileUpload(scheduleInfo, mokaCrypt);
+                success = fileUpload.stringFileUpload(stringBuffer.toString(), "");
+
+                //업로드 성공 시 GenStatus.content에 파일생성에 사용된 String 저장
+                if (success) {
+                    scheduleResult.setContent(stringBuffer.toString());
+                }
             }
 
             //AbstractScheduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
-            setFinish(success);
-            
+            setFinish(success, info);
+
         } catch (Exception e) {
             log.error(e.toString());
-            setFinish(StatusResultType.FAILED_JOB, e.getMessage());
+            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), info);
         }
     }
 }

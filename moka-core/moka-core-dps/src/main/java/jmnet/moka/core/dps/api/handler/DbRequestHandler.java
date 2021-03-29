@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class DbRequestHandler implements RequestHandler {
     public final static Logger logger = LoggerFactory.getLogger(DbRequestHandler.class);
-    private final static String PARAM_MAP = "PARAM_MAP";
+    public final static String PARAM_MAP = "PARAM_MAP";
     @Autowired
     private DpsSqlSessionFactory sessionFactory;
 

@@ -153,14 +153,15 @@ const BoardContentsSearch = ({ match }) => {
                     // 첫번째 분류가 있으면
                     <MokaInput className="mr-2" as="select" name="titlePrefix1" id="titlePrefix1" value={search.titlePrefix1} onChange={handleChangeValue}>
                         <option value="">{selectBoard.titlePrefixNm1}</option>
-                        {selectBoard.titlePrefix1
-                            .replaceAll(' ', '')
-                            .split(',')
-                            .map((i, idx) => (
-                                <option key={idx} value={i}>
-                                    {i}
-                                </option>
-                            ))}
+                        {selectBoard.titlePrefix1 &&
+                            selectBoard.titlePrefix1
+                                .replaceAll(' ', '')
+                                .split(',')
+                                .map((i, idx) => (
+                                    <option key={idx} value={i}>
+                                        {i}
+                                    </option>
+                                ))}
                     </MokaInput>
                 )}
 
@@ -168,14 +169,15 @@ const BoardContentsSearch = ({ match }) => {
                     // 두번째 분류가 있으면
                     <MokaInput className="mr-2" as="select" name="titlePrefix2" id="titlePrefix2" value={search.titlePrefix2} onChange={handleChangeValue}>
                         <option value="">{selectBoard.titlePrefixNm2}</option>
-                        {selectBoard.titlePrefix2
-                            .replaceAll(' ', '')
-                            .split(',')
-                            .map((i, idx) => (
-                                <option key={idx} value={i}>
-                                    {i}
-                                </option>
-                            ))}
+                        {selectBoard.titlePrefix2 &&
+                            selectBoard.titlePrefix2
+                                .replaceAll(' ', '')
+                                .split(',')
+                                .map((i, idx) => (
+                                    <option key={idx} value={i}>
+                                        {i}
+                                    </option>
+                                ))}
                     </MokaInput>
                 )}
 

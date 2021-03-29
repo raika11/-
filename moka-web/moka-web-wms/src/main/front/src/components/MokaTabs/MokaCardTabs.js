@@ -41,8 +41,17 @@ const propTypes = {
     tabs: PropTypes.arrayOf(PropTypes.node),
     /**
      * tab 컨텐츠의 Nav(array), tab과 갯수가 동일해야한다
+     * string이거나 object
      */
-    tabNavs: PropTypes.arrayOf(PropTypes.string),
+    tabNavs: PropTypes.arrayOf(
+        PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.shape({
+                idx: PropTypes.number,
+                name: PropTypes.string,
+            }),
+        ]),
+    ),
     /**
      * nav 클릭 콜백
      */
@@ -97,24 +106,33 @@ const MokaCardTabs = (props) => {
             <Tab.Container id={id} activeKey={activeKey}>
                 <div className="d-flex px-card">
                     <Nav fill={fill} activeKey={activeKey} variant="tabs" className="flex-row" onSelect={handleSelect}>
-                        {tabNavs.map((nav, idx) =>
-                            nav ? (
-                                <Nav.Item key={idx} style={{ width: navWidth }}>
-                                    <Nav.Link eventKey={idx} className="h4">
-                                        {nav}
-                                    </Nav.Link>
-                                </Nav.Item>
-                            ) : (
-                                ''
-                            ),
-                        )}
+                        {tabNavs.map((nav, idx) => {
+                            if (!nav) return null;
+                            else if (typeof nav === 'string') {
+                                return (
+                                    <Nav.Item key={idx} style={{ width: navWidth }}>
+                                        <Nav.Link eventKey={idx} className="h4">
+                                            {nav}
+                                        </Nav.Link>
+                                    </Nav.Item>
+                                );
+                            } else if (typeof nav === 'object') {
+                                return (
+                                    <Nav.Item key={nav.idx || idx} style={{ width: navWidth }}>
+                                        <Nav.Link eventKey={nav.idx || idx} className="h4">
+                                            {nav.name}
+                                        </Nav.Link>
+                                    </Nav.Item>
+                                );
+                            } else return null;
+                        })}
                     </Nav>
                 </div>
                 <div className={clsx('d-flex custom-scroll', tabContentWrapperClassName)}>
                     <Tab.Content className={clsx('p-0', tabContentClass)}>
                         {tabs.map((tab, idx) =>
                             tab ? (
-                                <Tab.Pane key={idx} eventKey={idx} className="overflow-hidden h-100">
+                                <Tab.Pane key={idx} eventKey={tab.idx || idx} className="overflow-hidden h-100">
                                     <div className="pb-card pt-20 px-card h-100 custom-scroll">{tab}</div>
                                 </Tab.Pane>
                             ) : (

@@ -7,6 +7,8 @@ import jmnet.moka.core.common.brightcove.BrightcoveCredentailVO;
 import jmnet.moka.core.common.brightcove.BrightcoveProperties;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.web.schedule.mvc.brightcove.service.BrightcoveService;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.mvc.ovp.dto.OvpSetJpotMetaJobDTO;
 import jmnet.moka.web.schedule.mvc.ovp.mapper.OvpSetJpotMetaJobMapper;
 import jmnet.moka.web.schedule.support.StatusResultType;
@@ -42,7 +44,9 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
     private OvpSetJpotMetaJobMapper ovpSetJpotMetaJobMapper;
 
     @Override
-    public void invoke() {
+    public void invoke(GenContent info) {
+        GenContent scheduleInfo = info;
+        GenStatus scheduleResult = info.getGenStatus();
 
         boolean success = true;
 
@@ -67,7 +71,6 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
             JSONArray items = (JSONArray) jsonObject.get("items");
             for (Object item : items) {
                 JSONObject tmp = (JSONObject) item;
-                log.debug("tmp : {}", tmp);
 
                 OvpSetJpotMetaJobDTO param = new OvpSetJpotMetaJobDTO();
                 param.setStatDate(now);
@@ -77,9 +80,7 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
                 param.setPlayPv((Long) tmp.get("play_request"));
                 param.setPlayUv(0L);
                 param.setPlayTime((Long) tmp.get("video_seconds_viewed"));
-                log.debug("tmpValue : {} : {}", tmp.get("video_engagement_100"), tmp
-                        .get("video_engagement_100")
-                        .getClass());
+                //log.debug("tmpValue : {} : {}", tmp.get("video_engagement_100"), tmp.get("video_engagement_100").getClass());
                 if (tmp
                         .get("video_engagement_100")
                         .getClass() == Double.class) {
@@ -100,12 +101,12 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
             }
 
             //AbstractScheduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
-            setFinish(success);
+            setFinish(success, info);
 
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.toString());
-            setFinish(StatusResultType.FAILED_JOB, e.getMessage());
+            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), info);
         }
     }
 }

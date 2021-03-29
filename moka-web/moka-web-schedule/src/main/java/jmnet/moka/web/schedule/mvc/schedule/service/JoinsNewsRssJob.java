@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Map;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.exception.MokaException;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.mvc.mybatis.dto.JoinsNewsRssDTO;
 import jmnet.moka.web.schedule.mvc.mybatis.mapper.JoinsNewsRssJobMapper;
 import jmnet.moka.web.schedule.mvc.mybatis.vo.JoinsNewsVO;
 import jmnet.moka.web.schedule.support.StatusResultType;
+import jmnet.moka.web.schedule.support.common.FileUpload;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -52,21 +55,28 @@ public class JoinsNewsRssJob extends AbstractScheduleJob {
     Map<String, Map<String, String>> ctgInfoMap = new HashMap<>();
 
     @Override
-    public void invoke() {
+    public void invoke(GenContent info) {
+        //같은 클래스가 스케쥴러에 등록된 경우 전역변수를 공유하는 문제로 인해 전역변수를 삭제하고 info로 대체
+        GenContent scheduleInfo = info;
+        GenStatus scheduleResult = info.getGenStatus();
+
         //필요정보 초기화
         getCtgInfo();
 
         try {
             // -1 = 전체조회
             String ctg = "-1";
+            String filename = "";
 
             //입력된 파라미터 확인(ctg)
-            log.debug("param : {}", scheduleInfo.getPkgOpt());
+            log.debug("{} param : {}", scheduleInfo.getJobSeq(), scheduleInfo.getPkgOpt());
             if (McpString.isNotEmpty(scheduleInfo.getPkgOpt())) {
                 JSONObject jsonParam = (JSONObject) new JSONParser().parse(scheduleInfo.getPkgOpt());
                 ctg = McpString.defaultValue((String) jsonParam.get("ctg"));
+                filename = McpString.defaultValue((String) jsonParam.get("filename"));
             }
-            log.debug("ctg : {}", ctg);
+            log.debug("{] ctg : {}", scheduleInfo.getJobSeq(), ctg);
+            log.debug("{} filename : {}", scheduleInfo.getJobSeq(), filename);
 
             //ctg에 해당하는 뉴스 정보 조회
             JoinsNewsRssDTO dto = new JoinsNewsRssDTO();
@@ -81,14 +91,22 @@ public class JoinsNewsRssJob extends AbstractScheduleJob {
             StringBuffer stringBuffer = makeArticleRss(ctg, list);
             //log.debug("stringBuffer : {} ", stringBuffer);
 
-            boolean success = stringFileUpload(stringBuffer.toString());
+            //boolean success = stringFileUpload(stringBuffer.toString());
+            FileUpload fileUpload = new FileUpload(scheduleInfo, mokaCrypt);
+            boolean success = fileUpload.stringFileUpload(stringBuffer.toString(), filename);
+
+            //업로드 성공 시 GenStatus.content에 파일생성에 사용된 String 저장
+            if (success) {
+                scheduleResult.setContent(stringBuffer.toString());
+            }
+
             //AbstractSchduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
-            setFinish(success);
+            setFinish(success, info);
 
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             log.error(e.toString());
-            setFinish(StatusResultType.FAILED_JOB, e.getMessage());
+            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), info);
         }
     }
 
@@ -251,7 +269,7 @@ public class JoinsNewsRssJob extends AbstractScheduleJob {
         ctgInfo = new HashMap<>();
         ctgInfo.put("sCtgKr", "지구촌");
         ctgInfo.put("sCtgEn", "world");
-        ctgInfo.put("sCrmTag", "world");
+        ctgInfo.put("sCrmTag", "?cloc=rss-news-global");
         ctgInfoMap.put("13", ctgInfo);
 
         ctgInfo = new HashMap<>();
@@ -289,7 +307,5 @@ public class JoinsNewsRssJob extends AbstractScheduleJob {
         ctgInfo.put("sCtgEn", "topic");
         ctgInfo.put("sCrmTag", "?cloc=rss-news-focus");
         ctgInfoMap.put("22", ctgInfo);
-
-        //log.debug("ctgInfoMap : {}", ctgInfoMap.toString());
     }
 }

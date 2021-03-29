@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,7 +28,6 @@ import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageKeywordDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageMasterDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageSearchDTO;
-import jmnet.moka.core.tps.mvc.issue.entity.PackageKeyword;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import jmnet.moka.core.tps.mvc.issue.service.PackageService;
 import jmnet.moka.core.tps.mvc.issue.vo.PackageVO;
@@ -100,15 +99,41 @@ public class IssueRestController extends AbstractCommonController {
     public ResponseEntity<?> getPackage(
             @ApiParam("패키지 일련번호") @PathVariable("pkgSeq") /* @Min(value = 0, message = "{tps.article.error.min.totalId}") */ Long pkgSeq)
             throws NoDataException {
-
-        log.debug("request params : {}", pkgSeq);
-
         // 조회
         PackageMaster packageMaster = packageService
                 .findByPkgSeq(pkgSeq)
                 .orElseThrow(() -> new NoDataException("no-data"));
 
         PackageMasterDTO packageMasterDTO = modelMapper.map(packageMaster, PackageMasterDTO.class);
+
+        // 리턴값 설정
+        ResultDTO<PackageMasterDTO> resultDto = new ResultDTO<>(packageMasterDTO);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 패키지 조회 (화면기준)
+     *
+     * @param pkgSeq 패키지 일련번호
+     * @return 검색 결과
+     */
+    @ApiOperation(value = "패키지 조회 (화면기준)")
+    @GetMapping("/{pkgSeq}/group-by-ordno")
+    public ResponseEntity<?> getPackageGroupByOrdno(
+            @ApiParam("패키지 일련번호") @PathVariable("pkgSeq") /* @Min(value = 0, message = "{tps.article.error.min.totalId}") */ Long pkgSeq)
+            throws NoDataException {
+        // 조회
+        PackageMaster packageMaster = packageService
+                .findByPkgSeq(pkgSeq)
+                .orElseThrow(() -> new NoDataException("no-data"));
+
+        PackageMasterDTO packageMasterDTO = modelMapper.map(packageMaster, PackageMasterDTO.class);
+
+        // transform
+        packageMasterDTO = transformDataToViewDto(packageMasterDTO);
 
         // 리턴값 설정
         ResultDTO<PackageMasterDTO> resultDto = new ResultDTO<>(packageMasterDTO);
@@ -136,20 +161,32 @@ public class IssueRestController extends AbstractCommonController {
 
         PackageMaster packageMaster = modelMapper.map(packageMasterDTO, PackageMaster.class);
 
-        AtomicLong kwdOrd = new AtomicLong();
-        // 키워드는 마지막에 순번 확인
-        List<PackageKeyword> categories = Arrays
-                .stream(packageMasterDTO
-                        .getCatList()
-                        .split(","))
-                .map(category -> PackageKeyword
-                        .builder()
-                        .packageMaster(packageMaster)
-                        .catDiv("C")
-                        .keyword(category)
-                        .kwdOrd(kwdOrd.incrementAndGet())
-                        .build())
-                .collect(Collectors.toList());
+        // 등록
+        PackageMaster returnValue = packageService.insertPackage(packageMaster);
+        tpsLogger.success(ActionType.INSERT);
+        return new ResponseEntity<>(packageMaster, HttpStatus.OK);
+    }
+
+    /**
+     * 패키지 등록 (화면기준)
+     *
+     * @param packageMasterDTO 등록할 패키지
+     * @return 등록된 패키지
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "패키지 등록 (화면기준)")
+    @PostMapping("/group-by-ordno")
+    public ResponseEntity<?> postPackageGroupByOrdno(@RequestBody @Valid PackageMasterDTO packageMasterDTO)
+            throws InvalidDataException, Exception {
+        if (packageMasterDTO.getPkgSeq() != null) {
+            throw new MokaException("A new package cannot already hava an pkgSeq.");
+        }
+
+        // transform
+        packageMasterDTO = transformViewToDto(packageMasterDTO);
+
+        PackageMaster packageMaster = modelMapper.map(packageMasterDTO, PackageMaster.class);
 
         // 등록
         PackageMaster returnValue = packageService.insertPackage(packageMaster);
@@ -182,6 +219,33 @@ public class IssueRestController extends AbstractCommonController {
     }
 
     /**
+     * 패키지 수정 (화면기준)
+     *
+     * @param packageMasterDTO 수정할 패키지
+     * @return 수정된 패키지
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "패키지 수정 (화면기준)")
+    @PutMapping("/{pkgSeq}/group-by-ordno")
+    public ResponseEntity<?> putPackageGroupByOrdno(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
+            @RequestBody @Valid PackageMasterDTO packageMasterDTO)
+            throws InvalidDataException, Exception {
+        if (packageMasterDTO.getPkgSeq() == null) {
+            throw new MokaException("pkgSeq is not null.");
+        }
+
+        // transform
+        packageMasterDTO = transformViewToDto(packageMasterDTO);
+
+        PackageMaster packageMaster = modelMapper.map(packageMasterDTO, PackageMaster.class);
+        // 수정
+        PackageMaster returnValue = packageService.updatePackage(packageMaster);
+        tpsLogger.success(ActionType.UPDATE);
+        return new ResponseEntity<>(packageMaster, HttpStatus.OK);
+    }
+
+    /**
      * 패키지 타이틀 중복 체크
      *
      * @param pkgTitle 패키지 타이틀
@@ -201,16 +265,18 @@ public class IssueRestController extends AbstractCommonController {
     }
 
     /**
-     * 화면표시용 데이터로 tansform
+     * 화면표시용 데이터로 transform - ordno 기준으로 검색카테고리 분리해서 저장
      *
      * @param dataDto 디비 엔티티 맵핑된 데이터
      * @return 화면 표시용 데이터
      */
-    private PackageMasterDTO transformDataToViewDto(PackageMasterDTO dataDto) {
+    public PackageMasterDTO transformDataToViewDto(PackageMasterDTO dataDto) {
         Set<PackageKeywordDTO> keywords = dataDto
                 .getPackageKeywords()
                 .stream()
-                .filter(keyword -> keyword.getCatDiv() != "C")
+                .filter(keyword -> !keyword
+                        .getCatDiv()
+                        .contains("C"))
                 .collect(Collectors.groupingBy(PackageKeywordDTO::getOrdno))
                 .values()
                 .stream()
@@ -224,6 +290,7 @@ public class IssueRestController extends AbstractCommonController {
                                 .build(), (stored, newDto) -> {
                             return newDto
                                     .toBuilder()
+                                    .pkgSeq(dataDto.getPkgSeq())
                                     .keyword(stored.getKeyword() + "," + newDto.getKeyword())
                                     .schCondi(stored.getSchCondi() + "," + newDto.getSchCondi())
                                     .build();
@@ -235,14 +302,14 @@ public class IssueRestController extends AbstractCommonController {
                             .stream(keyword
                                     .getKeyword()
                                     .split(","))
-                            .filter(kwd -> kwd.length() > 0 && kwd != "null")
+                            .filter(kwd -> kwd.length() > 0 && !kwd.contains("null"))
                             .forEach(kwd -> keywordSet.add(kwd));
                     Arrays
                             .stream(keyword
                                     .getSchCondi()
                                     .replace("null", "")
                                     .split(","))
-                            .filter(condi -> condi.length() > 0 && condi != "null")
+                            .filter(condi -> condi.length() > 0 && !condi.contains("null"))
                             .forEach(condi -> schCondiSet.add(condi));
                     keyword.setKeyword(String.join(",", keywordSet));
                     keyword.setSchCondi(String.join(",", schCondiSet));
@@ -253,7 +320,10 @@ public class IssueRestController extends AbstractCommonController {
         dataDto.setCatList(String.join(",", dataDto
                 .getPackageKeywords()
                 .stream()
-                .filter(keyword -> keyword.getCatDiv() == "C")
+                .filter(keyword -> keyword
+                        .getCatDiv()
+                        .contains("C"))
+                .sorted(Comparator.comparingLong(PackageKeywordDTO::getKwdOrd))
                 .map(keyword -> keyword.getKeyword())
                 .collect(Collectors.toList())));
         dataDto.setPackageKeywords(keywords);
@@ -266,11 +336,11 @@ public class IssueRestController extends AbstractCommonController {
      * @param viewDto 화면 표시용 데이터 디비 엔티티 맵핑된 데이터
      * @return 디비 엔티티 맵핑된 데이터
      */
-    private List<PackageKeywordDTO> transformViewToDto(PackageMasterDTO viewDto) {
-        List<PackageKeywordDTO> keywords = new LinkedList<>();
-        Integer categoryOrderNumber = viewDto
-                .getPackageKeywords()
-                .size();
+    public PackageMasterDTO transformViewToDto(PackageMasterDTO viewDto) {
+        Set<PackageKeywordDTO> keywords = new LinkedHashSet<>();
+        //        Integer categoryOrderNumber = viewDto
+        //                .getPackageKeywords()
+        //                .size();
         viewDto
                 .getPackageKeywords()
                 .stream()
@@ -332,10 +402,16 @@ public class IssueRestController extends AbstractCommonController {
                                 .catDiv("C")
                                 .keyword(category)
                                 .kwdOrd(kwdOrd.incrementAndGet())
-                                .ordno(categoryOrderNumber + kwdOrd.get())
+                                .ordno(0L)
                                 .build());
                     });
         }
-        return keywords;
+        return viewDto
+                .toBuilder()
+                .catList(viewDto
+                        .getCatList()
+                        .substring(0, 29))
+                .packageKeywords(keywords)
+                .build();
     }
 }

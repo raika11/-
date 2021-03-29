@@ -34,7 +34,7 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @Setter
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @Alias("PackageMasterDTO")
 public class PackageMasterDTO implements Serializable {
     private static final long serialVersionUID = 1L;

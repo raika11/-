@@ -361,7 +361,7 @@ const AreaFormDepth2 = (props) => {
                 setTemp({ ...temp, [name]: value });
             }
         },
-        [areaComp, areaComps, error, handleCompLoad, temp, setPage],
+        [areaComp, areaComps, error, handleCompLoad, temp],
     );
 
     /**

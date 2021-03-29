@@ -100,6 +100,13 @@ public class Area extends BaseAudit {
     private Domain domain;
 
     /**
+     * 컴포넌트/컨테이너 사용여부(Y:사용, N:미사용)
+     */
+    @Column(name = "COMP_YN")
+    @Builder.Default
+    private String compYn = MokaConstants.NO;
+
+    /**
      * 페이지
      */
     @ManyToOne(fetch = FetchType.EAGER)
@@ -163,6 +170,7 @@ public class Area extends BaseAudit {
     public void prePersist() {
         this.depth = this.depth == null ? 1 : this.depth;
         this.usedYn = this.usedYn == null ? MokaConstants.YES : this.usedYn;
+        this.compYn = this.compYn == null ? MokaConstants.NO : this.compYn;
         this.areaDiv = this.areaDiv == null ? MokaConstants.ITEM_COMPONENT : this.areaDiv;
         this.areaAlign = this.areaAlign == null ? TpsConstants.AREA_ALIGN_V : this.areaAlign;
         this.ordNo = this.ordNo == null ? 1 : this.ordNo;

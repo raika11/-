@@ -184,6 +184,13 @@ public class ComponentRestController extends AbstractCommonController {
         Component component = modelMapper.map(componentDTO, Component.class);
 
         try {
+            //저장
+            HistPublishDTO histPublishDTO = HistPublishDTO
+                    .builder()
+                    .status(EditStatusCode.PUBLISH)
+                    .approvalYn(MokaConstants.YES)
+                    .build();
+            Component returnVal = componentService.insertComponent(component, histPublishDTO);
 
             //임시저장
             HistPublishDTO histSaveDTO = HistPublishDTO
@@ -192,14 +199,6 @@ public class ComponentRestController extends AbstractCommonController {
                     .approvalYn(MokaConstants.NO)
                     .build();
             ComponentHist componentHist = componentHistService.insertComponentHist(component, histSaveDTO);
-
-            //저장
-            HistPublishDTO histPublishDTO = HistPublishDTO
-                    .builder()
-                    .status(EditStatusCode.PUBLISH)
-                    .approvalYn(MokaConstants.YES)
-                    .build();
-            Component returnVal = componentService.insertComponent(component, histPublishDTO);
 
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
             returnValDTO = this.setPrevDataset(returnValDTO);

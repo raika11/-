@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
+import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,6 +62,7 @@ public class PackageKeywordDTO implements Serializable {
      * 검색 조건
      */
     @ApiModelProperty("검색 조건")
+    @Pattern(regexp = "^((T)|(K)|(K,T)|(T,K))$", message = "{tps.issue.error.pattern.schCondi}")
     private String schCondi;
 
     /**

@@ -130,7 +130,7 @@
     <parameter>
       <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
     </parameter>
-    <request dmlType="sp" setNames="_DATA" total="totalCount">dps.article.issue</request>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.article.issue</request>
     <keys>
       id
       #paging

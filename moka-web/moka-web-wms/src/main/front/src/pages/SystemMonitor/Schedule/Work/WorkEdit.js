@@ -7,14 +7,14 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputLabel } from '@/components';
-import { DB_DATEFORMAT } from '@/constants';
+import { DB_DATEFORMAT, SCHEDULE_PERIOD } from '@/constants';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { invalidListToError } from '@/utils/convertUtil';
 import { getBoSchjob } from '@/store/codeMgt';
 import { initialState, getJob, clearJob, saveJob, deleteJob, getDeleteJobList } from '@/store/schedule';
 
 /**
- * 스케줄 서버 관리 > 작업 목록 등록, 수정
+ * 스케줄 서버 관리 > 작업 목록 편집(등록, 수정)
  */
 const WorkEdit = ({ match }) => {
     const history = useHistory();
@@ -62,7 +62,7 @@ const WorkEdit = ({ match }) => {
                 field: 'targetPath',
                 reason: '배포 경로를 입력하세요',
             });
-            isInvalid = isInvalid | true;
+            isInvalid = isInvalid || true;
         }
 
         if (!obj.pkgNm) {
@@ -70,16 +70,16 @@ const WorkEdit = ({ match }) => {
                 field: 'pkgNm',
                 reason: '패키지 명을 입력하세요',
             });
-            isInvalid = isInvalid | true;
+            isInvalid = isInvalid || true;
         }
 
-        if (!obj.callUrl) {
-            errList.push({
-                field: 'callUrl',
-                reason: '호출 URL을 입력하세요',
-            });
-            isInvalid = isInvalid | true;
-        }
+        // if (!obj.callUrl) {
+        //     errList.push({
+        //         field: 'callUrl',
+        //         reason: '호출 URL을 입력하세요',
+        //     });
+        //     isInvalid = isInvalid || true;
+        // }
 
         // if (!obj.jobDesc) {
         //     errList.push({
@@ -92,6 +92,11 @@ const WorkEdit = ({ match }) => {
         setError(invalidListToError(errList));
         return !isInvalid;
     };
+
+    /**
+     * 생성내용보기
+     */
+    const handleClickInfo = () => {};
 
     /**
      * 저장 버튼
@@ -232,16 +237,12 @@ const WorkEdit = ({ match }) => {
                         <Col xs={5} className="p-0">
                             {data.jobType === 'S' && (
                                 <MokaInputLabel label="주기" as="select" name="period" value={data.period} onChange={handleChangeValue}>
-                                    <option value="30">30초</option>
-                                    <option value="60">1분</option>
-                                    <option value="120">2분</option>
-                                    <option value="300">5분</option>
-                                    <option value="600">10분</option>
-                                    <option value="1200">20분</option>
-                                    <option value="1800">30분</option>
-                                    <option value="3600">1시간</option>
-                                    <option value="43200">12시간</option>
-                                    <option value="86400">24시간</option>
+                                    {SCHEDULE_PERIOD &&
+                                        SCHEDULE_PERIOD.filter((p) => p.period !== 0).map((p) => (
+                                            <option key={p.period} value={p.period}>
+                                                {p.periodNm}
+                                            </option>
+                                        ))}
                                 </MokaInputLabel>
                             )}
                             {data.jobType === 'R' && (
@@ -266,12 +267,12 @@ const WorkEdit = ({ match }) => {
                         </Col>
                         {data.sendType === 'FTP' && (
                             <>
-                                <Col xs={4} className="p-0 d-flex justify-content-center">
+                                <Col xs={4} className="p-0 pl-2">
                                     <div style={{ width: 180 }}>
                                         <MokaInputLabel label="FTP\nPORT" name="ftpPort" value={data.ftpPort} onChange={handleChangeValue} />
                                     </div>
                                 </Col>
-                                <Col xs={3} className="p-0 d-flex justify-content-center">
+                                <Col xs={3} className="p-0 pl-2">
                                     <div style={{ width: 120 }}>
                                         <MokaInputLabel
                                             label="PASSIVE\n모드"
@@ -309,17 +310,15 @@ const WorkEdit = ({ match }) => {
                         required
                     />
                     <MokaInputLabel label="패키지명" className="mb-2" name="pkgNm" value={data.pkgNm} onChange={handleChangeValue} isInvalid={error.pkgNm} required />
-                    <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} onChange={handleChangeValue} isInvalid={error.callUrl} required />
+                    {/* <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} onChange={handleChangeValue} isInvalid={error.callUrl} required /> */}
                     <MokaInputLabel
                         as="textarea"
                         label="설명"
                         className={jobSeq && 'mb-2'}
                         name="jobDesc"
-                        inputProps={{ rows: jobSeq ? 1 : 5 }}
+                        inputProps={{ rows: jobSeq ? 3 : 5 }}
                         value={data.jobDesc}
                         onChange={handleChangeValue}
-                        // isInvalid={error.jobDesc}
-                        // required
                     />
                     {jobSeq && (
                         <>
@@ -327,46 +326,37 @@ const WorkEdit = ({ match }) => {
                                 label="등록정보"
                                 name="regInfo"
                                 className="mb-2"
-                                value={
-                                    data.regDt
-                                        ? `${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember ? data.regMember.memberNm : ''}${
-                                              data.regMember ? `(${data.regMember.memberId})` : ''
-                                          }`
-                                        : ''
-                                }
+                                value={data.regDt ? `${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember?.memberNm || ''}${`(${data.regMember?.memberId})` || ''}` : ''}
                                 inputProps={{ plaintext: true, readOnly: true }}
                             />
                             <MokaInputLabel
                                 label="수정 정보"
                                 name="modInfo"
                                 className="mb-2"
-                                value={
-                                    data.modDt
-                                        ? `${moment(data.modDt).format(DB_DATEFORMAT)} ${data.modMember ? data.modMember.memberNm : ''}${
-                                              data.modMember ? `(${data.modMember.memberId})` : ''
-                                          }`
-                                        : ''
-                                }
+                                value={data.modDt ? `${moment(data.modDt).format(DB_DATEFORMAT)} ${data.modMember?.memberNm || ''}${`(${data.modMember?.memberId})` || ''}` : ''}
                                 inputProps={{ plaintext: true, readOnly: true }}
                             />
-                            <MokaInputLabel
-                                label="마지막\n실행 정보"
-                                name="lastInfo"
-                                className="mb-2"
-                                // 생성: ${data.create} 배포: ${data.deploy}
-                                value={`${moment(data.jobStatus?.lastExecDt).format(DB_DATEFORMAT)}`}
-                                inputProps={{ plaintext: true, readOnly: true }}
-                            />
+                            <Form.Row className="mb-2 align-items-center justify-content-between">
+                                <MokaInputLabel
+                                    label="마지막\n실행 정보"
+                                    name="lastInfo"
+                                    className="mb-2 flex-fill"
+                                    value={
+                                        data.jobStatus
+                                            ? `${data.jobStatus.genResult && `생성: ${data.jobStatus.genResult}/${data.jobStatus.genExecTime}`}   ${
+                                                  data.jobStatus.sendResult && `배포: ${data.jobStatus.sendResult}/${data.jobStatus.sendExecTime}`
+                                              }   ${moment(data.jobStatus.lastExecDt).format(DB_DATEFORMAT)}`
+                                            : ''
+                                    }
+                                    inputProps={{ plaintext: true, readOnly: true }}
+                                />
+                                <Button variant="outline-neutral" size="sm" onClick={handleClickInfo}>
+                                    생성내용보기
+                                </Button>
+                            </Form.Row>
                             <Form.Row>
                                 <MokaInputLabel label=" " as="none" />
-                                <MokaInput
-                                    as="textarea"
-                                    name="errMgs"
-                                    value={data.errMgs ? data.errMgs : ''}
-                                    className="custom-scroll resize-none"
-                                    readOnly
-                                    inputProps={{ rows: 5 }}
-                                />
+                                <MokaInput as="textarea" name="errMgs" value={data.errMgs || ''} className="custom-scroll resize-none" readOnly inputProps={{ rows: 5 }} />
                             </Form.Row>
                         </>
                     )}
@@ -374,7 +364,7 @@ const WorkEdit = ({ match }) => {
             </Card.Body>
             <Card.Footer className="d-flex justify-content-center card-footer">
                 <Button variant="positive" className="mr-1" onClick={handleClickSave}>
-                    {jobSeq ? '수정' : '등록'}
+                    {jobSeq ? '수정' : '저장'}
                 </Button>
                 {jobSeq && (
                     <Button variant="negative" className="mr-1" onClick={handleClickDelete}>

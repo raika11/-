@@ -14,8 +14,8 @@ const WorkErrorRenderer = forwardRef(({ data }, ref) => {
         <div className="d-flex flex-column justify-content-center h-100">
             {data.jobStatus && (
                 <>
-                    <p className="mb-0">{moment(data.jobStatus.lastExecDt).format(DB_DATEFORMAT)}</p>
-                    <p className="mb-0">{data.jobStatus.errMgs}</p>
+                    <p className="mb-0 text-truncate">{moment(data.jobStatus.lastExecDt).format(DB_DATEFORMAT)}</p>
+                    <p className="mb-0 text-truncate">{data.jobStatus.errMgs}</p>
                 </>
             )}
         </div>

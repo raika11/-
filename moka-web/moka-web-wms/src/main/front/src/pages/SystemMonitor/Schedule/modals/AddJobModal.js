@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaModal, MokaInputLabel, MokaInput } from '@/components';
+import { SCHEDULE_PERIOD } from '@/constants';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { saveJob } from '@/store/schedule';
 
@@ -87,7 +88,7 @@ const AddJobModal = (props) => {
             //  onSubmit={(e) => e.preventDefault()}
             >
                 <Form.Row className="mb-2">
-                    <Col xs={4} className="p-0">
+                    <Col xs={6} className="p-0">
                         <MokaInputLabel as="select" label="분류" name="category" value={data.category} onChange={handleChangeValue} required>
                             {genCateRows &&
                                 genCateRows.map((c) => (
@@ -140,16 +141,12 @@ const AddJobModal = (props) => {
                     <Col xs={5} className="p-0">
                         {data.jobType === 'S' && (
                             <MokaInputLabel label="주기" as="select" name="period" value={data.period} onChange={handleChangeValue}>
-                                <option value="30">30초</option>
-                                <option value="60">1분</option>
-                                <option value="120">2분</option>
-                                <option value="300">5분</option>
-                                <option value="600">10분</option>
-                                <option value="1200">20분</option>
-                                <option value="1800">30분</option>
-                                <option value="3600">1시간</option>
-                                <option value="43200">12시간</option>
-                                <option value="86400">24시간</option>
+                                {SCHEDULE_PERIOD &&
+                                    SCHEDULE_PERIOD.filter((p) => p.period !== 0).map((p) => (
+                                        <option key={p.period} value={p.period}>
+                                            {p.periodNm}
+                                        </option>
+                                    ))}
                             </MokaInputLabel>
                         )}
                         {data.jobType === 'R' && (
@@ -210,7 +207,7 @@ const AddJobModal = (props) => {
                 </Form.Row>
                 <MokaInputLabel label="배포 경로" className="mb-2" name="targetPath" value={data.targetPath} onChange={handleChangeValue} />
                 <MokaInputLabel label="패키지명" className="mb-2" name="pkgNm" value={data.pkgNm} onChange={handleChangeValue} required />
-                <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} onChange={handleChangeValue} required />
+                {/* <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} onChange={handleChangeValue} required /> */}
                 <MokaInputLabel as="textarea" label="설명" name="jobDesc" inputProps={{ rows: 5 }} value={data.jobDesc} onChange={handleChangeValue} />
             </Form>
         </MokaModal>

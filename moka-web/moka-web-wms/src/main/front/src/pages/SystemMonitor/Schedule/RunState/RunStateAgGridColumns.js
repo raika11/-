@@ -1,6 +1,3 @@
-import React from 'react';
-import WorkStatisticRenderer from '../components/WorkStatisticRenderer';
-
 export default [
     {
         headerName: '분류',
@@ -10,68 +7,67 @@ export default [
     },
     {
         headerName: '30초',
-        field: '',
+        field: 'ab30',
         width: 65,
-        cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a30} stateB={row.data.b30} />,
+        tooltipField: 'ab30',
     },
     {
         headerName: '1분',
-        field: '',
+        field: 'ab60',
         width: 65,
-        cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a60} stateB={row.data.b60} />,
+        tooltipField: 'ab60',
     },
     {
         headerName: '2분',
-        field: '',
+        field: 'ab120',
         width: 65,
-        cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a120} stateB={row.data.b120} />,
+        tooltipField: 'ab120',
     },
     {
         headerName: '5분',
-        field: '',
+        field: 'ab300',
         width: 65,
-        cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a300} stateB={row.data.b300} />,
+        tooltipField: 'ab300',
     },
     {
         headerName: '10분',
-        field: '',
+        field: 'ab600',
         width: 65,
-        cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a600} stateB={row.data.b600} />,
+        tooltipField: 'ab600',
     },
     {
         headerName: '20분',
-        field: '',
+        field: 'ab1200',
         width: 65,
-        cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a1200} stateB={row.data.b1200} />,
+        tooltipField: 'ab1200',
     },
     {
         headerName: '30분',
-        field: '',
+        field: 'ab1800',
         width: 65,
-        cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a1800} stateB={row.data.b1800} />,
+        tooltipField: 'ab1800',
     },
     {
         headerName: '1시간',
-        field: '',
+        field: 'ab3600',
         width: 65,
-        cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a3600} stateB={row.data.b3600} />,
+        tooltipField: 'ab3600',
     },
     {
         headerName: '12시간',
-        field: '',
+        field: 'ab43200',
         width: 65,
-        cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a43200} stateB={row.data.b43200} />,
+        tooltipField: 'ab43200',
     },
     {
         headerName: '24시간',
-        field: '',
+        field: 'ab86400',
         width: 65,
-        cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a86400} stateB={row.data.b86400} />,
+        tooltipField: 'ab86400',
     },
     {
         headerName: '상시',
         field: '',
         width: 65,
-        // cellRendererFramework: (row) => <WorkStatisticRenderer {...row} stateA={row.data.a86400} stateB={row.data.b86400} />,
     },
 ];

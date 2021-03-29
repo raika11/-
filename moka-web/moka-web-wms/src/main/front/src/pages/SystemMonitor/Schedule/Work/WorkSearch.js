@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaInput } from '@/components';
+import { SCHEDULE_PERIOD } from '@/constants';
 import { initialState, clearWorkSearch, getDistributeServerCode, getJobList, changeWorkSearchOption } from '@/store/schedule';
 
 /**
@@ -30,7 +31,7 @@ const WorkSearch = ({ match }) => {
     );
 
     /**
-     * 검색 버튼
+     * 검색
      */
     const handleClickSearch = () => {
         dispatch(
@@ -44,14 +45,14 @@ const WorkSearch = ({ match }) => {
     };
 
     /**
-     * 초기화 버튼
+     * 초기화
      */
     const handleClickReset = () => {
         dispatch(clearWorkSearch());
     };
 
     /**
-     * 등록 버튼
+     * 등록
      */
     const handleClickAdd = () => {
         history.push(`${match.path}/work-list/add`);
@@ -84,17 +85,12 @@ const WorkSearch = ({ match }) => {
                     <Col xs={2} className="p-0 pr-2">
                         <MokaInput as="select" name="period" value={search.period} onChange={handleChangeValue}>
                             <option value="">주기 전체</option>
-                            <option value="30">30초</option>
-                            <option value="60">1분</option>
-                            <option value="120">2분</option>
-                            <option value="300">5분</option>
-                            <option value="600">10분</option>
-                            <option value="1200">20분</option>
-                            <option value="1800">30분</option>
-                            <option value="3600">1시간</option>
-                            <option value="43200">12시간</option>
-                            <option value="86400">24시간</option>
-                            <option value="0">상시</option>
+                            {SCHEDULE_PERIOD &&
+                                SCHEDULE_PERIOD.map((p) => (
+                                    <option key={p.period} value={p.period}>
+                                        {p.periodNm}
+                                    </option>
+                                ))}
                         </MokaInput>
                     </Col>
                     <Col xs={2} className="p-0 pr-2">

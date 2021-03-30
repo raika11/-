@@ -7,7 +7,7 @@ import { getApi } from '@store/codeMgt';
 import { changeSearchOption, getDatasetList, initialState } from '@store/dataset';
 
 /**
- * 데이터셋 검색 컴포넌트
+ * 데이터셋 관리 > 데이터셋 목록 > 검색
  */
 const DatasetSearch = ({ match }) => {
     const dispatch = useDispatch();

@@ -9,7 +9,7 @@ import { Button } from 'react-bootstrap';
 /**
  * 패키지 검색
  */
-const PackageSearch = () => {
+const IssueSearch = () => {
     const [search, setSearch] = useState({
         masterCode: '',
         type: 'all',
@@ -157,4 +157,4 @@ const PackageSearch = () => {
     );
 };
 
-export default PackageSearch;
+export default IssueSearch;

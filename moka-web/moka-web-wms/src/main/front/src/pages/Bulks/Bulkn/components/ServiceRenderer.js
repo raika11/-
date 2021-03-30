@@ -4,7 +4,9 @@ import toast, { messageBox } from '@/utils/toastUtil';
 import { useDispatch } from 'react-redux';
 import { changeBulkused, getBulkList } from '@store/bulks';
 
-// grid 서비스 부분 렌더.
+/**
+ * AgGrid 서비스 버튼 Renderer
+ */
 const ServiceRenderer = ({ bulkartSeq, usedYn, status }) => {
     const dispatch = useDispatch();
 

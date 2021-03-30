@@ -2,12 +2,12 @@ import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@/components';
-import columnDefs, { rowData } from './PackageAgGridColumns';
+import columnDefs, { rowData } from './IssueAgGridColumns';
 
 /**
  * 패키지 AgGrid
  */
-const PackageAgGrid = () => {
+const IssueAgGrid = () => {
     const history = useHistory();
     const [total] = useState(0);
     const [loading] = useState(false);
@@ -61,4 +61,4 @@ const PackageAgGrid = () => {
     );
 };
 
-export default PackageAgGrid;
+export default IssueAgGrid;

@@ -7,13 +7,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
-import PackageList from './PackageList';
-import PackageEdit from './PackageEdit';
+import IssueList from './IssueList';
+import IssueEdit from './IssueEdit';
 
 /**
  * 패키지 관리
  */
-const Package = ({ match, displayName }) => {
+const Issue = ({ match, displayName }) => {
     const matchPoints = useBreakpoint();
 
     return (
@@ -28,14 +28,14 @@ const Package = ({ match, displayName }) => {
                 {/* 패키지 목록 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     <MokaCard title="패키지 목록" className="w-100" bodyClassName="d-flex flex-column">
-                        <PackageList match={match} />
+                        <IssueList match={match} />
                     </MokaCard>
                 </Col>
 
                 {/* 패키지 등록, 수정 */}
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
-                        <Route path={[`${match.path}/add`, `${match.path}/:seqNo`]} exact render={() => <PackageEdit match={match} />} />
+                        <Route path={[`${match.path}/add`, `${match.path}/:seqNo`]} exact render={() => <IssueEdit match={match} />} />
                     </Col>
                 )}
 
@@ -45,7 +45,7 @@ const Package = ({ match, displayName }) => {
                         exact
                         render={() => (
                             <div className="absolute-top-right h-100 overlay-shadow" style={{ width: 640, zIndex: 2 }}>
-                                <PackageEdit match={match} />
+                                <IssueEdit match={match} />
                             </div>
                         )}
                     />
@@ -55,4 +55,4 @@ const Package = ({ match, displayName }) => {
     );
 };
 
-export default Package;
+export default Issue;

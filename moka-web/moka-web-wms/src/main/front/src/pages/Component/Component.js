@@ -22,8 +22,6 @@ const Component = ({ match }) => {
     const history = useHistory();
     const component = useSelector(({ component }) => component.component);
     const currentMenu = useSelector(({ auth }) => auth.currentMenu);
-
-    // state
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     /**

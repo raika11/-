@@ -26,7 +26,7 @@ export const columnDefs = [
         headerName: '소개',
         field: 'summary',
         flex: 1,
-        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: 'initial', paddingTop: '5px', paddingBottom: '5px', lineHeight: '18px' },
+        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '18px', paddingTop: '5px', paddingBottom: '5px' },
         tooltipField: 'summary',
         wrapText: true,
         autoHeight: true,

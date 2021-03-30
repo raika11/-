@@ -11,7 +11,7 @@ import ReservedList from './ReservedList';
 import ReservedEdit from './ReservedEdit';
 
 /**
- * 예약어 관리 컴포넌트
+ * 예약어 관리
  */
 const Reserved = ({ match }) => {
     const history = useHistory();

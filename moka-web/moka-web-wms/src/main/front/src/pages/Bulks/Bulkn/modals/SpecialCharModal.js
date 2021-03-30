@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSpecialchar, saveSpecialchar } from '@store/bulks';
 import toast, { messageBox } from '@utils/toastUtil';
+
 const propTypes = {
     show: PropTypes.bool,
     onHide: PropTypes.func,

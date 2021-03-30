@@ -195,7 +195,8 @@ const EditThumbModal = (props) => {
                 apply('', null);
                 handleHide();
             } else {
-                if (repImg.dataType === 'archive') {
+                // 이미지 프록시 추가 (jam.joins)
+                if (!(repImg.imageOnlnPath || '').startsWith('blob:')) {
                     imagePath = `${IMAGE_PROXY_API}${encodeURIComponent(repImg.imageOnlnPath)}`;
                 }
                 (async () => {

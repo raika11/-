@@ -7,7 +7,7 @@ import { getReservedList, changeSearchOption, initialState } from '@store/reserv
 import { changeLatestDomainId } from '@store/auth';
 
 /**
- * 예약어 검색
+ * 예약어 관리 > 예약어 목록 > 검색
  */
 const ReservedSearch = ({ match }) => {
     const history = useHistory();

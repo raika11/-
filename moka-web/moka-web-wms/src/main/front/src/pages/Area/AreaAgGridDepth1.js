@@ -9,10 +9,10 @@ import { getDisplayedRows } from '@utils/agGridUtil';
 import columnDefs from './AreaAgGridColumns';
 
 /**
- * 편집영역 > 첫번째 리스트
+ * 영역편집정보 관리 > depth1 AgGrid
  */
 const AreaAgGridDepth1 = (props) => {
-    const { areaDepth1, setAreaDepth1, sourceCode, setSourceCode, onDelete, flag, listDepth1, setListDepth1, setListDepth2, setListDepth3 } = props;
+    const { areaDepth1, setAreaDepth1, sourceCode, setSourceCode, flag, listDepth1, setListDepth1, setListDepth2, setListDepth3 } = props;
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [gridInstance, setGridInstance] = useState(null);
@@ -30,12 +30,7 @@ const AreaAgGridDepth1 = (props) => {
                 },
                 callback: ({ header, body }) => {
                     if (header.success) {
-                        setListDepth1(
-                            body.list.map((d) => ({
-                                ...d,
-                                onDelete: (data) => onDelete(data, 1),
-                            })),
-                        );
+                        setListDepth1(body.list);
                     } else {
                         messageBox.alert(header.message);
                     }
@@ -43,7 +38,7 @@ const AreaAgGridDepth1 = (props) => {
                 },
             }),
         );
-    }, [dispatch, onDelete, sourceCode, setListDepth1]);
+    }, [dispatch, sourceCode, setListDepth1]);
 
     /**
      * 목록에서 Row클릭
@@ -154,7 +149,6 @@ const AreaAgGridDepth1 = (props) => {
                     onRowDragEnd={handleDragEnd}
                     onRowNodeId={(data) => data.areaSeq}
                     onRowClicked={handleRowClicked}
-                    preventRowClickCell={['delete']}
                     suppressRowClickSelection
                     suppressMoveWhenRowDragging
                     rowDragManaged

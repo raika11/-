@@ -8,18 +8,13 @@ import { initialState, getContainerList, changeSearchOption } from '@store/conta
 import { changeLatestDomainId } from '@store/auth';
 
 /**
- * 컨테이너 검색 컴포넌트
+ * 컨테이너 관리 > 컨테이너 목록 > 검색
  */
 const ContainerSearch = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { latestDomainId, domainList, search: storeSearch, searchTypeList } = useSelector((store) => ({
-        latestDomainId: store.auth.latestDomainId,
-        domainList: store.auth.domainList,
-        search: store.container.search,
-        searchTypeList: store.container.searchTypeList,
-    }));
-
+    const { latestDomainId, domainList } = useSelector(({ auth }) => auth);
+    const { search: storeSearch, searchTypeList } = useSelector(({ container }) => container);
     const [search, setSearch] = useState(initialState.search);
 
     useEffect(() => {
@@ -27,10 +22,10 @@ const ContainerSearch = () => {
         setSearch(storeSearch);
     }, [storeSearch]);
 
-    /**
-     * latestDomainId를 컨테이너의 search.domainId로 변경
-     */
     useEffect(() => {
+        /**
+         * latestDomainId를 컨테이너의 search.domainId로 변경
+         */
         if (latestDomainId && latestDomainId !== search.domainId) {
             dispatch(
                 getContainerList(

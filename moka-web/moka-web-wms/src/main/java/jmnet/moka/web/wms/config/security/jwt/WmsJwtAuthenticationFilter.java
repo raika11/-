@@ -11,11 +11,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.util.ResponseUtil;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.web.wms.config.security.exception.AbstractAuthenticationException;
+import jmnet.moka.web.wms.config.security.exception.UnauthrizedErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -163,7 +165,7 @@ public class WmsJwtAuthenticationFilter extends AbstractAuthenticationProcessing
         response.addHeader(WmsJwtHelper.HEADER_STRING, WmsJwtHelper.TOKEN_PREFIX + token);
 
         UserDTO userDetails = (UserDTO) authResult.getDetails();
-        /*
+        /* 비밀번호 변경 만료일 알림
         if (userDetails.getPasswordModDt() != null && McpDate.dayTerm(userDetails.getPasswordModDt()) < -(passwordChangeNotiDays)) {
             String message = messageByLocale.get("wms.login.change-password.noti");
 
@@ -175,9 +177,16 @@ public class WmsJwtAuthenticationFilter extends AbstractAuthenticationProcessing
             ResponseUtil.ok(response, message, null);
         }
         */
-        String message = messageByLocale.get("wms.login.success", userDetails.getUserName());
-        ResponseUtil.ok(response, message, null);
+        /** 비밀번호 사용 만료일 알림 */
+        if (McpDate.term(userDetails.getExpireDt()) > 0 && McpDate.term(userDetails.getExpireDt()) < 6) {
+            String message = messageByLocale.get("wms.login.error.expire-date-until", McpDate.term(userDetails.getExpireDt()));
 
+            ResponseUtil.ok(response, TpsConstants.HEADER_SUCCESS, message, UnauthrizedErrorCode.PASSWORD_NOTI.toMap(),
+                    UnauthrizedErrorCode.PASSWORD_NOTI.getCode());
+        } else {
+            String message = messageByLocale.get("wms.login.success", userDetails.getUserName());
+            ResponseUtil.ok(response, message, null);
+        }
     }
 
 }

@@ -46,7 +46,7 @@ const AreaFormDepth1 = (props) => {
      */
     const handleSave = (save) => {
         let as = save;
-        as.cmpYn = 'N';
+        as.compYn = 'N';
         delete as.areaComp;
         delete as.areaComps;
 

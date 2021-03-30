@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@/components';
 import columnDefs from './WorkAgGridColumns';
+import { SCHEDULE_PERIOD } from '@/constants';
 import { GET_JOB_LIST, getJobList, changeWorkSearchOption } from '@/store/schedule';
 
 /**
@@ -11,11 +12,14 @@ import { GET_JOB_LIST, getJobList, changeWorkSearchOption } from '@/store/schedu
 const WorkAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
     const total = useSelector((store) => store.schedule.work.total);
     const list = useSelector((store) => store.schedule.work.list);
     const job = useSelector((store) => store.schedule.work.job);
     const search = useSelector((store) => store.schedule.work.search);
     const loading = useSelector((store) => store.loading[GET_JOB_LIST]);
+
+    const [rowData, setRowData] = useState([]);
 
     /**
      * 테이블 row 클릭
@@ -42,11 +46,40 @@ const WorkAgGrid = ({ match }) => {
         [dispatch, search],
     );
 
+    useEffect(() => {
+        // 스케줄 작업 카테고리를 가져와서 categoryNm 매핑
+        if (genCateRows) {
+            let findIndex = (code) => genCateRows.findIndex((c) => c.dtlCd === code);
+            let findPeriodIndex = (period) => SCHEDULE_PERIOD.findIndex((c) => c.period === period);
+
+            setRowData(
+                list.map((job) => {
+                    let targetIndex = findIndex(job.category);
+                    let periodIndex = findPeriodIndex(job.period);
+                    if (targetIndex > -1) {
+                        return {
+                            ...job,
+                            categoryNm: genCateRows[targetIndex].cdNm,
+                            periodNm: SCHEDULE_PERIOD[periodIndex].periodNm,
+                        };
+                    } else {
+                        return {
+                            ...job,
+                            categoryNm: job.category,
+                            periodNm: SCHEDULE_PERIOD[periodIndex].periodNm,
+                        };
+                    }
+                }),
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [genCateRows, list]);
+
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
-            rowData={list}
+            rowData={rowData}
             onRowNodeId={(row) => row.jobSeq}
             onRowClicked={handleRowClicked}
             loading={loading}

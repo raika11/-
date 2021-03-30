@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { useHistory, useParams } from 'react-router-dom';
-import { MokaInputLabel } from '@/components';
+import { MokaInput, MokaInputLabel } from '@/components';
 import { messageBox } from '@/utils/toastUtil';
 import { DB_DATEFORMAT } from '@/constants';
 import { getDeleteJob } from '@/store/schedule';
@@ -65,6 +65,31 @@ const DeleteWorkEdit = ({ match }) => {
                             <MokaInputLabel label="분류" name="category" value={data.category} inputProps={{ readOnly: true }} />
                         </Col>
                     </Form.Row>
+                    <Form.Row className="mb-2 align-items-center">
+                        <Col xs={4} className="p-0 pr-2">
+                            <MokaInputLabel
+                                label="구분"
+                                as="radio"
+                                value="S"
+                                name="jobType"
+                                id="schedule-work-s"
+                                inputProps={{ custom: true, label: '스케줄', checked: data.jobType === 'S' ? true : false }}
+                                disabled={true}
+                            />
+                        </Col>
+                        <Col xs={4} className="p-0">
+                            <div>
+                                <MokaInput
+                                    as="radio"
+                                    name="jobType"
+                                    value="R"
+                                    id="schedule-work-r"
+                                    inputProps={{ custom: true, label: '백오피스 예약', checked: data.jobType === 'R' ? true : false }}
+                                    disabled={true}
+                                />
+                            </div>
+                        </Col>
+                    </Form.Row>
                     <Form.Row className="mb-2">
                         <Col xs={4} className="p-0">
                             <MokaInputLabel label="주기" name="period" value={data.period} inputProps={{ readOnly: true }} />
@@ -98,9 +123,9 @@ const DeleteWorkEdit = ({ match }) => {
                     <Form.Row className="mb-2">
                         <MokaInputLabel label="배포 서버" name="server" value={data.server} inputProps={{ readOnly: true }} />
                     </Form.Row>
-                    {/* <MokaInputLabel label="패키지명" className="mb-2" name="url" value={data.url} inputProps={{ readOnly: true }} /> */}
-                    <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} inputProps={{ readOnly: true }} />
+                    {/* <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} inputProps={{ readOnly: true }} /> */}
                     <MokaInputLabel label="배포 경로" className="mb-2" name="targetPath" value={data.targetPath} inputProps={{ readOnly: true }} />
+                    <MokaInputLabel label="패키지명" className="mb-2" name="pkgNm" value={data.pkgNm} inputProps={{ readOnly: true }} />
                     <MokaInputLabel label="설명" className="mb-2" name="jobDesc" value={data.jobDesc} inputProps={{ readOnly: true }} />
                     <MokaInputLabel
                         label="삭제 정보"

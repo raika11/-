@@ -55,11 +55,12 @@
 /* 임시 아이콘 이미지 변경시 소스 수정해야됨 */
 .fa_rect_w { width: 15px; height: 10px; border: 1.5px solid #fff;  }
 .fa_rect_w::after { content: ''; position: absolute; left: 6px; top: 4px; width: 12px; height: 8px; border: 1.5px solid #fff;}
+        .case_unique .card_group.trend .col_sm12 { flex: 0 0 50%; }
+        .case_unique .card_group.trend .headline { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
 
 /* Mobile devices (mobile, 375px and down) */
 @media (max-width:375px) {
-    
 }
 
 
@@ -90,10 +91,19 @@
 
 
     /***************************************    unique     ************************************/
+    .swiper_card_list .card { position: relative; padding-right: 132px; }
+    .swiper_card_list .card { margin-top: 16px; padding-top:17px; border-top: 1px solid #e2e2e2; }
+    .swiper_card_list .card_image { position: absolute; right: 0; top: 16px; width: 112px; }
+    .swiper_card_list .headline { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
     .card_in .card_body { position: static; padding:0;}
     .card_in .card_body .headline { color: #111;}
     .card_in .card_body .description { color: #777; }
     .case_unique [class*="swiper-button-prev"], .case_unique [class*="swiper-button-next"] { display: none;}
+    .case_unique .card_group.trend .col_sm12 { flex: 0 0 50%; }
+    .case_unique .card_group.trend .headline { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .case_unique .card_group.trend .card_image { margin-bottom: 10px; }
+    .case_unique .card_group.trend .card_body .byline { padding-top: 4px; }
+    .case_unique .card_group.trend .col_lg4 { margin-top: 15px; }
 }
 
 /* Medium devices (tablet + pc, 768px and up) */

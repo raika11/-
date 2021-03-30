@@ -1,16 +1,17 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { CodeAutocomplete } from '@pages/commons';
 import { MokaInput, MokaSearchInput } from '@/components';
+import { Button } from 'react-bootstrap';
 
 /**
  * 패키지 검색
  */
 const PackageSearch = () => {
     const [search, setSearch] = useState({
-        masterCode: null,
+        masterCode: '',
         type: 'all',
         endYn: 'all',
         subsYn: 'all',
@@ -47,12 +48,24 @@ const PackageSearch = () => {
         [search],
     );
 
+    const handleClickReset = () => {
+        setSearch({ masterCode: '', type: 'all', endYn: 'all', subsYn: 'all', expoYn: 'all', period: [1, 'day'], startDt: moment(), endDt: moment(), keyword: '' });
+    };
+
     return (
         <Form>
             <Form.Row className="mb-2">
                 <Col xs={12} className="p-0 d-flex">
                     <div style={{ width: 355 }} className="mr-2">
-                        <CodeAutocomplete name="masterCode" placeholder="카테고리 선택" value={search.masterCode} onChange={handleChangeValue} />
+                        <CodeAutocomplete
+                            name="masterCode"
+                            placeholder="카테고리 선택"
+                            value={search.masterCode}
+                            onChange={(value) => {
+                                handleChangeValue({ target: { name: 'masterCode', value: value.map((code) => code.value).join(',') } });
+                            }}
+                            isMulti={true}
+                        />
                     </div>
                     <div style={{ width: 120 }} className="mr-2">
                         <MokaInput as="select" className="mr-2" name="type" value={search.type} onChange={handleChangeValue}>
@@ -76,12 +89,17 @@ const PackageSearch = () => {
                             <option value="N">비구독 상품</option>
                         </MokaInput>
                     </div>
-                    <div style={{ width: 120 }}>
+                    <div style={{ width: 120 }} className="mr-2">
                         <MokaInput as="select" className="mr-2" name="expoYn" value={search.expoYn} onChange={handleChangeValue}>
                             <option value="all">전체</option>
                             <option value="Y">노출</option>
                             <option value="N">비노출</option>
                         </MokaInput>
+                    </div>
+                    <div style={{ width: 61.5 }}>
+                        <Button variant="negative" onClick={handleClickReset}>
+                            초기화
+                        </Button>
                     </div>
                 </Col>
             </Form.Row>

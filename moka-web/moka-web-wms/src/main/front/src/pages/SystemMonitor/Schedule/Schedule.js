@@ -18,7 +18,7 @@ const Schedule = ({ match }) => {
     const [activeKey, setActiveKey] = useState(0);
 
     const tabs = [<RunState match={match} />, <Work match={match} />, <DeleteWork match={match} />, <DeployServer match={match} />];
-    const tabNavs = ['작업 실행상태', '작업 목록', '삭제 작업 목록', '배포 서버 관리'];
+    const tabNavs = ['작업 실행상태', '작업 목록', '삭제 작업 목록', '배포 서버 관리', '백오피스 예약작업'];
 
     /**
      * Nav 선택 콜백

@@ -1,8 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 import { MokaTable } from '@/components';
 import columnDefs from './DeleteWorkAgGridColumns';
+import { SCHEDULE_PERIOD, DB_DATEFORMAT } from '@/constants';
 import { GET_DELETE_JOB_LIST, getJobList, changeDeleteWorkSearchOption } from '@/store/schedule';
 
 /**
@@ -11,11 +13,14 @@ import { GET_DELETE_JOB_LIST, getJobList, changeDeleteWorkSearchOption } from '@
 const DeleteWorkAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
     const total = useSelector((store) => store.schedule.deleteWork.total);
     const list = useSelector((store) => store.schedule.deleteWork.list);
     const search = useSelector((store) => store.schedule.deleteWork.search);
     const deleteJob = useSelector((store) => store.schedule.deleteWork.deleteJob);
     const loading = useSelector((store) => store.loading[GET_DELETE_JOB_LIST]);
+
+    const [rowData, setRowData] = useState([]);
 
     /**
      * 테이블 row 클릭
@@ -42,11 +47,42 @@ const DeleteWorkAgGrid = ({ match }) => {
         [dispatch, search],
     );
 
+    useEffect(() => {
+        // 스케줄 작업 카테고리를 가져와서 categoryNm 매핑
+        if (genCateRows) {
+            let findIndex = (code) => genCateRows.findIndex((c) => c.dtlCd === code);
+            let findPeriodIndex = (period) => SCHEDULE_PERIOD.findIndex((c) => c.period === period);
+
+            setRowData(
+                list.map((job) => {
+                    let targetIndex = findIndex(job.category);
+                    let periodIndex = findPeriodIndex(job.period);
+                    if (targetIndex > -1) {
+                        return {
+                            ...job,
+                            categoryNm: genCateRows[targetIndex].cdNm,
+                            periodNm: SCHEDULE_PERIOD[periodIndex].periodNm,
+                            delInfo: `${moment(job.modDt).format(DB_DATEFORMAT)} ${job.modMember.memberNm || ''}(${job.modMember.memberId || ''})`,
+                        };
+                    } else {
+                        return {
+                            ...job,
+                            categoryNm: job.category,
+                            periodNm: SCHEDULE_PERIOD[periodIndex].periodNm,
+                            delInfo: `${moment(job.modDt).format(DB_DATEFORMAT)} ${job.modMember.memberNm || ''}(${job.modMember.memberId || ''})`,
+                        };
+                    }
+                }),
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [genCateRows, list]);
+
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
-            rowData={list}
+            rowData={rowData}
             onRowNodeId={(row) => row.jobSeq}
             onRowClicked={handleRowClicked}
             loading={loading}

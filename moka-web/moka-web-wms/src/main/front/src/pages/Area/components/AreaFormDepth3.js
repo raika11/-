@@ -152,7 +152,7 @@ const AreaFormDepth3 = (props) => {
             ordNo: temp.areaSeq ? temp.ordNo : list.length + 1, // 수정 등록 분기쳐서 ordNo 셋팅
             sourceCode,
             domain,
-            cmpYn: 'Y',
+            compYn: 'Y',
             page: { pageSeq: page.pageSeq, pageName: page.pageName, pageUrl: page.pageUrl },
             parent: { areaSeq: parent.areaSeq },
             previewRsrc,

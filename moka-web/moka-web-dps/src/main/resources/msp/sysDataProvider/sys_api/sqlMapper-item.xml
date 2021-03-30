@@ -19,8 +19,8 @@
     FROM TB_WMS_DOMAIN
   </select>
 
-  <select id="domain_total" parameterType="hashmap" resultType="map">
-    SELECT count(1)
+  <select id="domain_total" parameterType="hashmap" resultType="java.lang.Integer">
+    SELECT COUNT(DOMAIN_ID) AS TOTAL
     FROM TB_WMS_DOMAIN
   </select>
 

@@ -11,11 +11,7 @@
     <parameter>
       <name desc="채널명">^.{0,1000}$</name>
     </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.jpod.channel</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("total");
-    </request>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.jpod.channel</request>
     <keys>
       #paging
     </keys>
@@ -27,11 +23,7 @@
     <parameter>
       <id desc="채널ID" type="number" require="Y">^[0-9]{1,9}$</id>
     </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.jpod.episode</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("total");
-    </request>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.jpod.episode</request>
     <keys>
       id
       #paging

@@ -12,8 +12,8 @@ const WorkDateRenterer = forwardRef(({ data }, ref) => {
         <div className="d-flex flex-column justify-content-center h-100">
             {data.jobStatus && (
                 <>
-                    <p className="mb-0">{`생성 : ${data.jobStatus.genResult}/${data.jobStatus.genExecTime}`}</p>
-                    <p className="mb-0">{`배포 : ${data.jobStatus.sendResult}/${data.jobStatus.sendExecTime}`}</p>
+                    <p className="mb-0 text-truncate">{`생성 : ${data.jobStatus.genResult}/${data.jobStatus.genExecTime}`}</p>
+                    <p className="mb-0 text-truncate">{`배포 : ${data.jobStatus.sendResult}/${data.jobStatus.sendExecTime}`}</p>
                 </>
             )}
         </div>

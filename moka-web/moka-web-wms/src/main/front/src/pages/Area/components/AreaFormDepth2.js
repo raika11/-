@@ -63,7 +63,7 @@ const AreaFormDepth2 = (props) => {
     const validate = (saveObj) => {
         let isInvalid = false;
         let errList = [];
-        const isCmp = saveObj.cmpYn === 'Y';
+        const isCmp = saveObj.compYn === 'Y';
 
         // 영역명 체크
         if (!REQUIRED_REGEX.test(saveObj.areaNm)) {
@@ -147,7 +147,7 @@ const AreaFormDepth2 = (props) => {
             return;
         }
 
-        const isCmp = temp.cmpYn === 'Y';
+        const isCmp = temp.compYn === 'Y';
 
         let save = {
             ...temp,
@@ -331,8 +331,8 @@ const AreaFormDepth2 = (props) => {
 
             if (name === 'usedYn') {
                 setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
-            } else if (name === 'cmpYn') {
-                setTemp({ ...temp, cmpYn: checked ? 'Y' : 'N' });
+            } else if (name === 'compYn') {
+                setTemp({ ...temp, compYn: checked ? 'Y' : 'N' });
             } else if (name === 'areaDiv') {
                 setTemp({ ...temp, areaDiv: value });
                 setAreaComps([]);
@@ -480,18 +480,18 @@ const AreaFormDepth2 = (props) => {
 
                 <hr className="divider" />
 
-                {/* cmpYn 변경 */}
+                {/* compYn 변경 */}
                 <MokaInputLabel
                     as="switch"
                     className="mb-2"
                     label="편집 여부"
-                    name="cmpYn"
-                    id="cmpYn"
-                    inputProps={{ custom: true, checked: temp.cmpYn === 'Y' }}
+                    name="compYn"
+                    id="compYn"
+                    inputProps={{ custom: true, checked: temp.compYn === 'Y' }}
                     onChange={handleChangeValue}
                 />
 
-                {temp.cmpYn === 'Y' && (
+                {temp.compYn === 'Y' && (
                     <React.Fragment>
                         {/* 페이지 검색 */}
                         <Form.Row className="mb-2">

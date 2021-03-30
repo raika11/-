@@ -7,10 +7,7 @@
       <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>
       <regId desc="작업자ID" require="Y">[0-9|A-z]{1,20}</regId>
     </parameter>
-    <request dmlType="sp" setNames="_DATA,RDATA">dps.backoffice.deskingWork</request>
-    <request type="script" resultName="_TOTAL">
-      var result = $ac.getAllResult();
-      result.get("PARAM_MAP").get("total");
+    <request dmlType="sp" setNames="_DATA,RDATA" outParam="_TOTAL">dps.backoffice.deskingWork
     </request>
     <keys>
       ids

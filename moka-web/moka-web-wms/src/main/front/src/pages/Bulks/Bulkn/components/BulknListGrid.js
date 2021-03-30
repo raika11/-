@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getBulkList, GET_BULK_LIST, changeSearchOption, clearBulksList, getBulkArticle } from '@store/bulks';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 
+/**
+ * 네이버 벌크 문구 > 목록 > AgGrid
+ */
 const BulknListGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();

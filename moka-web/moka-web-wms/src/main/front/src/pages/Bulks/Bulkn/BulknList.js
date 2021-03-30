@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MokaCard } from '@components';
-import { BulknListSearchBox, BulknListGrid } from './Component';
+import { BulknListSearchBox, BulknListGrid } from './components';
 
 const propTypes = {
     HandleEditEnable: PropTypes.func,
@@ -9,8 +9,13 @@ const propTypes = {
 };
 const defaultProps = {};
 
+/**
+ * 네이버 벌크 문구 > 네이버 벌크 목록
+ */
 const BulknList = (props) => {
-    // search box 등록 버튼 클릭시 상위 상태 전달.
+    /**
+     * 등록
+     */
     const handleEditEnable = () => {
         props.HandleEditEnable();
     };

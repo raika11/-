@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Col, Button } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
 import { MokaInput } from '@components';
 import moment from 'moment';
-import { useSelector, useDispatch } from 'react-redux';
 import { changeSearchOption, getBulkList, clearBulksArticle } from '@store/bulks';
 import { useHistory } from 'react-router-dom';
 import { DB_DATEFORMAT } from '@/constants';
@@ -14,18 +14,17 @@ const propTypes = {
 };
 const defaultProps = {};
 
-// 검색 박스
+/**
+ * 네이버 벌크 문구 > 목록 > 검색
+ */
 const BulknListSearchBox = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { search: storeSearch, bulkPathName, bulkartDiv, sourceCode } = useSelector((store) => ({
-        search: store.bulks.bulkn.search,
-        bulkPathName: store.bulks.bulkPathName,
-        bulkartDiv: store.bulks.bulkartDiv,
-        sourceCode: store.bulks.sourceCode,
+    const { search: storeSearch, bulkPathName, bulkartDiv } = useSelector(({ bulks }) => ({
+        search: bulks.bulkn.search,
+        bulkPathName: bulks.bulkPathName,
+        bulkartDiv: bulks.bulkartDiv,
     }));
-
-    // 기본 설정.
     const [searchData, setSearchData] = useState({
         startDt: storeSearch.startDt,
         endDt: storeSearch.endDt,
@@ -86,47 +85,45 @@ const BulknListSearchBox = (props) => {
     }, [bulkPathName, bulkartDiv]);
 
     return (
-        <>
-            <Form.Row className="mb-14">
-                <Col xs={3} className="p-0 pr-2">
-                    <MokaInput
-                        as="dateTimePicker"
-                        className="mb-0"
-                        name="startDt"
-                        id="startDt"
-                        value={searchData.startDt}
-                        // onChange={(e) => handleDateChange('startDt', e)}
-                        onChange={(param) => {
-                            handleDateChange('startDt', param);
-                        }}
-                        inputProps={{ timeFormat: null, timeDefault: 'start' }}
-                    />
-                </Col>
-                <Col xs={3} className="p-0 pr-2">
-                    <MokaInput
-                        as="dateTimePicker"
-                        className="mb-0"
-                        name="endDt"
-                        id="endDt"
-                        value={searchData.endDt}
-                        onChange={(param) => {
-                            handleDateChange('endDt', param);
-                        }}
-                        inputProps={{ timeFormat: null, timeDefault: 'end' }}
-                    />
-                </Col>
-                <Col xs={2} className="p-0 align-items-center">
-                    <Button variant="searching" onClick={() => handleClickSearchButton()}>
-                        검색
-                    </Button>
-                </Col>
-                <Col xs={4} className="p-0 align-items-center text-right">
-                    <Button variant="positive" onClick={() => handleClickNewButton()}>
-                        등록
-                    </Button>
-                </Col>
-            </Form.Row>
-        </>
+        <Form.Row className="mb-14">
+            <Col xs={3} className="p-0 pr-2">
+                <MokaInput
+                    as="dateTimePicker"
+                    className="mb-0"
+                    name="startDt"
+                    id="startDt"
+                    value={searchData.startDt}
+                    // onChange={(e) => handleDateChange('startDt', e)}
+                    onChange={(param) => {
+                        handleDateChange('startDt', param);
+                    }}
+                    inputProps={{ timeFormat: null, timeDefault: 'start' }}
+                />
+            </Col>
+            <Col xs={3} className="p-0 pr-2">
+                <MokaInput
+                    as="dateTimePicker"
+                    className="mb-0"
+                    name="endDt"
+                    id="endDt"
+                    value={searchData.endDt}
+                    onChange={(param) => {
+                        handleDateChange('endDt', param);
+                    }}
+                    inputProps={{ timeFormat: null, timeDefault: 'end' }}
+                />
+            </Col>
+            <Col xs={2} className="p-0 align-items-center">
+                <Button variant="searching" onClick={() => handleClickSearchButton()}>
+                    검색
+                </Button>
+            </Col>
+            <Col xs={4} className="p-0 align-items-center text-right">
+                <Button variant="positive" onClick={() => handleClickNewButton()}>
+                    등록
+                </Button>
+            </Col>
+        </Form.Row>
     );
 };
 

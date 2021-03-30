@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
@@ -16,12 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-
 /**
- * 작업 Repository
- * 2021. 2. 1. 김정민
- *
+ * 작업 Repository 2021. 2. 1. 김정민
  */
 public class JobContentRepositorySupportImpl extends TpsQueryDslRepositorySupport implements JobContentRepositorySupport {
 
@@ -49,36 +46,33 @@ public class JobContentRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         String searchType = search.getSearchType();
         String keyword = search.getKeyword();
 
-        if(!McpString.isEmpty(delYn)){
+        if (!McpString.isEmpty(delYn)) {
             builder.and(jobContent.delYn.eq(delYn));
-        }
-        else{
+        } else {
             builder.and(jobContent.delYn.eq(MokaConstants.NO));
         }
 
-        if(!McpString.isEmpty(category)){
+        if (!McpString.isEmpty(category)) {
             builder.and(jobContent.category.eq(category));
         }
-        if(!McpString.isEmpty(period)){
+        if (!McpString.isEmpty(period)) {
             builder.and(jobContent.period.eq(period));
         }
-        if(!McpString.isEmpty(sendType)){
+        if (!McpString.isEmpty(sendType)) {
             builder.and(jobContent.sendType.eq(sendType));
         }
-        if(!McpString.isEmpty(serverSeq)){
+        if (!McpString.isEmpty(serverSeq)) {
             builder.and(jobContent.serverSeq.eq(serverSeq));
         }
-        if(!McpString.isEmpty(usedYn)){
+        if (!McpString.isEmpty(usedYn)) {
             builder.and(jobContent.usedYn.eq(usedYn));
         }
-        if(!McpString.isEmpty(keyword)){
-            if(!McpString.isEmpty(searchType) && searchType.equals("keyword1")){
+        if (!McpString.isEmpty(keyword)) {
+            if (!McpString.isEmpty(searchType) && searchType.equals("keyword1")) {
                 builder.and(jobContent.pkgNm.contains(keyword));
-            }
-            else if(!McpString.isEmpty(searchType) && searchType.equals("keyword2")){
+            } else if (!McpString.isEmpty(searchType) && searchType.equals("keyword2")) {
                 builder.and(jobContent.targetPath.contains(keyword));
-            }
-            else if(!McpString.isEmpty(searchType) && searchType.equals("keyword3")){
+            } else if (!McpString.isEmpty(searchType) && searchType.equals("keyword3")) {
                 builder.and(jobContent.jobDesc.contains(keyword));
             }
 
@@ -87,9 +81,12 @@ public class JobContentRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         JPQLQuery<JobContent> query = queryFactory.selectFrom(jobContent);
         query = getQuerydsl().applyPagination(pageable, query);
         QueryResults<JobContent> list = query
-                .leftJoin(jobContent.jobStatus, jobStatus).fetchJoin()
-                .leftJoin(jobContent.regMember, memberSimpleInfo).fetchJoin()
-                .leftJoin(jobContent.modMember, memberSimpleInfo).fetchJoin()
+                .leftJoin(jobContent.jobStatus, jobStatus)
+                .fetchJoin()
+                .leftJoin(jobContent.regMember, memberSimpleInfo)
+                .fetchJoin()
+                .leftJoin(jobContent.modMember, memberSimpleInfo)
+                .fetchJoin()
                 .where(builder)
                 .fetchResults();
 
@@ -101,17 +98,15 @@ public class JobContentRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         QJobContent jobContent = QJobContent.jobContent;
         BooleanBuilder builder = new BooleanBuilder();
 
-        if(!McpString.isEmpty(search.getPeriod())) {
+        if (!McpString.isEmpty(search.getPeriod())) {
             builder.and(jobContent.period.eq(search.getPeriod()));
         }
-        if(!McpString.isEmpty(search.getServerSeq())) {
+        if (!McpString.isEmpty(search.getServerSeq())) {
             builder.and(jobContent.serverSeq.eq(search.getServerSeq()));
         }
-        if(!McpString.isEmpty(search.getCallUrl())) {
-            builder.and(jobContent.callUrl.eq(search.getCallUrl()));
-        }
 
-        JPQLQuery<JobContent> query = queryFactory.selectFrom(jobContent)
+        JPQLQuery<JobContent> query = queryFactory
+                .selectFrom(jobContent)
                 .where(builder);
 
         return Optional.ofNullable(query.fetchFirst());

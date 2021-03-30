@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.core.common.MokaConstants;
-import lombok.*;
-
 import java.lang.reflect.Type;
 import java.util.List;
+import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.common.MokaConstants;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,7 +44,4 @@ public class JobContentSearchDTO extends SearchDTO {
 
     @ApiModelProperty("사용여부(사용:Y/미사용:N)")
     private String usedYn;
-
-    @ApiModelProperty("URL")
-    private String callUrl;
 }

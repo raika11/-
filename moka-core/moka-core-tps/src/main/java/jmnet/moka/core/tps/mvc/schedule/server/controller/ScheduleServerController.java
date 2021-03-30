@@ -183,11 +183,10 @@ public class ScheduleServerController extends AbstractCommonController {
 
         JobContentSearchDTO checkItem = new JobContentSearchDTO();
         checkItem.setServerSeq(jobContentSaveDTO.getServerSeq());
-        checkItem.setCallUrl(jobContentSaveDTO.getCallUrl());
         checkItem.setPeriod(jobContentSaveDTO.getPeriod());
         //등록불가 작업인지 확인(기존데이터와 serverSeq, callUrl, period 가 동일하면 등록불가) > 제약조건 삭제로 불필요
         //if (jobContentService.isValidData(checkItem)) {
-            //throw new InvalidDataException(msg("tps.common.error.duplicated.data"));
+        //throw new InvalidDataException(msg("tps.common.error.duplicated.data"));
         //}
 
         try {
@@ -230,7 +229,6 @@ public class ScheduleServerController extends AbstractCommonController {
 
         JobContentSearchDTO checkItem = new JobContentSearchDTO();
         checkItem.setServerSeq(jobContentUpdateDTO.getServerSeq());
-        checkItem.setCallUrl(jobContentUpdateDTO.getCallUrl());
         checkItem.setPeriod(jobContentUpdateDTO.getPeriod());
         //등록불가 작업인지 확인(기존데이터와 serverSeq, callUrl, period 가 동일하면 등록불가) > 제약조건 삭제로 불필요
         //if (jobContentService.isValidData(checkItem)) {

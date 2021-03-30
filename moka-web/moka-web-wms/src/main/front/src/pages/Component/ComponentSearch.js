@@ -15,8 +15,8 @@ const ComponentSearch = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { latestDomainId, domainList } = useSelector(({ auth }) => auth, shallowEqual);
-    const tpZoneRows = useSelector(({ codeMgt }) => codeMgt, shallowEqual);
-    const storeSearch = useSelector(({ component }) => component, shallowEqual);
+    const tpZoneRows = useSelector(({ codeMgt }) => codeMgt.tpZoneRows, shallowEqual);
+    const storeSearch = useSelector(({ component }) => component.search, shallowEqual);
     const [search, setSearch] = React.useState(initialState.search);
 
     /**

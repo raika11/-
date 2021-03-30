@@ -76,16 +76,17 @@ const ArticleList = (props) => {
      * 기사조회하는 함수
      */
     const getArticleList = useCallback(
-        ({ type, getSourceList = false, search: appendSearch }) => {
+        ({ type, search: appendSearch }) => {
             const nt = new Date();
             const startServiceDay = !search.startServiceDay ? moment(nt).subtract(period[0], period[1]).startOf('day') : search.startServiceDay;
             const endServiceDay = !search.endServiceDay ? moment(nt).endOf('day') : search.endServiceDay;
             const ns = { ...search, ...appendSearch, startServiceDay, endServiceDay };
-            setSearch(ns);
+            const isOk = ns.sourceList && (ns.sourceList || []).length > 0; // sourceList가 셋팅되어있는지
 
+            setSearch(ns);
             dispatch(
                 getArticleListModal({
-                    getSourceList,
+                    getSourceList: !isOk,
                     type,
                     search: {
                         ...ns,
@@ -185,16 +186,13 @@ const ArticleList = (props) => {
     useEffect(() => {
         const type = !!isNaverChannel ? 'BULK' : 'DESKING';
         const masterCode = selectedComponent.schCodeId || null;
-        const ns = { ...initialSearch, masterCode };
+        const ns = { ...initialSearch, ...search, masterCode };
 
         if (show) {
-            // 기사 처음 로드 + 매체도 조회 (매체가 변경되는 경우 이 effect를 탄다)
+            // 기사 로딩
             setType(type);
-            if (previous.current.type === type && previous.current.schCodeId !== masterCode) {
-                getArticleList({ getSourceList: false, type, search: ns });
-                previous.current.schCodeId = masterCode;
-            } else if (previous.current.type !== type) {
-                getArticleList({ getSourceList: true, type, search: ns });
+            if (previous.current.type !== type || previous.current.schCodeId !== masterCode) {
+                getArticleList({ type, search: ns });
                 previous.current.type = type;
                 previous.current.schCodeId = masterCode;
             }

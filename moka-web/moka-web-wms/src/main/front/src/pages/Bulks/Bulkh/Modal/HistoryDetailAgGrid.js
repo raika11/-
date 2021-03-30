@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MokaTable } from '@components';
 import { useHistory } from 'react-router-dom';
 import { historyDetailColumnDefs } from './HistoryAgGridColumns';
-import { Col } from 'react-bootstrap';
 import { MokaCard } from '@components';
-import Button from 'react-bootstrap/Button';
 import { useSelector } from 'react-redux';
 import { GET_HISTORY_DETAIL } from '@store/bulks';
 
@@ -15,16 +13,16 @@ const HistoryDetailAgGrid = () => {
         historyListArticle: store.bulks.bulkh.historyList.article,
         loading: store.loading[GET_HISTORY_DETAIL],
     }));
-
     const [rowData, setRowData] = useState([]);
 
-    // 불러오기 버튼을 클릭 하면 핫클릭 리트스 창을 url 을 변경해서 리스트 를 가지고 온다.
+    /**
+     * 불러오기
+     */
     const handleClickLoadButton = () => {
         const selctSeq = historyListArticle.selectSeq;
         history.push(`/${bulkPathName}/${selctSeq}`);
     };
 
-    // store 리스트가 변경 되면 grid 에 리스트 전달.
     useEffect(() => {
         setRowData(
             historyListArticle.list.map((element) => {
@@ -39,38 +37,33 @@ const HistoryDetailAgGrid = () => {
     }, [historyListArticle]);
 
     return (
-        <>
-            <MokaCard
-                height={670}
-                loading={loading}
-                header={false}
-                className="custom-scroll mr-gutter w-100 no-shadow"
-                footer
-                footerAs={
-                    <div className="text-right">
-                        <Button variant="outline-neutral" onClick={() => handleClickLoadButton()} disabled={rowData.length > 0 ? false : true}>
-                            불러오기
-                        </Button>
-                    </div>
-                }
-            >
-                <MokaTable
-                    agGridHeight={540}
-                    columnDefs={historyDetailColumnDefs}
-                    rowData={rowData}
-                    onRowNodeId={(row) => row.id}
-                    onRowClicked={null}
-                    loading={null}
-                    total={historyListArticle.list.totalCnt}
-                    page={null}
-                    size={null}
-                    className="flex-fill"
-                    onChangeSearchOption={null}
-                    selected={null}
-                    paging={false}
-                />
-            </MokaCard>
-        </>
+        <MokaCard
+            loading={loading}
+            header={false}
+            className="shadow-none w-100 h-100"
+            bodyClassName="d-flex flex-column p-0 m-0"
+            footer
+            footerClassName="pb-0"
+            footerButtons={[
+                {
+                    text: '불러오기',
+                    onClick: handleClickLoadButton,
+                    variant: 'outline-neutral',
+                    disabled: rowData.length < 1,
+                },
+            ]}
+        >
+            <MokaTable
+                className="flex-fill overflow-hidden"
+                columnDefs={historyDetailColumnDefs}
+                rowData={rowData}
+                onRowNodeId={(row) => row.id}
+                onRowClicked={null}
+                total={historyListArticle.list.totalCnt}
+                onChangeSearchOption={null}
+                paging={false}
+            />
+        </MokaCard>
     );
 };
 

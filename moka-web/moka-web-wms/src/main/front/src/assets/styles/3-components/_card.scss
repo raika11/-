@@ -1,11 +1,9 @@
 .card {
   margin-bottom: 0;
   box-shadow: $card-shadow;
+
   &.body-bg {
     background-color:$body-bg;
-    box-shadow: none;
-  }
-  &.no-shadow {
     box-shadow: none;
   }
 }

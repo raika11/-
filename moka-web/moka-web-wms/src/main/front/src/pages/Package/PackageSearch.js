@@ -4,8 +4,6 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { CodeAutocomplete } from '@pages/commons';
 import { MokaInput, MokaSearchInput } from '@/components';
-import { changeKornameSearchOption, getCodeKornameList } from '@store/code';
-import { getPackageList } from '@store/package/packageAction';
 import { Button } from 'react-bootstrap';
 
 /**

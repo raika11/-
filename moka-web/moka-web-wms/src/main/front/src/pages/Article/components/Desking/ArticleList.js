@@ -184,13 +184,14 @@ const ArticleList = (props) => {
     );
 
     useEffect(() => {
-        const type = !!isNaverChannel ? 'BULK' : 'DESKING';
-        const masterCode = selectedComponent.schCodeId || null;
-        const ns = { ...initialSearch, ...search, masterCode };
-
         if (show) {
+            const type = !!isNaverChannel ? 'BULK' : 'DESKING';
+            const masterCode = selectedComponent.schCodeId || null;
+            let ns = { ...initialSearch, ...search, masterCode };
+
             // 기사 로딩
             setType(type);
+            if (previous.current.type !== type) ns.sourceList = null; // 타입이 바뀌면 매체 리로드해야함
             if (previous.current.type !== type || previous.current.schCodeId !== masterCode) {
                 getArticleList({ type, search: ns });
                 previous.current.type = type;

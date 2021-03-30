@@ -44,6 +44,7 @@ import jmnet.moka.core.tps.mvc.menu.dto.MenuNodeDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
 import jmnet.moka.core.tps.mvc.menu.service.MenuService;
+import jmnet.moka.web.wms.config.security.exception.PasswordNotMatchedException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -392,7 +393,9 @@ public class MemberRestController extends AbstractCommonController {
             @ApiParam("패스워드") @RequestParam("password")
             @Pattern(regexp = "^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*)$", message = "{tps.member.error.pattern.password}") String password,
             @ApiParam("신규 패스워드") @RequestParam("newPassword")
-            @Pattern(regexp = "^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*)$", message = "{tps.member.error.pattern.password}") String newPassword)
+            @Pattern(regexp = "^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*)$", message = "{tps.member.error.pattern.password}") String newPassword,
+            @ApiParam("확인 패스워드") @RequestParam("confirmPassword")
+            @Pattern(regexp = "^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*)$", message = "{tps.member.error.pattern.password}") String confirmPassword)
             throws Exception {
 
         String infoMessage = msg("tps.common.error.no-data");
@@ -411,10 +414,11 @@ public class MemberRestController extends AbstractCommonController {
             // 현재 패스워드 일치 여부 확인
             boolean same = passwordEncoder.matches(password, orgMember.getPassword());
 
-
             if (!same) {
                 throw new UserPrincipalNotFoundException(memberId);
             }
+            // 신규 패스워드와 패스워드 확인 비교
+            throwPasswordCheck(newPassword, confirmPassword);
 
             String bcryptPassword = passwordEncoder.encode(newPassword);
             orgMember.setExpireDt(McpDate.datePlus(McpDate.now(), 30));
@@ -442,6 +446,22 @@ public class MemberRestController extends AbstractCommonController {
         }
     }
 
+    /**
+     * 비밀번호 확인
+     *
+     * @param password        비밀번호 입력값
+     * @param confirmPassword 비밀번호 확인 입력값
+     * @throws PasswordNotMatchedException 비밀번호와 비밀번호 확인 불일치
+     */
+    private void throwPasswordCheck(String password, String confirmPassword)
+            throws PasswordNotMatchedException {
+
+        // 비밀번호와 비밀번호 확인 비교
+        boolean same = password.equals(confirmPassword);
+        if (!same) {
+            throw new PasswordNotMatchedException(msg("wms.login.error.PasswordNotMatchedException"));
+        }
+    }
 
 
     /**

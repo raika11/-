@@ -200,7 +200,8 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         try {
 
-            String passwordSameMessage = msg("tps.member.error.same.password");
+            // String passwordSameMessage = msg("tps.member.error.same.password");
+            String passwordSameMessage = msg("tps.member.error.PasswordNotMatchedException");
 
             if (!memberDTO
                     .getPassword()

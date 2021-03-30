@@ -6,7 +6,7 @@
   <!-- 패키지목록 조회-->
   <select id="findAll" parameterType="PackageSearchDTO" resultType="PackageVO"
     statementType="CALLABLE">
-    { call __UPA_MOKA_PACKAGE_LIST_SEL(
+    { call UPA_MOKA_PACKAGE_LIST_SEL(
     #{startDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
     #{endDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
     #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},

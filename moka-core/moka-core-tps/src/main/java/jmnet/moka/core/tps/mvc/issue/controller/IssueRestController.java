@@ -235,6 +235,34 @@ public class IssueRestController extends AbstractCommonController {
     }
 
     /**
+     * 패키지 종료
+     *
+     * @param pkgSeq 패키지 일련번호
+     * @return 수정된 패키지
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "패키지 종료")
+    @PutMapping("/{pkgSeq}/finish")
+    public ResponseEntity<?> putPackageFinish(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq)
+            throws InvalidDataException, Exception {
+
+        PackageMaster packageMaster = packageService
+                .findByPkgSeq(pkgSeq)
+                .orElseThrow(() -> new NoDataException(msg("")));
+        packageMaster.setUsedYn("N");
+        // 수정
+        PackageMaster returnValue = packageService.updatePackageMaster(packageMaster);
+
+        // 결과리턴
+        PackageMasterDTO dto = modelMapper.map(returnValue, PackageMasterDTO.class);
+        ResultDTO<PackageMasterDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.update"));
+
+        tpsLogger.success(ActionType.UPDATE);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
      * 패키지 수정 (화면기준)
      *
      * @param packageMasterDTO 수정할 패키지
@@ -421,7 +449,8 @@ public class IssueRestController extends AbstractCommonController {
                         keywords.add(PackageKeywordDTO
                                 .builder()
                                 .catDiv("C")
-                                .keyword(category)
+                                //                                .keyword(category)
+                                .repMaster(Long.parseLong(category))
                                 .kwdOrd(kwdOrd.incrementAndGet())
                                 .ordno(0L)
                                 .build());

@@ -454,7 +454,7 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInputLabel
                             as="switch"
                             label="로그인"
-                            labelWidth={35}
+                            labelWidth={50}
                             name="loginYn"
                             id="loginYn"
                             labelClassName="text-right"
@@ -469,11 +469,11 @@ const PollEdit = ({ onDelete }) => {
                             inputProps={{ checked: edit.loginYn === 'Y' }}
                         />
                     </Col>
-                    <Col xs={2}>
+                    <Col xs={3}>
                         <MokaInputLabel
                             as="switch"
                             label="댓글"
-                            labelWidth={23}
+                            labelWidth={50}
                             labelClassName="text-right"
                             name="replyYn"
                             id="replyYn"
@@ -489,7 +489,7 @@ const PollEdit = ({ onDelete }) => {
                             inputProps={{ checked: edit.replyYn === 'Y' }}
                         />
                     </Col>
-                    <Col xs={4}>
+                    <Col xs={3}>
                         <MokaInputLabel
                             as="switch"
                             label="중복 투표 제한"
@@ -530,7 +530,7 @@ const PollEdit = ({ onDelete }) => {
                         <Col xs={9}>
                             <MokaInputLabel
                                 label="url"
-                                labelWidth={15}
+                                labelWidth={20}
                                 name="bbsUrl"
                                 labelClassName="text-right"
                                 onChange={(e) => {

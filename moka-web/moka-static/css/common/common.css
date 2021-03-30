@@ -74,6 +74,7 @@ span {display: inline-block;}
 .header .uh .right_area {position: absolute; right: 20px;}
 /* .header .uh .right_area .btn_myinfo {margin-right: 10px;} */
 .header.sticky_top {
+    top:0;
     opacity: 1;
     -webkit-animation-name: fadeIn;
     animation-name: fadeIn;
@@ -110,9 +111,9 @@ section {width:100%;}
 
 /** nav **/
 /* header nav */
-.header_nav {width:100%;}
-.header_nav .nav {width:100%;}
-.header_nav .nav .nav_item .nav_link:hover {text-decoration: underline;}
+/* .header_nav {width:100%;} */
+/* .header_nav .nav {width:100%;}
+.header_nav .nav .nav_item .nav_link:hover {text-decoration: underline;} */
 
 /* side nav */
 .side_nav {width:100%; margin-top:16px;}
@@ -220,7 +221,7 @@ section {width:100%;}
 .flex_justify_around {justify-content: space-around;}
 .flex_wrap {flex-wrap: wrap;}
 .flex_nowrap {flex-wrap: nowrap;}
-.flex_reverse {flex-wrap: wrap-reverse;}
+
 .flex_row_reverse {display: flex; flex-direction: row-reverse;}
 .flex_col_reverse {display: flex; flex-direction: column-reverse;}
 
@@ -439,6 +440,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 @media (max-width:767px) {
     img {width:100%;}
 
+    .flex_row_reverse_sm {flex-wrap:wrap-reverse;}
+
     .pc {display:none;}
 
     .header {background: #fff; border-bottom: 4px solid #000; color: #000;}
@@ -523,6 +526,13 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .mo {display:none;}
 
     .tb {display:none;}
+
+
+
+    .row {margin-left:-10px;margin-right:-10px;}
+    .row > * {padding-left:10px;padding-right:10px;}
+
+
 
     .header {height: 42px;}
     .header .uh .btn_navbar .icon_navbar {background-color: #fff;}
@@ -615,6 +625,9 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
     .tb {display:block;}
+
+    .row {margin-left:-18px;margin-right:-18px;}
+    .row > * {padding-left:18px;padding-right:18px;}
 
     .header .uh,
     .contents,

@@ -78,7 +78,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RestController
 @RequestMapping("/api/boards")
-@Api(tags = {"게시판 API"})
+@Api(tags = {"게시글 API"})
 public class BoardRestController extends AbstractCommonController {
 
     private final BoardService boardService;
@@ -114,14 +114,14 @@ public class BoardRestController extends AbstractCommonController {
     }
 
     /**
-     * 게시판목록조회
+     * 게시글목록조회
      *
      * @param search 검색조건
-     * @return 게시판목록
+     * @return 게시글목록
      */
-    @ApiOperation(value = "게시판 목록 조회")
+    @ApiOperation(value = "게시글 목록 조회")
     @GetMapping("/{boardId}/contents")
-    public ResponseEntity<?> getBoardList(@ApiParam("게시물 일련번호") @PathVariable("boardId")
+    public ResponseEntity<?> getBoardList(@ApiParam("게시판 일련번호") @PathVariable("boardId")
     @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId, @SearchParam BoardSearchDTO search) {
 
         ResultListDTO<BoardDTO> resultListMessage = new ResultListDTO<>();
@@ -143,20 +143,20 @@ public class BoardRestController extends AbstractCommonController {
     }
 
     /**
-     * 게시판정보 조회
+     * 게시글정보 조회
      *
      * @param boardId  게시판 일련번호
-     * @param boardSeq 게시판아이디 (필수)
-     * @param boardSeq 게시판아이디 (필수)
+     * @param boardSeq 게시글아이디 (필수)
+     * @param boardSeq 게시글아이디 (필수)
      * @return 게시판정보
      * @throws NoDataException 게시판 정보가 없음
      */
-    @ApiOperation(value = "게시판 조회")
+    @ApiOperation(value = "게시글 조회")
     @GetMapping("/{boardId}/contents/{boardSeq}")
-    public ResponseEntity<?> getBoard(
-            @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Min(value = 1, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
-            @ApiParam("게시물 비밀번호") @RequestParam(value = "pwd", required = false) String pwd)
+    public ResponseEntity<?> getBoard(@ApiParam("게시판 일련번호") @PathVariable("boardId")
+    @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
+            @ApiParam("게시글 일련번호") @PathVariable("boardSeq") @Min(value = 1, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
+            @ApiParam("게시글 비밀번호") @RequestParam(value = "pwd", required = false) String pwd)
             throws NoDataException {
 
         String message = msg("tps.common.error.no-data");
@@ -194,14 +194,14 @@ public class BoardRestController extends AbstractCommonController {
     /**
      * 등록
      *
-     * @param boardDTO 등록할 게시판정보
-     * @return 등록된 게시판정보
+     * @param boardDTO 등록할 게시글정보
+     * @return 등록된 게시글정보
      */
-    @ApiOperation(value = "게시판 등록")
+    @ApiOperation(value = "게시글 등록")
     @PostMapping("/{boardId}/contents")
-    public ResponseEntity<?> postBoard(
-            @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            @Valid BoardSaveDTO boardDTO, @ApiParam(hidden = true) @NotNull Principal principal)
+    public ResponseEntity<?> postBoard(@ApiParam("게시판 일련번호") @PathVariable("boardId")
+    @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId, @Valid BoardSaveDTO boardDTO,
+            @ApiParam(hidden = true) @NotNull Principal principal)
             throws InvalidDataException, NoDataException {
 
 
@@ -247,20 +247,19 @@ public class BoardRestController extends AbstractCommonController {
     }
 
     /**
-     * 게시판 답변/댓글 등록
+     * 게시글 답변/댓글 등록
      *
-     * @param parentBoardSeq 게시물 일련번호
-     * @param boardDTO       등록할 게시판정보
-     * @return 등록된 게시판정보
+     * @param parentBoardSeq 게시글 일련번호
+     * @param boardDTO       등록할 게시글정보
+     * @return 등록된 게시글정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
-    @ApiOperation(value = "게시판 답변/댓글 등록")
+    @ApiOperation(value = "게시글 답변/댓글 등록")
     @PostMapping("/{boardId}/contents/{parentBoardSeq}/reply")
-    public ResponseEntity<?> postBoardReply(
-            @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            @ApiParam("게시물 일련번호") @PathVariable("parentBoardSeq")
-            @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long parentBoardSeq, @Valid BoardSaveDTO boardDTO,
+    public ResponseEntity<?> postBoardReply(@ApiParam("게시판 일련번호") @PathVariable("boardId")
+    @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId, @ApiParam("게시글 일련번호") @PathVariable("parentBoardSeq")
+    @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long parentBoardSeq, @Valid BoardSaveDTO boardDTO,
             @ApiParam(hidden = true) @NotNull Principal principal)
             throws InvalidDataException, Exception {
 
@@ -334,16 +333,16 @@ public class BoardRestController extends AbstractCommonController {
      * 수정
      *
      * @param boardId  게시판 ID
-     * @param boardSeq 게시판아이디
-     * @param boardDTO 수정할 게시판정보
-     * @return 수정된 게시판정보
+     * @param boardSeq 게시글아이디
+     * @param boardDTO 수정할 게시글정보
+     * @return 수정된 게시글정보
      * @throws Exception 그외 모든 에러
      */
-    @ApiOperation(value = "게시판 수정")
+    @ApiOperation(value = "게시글 수정")
     @PutMapping("/{boardId}/contents/{boardSeq}")
-    public ResponseEntity<?> putBoard(
-            @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
+    public ResponseEntity<?> putBoard(@ApiParam("게시판 일련번호") @PathVariable("boardId")
+    @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
+            @ApiParam("게시글 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
             @Valid BoardSaveDTO boardDTO)
             throws Exception {
 
@@ -385,21 +384,21 @@ public class BoardRestController extends AbstractCommonController {
 
 
     /**
-     * 게시판 답변/댓글 수정
+     * 게시글 답변/댓글 수정
      *
      * @param boardId  게시판 ID
-     * @param boardSeq 게시판아이디
-     * @param boardDTO 수정할 게시판정보
-     * @return 수정된 게시판정보
+     * @param boardSeq 게시글아이디
+     * @param boardDTO 수정할 게시글정보
+     * @return 수정된 게시글정보
      * @throws Exception 그외 모든 에러
      */
-    @ApiOperation(value = "게시판 답변/댓글 수정")
+    @ApiOperation(value = "게시글 답변/댓글 수정")
     @PutMapping("/{boardId}/contents/{parentBoardSeq}/replys/{boardSeq}")
-    public ResponseEntity<?> putBoardReply(
-            @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            @ApiParam("게시물 일련번호") @PathVariable("parentBoardSeq")
+    public ResponseEntity<?> putBoardReply(@ApiParam("게시판 일련번호") @PathVariable("boardId")
+    @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
+            @ApiParam("부모게시글 일련번호") @PathVariable("parentBoardSeq")
             @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long parentBoardSeq,
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
+            @ApiParam("게시글 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
             @Valid BoardSaveDTO boardDTO)
             throws Exception {
 
@@ -440,9 +439,9 @@ public class BoardRestController extends AbstractCommonController {
     }
 
     /**
-     * 게시판 등록 수정 처리
+     * 게시글 등록 수정 처리
      *
-     * @param board 게시물 정보
+     * @param board 게시글 정보
      * @return ResponseEntity
      * @throws InvalidDataException 공통 에러 처리
      */
@@ -487,17 +486,17 @@ public class BoardRestController extends AbstractCommonController {
      * 삭제
      *
      * @param boardId  게시판 일련번호
-     * @param boardSeq 삭제 할 게시판아이디 (필수)
+     * @param boardSeq 삭제 할 게시글아이디 (필수)
      * @return 삭제성공여부
      * @throws InvalidDataException 데이타유효성오류
-     * @throws NoDataException      삭제 할 게시판 없음
+     * @throws NoDataException      삭제 할 게시글 없음
      * @throws Exception            그 외 에러처리
      */
-    @ApiOperation(value = "게시판 삭제")
+    @ApiOperation(value = "게시글 삭제")
     @DeleteMapping("/{boardId}/contents/{boardSeq}")
-    public ResponseEntity<?> deleteBoard(
-            @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq)
+    public ResponseEntity<?> deleteBoard(@ApiParam("게시판 일련번호") @PathVariable("boardId")
+    @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
+            @ApiParam("게시글 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq)
             throws InvalidDataException, NoDataException, Exception {
 
 
@@ -508,7 +507,7 @@ public class BoardRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(noContentMessage));
 
 
-        // 하위 게시물이 있는 경우 삭제 불가
+        // 하위 게시글이 있는 경우 삭제 불가
         if (boardService.countAllBoardByParentBoardSeq(board.getBoardSeq()) > 0) {
             throw new InvalidDataException(msg("tps.board.error.exist-children-contents"));
         }
@@ -538,14 +537,14 @@ public class BoardRestController extends AbstractCommonController {
     /**
      * 글 순서 변경
      *
-     * @param boardSeq 게시물 일련번호
+     * @param boardSeq 게시글 일련번호
      * @return 성공 여부
      */
     @ApiOperation(value = "글 순서 변경")
     @PutMapping("/{boardSeq}/order")
     public ResponseEntity<?> putOrder(
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
-            @ApiParam("게시물 순서번호") @RequestParam("ordNo") @Min(value = 0, message = "{tps.board.error.min.ordNo}") Integer ordNo) {
+            @ApiParam("게시글 일련번호") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
+            @ApiParam("게시글 순서번호") @RequestParam("ordNo") @Min(value = 0, message = "{tps.board.error.min.ordNo}") Integer ordNo) {
 
         if (boardService.updateOrdNo(boardSeq, ordNo) > 0) {
             return new ResponseEntity<>(new ResultDTO<>(true, msg("tps.board.success.change-order")), HttpStatus.OK);
@@ -567,13 +566,13 @@ public class BoardRestController extends AbstractCommonController {
      * 푸시, 메일 파라미터 검증
      *
      * @param boardInfo 게시판정보
-     * @param board     게시물정보
+     * @param board     게시글정보
      * @throws InvalidDataException 오류데이터 에러 처리
      */
     private void validInteractionOperation(BoardInfo boardInfo, Board board)
             throws InvalidDataException {
 
-        // 답변푸시설정이 안되어 있는 게시판에 게시물의 답변푸시수신이 Y로 되어 있는 경우
+        // 답변푸시설정이 안되어 있는 게시판에 게시글의 답변푸시수신이 Y로 되어 있는 경우
         if (boardInfo
                 .getAnswPushYn()
                 .equals(MokaConstants.NO)) {
@@ -593,7 +592,7 @@ public class BoardRestController extends AbstractCommonController {
             }
         }
 
-        // 이메일 발송 설정이 안되어 있는 게시판의 게시물에 이메일수신이 Y로 되어 있는 경우
+        // 이메일 발송 설정이 안되어 있는 게시판의 게시글이 이메일수신이 Y로 되어 있는 경우
         if (boardInfo
                 .getEmailSendYn()
                 .equals(MokaConstants.NO)) {
@@ -788,9 +787,8 @@ public class BoardRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "본문에 첨부되는 이미지 업로드")
     @PostMapping("/{boardId}/image")
-    public ResponseEntity<?> postUploadContentImage(
-            @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            MultipartFile attachFile)
+    public ResponseEntity<?> postUploadContentImage(@ApiParam("게시판 일련번호") @PathVariable("boardId")
+    @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId, MultipartFile attachFile)
             throws InvalidDataException, IOException {
 
         if (!ImageUtil.isImage(attachFile)) {

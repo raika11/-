@@ -188,7 +188,7 @@ const EditDeskingWorkModal = (props) => {
             }
             title={isDummy ? '공백 기사' : undefined}
             width={650}
-            size="lg"
+            size="md"
             show={show}
             onHide={onHide}
             buttons={[

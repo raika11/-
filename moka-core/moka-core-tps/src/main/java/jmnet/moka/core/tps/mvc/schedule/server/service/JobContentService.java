@@ -1,18 +1,24 @@
 package jmnet.moka.core.tps.mvc.schedule.server.service;
 
+import java.util.List;
+import java.util.Optional;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobDeletedContentSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobContent;
 import org.springframework.data.domain.Page;
 
-import java.util.Optional;
-
 /**
- * 작업 Service
- * 2021. 1. 26. 김정민
- *
+ * 작업 Service 2021. 1. 26. 김정민
  */
 public interface JobContentService {
+
+    /**
+     * 작업목록 (코드조회)
+     *
+     * @param
+     * @return 작업목록
+     */
+    List<JobContent> findJobContentCodeList();
 
     /**
      * 작업목록 조회

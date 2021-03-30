@@ -313,6 +313,16 @@ public class ComponentServiceImpl implements ComponentService {
     public List<Component> insertComponents(List<Component> components)
             throws Exception {
 
+        //저장
+        HistPublishDTO histPublishDTO = HistPublishDTO
+                .builder()
+                .status(EditStatusCode.PUBLISH)
+                .approvalYn(MokaConstants.YES)
+                .build();
+
+        List<Component> result = componentRepository.saveAll(components);
+        componentHistService.insertComponentHistList(result, histPublishDTO);
+
         //임시저장
         HistPublishDTO histSaveDTO = HistPublishDTO
                 .builder()
@@ -323,16 +333,6 @@ public class ComponentServiceImpl implements ComponentService {
             componentHistService.insertComponentHist(component, histSaveDTO);
         }
 
-        //저장
-        HistPublishDTO histPublishDTO = HistPublishDTO
-                .builder()
-                .status(EditStatusCode.PUBLISH)
-                .approvalYn(MokaConstants.YES)
-                .build();
-
-        List<Component> result = componentRepository.saveAll(components);
-        componentHistService.insertComponentHistList(result, histPublishDTO);
-        
         return result;
     }
 

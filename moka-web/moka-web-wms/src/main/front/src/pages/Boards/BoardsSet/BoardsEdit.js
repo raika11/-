@@ -84,7 +84,7 @@ const BoardsEdit = ({ match }) => {
         }
 
         // 파일 true 선택 후 개수를 입력 안했을 때
-        if (save.fileYn === 'Y' && save.allowFileCnt === 0) {
+        if (save.fileYn === 'Y' && !/^[0-9]+$/.test(save.allowFileCnt)) {
             errList.push({
                 field: 'allowFileCnt',
                 reason: '개수를 입력해 주세요',
@@ -93,10 +93,10 @@ const BoardsEdit = ({ match }) => {
         }
 
         // 파일 true 선택 후 용량을 입력 안했을 때
-        if (save.fileYn === 'Y' && save.allowFileSize === 0) {
+        if (save.fileYn === 'Y' && !/^[0-9]+$/.test(save.allowFileSize)) {
             errList.push({
                 field: 'allowFileSize',
-                reason: '용량을 입력해 주세요',
+                reason: '파일의 용량을 숫자로 입력해 주세요',
             });
             isInvalid = isInvalid || true;
         }
@@ -219,6 +219,7 @@ const BoardsEdit = ({ match }) => {
             setError({});
         } else {
             dispatch(clearSetmenuBoardInfo());
+            setError({});
         }
     }, [boardId, dispatch]);
 

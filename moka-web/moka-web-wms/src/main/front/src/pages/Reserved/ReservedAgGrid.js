@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
@@ -7,19 +7,13 @@ import { columnDefs } from './ReservedAgGridColumns';
 import { changeSearchOption, getReservedList, GET_RESERVED_LIST } from '@store/reserved';
 
 /**
- * 예약어 AgGrid 컴포넌트
+ * 예약어 관리 > 예약어 목록 > AgGrid
  */
-const ReservedAgGrid = ({ match, onDelete }) => {
+const ReservedAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const [rowData, setRowData] = useState([]);
-    const { total, list, search, reserved, loading } = useSelector((store) => ({
-        total: store.reserved.total,
-        list: store.reserved.list,
-        search: store.reserved.search,
-        reserved: store.reserved.reserved,
-        loading: store.loading[GET_RESERVED_LIST],
-    }));
+    const loading = useSelector(({ loading }) => loading[GET_RESERVED_LIST]);
+    const { total, list, search, reserved } = useSelector(({ reserved }) => reserved);
 
     /**
      * 테이블에서 검색옵션 변경
@@ -45,15 +39,6 @@ const ReservedAgGrid = ({ match, onDelete }) => {
      */
     const handleAddClick = useCallback(() => history.push(`${match.path}/add`), [history, match.path]);
 
-    useEffect(() => {
-        setRowData(
-            list.map((data) => ({
-                ...data,
-                onDelete,
-            })),
-        );
-    }, [list, onDelete]);
-
     return (
         <>
             <div className="d-flex justify-content-end mb-14">
@@ -65,7 +50,7 @@ const ReservedAgGrid = ({ match, onDelete }) => {
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
-                rowData={rowData}
+                rowData={list}
                 onRowNodeId={(reserved) => reserved.reservedSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}
@@ -75,7 +60,6 @@ const ReservedAgGrid = ({ match, onDelete }) => {
                 displayPageNum={3}
                 selected={reserved.reservedSeq}
                 onChangeSearchOption={handleChangeSearchOption}
-                preventRowClickCell={['delete']}
             />
         </>
     );

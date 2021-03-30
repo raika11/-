@@ -95,16 +95,16 @@ const DeskingTree = ({ setComponentAgGridInstances, match }) => {
      */
     const handleSelectNode = useCallback(
         (item) => {
-            if (item?.parentAreaSeq) {
-                // 부모 노드가 아니면 링크 이동 or 데이터 새로 로드
+            if (item?.compYn === 'Y') {
+                // compYn === 'Y'이면 데이터 로드
+                // path와 동일한 키이면 새데이터 로드, 아니면 페이지이동
                 if (String(item.areaSeq) === areaSeq) {
-                    // path와 동일한 키이면 데이터 새로 로드
                     loadWork(item.areaSeq);
                 } else {
                     history.push(`${match.path}/${item.areaSeq}`);
                 }
             } else {
-                // 부모노드면!! 트리 확장
+                // compYn !== 'Y'이면 트리 확장
                 handleExpansion({ areaSeq: item.areaSeq });
             }
         },

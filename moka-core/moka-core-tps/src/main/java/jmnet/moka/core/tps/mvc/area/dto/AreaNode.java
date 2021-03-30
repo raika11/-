@@ -67,6 +67,11 @@ public class AreaNode implements Serializable {
     private Integer ordNo = 1;
 
     /**
+     * 컴포넌트/컨테이너 사용여부
+     */
+    private String compYn = MokaConstants.NO;
+
+    /**
      * 영역구분(CP,CT)
      */
     private String areaDiv = MokaConstants.ITEM_COMPONENT;
@@ -91,8 +96,10 @@ public class AreaNode implements Serializable {
         this.areaNm = area.getAreaNm();
         this.parentAreaSeq = area.getParentAreaSeq();
         this.parentAreaNm = area.getParentAreaNm();
-        this.ordNo = area.getOrdNo()
-                         .intValue();
+        this.ordNo = area
+                .getOrdNo()
+                .intValue();
+        this.compYn = area.getCompYn();
         this.areaDiv = area.getAreaDiv();
         this.areaAlign = area.getAreaAlign();
     }
@@ -109,8 +116,9 @@ public class AreaNode implements Serializable {
             return rootNode;
         } else {
             if (rootNode.hasChild()) {
-                Iterator<AreaNode> iterator = rootNode.getNodes()
-                                                      .iterator();
+                Iterator<AreaNode> iterator = rootNode
+                        .getNodes()
+                        .iterator();
                 while (iterator.hasNext()) {
                     AreaNode areaNode = iterator.next();
                     if (findAreaSeq.equals(areaNode.getAreaSeq())) {
@@ -134,8 +142,9 @@ public class AreaNode implements Serializable {
      * @return 존재여부
      */
     public boolean hasChild() {
-        return this.getNodes() != null && this.getNodes()
-                                              .size() > 0 ? true : false;
+        return this.getNodes() != null && this
+                .getNodes()
+                .size() > 0 ? true : false;
     }
 
     /**
@@ -156,31 +165,37 @@ public class AreaNode implements Serializable {
     public void sort() {
         if (this.getNodes() != null) {
             // 자식노드가 하나만 있을경우는, 자식의 자식노드를 정렬하도록 한다.
-            if (this.getNodes()
+            if (this
+                    .getNodes()
                     .size() == 1) {
-                this.getNodes()
-                    .get(0)
-                    .sort();
+                this
+                        .getNodes()
+                        .get(0)
+                        .sort();
             } else {
-                this.getNodes()
-                    .sort((a, b) -> {
+                this
+                        .getNodes()
+                        .sort((a, b) -> {
 
-                        if (a.getNodes() != null && a.getNodes()
-                                                     .size() > 0) {
-                            a.sort();
-                        }
-                        if (b.getNodes() != null && b.getNodes()
-                                                     .size() > 0) {
-                            b.sort();
-                        }
+                            if (a.getNodes() != null && a
+                                    .getNodes()
+                                    .size() > 0) {
+                                a.sort();
+                            }
+                            if (b.getNodes() != null && b
+                                    .getNodes()
+                                    .size() > 0) {
+                                b.sort();
+                            }
 
-                        if (a.getOrdNo()
-                             .equals(b.getOrdNo())) {
-                            return (int) (long) (a.getAreaSeq() - b.getAreaSeq());
-                        } else {
-                            return a.getOrdNo() - b.getOrdNo();
-                        }
-                    });
+                            if (a
+                                    .getOrdNo()
+                                    .equals(b.getOrdNo())) {
+                                return (int) (long) (a.getAreaSeq() - b.getAreaSeq());
+                            } else {
+                                return a.getOrdNo() - b.getOrdNo();
+                            }
+                        });
             }
         }
     }

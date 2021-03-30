@@ -22,7 +22,7 @@ const rnOptions = [
 /**
  * 패키지 상세 정보
  */
-const PackageEdit = () => {
+const IssueEdit = () => {
     const history = useHistory();
     const { seqNo } = useParams();
     const [pkg, setPkg] = useState({
@@ -1075,4 +1075,4 @@ const PackageEdit = () => {
     );
 };
 
-export default PackageEdit;
+export default IssueEdit;

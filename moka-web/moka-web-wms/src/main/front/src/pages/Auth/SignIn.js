@@ -112,7 +112,7 @@ const SignIn = () => {
                                                     <span>
                                                         <img src={logo} alt="joongang" />
                                                     </span>
-                                                    <h1 className="mt-10">BackOffice</h1>
+                                                    <h1 className="mt-10">Back Office</h1>
                                                 </div>
                                                 <Form>
                                                     <Form.Group>
@@ -162,13 +162,13 @@ const SignIn = () => {
                                                     </div>
                                                     <div className="etc-btn">
                                                         <label onClick={handleClickRegister}>
-                                                            BackOffice <span>사용신청</span>
+                                                            Back Office <span>사용신청</span>
                                                         </label>
                                                         <RegisterModal show={showRegisterModal} onHide={() => setShowRegisterModal(false)} />
                                                     </div>
                                                     <div className="etc-btn">
                                                         <label onClick={handleClickUnlock}>
-                                                            BackOffice <span>잠금해제</span>
+                                                            Back Office <span>잠금해제</span>
                                                         </label>
                                                         <UnlockModal show={showUnlockModal} onHide={() => setShowUnlockModal(false)} />
                                                     </div>

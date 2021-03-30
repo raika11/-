@@ -11,7 +11,7 @@ import { MokaInputLabel, MokaCard } from '@components';
 import { initialState, getReserved, duplicateCheck, clearReserved, changeReserved, changeInvalidList, saveReserved } from '@store/reserved';
 
 /**
- * 예약어 정보 컴포넌트
+ * 예약어 관리 > 등록, 수정
  */
 const ReservedEdit = ({ match, onDelete, loading }) => {
     const { reservedSeq: paramSeq } = useParams();

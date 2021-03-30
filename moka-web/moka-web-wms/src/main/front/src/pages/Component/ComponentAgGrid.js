@@ -2,36 +2,19 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import columnDefs from './ComponentAgGridColumns';
-
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';
 import { GET_COMPONENT_LIST, getComponentList, changeSearchOption } from '@store/component';
 
 /**
- * 컴포넌트 AgGrid 컴포넌트
+ * 컴포넌트 관리 > 컴포넌트 목록 > AgGrid
  */
-const ComponentAgGrid = ({ onDelete, match }) => {
+const ComponentAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_COMPONENT_LIST]);
-    const { total, list, search, component } = useSelector((store) => ({
-        total: store.component.total,
-        list: store.component.list,
-        search: store.component.search,
-        component: store.component.component,
-    }));
-
-    // state
+    const { total, list, search, component } = useSelector(({ component }) => component);
     const [rowData, setRowData] = useState([]);
-
-    useEffect(() => {
-        setRowData(
-            list.map((data) => ({
-                ...data,
-                onDelete,
-            })),
-        );
-    }, [list, onDelete]);
 
     /**
      * 테이블 검색옵션 변경
@@ -57,6 +40,14 @@ const ComponentAgGrid = ({ onDelete, match }) => {
         [history, match.path],
     );
 
+    useEffect(() => {
+        setRowData(
+            list.map((data) => ({
+                ...data,
+            })),
+        );
+    }, [list]);
+
     return (
         <>
             {/* 버튼 그룹 */}
@@ -78,7 +69,6 @@ const ComponentAgGrid = ({ onDelete, match }) => {
                 page={search.page}
                 size={search.size}
                 onChangeSearchOption={handleChangeSearchOption}
-                preventRowClickCell={['delete']}
                 selected={component.componentSeq}
             />
         </>

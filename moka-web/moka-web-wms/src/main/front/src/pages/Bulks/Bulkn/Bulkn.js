@@ -1,18 +1,9 @@
-import React, { Suspense, useState } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
-import { BulkPreviewModal } from './Modal';
 import { useSelector } from 'react-redux';
-import { MokaLoader } from '@components';
-
-// const BulknMain = React.lazy(() => import('./BulknMain'));
-// const BulknList = React.lazy(() => import('./BulknList'));
-// const BulknEdit = React.lazy(() => import('./BulknEdit'));
-
-// 2021-03-02 14:44 깜빡이는 문제점이 있다는 의견이 있어서.
-// 벌크 는 같은 페이지가 2개라서 route 설정을 한번 더 타기 때문에 lazy 로더를 결국엔 2번 불러 오게
-// 설정 되어 있어서 최초 Bulks.js 파일에만 lazy 로더를 사용하게 수정.
+import { BulkPreviewModal } from './modals';
 import BulknList from './BulknList';
 import BulknEdit from './BulknEdit';
 
@@ -56,28 +47,17 @@ const Bulkn = ({ bulksParams, bulksURL }) => {
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            {/* 임시. */}
-            {/* <Switch>
-                <Route path={[`/${bulkPathName}`, `/${bulkPathName}/:tempSeq`]} exact render={() => <BulknMain bulksParams={bulksParams} />} />
-            </Switch> */}
-
             {/* 리스트 창 */}
-            <Suspense fallback={<MokaLoader />}>
-                <BulknList HandleEditEnable={handleEditEnable} bulksURL={bulksURL} />
-            </Suspense>
+            <BulknList HandleEditEnable={handleEditEnable} bulksURL={bulksURL} />
 
             {/* 등록/수정창 */}
             <Route
                 path={[`/${bulkPathName}/add`, `/${bulkPathName}/:bulkartSeq`]}
                 exact
-                render={(props) => (
-                    <Suspense fallback={<MokaLoader />}>
-                        <BulknEdit {...props} EditState={editState} HandleEditEnable={handleEditEnable} />
-                    </Suspense>
-                )}
+                render={(props) => <BulknEdit {...props} EditState={editState} HandleEditEnable={handleEditEnable} />}
             />
 
-            {/* 미리 보기 모달창. */}
+            {/* 미리 보기 모달창 */}
             <BulkPreviewModal />
         </div>
     );

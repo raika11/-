@@ -4,13 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
-
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -48,6 +51,9 @@ public class JobContentSaveDTO implements Serializable {
     @ApiModelProperty("작업 코드")
     private String jobCd;
 
+    @ApiModelProperty("작업 명")
+    private String jobNm;
+
     @ApiModelProperty("주기")
     private Long period;
 
@@ -63,9 +69,6 @@ public class JobContentSaveDTO implements Serializable {
     @ApiModelProperty("FTP PASSIVE 여부")
     private String ftpPassive;
 
-    @ApiModelProperty("URL")
-    private String callUrl;
-
     @ApiModelProperty("저장경로")
     private String targetPath;
 
@@ -74,4 +77,7 @@ public class JobContentSaveDTO implements Serializable {
 
     @ApiModelProperty("설명")
     private String jobDesc;
+
+    @ApiModelProperty("옵션 파라미터")
+    private String pkgOpt;
 }

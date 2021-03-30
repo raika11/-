@@ -4,7 +4,9 @@ import { useDispatch } from 'react-redux';
 import { showPreviewModal, getModalBulkArticle } from '@store/bulks';
 import { messageBox } from '@utils/toastUtil';
 
-// grid 미리보기 버튼 렌더.
+/**
+ * AgGrid 미리보기 버튼 Renderer
+ */
 const PreviewRenderer = ({ bulkartSeq }) => {
     const dispatch = useDispatch();
 

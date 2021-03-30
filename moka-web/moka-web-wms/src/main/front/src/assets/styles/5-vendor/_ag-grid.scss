@@ -49,9 +49,9 @@
             header-column-separator: false,
             range-selection-border-color: transparent,
             row-hover-color: rgba(33, 150, 243, 0.1),
-            alpine-active-color: rgba(33, 150, 243, 0.2),
             selected-row-background-color: rgba(33, 150, 243, 0.2),
-            checkbox-checked-color: rgba(33, 150, 243, 1)
+            alpine-active-color: rgba($gray-600, 0.1),
+            checkbox-checked-color: $gray-800,
         )
     );
 
@@ -132,28 +132,15 @@
     &:not(.article-list) .ag-checkbox-input-wrapper {
         border-radius: 50%;
         font-size: 18px;
-        line-height: 17px;
-        width: 17px;
-        height: 17px;
 
         &::after {
             font-family: 'Font Awesome 5 Pro';
             content: '\f111';
+            margin-left: -1px;
         }
-
-        &:focus-within, &:active {
-            box-shadow: none;
-        }
-
         &.ag-checked::after {
             content: '\f058';
             font-weight: 900;
-        }
-    }
-
-    .ag-checkbox-input-wrapper {
-        &.ag-checked::after {
-            color: $gray-800;
         }
     }
 
@@ -186,7 +173,9 @@ $row-hover-color: darken($desking-row-color, 5);
             row-hover-color: $row-hover-color,
             selected-row-background-color: $row-hover-color,
             range-selection-border-color: transparent,
-            border-color: $white
+            border-color: $white,
+            alpine-active-color: rgba($gray-600, 0.1),
+            checkbox-checked-color: $gray-800,
         )
     );
 

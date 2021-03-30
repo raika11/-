@@ -11,7 +11,7 @@ import AreaEdit from './AreaEdit';
 const it = new Date().getTime();
 
 /**
- * 편집영역 관리
+ * 영역편집정보 관리
  */
 const Area = () => {
     const dispatch = useDispatch();

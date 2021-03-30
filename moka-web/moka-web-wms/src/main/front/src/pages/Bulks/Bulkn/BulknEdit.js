@@ -1,23 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import { MokaCard, MokaInputLabel } from '@components';
-import { Form, Col } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { Form, Col } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import toast, { messageBox } from '@utils/toastUtil';
+import { MokaCard, MokaInputLabel } from '@components';
 import { GET_BULK_LIST, saveBulkArticle, getBulkList, showPreviewModal, getBulkArticle } from '@store/bulks';
 import { changeSpecialCharCode, getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
 import { W3C_URL } from '@/constants';
 import commonUtil from '@utils/commonUtil';
 
+const rowInit = [
+    {
+        bulkartSeq: 0,
+        ordNo: 0,
+        title: '',
+        totalId: 0,
+        url: '',
+        symbol: '▶',
+        title_length: 0,
+    },
+    {
+        bulkartSeq: 0,
+        ordNo: 0,
+        title: '',
+        totalId: 0,
+        url: '',
+        symbol: '▶',
+        title_length: 0,
+    },
+    {
+        bulkartSeq: 0,
+        ordNo: 0,
+        title: '',
+        totalId: 0,
+        url: '',
+        symbol: '▶',
+        title_length: 0,
+    },
+];
+
 const propTypes = {
     EditState: PropTypes.string,
     HandleEditEnable: PropTypes.func,
 };
+
 const defaultProps = {};
 
-var checkTextLength = function (str) {
+const checkTextLength = function (str) {
     var len = 0;
     for (var i = 0; i < str.length; i++) {
         len++;
@@ -25,6 +56,9 @@ var checkTextLength = function (str) {
     return len;
 };
 
+/**
+ * 네이버 벌크 문구 > 등록, 수정 폼
+ */
 const BulknEdit = (props) => {
     // const params = useParams();
     const history = useHistory();
@@ -424,35 +458,5 @@ ${bulkArticleRow
 
 BulknEdit.propTypes = propTypes;
 BulknEdit.defaultProps = defaultProps;
-
-const rowInit = [
-    {
-        bulkartSeq: 0,
-        ordNo: 0,
-        title: '',
-        totalId: 0,
-        url: '',
-        symbol: '▶',
-        title_length: 0,
-    },
-    {
-        bulkartSeq: 0,
-        ordNo: 0,
-        title: '',
-        totalId: 0,
-        url: '',
-        symbol: '▶',
-        title_length: 0,
-    },
-    {
-        bulkartSeq: 0,
-        ordNo: 0,
-        title: '',
-        totalId: 0,
-        url: '',
-        symbol: '▶',
-        title_length: 0,
-    },
-];
 
 export default BulknEdit;

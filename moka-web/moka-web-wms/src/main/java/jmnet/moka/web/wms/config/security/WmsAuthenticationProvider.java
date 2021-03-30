@@ -258,12 +258,6 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
 
             // 5. 계정 만료일
             if (userDetails.getExpireDt() != null) {
-
-                if (McpDate.term(userDetails.getExpireDt()) > 0 && McpDate.term(userDetails.getExpireDt()) < 6) {
-                    String errMsg = messageByLocale.get("wms.login.error.expire-date-until", McpDate.term(userDetails.getExpireDt()));
-                    throw new AccountExpiredException(errMsg);
-                }
-
                 if (McpDate.term(userDetails.getExpireDt()) < 0) {
                     String errMsg = messageByLocale.get("wms.login.error.expire-date", McpDate.nowDateStr());
                     memberService.updateMemberStatus(userId, MemberStatusCode.P, userDetails.getErrorCnt(), errMsg);

@@ -9,7 +9,6 @@ export const columnDefs = [
         colId: 'checkbox',
         width: 24,
         checkboxSelection: true,
-        headerCheckboxSelection: true,
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {

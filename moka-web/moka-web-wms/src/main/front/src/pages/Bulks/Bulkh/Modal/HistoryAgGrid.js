@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { MokaTable } from '@components';
 import { historyColumnDefs } from './HistoryAgGridColumns';
-import { MokaCard } from '@components';
-import { useSelector, useDispatch } from 'react-redux';
 import { getHotclickHistoryList, changeHistirySearchOption, getHotclickDetail, clearHistoryDetail, GET_HOTCLICK_HISTORY_LIST } from '@store/bulks';
 
 const HistoryAgGrid = () => {
@@ -49,25 +48,21 @@ const HistoryAgGrid = () => {
     }, [historyList]);
 
     return (
-        <>
-            <MokaCard width={430} height={650} loading={null} header={false} className="custom-scroll mr-gutter flex-fill no-shadow">
-                <MokaTable
-                    agGridHeight={550}
-                    columnDefs={historyColumnDefs}
-                    rowData={rowData}
-                    onRowNodeId={(row) => row.bulkartSeq}
-                    onRowClicked={(row) => {
-                        handleClickListRow(row.bulkartSeq);
-                    }}
-                    loading={loading}
-                    total={historyList.totalCnt}
-                    page={historyList.search.page}
-                    size={historyList.search.size}
-                    onChangeSearchOption={handleChangeSearchOption}
-                    selected={selectBulkartSeq}
-                />
-            </MokaCard>
-        </>
+        <MokaTable
+            className="overflow-hidden flex-fill"
+            columnDefs={historyColumnDefs}
+            rowData={rowData}
+            onRowNodeId={(row) => row.bulkartSeq}
+            onRowClicked={(row) => {
+                handleClickListRow(row.bulkartSeq);
+            }}
+            loading={loading}
+            total={historyList.totalCnt}
+            page={historyList.search.page}
+            size={historyList.search.size}
+            onChangeSearchOption={handleChangeSearchOption}
+            selected={selectBulkartSeq}
+        />
     );
 };
 

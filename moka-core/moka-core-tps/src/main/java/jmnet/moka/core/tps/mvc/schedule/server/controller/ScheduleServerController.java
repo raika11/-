@@ -25,7 +25,10 @@ import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerSaveDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerUpdateDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentCodeDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentHistoryDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentHistorySearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSaveDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentUpdateDTO;
@@ -34,8 +37,10 @@ import jmnet.moka.core.tps.mvc.schedule.server.dto.JobStatisticDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobStatisticSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.DistributeServer;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobContent;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.JobContentHistory;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobStatistic;
 import jmnet.moka.core.tps.mvc.schedule.server.service.DistributeServerService;
+import jmnet.moka.core.tps.mvc.schedule.server.service.JobContentHistoryService;
 import jmnet.moka.core.tps.mvc.schedule.server.service.JobContentService;
 import jmnet.moka.core.tps.mvc.schedule.server.service.JobStatisticService;
 import jmnet.moka.core.tps.mvc.schedule.server.vo.JobStatisticVO;
@@ -63,16 +68,19 @@ public class ScheduleServerController extends AbstractCommonController {
     private final DistributeServerService distServerService;
     //작업
     private final JobContentService jobContentService;
+    //작업예약
+    private final JobContentHistoryService jobContentHistoryService;
 
     //암호화 모듈
     private final MokaCrypt mokaCrypt;
 
     public ScheduleServerController(JobStatisticService jobStatisticService, DistributeServerService distServerService,
-            JobContentService jobContentService, MokaCrypt mokaCrypt) {
+            JobContentService jobContentService, JobContentHistoryService jobContentHistoryService, MokaCrypt mokaCrypt) {
 
         this.jobStatisticService = jobStatisticService;
         this.distServerService = distServerService;
         this.jobContentService = jobContentService;
+        this.jobContentHistoryService = jobContentHistoryService;
         this.mokaCrypt = mokaCrypt;
     }
 
@@ -119,6 +127,27 @@ public class ScheduleServerController extends AbstractCommonController {
         ResultDTO<ResultListDTO<JobStatisticDTO>> resultDTO = new ResultDTO<ResultListDTO<JobStatisticDTO>>(resultList);
         tpsLogger.success(true);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
+     * 작업 목록(코드조회)
+     *
+     * @param
+     * @return 작업 목록
+     */
+    @ApiOperation(value = "작업코드 목록조회")
+    @GetMapping("/job-code")
+    public ResponseEntity<?> getJobContentCodeList() {
+        List<JobContent> returnValue = jobContentService.findJobContentCodeList();
+
+        ResultListDTO<JobContentCodeDTO> resultListMessage = new ResultListDTO<JobContentCodeDTO>();
+        List<JobContentCodeDTO> dtoList = modelMapper.map(returnValue, JobContentCodeDTO.TYPE);
+        resultListMessage.setTotalCnt(returnValue.size());
+        resultListMessage.setList(dtoList);
+
+        ResultDTO<ResultListDTO<JobContentCodeDTO>> resultDto = new ResultDTO<ResultListDTO<JobContentCodeDTO>>(resultListMessage);
+        tpsLogger.success(LoggerCodes.ActionType.SELECT, true);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
@@ -568,6 +597,54 @@ public class ScheduleServerController extends AbstractCommonController {
             throw new Exception(msg("tps.common.error.update"), e);
 
         }
+    }
+
+    /**
+     * 작업예약 목록조회
+     *
+     * @param search 검색조건 : 시작일, 종료일, 작업번호, 작업상태, 작업식별정보
+     * @return 작업예약 목록
+     */
+    @ApiOperation(value = "작업예약 목록조회")
+    @GetMapping("/job-history")
+    public ResponseEntity<?> getJobContentHistoryList(@Valid @SearchParam JobContentHistorySearchDTO search) {
+        Page<JobContentHistory> returnValue = jobContentHistoryService.findJobContentHistoryList(search);
+
+        List<JobContentHistoryDTO> dtoList = modelMapper.map(returnValue.getContent(), JobContentHistoryDTO.TYPE);
+
+        ResultListDTO<JobContentHistoryDTO> resultList = new ResultListDTO<JobContentHistoryDTO>();
+        resultList.setList(dtoList);
+        resultList.setTotalCnt(returnValue.getTotalElements());
+
+        ResultDTO<ResultListDTO<JobContentHistoryDTO>> resultDTO = new ResultDTO<ResultListDTO<JobContentHistoryDTO>>(resultList);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
+     * 작업예약 상세조회
+     *
+     * @param seqNo 일련번호
+     * @return 작업
+     */
+    @ApiOperation(value = "작업 상세조회")
+    @GetMapping("/job-history/{seqNo}")
+    public ResponseEntity<?> getJobContentHistory(@ApiParam("작업 번호(필수)") @PathVariable("seqNo") Long seqNo)
+            throws NoDataException {
+        JobContentHistory jobContentHistory = jobContentHistoryService
+                .findJobContentHistoryById(seqNo)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
+        JobContentHistoryDTO dto = modelMapper.map(jobContentHistory, JobContentHistoryDTO.class);
+
+        ResultDTO<JobContentHistoryDTO> resultDTO = new ResultDTO<JobContentHistoryDTO>(dto);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
     }
 
     //패스워드 암호화 적용

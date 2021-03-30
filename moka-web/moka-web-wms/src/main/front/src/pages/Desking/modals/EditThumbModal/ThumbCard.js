@@ -82,11 +82,11 @@ const ThumbCard = forwardRef((props, ref) => {
         moveCard,
         setAddIndex,
         dataType,
+        editPhoto,
         // 대표사진과 관련된 props
         boxShadow,
         represent,
         showPhotoDetail,
-        editPhoto,
         onDeleteClick,
         isRep,
         setRepImg,
@@ -178,7 +178,7 @@ const ThumbCard = forwardRef((props, ref) => {
                         <img src={img} className="center-image" alt={alt} ref={imgRef} />
 
                         <div className="w-100 h-100 absolute-top">
-                            {/* 마우스 오버 -> 대표 사진 등록 버튼 생성 */}
+                            {/* 마우스 오버 -> 대표 사진 등록 */}
                             {mouseOver && !represent && (
                                 <Button
                                     variant={isRep ? 'positive' : 'negative'}
@@ -190,91 +190,61 @@ const ThumbCard = forwardRef((props, ref) => {
                                 </Button>
                             )}
 
-                            {/* 테이블 카드의 버튼 */}
-                            {dataType !== 'drop' && !represent && (
-                                <React.Fragment>
-                                    {/* 초상권 주의 */}
-                                    {data.atpnPoriatentYn === 'Y' && (
-                                        <Button
-                                            variant="searching"
-                                            className="border-0 p-0 moka-table-button"
-                                            style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
-                                        >
-                                            <MokaIcon iconName="fal-eye-slash" />
-                                        </Button>
-                                    )}
-                                    {data.atpnReusprhibtYn === 'Y' && (
-                                        <Button
-                                            variant="searching"
-                                            className="border-0 p-0 moka-table-button"
-                                            style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
-                                        >
-                                            <MokaIcon iconName="fal-exclamation-triangle" />
-                                        </Button>
-                                    )}
-                                    {/* 상세 조회 */}
-                                    {!data.preview && (
-                                        <Button
-                                            variant="searching"
-                                            className="border-0 p-0 moka-table-button"
-                                            style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
-                                            onClick={() => showPhotoDetail(data)}
-                                        >
-                                            <MokaIcon iconName="fal-search-plus" />
-                                        </Button>
-                                    )}
-                                </React.Fragment>
+                            {/* 초상권 주의 */}
+                            {dataType !== 'drop' && !represent && data.atpnPoriatentYn === 'Y' && (
+                                <Button variant="searching" className="border-0 p-0 moka-table-button" style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}>
+                                    <MokaIcon iconName="fal-eye-slash" />
+                                </Button>
                             )}
 
-                            {/* 드롭된 카드의 버튼 */}
-                            {dataType === 'drop' && !represent && (
-                                <React.Fragment>
-                                    {/* 삭제 */}
-                                    <Button
-                                        variant="searching"
-                                        className="border-0 p-0 moka-table-button"
-                                        style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
-                                        onClick={(e) => onDeleteClick(data, e)}
-                                    >
-                                        <MokaIcon iconName="fas-times" />
-                                    </Button>
-                                    {/* 사진 편집 */}
-                                    <Button
-                                        variant="searching"
-                                        className="border-0 p-0 moka-table-button"
-                                        style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
-                                        onClick={() => editPhoto(data)}
-                                    >
-                                        <MokaIcon iconName="fas-pencil" />
-                                    </Button>
-                                </React.Fragment>
+                            {/* 재사용 금지 */}
+                            {dataType !== 'drop' && !represent && data.atpnReusprhibtYn === 'Y' && (
+                                <Button variant="searching" className="border-0 p-0 moka-table-button" style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}>
+                                    <MokaIcon iconName="fal-exclamation-triangle" />
+                                </Button>
                             )}
 
-                            {/* 대표 사진의 버튼 */}
+                            {/* 상세 조회 */}
+                            {dataType !== 'drop' && !represent && !data.preview && (
+                                <Button
+                                    variant="searching"
+                                    className="border-0 p-0 moka-table-button"
+                                    style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
+                                    onClick={() => showPhotoDetail(data)}
+                                >
+                                    <MokaIcon iconName="fal-search-plus" />
+                                </Button>
+                            )}
+
+                            {/* 삭제 */}
+                            {(dataType === 'drop' || represent) && (
+                                <Button
+                                    variant="searching"
+                                    className="border-0 p-0 moka-table-button"
+                                    style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
+                                    onClick={(e) => onDeleteClick(data, e)}
+                                >
+                                    <MokaIcon iconName="fas-times" />
+                                </Button>
+                            )}
+
+                            {/* 수정 */}
+                            {(dataType === 'drop' || represent) && (
+                                <Button
+                                    variant="searching"
+                                    className="border-0 p-0 moka-table-button"
+                                    style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
+                                    onClick={() => editPhoto(data)}
+                                >
+                                    <MokaIcon iconName="fas-pencil" />
+                                </Button>
+                            )}
+
+                            {/* 대표이미지 마크 */}
                             {represent && (
-                                <React.Fragment>
-                                    {/* 삭제 */}
-                                    <Button
-                                        variant="searching"
-                                        className="border-0 p-0 moka-table-button"
-                                        style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
-                                        onClick={(e) => onDeleteClick(data, e)}
-                                    >
-                                        <MokaIcon iconName="fas-times" />
-                                    </Button>
-                                    {/* 사진 편집 */}
-                                    <Button
-                                        variant="searching"
-                                        className="border-0 p-0 moka-table-button"
-                                        style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
-                                        onClick={() => editPhoto(data)}
-                                    >
-                                        <MokaIcon iconName="fas-pencil" />
-                                    </Button>
-                                    <Badge variant="positive" style={{ position: 'absolute', bottom: '5px', left: '5px' }}>
-                                        대표 이미지
-                                    </Badge>
-                                </React.Fragment>
+                                <Badge variant="positive" style={{ position: 'absolute', bottom: '5px', left: '5px' }}>
+                                    대표 이미지
+                                </Badge>
                             )}
                         </div>
                     </div>

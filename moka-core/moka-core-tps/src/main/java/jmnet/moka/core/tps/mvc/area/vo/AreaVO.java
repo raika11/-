@@ -65,6 +65,11 @@ public class AreaVO implements Serializable {
     private Integer ordNo = 1;
 
     /**
+     * 컴포넌트/컨테이너 사용여부
+     */
+    private String compYn = MokaConstants.NO;
+
+    /**
      * 영역구분(CP,CT)
      */
     @Column(name = "AREA_DIV")

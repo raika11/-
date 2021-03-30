@@ -216,11 +216,10 @@ const BoardsEdit = ({ match }) => {
         // boardId param이 존재하면 상세 조회, boardInfo초기화
         if (boardId) {
             dispatch(getBoardInfo(boardId));
-            setError({});
         } else {
             dispatch(clearSetmenuBoardInfo());
-            setError({});
         }
+        setError({});
     }, [boardId, dispatch]);
 
     useEffect(() => {

@@ -13,7 +13,7 @@ export default [
     {
         headerName: '분류',
         field: 'serverNm',
-        cellStyle: { textOverflow: 'ellipsis', lineHeight: '60px' },
+        cellStyle: { textOverflow: 'ellipsis', lineHeight: '57px' },
         width: 60,
         tooltipField: 'serverNm',
     },
@@ -44,5 +44,6 @@ export default [
         cellStyle: { lineHeight: '18px' },
         width: 150,
         cellRendererFramework: (row) => <WorkErrorRenderer {...row} />,
+        tooltipField: 'jobStatus.errMgs',
     },
 ];

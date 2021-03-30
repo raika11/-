@@ -212,3 +212,13 @@ export const SCHEDULE_PERIOD = [
     { period: 86400, periodNm: '24시간' },
     { period: 0, periodNm: '상시' },
 ];
+
+// 스케줄 서버 예약작업 실행 상태
+export const SCHEDULE_STATUS = [
+    { status: '0', statusNm: '준비' },
+    { status: '1', statusNm: '전송 완료' },
+    { status: '2', statusNm: '서버 오류' },
+    { status: '3', statusNm: '삭제된 테스크' },
+    { status: '4', statusNm: '실행 결과 실패' },
+    { status: '9', statusNm: '진행 중' },
+];

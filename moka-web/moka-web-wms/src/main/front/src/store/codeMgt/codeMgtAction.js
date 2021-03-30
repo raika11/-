@@ -116,7 +116,6 @@ export const getApiType = createAction(GET_API_TYPE);
 export const getTourAge = createAction(GET_TOUR_AGE);
 export const getBulkSite = createAction(GET_BULK_SITE);
 export const getGenCate = createAction(GET_GEN_CATE);
-export const getBoSchjob = createAction(GET_BO_SCHJOB);
 
 export const [GET_SPECIAL_CHAR_CODE, GET_SPECIAL_CHAR_CODE_SUCCESS, GET_SPECIAL_CHAR_CODE_FAILURE] = createRequestActionTypes('codeMgt/GET_SPECIAL_CHAR_CODE');
 export const getSpecialCharCode = createAction(GET_SPECIAL_CHAR_CODE);

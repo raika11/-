@@ -3,7 +3,7 @@ import Search from './ReservedSearch';
 import AgGrid from './ReservedAgGrid';
 
 /**
- * 예약어 목록
+ * 예약어 관리 > 예약어 목록
  */
 const ReservedList = (props) => {
     return (

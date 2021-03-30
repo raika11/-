@@ -5,6 +5,9 @@ import { MokaCardEditor } from '@components';
 import { changeLatestDomainId } from '@store/auth/authAction';
 import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeContainerBody, getContainer, clearContainer } from '@store/container';
 
+/**
+ * 컨테이너 관리 > 에디터
+ */
 const ContainerEditor = (props) => {
     const { expansion, onExpansion } = props;
     const { containerSeq } = useParams();

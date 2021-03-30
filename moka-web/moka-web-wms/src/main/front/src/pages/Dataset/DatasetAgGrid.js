@@ -7,23 +7,15 @@ import { GET_DATASET_LIST, changeSearchOption, getDatasetList, initialState } fr
 import { useHistory } from 'react-router-dom';
 
 /**
- * 데이터셋 AgGrid 컴포넌트
+ * 데이터셋 관리 > 데이터셋 목록 > AgGrid
  */
-const DatasetAgGrid = ({ onDelete, match }) => {
+const DatasetAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [search, setSearch] = useState(initialState);
     const [datasetRows, setDatasetRows] = useState([]);
     const loading = useSelector(({ loading }) => loading[GET_DATASET_LIST]);
-    const { dataset, list, search: storeSearch, total } = useSelector(
-        ({ dataset }) => ({
-            dataset: dataset.dataset,
-            list: dataset.list,
-            search: dataset.search,
-            total: dataset.total,
-        }),
-        shallowEqual,
-    );
+    const { dataset, list, search: storeSearch, total } = useSelector(({ dataset }) => dataset, shallowEqual);
 
     /**
      * 테이블에서 검색옵션 변경
@@ -61,10 +53,9 @@ const DatasetAgGrid = ({ onDelete, match }) => {
                 datasetName: row.datasetName,
                 autoCreateYn: row.autoCreateYn,
                 usedYn: row.usedYn,
-                onDelete,
             })),
         );
-    }, [list, onDelete]);
+    }, [list]);
 
     useEffect(() => {
         setSearch(storeSearch);
@@ -90,7 +81,6 @@ const DatasetAgGrid = ({ onDelete, match }) => {
                 onChangeSearchOption={handleChangeSearchOption}
                 onRowClicked={handleRowClicked}
                 suppressRefreshCellAfterUpdate
-                preventRowClickCell={['delete']}
             />
         </>
     );

@@ -1,6 +1,3 @@
-import React from 'react';
-import { MokaTableDeleteButton } from '@components';
-
 export const columnDefs = [
     {
         headerName: '예약어',
@@ -20,14 +17,5 @@ export const columnDefs = [
         field: 'usedYn',
         width: 40,
         cellRenderer: 'usedYnRenderer',
-    },
-    {
-        headerName: '',
-        field: 'delete',
-        width: 28,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;
-        },
     },
 ];

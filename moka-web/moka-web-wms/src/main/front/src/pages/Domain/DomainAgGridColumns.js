@@ -1,7 +1,3 @@
-import React from 'react';
-import { MokaTableDeleteButton } from '@components';
-
-export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 export const columnDefs = [
     {
         headerName: 'ID',
@@ -12,6 +8,7 @@ export const columnDefs = [
         headerName: 'URL',
         field: 'domainUrl',
         width: 200,
+        flex: 1,
         tooltipField: 'domainUrl',
     },
     {
@@ -26,14 +23,5 @@ export const columnDefs = [
         field: 'usedYn',
         width: 40,
         cellRenderer: 'usedYnRenderer',
-    },
-    {
-        headerName: '',
-        field: 'delete',
-        width: 28,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;
-        },
     },
 ];

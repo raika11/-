@@ -9,26 +9,15 @@ import { getComponentList, changeSearchOption, initialState } from '@store/compo
 import { getTpZone } from '@store/codeMgt';
 
 /**
- * 컴포넌트 검색 컴포넌트
+ * 컴포넌트 관리 > 컴포넌트 목록 > 검색
  */
 const ComponentSearch = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { latestDomainId, domainList, search: storeSearch, tpZoneRows } = useSelector(
-        (store) => ({
-            latestDomainId: store.auth.latestDomainId,
-            domainList: store.auth.domainList,
-            search: store.component.search,
-            tpZoneRows: store.codeMgt.tpZoneRows,
-        }),
-        shallowEqual,
-    );
+    const { latestDomainId, domainList } = useSelector(({ auth }) => auth, shallowEqual);
+    const tpZoneRows = useSelector(({ codeMgt }) => codeMgt, shallowEqual);
+    const storeSearch = useSelector(({ component }) => component, shallowEqual);
     const [search, setSearch] = React.useState(initialState.search);
-
-    useEffect(() => {
-        // 스토어의 search 객체 변경 시 로컬 state에 셋팅
-        setSearch(storeSearch);
-    }, [storeSearch]);
 
     /**
      * 검색
@@ -62,6 +51,11 @@ const ComponentSearch = () => {
     useEffect(() => {
         if (!tpZoneRows) dispatch(getTpZone());
     }, [dispatch, tpZoneRows]);
+
+    useEffect(() => {
+        // 스토어의 search 객체 변경 시 로컬 state에 셋팅
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     return (
         <Form className="mb-14">

@@ -6,6 +6,9 @@ import Form3 from './components/AreaFormDepth3';
 import { messageBox } from '@utils/toastUtil';
 import { PageListModal } from '@pages/Page/modals';
 
+/**
+ * 영역편집정보 관리 > 등록, 수정
+ */
 const AreaEdit = (props) => {
     const { areaDepth1, areaDepth2, areaDepth3, listDepth2, listDepth3, ...rest } = props;
     const selectedDepth = useSelector(({ area }) => area.selectedDepth);

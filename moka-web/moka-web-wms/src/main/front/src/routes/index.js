@@ -109,7 +109,7 @@ const EditLog = React.lazy(() => import('@pages/EditLog'));
 const SystemMonitor = React.lazy(() => import('@pages/SystemMonitor'));
 const BulkMonitor = React.lazy(() => import('@pages/BulkMonitor'));
 const InternalApi = React.lazy(() => import('@pages/InternalApi'));
-const Package = React.lazy(() => import('@pages/Package'));
+const Package = React.lazy(() => import('@pages/Issue'));
 const Jopan = React.lazy(() => import('@pages/Jopan'));
 
 const routes = [

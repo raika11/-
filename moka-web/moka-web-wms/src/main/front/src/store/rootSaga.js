@@ -46,6 +46,7 @@ import searchKeywordSaga from '@store/searchKeyword/searchKeywordSaga';
 import quizSaga from '@store/survey/quiz/quizSaga';
 import micSaga from '@store/mic/micSaga';
 import scheduleSaga from '@store/schedule/scheduleSaga';
+import issueSaga from '@store/issue/issueSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -95,5 +96,6 @@ export default function* rootSaga() {
         quizSaga(),
         micSaga(),
         scheduleSaga(),
+        issueSaga(),
     ]);
 }

@@ -81,12 +81,12 @@ const ArticleList = (props) => {
             const startServiceDay = !search.startServiceDay ? moment(nt).subtract(period[0], period[1]).startOf('day') : search.startServiceDay;
             const endServiceDay = !search.endServiceDay ? moment(nt).endOf('day') : search.endServiceDay;
             const ns = { ...search, ...appendSearch, startServiceDay, endServiceDay };
-            const isOk = ns.sourceList && (ns.sourceList || []).length > 0; // sourceList가 셋팅되어있는지
+            const needCallSource = !ns.sourceList; // 매체 api 호출해야하는지
 
             setSearch(ns);
             dispatch(
                 getArticleListModal({
-                    getSourceList: !isOk,
+                    getSourceList: needCallSource,
                     type,
                     search: {
                         ...ns,

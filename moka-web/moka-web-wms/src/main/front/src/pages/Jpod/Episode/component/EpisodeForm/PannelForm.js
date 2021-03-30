@@ -10,7 +10,7 @@ const PannelForm = ({ label, memDiv, members, addMember, onChangeMember, onDelet
 
     return (
         <React.Fragment>
-            <Form.Row className="mb-14">
+            <Form.Row className="mb-14 align-items-center">
                 <MokaInputLabel label={label} as="none" />
                 <Button xs={12} variant="searching" className="mb-0 mr-1" onClick={() => setShow(true)}>
                     기자 검색

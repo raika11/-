@@ -64,6 +64,7 @@ const ImageForm = ({ component, contentId, partKey, temp, onChange, fileName }) 
                 saveFileName={String(fileName)}
                 thumbFileName={temp.thumbFileName}
                 apply={handleThumbFileApply}
+                accept="image/jpeg, image/gif"
             />
         </Form.Row>
     );

@@ -54,10 +54,10 @@ const Search = (props) => {
                 {/* 검색기간 */}
                 <div style={{ width: 78 }} className="flex-shrink-0 mr-2">
                     <MokaInput as="select" name="period" onChange={handleChangePeriod} value={period.join('')}>
-                        <option value="2days" data-number="2" data-date="days">
+                        <option value="1days" data-number="1" data-date="days">
                             1일
                         </option>
-                        <option value="3days" data-number="3" data-date="days">
+                        <option value="7days" data-number="7" data-date="days">
                             7일
                         </option>
                         <option value="1months" data-number="1" data-date="months">

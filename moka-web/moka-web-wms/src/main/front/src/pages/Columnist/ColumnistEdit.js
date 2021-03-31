@@ -23,6 +23,7 @@ const ColumnistEdit = ({ match }) => {
     const [temp, setTemp] = useState(initialState.columnist);
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState({});
+    const [ntImg, setNtImg] = useState(0);
     const imgFileRef = useRef(null);
 
     /**
@@ -149,6 +150,7 @@ const ColumnistEdit = ({ match }) => {
                 email1: tmpEmail[0],
                 email2: tmpEmail[1],
             });
+            setNtImg(new Date().getTime());
         }
     }, [columnist]);
 
@@ -299,8 +301,8 @@ const ColumnistEdit = ({ match }) => {
                     ref={imgFileRef}
                     inputProps={{
                         width: 267,
-                        img: temp.profilePhoto ? `${temp.profilePhoto}?t=${new Date().getTime()}` : null,
-                        selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
+                        img: temp.profilePhoto ? `${temp.profilePhoto}?t=${ntImg}` : null,
+                        selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정
                         setFileValue: handleChangeFile,
                         deleteButton: true,
                     }}

@@ -38,9 +38,12 @@ const ReporterMgrAgGrid = ({ match }) => {
     );
 
     useEffect(() => {
+        const nt = new Date().getTime();
         setRepoterRows(
             list.map((row) => ({
                 ...row,
+                // 이미지가 변경되어도 링크가 같기 때문에 캐싱된 이미지를 계속 사용하는 문제 수정
+                repImg: row.repImg ? `${row.repImg}?t=${nt}` : null,
                 id: String(row.repSeq),
                 modDt: row.modDt && row.modDt.length > 10 ? row.modDt.substr(0, 16) : row.modDt,
                 belong:

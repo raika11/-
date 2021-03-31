@@ -25,8 +25,6 @@ const TemplateEdit = ({ onDelete, match }) => {
     const tpZoneRows = useSelector((store) => store.codeMgt.tpZoneRows);
     const latestDomainId = useSelector((store) => store.auth.latestDomainId);
     const { template, inputTag, invalidList } = useSelector(({ template }) => template);
-
-    // state
     const [temp, setTemp] = useState({});
     const [thumbSrc, setThumbSrc] = useState();
     const [btnDisabled, setBtnDisabled] = useState(true);
@@ -57,6 +55,7 @@ const TemplateEdit = ({ onDelete, match }) => {
         setTemp({
             ...temp,
             templateThumbnailFile: data,
+            templateThumb: !data ? null : temp.templateThumb,
         });
     };
 
@@ -186,7 +185,7 @@ const TemplateEdit = ({ onDelete, match }) => {
             templateWidth: template.templateWidth || 0,
         });
         if (template.templateThumb && template.templateThumb !== '') {
-            setThumbSrc(`${API_BASE_URL}${UPLOAD_PATH_URL}/${template.templateThumb}`);
+            setThumbSrc(`${API_BASE_URL}${UPLOAD_PATH_URL}/${template.templateThumb}?t=${new Date().getTime()}`);
         } else {
             setThumbSrc(null);
         }

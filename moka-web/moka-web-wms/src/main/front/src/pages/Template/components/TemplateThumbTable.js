@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { MokaPagination, MokaLoader } from '@components';
@@ -117,6 +117,12 @@ const TemplateThumbTable = (props) => {
         onChangeSearchOption,
     } = props;
 
+    const [ntImg, setNtImg] = useState(0);
+
+    useEffect(() => {
+        setNtImg(new Date().getTime());
+    }, [rowData]);
+
     return (
         <>
             <div className={clsx('mb-card input-border', className)} style={{ height: tableHeight }}>
@@ -128,7 +134,7 @@ const TemplateThumbTable = (props) => {
                             data={data}
                             width={cardWidth}
                             height={cardHeight}
-                            img={data.thumb}
+                            img={data.thumb ? `${data.thumb}?t=${ntImg}` : null}
                             alt={data.name}
                             menus={menus}
                             onClick={onClick}

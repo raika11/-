@@ -29,6 +29,7 @@ const ReporterEdit = ({ match }) => {
     const { repSeq: paramSeq } = useParams();
     const reporter = useSelector(({ reporter }) => reporter.reporter);
     const [temp, setTemp] = useState({});
+    const [ntImg, setNtImg] = useState(0);
 
     /**
      * 각 항목별 값 변경
@@ -106,6 +107,7 @@ const ReporterEdit = ({ match }) => {
             modDt: reporter.modDt && reporter.modDt.length > 10 ? reporter.modDt.substr(0, 11) : reporter.modDt,
             typeCode,
         });
+        setNtImg(new Date().getTime());
     }, [reporter]);
 
     useEffect(() => {
@@ -121,7 +123,7 @@ const ReporterEdit = ({ match }) => {
             <div className="d-flex align-items-center">
                 {/* 기자 이미지 */}
                 {temp.repImg ? (
-                    <Image width="100" height="100" src={temp.repImg} className="flex-shrink-0" roundedCircle />
+                    <Image width="100" height="100" src={temp.repImg ? `${temp.repImg}?t=${ntImg}` : null} className="flex-shrink-0" roundedCircle />
                 ) : (
                     <MokaIcon
                         iconName="fal-user"

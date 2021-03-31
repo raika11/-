@@ -52,8 +52,20 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
             boxRef.current.classList.add('onerror-image-wrap');
             imgRef.current.src = img_logo;
             imgRef.current.classList.add('onerror-image');
+        } else {
+            imgRef.current.src = data?.[field];
         }
     }, [data, field]);
+
+    useEffect(() => {
+        // 동그라미인 경우 정사각형으로 셋팅
+        if (roundedCircle && boxRef.current) {
+            const w = boxRef.current.offsetWidth;
+            const h = boxRef.current.offsetHeight;
+            if (w > h) boxRef.current.style.setProperty('width', `${h}px`, 'important');
+            else if (h > w) boxRef.current.style.setProperty('height', `${w}px`, 'important');
+        }
+    }, [roundedCircle]);
 
     return (
         <div
@@ -64,16 +76,7 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
             })}
             ref={boxRef}
         >
-            <img
-                src={data?.[field]}
-                // className={clsx('center-image', { 'rounded-circle': roundedCircle })}
-                className="center-image"
-                ref={imgRef}
-                alt={data?.imgAlt || ''}
-                onError={onError}
-                onLoad={onLoad}
-                loading="lazy"
-            />
+            <img className="center-image" ref={imgRef} alt={data?.imgAlt || ''} onError={onError} onLoad={onLoad} loading="lazy" />
         </div>
     );
 });

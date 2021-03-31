@@ -10,7 +10,7 @@ import { initialState, getDistributeServerList, changeDeployServerSearchOption, 
 /**
  * 스케줄 서버 관리 > 배포 서버 검색
  */
-const DeleteWorkSearch = ({ match }) => {
+const DeleteWorkSearch = ({ show, match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const storeSearch = useSelector((store) => store.schedule.deployServer.search);
@@ -46,6 +46,7 @@ const DeleteWorkSearch = ({ match }) => {
      */
     const handleClickReset = () => {
         dispatch(clearDeployServerSearch());
+        setSearch(initialState.deployServer.search);
     };
 
     /**
@@ -60,14 +61,19 @@ const DeleteWorkSearch = ({ match }) => {
     }, [storeSearch]);
 
     useEffect(() => {
-        dispatch(getDistributeServerList());
-    }, [dispatch]);
+        if (show) {
+            dispatch(getDistributeServerList());
+        } else {
+            dispatch(clearDeployServerSearch());
+            setSearch(initialState.deployServer.search);
+        }
+    }, [dispatch, show]);
 
     return (
         <Form className="mb-14">
             <Form.Row className="mb-14 justify-content-between">
                 <Col xs={6} className="p-0 d-flex">
-                    <div className="mr-2">
+                    <div className="mr-20">
                         <MokaInputLabel label="별칭" name="serverNm" value={search.serverNm} onChange={handleChangeValue} />
                     </div>
                     <div>

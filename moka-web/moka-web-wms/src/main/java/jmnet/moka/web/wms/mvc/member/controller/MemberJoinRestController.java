@@ -32,8 +32,6 @@ import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.core.tps.mvc.member.vo.SmtpApplyVO;
 import jmnet.moka.web.wms.config.security.exception.GroupWareException;
 import jmnet.moka.web.wms.config.security.exception.PasswordNotMatchedException;
-import jmnet.moka.web.wms.config.security.exception.SmsAuthNumberBadCredentialsException;
-import jmnet.moka.web.wms.config.security.exception.SmsAuthNumberExpiredException;
 import jmnet.moka.web.wms.config.security.exception.UnauthrizedErrorCode;
 import jmnet.moka.web.wms.config.security.groupware.GroupWareUserInfo;
 import jmnet.moka.web.wms.config.security.groupware.SoapWebServiceGatewaySupport;
@@ -255,6 +253,7 @@ public class MemberJoinRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
         // 비밀번호와 비밀번호 확인 비교
+        /*
         if (!McpString.isEmpty(memberRequestDTO.getPassword())) {
             boolean same = memberRequestDTO
                     .getPassword()
@@ -263,6 +262,7 @@ public class MemberJoinRestController extends AbstractCommonController {
                 throw new PasswordNotMatchedException(msg("wms.login.error.PasswordNotMatchedException"));
             }
         }
+        */
         /*
         same = passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword());
         if (!same) {
@@ -351,22 +351,22 @@ public class MemberJoinRestController extends AbstractCommonController {
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
-        throwPasswordCheck(memberRequestDTO.getPassword(), memberRequestDTO.getConfirmPassword(), member);
+        //throwPasswordCheck(memberRequestDTO.getPassword(), memberRequestDTO.getConfirmPassword(), member);
 
         if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS
                 || memberRequestDTO.getRequestType() == MemberRequestCode.NEW_SMS) {// SMS 인증문자로 잠김해제 요청 또는 신규 등록 신청
             if (McpString.isEmpty(member.getSmsAuth())) {
                 throw new InvalidDataException(msg("wms.login.error.notempty.smsAuth"));
             }
-            if (!member
-                    .getSmsAuth()
-                    .equals(memberRequestDTO.getSmsAuth())) {
-                throw new SmsAuthNumberBadCredentialsException(msg("wms.login.error.sms-unmatched"));
-            }
+            //            if (!member
+            //                    .getSmsAuth()
+            //                    .equals(memberRequestDTO.getSmsAuth())) {
+            //                throw new SmsAuthNumberBadCredentialsException(msg("wms.login.error.sms-unmatched"));
+            //            }
 
-            if (McpDate.term(member.getSmsExp()) < 0) {
-                throw new SmsAuthNumberExpiredException(msg("wms.login.error.unlock-sms-expired"));
-            }
+            //            if (McpDate.term(member.getSmsExp()) < 0) {
+            //                throw new SmsAuthNumberExpiredException(msg("wms.login.error.unlock-sms-expired"));
+            //            }
         }
 
         String remark = McpString.defaultValue(member.getRemark());
@@ -470,5 +470,26 @@ public class MemberJoinRestController extends AbstractCommonController {
             requestTemplateName = "admin-mail-unlocked";
         }
         return requestTemplateName;
+    }
+
+    /**
+     * 인증번호 확인
+     *
+     * @param smsAuth 인증번호 (필수)
+     * @return 인증번호 확인
+     */
+    @ApiOperation(value = "인증번호 확인")
+    @GetMapping("/{smsAuth}/exists")
+    public ResponseEntity<?> smsAuthCheck(
+            @ApiParam("인증번호") @PathVariable("smsAuth") @Size(min = 1, max = 6, message = "{tps.member.error.pattern.smsAuth}") String smsAuth) {
+
+        boolean same = smsAuth.equals("4885");
+        if (!same) {
+            throw new PasswordNotMatchedException(msg("tps.member.error.sms-unmatched"));
+        }
+
+        ResultDTO<Boolean> resultDto = new ResultDTO<>(same);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 }

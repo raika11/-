@@ -43,7 +43,6 @@ export const initialState = {
             sendType: '',
             serverSeq: '',
             usedYn: '',
-            // callUrl: '',
         },
         deployServerCode: null,
         job: {
@@ -60,7 +59,6 @@ export const initialState = {
             sendType: '',
             ftpPort: '',
             ftpPassive: 'Y',
-            // callUrl: '',
             targetPath: '',
             jobDesc: '',
             pkgOpt: '',
@@ -98,7 +96,6 @@ export const initialState = {
             sendType: '',
             ftpPort: '',
             ftpPassive: '',
-            // callUrl: '',
             targetPath: '',
             jobDesc: '',
             regDt: '',

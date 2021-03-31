@@ -11,6 +11,7 @@ import { DB_DATEFORMAT, SCHEDULE_PERIOD } from '@/constants';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { invalidListToError } from '@/utils/convertUtil';
 import { initialState, getJob, clearJob, saveJob, deleteJob, getDeleteJobList } from '@/store/schedule';
+import JobContentModal from '../modals/JobContentModal';
 
 /**
  * 스케줄 서버 관리 > 작업 목록 편집(등록, 수정)
@@ -24,6 +25,7 @@ const WorkEdit = ({ match }) => {
     const job = useSelector((store) => store.schedule.work.job);
     const [data, setData] = useState(initialState.work.job);
     const [error, setError] = useState({});
+    const [contentModal, setContentModal] = useState(false);
 
     /**
      * input value
@@ -71,33 +73,28 @@ const WorkEdit = ({ match }) => {
             isInvalid = isInvalid || true;
         }
 
-        // if (!obj.callUrl) {
-        //     errList.push({
-        //         field: 'callUrl',
-        //         reason: '호출 URL을 입력하세요',
-        //     });
-        //     isInvalid = isInvalid || true;
-        // }
-
-        // if (!obj.jobDesc) {
-        //     errList.push({
-        //         field: 'jobDesc',
-        //         reason: '설명을 입력하세요',
-        //     });
-        //     isInvalid = isInvalid | true;
-        // }
-
         setError(invalidListToError(errList));
         return !isInvalid;
     };
 
     /**
-     * 생성내용보기
+     * 생성 내용 보기
      */
-    const handleClickInfo = () => {};
+    const handleClickInfo = () => {
+        if (data.jobStatus?.content) {
+            setContentModal(true);
+        } else {
+            messageBox.alert('생성된 내용이 존재하지 않습니다.');
+        }
+    };
 
     /**
-     * 저장 버튼
+     * 재실행
+     */
+    const handleClickExecute = () => {};
+
+    /**
+     * 저장
      */
     const handleClickSave = () => {
         if (validate(data)) {
@@ -110,9 +107,10 @@ const WorkEdit = ({ match }) => {
                 saveJob({
                     job: temp,
                     jobSeq: jobSeq ? Number(jobSeq) : null,
-                    callback: ({ header }) => {
+                    callback: ({ header, body }) => {
                         if (header.success) {
                             toast.success(header.message);
+                            history.push(`${match.path}/work-list/${body.jobSeq}`);
                         } else {
                             messageBox.alert(header.message);
                         }
@@ -123,7 +121,7 @@ const WorkEdit = ({ match }) => {
     };
 
     /**
-     * 삭제 버튼
+     * 삭제
      */
     const handleClickDelete = () => {
         messageBox.confirm(
@@ -148,7 +146,7 @@ const WorkEdit = ({ match }) => {
     };
 
     /**
-     * 취소 버튼
+     * 취소
      */
     const handleClickCancel = () => {
         history.push(`${match.path}`);
@@ -166,7 +164,7 @@ const WorkEdit = ({ match }) => {
 
     useEffect(() => {
         // 스토어의 job 데이터를 로컬 state에 셋팅
-        setData({ ...data, ...job });
+        setData(job);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [job]);
 
@@ -175,7 +173,7 @@ const WorkEdit = ({ match }) => {
             <Card.Header>
                 <Card.Title as="h2">{jobSeq ? '작업 수정' : '작업 등록'}</Card.Title>
             </Card.Header>
-            <Card.Body className="custom-scroll" style={{ height: 496 }}>
+            <Card.Body className="custom-scroll" style={{ height: 496, maxWidth: 640 }}>
                 <Form>
                     <Form.Row className="mb-2">
                         <Col xs={4} className="p-0">
@@ -229,18 +227,17 @@ const WorkEdit = ({ match }) => {
                         <Col xs={5} className="p-0">
                             {data.jobType === 'S' && (
                                 <MokaInputLabel label="주기" as="select" name="period" value={data.period} onChange={handleChangeValue}>
-                                    {SCHEDULE_PERIOD &&
-                                        SCHEDULE_PERIOD.filter((p) => p.period !== 0).map((p) => (
-                                            <option key={p.period} value={p.period}>
-                                                {p.periodNm}
-                                            </option>
-                                        ))}
+                                    {SCHEDULE_PERIOD.filter((p) => p.period !== 0).map((p) => (
+                                        <option key={p.period} value={p.period}>
+                                            {p.periodNm}
+                                        </option>
+                                    ))}
                                 </MokaInputLabel>
                             )}
-                            {data.jobType === 'R' && <MokaInputLabel label="백오피스 업무" name="jobNm" value={data.jobNm} onChange={handleChangeValue} />}
+                            {data.jobType === 'R' && <MokaInputLabel label="백오피스 업무" name="jobCd" value={data.jobCd} onChange={handleChangeValue} />}
                         </Col>
                     </Form.Row>
-                    <Form.Row className="mb-2">
+                    <Form.Row className="mb-2" style={{ maxHeight: 31 }}>
                         <Col xs={5} className="p-0">
                             <MokaInputLabel label="전송 타입" as="select" name="sendType" value={data.sendType} onChange={handleChangeValue}>
                                 <option value=""></option>
@@ -250,22 +247,19 @@ const WorkEdit = ({ match }) => {
                         </Col>
                         {data.sendType === 'FTP' && (
                             <>
-                                <Col xs={4} className="p-0 pl-2">
-                                    <div style={{ width: 180 }}>
-                                        <MokaInputLabel label="FTP\nPORT" name="ftpPort" value={data.ftpPort} onChange={handleChangeValue} />
-                                    </div>
+                                <Col xs={3} className="p-0">
+                                    <MokaInputLabel label="FTP PORT" className="pl-20" labelWidth={40} name="ftp\nPort" value={data.ftpPort} onChange={handleChangeValue} />
                                 </Col>
-                                <Col xs={3} className="p-0 pl-2">
-                                    <div style={{ width: 120 }}>
-                                        <MokaInputLabel
-                                            label="PASSIVE\n모드"
-                                            name="ftpPassive"
-                                            as="checkbox"
-                                            id="schedule-work-ftpPassive"
-                                            inputProps={{ label: '', custom: true, checked: data.ftpPassive === 'Y' }}
-                                            onChange={handleChangeValue}
-                                        />
-                                    </div>
+                                <Col xs={3} className="p-0">
+                                    <MokaInputLabel
+                                        label="PASSIVE\n모드"
+                                        name="ftpPassive"
+                                        className="pl-20"
+                                        as="checkbox"
+                                        id="schedule-work-ftpPassive"
+                                        inputProps={{ label: '', custom: true, checked: data.ftpPassive === 'Y' }}
+                                        onChange={handleChangeValue}
+                                    />
                                 </Col>
                             </>
                         )}
@@ -283,7 +277,7 @@ const WorkEdit = ({ match }) => {
                             </MokaInputLabel>
                         </Col>
                     </Form.Row>
-                    <MokaInputLabel label="배포 서버명" className="mb-2" name="jobNm" value={data.jobNm} onChange={handleChangeValue} />
+                    <MokaInputLabel label="작업명" className="mb-2" name="jobNm" value={data.jobNm} onChange={handleChangeValue} />
                     <MokaInputLabel label="옵션 파라미터" className="mb-2" name="pkgOpt" value={data.pkgOpt} onChange={handleChangeValue} />
                     <MokaInputLabel
                         label="배포 경로"
@@ -295,7 +289,6 @@ const WorkEdit = ({ match }) => {
                         required
                     />
                     <MokaInputLabel label="패키지명" className="mb-2" name="pkgNm" value={data.pkgNm} onChange={handleChangeValue} isInvalid={error.pkgNm} required />
-                    {/* <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} onChange={handleChangeValue} isInvalid={error.callUrl} required /> */}
                     <MokaInputLabel
                         as="textarea"
                         label="설명"
@@ -336,7 +329,7 @@ const WorkEdit = ({ match }) => {
                                     inputProps={{ plaintext: true, readOnly: true }}
                                 />
                                 <Button variant="outline-neutral" size="sm" onClick={handleClickInfo}>
-                                    생성내용보기
+                                    생성 내용 보기
                                 </Button>
                             </Form.Row>
                             <Form.Row>
@@ -348,6 +341,11 @@ const WorkEdit = ({ match }) => {
                 </Form>
             </Card.Body>
             <Card.Footer className="d-flex justify-content-center card-footer">
+                {data.jobType === 'S' && (
+                    <Button variant="positive" className="mr-1" onClick={handleClickExecute}>
+                        재실행
+                    </Button>
+                )}
                 <Button variant="positive" className="mr-1" onClick={handleClickSave}>
                     {jobSeq ? '수정' : '저장'}
                 </Button>
@@ -360,6 +358,7 @@ const WorkEdit = ({ match }) => {
                     취소
                 </Button>
             </Card.Footer>
+            <JobContentModal content={data.jobStatus?.content} show={contentModal} onHide={() => setContentModal(false)} />
         </>
     );
 };

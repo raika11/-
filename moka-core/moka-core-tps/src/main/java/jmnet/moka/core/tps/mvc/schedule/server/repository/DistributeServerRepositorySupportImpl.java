@@ -4,25 +4,23 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.member.entity.QMemberSimpleInfo;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerSearchDTO;
-import jmnet.moka.core.tps.mvc.schedule.server.entity.*;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.DistributeServer;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.QDistributeServer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 /**
- * 배포서버 Repository
- * 2021. 1. 26. 김정민
- *
+ * 배포서버 Repository 2021. 1. 26. 김정민
  */
-public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepositorySupport implements DistributeServerRepositorySupport{
+public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepositorySupport implements DistributeServerRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 
@@ -46,21 +44,21 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
     }
 
     @Override
-    public Page<DistributeServer> findDistibuteServerList(DistributeServerSearchDTO search, Pageable pageable){
+    public Page<DistributeServer> findDistibuteServerList(DistributeServerSearchDTO search, Pageable pageable) {
         QDistributeServer distributeServer = QDistributeServer.distributeServer;
         QMemberSimpleInfo memberSimpleInfo = QMemberSimpleInfo.memberSimpleInfo;
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(distributeServer.delYn.eq(MokaConstants.NO));
-        
+
         String serverNm = search.getServerNm();
         String serverIp = search.getServerIp();
 
-        if(!McpString.isEmpty(serverNm)){
-            builder.or(distributeServer.serverNm.contains(serverNm));
+        if (!McpString.isEmpty(serverNm)) {
+            builder.and(distributeServer.serverNm.contains(serverNm));
         }
-        if(!McpString.isEmpty(serverIp)){
-            builder.or(distributeServer.serverIp.contains(serverIp));
+        if (!McpString.isEmpty(serverIp)) {
+            builder.and(distributeServer.serverIp.contains(serverIp));
         }
 
         JPQLQuery<DistributeServer> query = queryFactory.selectFrom(distributeServer);
@@ -78,8 +76,6 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
 
 
 
-
-
     //미사용 추후 삭제예정
     @Override
     public Page<DistributeServerDTO> findList2(DistributeServerSearchDTO search, Pageable pageable) {
@@ -91,27 +87,18 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
         String serverNm = search.getServerNm();
         String serverIp = search.getServerIp();
 
-        if(!McpString.isEmpty(serverNm)){
+        if (!McpString.isEmpty(serverNm)) {
             builder.and(distributeServer.serverNm.contains(serverNm));
         }
-        if(!McpString.isEmpty(serverIp)){
+        if (!McpString.isEmpty(serverIp)) {
             builder.and(distributeServer.serverIp.contains(serverIp));
         }
         builder.and(distributeServer.regId.eq(memberSimpleInfo.memberId));
 
         JPQLQuery query = queryFactory
-                .select(
-                        distributeServer.serverSeq,
-                        distributeServer.serverIp,
-                        distributeServer.serverNm,
-                        distributeServer.delYn,
-                        distributeServer.accessId,
-                        distributeServer.regId,
-                        distributeServer.regDt,
-                        distributeServer.modId,
-                        distributeServer.modDt,
-                        memberSimpleInfo.memberNm
-                )
+                .select(distributeServer.serverSeq, distributeServer.serverIp, distributeServer.serverNm, distributeServer.delYn,
+                        distributeServer.accessId, distributeServer.regId, distributeServer.regDt, distributeServer.modId, distributeServer.modDt,
+                        memberSimpleInfo.memberNm)
                 .from(distributeServer, memberSimpleInfo)
                 //.leftJoin(distributeServer.member, member)
                 .where(builder);

@@ -1,8 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 import { MokaTable } from '@components';
 import columnDefs from './ColumnistAgGridColumns';
+import { getJplusRep } from '@store/codeMgt';
 import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption } from '@store/columnist';
 
 /**
@@ -13,6 +15,7 @@ const ColumnistAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_COLUMNIST_LIST]);
     const { list, search, total, columnist } = useSelector(({ columnist }) => columnist);
+    const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
     const [rowData, setRowData] = useState([]);
 
     /**
@@ -36,17 +39,27 @@ const ColumnistAgGrid = ({ match }) => {
     );
 
     useEffect(() => {
-        setRowData(
-            list.map((data) => {
-                return {
-                    ...data,
-                    repSeqText: data.repSeq || '   -',
-                    regMember: `${data.regMember.memberNm}(${data.regMember.memberId})`,
-                    regDt: (data.regDt || '').slice(0, -3),
-                };
-            }),
-        );
-    }, [list]);
+        if (!jplusRepRows) dispatch(getJplusRep());
+    }, [dispatch, jplusRepRows]);
+
+    useEffect(() => {
+        if (jplusRepRows) {
+            setRowData(
+                list.map((data) => {
+                    let jplusRelDiv = jplusRepRows.find((code) => code.dtlCd === data.jplusRelDiv);
+                    const jplusRelDivNm = (jplusRelDiv?.cdNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2);
+
+                    return {
+                        ...data,
+                        jplusRelDivNm,
+                        repSeqText: data.repSeq || '   -',
+                        regMember: `${data.regMember.memberNm}(${data.regMember.memberId})`,
+                        regDt: (data.regDt || '').slice(0, -3),
+                    };
+                }),
+            );
+        }
+    }, [list, jplusRepRows]);
 
     return (
         <React.Fragment>

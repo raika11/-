@@ -8,7 +8,7 @@ import toast from '@/utils/toastUtil';
 /**
  * 작업 실행 통계 목록 조회
  */
-const getJobStatistic = callApiAfterActions(act.GET_JOB_STATISTIC_LIST, api.getJobStatistic, (state) => state.schedule.runState);
+const getJobStatistic = createRequestSaga(act.GET_JOB_STATISTIC_LIST, api.getJobStatistic);
 
 /**
  * 작업 실행 현황 목록 조회

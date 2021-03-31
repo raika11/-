@@ -5,6 +5,7 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { MokaCard } from '@/components';
 import { getGenCate } from '@/store/codeMgt';
+import { clearStore } from '@/store/schedule';
 import RunState from './RunState';
 import Work from './Work';
 import DeleteWork from './DeleteWork';
@@ -18,8 +19,7 @@ const Schedule = ({ match }) => {
     const dispatch = useDispatch();
     const [activeKey, setActiveKey] = useState(0);
 
-    const tabs = [<RunState match={match} />, <Work match={match} />, <DeleteWork match={match} />, <DeployServer match={match} />, <BackOfficeWork match={match} />];
-    const tabNavs = ['작업 실행상태', '작업 목록', '삭제 작업 목록', '배포 서버 관리', '백오피스 예약작업'];
+    const [tabNavs] = useState(['작업 실행상태', '작업 목록', '삭제 작업 목록', '배포 서버 관리', '백오피스 예약작업']);
 
     /**
      * Nav 선택 콜백
@@ -32,17 +32,32 @@ const Schedule = ({ match }) => {
         }
     }, []);
 
-    // useEffect(() => {
-    //     // 탭의 activeKey를 직접 제어
-    //     if (parentKey !== null && parentKey !== undefined) {
-    //         handleSelect(String(parentKey));
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [parentKey]);
+    const createTabs = useCallback(() => {
+        return tabNavs.map((nav, idx) => {
+            if (nav === '작업 실행상태') {
+                return <RunState show={Number(activeKey) === idx} match={match} />;
+            } else if (nav === '작업 목록') {
+                return <Work show={Number(activeKey) === idx} match={match} />;
+            } else if (nav === '삭제 작업 목록') {
+                return <DeleteWork show={Number(activeKey) === idx} match={match} />;
+            } else if (nav === '배포 서버 관리') {
+                return <DeployServer show={Number(activeKey) === idx} match={match} />;
+            } else if (nav === '백오피스 예약작업') {
+                return <BackOfficeWork show={Number(activeKey) === idx} match={match} />;
+            }
+            return null;
+        });
+    }, [activeKey, match, tabNavs]);
 
     useEffect(() => {
         // 기타코드 스케줄 작업 목록
         dispatch(getGenCate());
+    }, [dispatch]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
     }, [dispatch]);
 
     return (
@@ -54,14 +69,6 @@ const Schedule = ({ match }) => {
             </Helmet>
 
             <MokaCard className="w-100 h-100" title="스케줄 서버 관리">
-                {/* <MokaCardTabs
-                    className="w-100 h-100"
-                    style={{ boxShadow: 'none' }}
-                    navWidth={120}
-                    tabs={[<RunState match={match} />, <Work match={match} />, <DeleteWork match={match} />, <DeployServer match={match} />]}
-                    tabNavs={['작업 실행상태', '작업 목록', '삭제 작업 목록', '배포 서버 관리']}
-                /> */}
-
                 <div className="tab card-tab w-100 h-100" style={{ boxShadow: 'none' }}>
                     <Tab.Container activeKey={activeKey}>
                         <div className="d-flex">
@@ -77,7 +84,7 @@ const Schedule = ({ match }) => {
                         </div>
                         <div className="d-flex custom-scroll">
                             <Tab.Content className="p-0">
-                                {tabs.map((tab, idx) => (
+                                {createTabs().map((tab, idx) => (
                                     <Tab.Pane key={idx} eventKey={idx} className="overflow-hidden h-100">
                                         <div className="pb-3 pt-20 h-100 custom-scroll">{tab}</div>
                                     </Tab.Pane>

@@ -60,7 +60,14 @@ public class JobStatisticRepositorySupportImpl extends TpsQueryDslRepositorySupp
             builder.or(jobStatus.genResult.eq(genResult));
         }
         if (!McpString.isEmpty(keyword)) {
-            if (!McpString.isEmpty(searchType) && searchType.equals("keyword1")) {
+            if (!McpString.isEmpty(searchType) && searchType.equals("keyword0")) {
+                builder.and(jobStatistic.pkgNm
+                        .contains(keyword)
+                        .or(jobStatistic.targetPath
+                                .contains(keyword)
+                                .or(jobStatistic.jobDesc.contains(keyword))));
+
+            } else if (!McpString.isEmpty(searchType) && searchType.equals("keyword1")) {
                 builder.and(jobStatistic.pkgNm.contains(keyword));
             } else if (!McpString.isEmpty(searchType) && searchType.equals("keyword2")) {
                 builder.and(jobStatistic.targetPath.contains(keyword));

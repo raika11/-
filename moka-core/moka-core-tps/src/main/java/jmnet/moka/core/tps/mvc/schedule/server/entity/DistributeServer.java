@@ -68,7 +68,7 @@ public class DistributeServer extends BaseAudit {
     /**
      * 계정비밀번호
      */
-    @Column(name = "ACCESS_PWD", insertable = false, updatable = false)
+    @Column(name = "ACCESS_PWD", updatable = false)
     private String accessPwd;
 
 

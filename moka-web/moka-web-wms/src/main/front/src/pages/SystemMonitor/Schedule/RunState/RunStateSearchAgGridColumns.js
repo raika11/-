@@ -13,7 +13,7 @@ export default [
     {
         headerName: '분류',
         field: 'serverNm',
-        cellStyle: { textOverflow: 'ellipsis', lineHeight: '57px' },
+        cellStyle: { lineHeight: '60px' },
         width: 60,
         tooltipField: 'serverNm',
     },

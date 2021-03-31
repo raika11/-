@@ -47,26 +47,25 @@
 
 /***************************************    unique     ************************************/
 .card_in {position: relative;}
-.card_in .card_image { position: relative; }
+.card_in .card_image { position: relative; margin-bottom: 0; }
 .card_in .card_image::before { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 50%; background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));}
+.card_in .card_image .fa_rect_w { right: 46px; bottom: 40px; width: 30px; height: 20px }
 .card_in .card_body { position: absolute; left: 0; bottom: 0; width: 100%; padding: 34px 40px;}
 .card_in .card_body .headline,
 .card_in .card_body .description { color: #fff;}
-.card_in .card_image .fa_rect_w { right: 46px; bottom: 40px; width: 30px; height: 20px }
 .card_in .fa_rect_w::after { left: 11px; top: 8px; width: 22px; height: 14px;}
-.card_in .card_image { position: relative;}
 .card_image .fa_rect_w { position: absolute; right: 14px; bottom: 12px;}
-.card_group.unique_trend { margin: -20px -18px 0; }
-.card_group.unique_trend .col_lg4 { margin-top: 20px; padding: 0 18px;}
 .component .card_more { display: flex; align-items: center; justify-content: center; margin-top: 30px; padding: 20px 0; border-top: 1px solid #e2e2e2;}
 .component .card_more .fa_arrow_down_g { margin-left: 8px;}
 .case_unique .top_area_wrap .sub_title { display: flex; align-items: center;}
 .case_unique .top_area_wrap .sub_title .fa_arrow_right_b { margin-left: 4px;}
-.case_unique .card_group .card_image { position: relative; }
+.case_unique .card_group .card_image { position: relative; margin-bottom: 0; }
 /* 임시 아이콘 이미지 변경시 소스 수정해야됨 */
 .fa_rect_w { width: 15px; height: 10px; border: 1.5px solid #fff;  }
 .fa_rect_w::after { content: ''; position: absolute; left: 6px; top: 4px; width: 10px; height: 6px; border: 1.5px solid #fff;}
-.card_group.unique_trend .card_image { margin-bottom: 10px; }
+.unique_trend .card_group { margin-top: -20px; }
+.unique_trend .card_group .col_lg4 { margin-top: 20px; }
+
 
 
 /* Mobile devices (mobile, 375px and down) */
@@ -108,18 +107,18 @@
     .card_in .card_body { position: static; padding:0;}
     .card_in .card_body .headline { color: #111;}
     .card_in .card_body .description { color: #777; }
-    .case_unique .card a { display: flex; flex-flow: row-reverse; }
     .case_unique .card { margin-top: 16px; padding-top:17px; border-top: 1px solid #e2e2e2; }
+    .case_unique .card:first-child { margin-top: 0; }
+    .case_unique .card a { display: flex; flex-flow: row-reverse; }
     .case_unique .headline { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
     .case_unique .card_group { justify-content: space-between; }
     .case_unique .card_group .card_image {  width: 58%; }
     .case_unique .card_group .card_image + .card_body { margin-right: 15px; }
-
-    .card_group.unique_trend .headline { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-    .card_group.unique_trend .card_image { margin-bottom: 10px; }
-    .card_group.unique_trend .card_body .byline { padding-top: 4px; }
-    .card_group.unique_trend .col_lg4 { margin-top: 15px; }
-
+    .unique_trend .card_group { margin: -20px -10px 0; }
+    .unique_trend .card_group .headline { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .unique_trend .card_group .card_image { margin-bottom: 10px; }
+    .unique_trend .card_group .card_body .byline { padding-top: 4px; }
+    .unique_trend .card_group .col_lg4 { margin-top: 15px; padding: 0 10px; }
 }
 
 /* Medium devices (tablet + pc, 768px and up) */
@@ -178,10 +177,18 @@
 
 
     /***************************************    unique     ************************************/
-    .card_in .card_body .description { max-width: 48%; font-size: 14px; line-height: 22px; letter-spacing: -0.4px; }
-    .card_in .card_body .date { margin-top: 12px; color: #aaa; }
+    .card_in .card_body .headline { font-size: 20px; line-height: 28px; letter-spacing: -0.4px; }
+    .card_in .card_body .description { max-width: 78%; font-size: 13px; line-height: 21px; }
+    .card_in .card_body .date { padding-top: 12px; color: #aaa; }
+    .card_in .card_body .headline + .description { margin-top: 6px; }
+    .case_unique .top_area_wrap .sub_title { font-size: 16px; line-height: 24px; letter-spacing: -0.4px; }
+    .case_unique .card_group .card_body { margin-top: 8px; }
+    .case_unique .card_group .card_body .date { padding-top: 6px; font-size: 13px; line-height: 21px; letter-spacing: -0.63px; }
+    .case_unique .card_body .headline { font-size: 14px; line-height: 22px; letter-spacing: -0.4px; }
     .case_unique .card_group {  margin: 0 -18px; }
     .case_unique .row > .col_lg3 { padding: 0 18px; }
+    .unique_trend .top_area_wrap .sub_title { font-size: 16px;  }
+    .unique_trend .card_body .headline { font-size: 14px; line-height: 22px; letter-spacing: -0.4px; }
 }
 
 /* Large devices (desktops, 1024px and up) */
@@ -233,6 +240,14 @@
 
 
     /***************************************    unique     ************************************/
+    .card_in .card_body .headline { font-size: 28px; }
+    .card_in .card_body .description { max-width: 48%; font-size: 14px; line-height: 22px; letter-spacing: -0.4px; }
+    .card_in .card_body .date { padding-top: 8px; }
+    .case_unique .card_group .card_body { margin-top: 12px; }
+    .case_unique .card_group .card_body .headline { font-size: 16px; line-height: 24px; letter-spacing: -0.4px; }
+    .component.case_unique + .component .top_area_wrap { margin-top: 50px; }
+    .unique_trend .top_area_wrap .sub_title { font-size: 20px; line-height: 24px; letter-spacing: -0.4px; }
+    .unique_trend .card_group .card_body .headline { font-size: 18px; line-height: 26px; letter-spacing: -0.4px; }
 }
 
 /* X-Large devices (large desktops, 1200px and up) */
@@ -246,9 +261,7 @@
     /***************************************    catalog     ************************************/
 
     /***************************************    unique     ************************************/
-    .card_in .card_body .headline { font-size: 28px; }
-    .case_unique .card_group .card_body .headline { font-size: 16px; line-height: 24px; letter-spacing: -0.4px; }
-    .component.case_unique + .component .top_area_wrap { margin-top: 50px; }
+
 }
 
 

@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaCardTabs } from '@components';
 import { ArticleList } from '@pages/Article/components/Desking';
+import PackageList from '@pages/Issue/components/Desking';
 import ReporterList from '@pages/Reporter/components/Desking/ReporterList';
 import ColumnistList from '@pages/Columnist/components/Desking/ColumnistList';
 import { deskingDragStop } from '@store/desking';
@@ -78,6 +79,18 @@ const DeskingArticleTab = (props) => {
                         isNaverChannel={isNaverChannel}
                         show={navIdx === idx && show}
                         movie
+                    />
+                );
+            }
+            // 패키지 조회 컴포넌트
+            else if (nav === '패키지') {
+                return (
+                    <PackageList
+                        selectedComponent={{}}
+                        dropTargetAgGrid={componentAgGridInstances}
+                        dropTargetComponent={componentList}
+                        // onDragStop={}
+                        show={navIdx === idx && show}
                     />
                 );
             }

@@ -40,6 +40,7 @@ const ColumnistAgGrid = ({ match }) => {
             list.map((data) => {
                 return {
                     ...data,
+                    repSeqText: data.repSeq || '   -',
                     regMember: `${data.regMember.memberNm}(${data.regMember.memberId})`,
                     regDt: (data.regDt || '').slice(0, -3),
                 };
@@ -53,6 +54,7 @@ const ColumnistAgGrid = ({ match }) => {
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={45}
                 onRowNodeId={(data) => data.seqNo}
                 onRowClicked={handleRowClicked}
                 loading={loading}

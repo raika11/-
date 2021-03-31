@@ -19,6 +19,7 @@ const propTypes = {
     className: PropTypes.string,
     /**
      * 선택한 컴포넌트의 데이터
+     * @default
      */
     selectedComponent: PropTypes.object,
     /**
@@ -81,12 +82,12 @@ const ArticleList = (props) => {
             const startServiceDay = !search.startServiceDay ? moment(nt).subtract(period[0], period[1]).startOf('day') : search.startServiceDay;
             const endServiceDay = !search.endServiceDay ? moment(nt).endOf('day') : search.endServiceDay;
             const ns = { ...search, ...appendSearch, startServiceDay, endServiceDay };
-            const isOk = ns.sourceList && (ns.sourceList || []).length > 0; // sourceList가 셋팅되어있는지
+            const needCallSource = !ns.sourceList; // 매체 api 호출해야하는지
 
             setSearch(ns);
             dispatch(
                 getArticleListModal({
-                    getSourceList: !isOk,
+                    getSourceList: needCallSource,
                     type,
                     search: {
                         ...ns,
@@ -184,13 +185,14 @@ const ArticleList = (props) => {
     );
 
     useEffect(() => {
-        const type = !!isNaverChannel ? 'BULK' : 'DESKING';
-        const masterCode = selectedComponent.schCodeId || null;
-        const ns = { ...initialSearch, ...search, masterCode };
-
         if (show) {
+            const type = !!isNaverChannel ? 'BULK' : 'DESKING';
+            const masterCode = selectedComponent.schCodeId || null;
+            let ns = { ...initialSearch, ...search, masterCode };
+
             // 기사 로딩
             setType(type);
+            if (previous.current.type !== type) ns.sourceList = null; // 타입이 바뀌면 매체 리로드해야함
             if (previous.current.type !== type || previous.current.schCodeId !== masterCode) {
                 getArticleList({ type, search: ns });
                 previous.current.type = type;
@@ -212,6 +214,7 @@ const ArticleList = (props) => {
                 isNaverChannel={isNaverChannel}
                 // 그룹넘버 변경 후 실행함수
                 onChangeGroupNumber={handleSearch}
+                movie={movie}
             />
 
             <AgGrid

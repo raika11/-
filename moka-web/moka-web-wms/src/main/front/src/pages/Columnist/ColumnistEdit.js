@@ -110,6 +110,7 @@ const ColumnistEdit = ({ match }) => {
      */
     const handleSave = () => {
         let saveData = temp;
+        saveData.inout = saveData.repSeq ? 'I' : 'O'; // 외부/내부 필진 설정
 
         if (validate(saveData)) {
             // 이메일 설정

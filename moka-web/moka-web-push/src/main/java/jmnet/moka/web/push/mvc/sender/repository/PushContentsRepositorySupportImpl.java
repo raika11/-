@@ -1,7 +1,7 @@
 package jmnet.moka.web.push.mvc.sender.repository;
 
 import com.querydsl.jpa.JPQLQuery;
-import java.util.List;
+import java.util.Optional;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.entity.QPushContents;
 import org.springframework.data.domain.Page;
@@ -28,19 +28,38 @@ public class PushContentsRepositorySupportImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public List<PushContents> findByRelContentId(Long relContentId) {
-        QPushContents pushContents = QPushContents.pushContents;
-        JPQLQuery<PushContents> query = from(pushContents);
+    public Optional<PushContents> findByRelContentId(Long relContentId) {
+        QPushContents qPushContents = QPushContents.pushContents;
+        JPQLQuery<PushContents> query = from(qPushContents);
 
-        return query
-                .where(pushContents.relContentId.eq(relContentId))
+        query
+                .where(qPushContents.relContentId.eq(relContentId))
                 .limit(1)
-                .orderBy(pushContents.contentSeq.desc())
+                .orderBy(qPushContents.contentSeq.desc())
                 .fetch();
+
+        PushContents pushContents = query.fetchFirst();
+
+        return Optional.ofNullable(pushContents);
+    }
+
+    @Override
+    public Page<PushContents> findByRelContentId(Long search, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<PushContents> findByContentSeq(Long contentSeq, Pageable pageable) {
+        return null;
     }
 
     @Override
     public Page<PushContents> findAllByUsedYn(String usedYn, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<PushContents> findAllByContentSeq(Long contentSeq, Pageable pageable) {
         return null;
     }
 

@@ -58,4 +58,12 @@ public interface PackageService {
      * @return 패키지
      */
     PackageMaster updatePackage(PackageMaster packageMaster);
+
+    /**
+     * 패키지 마스터 수정
+     *
+     * @param packageMaster 패키지 엔티티
+     * @return 패키지
+     */
+    PackageMaster updatePackageMaster(PackageMaster packageMaster);
 }

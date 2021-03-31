@@ -3,6 +3,7 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
 import * as act from './scheduleAction';
 import * as api from './scheduleApi';
+import toast from '@/utils/toastUtil';
 
 /**
  * 작업 실행 통계 목록 조회
@@ -168,6 +169,67 @@ function* deleteServer({ payload: { serverSeq, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 작업코드 목록조회
+ */
+function* getJobCode() {
+    const ACTION = act.GET_JOB_CODE;
+    let callbackData, response;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        response = yield call(api.getJobCode);
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: act.GET_JOB_CODE_SUCCESS,
+                payload: callbackData,
+            });
+        } else {
+            toast.error(callbackData.header?.message);
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 작업예약 목록조회
+ */
+const getJobHistoryList = callApiAfterActions(act.GET_JOB_HISTORY_LIST, api.getJobHistoryList, (state) => state.schedule.backOffice);
+
+/**
+ * 작업예약 상세조회
+ */
+function* getHistoryJob({ payload: seqNo }) {
+    const ACTION = act.GET_HISTORY_JOB;
+    let callbackData, response;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        response = yield call(api.getHistoryJob, seqNo);
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: act.GET_HISTORY_JOB_SUCCESS,
+                payload: callbackData,
+            });
+        } else {
+            toast.error(callbackData.header?.message);
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
 export default function* scheduleSaga() {
     yield takeLatest(act.GET_JOB_STATISTIC_LIST, getJobStatistic);
     yield takeLatest(act.GET_JOB_STATISTIC_SEARCH_LIST, getJobStatisticSearch);
@@ -183,4 +245,7 @@ export default function* scheduleSaga() {
     yield takeLatest(act.GET_DISTRIBUTE_SERVER, getDistributeServer);
     yield takeLatest(act.SAVE_DISTRIBUTE_SERVER, saveDistributeServer);
     yield takeLatest(act.DELETE_SERVER, deleteServer);
+    yield takeLatest(act.GET_JOB_CODE, getJobCode);
+    yield takeLatest(act.GET_JOB_HISTORY_LIST, getJobHistoryList);
+    yield takeLatest(act.GET_HISTORY_JOB, getHistoryJob);
 }

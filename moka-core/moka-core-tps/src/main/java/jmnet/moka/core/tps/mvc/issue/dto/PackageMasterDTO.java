@@ -9,6 +9,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
@@ -47,6 +48,7 @@ public class PackageMasterDTO implements Serializable {
      * 패키지 일련번호
      */
     @ApiModelProperty("패키지 일련번호")
+    @Min(value = 0, message = "{tps.common.error.min.seqNo}")
     private Long pkgSeq;
 
     /**
@@ -102,20 +104,21 @@ public class PackageMasterDTO implements Serializable {
      * 카테고리 리스트
      */
     @ApiModelProperty("카테고리 리스트")
+    @Pattern(regexp = "^([\\d|\\,]*)$", message = "{tps.issue.error.pattern.catList}")
     private String catList;
 
     /**
      * 패키지 타이틀
      */
     @ApiModelProperty("패키지 타이틀")
-    @Length(max = 100, message = "TODO : ")
+    @Length(max = 100, message = "{tps.issue.error.length.pkgTitle}")
     private String pkgTitle;
 
     /**
      * 패키지 설명
      */
     @ApiModelProperty("패키지 설명")
-    @Length(max = 1000, message = "TODO : ")
+    @Length(max = 1000, message = "{tps.issue.error.length.pkgDesc}")
     private String pkgDesc;
 
     /**

@@ -4,14 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
-import jmnet.moka.core.tps.mvc.schedule.server.entity.JobStatus;
-import lombok.*;
-
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.JobStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -50,9 +53,6 @@ public class JobDeletedContentDTO implements Serializable {
 
     @ApiModelProperty("FTP PASSIVE 여부")
     private String ftpPassive;
-
-    @ApiModelProperty("URL")
-    private String callUrl;
 
     @ApiModelProperty("배포경로")
     private String targetPath;

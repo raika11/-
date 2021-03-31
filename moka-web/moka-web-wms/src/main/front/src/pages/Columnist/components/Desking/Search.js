@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
+import { initialState } from '@store/columnist';
 import { MokaInputLabel, MokaSearchInput } from '@components';
 
 /**
@@ -10,12 +11,14 @@ const Search = (props) => {
 
     return (
         <div className="mb-14 d-flex">
-            {/* 상태정보 */}
+            {/* 검색조건 */}
             <div className="flex-shrink-0 mr-2">
                 <MokaInputLabel as="select" name="status" value={search.status} onChange={(e) => onChangeSearchOption({ key: e.target.name, value: e.target.value })}>
-                    <option value="">상태정보 전체</option>
-                    <option value="Y">상태정보 설정</option>
-                    <option value="N">상태정보 해제</option>
+                    {initialState.statusSearchTypeList.map((type) => (
+                        <option key={type.id} value={type.id}>
+                            {type.name}
+                        </option>
+                    ))}
                 </MokaInputLabel>
             </div>
 

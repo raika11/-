@@ -53,6 +53,7 @@ body {
 
 .onerror-image-wrap {
     background-color: $gray-400 !important;
+    pointer-events: none;
 }
 
 .onerror-image {

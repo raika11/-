@@ -52,11 +52,6 @@ const propTypes = {
      */
     alt: PropTypes.string,
     /**
-     * 업로드 가능 이미지 타입
-     * @default
-     */
-    selectAccept: PropTypes.array,
-    /**
      * 타당한 데이터 체크
      */
     isInvalid: PropTypes.bool,
@@ -80,9 +75,8 @@ const defaultProps = {
         body: '이미지파일만 등록할 수 있습니다',
     },
     alt: '이미지',
-    selectAccept: [],
     deleteButton: false,
-    accept: 'image/*',
+    accept: ACCEPTED_IMAGE_TYPES.join(','),
 };
 
 /**
@@ -90,7 +84,7 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = forwardRef((props, ref) => {
-    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton, accept } = props;
+    const { width, height, alertProps, img, setFileValue, alt, className, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton, accept } = props;
 
     // state
     const [imgSrc, setImgSrc] = useState(null);
@@ -163,21 +157,21 @@ const MokaImageInput = forwardRef((props, ref) => {
      */
     const onDrop = (acceptedFiles) => {
         wrapRef.current.classList.remove('dropzone-dragover');
-        if (ACCEPTED_IMAGE_TYPES.includes(acceptedFiles[0].type)) {
-            // 업로드 가능 확장자 체크
-            if (selectAccept.length > 0 && selectAccept.includes(acceptedFiles[0].type) === false) {
-                handleEtcAlert(`확장자가 ${selectAccept.map((n) => n.split('/')[1]).join(', ')}인 파일만 등록할 수 있습니다`);
-                return;
+        // 확장자 체크
+        if (acceptedFiles[0].type.indexOf('image/') > -1) {
+            if (accept === 'image/*' || accept.includes(acceptedFiles[0].type)) {
+                setAlert(false);
+                setImgSrc(URL.createObjectURL(acceptedFiles[0]));
+                imageShow();
+                if (setFileValue) setFileValue(acceptedFiles[0]);
+                if (onChange) onChange(acceptedFiles);
+            } else {
+                handleEtcAlert(`확장자가 ${accept}인 파일만 등록할 수 있습니다`);
+                imageHide();
+                if (onChange) onChange();
             }
-
-            setAlert(false);
-            setImgSrc(URL.createObjectURL(acceptedFiles[0]));
-            imageShow();
-            if (setFileValue) setFileValue(acceptedFiles[0]);
-            if (onChange) onChange(acceptedFiles);
         } else {
-            // 이미지가 아닐 경우 alert 처리
-            setAlert(true);
+            handleEtcAlert(`확장자가 ${accept}인 파일만 등록할 수 있습니다`);
             imageHide();
             if (onChange) onChange();
         }

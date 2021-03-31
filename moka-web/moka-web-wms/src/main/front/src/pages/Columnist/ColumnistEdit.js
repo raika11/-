@@ -332,9 +332,9 @@ const ColumnistEdit = ({ match }) => {
                     inputProps={{
                         width: 267,
                         img: temp.profilePhoto,
-                        selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정
                         setFileValue: handleChangeFile,
                         deleteButton: true,
+                        accept: 'image/jpeg',
                     }}
                 />
             </div>

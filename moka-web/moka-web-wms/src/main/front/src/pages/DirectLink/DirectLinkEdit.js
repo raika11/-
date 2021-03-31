@@ -449,7 +449,7 @@ const DirectLinkEdit = ({ history, match }) => {
                                     </Button>
                                 </React.Fragment>
                             }
-                            inputProps={{ img: temp.imgUrl ? `${temp.imgUrl}?${temp.linkSeq}` : null, width: 120, height: 100, setFileValue, deleteButton: true }}
+                            inputProps={{ img: temp.imgUrl, width: 120, height: 100, setFileValue, deleteButton: true, accept: 'image/jpeg' }}
                             labelClassName="justify-content-end"
                             isInvalid={error.directLinkThumbnailFile}
                             onChange={() => setError({ ...error, directLinkThumbnailFile: false })}

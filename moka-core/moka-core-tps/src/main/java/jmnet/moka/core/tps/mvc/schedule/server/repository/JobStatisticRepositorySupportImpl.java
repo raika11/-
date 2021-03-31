@@ -7,17 +7,18 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobStatisticSearchDTO;
-import jmnet.moka.core.tps.mvc.schedule.server.entity.*;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.JobStatistic;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.QDistributeServerSimple;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.QJobStatistic;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.QJobStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 /**
- * 작업 실행상태 Repository
- * 2021. 2. 3. 김정민
- *
+ * 작업 실행상태 Repository 2021. 2. 3. 김정민
  */
-public class JobStatisticRepositorySupportImpl extends TpsQueryDslRepositorySupport implements JobStatisticRepositorySupport{
+public class JobStatisticRepositorySupportImpl extends TpsQueryDslRepositorySupport implements JobStatisticRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 
@@ -43,20 +44,30 @@ public class JobStatisticRepositorySupportImpl extends TpsQueryDslRepositorySupp
         String searchType = search.getSearchType();
         String keyword = search.getKeyword();
 
-        if(!McpString.isEmpty(category)){
+        if (!McpString.isEmpty(category)) {
             builder.or(jobStatistic.category.eq(category));
         }
-        if(!McpString.isEmpty(period)){
+        if (!McpString.isEmpty(period)) {
             builder.or(jobStatistic.period.eq(period));
         }
-        if(!McpString.isEmpty(sendType)){
+        if (!McpString.isEmpty(sendType)) {
             builder.or(jobStatistic.sendType.eq(sendType));
         }
-        if(!McpString.isEmpty(serverSeq)){
+        if (!McpString.isEmpty(serverSeq)) {
             builder.or(jobStatistic.serverSeq.eq(serverSeq));
         }
-        if(!McpString.isEmpty(genResult)){
+        if (!McpString.isEmpty(genResult)) {
             builder.or(jobStatus.genResult.eq(genResult));
+        }
+        if (!McpString.isEmpty(keyword)) {
+            if (!McpString.isEmpty(searchType) && searchType.equals("keyword1")) {
+                builder.and(jobStatistic.pkgNm.contains(keyword));
+            } else if (!McpString.isEmpty(searchType) && searchType.equals("keyword2")) {
+                builder.and(jobStatistic.targetPath.contains(keyword));
+            } else if (!McpString.isEmpty(searchType) && searchType.equals("keyword3")) {
+                builder.and(jobStatistic.jobDesc.contains(keyword));
+            }
+
         }
 
         //TB_GEN_TARGET.SERVER_SEQ = 0 인 데이터는 미존재로 조회불가
@@ -65,8 +76,10 @@ public class JobStatisticRepositorySupportImpl extends TpsQueryDslRepositorySupp
         JPQLQuery<JobStatistic> query = queryFactory.selectFrom(jobStatistic);
         query = getQuerydsl().applyPagination(pageable, query);
         QueryResults<JobStatistic> list = query
-                .leftJoin(jobStatistic.distributeServerSimple, distributeServerSimple).fetchJoin()
-                .leftJoin(jobStatistic.jobStatus, jobStatus).fetchJoin()
+                .leftJoin(jobStatistic.distributeServerSimple, distributeServerSimple)
+                .fetchJoin()
+                .leftJoin(jobStatistic.jobStatus, jobStatus)
+                .fetchJoin()
                 .where(builder)
                 .fetchResults();
 

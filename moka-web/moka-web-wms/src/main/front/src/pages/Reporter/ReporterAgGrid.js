@@ -64,6 +64,7 @@ const ReporterMgrAgGrid = ({ match }) => {
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={reporterRows}
+            rowHeight={45}
             onRowNodeId={(reporter) => reporter.repSeq}
             onRowClicked={handleRowClicked}
             loading={loading}

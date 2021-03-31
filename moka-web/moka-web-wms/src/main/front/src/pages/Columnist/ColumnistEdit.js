@@ -110,6 +110,7 @@ const ColumnistEdit = ({ match }) => {
      */
     const handleSave = () => {
         let saveData = temp;
+        saveData.inout = saveData.repSeq ? 'I' : 'O'; // 외부/내부 필진 설정
 
         if (validate(saveData)) {
             // 이메일 설정
@@ -298,8 +299,8 @@ const ColumnistEdit = ({ match }) => {
                     ref={imgFileRef}
                     inputProps={{
                         width: 267,
-                        img: temp.profilePhoto ? `${temp.profilePhoto}?t=${new Date().getTime()}` : null,
-                        selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
+                        img: temp.profilePhoto,
+                        selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정
                         setFileValue: handleChangeFile,
                         deleteButton: true,
                     }}

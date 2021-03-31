@@ -8,6 +8,7 @@ import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
 // cell renderer
 import ImageRenderer from './MokaTableImageRenderer';
+import CircleImageRenderer from './MokaTableCircleImageRenderer';
 import UsedYnRenderer from './MokaTableUsedYnRenderer';
 import SwitchRenderer from './MokaTableSwitchRenderer';
 import ButtonRenderer from './MokaTableButtonRenderer';
@@ -321,6 +322,7 @@ const MokaTable = forwardRef((props, ref) => {
                     tooltipShowDelay={0}
                     frameworkComponents={{
                         imageRenderer: ImageRenderer,
+                        circleImageRenderer: CircleImageRenderer,
                         usedYnRenderer: UsedYnRenderer,
                         switchRenderer: SwitchRenderer,
                         buttonRenderer: ButtonRenderer,

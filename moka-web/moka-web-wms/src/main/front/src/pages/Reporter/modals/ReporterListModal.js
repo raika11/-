@@ -159,6 +159,7 @@ const ReporterListModal = (props) => {
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={45}
                 onRowNodeId={(reporter) => reporter.repSeq}
                 onRowClicked={() => {}}
                 loading={loading}

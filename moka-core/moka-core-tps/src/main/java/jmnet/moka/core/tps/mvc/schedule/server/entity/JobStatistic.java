@@ -1,12 +1,23 @@
 package jmnet.moka.core.tps.mvc.schedule.server.entity;
 
-import lombok.*;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * 작업 실행상태 엔티티
- * 2021. 2. 3. 김정민
+ * 작업 실행상태 엔티티 2021. 2. 3. 김정민
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -46,6 +57,12 @@ public class JobStatistic {
     private String category;
 
     /**
+     * 패키지 명
+     */
+    @Column(name = "PKG_NM")
+    private String pkgNm;
+
+    /**
      * 주기
      */
     @Column(name = "PERIOD", nullable = false)
@@ -76,12 +93,6 @@ public class JobStatistic {
     private String targetPath;
 
     /**
-     * URL
-     */
-    @Column(name = "CALL_URL")
-    private String callUrl;
-
-    /**
      * 설명
      */
     @Column(name = "JOB_DESC")
@@ -89,10 +100,10 @@ public class JobStatistic {
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name="SERVER_SEQ", insertable = false, updatable = false)
+    @JoinColumn(name = "SERVER_SEQ", insertable = false, updatable = false)
     private DistributeServerSimple distributeServerSimple;
 
     @OneToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name="JOB_SEQ", insertable = false, updatable = false)
+    @JoinColumn(name = "JOB_SEQ", insertable = false, updatable = false)
     private JobStatus jobStatus;
 }

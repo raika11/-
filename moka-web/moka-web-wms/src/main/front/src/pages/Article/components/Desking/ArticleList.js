@@ -19,6 +19,7 @@ const propTypes = {
     className: PropTypes.string,
     /**
      * 선택한 컴포넌트의 데이터
+     * @default
      */
     selectedComponent: PropTypes.object,
     /**
@@ -213,6 +214,7 @@ const ArticleList = (props) => {
                 isNaverChannel={isNaverChannel}
                 // 그룹넘버 변경 후 실행함수
                 onChangeGroupNumber={handleSearch}
+                movie={movie}
             />
 
             <AgGrid

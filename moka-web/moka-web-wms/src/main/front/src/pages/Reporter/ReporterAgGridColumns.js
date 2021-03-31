@@ -6,22 +6,27 @@ export const columnDefs = [
         field: 'repSeq',
         tooltipField: 'repSeq',
         width: 55,
+        cellStyle: { lineHeight: '43px' },
+    },
+    {
+        headerName: '사진',
+        field: 'repImg',
+        width: 50,
+        cellRenderer: 'circleImageRenderer',
+        cellStyle: { padding: '3px 6px' },
+    },
+    {
+        headerName: '이름',
+        field: 'repName',
+        width: 80,
+        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '아이디',
         field: 'joinsId',
         tooltipField: 'joinsId',
         width: 100,
-    },
-    {
-        headerName: '이름',
-        field: 'repName',
-        width: 80,
-    },
-    {
-        headerName: '수정일시',
-        field: 'modDt',
-        width: 130,
+        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '이메일',
@@ -29,6 +34,13 @@ export const columnDefs = [
         tooltipField: 'repEmail1',
         width: 180,
         flex: 1,
+        cellStyle: { lineHeight: '43px' },
+    },
+    {
+        headerName: '수정일시',
+        field: 'modDt',
+        width: 130,
+        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '노출여부',

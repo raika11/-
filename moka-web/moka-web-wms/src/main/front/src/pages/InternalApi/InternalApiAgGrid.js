@@ -6,18 +6,13 @@ import { changeSearchOption, getInternalApiList, GET_INTERNAL_API_LIST } from '@
 import columnDefs from './InternalApiAgGridColumns';
 
 /**
- * API 목록 AgGrid
+ * API 관리 > API 목록 > AgGrid
  */
 const InternalApiAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_INTERNAL_API_LIST]);
-    const { total, search, list, internalApi } = useSelector(({ internalApi }) => ({
-        total: internalApi.total,
-        search: internalApi.search,
-        list: internalApi.list,
-        internalApi: internalApi.internalApi,
-    }));
+    const { total, search, list, internalApi } = useSelector(({ internalApi }) => internalApi);
     const [rowData, setRowData] = useState([]);
 
     /**

@@ -127,7 +127,6 @@ const MokaImageInput = forwardRef((props, ref) => {
         alertProps.body = message;
         setAlert(true);
         imageHide();
-        alertProps.body = '이미지파일만 등록할 수 있습니다';
     };
 
     /**
@@ -167,7 +166,7 @@ const MokaImageInput = forwardRef((props, ref) => {
         if (ACCEPTED_IMAGE_TYPES.includes(acceptedFiles[0].type)) {
             // 업로드 가능 확장자 체크
             if (selectAccept.length > 0 && selectAccept.includes(acceptedFiles[0].type) === false) {
-                handleEtcAlert(`확장자 (${selectAccept.map((n) => n.split('/')[1]).join(', ')})만 가능합니다.`);
+                handleEtcAlert(`확장자가 ${selectAccept.map((n) => n.split('/')[1]).join(', ')}인 파일만 등록할 수 있습니다`);
                 return;
             }
 
@@ -260,10 +259,10 @@ const MokaImageInput = forwardRef((props, ref) => {
 
                         {/* alert */}
                         {alert && (
-                            <div className="absolute-top">
-                                <MokaAlert {...alertProps} show>
+                            <div className="absolute-top" style={{ zIndex: 1 }}>
+                                <MokaAlert bodyClassName="p-2" {...alertProps} show>
                                     {alertProps.heading && <MokaAlert.Heading>{alertProps.heading}</MokaAlert.Heading>}
-                                    <p>{alertProps.body}</p>
+                                    {alertProps.body}
                                 </MokaAlert>
                             </div>
                         )}

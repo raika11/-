@@ -23,7 +23,7 @@ import { invalidListToError } from '@utils/convertUtil';
 import ParamDesc from './components/ParamDesc';
 
 /**
- * API 등록/수정
+ * API 관리 > 등록/수정
  */
 const InternalApiEdit = ({ match }) => {
     const history = useHistory();

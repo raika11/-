@@ -92,7 +92,7 @@ const defaultProps = {
 };
 
 /**
- * 템플릿관리의 썸네일 테이블
+ * 템플릿 관리 > 템플릿 목록 (썸네일 테이블)
  */
 const TemplateThumbTable = (props) => {
     const {

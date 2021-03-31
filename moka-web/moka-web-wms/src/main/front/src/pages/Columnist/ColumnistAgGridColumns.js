@@ -1,26 +1,29 @@
 export default [
     {
         headerName: '기자번호',
-        field: 'repSeq',
+        field: 'repSeqText',
         width: 65,
+        cellStyle: { lineHeight: '43px', whiteSpace: 'pre-wrap' },
+    },
+    {
+        headerName: '사진',
+        field: 'profilePhoto',
+        width: 50,
+        cellRenderer: 'circleImageRenderer',
+        cellStyle: { padding: '3px 6px' },
     },
     {
         headerName: '기자이름',
         field: 'columnistNm',
-        width: 100,
-        tooltipField: 'columnistNm',
+        width: 70,
+        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '이메일',
         field: 'email',
         width: 200,
         tooltipField: 'email',
-    },
-    {
-        headerName: '사용',
-        field: 'status',
-        width: 40,
-        cellRenderer: 'usedYnRenderer',
+        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '약력정보',
@@ -28,16 +31,25 @@ export default [
         tooltipField: 'profile',
         width: 200,
         flex: 1,
+        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '등록자',
         field: 'regMember',
         tooltipField: 'regMember',
         width: 130,
+        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '등록일',
         field: 'regDt',
         width: 130,
+        cellStyle: { lineHeight: '43px' },
+    },
+    {
+        headerName: '사용',
+        field: 'status',
+        width: 40,
+        cellRenderer: 'usedYnRenderer',
     },
 ];

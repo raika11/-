@@ -78,9 +78,11 @@ const ColumnistSearch = ({ match }) => {
             {/* 상태정보 */}
             <Col xs={2} className="p-0 pr-2">
                 <MokaInputLabel as="select" name="status" value={search.status} onChange={handleChangeValue} className="mb-0">
-                    <option value="">상태전체</option>
-                    <option value="Y">사용</option>
-                    <option value="N">미사용</option>
+                    {initialState.statusSearchTypeList.map((type) => (
+                        <option key={type.id} value={type.id}>
+                            {type.name}
+                        </option>
+                    ))}
                 </MokaInputLabel>
             </Col>
 

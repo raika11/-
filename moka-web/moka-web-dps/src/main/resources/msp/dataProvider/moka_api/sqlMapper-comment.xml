@@ -19,7 +19,7 @@
   <!-- 댓글 목록 조회 -->
   <select id="list" parameterType="hashmap" resultType="hashmap"
     statementType="CALLABLE">
-    {call UPU_COMMENT_LIST_SEL_BY_TOTAL_ID(
+    {call UPU_COMMENT_LIST_SEL_BY_CONTENT_ID(
       #{totalId, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{referrer, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
@@ -36,8 +36,8 @@
   <!-- 내댓글 목록 조회 -->
   <select id="listMy" parameterType="hashmap" resultType="hashmap"
     statementType="CALLABLE">
-    {call UPU_COMMENT_LIST_SEL_BY_TOTAL_ID(
-      #{totalId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    {call UPU_COMMENT_LIST_SEL_BY_CONTENT_ID(
+      #{contentId, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{referrer, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},

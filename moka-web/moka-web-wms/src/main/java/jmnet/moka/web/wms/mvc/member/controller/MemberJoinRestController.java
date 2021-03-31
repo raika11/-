@@ -26,6 +26,7 @@ import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberGroupSaveDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberRequestDTO;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSnsRequestDTO;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.core.tps.mvc.member.vo.SmtpApplyVO;
@@ -244,7 +245,7 @@ public class MemberJoinRestController extends AbstractCommonController {
     @GetMapping("/{memberId}/sms-request")
     public ResponseEntity<?> putSmsRequest(
             @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
-            @Valid MemberRequestDTO memberRequestDTO)
+            @Valid MemberSnsRequestDTO memberRequestDTO)
             throws Exception {
 
         String noDataMsg = msg("tps.common.error.no-data");
@@ -254,11 +255,13 @@ public class MemberJoinRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
         // 비밀번호와 비밀번호 확인 비교
-        boolean same = memberRequestDTO
-                .getPassword()
-                .equals(memberRequestDTO.getConfirmPassword());
-        if (!same) {
-            throw new PasswordNotMatchedException(msg("wms.login.error.PasswordNotMatchedException"));
+        if (!McpString.isEmpty(memberRequestDTO.getPassword())) {
+            boolean same = memberRequestDTO
+                    .getPassword()
+                    .equals(memberRequestDTO.getConfirmPassword());
+            if (!same) {
+                throw new PasswordNotMatchedException(msg("wms.login.error.PasswordNotMatchedException"));
+            }
         }
         /*
         same = passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword());

@@ -16,7 +16,7 @@ import ArticleImageList from './ArticleImageList';
 import GifDropzone from './GifDropzone';
 import ThumbCard from './ThumbCard';
 import ThumbViewModal from './ThumbViewModal';
-import { IMAGE_PROXY_API } from '@/constants';
+import { IMAGE_PROXY_API, ACCEPTED_IMAGE_TYPES } from '@/constants';
 
 moment.locale('ko');
 
@@ -49,10 +49,16 @@ const propTypes = {
      * @param {any} file 파일데이터
      */
     apply: PropTypes.func,
+    /**
+     * 등록가능한 이미지 확장자
+     * @default
+     */
+    accept: PropTypes.string,
 };
 const defaultProps = {
     cropHeight: 300,
     cropWidth: 300,
+    accept: ACCEPTED_IMAGE_TYPES.join(','),
 };
 
 /**
@@ -83,6 +89,8 @@ const EditThumbModal = (props) => {
         cropHeight,
         cropWidth,
         saveFileName,
+        // input props
+        accept,
         // 대표이미지 props
         thumbFileName,
         apply,
@@ -311,6 +319,7 @@ const EditThumbModal = (props) => {
                         repImg={repImg}
                         setRepImg={setRepImgByDataType}
                         showPhotoDetail={showPhotoDetail}
+                        accept={accept}
                     />
                 </div>
             </DndProvider>

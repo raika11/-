@@ -52,11 +52,6 @@ const propTypes = {
      */
     alt: PropTypes.string,
     /**
-     * 업로드 가능 이미지 타입
-     * @default
-     */
-    selectAccept: PropTypes.array,
-    /**
      * 타당한 데이터 체크
      */
     isInvalid: PropTypes.bool,
@@ -80,9 +75,8 @@ const defaultProps = {
         body: '이미지파일만 등록할 수 있습니다',
     },
     alt: '이미지',
-    selectAccept: [],
     deleteButton: false,
-    accept: 'image/*',
+    accept: ACCEPTED_IMAGE_TYPES.join(','),
 };
 
 /**
@@ -90,7 +84,7 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = forwardRef((props, ref) => {
-    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton, accept } = props;
+    const { width, height, alertProps, img, setFileValue, alt, className, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton, accept } = props;
 
     // state
     const [imgSrc, setImgSrc] = useState(null);
@@ -163,21 +157,17 @@ const MokaImageInput = forwardRef((props, ref) => {
      */
     const onDrop = (acceptedFiles) => {
         wrapRef.current.classList.remove('dropzone-dragover');
-        if (ACCEPTED_IMAGE_TYPES.includes(acceptedFiles[0].type)) {
-            // 업로드 가능 확장자 체크
-            if (selectAccept.length > 0 && selectAccept.includes(acceptedFiles[0].type) === false) {
-                handleEtcAlert(`확장자가 ${selectAccept.map((n) => n.split('/')[1]).join(', ')}인 파일만 등록할 수 있습니다`);
-                return;
-            }
+        const extra = acceptedFiles[0].type;
 
+        // 확장자 체크
+        if (extra.indexOf('image/') > -1 && (accept === 'image/*' || accept.includes(extra))) {
             setAlert(false);
             setImgSrc(URL.createObjectURL(acceptedFiles[0]));
             imageShow();
             if (setFileValue) setFileValue(acceptedFiles[0]);
             if (onChange) onChange(acceptedFiles);
         } else {
-            // 이미지가 아닐 경우 alert 처리
-            setAlert(true);
+            handleEtcAlert(`확장자가 ${accept}인 파일만 등록할 수 있습니다`);
             imageHide();
             if (onChange) onChange();
         }
@@ -235,6 +225,9 @@ const MokaImageInput = forwardRef((props, ref) => {
                         ref={wrapRef}
                         as="div"
                     >
+                        {/* drag over mask */}
+                        <div className="dropzone-dragover-mask input-border" />
+
                         {/* 이미지 미리보기 */}
                         <Figure.Image className="center-image" alt={alt} src={imgSrc} ref={imgRef} onLoad={handleLoadImage} onError={handleErrorImage} />
 
@@ -271,9 +264,6 @@ const MokaImageInput = forwardRef((props, ref) => {
                         <span className="absolute-top w-100 h-100 input-border onerror-image-wrap" ref={defaultRef}>
                             {!alert && <Figure.Image src={img_logo} className="center-image onerror-image" alt="error" />}
                         </span>
-
-                        {/* drag over mask */}
-                        <div className="dropzone-dragover-mask input-border" />
                     </Figure>
                 );
             }}

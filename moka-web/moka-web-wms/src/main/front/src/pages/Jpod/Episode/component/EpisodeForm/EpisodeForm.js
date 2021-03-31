@@ -245,9 +245,9 @@ const EpisodeForm = ({
                                 ref={img1Ref}
                                 inputProps={{
                                     img: episode.shrImg,
+                                    accept: 'image/jpeg, image/png',
                                     setFileValue: (file) => onChangeImg('shrImgFile', file),
                                     deleteButton: true,
-                                    accept: 'image/jpeg',
                                 }}
                             />
                         </Col>
@@ -272,7 +272,7 @@ const EpisodeForm = ({
                                     img: episode.katalkImg,
                                     setFileValue: (file) => onChangeImg('katalkImgFile', file),
                                     deleteButton: true,
-                                    accept: 'image/jpeg',
+                                    accept: 'image/jpeg, image/png',
                                 }}
                             />
                         </Col>

@@ -275,7 +275,7 @@ const ChannelForm = (props) => {
                 inputProps={{
                     height: 80,
                     img: channel.chnlImg,
-                    // selectAccept: ['image/jpeg'],
+                    accept: 'image/jpeg, image/png',
                     setFileValue: (file) => onChangeImg('chnlImgFile', file),
                     deleteButton: true,
                 }}
@@ -302,6 +302,7 @@ const ChannelForm = (props) => {
                         inputProps={{
                             height: 80,
                             img: channel.chnlImgMob,
+                            accept: 'image/jpeg, image/png',
                             setFileValue: (file) => onChangeImg('chnlImgMobFile', file),
                             deleteButton: true,
                         }}
@@ -327,6 +328,7 @@ const ChannelForm = (props) => {
                         inputProps={{
                             height: 80,
                             img: channel.chnlThumb,
+                            accept: 'image/jpeg, image/png',
                             setFileValue: (file) => onChangeImg('chnlThumbFile', file),
                             deleteButton: true,
                         }}

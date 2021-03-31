@@ -64,7 +64,7 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, setError }) => {
                     </React.Fragment>
                 }
                 ref={fileRef}
-                inputProps={{ img: temp.imgLink, width: 280, height: (280 * 9) / 16, deleteButton: true, setFileValue }}
+                inputProps={{ img: temp.imgLink, width: 280, height: (280 * 9) / 16, deleteButton: true, setFileValue, accept: 'image/jpeg, image/png' }}
                 required
                 className="mb-2"
                 isInvalid={error.imgLink}

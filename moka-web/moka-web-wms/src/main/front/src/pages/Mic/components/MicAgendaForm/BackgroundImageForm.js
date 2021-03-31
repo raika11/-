@@ -67,7 +67,7 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
                         </Button>
                     </React.Fragment>
                 }
-                inputProps={{ img: agenda.agndImg, width: 280, setFileValue: setPcFileValue, deleteButton: true }}
+                inputProps={{ img: agenda.agndImg, width: 280, setFileValue: setPcFileValue, deleteButton: true, accept: 'image/jpeg, image/png' }}
             />
             <MokaInputLabel
                 as="imageFile"
@@ -92,7 +92,7 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
                         </Button>
                     </React.Fragment>
                 }
-                inputProps={{ img: agenda.agndImgMob, width: 280, setFileValue: setMFileValue, deleteButton: true }}
+                inputProps={{ img: agenda.agndImgMob, width: 280, setFileValue: setMFileValue, deleteButton: true, accept: 'image/jpeg, image/png' }}
             />
         </Form.Row>
     );

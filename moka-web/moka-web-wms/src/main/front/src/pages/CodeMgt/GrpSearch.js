@@ -54,12 +54,11 @@ const GrpSearch = () => {
 
     useEffect(() => {
         // 숨김코드 변경 시 바로 조회
-        handleSearch(false);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        handleSearch(true);
+        if (search.secretYn) {
+            handleSearch(true);
+        } else {
+            handleSearch(false);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search.secretYn]);
 

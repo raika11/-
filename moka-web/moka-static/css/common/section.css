@@ -5,10 +5,25 @@
 /* contents layout */
 .contents {padding-top: 30px; padding-bottom: 60px;}
 
-/* header */
-.header_nav_area {margin-bottom: 20px; padding: 0 0 18px !important; border-top: 0 !important; border-bottom: 4px solid #000;}
+/* header - nav */
+.header_nav_wrap {margin-top:26px;margin-bottom: 20px; padding: 0 0 18px !important; border-top: 0 !important; border-bottom: 1px solid #000;}
+.header_nav_wrap .header_nav_area {display: flex;}
+.header_nav_wrap .header_nav_area .page_title {font-size: 24px;font-weight: bold;line-height:inherit;letter-spacing: -0.3px;color: #000;}
+/* .header_nav_wrap .header_nav_area .header_nav {}
+.header_nav_wrap .header_nav_area .header_nav .nav {} */
+.header_nav_wrap .header_nav_area .header_nav .nav .nav_item {padding-right:26px;}
+
+.header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link {font-size:16px;font-weight: 500;line-height: 1.5;letter-spacing: -0.56px;color: #111;}
+
+
+
+
+
 .header_nav .nav .nav_item {display:inline-block;}
 .header_nav .nav .nav_item .nav_link {display:inline-block; width:100%; color: #111; font-size: 16px; font-weight: 500;}
+
+
+
 
 /***************************************    general     ************************************/
 .section.general .component {padding: 18px 0 40px; border-top: 1px solid #000; overflow: hidden;}
@@ -61,11 +76,15 @@
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
-    .header_nav_area {padding: 0 0 13px !important; border-top: 0 !important; border-bottom: 1px solid #000;}
+    .header_nav_wrap .header_nav_area {display: flex;flex-flow:column;}
+    /* .header_nav_wrap .header_nav_area .header_nav .nav .nav_item.page_title_area{padding-left:0;} */
+    /* .header_nav_area {padding: 0 0 13px !important; border-top: 0 !important; border-bottom: 1px solid #000;}
     .header_nav {margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e2e2;}
+
+    .header_nav .nav .nav_item.page_title_area{display:block;width:100%;}
     .header_nav .nav {display: flex; width: calc(100% + 40px); margin-left: -20px; padding-left: 20px; overflow-y: hidden; overflow-x: scroll; scrollbar-width: none; scrollbar-color: transparent transparent;}
     .header_nav .nav::-webkit-scrollbar {display: none; width: 0px; background: transparent;}
-    .header_nav .nav .nav_item {padding-right: 26px;}
+    .header_nav .nav .nav_item {padding-right: 26px;} */
     .swiper-container.catalog_home .swiper-button-prev, .swiper-container.catalog_home .swiper-button-next {display:none;}
 
     /***************************************    general     ************************************/
@@ -112,7 +131,11 @@
     .header_nav_wrap .page_title { font-size: 40px; }
     .header_nav .nav .nav_item {padding-right: 24px;}
     .header_nav .nav .nav_item .nav_link {color: #000; font-size: 14px;}
-    .header_nav_wrap .btn_area {position: absolute; right: 16px; bottom: 16px; width: auto;}
+    .header_nav_area .btn_area {position: absolute; right: 16px; bottom: 16px; width: auto;} */
+    .header_nav_wrap .header_nav_area {align-items:baseline;}
+    .header_nav_wrap .header_nav_area .page_title {display:inline-block;font-size:28px;letter-spacing:-0.35px;}
+    .header_nav_wrap .header_nav_area .page_title + .header_nav{margin-left:30px;}
+
 
     /***************************************    general     ************************************/
     .section.general {overflow: hidden;}
@@ -120,7 +143,7 @@
     .section.general .component > .row > * {padding-right: 20px;}
     .section.general .component > .row.no_grid > * {margin-right: 20px; padding-right: 0;}
     .section.general .component > .row > *:last-child {margin-right: 0; padding-right: 0;}
-    .section.general .component.header_nav_area > .row > * {padding-right: 0;}
+    /* .section.general .component.header_nav_area > .row > * {padding-right: 0;} */
     .section.general .component.showcase > .row > * {padding-right: 0;}    
     .section.general .component .sub_title {margin-bottom: 19px;}
     .section.general .component.showcase {padding: 0 0 20px;}
@@ -165,9 +188,16 @@
 @media (min-width:1024px) {
     .contents {padding-top: 88px; padding-bottom: 100px;}
 
-    .header_nav_area {margin-bottom: 30px;}
+
+    /* .header_nav_wrap {margin-bottom: 30px;}
     .header_nav .nav .nav_item {padding-right: 30px;}
-    .header_nav .nav .nav_item .nav_link {font-size: 16px;}
+    .header_nav .nav .nav_item .nav_link {font-size: 16px;} */
+
+
+    .page_title {
+        /* height: 59px; */
+        font-size: 40px;
+        letter-spacing: -0.5px;}
 
     /***************************************    general     ************************************/
     .section.general .component {padding: 18px 0 50px;}
@@ -314,8 +344,8 @@
 
 
     /* card */
-    .catalog .card_group {width:calc(100% + 20px);max-width:unset;margin-left:-10px;}
-    .catalog .card_group .card {padding:0 10px;}
+    /* .catalog .card_group {width:calc(100% + 20px);max-width:unset;margin-left:-10px;}
+    .catalog .card_group .card {padding:0 10px;} */
 
     /* rank */
     .card_group.rank .card {margin-bottom:20px;}

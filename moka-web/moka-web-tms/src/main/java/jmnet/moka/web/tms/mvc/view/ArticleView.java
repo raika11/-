@@ -18,6 +18,7 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
@@ -112,7 +113,7 @@ public class ArticleView extends AbstractView {
             // 기사정보 조회
             JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE, paramMap, true);
             Map<String, Object> articleInfo = (Map<String, Object>)jsonResult.get("article");
-            this.insertSubTitle(articleInfo);
+            this.convertContent(articleInfo);
             this.setEPaper(articleInfo,mergeContext);
             mergeContext.set("article", articleInfo);
             this.setCodesAndMenus(loader, articleInfo, mergeContext);
@@ -147,20 +148,46 @@ public class ArticleView extends AbstractView {
         }
     }
 
-    private void insertSubTitle(Map<String, Object> articleInfo) {
-        String content = (String) articleInfo.get("ART_CONTENT");
+    private void convertContent(Map<String, Object> articleInfo) {
+        String originalContent = (String) articleInfo.get("ART_CONTENT");
+
+        // 기본 , 일반 텍스트
+        String convertedContent = originalContent
+                .replaceAll("(?i)<div class=\"dim\".+?>.*?<\\/div>", "")
+                .replaceAll("(?i)<br.*?\\/?>", "<br>")
+                .replaceAll("\n", "<br>")
+                .trim();
+
+        //인용구
+        convertedContent = convertedContent.replaceAll("(?i)<div class=\"tag_quotation\">(.*?)</div>", "<div class=\"ab_quot\"><p>$1</p></div>");
+
+        // 인터뷰
+        convertedContent = convertedContent.replaceAll("(?i)<div class=\"tag_question\">(.*?)</div>", "<dt>$1</dt>");
+        convertedContent = convertedContent.replaceAll("(?i)<div class=\"tag_answer\">(.*?)</div>", "<dd>$1</dd>");
+        convertedContent = convertedContent.replaceAll("(?i)<div class=\"tag_interview\">(.*?)</div>", "<div class=\"ab_qa\"><dl>$1</dl></div>");
+
+        // 세로선박스 텍스트
+        // 위아래선박스 텍스트
+        // 박스기사
+
+        // 서브 타이틀
         Object subTitleObj = articleInfo.get("ART_SUB_TITLE");
-        if (subTitleObj == null) {
-            return;
+        if (McpString.isNotEmpty(subTitleObj)) {
+            convertedContent = insertSubTitle(convertedContent, (String)subTitleObj);
         }
+
+        articleInfo.put("ART_CONTENT", convertedContent);
+    }
+
+    private String insertSubTitle(String content, String subTitle) {
         Matcher matcher = PATTERN_BR.matcher(content);
         if (matcher.find()) { // 첫번째에 다음에 추가
             StringBuffer sb = new StringBuffer(content.length());
-            matcher.appendReplacement(sb, "$0<div class=\"ab_subtitle\"><p>" + (String) subTitleObj + "</p></div>");
+            matcher.appendReplacement(sb, "$0<div class=\"ab_subtitle\"><p>" + subTitle + "</p></div>");
             matcher.appendTail(sb);
             content = sb.toString();
-            articleInfo.put("ART_CONTENT", content);
         }
+        return content;
     }
 
     private void setEPaper(Map<String, Object> articleInfo, MergeContext mergeContext) {

@@ -10,7 +10,6 @@ import { MokaInput, MokaInputLabel } from '@/components';
 import { DB_DATEFORMAT, SCHEDULE_PERIOD } from '@/constants';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { invalidListToError } from '@/utils/convertUtil';
-import { getBoSchjob } from '@/store/codeMgt';
 import { initialState, getJob, clearJob, saveJob, deleteJob, getDeleteJobList } from '@/store/schedule';
 
 /**
@@ -21,7 +20,6 @@ const WorkEdit = ({ match }) => {
     const { jobSeq } = useParams();
     const dispatch = useDispatch();
     const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
-    const boSchjobRows = useSelector((store) => store.codeMgt.boSchjobRows);
     const deployServerCode = useSelector((store) => store.schedule.work.deployServerCode);
     const job = useSelector((store) => store.schedule.work.job);
     const [data, setData] = useState(initialState.work.job);
@@ -172,12 +170,6 @@ const WorkEdit = ({ match }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [job]);
 
-    useEffect(() => {
-        // 스케줄러 예약 코드
-        dispatch(getBoSchjob());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     return (
         <>
             <Card.Header>
@@ -245,16 +237,7 @@ const WorkEdit = ({ match }) => {
                                         ))}
                                 </MokaInputLabel>
                             )}
-                            {data.jobType === 'R' && (
-                                <MokaInputLabel label="백오피스 업무" as="select" name="backOffice" value={data.backOffice} onChange={handleChangeValue}>
-                                    {boSchjobRows &&
-                                        boSchjobRows.map((b) => (
-                                            <option key={b.id} value={b.id}>
-                                                {b.name}
-                                            </option>
-                                        ))}
-                                </MokaInputLabel>
-                            )}
+                            {data.jobType === 'R' && <MokaInputLabel label="백오피스 업무" name="jobNm" value={data.jobNm} onChange={handleChangeValue} />}
                         </Col>
                     </Form.Row>
                     <Form.Row className="mb-2">
@@ -290,7 +273,7 @@ const WorkEdit = ({ match }) => {
                     <Form.Row className="mb-2">
                         <Col sm={6} className="p-0">
                             <MokaInputLabel label="배포 서버" as="select" name="serverSeq" value={data.serverSeq} onChange={handleChangeValue}>
-                                <option value="0"></option>
+                                <option value=""></option>
                                 {deployServerCode &&
                                     deployServerCode.map((s) => (
                                         <option key={s.serverSeq} value={s.serverSeq}>
@@ -300,6 +283,8 @@ const WorkEdit = ({ match }) => {
                             </MokaInputLabel>
                         </Col>
                     </Form.Row>
+                    <MokaInputLabel label="배포 서버명" className="mb-2" name="jobNm" value={data.jobNm} onChange={handleChangeValue} />
+                    <MokaInputLabel label="옵션 파라미터" className="mb-2" name="pkgOpt" value={data.pkgOpt} onChange={handleChangeValue} />
                     <MokaInputLabel
                         label="배포 경로"
                         className="mb-2"
@@ -340,7 +325,7 @@ const WorkEdit = ({ match }) => {
                                 <MokaInputLabel
                                     label="마지막\n실행 정보"
                                     name="lastInfo"
-                                    className="mb-2 flex-fill"
+                                    className="flex-fill"
                                     value={
                                         data.jobStatus
                                             ? `${data.jobStatus.genResult && `생성: ${data.jobStatus.genResult}/${data.jobStatus.genExecTime}`}   ${

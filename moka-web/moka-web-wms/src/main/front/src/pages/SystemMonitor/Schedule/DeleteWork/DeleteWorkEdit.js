@@ -123,7 +123,8 @@ const DeleteWorkEdit = ({ match }) => {
                     <Form.Row className="mb-2">
                         <MokaInputLabel label="배포 서버" name="server" value={data.server} inputProps={{ readOnly: true }} />
                     </Form.Row>
-                    {/* <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} inputProps={{ readOnly: true }} /> */}
+                    <MokaInputLabel label="작업명" className="mb-2" name="jobNm" value={data.jobNm} inputProps={{ readOnly: true }} />
+                    <MokaInputLabel label="옵션 파라미터" className="mb-2" name="pkgOpt" value={data.pkgOpt} inputProps={{ readOnly: true }} />
                     <MokaInputLabel label="배포 경로" className="mb-2" name="targetPath" value={data.targetPath} inputProps={{ readOnly: true }} />
                     <MokaInputLabel label="패키지명" className="mb-2" name="pkgNm" value={data.pkgNm} inputProps={{ readOnly: true }} />
                     <MokaInputLabel label="설명" className="mb-2" name="jobDesc" value={data.jobDesc} inputProps={{ readOnly: true }} />

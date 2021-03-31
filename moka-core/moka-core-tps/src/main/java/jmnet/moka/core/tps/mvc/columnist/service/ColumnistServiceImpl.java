@@ -5,6 +5,7 @@ package jmnet.moka.core.tps.mvc.columnist.service;
 
 import java.util.Optional;
 import jmnet.moka.common.utils.McpFile;
+import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.tps.mvc.columnist.dto.ColumnistSearchDTO;
 import jmnet.moka.core.tps.mvc.columnist.entity.Columnist;
@@ -74,13 +75,14 @@ public class ColumnistServiceImpl implements ColumnistService {
         String extension = McpFile
                 .getExtension(thumbnail.getOriginalFilename())
                 .toLowerCase();
-        String fileName = String.valueOf(columnist.getSeqNo()) + "." + extension;
+
+        String filename = UUIDGenerator.uuid() + "." + extension;
 
         // 파일 저장
-        boolean upload = ftpHelper.upload(FtpHelper.PDS, fileName, thumbnail.getInputStream(), saveFilePath);
+        boolean upload = ftpHelper.upload(FtpHelper.PDS, filename, thumbnail.getInputStream(), saveFilePath);
         if (upload) {
             log.debug("SAVE COLUMNIST IMAGE");
-            String path = pdsUrl + saveFilePath + "/" + fileName;
+            String path = pdsUrl + saveFilePath + "/" + filename;
             return path;
         } else {
             log.debug("SAVE FAIL COLUMNIST IMAGE");

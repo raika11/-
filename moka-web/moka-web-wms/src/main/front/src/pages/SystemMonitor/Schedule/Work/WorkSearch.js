@@ -11,7 +11,7 @@ import { initialState, clearWorkSearch, getDistributeServerCode, getJobList, cha
 /**
  * 스케줄 서버 관리 > 작업 목록 검색
  */
-const WorkSearch = ({ match }) => {
+const WorkSearch = ({ show, match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const storeSearch = useSelector((store) => store.schedule.work.search);
@@ -49,6 +49,7 @@ const WorkSearch = ({ match }) => {
      */
     const handleClickReset = () => {
         dispatch(clearWorkSearch());
+        setSearch(initialState.work.search);
     };
 
     /**
@@ -59,8 +60,13 @@ const WorkSearch = ({ match }) => {
     };
 
     useEffect(() => {
-        dispatch(getJobList(getDistributeServerCode()));
-    }, [dispatch]);
+        if (show) {
+            dispatch(getJobList(getDistributeServerCode()));
+        } else {
+            dispatch(clearWorkSearch());
+            setSearch(initialState.work.search);
+        }
+    }, [dispatch, show]);
 
     useEffect(() => {
         setSearch(storeSearch);
@@ -85,12 +91,11 @@ const WorkSearch = ({ match }) => {
                     <Col xs={2} className="p-0 pr-2">
                         <MokaInput as="select" name="period" value={search.period} onChange={handleChangeValue}>
                             <option value="">주기 전체</option>
-                            {SCHEDULE_PERIOD &&
-                                SCHEDULE_PERIOD.map((p) => (
-                                    <option key={p.period} value={p.period}>
-                                        {p.periodNm}
-                                    </option>
-                                ))}
+                            {SCHEDULE_PERIOD.map((p) => (
+                                <option key={p.period} value={p.period}>
+                                    {p.periodNm}
+                                </option>
+                            ))}
                         </MokaInput>
                     </Col>
                     <Col xs={2} className="p-0 pr-2">

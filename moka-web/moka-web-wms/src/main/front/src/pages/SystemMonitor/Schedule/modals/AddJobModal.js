@@ -141,12 +141,11 @@ const AddJobModal = (props) => {
                     <Col xs={5} className="p-0">
                         {data.jobType === 'S' && (
                             <MokaInputLabel label="주기" as="select" name="period" value={data.period} onChange={handleChangeValue}>
-                                {SCHEDULE_PERIOD &&
-                                    SCHEDULE_PERIOD.filter((p) => p.period !== 0).map((p) => (
-                                        <option key={p.period} value={p.period}>
-                                            {p.periodNm}
-                                        </option>
-                                    ))}
+                                {SCHEDULE_PERIOD.filter((p) => p.period !== 0).map((p) => (
+                                    <option key={p.period} value={p.period}>
+                                        {p.periodNm}
+                                    </option>
+                                ))}
                             </MokaInputLabel>
                         )}
                         {data.jobType === 'R' && (
@@ -205,9 +204,10 @@ const AddJobModal = (props) => {
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>
+                <MokaInputLabel label="작업명" className="mb-2" name="jobNm" value={data.jobNm} onChange={handleChangeValue} />
+                <MokaInputLabel label="옵션 파라미터" className="mb-2" name="pkgOpt" value={data.pkgOpt} onChange={handleChangeValue} />
                 <MokaInputLabel label="배포 경로" className="mb-2" name="targetPath" value={data.targetPath} onChange={handleChangeValue} />
                 <MokaInputLabel label="패키지명" className="mb-2" name="pkgNm" value={data.pkgNm} onChange={handleChangeValue} required />
-                {/* <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} onChange={handleChangeValue} required /> */}
                 <MokaInputLabel as="textarea" label="설명" name="jobDesc" inputProps={{ rows: 5 }} value={data.jobDesc} onChange={handleChangeValue} />
             </Form>
         </MokaModal>

@@ -26,7 +26,9 @@ const PollDetailCompareAnswerContainer = ({ items, type, onChange, hasUrl }) => 
     };
 
     useEffect(() => {
-        setEditItems(items);
+        if (items.length === 2) {
+            setEditItems(items);
+        }
     }, [items]);
 
     let AnswerComponent = null;

@@ -57,7 +57,7 @@
 .case_unique .top_area_wrap .sub_title .fa_arrow_right_b { margin-left: 4px;}
 .case_unique .card_group .card_image { position: relative; margin-bottom: 0; }
 /* 임시 아이콘 이미지 변경시 소스 수정해야됨 */
-.fa_rect_w { width: 15px; height: 10px; border: 1.5px solid #fff;  }
+.fa_rect_w { display: inline-block; width: 15px; height: 10px; border: 1.5px solid #fff;  }
 .fa_rect_w::after { content: ''; position: absolute; left: 6px; top: 4px; width: 10px; height: 6px; border: 1.5px solid #fff;}
 .unique_trend .card_group { margin-top: -20px; }
 .unique_trend .card_group .col_lg4 { margin-top: 20px; }

@@ -33,6 +33,7 @@
     <link href="//stg-static.joongang.co.kr/css/common/section.css" rel="stylesheet">
 
     <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/utils/scroll.js"></script>
     
     <link rel="stylesheet" href="guide.css">
     <script src="guide.js"></script>
@@ -40,8 +41,23 @@
 
 </head>
 <body class="guide">
-    <header class="navbar">
+<div id="wrapper">
+
+    <!-- header -->
+    <header id="header" class="header">
+        <div class="uh flex flex_align_center flex_justify_center">
+            <a href="#" class="btn_navbar"><i class="icon_navbar">서비스 바로가기</i></a>
+            <h2 class="lh_sm22 lh_md16 lh_lg22">The JoongAng</h2>
+            <div class="right_area flex flex_align_center">
+                <a href="#" class="btn btn_myinfo">마이페이지</a> <!--임시 이미지-->
+                <a href="#" class="btn btn_search">검색하기</a> <!--임시 이미지-->
+            </div>
+        </div>
+    </header>
+    <!-- // header -->
+    <header class="header" > 
         <nav class="container flex_wrap flex-md-nowrap">
+            <h1 class="logo">중앙일보</h1>
             <div class="collapse navbar-collapse" id="bdNavbar">
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
                     <li class="nav_item col-6 col-md-auto">
@@ -73,7 +89,7 @@
     <div class="container_guide row">
         <script>include.aside.menu0()</script>
 
-        <main class="main_guide col_lg10">
+        <main class="main_guide col_lg10" style="height: 1200px;">
 sdfsdfs
         </main>
     </div>
@@ -83,5 +99,6 @@ sdfsdfs
             <p class="mb-0">Copyright by <a href="https://joongang.joins.com/" target="_blank">JoongAng Ilbo</a> Co., Ltd. All Rights Reserved</p>
         </div>
     </footer>
+</div>
 </body>
 </html>

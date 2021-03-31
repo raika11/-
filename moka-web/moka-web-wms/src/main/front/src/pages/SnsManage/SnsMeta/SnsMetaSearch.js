@@ -13,7 +13,6 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
 
     const handleSearchReset = () => {
         setDateType('today');
-        setDisabled({ date: true });
 
         if (onReset instanceof Function) {
             onReset(setOptions);
@@ -22,7 +21,6 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
 
     const handleClickSearch = () => {
         if (onSearch instanceof Function) {
-            console.log(options);
             onSearch(options);
         }
 

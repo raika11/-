@@ -155,13 +155,14 @@ const ArticlePage = ({ match }) => {
      */
     const handleAppendTag = useCallback(
         (data, itemType) => {
+            const nt = new Date().getTime();
             let tag = null;
             if (itemType === ITEM_CT) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.containerSeq}" name="${data.containerName}"/>\n`;
+                tag = `${nt}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.containerSeq}" name="${data.containerName}"/>\n`;
             } else if (itemType === ITEM_CP) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.componentSeq}" name="${data.componentName}"/>\n`;
+                tag = `${nt}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.componentSeq}" name="${data.componentName}"/>\n`;
             } else if (itemType === ITEM_TP) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.templateSeq}" name="${data.templateName}"/>\n`;
+                tag = `${nt}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.templateSeq}" name="${data.templateName}"/>\n`;
             }
             dispatch(appendTag(tag));
         },

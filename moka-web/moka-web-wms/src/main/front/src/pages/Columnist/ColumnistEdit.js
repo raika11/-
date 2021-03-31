@@ -299,8 +299,8 @@ const ColumnistEdit = ({ match }) => {
                     ref={imgFileRef}
                     inputProps={{
                         width: 267,
-                        img: temp.profilePhoto ? `${temp.profilePhoto}?t=${new Date().getTime()}` : null,
-                        selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
+                        img: temp.profilePhoto,
+                        selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정
                         setFileValue: handleChangeFile,
                         deleteButton: true,
                     }}

@@ -39,13 +39,13 @@
   <api id="comment">
     <description>기사의 댓글 목록을 조회한다.</description>
     <parameter>
-      <totalId desc="기사키" require="Y" default="">^[0-9]{1,9}$</totalId>
+      <contentId desc="기사키 또는 기자키" require="Y">^[0-9]{1,9}$</contentId>
       <referrer desc="레퍼러" require="Y">^.{1,500}$</referrer>
       <order desc="정렬" type="number">^[0-9]{1}$</order>
     </parameter>
     <request dmlType="sp" setNames="_DATA" outParam="_TOTAL,_DISP_TOTAL">dps.comment.list</request>
     <keys>
-      totalId
+      contentId
       referrer
       order
       #paging
@@ -59,14 +59,14 @@
   <api id="comment.my" membership="cookie">
     <description>기사의 내댓글 목록을 조회한다.</description>
     <parameter>
-      <totalId desc="기사키" require="Y" default="">^[0-9]{1,9}$</totalId>
+      <contentId desc="기사키 또는 기자키" require="Y">^[0-9]{1,9}$</contentId>
       <referrer desc="레퍼러" require="Y">^.{1,500}$</referrer>
       <order desc="정렬" type="number">^[0-9]{1}$</order>
     </parameter>
     <request dmlType="sp" setNames="_DATA" outParam="_TOTAL,_DISP_TOTAL">dps.comment.listMy
     </request>
     <keys>
-      totalId
+      contentId
       referrer
       order
       #paging

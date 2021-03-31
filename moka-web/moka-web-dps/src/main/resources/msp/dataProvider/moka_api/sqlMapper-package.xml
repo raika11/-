@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dps.package">
+
+
+  <!--package.info-->
+  <select id="info" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_MOKA_PACKAGE_SEL(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!--package.article-->
+  <select id="article" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_MOKA_PACKAGE_LIST_LIST_SEL(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{start, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{end, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!--package-->
+  <select id="list" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_MOKA_PACKAGE_LIST_SEL(
+      #{div, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{finish, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+</mapper>

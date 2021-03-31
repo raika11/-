@@ -37,6 +37,10 @@ const propTypes = {
      * className
      */
     className: PropTypes.string,
+    /**
+     * alert body 영역의 className
+     */
+    bodyClassName: PropTypes.string,
 };
 
 const defaultProps = {
@@ -50,7 +54,7 @@ const defaultProps = {
  * icon, outline 추가한 Alert
  */
 const MokaAlert = forwardRef((props, ref) => {
-    const { show, outline, variant, icon, dismissible, children, className, onHide, ...rest } = props;
+    const { show, outline, variant, icon, dismissible, children, className, onHide, bodyClassName, ...rest } = props;
 
     /**
      * 닫기 버튼
@@ -72,7 +76,7 @@ const MokaAlert = forwardRef((props, ref) => {
                 {...rest}
             >
                 {icon && <div className="alert-icon">{icon}</div>}
-                <div className="alert-message">{children}</div>
+                <div className={clsx('alert-message', bodyClassName)}>{children}</div>
             </Alert>
         );
     } else {

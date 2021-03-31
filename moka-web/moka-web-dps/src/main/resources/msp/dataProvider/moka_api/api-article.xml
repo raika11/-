@@ -102,33 +102,6 @@
     </keys>
   </api>
 
-  <!-- 이슈기사목록-->
-  <api id="issue.info">
-    <description>패키지 상세정보를 조회한다.</description>
-    <parameter>
-      <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
-    </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.article.issueInfo</request>
-    <request type="apiCall" resultName="LIST" apiId="issue"/>
-    <keys>
-      id
-      #paging
-    </keys>
-  </api>
-
-  <!-- 이슈기사목록-->
-  <api id="issue">
-    <description>패키지 기사목록을 조회한다.</description>
-    <parameter>
-      <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
-    </parameter>
-    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.article.issue</request>
-    <keys>
-      id
-      #paging
-    </keys>
-  </api>
-
   <!--기사 FLAG 정보-->
   <api id="article.flag">
     <description>기사 FLAG정보를 조회한다.</description>

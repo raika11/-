@@ -213,6 +213,7 @@ const ArticleList = (props) => {
                 isNaverChannel={isNaverChannel}
                 // 그룹넘버 변경 후 실행함수
                 onChangeGroupNumber={handleSearch}
+                movie={movie}
             />
 
             <AgGrid

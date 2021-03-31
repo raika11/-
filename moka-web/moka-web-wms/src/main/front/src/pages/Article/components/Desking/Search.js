@@ -11,7 +11,7 @@ import { initialState } from '@store/article';
  * 페이지편집 > 기사 목록 > 기사 검색
  */
 const Search = (props) => {
-    const { onChangeSearchOption, search, period, isNaverChannel, error, onSearch, onReset, onChangeGroupNumber, media = false } = props;
+    const { onChangeSearchOption, search, period, isNaverChannel, error, onSearch, onReset, onChangeGroupNumber, movie } = props;
     const [modalShow, setModalShow] = useState(false);
 
     /**
@@ -141,16 +141,16 @@ const Search = (props) => {
 
                     {/* 면 */}
                     <div style={{ width: 60 }} className="mr-2">
-                        <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} disabled={media} />
+                        <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} />
                     </div>
 
                     {/* 판 */}
                     <div style={{ width: 60 }} className="mr-2">
-                        <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} disabled={media} />
+                        <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} />
                     </div>
                 </div>
 
-                {!isNaverChannel && (
+                {!isNaverChannel && !movie && (
                     <React.Fragment>
                         <Button variant="outline-neutral" className="flex-shrink-0" onClick={() => setModalShow(true)}>
                             그룹지정

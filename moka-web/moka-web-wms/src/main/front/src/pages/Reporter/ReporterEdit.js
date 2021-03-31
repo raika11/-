@@ -10,7 +10,7 @@ import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 
 const ReporterInput = ({ label, value }) => (
-    <div className="d-flex align-items-center">
+    <div className="d-flex align-items-center h-100">
         <MokaInputLabel label={label} as="none" />
         <div className="flex-fill text-dark text-truncate">
             <OverlayTrigger overlay={<Tooltip id={label}>{value}</Tooltip>}>
@@ -263,7 +263,9 @@ const ReporterEdit = ({ match }) => {
                     </Col>
                 </Form.Row>
 
-                <MokaInputLabel as="none" className="mb-2" label="기자 한마디" />
+                <Form.Row className="mb-2">
+                    <MokaInputLabel as="none" label="기자 한마디" />
+                </Form.Row>
                 <MokaInput
                     as="textarea"
                     rows={3}

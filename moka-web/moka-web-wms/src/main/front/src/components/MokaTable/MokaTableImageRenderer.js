@@ -1,5 +1,10 @@
 import React, { useState, useRef, useImperativeHandle, forwardRef } from 'react';
+import clsx from 'clsx';
 import img_logo from '@assets/images/img_logo.png';
+
+const defaultProps = {
+    roundedCircle: false,
+};
 
 /**
  * ag-grid 셀에 이미지를 그리는 컴포넌트.
@@ -8,18 +13,26 @@ import img_logo from '@assets/images/img_logo.png';
  * @param {object} params ag grid params
  */
 const MokaTableImageRenderer = forwardRef((params, ref) => {
-    const { colDef } = params;
+    const { colDef, roundedCircle } = params;
     const [field] = useState(colDef.field);
     const [data, setData] = useState(params.node.data);
     const boxRef = useRef(null);
     const imgRef = useRef(null);
 
+    /**
+     * 이미지 로드 실패
+     * @param {object} e 이벤트
+     */
     const onError = (e) => {
         e.target.src = img_logo;
         boxRef.current.classList.add('onerror-image-wrap');
         e.target.classList.add('onerror-image');
     };
 
+    /**
+     * 이미지 로드 후 실행
+     * @param {object} e 이벤트
+     */
     const onLoad = (e) => {
         if (e.target.src.replace(window.location.origin, '') !== img_logo) {
             boxRef.current.classList.remove('onerror-image-wrap');
@@ -35,10 +48,27 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
     }));
 
     return (
-        <div className="d-flex h-100 w-100 align-items-center justify-content-center bg-white border overflow-hidden position-relative" ref={boxRef}>
-            <img src={data?.[field] || img_logo} className="center-image" ref={imgRef} alt={data?.imgAlt || ''} onError={onError} onLoad={onLoad} loading="lazy" />
+        <div
+            className={clsx('d-flex h-100 w-100 align-items-center justify-content-center overflow-hidden position-relative', {
+                'bg-white': !roundedCircle,
+                border: !roundedCircle,
+                'rounded-circle': roundedCircle,
+            })}
+            ref={boxRef}
+        >
+            <img
+                src={data?.[field] || img_logo}
+                className={clsx('center-image', { 'rounded-circle': roundedCircle })}
+                ref={imgRef}
+                alt={data?.imgAlt || ''}
+                onError={onError}
+                onLoad={onLoad}
+                loading="lazy"
+            />
         </div>
     );
 });
+
+MokaTableImageRenderer.defaultProps = defaultProps;
 
 export default MokaTableImageRenderer;

@@ -66,7 +66,8 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
         >
             <img
                 src={data?.[field]}
-                className={clsx('center-image', { 'rounded-circle': roundedCircle })}
+                // className={clsx('center-image', { 'rounded-circle': roundedCircle })}
+                className="center-image"
                 ref={imgRef}
                 alt={data?.imgAlt || ''}
                 onError={onError}

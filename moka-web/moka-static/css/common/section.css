@@ -6,8 +6,8 @@
 .contents {padding-top: 30px; padding-bottom: 60px;}
 
 /* header - nav */
-.header_nav_wrap {margin-top:26px;margin-bottom: 20px; padding: 0 0 18px !important; border-top: 0 !important; border-bottom: 1px solid #000;}
-.header_nav_wrap .header_nav_area {display: flex;}
+.header_nav_wrap {display: flex; margin-bottom: 20px; padding: 0 0 18px !important; border-top: 0 !important; border-bottom: 4px solid #000;}
+.header_nav_wrap .header_nav_area {display: flex; align-items: flex-end;}
 .header_nav_wrap .header_nav_area .page_title {font-size: 24px;font-weight: bold;line-height:inherit;letter-spacing: -0.3px;color: #000;}
 /* .header_nav_wrap .header_nav_area .header_nav {}
 .header_nav_wrap .header_nav_area .header_nav .nav {} */
@@ -26,23 +26,12 @@
 
 
 /***************************************    general     ************************************/
-.section.general .component {padding: 18px 0 40px; border-top: 1px solid #000; overflow: hidden;}
-.section.general .component .sub_title {margin-bottom: 20px;}
-.section.general .component .card {margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e2e2e2;}
+.title_wrap .title_area .title {margin-bottom: 20px;}
 
-.section.general .component.showcase {padding: 0; border-top: 0;}
+.showcase_general {padding: 20px 0 40px;}
 
-.section .component.fb_area {border-top: 0;}
-.section .component.fb_area .fa_facebook {margin-right: 10px;}
-
-.section.general .component.latest_area {border-top: 3px solid #000;}
-.section.general .component.latest_area .sub_title {margin-bottom: 18px;}
-
-.section.general .component.view_lank_area {border-top: 3px solid #000;}
-.section.general .component.view_lank_area .sub_title {margin-bottom: 18px;}
-
-.section.general .component.banner_area {padding: 0; border-top: 0; height: 100%;}
-
+.fb_wrap {background: #f7faff;}
+.fb_wrap .fa_facebook {margin-right: 10px;}
 
 
 /***************************************    unique     ************************************/
@@ -55,8 +44,6 @@
 .card_in .card_body .description { color: #fff;}
 .card_in .fa_rect_w::after { left: 11px; top: 8px; width: 22px; height: 14px;}
 .card_image .fa_rect_w { position: absolute; right: 14px; bottom: 12px;}
-.component .card_more { display: flex; align-items: center; justify-content: center; margin-top: 30px; padding: 20px 0; border-top: 1px solid #e2e2e2;}
-.component .card_more .fa_arrow_down_g { margin-left: 8px;}
 .case_unique .top_area_wrap .sub_title { display: flex; align-items: center;}
 .case_unique .top_area_wrap .sub_title .fa_arrow_right_b { margin-left: 4px;}
 .case_unique .card_group .card_image { position: relative; margin-bottom: 0; }
@@ -87,17 +74,11 @@
     .swiper-container.catalog_home .swiper-button-prev, .swiper-container.catalog_home .swiper-button-next {display:none;}
 
     /***************************************    general     ************************************/
-    .section.general .component .card:last-child {margin-bottom: 0; padding-bottom: 0; border-bottom: 0;}
-    .section.general .component.showcase .card.top_1 {margin-bottom: 20px; padding-bottom: 0; border-bottom: 0;}
-    .section.general .component.showcase .card.top_2 {margin-bottom: 16px; padding-bottom: 18px;}
-    .section.general .component.showcase .card.top_2:last-child {border-bottom: 1px solid #e2e2e2;}
-    .section.general .component.showcase .card.top_3:last-child {margin-bottom: 0; border-bottom: 0;}
+    .chain_wrap.correct {width: calc(100% + 40px); margin: 18px 0 20px; padding: 15px 20px;  margin-left: -20px; border-top: 0; background: #f5f5f5;}
 
-    .section.general .component.correct_noti {width: calc(100% + 40px); margin: 18px 0 20px; padding: 15px 20px;  margin-left: -20px; border-top: 0; background: #f5f5f5;}
+    .chain_wrap.facebook {width: calc(100% + 40px); margin-left: -20px; margin-bottom: 20px; padding: 20px !important;}
 
-    .section .component.fb_area {width: calc(100% + 40px); margin-left: -20px; margin-bottom: 20px; padding: 20px !important;}
-
-    .section.general .component.latest_area .card:first-child {padding-top: 16px; border-top: 1px solid #e2e2e2;}
+    .chain_wrap.latest .card:first-child {padding-top: 16px; border-top: 1px solid #e2e2e2;}
 
 
     /***************************************    catalog     ************************************/
@@ -124,7 +105,7 @@
 /* Medium devices (tablet + pc, 768px and up) */
 @media (min-width:768px) {
 
-    .contents.section .page_title {margin-right: 24px;}
+    /* .contents .page_title {margin-right: 24px;} */
 
     .header_nav_wrap {align-items: flex-end; flex-wrap: nowrap;}
     .header_nav_wrap .page_title { font-size: 40px; }
@@ -137,39 +118,7 @@
 
 
     /***************************************    general     ************************************/
-    .section.general {overflow: hidden;}
-    .section.general .component {padding: 18px 0 30px;}
-    .section.general .component > .row > * {padding-right: 20px;}
-    .section.general .component > .row.no_grid > * {margin-right: 20px; padding-right: 0;}
-    .section.general .component > .row > *:last-child {margin-right: 0; padding-right: 0;}
-    /* .section.general .component.header_nav_area > .row > * {padding-right: 0;} */
-    .section.general .component.showcase > .row > * {padding-right: 0;}    
-    .section.general .component .sub_title {margin-bottom: 19px;}
-    .section.general .component.showcase {padding: 0 0 20px;}
-    .section.general .component .card {margin-bottom: 0; padding-bottom: 0; border-bottom: 0;}
-    .section.general .component.showcase .card.top_1 .card_body {padding-left: 20px;}
-    .section.general .component.showcase .card.top_2 .card_body {padding-left: 20px;}
-    .section.general .component.showcase .card_group {margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e2e2;}
-    .section.general .component.showcase .card_group .card {padding-right: 10px; padding-left: 10px; border-right: 1px solid #e2e2e2;}
-    .section.general .component.showcase .card_group .card:first-child {padding-left: 0;}
-    .section.general .component.showcase .card_group .card:last-child {padding-right: 0; border-right: 0;}
     
-    .section.general .component.correct_noti {padding: 16px 0; border-top: 1px solid #e2e2e2;}
-
-    .section .component.fb_area {margin-bottom: 50px; padding: 25px 30px 25px 40px !important;}
-
-    .section.general .component.latest_area {float: left; width: 65.666666%;}
-    .section.general .component.latest_area .sub_title {margin-bottom: 23px;}
-    .section.general .latest_area .card {margin-bottom: 17px; padding-bottom: 20px; border-bottom: 1px solid #e2e2e2;}
-
-    .section.general .component.view_lank_area {float: right; width: 31.333333%; padding-bottom: 0;}
-    .section.general .component.view_lank_area .sub_title {margin-bottom: 23px;}
-    .section.general .view_lank_area .card {margin-bottom: 10px; padding-bottom: 10px; border-bottom: 0;}
-
-    .section.general .component.banner_area {float: right; width: 31.333333%; height: 213px;}
-
-    .section.general .component.latest_area .card,
-    .section.general .component.view_lank_area .card {padding-right: 0;}
 
 
     /***************************************    catalog     ************************************/
@@ -207,32 +156,7 @@
         letter-spacing: -0.5px;}
 
     /***************************************    general     ************************************/
-    .section.general .component {padding: 18px 0 50px;}
-    .section.general .component > .row > * {padding-right: 36px;}
-    .section.general .component.showcase > .row > * {padding-right: 36px;}
-    .section.general .component > .row.no_grid > * {margin-right: 36px; padding-right: 0;}
-    .section.general .component > .row > *:last-child {margin-right: 0; padding-right: 0;}
-    .component.general .sub_title {margin-bottom: 23px;}
-
-    .section.general .component.showcase {padding: 0 0 36px;}
-    .section.general .component.showcase .card {margin-bottom: 18px; padding-bottom: 30px; border-bottom: 1px solid #e2e2e2; border-right: 0;}
-    .section.general .component.showcase .card:last-child {margin-bottom: 0; padding-bottom: 0; border-bottom: 0;}
-    .section.general .component.showcase .card.top_1 .card_body {padding-left: 0;}
-    .section.general .component.showcase .card.top_2 .card_body {padding-left: 0;}
-    .section.general .component.showcase .card_group {flex-direction: column; margin-top: 0; padding-top: 0; border-top: 0;}
-    .section.general .component.showcase .card_group .card {padding-right: 0; padding-left: 0; border-right: 0;}
-
-    .section.general .component.correct_noti {padding: 18px 0 21px; border-top: 1px solid #e2e2e2;}
-
-    .section.general .component.latest_area .sub_title {margin-bottom: 30px;}
-    .section.general .latest_area .card {margin-bottom: 20px; padding-bottom: 30px;}
-
-    .section.general .component.view_lank_area .sub_title {margin-bottom: 30px;}
-
-    .section.general .component.banner_area {height: 366px;}
-
-    .section.general .component.latest_area .card,
-    .section.general .component.view_lank_area .card {padding-right: 0;}
+    
 
 
     /***************************************    catalog     ************************************/

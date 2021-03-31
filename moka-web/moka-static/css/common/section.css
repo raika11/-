@@ -6,13 +6,8 @@
 .contents {padding-top: 26px; padding-bottom: 60px;}
 
 /* header - nav */
-<<<<<<< HEAD
-.header_nav_wrap {display: flex; margin-bottom: 20px; padding: 0 0 18px !important; border-top: 0 !important; border-bottom: 4px solid #000;}
-.header_nav_wrap .header_nav_area {display: flex; align-items: flex-end;}
-=======
 .header_nav_wrap {margin-bottom: 20px; padding: 0 0 13px;border-bottom: 1px solid #000;}
 .header_nav_wrap .header_nav_area {display: flex;}
->>>>>>> 9bcb109d97abd51dd36c920db36542ffa6a5d92a
 .header_nav_wrap .header_nav_area .page_title {font-size: 24px;font-weight: bold;line-height:inherit;letter-spacing: -0.3px;color: #000;}
 .header_nav_wrap .header_nav_area .header_nav .nav .nav_item {display:inline-block;padding-right:26px;}
 .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2{font-size:16px;font-weight: 500;line-height: 1.5;letter-spacing: -0.56px;color: #111;}

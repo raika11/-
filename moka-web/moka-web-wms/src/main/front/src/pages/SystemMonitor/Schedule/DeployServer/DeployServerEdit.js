@@ -5,8 +5,6 @@ import moment from 'moment';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@/components';
 import { DB_DATEFORMAT } from '@/constants';
@@ -30,6 +28,7 @@ const DeployServerEdit = ({ match }) => {
         (e) => {
             const { name, value } = e.target;
             setData({ ...data, [name]: value });
+            setError({});
         },
         [data],
     );
@@ -43,7 +42,7 @@ const DeployServerEdit = ({ match }) => {
             errList = [];
 
         // 별칭 체크
-        if (!REQUIRED_REGEX.test(obj.serverNm)) {
+        if (!obj.serverNm || !REQUIRED_REGEX.test(obj.serverNm)) {
             errList.push({
                 field: 'serverNm',
                 reason: '별칭을 입력하세요',
@@ -51,7 +50,7 @@ const DeployServerEdit = ({ match }) => {
             isInvalid = isInvalid || true;
         }
         // IP 체크
-        if (!REQUIRED_REGEX.test(obj.serverIp)) {
+        if (!obj.serverIp || !REQUIRED_REGEX.test(obj.serverIp)) {
             errList.push({
                 field: 'serverIp',
                 reason: '서버 IP를 입력하세요',
@@ -59,7 +58,7 @@ const DeployServerEdit = ({ match }) => {
             isInvalid = isInvalid || true;
         }
         // 계정 체크
-        if (!REQUIRED_REGEX.test(obj.accessId)) {
+        if (!obj.accessId || !REQUIRED_REGEX.test(obj.accessId)) {
             errList.push({
                 field: 'accessId',
                 reason: '로그인 계정을 입력하세요',
@@ -67,12 +66,14 @@ const DeployServerEdit = ({ match }) => {
             isInvalid = isInvalid || true;
         }
         // 암호 체크
-        if (!REQUIRED_REGEX.test(obj.accessPwd)) {
-            errList.push({
-                field: 'accessPwd',
-                reason: '로그인 암호를 입력하세요',
-            });
-            isInvalid = isInvalid || true;
+        if (!serverSeq) {
+            if (!obj.accessPwd || !REQUIRED_REGEX.test(obj.accessPwd)) {
+                errList.push({
+                    field: 'accessPwd',
+                    reason: '로그인 암호를 입력하세요',
+                });
+                isInvalid = isInvalid || true;
+            }
         }
 
         setError(invalidListToError(errList));
@@ -97,8 +98,6 @@ const DeployServerEdit = ({ match }) => {
                     },
                 }),
             );
-        } else {
-            console.log('저장 실패');
         }
     };
 
@@ -175,52 +174,30 @@ const DeployServerEdit = ({ match }) => {
                     {serverSeq && (
                         <>
                             <Form.Row className="mb-2">
-                                <Col xs={7} className="p-0">
-                                    <OverlayTrigger
-                                        overlay={
-                                            <Tooltip id="server-reg-info">
-                                                {`${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember ? `${data.regMember.memberNm} (${data.regMember.memberId})` : ''}`}
-                                            </Tooltip>
-                                        }
-                                    >
-                                        <MokaInputLabel
-                                            label="등록 정보"
-                                            inputClassName="text-truncate"
-                                            value={
-                                                data.regDt
-                                                    ? `${moment(data.regDt).format(DB_DATEFORMAT)} ${
-                                                          data.regMember ? `${data.regMember.memberNm} (${data.regMember.memberId})` : ''
-                                                      }`
-                                                    : ''
-                                            }
-                                            inputProps={{ readOnly: true, plaintext: true }}
-                                        />
-                                    </OverlayTrigger>
-                                </Col>
+                                <MokaInputLabel
+                                    label="등록 정보"
+                                    inputClassName="text-truncate"
+                                    className="flex-fill"
+                                    value={
+                                        data.regDt
+                                            ? `${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember ? `${data.regMember.memberNm} (${data.regMember.memberId})` : ''}`
+                                            : ''
+                                    }
+                                    inputProps={{ readOnly: true, plaintext: true }}
+                                />
                             </Form.Row>
                             <Form.Row className="mb-2">
-                                <Col xs={7} className="p-0">
-                                    <OverlayTrigger
-                                        overlay={
-                                            <Tooltip id="server-reg-info">
-                                                {`${moment(data.modDt).format(DB_DATEFORMAT)} ${data.modMember ? `${data.modMember.memberNm} (${data.modMember.memberId})` : ''}`}
-                                            </Tooltip>
-                                        }
-                                    >
-                                        <MokaInputLabel
-                                            label="수정 정보"
-                                            inputClassName="text-truncate"
-                                            value={
-                                                data.modDt
-                                                    ? `${moment(data.modDt).format(DB_DATEFORMAT)} ${
-                                                          data.modMember ? `${data.modMember.memberNm} (${data.modMember.memberId})` : ''
-                                                      }`
-                                                    : ''
-                                            }
-                                            inputProps={{ readOnly: true, plaintext: true }}
-                                        />
-                                    </OverlayTrigger>
-                                </Col>
+                                <MokaInputLabel
+                                    label="수정 정보"
+                                    inputClassName="text-truncate"
+                                    className="flex-fill"
+                                    value={
+                                        data.modDt
+                                            ? `${moment(data.modDt).format(DB_DATEFORMAT)} ${data.modMember ? `${data.modMember.memberNm} (${data.modMember.memberId})` : ''}`
+                                            : ''
+                                    }
+                                    inputProps={{ readOnly: true, plaintext: true }}
+                                />
                             </Form.Row>
                         </>
                     )}

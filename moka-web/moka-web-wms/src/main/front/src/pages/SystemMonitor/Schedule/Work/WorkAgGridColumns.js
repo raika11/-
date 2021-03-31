@@ -19,7 +19,7 @@ export default [
     {
         headerName: '분류',
         field: 'categoryNm',
-        cellStyle: { textOverflow: 'ellipsis', lineHeight: '57px' },
+        cellStyle: { lineHeight: '60px' },
         width: 50,
         tooltipField: 'categoryNm',
     },

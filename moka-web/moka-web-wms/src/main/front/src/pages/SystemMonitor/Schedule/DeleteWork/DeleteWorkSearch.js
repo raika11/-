@@ -4,16 +4,18 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
-import { getDeleteJobList, changeDeleteWorkSearchOption, clearDeleteWorkSearch } from '@/store/schedule';
+import { SCHEDULE_PERIOD } from '@/constants';
+import { initialState, getDeleteJobList, changeDeleteWorkSearchOption, clearDeleteWorkSearch } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 삭제 작업 목록 검색
  */
-const DeleteWorkSearch = () => {
+const DeleteWorkSearch = ({ show }) => {
     const dispatch = useDispatch();
     const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
     const deployServerCode = useSelector((store) => store.schedule.work.deployServerCode);
-    const [search, setSearch] = useState({});
+    const storeSearch = useSelector((store) => store.schedule.deleteWork.search);
+    const [search, setSearch] = useState(initialState.deleteWork.search);
 
     /**
      * input value
@@ -45,11 +47,21 @@ const DeleteWorkSearch = () => {
      */
     const handleClickReset = () => {
         dispatch(clearDeleteWorkSearch());
+        setSearch(initialState.deleteWork.search);
     };
 
     useEffect(() => {
-        dispatch(getDeleteJobList());
-    }, [dispatch]);
+        if (show) {
+            dispatch(getDeleteJobList());
+        } else {
+            dispatch(clearDeleteWorkSearch());
+            setSearch(initialState.deleteWork.search);
+        }
+    }, [dispatch, show]);
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     return (
         <Form className="mb-14">
@@ -69,17 +81,11 @@ const DeleteWorkSearch = () => {
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="period" value={search.period} onChange={handleChangeValue}>
                         <option value="">주기 전체</option>
-                        <option value="30">30초</option>
-                        <option value="60">1분</option>
-                        <option value="120">2분</option>
-                        <option value="300">5분</option>
-                        <option value="600">10분</option>
-                        <option value="1200">20분</option>
-                        <option value="1800">30분</option>
-                        <option value="3600">1시간</option>
-                        <option value="43200">12시간</option>
-                        <option value="86400">24시간</option>
-                        <option value="p">상시</option>
+                        {SCHEDULE_PERIOD.map((p) => (
+                            <option key={p.period} value={p.period}>
+                                {p.periodNm}
+                            </option>
+                        ))}
                     </MokaInput>
                 </Col>
                 <Col xs={2} className="p-0 pr-2">

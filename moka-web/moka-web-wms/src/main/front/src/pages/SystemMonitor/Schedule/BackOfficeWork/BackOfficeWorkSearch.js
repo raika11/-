@@ -11,7 +11,7 @@ import { initialState, getJobHistoryList, getJobCode, changeBackOfficeWorkSearch
 /**
  * 스케줄 서버 관리 > 백오피스 예약작업 검색
  */
-const BackOfficeWorkSearch = () => {
+const BackOfficeWorkSearch = ({ show }) => {
     const dispatch = useDispatch();
     const jobCode = useSelector((store) => store.schedule.backOffice.jobCode);
     const storeSearch = useSelector((store) => store.schedule.backOffice.search);
@@ -64,14 +64,18 @@ const BackOfficeWorkSearch = () => {
     }, [storeSearch]);
 
     useEffect(() => {
-        dispatch(
-            getJobHistoryList(
-                getJobCode(),
-                changeBackOfficeWorkSearchOption({ ...search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) }),
-            ),
-        );
+        if (show) {
+            dispatch(
+                getJobHistoryList(
+                    getJobCode(),
+                    changeBackOfficeWorkSearchOption({ ...search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) }),
+                ),
+            );
+        } else {
+            changeBackOfficeWorkSearchOption({ ...search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) });
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [show]);
 
     return (
         <Form className="mb-14">

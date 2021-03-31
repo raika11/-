@@ -10,7 +10,7 @@ import { initialState, getJobStatisticSearchList, changeRunStateSearchOption, cl
 /**
  * 스케줄 서버 관리 > 작업 실행상태 검색
  */
-const RunStateSearch = () => {
+const RunStateSearch = ({ show }) => {
     const dispatch = useDispatch();
     const storeSearch = useSelector((store) => store.schedule.runState.search);
     const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
@@ -44,11 +44,21 @@ const RunStateSearch = () => {
      */
     const handleClickReset = () => {
         dispatch(clearRunStateSearch());
+        setSearch(initialState.runState.search);
     };
 
     useEffect(() => {
         setSearch(storeSearch);
     }, [storeSearch]);
+
+    useEffect(() => {
+        if (show) {
+            dispatch(getJobStatisticSearchList());
+        } else {
+            dispatch(clearRunStateSearch());
+            setSearch(initialState.runState.search);
+        }
+    }, [dispatch, show]);
 
     return (
         <Form className="mb-14">
@@ -68,12 +78,11 @@ const RunStateSearch = () => {
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="period" value={search.period} onChange={handleChangeValue}>
                         <option value="">주기 전체</option>
-                        {SCHEDULE_PERIOD &&
-                            SCHEDULE_PERIOD.map((p) => (
-                                <option key={p.period} value={p.period}>
-                                    {p.periodNm}
-                                </option>
-                            ))}
+                        {SCHEDULE_PERIOD.map((p) => (
+                            <option key={p.period} value={p.period}>
+                                {p.periodNm}
+                            </option>
+                        ))}
                     </MokaInput>
                 </Col>
                 <Col xs={2} className="p-0 pr-2">

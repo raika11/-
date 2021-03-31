@@ -2,17 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@/components';
 import columnDefs from './RunStateAgGridColumns';
-import { getJobStatisticList, changeRunStateSearchOption, GET_JOB_STATISTIC_LIST } from '@/store/schedule';
+import { getJobStatisticList, GET_JOB_STATISTIC_LIST } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 작업 실행상태 현황 AgGrid
  */
-const RunStateAgGrid = () => {
+const RunStateAgGrid = ({ show }) => {
     const dispatch = useDispatch();
-
-    const total = useSelector((store) => store.schedule.runState.statisticTotal);
     const list = useSelector((store) => store.schedule.runState.statisticList);
-    const search = useSelector((store) => store.schedule.runState.search);
     const loading = useSelector((store) => store.loading[GET_JOB_STATISTIC_LIST]);
 
     const [rowData, setRowData] = useState([]);
@@ -22,24 +19,18 @@ const RunStateAgGrid = () => {
      */
     const handleRowClicked = useCallback((row) => {}, []);
 
-    /**
-     * 테이블에서 검색옵션 변경하는 경우
-     * @param {object} payload 변경된 값
-     */
-    const handleChangeSearchOption = useCallback(
-        ({ key, value }) => {
-            let temp = { ...search, [key]: value };
-            if (key !== 'page') {
-                temp['page'] = 0;
-            }
-            dispatch(getJobStatisticList(changeRunStateSearchOption(temp)));
-        },
-        [dispatch, search],
-    );
-
     useEffect(() => {
-        dispatch(getJobStatisticList());
-    }, [dispatch]);
+        if (show) {
+            dispatch(
+                getJobStatisticList({
+                    search: {
+                        sort: 'jobSeq,desc',
+                        page: 0,
+                    },
+                }),
+            );
+        }
+    }, [dispatch, show]);
 
     useEffect(() => {
         setRowData(
@@ -55,6 +46,7 @@ const RunStateAgGrid = () => {
                 ab3600: `${job.a3600}개, ${job.b3600}초`,
                 ab43200: `${job.a43200}개, ${job.b43200}초`,
                 ab86400: `${job.a86400}개, ${job.b86400}초`,
+                ab0: `${job.a0}개, ${job.b0}초`,
             })),
         );
     }, [list]);
@@ -67,11 +59,8 @@ const RunStateAgGrid = () => {
             onRowNodeId={(row) => row.serverSeq}
             onRowClicked={handleRowClicked}
             loading={loading}
-            total={total}
-            page={search.page}
-            size={search.size}
+            paging={false}
             // selected={}
-            onChangeSearchOption={handleChangeSearchOption}
         />
     );
 };

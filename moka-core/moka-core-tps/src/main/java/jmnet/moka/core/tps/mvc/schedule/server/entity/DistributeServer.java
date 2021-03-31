@@ -1,15 +1,25 @@
 package jmnet.moka.core.tps.mvc.schedule.server.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
-import lombok.*;
-
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * 배포서버 엔티티
- * 2021. 1. 26. 김정민
+ * 배포서버 엔티티 2021. 1. 26. 김정민
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +28,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "TB_GEN_TARGET")
-public class DistributeServer extends BaseAudit{
+public class DistributeServer extends BaseAudit {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,17 +68,17 @@ public class DistributeServer extends BaseAudit{
     /**
      * 계정비밀번호
      */
-    @Column(name = "ACCESS_PWD")
+    @Column(name = "ACCESS_PWD", insertable = false, updatable = false)
     private String accessPwd;
 
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="REG_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
     private MemberSimpleInfo regMember;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="MOD_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "MOD_ID", insertable = false, updatable = false)
     private MemberSimpleInfo modMember;
 
 }

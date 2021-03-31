@@ -319,7 +319,7 @@ public class GroupRestController extends AbstractCommonController {
             tpsLogger.success(ActionType.DELETE);
 
             // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.group.success.delete"));
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {

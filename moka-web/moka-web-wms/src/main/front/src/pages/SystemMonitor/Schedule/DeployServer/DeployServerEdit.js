@@ -89,9 +89,10 @@ const DeployServerEdit = ({ match }) => {
                 saveDistributeServer({
                     server: data,
                     serverSeq: serverSeq ? Number(serverSeq) : null,
-                    callback: ({ header }) => {
+                    callback: ({ header, body }) => {
                         if (header.success) {
                             toast.success(header.message);
+                            history.push(`${match.path}/deploy-server/${body.serverSeq}`);
                         } else {
                             messageBox.alert(header.message);
                         }

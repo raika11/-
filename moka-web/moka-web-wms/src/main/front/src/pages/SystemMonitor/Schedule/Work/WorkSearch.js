@@ -127,7 +127,7 @@ const WorkSearch = ({ show, match }) => {
                 <Form.Row>
                     <Col xs={2} className="p-0 pr-2">
                         <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                            <option value="">전체</option>
+                            <option value="keyword0">전체</option>
                             <option value="keyword1">패키지명</option>
                             <option value="keyword2">배포 경로</option>
                             <option value="keyword3">설명</option>

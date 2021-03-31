@@ -40,15 +40,15 @@ public class MokaStorageController {
     private UploadFileHelper uploadFileHelper;
 
     /**
-     * 파일 서비스
+     * 템플릿 파일 서비스
      *
      * @param request HTTP 요청
      * @return 이미지 byte[]
      * @throws NoDataException 데이터없음
      */
-    @GetMapping(value = "/{business}/{domainId:\\d+}/{filename:\\d+\\.(?:jpe*g|JPE*G|png|PNG|gif|GIF)}", produces = {MediaType.IMAGE_JPEG_VALUE,
-                                                                                                                     MediaType.IMAGE_PNG_VALUE,
-                                                                                                                     MediaType.IMAGE_GIF_VALUE})
+    @GetMapping(value = "/{business}/{domainId:\\d+}/{filename:[\\w-\\d]+\\.(?:jpe*g|JPE*G|png|PNG|gif|GIF)}", produces = {MediaType.IMAGE_JPEG_VALUE,
+                                                                                                                           MediaType.IMAGE_PNG_VALUE,
+                                                                                                                           MediaType.IMAGE_GIF_VALUE})
     public ResponseEntity<byte[]> getImageAsResponseEntity(HttpServletRequest request, @PathVariable("business") String business,
             @PathVariable("domainId") String domainId, @PathVariable("filename") String filename)
             throws NoDataException {

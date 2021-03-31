@@ -93,6 +93,7 @@ var include = {
             document.write('            <ul class="nav">');
             document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Menu3</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">버튼</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="card.html">카드</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="rank.html">많이본기사(rank)</a></li>');
             document.write('            </ul>');
             document.write('        </li>');

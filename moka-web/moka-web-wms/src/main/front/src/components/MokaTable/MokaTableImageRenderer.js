@@ -1,4 +1,4 @@
-import React, { useState, useRef, useImperativeHandle, forwardRef } from 'react';
+import React, { useState, useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
 import clsx from 'clsx';
 import img_logo from '@assets/images/img_logo.png';
 
@@ -47,6 +47,14 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
         },
     }));
 
+    useEffect(() => {
+        if (!data?.[field] && boxRef.current && imgRef.current) {
+            boxRef.current.classList.add('onerror-image-wrap');
+            imgRef.current.src = img_logo;
+            imgRef.current.classList.add('onerror-image');
+        }
+    }, [data, field]);
+
     return (
         <div
             className={clsx('d-flex h-100 w-100 align-items-center justify-content-center overflow-hidden position-relative', {
@@ -57,7 +65,7 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
             ref={boxRef}
         >
             <img
-                src={data?.[field] || img_logo}
+                src={data?.[field]}
                 className={clsx('center-image', { 'rounded-circle': roundedCircle })}
                 ref={imgRef}
                 alt={data?.imgAlt || ''}

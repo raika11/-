@@ -6,6 +6,12 @@ export default [
         cellStyle: { lineHeight: '43px', whiteSpace: 'pre-wrap' },
     },
     {
+        headerName: '타입코드',
+        field: 'jplusRelDivNm',
+        width: 63,
+        cellStyle: { lineHeight: '43px' },
+    },
+    {
         headerName: '사진',
         field: 'profilePhoto',
         width: 50,
@@ -21,7 +27,8 @@ export default [
     {
         headerName: '이메일',
         field: 'email',
-        width: 200,
+        width: 160,
+        flex: 1,
         tooltipField: 'email',
         cellStyle: { lineHeight: '43px' },
     },
@@ -29,7 +36,7 @@ export default [
         headerName: '약력정보',
         field: 'profile',
         tooltipField: 'profile',
-        width: 200,
+        width: 160,
         flex: 1,
         cellStyle: { lineHeight: '43px' },
     },

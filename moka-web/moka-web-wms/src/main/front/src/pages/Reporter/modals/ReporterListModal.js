@@ -79,9 +79,10 @@ const ReporterListModal = (props) => {
     /**
      * 검색조건 변경
      */
-    const handleSearchOption = useCallback(
-        ({ key, value }) => {
-            setSearch({ ...search, [key]: value });
+    const handleChange = useCallback(
+        (e) => {
+            const { name, value } = e.target;
+            setSearch({ ...search, [name]: value });
         },
         [search],
     );
@@ -153,7 +154,7 @@ const ReporterListModal = (props) => {
             draggable
         >
             <div className="mb-14">
-                <MokaSearchInput name="keyword" value={search.keyword} onChange={handleSearchOption} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
+                <MokaSearchInput name="keyword" value={search.keyword} onChange={handleChange} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
             </div>
             <MokaTable
                 className="overflow-hidden flex-fill"

@@ -373,7 +373,7 @@ public class IssueRestController extends AbstractCommonController {
                         .getCatDiv()
                         .contains("C"))
                 .sorted(Comparator.comparingLong(PackageKeywordDTO::getKwdOrd))
-                .map(keyword -> keyword.getKeyword())
+                .map(keyword -> String.valueOf(keyword.getRepMaster()))
                 .collect(Collectors.toList())));
         dataDto.setPackageKeywords(keywords);
         return dataDto;

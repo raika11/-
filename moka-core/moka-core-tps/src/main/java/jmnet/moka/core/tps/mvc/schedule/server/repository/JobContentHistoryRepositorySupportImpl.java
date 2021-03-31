@@ -68,6 +68,7 @@ public class JobContentHistoryRepositorySupportImpl extends TpsQueryDslRepositor
         QueryResults<JobContentHistory> list = query
                 .leftJoin(jobContentHistory.jobContent, jobContent)
                 .fetchJoin()
+                .where(builder)
                 .fetchResults();
 
         return new PageImpl<JobContentHistory>(list.getResults(), pageable, list.getTotal());

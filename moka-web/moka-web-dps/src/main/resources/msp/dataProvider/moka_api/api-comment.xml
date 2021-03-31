@@ -41,7 +41,7 @@
     <parameter>
       <totalId desc="기사키" require="Y" default="">^[0-9]{1,9}$</totalId>
       <referrer desc="레퍼러" require="Y">^.{1,500}$</referrer>
-      <order desc="정렬" type="number">^[0-9]{1}</order>
+      <order desc="정렬" type="number">^[0-9]{1}$</order>
     </parameter>
     <request dmlType="sp" setNames="_DATA" outParam="_TOTAL,_DISP_TOTAL">dps.comment.list</request>
     <keys>
@@ -52,7 +52,28 @@
     </keys>
   </api>
 
-  <!--  <api id="comment.insert" membership="cookie">-->
+  <!--
+  내댓글 목록 조회
+  http://localhost:8081/moka_api/comment.my?totalId=23530553&referrer=joongang.joins.com/article&order=3
+  -->
+  <api id="comment.my" membership="cookie">
+    <description>기사의 내댓글 목록을 조회한다.</description>
+    <parameter>
+      <totalId desc="기사키" require="Y" default="">^[0-9]{1,9}$</totalId>
+      <referrer desc="레퍼러" require="Y">^.{1,500}$</referrer>
+      <order desc="정렬" type="number">^[0-9]{1}$</order>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL,_DISP_TOTAL">dps.comment.listMy
+    </request>
+    <keys>
+      totalId
+      referrer
+      order
+      #paging
+    </keys>
+  </api>
+
+  <!--  <api id="comment.insert" membership="cookie" method="post">-->
   <!--    <description>댓글을 등록한다</description>-->
   <!--    <parameter>-->
   <!--      <parent desc="부모댓글SEQ" default="0" type="number">^[0-9]$</parent>-->

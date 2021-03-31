@@ -74,4 +74,9 @@ public class PackageServiceImpl implements PackageService {
                 .forEach(keyword -> keyword.setPackageMaster(packageMaster));
         return packageRepository.save(packageMaster);
     }
+
+    @Override
+    public PackageMaster updatePackageMaster(PackageMaster packageMaster) {
+        return packageRepository.save(packageMaster);
+    }
 }

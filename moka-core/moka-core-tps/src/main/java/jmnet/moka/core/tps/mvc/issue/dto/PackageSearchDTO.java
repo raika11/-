@@ -45,6 +45,7 @@ public class PackageSearchDTO extends SearchDTO {
     private Date endDt;
 
     @ApiModelProperty("카테고리")
+    @Pattern(regexp = "^(all)|([\\d|\\,]*)$", message = "{tps.issue.error.pattern.catList}")
     private String category = TpsConstants.SEARCH_TYPE_ALL;
 
     @ApiModelProperty("패키지유형")

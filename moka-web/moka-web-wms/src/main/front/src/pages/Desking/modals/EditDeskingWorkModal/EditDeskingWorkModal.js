@@ -173,7 +173,7 @@ const EditDeskingWorkModal = (props) => {
             titleAs={
                 !isDummy && (
                     <div className="w-100 d-flex flex-column">
-                        <div className="d-flex h2 mb-0 user-select-text">
+                        <div className="d-flex h2 color-gray-800 mb-0 user-select-text">
                             <p className="m-0 mr-2">{deskingWorkData.rel ? `0${deskingWorkData.relOrd}`.substr(-2) : `0${deskingWorkData.contentOrd}`.substr(-2)}</p>
                             <p className="m-0">{deskingWorkData.title}</p>
                         </div>
@@ -188,7 +188,7 @@ const EditDeskingWorkModal = (props) => {
             }
             title={isDummy ? '공백 기사' : undefined}
             width={650}
-            size="lg"
+            size="md"
             show={show}
             onHide={onHide}
             buttons={[

@@ -28,7 +28,7 @@ const MokaBreadcrumb = ({ match, menuPaths, menuById, nonResponsive, side, curre
     }, [menuPaths, match, menuById, currentMenu, menu.menuPaths, menu.menuById]);
 
     return (
-        <Breadcrumb listProps={{ className: 'mb-0 bg-white p-0 pl-3 pr-3' }}>
+        <Breadcrumb listProps={{ className: 'mb-0 bg-white p-0 pl-3 pr-3 ft-14' }}>
             {parents &&
                 parents.map((data) => (
                     // 클릭 못하게 하려고 active로 함

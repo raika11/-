@@ -9,7 +9,7 @@ import { initialState, getInternalApiList, changeSearchOption } from '@store/int
 import { MokaInput, MokaSearchInput } from '@/components';
 
 /**
- * API 검색
+ * API 관리 > API 목록 > 검색
  */
 const InternalApiSearch = ({ match }) => {
     const history = useHistory();
@@ -65,57 +65,53 @@ const InternalApiSearch = ({ match }) => {
     }, [dispatch]);
 
     return (
-        <Form className="mb-14">
-            <Form.Row>
-                <Col xs={4} className="d-flex p-0 pr-2">
-                    <MokaInput as="select" name="apiMethod" value={search.apiMethod} onChange={handleChangeValue}>
-                        <option value="">방식 전체</option>
-                        {httpMethodRows &&
-                            httpMethodRows.map((method) => (
-                                <option key={method.id} value={method.id}>
-                                    {method.name}
-                                </option>
-                            ))}
+        <Form.Row className="mb-14">
+            <Col xs={4} className="d-flex p-0 pr-2">
+                <MokaInput as="select" name="apiMethod" value={search.apiMethod} onChange={handleChangeValue}>
+                    <option value="">방식 전체</option>
+                    {httpMethodRows &&
+                        httpMethodRows.map((method) => (
+                            <option key={method.id} value={method.id}>
+                                {method.name}
+                            </option>
+                        ))}
+                </MokaInput>
+                <div className="flex-shrink-0 ml-2">
+                    <MokaInput as="select" name="usedYn" value={search.usedYn} onChange={handleChangeValue}>
+                        {initialState.usedYnList.map((li) => (
+                            <option key={li.id} value={li.id}>
+                                {li.name}
+                            </option>
+                        ))}
                     </MokaInput>
-                    <div className="flex-shrink-0 ml-2">
-                        <MokaInput as="select" name="usedYn" value={search.usedYn} onChange={handleChangeValue}>
-                            {initialState.usedYnList.map((li) => (
-                                <option key={li.id} value={li.id}>
-                                    {li.name}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </div>
-                </Col>
-                <Col xs={8} className="mb-14 d-flex p-0">
-                    <div className="flex-shrink-0 mr-2">
-                        <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                            {initialState.searchTypeList.map((type) => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </div>
-                    <MokaSearchInput
-                        className="flex-fill mr-1"
-                        name="keyword"
-                        value={search.keyword}
-                        placeholder="검색어를 입력하세요"
-                        onChange={handleChangeValue}
-                        onSearch={handleSearch}
-                    />
-                    <Button variant="outline-neutral" className="flex-shrink-0" onClick={handleClickReset}>
-                        초기화
-                    </Button>
-                </Col>
-            </Form.Row>
-            <div className="d-flex justify-content-end">
-                <Button variant="positive" onClick={handleClickAdd}>
+                </div>
+            </Col>
+            <Col xs={8} className="d-flex p-0">
+                <div className="flex-shrink-0 mr-2">
+                    <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                        {initialState.searchTypeList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
+                    </MokaInput>
+                </div>
+                <MokaSearchInput
+                    className="flex-fill mr-1"
+                    name="keyword"
+                    value={search.keyword}
+                    placeholder="검색어를 입력하세요"
+                    onChange={handleChangeValue}
+                    onSearch={handleSearch}
+                />
+                <Button variant="negative" className="flex-shrink-0 mr-1" onClick={handleClickReset}>
+                    초기화
+                </Button>
+                <Button variant="positive" className="flex-shrink-0" onClick={handleClickAdd}>
                     등록
                 </Button>
-            </div>
-        </Form>
+            </Col>
+        </Form.Row>
     );
 };
 

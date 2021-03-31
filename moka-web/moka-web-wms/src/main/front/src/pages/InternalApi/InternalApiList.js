@@ -3,7 +3,7 @@ import Search from './InternalApiSearch';
 import AgGrid from './InternalApiAgGrid';
 
 /**
- * API 목록
+ * API 관리 > API 목록
  */
 const InternalApiList = (props) => {
     return (

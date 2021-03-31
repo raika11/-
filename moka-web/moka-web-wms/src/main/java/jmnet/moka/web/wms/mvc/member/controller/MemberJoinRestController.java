@@ -471,4 +471,25 @@ public class MemberJoinRestController extends AbstractCommonController {
         }
         return requestTemplateName;
     }
+
+    /**
+     * 인증번호 확인
+     *
+     * @param smsAuth 인증번호 (필수)
+     * @return 인증번호 확인
+     */
+    @ApiOperation(value = "인증번호 확인")
+    @GetMapping("/{smsAuth}/exists")
+    public ResponseEntity<?> smsAuthCheck(
+            @ApiParam("인증번호") @PathVariable("smsAuth") @Size(min = 1, max = 6, message = "{tps.member.error.pattern.smsAuth}") String smsAuth) {
+
+        boolean same = smsAuth.equals("4885");
+        if (!same) {
+            throw new PasswordNotMatchedException(msg("tps.member.error.sms-unmatched"));
+        }
+
+        ResultDTO<Boolean> resultDto = new ResultDTO<>(same);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
 }

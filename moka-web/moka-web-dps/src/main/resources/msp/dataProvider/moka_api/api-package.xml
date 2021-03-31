@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+  -->
+
+<apiConfig>
+
+  <!-- 패키지상세 -->
+  <api id="package.info">
+    <description>패키지 상세정보를 조회한다.</description>
+    <parameter>
+      <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.package.info</request>
+    <request type="apiCall" resultName="LIST" apiId="package.article"/>
+    <keys>
+      id
+      start
+      end
+      #paging
+    </keys>
+  </api>
+
+  <!-- 패키지 기사목록 -->
+  <api id="package.article">
+    <description>패키지 기사목록을 조회한다.</description>
+    <parameter>
+      <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
+      <start type="number" desc="연재시작번호">^[0-9]{1,20}$</start>
+      <end type="number" desc="연재끝번호">^[0-9]{1,20}$</end>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.package.article</request>
+    <keys>
+      id
+      start
+      end
+      #paging
+    </keys>
+  </api>
+
+  <!--타입별 패키지목록 -->
+  <api id="package">
+    <description>패키지목록을 타입별로 조회한다.</description>
+    <parameter>
+      <div desc="패키지타입" require="Y" default="I">^[T|I|S]{1}$</div>
+      <order desc="정렬" type="number">^[0-9]{1}$</order>
+      <finish desc="완결여부">^[Y]{1}$</finish>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.package.list</request>
+    <keys>
+      div
+      order
+      finish
+      #paging
+    </keys>
+  </api>
+
+</apiConfig>

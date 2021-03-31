@@ -10,7 +10,7 @@ export default [
     },
     {
         headerName: '기자번호',
-        field: 'repSeq',
+        field: 'repSeqText',
         width: 65,
         cellStyle: { lineHeight: '43px', whiteSpace: 'pre-wrap' },
     },

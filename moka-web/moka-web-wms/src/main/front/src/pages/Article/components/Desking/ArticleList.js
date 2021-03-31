@@ -19,6 +19,7 @@ const propTypes = {
     className: PropTypes.string,
     /**
      * 선택한 컴포넌트의 데이터
+     * @default
      */
     selectedComponent: PropTypes.object,
     /**

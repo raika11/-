@@ -93,7 +93,7 @@
 
     /* .contents .page_title {margin-right: 24px;} */
 
-    .header_nav_wrap {align-items: flex-end; flex-wrap: nowrap;padding-bottom:18px;}
+    .header_nav_wrap {align-items: flex-end; flex-wrap: nowrap;padding-bottom:18px;border-bottom-width:3px;}
     .header_nav_wrap .page_title {padding-top:5px;font-size: 40px; }
     .header_nav .nav .nav_item {padding-right: 24px;}
     .header_nav .nav .nav_item .nav_link {color: #000; font-size: 14px;}

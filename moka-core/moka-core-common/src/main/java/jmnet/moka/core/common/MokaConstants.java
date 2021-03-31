@@ -79,6 +79,9 @@ public class MokaConstants {
     public static final String MERGE_AMP_ARTICE_PREFIX = "/amparticle";
     public static final String MERGE_DIGITAL_SPECIAL_PREFIX = "/digitalspecial";
     public static final String MERGE_SITEMAP_PREFIX = "/sitemap/index";
+    public static final String MERGE_ISSUE_PREFIX = "/issue";
+    public static final String MERGE_SERIES_PREFIX = "/series";
+    public static final String MERGE_TOPIC_PREFIX = "/topic";
 
     /* TMS Custom Token */
     public static final String MERGE_CONTEXT_DOMAIN = "domain";
@@ -98,6 +101,8 @@ public class MokaConstants {
     public static final String MERGE_CONTEXT_ARTICLE = "article";
     public static final String MERGE_CONTEXT_ARTICLE_ID = "articleId";
     public static final String MERGE_CONTEXT_DIGITAL_SPECIAL_ID = "digitalSpecialId";
+    public static final String MERGE_CONTEXT_PACKAGE_TYPE = "packageType";
+    public static final String MERGE_CONTEXT_PACKAGE_ID = "packageId";
     public static final String MERGE_CONTEXT_BODY = "body";
     public static final String MERGE_CONTEXT_REG_ID = "regId";
     public static final String MERGE_CONTEXT_EDITION_SEQ = "editionSeq";

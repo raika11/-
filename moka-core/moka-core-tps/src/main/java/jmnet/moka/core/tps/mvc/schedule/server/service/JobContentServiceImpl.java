@@ -1,5 +1,8 @@
 package jmnet.moka.core.tps.mvc.schedule.server.service;
 
+import java.util.List;
+import java.util.Optional;
+import javax.persistence.EntityManager;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSearchDTO;
@@ -9,20 +12,17 @@ import jmnet.moka.core.tps.mvc.schedule.server.repository.JobContentHistoryRepos
 import jmnet.moka.core.tps.mvc.schedule.server.repository.JobContentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import javax.persistence.EntityManager;
-import java.util.Optional;
-
 @Service
 @Slf4j
-public class JobContentServiceImpl implements JobContentService{
+public class JobContentServiceImpl implements JobContentService {
 
     @Value("http://172.29.58.94:8150")  //로컬 스케쥴서버 주소
     private String schdulerServer;
@@ -44,6 +44,11 @@ public class JobContentServiceImpl implements JobContentService{
     }
 
     @Override
+    public List<JobContent> findJobContentCodeList() {
+        return jobContentRepository.findAllByUsedYnAndDelYnAndJobType(MokaConstants.YES, MokaConstants.NO, "R");
+    }
+
+    @Override
     public Page<JobContent> findJobContentList(JobContentSearchDTO search) {
         return jobContentRepository.findJobContentList(search, search.getPageable());
     }
@@ -56,15 +61,19 @@ public class JobContentServiceImpl implements JobContentService{
     @Override
     public JobContent insertJobContent(JobContent jobContent) {
         JobContent result = jobContentRepository.save(jobContent);
-        try{
+        try {
             String url = "";
             MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
 
             //등록 + 사용가능 + 반복성Job
-            if(result.getUsedYn().equals(MokaConstants.YES) & result.getJobType().equals("S")){
-                url = schdulerServer + "/api/schedule/"+ result.getJobSeq();
+            if (result
+                    .getUsedYn()
+                    .equals(MokaConstants.YES) & result
+                    .getJobType()
+                    .equals("S")) {
+                url = schdulerServer + "/api/schedule/" + result.getJobSeq();
                 ResponseEntity<String> responseEntity = restTemplateHelper.post(url, params);   //반복성job 등록
-                log.debug("add schedule job result : "+ responseEntity.toString());
+                log.debug("add schedule job result : " + responseEntity.toString());
             }
             /*
             //등록 + 사용가능 + 일회성Job (현재 기획부재로 등록방법이 미정 / 하드코딩된 데이터로 대체)
@@ -77,7 +86,7 @@ public class JobContentServiceImpl implements JobContentService{
                 log.debug("add reserved job result : "+ responseEntity.toString());
             }
             */
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("add job for scheduler is failed.");
         }
         return result;
@@ -86,21 +95,29 @@ public class JobContentServiceImpl implements JobContentService{
     @Override
     public JobContent updateJobContent(JobContent jobContent) {
         JobContent result = jobContentRepository.save(jobContent);
-        try{
+        try {
             String url = "";
             MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
 
             //수정 + 사용가능 + 반복성Job
-            if(result.getUsedYn().equals(MokaConstants.YES) & result.getJobType().equals("S")){
-                url = schdulerServer + "/api/schedule/"+ result.getJobSeq();
+            if (result
+                    .getUsedYn()
+                    .equals(MokaConstants.YES) & result
+                    .getJobType()
+                    .equals("S")) {
+                url = schdulerServer + "/api/schedule/" + result.getJobSeq();
                 ResponseEntity<String> responseEntity = restTemplateHelper.post(url, params);   //반복성job 등록
-                log.debug("add schedule job result : "+ responseEntity.toString());
+                log.debug("add schedule job result : " + responseEntity.toString());
             }
             //수정 + 사용불가 + 반복성Job
-            else if(result.getUsedYn().equals(MokaConstants.NO) & result.getJobType().equals("S")){
-                url = schdulerServer + "/api/schedule/"+ result.getJobSeq();
+            else if (result
+                    .getUsedYn()
+                    .equals(MokaConstants.NO) & result
+                    .getJobType()
+                    .equals("S")) {
+                url = schdulerServer + "/api/schedule/" + result.getJobSeq();
                 ResponseEntity<String> responseEntity = restTemplateHelper.delete(url); //반복성job 삭제
-                log.debug("remove schedule job result : "+ responseEntity.toString());
+                log.debug("remove schedule job result : " + responseEntity.toString());
             }
             /*
             //수정 + 사용가능 + 일회성Job (현재 기획부재로 등록방법이 미정 / 직접 DB에 등록한 데이터를 조회하도록 처리)
@@ -117,7 +134,7 @@ public class JobContentServiceImpl implements JobContentService{
                 }
             }
             */
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("update job for scheduler is failed.");
         }
 
@@ -129,25 +146,31 @@ public class JobContentServiceImpl implements JobContentService{
         jobContent.setDelYn(MokaConstants.YES);
         jobContentRepository.save(jobContent);
 
-        try{
+        try {
             String url = "";
             MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
 
             //삭제 + 사용가능 + 반복성Job
-            if(jobContent.getUsedYn().equals(MokaConstants.YES) & jobContent.getJobType().equals("S")){
-                url = schdulerServer + "/api/schedule/"+ jobContent.getJobSeq();
+            if (jobContent
+                    .getUsedYn()
+                    .equals(MokaConstants.YES) & jobContent
+                    .getJobType()
+                    .equals("S")) {
+                url = schdulerServer + "/api/schedule/" + jobContent.getJobSeq();
                 ResponseEntity<String> responseEntity = restTemplateHelper.delete(url); //반복성job 삭제
-                log.debug("remove schedule job result : "+ responseEntity.toString());
+                log.debug("remove schedule job result : " + responseEntity.toString());
             }
 
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("delete job for schedule is failed.");
         }
     }
 
     @Override
     public boolean isValidData(JobContentSearchDTO search) {
-        return jobContentRepository.findJobContent(search).isPresent();
+        return jobContentRepository
+                .findJobContent(search)
+                .isPresent();
     }
 
     @Override
@@ -172,15 +195,19 @@ public class JobContentServiceImpl implements JobContentService{
     public void updateDeleteJobContent(JobContent jobContent) {
         jobContent.setDelYn(MokaConstants.NO);
         JobContent result = jobContentRepository.save(jobContent);
-        try{
+        try {
             String url = "";
             MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
 
             //수정 + 사용가능 + 반복성Job
-            if(result.getUsedYn().equals(MokaConstants.YES) & result.getJobType().equals("S")){
-                url = schdulerServer + "/api/schedule/"+ result.getJobSeq();
+            if (result
+                    .getUsedYn()
+                    .equals(MokaConstants.YES) & result
+                    .getJobType()
+                    .equals("S")) {
+                url = schdulerServer + "/api/schedule/" + result.getJobSeq();
                 ResponseEntity<String> responseEntity = restTemplateHelper.post(url, params);   //반복성job 등록
-                log.debug("add schedule job result : "+ responseEntity.toString());
+                log.debug("add schedule job result : " + responseEntity.toString());
             }
             /*
             //수정 + 사용가능 + 일회성Job (현재 기획부재로 등록방법이 미정 / 직접 DB에 등록한 데이터를 조회하도록 처리)
@@ -197,7 +224,7 @@ public class JobContentServiceImpl implements JobContentService{
                 }
             }
             */
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("update job for scheduler is failed.");
         }
     }

@@ -22,6 +22,7 @@ export const initialState = {
             parent: {},
             previewRsrc: '',
             usedYn: 'N',
+            compYn: 'N',
             areaAlign: AREA_ALIGN_V,
         },
         areaCompLoad: {

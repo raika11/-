@@ -49,6 +49,7 @@ import searchKeyword from '@store/searchKeyword/searchKeywordReducer';
 import quiz from '@store/survey/quiz/quizReducer';
 import mic from '@store/mic/micReducer';
 import schedule from '@store/schedule/scheduleReducer';
+import issue from '@store/issue/issueReducer';
 
 export default combineReducers({
     toastr,
@@ -100,4 +101,5 @@ export default combineReducers({
     mic,
     quiz,
     schedule,
+    issue,
 });

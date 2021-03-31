@@ -17,6 +17,7 @@ import jmnet.moka.web.schedule.mvc.mybatis.mapper.JoinsNewsRssJobMapper;
 import jmnet.moka.web.schedule.mvc.mybatis.vo.JoinsNewsVO;
 import jmnet.moka.web.schedule.support.StatusResultType;
 import jmnet.moka.web.schedule.support.common.FileUpload;
+import jmnet.moka.web.schedule.support.common.ReplaceSymbol;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -75,7 +76,7 @@ public class JoinsNewsRssJob extends AbstractScheduleJob {
                 ctg = McpString.defaultValue((String) jsonParam.get("ctg"));
                 filename = McpString.defaultValue((String) jsonParam.get("filename"));
             }
-            log.debug("{] ctg : {}", scheduleInfo.getJobSeq(), ctg);
+            log.debug("{} ctg : {}", scheduleInfo.getJobSeq(), ctg);
             log.debug("{} filename : {}", scheduleInfo.getJobSeq(), filename);
 
             //ctg에 해당하는 뉴스 정보 조회
@@ -195,26 +196,15 @@ public class JoinsNewsRssJob extends AbstractScheduleJob {
     //asp 소스의 심볼처리를 그대로 이식
     public String replaceSymbol(String origin) {
         origin = McpString.defaultValue(origin);
+        ReplaceSymbol replaceSymbol = new ReplaceSymbol();
 
-        origin = origin.replace("&lt;", "<");
-        origin = origin.replace("&gt;", ">");
-        origin = origin.replace("&#91;", "[");
-        origin = origin.replace("&#93;", "]");
-        origin = origin.replace("&amp;", "");
-        origin = origin.replace("#39;", "'");
-        origin = origin.replace("#39", "'");
+        //fnRemoveContentSpecialChar
+        origin = replaceSymbol.fnRemoveContentSpecialChar(origin);
 
-        origin = origin.replaceAll("<(style|script|title|link|a)(.*)</(style|script|title|a)>", "");
-        origin = origin.replaceAll("<html(.*|)<body([^>]*)>", "");
-        origin = origin.replaceAll("</body(.*)</html>(.*)", "");
-        origin = origin.replaceAll(
-                "<[/]*(div|layer|tbody|html|head|meta|form|input|object|select|textarea|base|table|tr|td|!|b|br|font|img|map|area|hr|p|span|embed)[^>]*>",
-                "");
-        origin = origin.replaceAll("<[/]*(script|style|title|xmp|div)>", "");
-        origin = origin.replaceAll("([a-z0-9]*script:)", "deny_$1");
-        origin = origin.replaceAll("<(\\?|%)", "<$1");
-        origin = origin.replaceAll("(\\?|%)>", "$1>");
+        //fnDelete_tag
+        origin = replaceSymbol.fnDelete_tag(origin);
 
+        //페이지 내 하드코딩
         origin = origin.replace("  ", "™");
         origin = origin.replace("™", "");
         origin = origin.replace("<b>", "");

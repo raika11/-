@@ -1,6 +1,3 @@
-import React from 'react';
-import { MokaTableDeleteButton } from '@components';
-
 export default [
     {
         headerName: 'ID',
@@ -15,15 +12,6 @@ export default [
         tooltipField: 'containerName',
         cellClassRules: {
             'usedyn-n': (params) => params.data.usedYn === 'N',
-        },
-    },
-    {
-        headerName: '',
-        field: 'delete',
-        width: 33,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;
         },
     },
 ];

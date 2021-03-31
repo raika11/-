@@ -8,9 +8,9 @@ import { getDisplayedRows } from '@utils/agGridUtil';
 import columnDefs from './AreaAgGridColumns';
 
 /**
- * 편집영역 > 두번째 리스트
+ * 영역편집정보 관리 > depth2 AgGrid
  */
-const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, sourceCode, onDelete, flag, listDepth2, setListDepth2 }) => {
+const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, sourceCode, flag, listDepth2, setListDepth2 }) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [gridInstance, setGridInstance] = useState(null);
@@ -30,12 +30,7 @@ const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, sourceCode, o
                     },
                     callback: ({ header, body }) => {
                         if (header.success) {
-                            setListDepth2(
-                                body.list.map((d) => ({
-                                    ...d,
-                                    onDelete: (data) => onDelete(data, 2),
-                                })),
-                            );
+                            setListDepth2(body.list);
                         } else {
                             messageBox.alert(header.message);
                         }
@@ -46,7 +41,7 @@ const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, sourceCode, o
         } else {
             setListDepth2([]);
         }
-    }, [areaDepth1.area, dispatch, onDelete, sourceCode, setListDepth2]);
+    }, [areaDepth1.area, dispatch, sourceCode, setListDepth2]);
 
     /**
      * 목록에서 Row클릭
@@ -138,7 +133,6 @@ const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, sourceCode, o
                     onRowNodeId={(data) => data.areaSeq}
                     onRowClicked={handleRowClicked}
                     loading={loading}
-                    preventRowClickCell={['delete']}
                     suppressRowClickSelection
                     suppressMoveWhenRowDragging
                     rowDragManaged

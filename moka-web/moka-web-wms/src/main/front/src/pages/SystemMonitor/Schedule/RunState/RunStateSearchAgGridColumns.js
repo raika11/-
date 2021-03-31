@@ -1,5 +1,4 @@
 import React from 'react';
-// import WorkServerSeqRenderer from '../components/WorkServerSeqRenderer';
 import WorkDescRenderer from '../components/WorkDescRenderer';
 import WorkDateRenderer from '../components/WorkDateRenderer';
 import WorkErrorRenderer from '../components/WorkErrorRenderer';
@@ -13,22 +12,20 @@ export default [
     },
     {
         headerName: '분류',
-        field: 'serverSeq',
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        field: 'serverNm',
+        cellStyle: { textOverflow: 'ellipsis', lineHeight: '57px' },
         width: 60,
-        // cellRendererFramework: (params) => {
-        //     return <WorkServerSeqRenderer {...params} serverSeq={params.data.serverSeq} />;
-        // },
+        tooltipField: 'serverNm',
     },
     {
         headerName: '주기',
-        field: 'period',
+        field: 'periodNm',
         cellStyle: { display: 'flex', alignItems: 'center' },
         width: 60,
     },
     {
         headerName: '패키지명 / 배포 경로 / 설명',
-        field: 'content',
+        field: '',
         cellStyle: { lineHeight: '18px', height: '60px' },
         autoHeight: true,
         flex: 1,
@@ -36,15 +33,17 @@ export default [
     },
     {
         headerName: '결과/시간(ms)',
-        field: 'stateDt',
+        field: '',
+        cellStyle: { lineHeight: '18px' },
         width: 100,
         cellRendererFramework: (row) => <WorkDateRenderer {...row} />,
     },
     {
         headerName: '마지막 실행 정보',
-        field: 'lastInfo',
+        field: '',
+        cellStyle: { lineHeight: '18px' },
         width: 150,
         cellRendererFramework: (row) => <WorkErrorRenderer {...row} />,
-        tooltipField: 'error',
+        tooltipField: 'jobStatus.errMgs',
     },
 ];

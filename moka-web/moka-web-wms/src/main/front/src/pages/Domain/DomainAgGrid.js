@@ -6,9 +6,9 @@ import { GET_DOMAIN_LIST, changeSearchOption, getDomainList, initialState } from
 import { columnDefs } from './DomainAgGridColumns';
 
 /**
- * 도메인 AgGrid 목록
+ * 도메인 관리 > 도메인 목록 > AgGrid
  */
-const DomainAgGrid = ({ onDelete, match }) => {
+const DomainAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [search, setSearch] = useState(initialState);
@@ -51,7 +51,6 @@ const DomainAgGrid = ({ onDelete, match }) => {
                 domainName: row.domainName,
                 domainUrl: row.domainUrl,
                 usedYn: row.usedYn,
-                onDelete,
             })),
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +69,6 @@ const DomainAgGrid = ({ onDelete, match }) => {
             size={search.size}
             selected={domain.domainId}
             onChangeSearchOption={handleChangeSearchOption}
-            preventRowClickCell={['delete']}
         />
     );
 };

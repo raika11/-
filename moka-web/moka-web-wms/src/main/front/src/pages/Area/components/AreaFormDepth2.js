@@ -4,7 +4,6 @@ import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Popover from 'react-bootstrap/Popover';
 import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput, MokaIcon } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
@@ -19,27 +18,10 @@ import ContainerSelector from './ContainerSelector';
 import AreaComp from './AreaComp';
 import ComponentLoadBox from './ComponentLoadBox';
 import ContainerLoadBox from './ContainerLoadBox';
+import ResourcePopover from './ResourcePopover';
 
 /**
- * 미리보기 리소스 설명하는 popover
- */
-const popover = (
-    <Popover id="popover-area-info">
-        <Popover.Title>미리보기 리소스</Popover.Title>
-        <Popover.Content className="user-select-text">
-            페이지편집에서 미리보기를 서비스하기 위한 리소스를 추가하세요.
-            <br />
-            (서비스 화면과 별도로 설정해야합니다.)
-            <br />
-            변환된 html은 <span>{`\$\{SYSTEM_AREA\}`}</span> 토큰을 사용하세요.
-            <br />
-            예약어는 <span>{`\$\{reserved.예약어\}`}</span> 토큰을 사용하세요.
-        </Popover.Content>
-    </Popover>
-);
-
-/**
- * 편집영역 2뎁스, 3뎁스 폼
+ * 편집영역 2뎁스 폼
  */
 const AreaFormDepth2 = (props) => {
     const {
@@ -56,7 +38,6 @@ const AreaFormDepth2 = (props) => {
         flag,
         sourceCode,
         setAreaDepth2,
-        setAreaDepth3,
         list,
     } = props;
     const dispatch = useDispatch();
@@ -82,6 +63,7 @@ const AreaFormDepth2 = (props) => {
     const validate = (saveObj) => {
         let isInvalid = false;
         let errList = [];
+        const isCmp = saveObj.compYn === 'Y';
 
         // 영역명 체크
         if (!REQUIRED_REGEX.test(saveObj.areaNm)) {
@@ -92,7 +74,7 @@ const AreaFormDepth2 = (props) => {
             isInvalid = isInvalid || true;
         }
         // 페이지 체크
-        if (!saveObj.page?.pageSeq) {
+        if (isCmp && !saveObj.page?.pageSeq) {
             errList.push({
                 field: 'page',
                 reason: '페이지를 선택하세요',
@@ -108,7 +90,7 @@ const AreaFormDepth2 = (props) => {
             isInvalid = isInvalid || true;
         }
         // areaComp, areaComps 체크
-        if (saveObj.areaDiv === ITEM_CP) {
+        if (isCmp && saveObj.areaDiv === ITEM_CP) {
             if (!saveObj.areaComp.component?.componentSeq) {
                 errList.push({
                     field: 'component',
@@ -116,7 +98,7 @@ const AreaFormDepth2 = (props) => {
                 });
                 isInvalid = isInvalid || true;
             }
-        } else if (!saveObj.container?.containerSeq) {
+        } else if (isCmp && !saveObj.container?.containerSeq) {
             errList.push({
                 field: 'container',
                 reason: '선택된 컨테이너가 없습니다',
@@ -139,8 +121,8 @@ const AreaFormDepth2 = (props) => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);
-                        setFlag({ ...flag, [`depth${depth}`]: new Date().getTime() });
-                        depth === 2 ? setAreaDepth2(body) : setAreaDepth3(body);
+                        setFlag({ ...flag, depth2: new Date().getTime(), depth3: new Date().getTime() });
+                        setAreaDepth2(body);
                     } else {
                         messageBox.alert(header.message);
                     }
@@ -165,24 +147,30 @@ const AreaFormDepth2 = (props) => {
             return;
         }
 
+        const isCmp = temp.compYn === 'Y';
+
         let save = {
             ...temp,
             depth, // depth 변경
             ordNo: temp.areaSeq ? temp.ordNo : list.length + 1, // 수정 등록 분기쳐서 ordNo 셋팅
             sourceCode,
             domain,
-            page: { pageSeq: page.pageSeq, pageName: page.pageName, pageUrl: page.pageUrl },
+            page: isCmp ? { pageSeq: page.pageSeq, pageName: page.pageName, pageUrl: page.pageUrl } : null,
             parent: { areaSeq: parent.areaSeq },
-            previewRsrc,
+            previewRsrc: isCmp ? previewRsrc : null,
         };
-        if (temp.areaDiv === ITEM_CP) {
+        if (isCmp && temp.areaDiv === ITEM_CP) {
             save.container = null;
             save.areaComps = null;
             save.areaComp = { ...areaComp, component, ordNo: 1 };
-        } else {
+        } else if (isCmp) {
             save.container = container;
             save.areaComp = null;
             save.areaComps = areaComps;
+        } else {
+            save.container = null;
+            save.areaComp = null;
+            save.areaComps = null;
         }
 
         if (validate(save)) {
@@ -343,6 +331,8 @@ const AreaFormDepth2 = (props) => {
 
             if (name === 'usedYn') {
                 setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
+            } else if (name === 'compYn') {
+                setTemp({ ...temp, compYn: checked ? 'Y' : 'N' });
             } else if (name === 'areaDiv') {
                 setTemp({ ...temp, areaDiv: value });
                 setAreaComps([]);
@@ -475,7 +465,7 @@ const AreaFormDepth2 = (props) => {
                 {/* 부모 정보 노출 */}
                 <Form.Row className="mb-2">
                     <Col xs={8} className="p-0 pr-40">
-                        <MokaInputLabel name="parent" label={depth === 2 ? '그룹 영역' : '중분류 영역'} value={parent.areaNm} onChange={handleChangeValue} disabled />
+                        <MokaInputLabel name="parent" label="그룹 영역" value={parent.areaNm} onChange={handleChangeValue} disabled />
                     </Col>
                     <Col xs={4} className="p-0">
                         <MokaInputLabel label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
@@ -490,99 +480,114 @@ const AreaFormDepth2 = (props) => {
 
                 <hr className="divider" />
 
-                {/* 페이지 검색 */}
-                <Form.Row className="mb-2">
-                    <MokaInputLabel as="none" className="mb-0" label="페이지" required />
-                    <MokaSearchInput
-                        className="w-100"
-                        inputClassName="bg-white"
-                        variant="dark"
-                        value={page.pageSeq ? `${page.pageName} (${page.pageUrl})` : ''}
-                        onSearch={() => setModalShow(true)}
-                        placeholder="페이지를 선택하세요"
-                        inputProps={{ readOnly: true }}
-                        isInvalid={error.page}
-                    />
-                </Form.Row>
+                {/* compYn 변경 */}
+                <MokaInputLabel
+                    as="switch"
+                    className="mb-2"
+                    label="편집 여부"
+                    name="compYn"
+                    id="compYn"
+                    inputProps={{ custom: true, checked: temp.compYn === 'Y' }}
+                    onChange={handleChangeValue}
+                />
 
-                {/* api 입력 */}
-                <MokaInputLabel name="afterApi" label="API" className="mb-2" value={temp.afterApi} onChange={handleChangeValue} />
-
-                {/* 컴포넌트/컨테이너 선택 */}
-                <Form.Row className="mb-2 d-flex">
-                    <div className="flex-shrink-0 mr-2" style={{ width: 74 }}>
-                        <MokaInput as="select" name="areaDiv" value={temp.areaDiv} onChange={handleChangeValue}>
-                            <option value={ITEM_CP}>컴포넌트</option>
-                            <option value={ITEM_CT}>컨테이너</option>
-                        </MokaInput>
-                    </div>
-
-                    <Form.Row className="flex-fill">
-                        {temp.areaDiv === ITEM_CP && (
-                            <ComponentSelector
-                                component={component}
-                                areaComp={areaComp}
-                                setAreaComp={setAreaComp}
-                                onChange={handleChangeValue}
-                                compOptions={compOptions}
-                                error={error}
+                {temp.compYn === 'Y' && (
+                    <React.Fragment>
+                        {/* 페이지 검색 */}
+                        <Form.Row className="mb-2">
+                            <MokaInputLabel as="none" className="mb-0" label="페이지" required />
+                            <MokaSearchInput
+                                className="w-100"
+                                inputClassName="bg-white"
+                                variant="dark"
+                                value={page.pageSeq ? `${page.pageName} (${page.pageUrl})` : ''}
+                                onSearch={() => setModalShow(true)}
+                                placeholder="페이지를 선택하세요"
+                                inputProps={{ readOnly: true }}
+                                isInvalid={error.page}
                             />
-                        )}
+                        </Form.Row>
 
-                        {temp.areaDiv === ITEM_CT && <ContainerSelector container={container} onChange={handleChangeValue} contOptions={contOptions} error={error} />}
-                    </Form.Row>
+                        {/* api 입력 */}
+                        <MokaInputLabel name="afterApi" label="API" className="mb-2" value={temp.afterApi} onChange={handleChangeValue} />
 
-                    {/* 일반형/가로형 선택 */}
-                    <div className="ml-2 flex-shrink-0">
-                        <MokaInput as="select" name="areaAlign" value={temp.areaAlign} onChange={handleChangeValue} disabled={temp.areaDiv === ITEM_CP}>
-                            <option value={AREA_ALIGN_V}>일반형</option>
-                            {temp.areaDiv === ITEM_CT && <option value={AREA_ALIGN_H}>가로형</option>}
-                        </MokaInput>
-                    </div>
-                </Form.Row>
+                        {/* 컴포넌트/컨테이너 선택 */}
+                        <Form.Row className="mb-2 d-flex">
+                            <div className="flex-shrink-0 mr-2" style={{ width: 74 }}>
+                                <MokaInput as="select" name="areaDiv" value={temp.areaDiv} onChange={handleChangeValue}>
+                                    <option value={ITEM_CP}>컴포넌트</option>
+                                    <option value={ITEM_CT}>컨테이너</option>
+                                </MokaInput>
+                            </div>
 
-                {/* 컨테이너 리로드 문구 */}
-                {areaCompLoad.byContainer && <ContainerLoadBox message={areaCompLoad.byContainerMessage} onClick={() => getContOptions(true)} />}
+                            <Form.Row className="flex-fill">
+                                {temp.areaDiv === ITEM_CP && (
+                                    <ComponentSelector
+                                        component={component}
+                                        areaComp={areaComp}
+                                        setAreaComp={setAreaComp}
+                                        onChange={handleChangeValue}
+                                        compOptions={compOptions}
+                                        error={error}
+                                    />
+                                )}
 
-                {/* 컴포넌트 리로드 (페이지에 컴포넌트가 없어졌을 때) 문구 */}
-                {areaCompLoad.byPage && <ComponentLoadBox message={areaCompLoad.byPageMessage} onClick={() => getCompOptions(true)} />}
+                                {temp.areaDiv === ITEM_CT && <ContainerSelector container={container} onChange={handleChangeValue} contOptions={contOptions} error={error} />}
+                            </Form.Row>
 
-                {/* 컴포넌트 리로드 (컨테이너에 컴포넌트가 없어졌을 때) 문구 */}
-                {areaCompLoad.byContainerComp && <ComponentLoadBox message={areaCompLoad.byContainerCompMessage} onClick={() => handleCompLoad(container)} />}
+                            {/* 일반형/가로형 선택 */}
+                            <div className="ml-2 flex-shrink-0">
+                                <MokaInput as="select" name="areaAlign" value={temp.areaAlign} onChange={handleChangeValue} disabled={temp.areaDiv === ITEM_CP}>
+                                    <option value={AREA_ALIGN_V}>일반형</option>
+                                    {temp.areaDiv === ITEM_CT && <option value={AREA_ALIGN_H}>가로형</option>}
+                                </MokaInput>
+                            </div>
+                        </Form.Row>
 
-                {/* 컨테이너일 경우 하위 컴포넌트 나열 */}
-                {temp.areaDiv === ITEM_CT &&
-                    areaComps.map((comp, idx) => (
-                        <AreaComp
-                            key={idx}
-                            areaComp={comp}
-                            areaComps={areaComps}
-                            index={idx}
-                            onChange={handleChangeValue}
-                            disabled={areaCompLoad.byContainer || areaCompLoad.byContainerComp || temp.areaAlign === AREA_ALIGN_V}
-                            setAreaComps={setAreaComps}
-                        />
-                    ))}
+                        {/* 컨테이너 리로드 문구 */}
+                        {areaCompLoad.byContainer && <ContainerLoadBox message={areaCompLoad.byContainerMessage} onClick={() => getContOptions(true)} />}
 
-                {/* 미리보기 리소스 */}
-                <Form.Row style={{ height: 200 }}>
-                    <MokaInputLabel
-                        label={
-                            <React.Fragment>
-                                미리보기
-                                <br />
-                                리소스
-                                <OverlayTrigger overlay={popover} trigger={['click']}>
-                                    <MokaIcon iconName="fas-info-circle" className="ml-1 color-info cursor-pointer" />
-                                </OverlayTrigger>
-                            </React.Fragment>
-                        }
-                        as="none"
-                    />
-                    <div className="flex-fill input-border overflow-hidden">
-                        <MokaEditorCore defaultValue={temp.previewRsrc} value={previewRsrc} onBlur={(value) => setPreviewRsrc(value)} fullWindowButton />
-                    </div>
-                </Form.Row>
+                        {/* 컴포넌트 리로드 (페이지에 컴포넌트가 없어졌을 때) 문구 */}
+                        {areaCompLoad.byPage && <ComponentLoadBox message={areaCompLoad.byPageMessage} onClick={() => getCompOptions(true)} />}
+
+                        {/* 컴포넌트 리로드 (컨테이너에 컴포넌트가 없어졌을 때) 문구 */}
+                        {areaCompLoad.byContainerComp && <ComponentLoadBox message={areaCompLoad.byContainerCompMessage} onClick={() => handleCompLoad(container)} />}
+
+                        {/* 컨테이너일 경우 하위 컴포넌트 나열 */}
+                        {temp.areaDiv === ITEM_CT &&
+                            areaComps.map((comp, idx) => (
+                                <AreaComp
+                                    key={idx}
+                                    areaComp={comp}
+                                    areaComps={areaComps}
+                                    index={idx}
+                                    onChange={handleChangeValue}
+                                    disabled={areaCompLoad.byContainer || areaCompLoad.byContainerComp || temp.areaAlign === AREA_ALIGN_V}
+                                    setAreaComps={setAreaComps}
+                                />
+                            ))}
+
+                        {/* 미리보기 리소스 */}
+                        <Form.Row style={{ height: 200 }}>
+                            <MokaInputLabel
+                                label={
+                                    <React.Fragment>
+                                        미리보기
+                                        <br />
+                                        리소스
+                                        <OverlayTrigger overlay={ResourcePopover} trigger={['click']}>
+                                            <MokaIcon iconName="fas-info-circle" className="ml-1 color-info cursor-pointer" />
+                                        </OverlayTrigger>
+                                    </React.Fragment>
+                                }
+                                as="none"
+                            />
+                            <div className="flex-fill input-border overflow-hidden">
+                                <MokaEditorCore defaultValue={temp.previewRsrc} value={previewRsrc} onBlur={(value) => setPreviewRsrc(value)} fullWindowButton />
+                            </div>
+                        </Form.Row>
+                    </React.Fragment>
+                )}
             </div>
         </MokaCard>
     );

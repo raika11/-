@@ -147,17 +147,15 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                     <>
                         <Form.Row className="mb-2">
                             {data.boardSeq && data.regDt && (
-                                <Col xs={6} className="p-0 d-flex align-items-center">
+                                <Col xs={7} className="p-0 d-flex align-items-center">
                                     <MokaInputLabel label="등록일시" as="none" labelWidth={50} />
-                                    <p className="mb-0">{data.regDt || ''}</p>
-                                    <p className="mb-0">{data.regName && data.regId && `${data.regName}(${data.regId})`}</p>
+                                    <p className="mb-0">{`${data.regDt} ${data.regName || ''}(${data.regId || ''})`}</p>
                                 </Col>
                             )}
                             {data.boardSeq && data.modDt && (
-                                <Col xs={6} className="p-0 d-flex align-items-center justify-content-end">
+                                <Col xs={5} className="p-0 d-flex align-items-center justify-content-end">
                                     <MokaInputLabel label="수정일시" as="none" labelWidth={50} />
-                                    <p className="mb-0">{data.modDt || ''}</p>
-                                    <p className="mb-0">{data.regName && data.regId && `${data.regName}(${data.regId})`}</p>
+                                    <p className="mb-0">{`${data.modDt} ${data.modId || ''}`}</p>
                                 </Col>
                             )}
                         </Form.Row>
@@ -350,7 +348,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                             {/* <Link to={element.fileUrl} target="_blank" download>
                                                 {element.name}
                                             </Link> */}
-                                            <div onClick={() => handleClickImageName(file.attachFile)}>{file.name}</div>
+                                            <div onClick={() => handleClickImageName(file)}>{file.name}</div>
                                         </Col>
                                         <Col>
                                             <MokaTableEditCancleButton onClick={() => handleDeleteUploadFile(index)} />

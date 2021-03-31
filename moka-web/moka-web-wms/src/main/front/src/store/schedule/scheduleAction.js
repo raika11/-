@@ -12,9 +12,11 @@ export const CHANGE_DELETE_WORK_SEARCH_OPTION = 'schedule/CHANGE_DELETE_WORK_SEA
 export const changeDeleteWorkSearchOption = createAction(CHANGE_DELETE_WORK_SEARCH_OPTION, (search) => search);
 export const CHANGE_DEPLOY_SERVER_SEARCH_OPTION = 'schedule/CHANGE_DEPLOY_SERVER_SEARCH_OPTION';
 export const changeDeployServerSearchOption = createAction(CHANGE_DEPLOY_SERVER_SEARCH_OPTION, (search) => search);
+export const CHANGE_BACK_OFFICE_WORK_SEARCH_OPTION = 'schedule/CHANGE_BACK_OFFICE_WORK_SEARCH_OPTION';
+export const changeBackOfficeWorkSearchOption = createAction(CHANGE_BACK_OFFICE_WORK_SEARCH_OPTION, (search) => search);
 
 /**
- * 스토어 데이터 삭제 액션
+ * 스토어 데이터 초기화 액션
  */
 export const CLEAR_STORE = 'schedule/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE, (payload) => payload);
@@ -30,6 +32,8 @@ export const CLEAR_JOB = 'schedule/CLEAR_WORK_JOB';
 export const clearJob = createAction(CLEAR_JOB, (payload) => payload);
 export const CLEAR_SERVER = 'schedule/CLEAR_SERVER';
 export const clearServer = createAction(CLEAR_SERVER, (payload) => payload);
+export const CLEAR_HISTORY_JOB = 'schedule/CLEAR_HISTORY';
+export const clearHistoryJob = createAction(CLEAR_HISTORY_JOB, (payload) => payload);
 
 /**
  * 조회 액션
@@ -54,6 +58,12 @@ export const [GET_DISTRIBUTE_SERVER_LIST, GET_DISTRIBUTE_SERVER_LIST_SUCCESS, GE
 export const getDistributeServerList = createAction(GET_DISTRIBUTE_SERVER_LIST, (...actions) => actions);
 export const [GET_DISTRIBUTE_SERVER, GET_DISTRIBUTE_SERVER_SUCCESS, GET_DISTRIBUTE_SERVER_FAILURE] = createRequestActionTypes('schedule/GET_DISTRIBUTE_SERVER');
 export const getDistributeServer = createAction(GET_DISTRIBUTE_SERVER, (serverSeq) => serverSeq);
+export const [GET_JOB_CODE, GET_JOB_CODE_SUCCESS] = createRequestActionTypes('schedule/GET_JOB_CODE');
+export const getJobCode = createAction(GET_JOB_CODE);
+export const [GET_JOB_HISTORY_LIST, GET_JOB_HISTORY_LIST_SUCCESS, GET_JOB_HISTORY_LIST_FAILURE] = createRequestActionTypes('schedule/GET_JOB_HISTORY_LIST');
+export const getJobHistoryList = createAction(GET_JOB_HISTORY_LIST, (...actions) => actions);
+export const [GET_HISTORY_JOB, GET_HISTORY_JOB_SUCCESS] = createRequestActionTypes('schedule/GET_HISTORY_JOB');
+export const getHistoryJob = createAction(GET_HISTORY_JOB, (seqNo) => seqNo);
 
 /**
  * 저장, 등록, 수정 액션

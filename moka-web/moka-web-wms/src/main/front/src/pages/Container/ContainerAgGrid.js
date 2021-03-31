@@ -1,24 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';
 import columnDefs from './ContainerAgGridColumns';
 import { GET_CONTAINER_LIST, getContainerList, changeSearchOption } from '@store/container';
 
-const ContainerAgGrid = ({ onDelete, match }) => {
+/**
+ * 컨테이너 관리 > 컨테이너 목록 > AgGrid
+ */
+const ContainerAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { total, list, search, container, loading } = useSelector((store) => ({
-        total: store.container.total,
-        list: store.container.list,
-        search: store.container.search,
-        container: store.container.container,
-        loading: store.loading[GET_CONTAINER_LIST],
-    }));
-
-    // state
+    const loading = useSelector(({ loading }) => loading[GET_CONTAINER_LIST]);
+    const { total, list, search, container } = useSelector(({ container }) => container);
     const [rowData, setRowData] = useState([]);
 
     /**
@@ -50,13 +45,12 @@ const ContainerAgGrid = ({ onDelete, match }) => {
             setRowData(
                 list.map((data) => ({
                     ...data,
-                    onDelete,
                 })),
             );
         } else {
             setRowData([]);
         }
-    }, [list, onDelete]);
+    }, [list]);
 
     return (
         <>
@@ -77,7 +71,6 @@ const ContainerAgGrid = ({ onDelete, match }) => {
                 page={search.page}
                 size={search.size}
                 onChangeSearchOption={handleChangeSearchOption}
-                preventRowClickCell={['delete']}
                 selected={container.containerSeq}
             />
         </>

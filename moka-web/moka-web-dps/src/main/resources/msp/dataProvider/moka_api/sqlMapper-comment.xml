@@ -7,5 +7,56 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dps.comment">
 
+  <!-- 댓글차단목록 -->
+  <select id="banned" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_COMMENT_BANNED_LIST_SEL(
+      #{div, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!-- 댓글 목록 조회 -->
+  <select id="list" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_COMMENT_LIST_SEL_BY_TOTAL_ID(
+      #{totalId, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{referrer, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      NULL,
+      NULL,
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{_DISP_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!-- 내댓글 목록 조회 -->
+  <select id="listMy" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_COMMENT_LIST_SEL_BY_TOTAL_ID(
+      #{totalId, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{referrer, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{_DISP_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!--댓글등록-->
+  <!--  <select id="commentInsert" parameterType="map" resultType="string" statementType="CALLABLE">-->
+  <!--    { call UPU_COMMENT_INS(-->
+  <!--      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},-->
+  <!--      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},-->
+  <!--      #{remoteIP, mode=IN, jdbcType=VARCHAR, javaType=string}-->
+  <!--      )}-->
+  <!--  </select>-->
 
 </mapper>

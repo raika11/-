@@ -18,22 +18,20 @@ export default [
     },
     {
         headerName: '분류',
-        field: 'category',
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        field: 'categoryNm',
+        cellStyle: { textOverflow: 'ellipsis', lineHeight: '57px' },
         width: 50,
-        // cellRendererFramework: (params) => {
-        //     return <WorkServerSeqRenderer {...params} serverSeq={params.data.serverSeq} />;
-        // },
+        tooltipField: 'categoryNm',
     },
     {
         headerName: '주기',
-        field: 'period',
+        field: 'periodNm',
         cellStyle: { display: 'flex', alignItems: 'center' },
         width: 50,
     },
     {
         headerName: '패키지명 / 배포 경로 / 설명',
-        field: 'content',
+        field: '',
         cellStyle: { lineHeight: '18px', height: '60px' },
         autoHeight: true,
         flex: 1,
@@ -41,7 +39,8 @@ export default [
     },
     {
         headerName: '등록 / 수정 정보',
-        field: 'info',
+        field: '',
+        cellStyle: { lineHeight: '18px' },
         width: 240,
         cellRendererFramework: (row) => <WorkStateRenderer {...row} />,
     },

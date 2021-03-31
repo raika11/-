@@ -9,7 +9,7 @@ import { getChannelTp } from '@store/codeMgt';
 import { ComponentWork, NaverChannelWork, NaverStandWork } from './components';
 
 /**
- * 컴포넌트의 워크 리스트
+ * 홈 섹션편집 > 워크 목록
  */
 const ComponentWorkList = (props) => {
     const dispatch = useDispatch();
@@ -88,7 +88,7 @@ const ComponentWorkList = (props) => {
                         labelClassName="ml-0"
                         className="h-100 mb-0"
                         value={componentWorkList.length > 0 ? componentWorkList[0].templateSeq : null}
-                        inputProps={{ size: 'sm', 'data-workseq': componentWorkList.length > 0 ? componentWorkList[0].seq : '' }}
+                        inputProps={{ 'data-workseq': componentWorkList.length > 0 ? componentWorkList[0].seq : '' }}
                         onChange={handleChangeTemplate}
                     >
                         <option hidden>템플릿 선택</option>
@@ -108,7 +108,7 @@ const ComponentWorkList = (props) => {
             return (
                 <React.Fragment>
                     <div style={{ width: 170 }}>
-                        <MokaInput as="select" className="h-100" value={null} inputProps={{ size: 'sm' }} onChange={handleChangeDisabled}>
+                        <MokaInput as="select" className="h-100" value={null} onChange={handleChangeDisabled}>
                             <option value="" disabled>
                                 비활성 영역 보기
                             </option>
@@ -119,7 +119,7 @@ const ComponentWorkList = (props) => {
                             ))}
                         </MokaInput>
                     </div>
-                    <Button variant="outline-neutral" size="sm" className="flex-shrink-0" onClick={handleClickPreview}>
+                    <Button variant="outline-neutral" className="flex-shrink-0" onClick={handleClickPreview}>
                         페이지 미리보기
                     </Button>
                 </React.Fragment>
@@ -231,11 +231,11 @@ const ComponentWorkList = (props) => {
                 className={clsx('p-0 position-relative h-100', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H, 'mr-1': area.areaAlign === AREA_ALIGN_H })}
                 bodyClassName="p-0 mt-0 overflow-hidden"
             >
-                <div className="d-flex justify-content-between p-2 border-bottom" style={{ height: 45 }}>
+                <div className="d-flex justify-content-between p-2 border-bottom align-items-center" style={{ height: 52 }}>
                     {renderTitle()}
                 </div>
 
-                <div className="custom-scroll scrollable overflow-x-hidden" style={{ height: 'calc(100% - 45px)' }}>
+                <div className="custom-scroll scrollable overflow-x-hidden" style={{ height: 'calc(100% - 52px)' }}>
                     {leftList.map((areaComp) => renderList(areaComp))}
                 </div>
             </MokaCard>
@@ -243,9 +243,9 @@ const ComponentWorkList = (props) => {
             {/* 오른쪽 카드 */}
             {rightList.length > 0 && (
                 <MokaCard loading={loading} header={false} width={363} className="p-0 position-relative mr-gutter h-100" bodyClassName="p-0 mt-0 overflow-hidden">
-                    <div className="d-flex justify-content-end p-2 border-bottom" style={{ height: 45 }}></div>
+                    <div style={{ height: 52 }}></div>
 
-                    <div className="custom-scroll scrollable overflow-x-hidden" style={{ height: 'calc(100% - 45px)' }}>
+                    <div className="custom-scroll scrollable overflow-x-hidden" style={{ height: 'calc(100% - 52px)' }}>
                         {rightList.map((areaComp) => renderList(areaComp))}
                     </div>
                 </MokaCard>

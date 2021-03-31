@@ -11,7 +11,7 @@ import { getApi, getLang } from '@store/codeMgt';
 import { MokaInputLabel, MokaCard } from '@components';
 
 /**
- * 도메인 상세/수정/등록
+ * 도메인 관리 > 등록, 수정
  * uncontrolled 예제
  */
 const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {

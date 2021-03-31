@@ -78,6 +78,12 @@ public class JobContent extends BaseAudit {
     private String jobCd;
 
     /**
+     * 작업 명
+     */
+    @Column(name = "JOB_NM")
+    private String jobNm;
+
+    /**
      * 서버 번호
      */
     @Column(name = "SERVER_SEQ", nullable = false)
@@ -118,12 +124,6 @@ public class JobContent extends BaseAudit {
      */
     @Column(name = "TARGET_FILE_NAME")
     private String targetFileName;
-
-    /**
-     * URL
-     */
-    @Column(name = "CALL_URL")
-    private String callUrl;
 
     /**
      * 설명

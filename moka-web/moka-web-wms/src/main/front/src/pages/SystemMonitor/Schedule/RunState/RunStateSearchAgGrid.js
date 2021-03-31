@@ -1,7 +1,8 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@/components';
 import columnDefs from './RunStateSearchAgGridColumns';
+import { SCHEDULE_PERIOD } from '@/constants';
 import { GET_JOB_STATISTIC_SEARCH_LIST, getJobStatisticSearchList, changeRunStateSearchOption } from '@/store/schedule';
 
 /**
@@ -14,11 +15,13 @@ const RunStateSearchAgGrid = () => {
     const search = useSelector((store) => store.schedule.runState.search);
     const loading = useSelector((store) => store.loading[GET_JOB_STATISTIC_SEARCH_LIST]);
 
+    const [rowData, setRowData] = useState([]);
+
     /**
      * 테이블 row 클릭
      */
     const handleRowClicked = useCallback((row) => {
-        console.log(row);
+        // console.log(row);
     }, []);
 
     /**
@@ -40,18 +43,33 @@ const RunStateSearchAgGrid = () => {
         dispatch(getJobStatisticSearchList());
     }, [dispatch]);
 
+    useEffect(() => {
+        setRowData(
+            list.map((job) => {
+                let targetIndex = SCHEDULE_PERIOD.findIndex((p) => p.period === job.period);
+
+                return {
+                    ...job,
+                    serverNm: job.distributeServerSimple?.serverNm,
+                    periodNm: SCHEDULE_PERIOD[targetIndex].periodNm,
+                };
+            }),
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [list]);
+
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
-            rowData={list}
+            rowData={rowData}
             onRowNodeId={(row) => row.jobSeq}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}
             page={search.page}
             size={search.size}
-            // selected={source.sourceCode}
+            // selected={}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );

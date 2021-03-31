@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
+import moment from 'moment';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { clearStore } from '@store/photoArchive';
@@ -16,6 +17,8 @@ import GifDropzone from './GifDropzone';
 import ThumbCard from './ThumbCard';
 import ThumbViewModal from './ThumbViewModal';
 import { IMAGE_PROXY_API } from '@/constants';
+
+moment.locale('ko');
 
 const propTypes = {
     /**
@@ -161,20 +164,27 @@ const EditThumbModal = (props) => {
 
     /**
      * 카드 안의 편집기능 실행
+     * @param {object} imgData 편집할 이미지 데이터
+     * @param {func} callback 편집된 이미지 저장하는 함수 (대표, 드롭 이미지 개별로 처리해야하기 때문에 함수를 받음)
      */
-    const editPhoto = () => {
+    const editPhoto = (imgData, callback) => {
+        const targetPath = imgData.imageOnlnPath ? imgData.imageOnlnPath : imgData.thumbPath;
+
         imageEditer.create(
-            repImg.imageOnlnPath ? repImg.imageOnlnPath : repImg.thumbPath,
-            (imageSrc) => {
-                setRepImg({
-                    ...repImg,
-                    dataType: 'local',
-                    thumbPath: imageSrc,
-                    imageOnlnPath: imageSrc,
-                    path: {
-                        preview: imageSrc,
-                    },
-                });
+            targetPath,
+            (newImg) => {
+                if (typeof callback === 'function') {
+                    callback({
+                        ...imgData,
+                        id: `${moment().format('YYYYMMDDsss')}_0`,
+                        dataType: 'local',
+                        thumbPath: newImg,
+                        imageOnlnPath: newImg,
+                        path: {
+                            preview: newImg,
+                        },
+                    });
+                }
             },
             { cropWidth, cropHeight },
         );
@@ -195,7 +205,8 @@ const EditThumbModal = (props) => {
                 apply('', null);
                 handleHide();
             } else {
-                if (repImg.dataType === 'archive') {
+                // 이미지 프록시 추가 (jam.joins)
+                if (!(repImg.imageOnlnPath || '').startsWith('blob:')) {
                     imagePath = `${IMAGE_PROXY_API}${encodeURIComponent(repImg.imageOnlnPath)}`;
                 }
                 (async () => {
@@ -282,7 +293,8 @@ const EditThumbModal = (props) => {
                             img={repImg.thumbPath}
                             dataType={repImg.dataType}
                             onDeleteClick={handleDeleteClick}
-                            editPhoto={editPhoto}
+                            data={repImg}
+                            editPhoto={(origin) => editPhoto(origin, setRepImg)}
                             showPhotoDetail={showPhotoDetail}
                             represent
                         />
@@ -295,6 +307,7 @@ const EditThumbModal = (props) => {
                         collapse={collapse}
                         setCollapse={setCollapse}
                         onDeleteClick={handleDeleteClick}
+                        editPhoto={editPhoto}
                         repImg={repImg}
                         setRepImg={setRepImgByDataType}
                         showPhotoDetail={showPhotoDetail}

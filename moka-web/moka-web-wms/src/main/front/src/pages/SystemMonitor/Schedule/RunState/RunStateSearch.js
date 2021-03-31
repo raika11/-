@@ -4,12 +4,13 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
+import { SCHEDULE_PERIOD } from '@/constants';
 import { initialState, getJobStatisticSearchList, changeRunStateSearchOption, clearRunStateSearch } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 작업 실행상태 검색
  */
-const RunStateSearch = ({ match }) => {
+const RunStateSearch = () => {
     const dispatch = useDispatch();
     const storeSearch = useSelector((store) => store.schedule.runState.search);
     const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
@@ -24,6 +25,9 @@ const RunStateSearch = ({ match }) => {
         [search],
     );
 
+    /**
+     * 검색
+     */
     const handleClickSearch = () => {
         dispatch(
             getJobStatisticSearchList(
@@ -35,6 +39,9 @@ const RunStateSearch = ({ match }) => {
         );
     };
 
+    /**
+     * 초기화
+     */
     const handleClickReset = () => {
         dispatch(clearRunStateSearch());
     };
@@ -61,17 +68,12 @@ const RunStateSearch = ({ match }) => {
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="period" value={search.period} onChange={handleChangeValue}>
                         <option value="">주기 전체</option>
-                        <option value="30">30초</option>
-                        <option value="60">1분</option>
-                        <option value="120">2분</option>
-                        <option value="300">5분</option>
-                        <option value="600">10분</option>
-                        <option value="1200">20분</option>
-                        <option value="1800">30분</option>
-                        <option value="3600">1시간</option>
-                        <option value="43200">12시간</option>
-                        <option value="86400">24시간</option>
-                        <option value="0">상시</option>
+                        {SCHEDULE_PERIOD &&
+                            SCHEDULE_PERIOD.map((p) => (
+                                <option key={p.period} value={p.period}>
+                                    {p.periodNm}
+                                </option>
+                            ))}
                     </MokaInput>
                 </Col>
                 <Col xs={2} className="p-0 pr-2">

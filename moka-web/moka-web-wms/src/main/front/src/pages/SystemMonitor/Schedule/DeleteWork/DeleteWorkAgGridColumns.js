@@ -1,6 +1,5 @@
 import React from 'react';
 import WorkDescRenderer from '../components/WorkDescRenderer';
-import WorkDelRenderer from '../components/WorkDelRenderer';
 
 export default [
     {
@@ -11,19 +10,20 @@ export default [
     },
     {
         headerName: '분류',
-        field: 'category',
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        field: 'categoryNm',
+        cellStyle: { textOverflow: 'ellipsis', lineHeight: '60px' },
         width: 50,
+        tooltipField: 'categoryNm',
     },
     {
         headerName: '주기',
-        field: 'period',
+        field: 'periodNm',
         cellStyle: { display: 'flex', alignItems: 'center' },
         width: 50,
     },
     {
         headerName: 'URL / 배포 경로 / 설명',
-        field: 'content',
+        field: '',
         cellStyle: { lineHeight: '18px', height: '60px' },
         autoHeight: true,
         flex: 1,
@@ -31,8 +31,9 @@ export default [
     },
     {
         headerName: '삭제 정보',
-        field: 'info',
+        field: 'delInfo',
+        cellStyle: { textOverflow: 'ellipsis', lineHeight: '60px' },
         width: 250,
-        cellRendererFramework: (row) => <WorkDelRenderer {...row} />,
+        tooltipField: 'delInfo',
     },
 ];

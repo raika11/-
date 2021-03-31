@@ -51,18 +51,20 @@ a{color:inherit;font-size:inherit;text-decoration:none;}  */
 
 
 /* side */
-
-.accordian.side_nav_guide {width: 100%;margin:0 auto;color: #111;box-shadow:0 0 10px 1px rgba(0, 0, 0, .3)}
-.accordian.side_nav_guide .nav_link {display:inline-block;width:100%;font-size: 12px;line-height: 34px;padding: 0 10px;cursor: pointer;border-bottom:1px solid #000;}
+.guide aside{padding-right:20px;margin-top:30px;}
+.accordian.side_nav_guide {width: 100%;margin:0 auto;color: #111;}
+.accordian.side_nav_guide .nav_item {border:none;}
+.accordian.side_nav_guide .nav_link {display:inline-block;width:100%;padding: 18px 0 22px;border-bottom:1px solid #eee;font-size: 18px;line-height: 1.22;letter-spacing: -0.4px;}
 .accordian.side_nav_guide .nav_link:hover {text-shadow: 0 0 1px rgba(255, 255, 255, 0.7);}
 .accordian.side_nav_guide .nav_link span {font-size: 16px;margin-right: 10px;}
 
 .accordian.side_nav_guide .nav_item{display:inline-block;}
 .accordian.side_nav_guide li {list-style-type: none;}
+.accordian.side_nav_guide .nav_item ul{border-left:10px solid #dfdfdf;}
 .accordian.side_nav_guide ul ul li a {font-size: 11px;line-height: 27px;display: block;padding: 0 15px;transition: all 0.15s;}
 .accordian.side_nav_guide ul ul li a:hover {border-left: 5px solid #cecece;}
 .accordian.side_nav_guide ul ul {display: none;}
-.accordian.side_nav_guide li.active ul {display: block;}
+.accordian.side_nav_guide .nav_link.active ~ ul {display: block;}
 
 /* .sidebar_guide {grid-area: sidebar;} */
 /* .main_guide {display: grid;grid-area: main;grid-template-areas:"intro toc""content toc";grid-template-columns: 100% 1fr;grid-template-rows: auto 1fr;} */

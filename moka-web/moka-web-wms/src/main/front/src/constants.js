@@ -197,3 +197,28 @@ export const ICON_TAB_HOT_KEYS = ['shift+Q', 'shift+W', 'shift+E', 'shift+R', 's
 
 // 서비스사이트의 breakpoint
 export const BREAKPOINT_SERVICE = { mobile: [375, 767], tablet: [768, 1199], pc: [1200, 1400], wide: [1401, Infinity] };
+
+// 스케줄 서버 주기
+export const SCHEDULE_PERIOD = [
+    { period: 30, periodNm: '30초' },
+    { period: 60, periodNm: '1분' },
+    { period: 120, periodNm: '2분' },
+    { period: 300, periodNm: '5분' },
+    { period: 600, periodNm: '10분' },
+    { period: 1200, periodNm: '20분' },
+    { period: 1800, periodNm: '30분' },
+    { period: 3600, periodNm: '1시간' },
+    { period: 43200, periodNm: '12시간' },
+    { period: 86400, periodNm: '24시간' },
+    { period: 0, periodNm: '상시' },
+];
+
+// 스케줄 서버 예약작업 실행 상태
+export const SCHEDULE_STATUS = [
+    { status: '0', statusNm: '준비' },
+    { status: '1', statusNm: '전송 완료' },
+    { status: '2', statusNm: '서버 오류' },
+    { status: '3', statusNm: '삭제된 테스크' },
+    { status: '4', statusNm: '실행 결과 실패' },
+    { status: '9', statusNm: '진행 중' },
+];

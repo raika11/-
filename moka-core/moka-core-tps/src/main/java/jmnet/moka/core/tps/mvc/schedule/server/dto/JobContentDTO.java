@@ -4,14 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
-import jmnet.moka.core.tps.mvc.schedule.server.entity.JobStatus;
-import lombok.*;
-
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.JobStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -48,6 +51,9 @@ public class JobContentDTO implements Serializable {
     @ApiModelProperty("작업 코드")
     private String jobCd;
 
+    @ApiModelProperty("작업 명")
+    private String jobNm;
+
     @ApiModelProperty("배포서버 일련번호")
     private Long serverSeq;
 
@@ -63,14 +69,14 @@ public class JobContentDTO implements Serializable {
     @ApiModelProperty("FTP PASSIVE 여부")
     private String ftpPassive;
 
-    @ApiModelProperty("URL")
-    private String callUrl;
-
     @ApiModelProperty("배포경로")
     private String targetPath;
 
     @ApiModelProperty("설명")
     private String jobDesc;
+
+    @ApiModelProperty("옵션 파라미터")
+    private String pkgOpt;
 
     @ApiModelProperty("등록일시")
     private Date regDt;

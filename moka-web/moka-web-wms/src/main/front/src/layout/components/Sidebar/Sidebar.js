@@ -6,7 +6,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { changeSidebarOpenItem, initSidebarOpenItem } from '@store/layout/layoutAction';
 import SidebarCategory from './SidebarCategory';
 import SidebarItem from './SidebarItem';
-import logo from '@assets/images/img_logo.png';
+import logo from '@assets/images/img_logo@2x.png';
 
 /**
  * 사이드바
@@ -64,7 +64,7 @@ const Sidebar = ({ match, currentMenu }) => {
                 <PerfectScrollbar ref={scrollbarRef} options={{ handlers: ['drag-thumb', 'keyboard', 'wheel', 'touch'], wheelSpeed: 0.5 }}>
                     <Link className="sidebar-brand mt-3" to="/">
                         <span>
-                            <img src={logo} alt="joongang" />
+                            <img src={logo} alt="joongang" width={156} height={52} />
                         </span>
                     </Link>
 

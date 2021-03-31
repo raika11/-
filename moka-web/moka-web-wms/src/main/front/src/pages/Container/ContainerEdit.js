@@ -10,7 +10,7 @@ import { invalidListToError } from '@utils/convertUtil';
 import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
 
 /**
- * 컨테이너 정보/수정 컴포넌트
+ * 컨테이너 관리 > 등록, 수정
  */
 const ContainerEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();

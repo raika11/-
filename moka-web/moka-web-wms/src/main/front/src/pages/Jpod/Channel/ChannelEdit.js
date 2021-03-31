@@ -372,11 +372,11 @@ const ChannelEdit = ({ match }) => {
     return (
         <MokaCard
             className="w-100 flex-fill"
-            title={`J팟 채널 ${!chnlSeq ? '등록' : '수정'}`}
+            title={`J팟 채널 ${!chnlSeq ? '저장' : '수정'}`}
             loading={loading}
             footerButtons={[
                 {
-                    text: !chnlSeq ? '등록' : '수정',
+                    text: !chnlSeq ? '저장' : '수정',
                     variant: 'positive',
                     onClick: handleSave,
                     className: 'mr-1',

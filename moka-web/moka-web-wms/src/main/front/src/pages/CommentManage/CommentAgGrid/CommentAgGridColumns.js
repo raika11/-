@@ -9,7 +9,6 @@ export const columnDefs = [
         colId: 'checkbox',
         width: 24,
         checkboxSelection: true,
-        headerCheckboxSelection: true,
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
@@ -47,18 +46,16 @@ export const columnDefs = [
         },
         cellRendererFramework: (param) => {
             return (
-                <OverlayTrigger overlay={<Tooltip id="tooltip-table-preview-button">{param.value}</Tooltip>}>
-                    <span
-                        onClick={() => {
-                            if (param.data.onClickTitle instanceof Function) {
-                                param.data.onClickTitle(param);
-                            }
-                        }}
-                        className="d-flex flex-fill"
-                    >
-                        {param.value}
-                    </span>
-                </OverlayTrigger>
+                <span
+                    onClick={() => {
+                        if (param.data.onClickTitle instanceof Function) {
+                            param.data.onClickTitle(param);
+                        }
+                    }}
+                    className="d-flex flex-fill"
+                >
+                    {param.value}
+                </span>
             );
         },
     },

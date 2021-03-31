@@ -288,7 +288,16 @@ const MenuEditContainerEdit = (props) => {
     }, [invalidList]);
 
     return (
-        <MokaCard className="w-100" title="메뉴정보">
+        <MokaCard
+            className="w-100"
+            title="메뉴정보"
+            footerClassName="justify-content-center"
+            footer
+            footerButtons={[
+                { text: menuSeq ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
+                menuSeq && { text: '삭제', variant: 'negative', onClick: handleClickDelete },
+            ].filter((a) => a)}
+        >
             {loading && <div className="opacity-box"></div>}
             <Form>
                 <Form.Row className="mb-2">
@@ -455,18 +464,18 @@ const MenuEditContainerEdit = (props) => {
                 ) : (
                     ''
                 )}
-                <Form.Group className="d-flex pt-20 justify-content-center">
-                    <Button type="submit" className="float-left mr-10 pr-20 pl-20" variant="positive" onClick={handleClickSave}>
-                        저장
+                {/*<Form.Group className="d-flex pt-20 justify-content-center">
+                    <Button type="submit" className="float-left mr-1" variant="positive" onClick={handleClickSave}>
+                        {menuSeq ? '수정' : '저장'}
                     </Button>
                     {menuSeq ? (
-                        <Button className="float-left mr-0 pr-20 pl-20" variant="negative" onClick={handleClickDelete}>
+                        <Button className="float-left mr-0" variant="negative" onClick={handleClickDelete}>
                             삭제
                         </Button>
                     ) : (
                         ''
                     )}
-                </Form.Group>
+                </Form.Group>*/}
             </Form>
         </MokaCard>
     );

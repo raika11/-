@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Form1 from './components/AreaFormDepth1';
 import Form2 from './components/AreaFormDepth2';
+import Form3 from './components/AreaFormDepth3';
 import { messageBox } from '@utils/toastUtil';
 import { PageListModal } from '@pages/Page/modals';
 
+/**
+ * 영역편집정보 관리 > 등록, 수정
+ */
 const AreaEdit = (props) => {
     const { areaDepth1, areaDepth2, areaDepth3, listDepth2, listDepth3, ...rest } = props;
     const selectedDepth = useSelector(({ area }) => area.selectedDepth);
@@ -58,7 +62,7 @@ const AreaEdit = (props) => {
             )}
             {/* 3뎁스 폼 */}
             {selectedDepth === 3 && (
-                <Form2
+                <Form3
                     {...rest}
                     setModalShow={setModalShow}
                     setModalDomainId={setModalDomainId}

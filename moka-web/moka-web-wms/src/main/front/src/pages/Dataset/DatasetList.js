@@ -3,7 +3,7 @@ import Search from './DatasetSearch';
 import AgGrid from './DatasetAgGrid';
 
 /**
- * 데이터셋 리스트 컴포넌트
+ * 데이터셋 관리 > 데이터셋 목록
  */
 const DatasetList = (props) => {
     return (

@@ -7,7 +7,6 @@ import { useDrop } from 'react-dnd';
 import moment from 'moment';
 import { IMAGE_PROXY_API, ACCEPTED_IMAGE_TYPES } from '@/constants';
 import toast from '@utils/toastUtil';
-import imageEditer from '@utils/imageEditorUtil';
 import { MokaIcon } from '@components';
 import ThumbCard, { ItemTypes } from './ThumbCard';
 import MakeGifModal from '../MakeGifModal';
@@ -18,7 +17,7 @@ moment.locale('ko');
  * Gif를 생성하기 위한 이미지 드롭존
  */
 const GifDropzone = (props) => {
-    const { collapse, setCollapse, showPhotoDetail, setRepImg, repImg, cropWidth, cropHeight } = props;
+    const { collapse, setCollapse, showPhotoDetail, setRepImg, repImg, cropWidth, cropHeight, editPhoto } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
     const [modalShow, setModalShow] = useState(false);
@@ -36,7 +35,6 @@ const GifDropzone = (props) => {
                 if (ACCEPTED_IMAGE_TYPES.includes(f.type)) {
                     const id = `${moment().format('YYYYMMDDsss')}_${idx}`;
                     const preview = URL.createObjectURL(f);
-                    // thumbPath: preview, imageOnlnPath: `${IMAGE_PROXY_API}${encodeURIComponent(preview)}`
                     const imageData = { id: id, File: f, preview, dataType: 'local', imageOnlnPath: preview, thumbPath: preview };
                     imageFiles.push(imageData);
                 } else {
@@ -47,6 +45,7 @@ const GifDropzone = (props) => {
 
             const arr = imgList.concat(imageFiles);
             setImgList(arr);
+            fileRef.current.value = null;
         },
         [imgList],
     );
@@ -95,38 +94,32 @@ const GifDropzone = (props) => {
      */
     const moveCard = useCallback(
         (dragIndex, hoverIndex) => {
-            const dragImg = imgList[dragIndex];
-            setImgList(
-                produce(imgList, (draft) => {
-                    draft.splice(dragIndex, 1);
-                    draft.splice(hoverIndex, 0, dragImg);
-                }),
-            );
+            if (typeof dragIndex === 'number' && typeof hoverIndex === 'number') {
+                const dragImg = imgList[dragIndex];
+                setImgList(
+                    produce(imgList, (draft) => {
+                        draft.splice(dragIndex, 1);
+                        draft.splice(hoverIndex, 0, dragImg);
+                    }),
+                );
+            }
         },
         [imgList],
     );
 
     /**
      * 이미지 편집
-     * @param {*} data
+     * @param {object} origin 편집할 이미지 데이터
      */
-    const handleEditClick = (data) => {
-        imageEditer.create(
-            data.imageOnlnPath,
-            (imageSrc) => {
-                data.imageOnlnPath = imageSrc;
-                data.preview = imageSrc;
-                data.thumbPath = imageSrc;
-
-                setImgList(
-                    produce(imgList, (draft) => {
-                        draft.splice(data.index + 1, 0, data);
-                        draft.splice(data.index, 1);
-                    }),
-                );
-            },
-            { cropWidth, cropHeight },
-        );
+    const handleEditClick = (origin) => {
+        editPhoto(origin, (newImgData) => {
+            setImgList(
+                produce(imgList, (draft) => {
+                    draft.splice(newImgData.index + 1, 0, newImgData);
+                    draft.splice(newImgData.index, 1);
+                }),
+            );
+        });
     };
 
     /**
@@ -192,8 +185,6 @@ const GifDropzone = (props) => {
                     <MakeGifModal
                         show={modalShow}
                         onHide={() => setModalShow(false)}
-                        cropWidth={cropWidth}
-                        cropHeight={cropHeight}
                         onSave={handleSaveGif}
                         gifWidth={cropWidth}
                         gifHeight={cropHeight}
@@ -236,7 +227,7 @@ const GifDropzone = (props) => {
                                 onDeleteClick={handleDeleteDropCard}
                                 setRepImg={setRepImg}
                                 isRep={data.id === repImg?.id}
-                                onEditClick={handleEditClick}
+                                editPhoto={handleEditClick}
                             />
                         ))}
                     </div>

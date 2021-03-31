@@ -151,7 +151,7 @@ const MakeGifModal = (props) => {
 
                     {/* 이미지 사이즈 설정 */}
                     <p className="h4 mb-14">GIF 이미지 사이즈</p>
-                    <div className="mb-2 d-flex">
+                    <div className="mb-2 d-flex align-items-center">
                         <MokaInput
                             as="radio"
                             value="self"

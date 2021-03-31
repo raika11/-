@@ -9,14 +9,14 @@ export const historyColumnDefs = [
         headerName: '작업일시',
         headerClass: 'ag-grid-sns-meta-header',
         field: 'regDt',
-        width: 90,
-        flex: 1,
+        width: 140,
     },
     {
         headerName: '등록자',
         field: 'regMember',
         headerClass: 'ag-grid-sns-meta-header',
         width: 150,
+        flex: 1,
     },
 ];
 
@@ -24,7 +24,7 @@ export const historyDetailColumnDefs = [
     {
         headerName: '순서',
         field: 'ordNo',
-        width: 70,
+        width: 43,
         headerClass: 'ag-grid-sns-meta-header',
     },
     {
@@ -38,6 +38,6 @@ export const historyDetailColumnDefs = [
         headerName: '기사ID',
         field: 'totalId',
         headerClass: 'ag-grid-sns-meta-header',
-        width: 80,
+        width: 100,
     },
 ];

@@ -32,8 +32,6 @@ import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.core.tps.mvc.member.vo.SmtpApplyVO;
 import jmnet.moka.web.wms.config.security.exception.GroupWareException;
 import jmnet.moka.web.wms.config.security.exception.PasswordNotMatchedException;
-import jmnet.moka.web.wms.config.security.exception.SmsAuthNumberBadCredentialsException;
-import jmnet.moka.web.wms.config.security.exception.SmsAuthNumberExpiredException;
 import jmnet.moka.web.wms.config.security.exception.UnauthrizedErrorCode;
 import jmnet.moka.web.wms.config.security.groupware.GroupWareUserInfo;
 import jmnet.moka.web.wms.config.security.groupware.SoapWebServiceGatewaySupport;
@@ -358,15 +356,15 @@ public class MemberJoinRestController extends AbstractCommonController {
             if (McpString.isEmpty(member.getSmsAuth())) {
                 throw new InvalidDataException(msg("wms.login.error.notempty.smsAuth"));
             }
-            if (!member
-                    .getSmsAuth()
-                    .equals(memberRequestDTO.getSmsAuth())) {
-                throw new SmsAuthNumberBadCredentialsException(msg("wms.login.error.sms-unmatched"));
-            }
+            //            if (!member
+            //                    .getSmsAuth()
+            //                    .equals(memberRequestDTO.getSmsAuth())) {
+            //                throw new SmsAuthNumberBadCredentialsException(msg("wms.login.error.sms-unmatched"));
+            //            }
 
-            if (McpDate.term(member.getSmsExp()) < 0) {
-                throw new SmsAuthNumberExpiredException(msg("wms.login.error.unlock-sms-expired"));
-            }
+            //            if (McpDate.term(member.getSmsExp()) < 0) {
+            //                throw new SmsAuthNumberExpiredException(msg("wms.login.error.unlock-sms-expired"));
+            //            }
         }
 
         String remark = McpString.defaultValue(member.getRemark());

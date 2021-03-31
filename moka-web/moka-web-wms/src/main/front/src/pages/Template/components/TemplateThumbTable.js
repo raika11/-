@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { MokaPagination, MokaLoader } from '@components';
@@ -92,7 +92,7 @@ const defaultProps = {
 };
 
 /**
- * 템플릿관리의 썸네일 테이블
+ * 템플릿 관리 > 템플릿 목록 (썸네일 테이블)
  */
 const TemplateThumbTable = (props) => {
     const {
@@ -117,12 +117,6 @@ const TemplateThumbTable = (props) => {
         onChangeSearchOption,
     } = props;
 
-    const [ntImg, setNtImg] = useState(0);
-
-    useEffect(() => {
-        setNtImg(new Date().getTime());
-    }, [rowData]);
-
     return (
         <>
             <div className={clsx('mb-card input-border', className)} style={{ height: tableHeight }}>
@@ -134,7 +128,7 @@ const TemplateThumbTable = (props) => {
                             data={data}
                             width={cardWidth}
                             height={cardHeight}
-                            img={data.thumb ? `${data.thumb}?t=${ntImg}` : null}
+                            img={data.thumb}
                             alt={data.name}
                             menus={menus}
                             onClick={onClick}

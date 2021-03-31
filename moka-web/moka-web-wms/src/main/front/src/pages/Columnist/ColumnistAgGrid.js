@@ -36,13 +36,10 @@ const ColumnistAgGrid = ({ match }) => {
     );
 
     useEffect(() => {
-        const nt = new Date().getTime();
         setRowData(
             list.map((data) => {
                 return {
                     ...data,
-                    // 이미지가 변경되어도 링크가 같기 때문에 캐싱된 이미지를 계속 사용하는 문제 수정
-                    profilePhoto: data.profilePhoto ? `${data.profilePhoto}?t=${nt}` : null,
                     repSeqText: data.repSeq || '   -',
                     regMember: `${data.regMember.memberNm}(${data.regMember.memberId})`,
                     regDt: (data.regDt || '').slice(0, -3),

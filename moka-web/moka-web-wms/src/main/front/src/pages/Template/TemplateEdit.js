@@ -185,7 +185,7 @@ const TemplateEdit = ({ onDelete, match }) => {
             templateWidth: template.templateWidth || 0,
         });
         if (template.templateThumb && template.templateThumb !== '') {
-            setThumbSrc(`${API_BASE_URL}${UPLOAD_PATH_URL}/${template.templateThumb}?t=${new Date().getTime()}`);
+            setThumbSrc(`${API_BASE_URL}${UPLOAD_PATH_URL}/${template.templateThumb}`);
         } else {
             setThumbSrc(null);
         }

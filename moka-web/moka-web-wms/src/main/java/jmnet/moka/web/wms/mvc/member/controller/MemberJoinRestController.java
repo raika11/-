@@ -253,6 +253,7 @@ public class MemberJoinRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
         // 비밀번호와 비밀번호 확인 비교
+        /*
         if (!McpString.isEmpty(memberRequestDTO.getPassword())) {
             boolean same = memberRequestDTO
                     .getPassword()
@@ -261,6 +262,7 @@ public class MemberJoinRestController extends AbstractCommonController {
                 throw new PasswordNotMatchedException(msg("wms.login.error.PasswordNotMatchedException"));
             }
         }
+        */
         /*
         same = passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword());
         if (!same) {
@@ -349,7 +351,7 @@ public class MemberJoinRestController extends AbstractCommonController {
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
-        throwPasswordCheck(memberRequestDTO.getPassword(), memberRequestDTO.getConfirmPassword(), member);
+        //throwPasswordCheck(memberRequestDTO.getPassword(), memberRequestDTO.getConfirmPassword(), member);
 
         if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS
                 || memberRequestDTO.getRequestType() == MemberRequestCode.NEW_SMS) {// SMS 인증문자로 잠김해제 요청 또는 신규 등록 신청

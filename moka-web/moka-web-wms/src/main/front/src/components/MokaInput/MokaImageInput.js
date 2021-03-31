@@ -157,19 +157,15 @@ const MokaImageInput = forwardRef((props, ref) => {
      */
     const onDrop = (acceptedFiles) => {
         wrapRef.current.classList.remove('dropzone-dragover');
+        const extra = acceptedFiles[0].type;
+
         // 확장자 체크
-        if (acceptedFiles[0].type.indexOf('image/') > -1) {
-            if (accept === 'image/*' || accept.includes(acceptedFiles[0].type)) {
-                setAlert(false);
-                setImgSrc(URL.createObjectURL(acceptedFiles[0]));
-                imageShow();
-                if (setFileValue) setFileValue(acceptedFiles[0]);
-                if (onChange) onChange(acceptedFiles);
-            } else {
-                handleEtcAlert(`확장자가 ${accept}인 파일만 등록할 수 있습니다`);
-                imageHide();
-                if (onChange) onChange();
-            }
+        if (extra.indexOf('image/') > -1 && (accept === 'image/*' || accept.includes(extra))) {
+            setAlert(false);
+            setImgSrc(URL.createObjectURL(acceptedFiles[0]));
+            imageShow();
+            if (setFileValue) setFileValue(acceptedFiles[0]);
+            if (onChange) onChange(acceptedFiles);
         } else {
             handleEtcAlert(`확장자가 ${accept}인 파일만 등록할 수 있습니다`);
             imageHide();
@@ -229,6 +225,9 @@ const MokaImageInput = forwardRef((props, ref) => {
                         ref={wrapRef}
                         as="div"
                     >
+                        {/* drag over mask */}
+                        <div className="dropzone-dragover-mask input-border" />
+
                         {/* 이미지 미리보기 */}
                         <Figure.Image className="center-image" alt={alt} src={imgSrc} ref={imgRef} onLoad={handleLoadImage} onError={handleErrorImage} />
 
@@ -265,9 +264,6 @@ const MokaImageInput = forwardRef((props, ref) => {
                         <span className="absolute-top w-100 h-100 input-border onerror-image-wrap" ref={defaultRef}>
                             {!alert && <Figure.Image src={img_logo} className="center-image onerror-image" alt="error" />}
                         </span>
-
-                        {/* drag over mask */}
-                        <div className="dropzone-dragover-mask input-border" />
                     </Figure>
                 );
             }}

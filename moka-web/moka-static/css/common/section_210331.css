@@ -9,8 +9,16 @@
 .header_nav_wrap {margin-bottom: 20px; padding: 0 0 13px;border-bottom: 1px solid #000;}
 .header_nav_wrap .header_nav_area {display: flex;}
 .header_nav_wrap .header_nav_area .page_title {font-size: 24px;font-weight: bold;line-height:inherit;letter-spacing: -0.3px;color: #000;}
-.header_nav_wrap .header_nav_area .header_nav .nav .nav_item {display:inline-block;padding-right:26px;}
+/* .header_nav_wrap .header_nav_area .header_nav {}
+.header_nav_wrap .header_nav_area .header_nav .nav {} */
+.header_nav_wrap .header_nav_area .header_nav .nav .nav_item {padding-right:26px;}
+
 .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2{font-size:16px;font-weight: 500;line-height: 1.5;letter-spacing: -0.56px;color: #111;}
+
+.header_nav .nav .nav_item {display:inline-block;}
+/* .header_nav .nav .nav_item .nav_link {display:inline-block; width:100%; color: #111; font-size: 16px; font-weight: 500;} */
+
+
 
 
 /***************************************    general     ************************************/
@@ -49,7 +57,7 @@
 .case_unique .top_area_wrap .sub_title .fa_arrow_right_b { margin-left: 4px;}
 .case_unique .card_group .card_image { position: relative; margin-bottom: 0; }
 /* 임시 아이콘 이미지 변경시 소스 수정해야됨 */
-.fa_rect_w { display: inline-block; width: 15px; height: 10px; border: 1.5px solid #fff;  }
+.fa_rect_w { width: 15px; height: 10px; border: 1.5px solid #fff;  }
 .fa_rect_w::after { content: ''; position: absolute; left: 6px; top: 4px; width: 10px; height: 6px; border: 1.5px solid #fff;}
 .unique_trend .card_group { margin-top: -20px; }
 .unique_trend .card_group .col_lg4 { margin-top: 20px; }
@@ -63,13 +71,19 @@
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
+    .header_nav_wrap .header_nav_area {display: flex;flex-flow:column;}
+    .header_nav_wrap .header_nav_area .page_title{padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid #e2e2e2;}
+    .header_nav_wrap .header_nav_area .header_nav .nav {display: flex; width: calc(100% + 40px); margin-left: -20px; padding-left: 20px; overflow-y: hidden; overflow-x: scroll; scrollbar-width: none; scrollbar-color: transparent transparent;}
+    .header_nav_wrap .header_nav_area .header_nav .nav::-webkit-scrollbar {display: none; width: 0px; background: transparent;}
+    /* .header_nav_wrap .header_nav_area .header_nav .nav .nav_item.page_title_area{padding-left:0;} */
+    /* .header_nav_area {padding: 0 0 13px !important; border-top: 0 !important; border-bottom: 1px solid #000;}
+    .header_nav {margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e2e2;}
 
-    /* nav */
-    .header_nav_wrap .header_nav_area {display:flex;flex-flow:column;}
-    .header_nav_wrap .header_nav_area .page_title {padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid #e2e2e2;}
-    .header_nav_wrap .header_nav_area .header_nav .nav {display:flex;width:calc(100% + 40px);margin-left:-20px;padding-left:20px;overflow-y:hidden;overflow-x:scroll;scrollbar-width:none;scrollbar-color:transparent transparent;}
-    .header_nav_wrap .header_nav_area .header_nav .nav::-webkit-scrollbar {display:none;width:0px;background:transparent;}
-    
+    .header_nav .nav .nav_item.page_title_area{display:block;width:100%;}
+    .header_nav .nav {display: flex; width: calc(100% + 40px); margin-left: -20px; padding-left: 20px; overflow-y: hidden; overflow-x: scroll; scrollbar-width: none; scrollbar-color: transparent transparent;}
+    .header_nav .nav::-webkit-scrollbar {display: none; width: 0px; background: transparent;}
+    .header_nav .nav .nav_item {padding-right: 26px;} */
+    .swiper-container.catalog_home .swiper-button-prev, .swiper-container.catalog_home .swiper-button-next {display:none;}
 
     /***************************************    general     ************************************/
     .section.general .component .card:last-child {margin-bottom: 0; padding-bottom: 0; border-bottom: 0;} 
@@ -86,7 +100,7 @@
 
 
     /***************************************    catalog     ************************************/
-    .swiper-container.catalog_home .swiper-button-prev, .swiper-container.catalog_home .swiper-button-next {display:none;}
+
 
     /***************************************    unique     ************************************/
     .card_in .card_body { position: static; padding:0;}
@@ -109,8 +123,8 @@
 /* Medium devices (tablet + pc, 768px and up) */
 @media (min-width:768px) {
     .contents {padding-top:30px;}
+    /* .contents.section .page_title {margin-right: 24px;} */
 
-    /* nav */
     .header_nav_wrap {align-items:flex-end; flex-wrap: nowrap;padding-bottom:13px;border-bottom-width:3px;}
     .header_nav_wrap .header_nav_area {align-items:flex-end;}
     .header_nav_wrap .header_nav_area .page_title {padding-top:5px;font-size:28px;letter-spacing:-0.35px;}
@@ -127,6 +141,7 @@
     .section.general .component > .row > * {padding-right: 20px;}
     .section.general .component > .row.no_grid > * {margin-right: 20px; padding-right: 0;}
     .section.general .component > .row > *:last-child {margin-right: 0; padding-right: 0;}
+    /* .section.general .component.header_nav_area > .row > * {padding-right: 0;} */
     .section.general .component.showcase > .row > * {padding-right: 0;}    
     .section.general .component .sub_title {margin-bottom: 19px;}
     .section.general .component.showcase {padding: 0 0 20px;}
@@ -180,10 +195,11 @@
     .contents {padding-top:88px;padding-bottom:100px;}
 
     /* nav */
-    .header_nav_wrap{margin-bottom:40px;border-bottom-width:4px;}
-    .header_nav_wrap .header_nav_area .page_title {padding-top:10px;font-size: 40px;letter-spacing:-0.5px;}
-    .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2{font-size:16px;letter-spacing:-0.2px;}
-    
+    .header_nav_wrap{margin-bottom:40px;border-bottom-width: 4px;}
+    .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2{font-size: 16px;letter-spacing: -0.2px;}
+
+
+    .header_nav_wrap .header_nav_area .page_title {padding-top:10px;font-size: 40px;letter-spacing: -0.5px;}
 
     /***************************************    general     ************************************/
     .section.general .component {padding: 18px 0 50px;}

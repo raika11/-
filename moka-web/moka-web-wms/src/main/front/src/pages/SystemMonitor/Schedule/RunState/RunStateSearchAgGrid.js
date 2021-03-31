@@ -40,10 +40,6 @@ const RunStateSearchAgGrid = () => {
     );
 
     useEffect(() => {
-        dispatch(getJobStatisticSearchList());
-    }, [dispatch]);
-
-    useEffect(() => {
         setRowData(
             list.map((job) => {
                 let targetIndex = SCHEDULE_PERIOD.findIndex((p) => p.period === job.period);
@@ -51,7 +47,7 @@ const RunStateSearchAgGrid = () => {
                 return {
                     ...job,
                     serverNm: job.distributeServerSimple?.serverNm,
-                    periodNm: SCHEDULE_PERIOD[targetIndex].periodNm,
+                    periodNm: SCHEDULE_PERIOD[targetIndex].periodNm || '',
                 };
             }),
         );

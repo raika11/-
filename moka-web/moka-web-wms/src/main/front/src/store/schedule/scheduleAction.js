@@ -24,7 +24,7 @@ export const CLEAR_RUN_STATE_SEARCH = 'schedule/CLEAR_RUN_STATE_SEARCH';
 export const clearRunStateSearch = createAction(CLEAR_RUN_STATE_SEARCH, (payload) => payload);
 export const CLEAR_WORK_SEARCH = 'schedule/CLEAR_WORK_SEARCH';
 export const clearWorkSearch = createAction(CLEAR_WORK_SEARCH, (payload) => payload);
-export const CLEAR_DELETE_WORK_SEARCH = 'schedule/CLEAR_WORK_SEARCH';
+export const CLEAR_DELETE_WORK_SEARCH = 'schedule/CLEAR_DELETE_WORK_SEARCH';
 export const clearDeleteWorkSearch = createAction(CLEAR_WORK_SEARCH, (payload) => payload);
 export const CLEAR_DEPLOY_SERVER_SEARCH = 'schedule/CLEAR_DEPLOY_SERVER_SEARCH';
 export const clearDeployServerSearch = createAction(CLEAR_DEPLOY_SERVER_SEARCH, (payload) => payload);
@@ -39,7 +39,7 @@ export const clearHistoryJob = createAction(CLEAR_HISTORY_JOB, (payload) => payl
  * 조회 액션
  */
 export const [GET_JOB_STATISTIC_LIST, GET_JOB_STATISTIC_LIST_SUCCESS, GET_JOB_STATISTIC_LIST_FAILURE] = createRequestActionTypes('schedule/GET_JOB_STATISTIC_LIST');
-export const getJobStatisticList = createAction(GET_JOB_STATISTIC_LIST, (...actions) => actions);
+export const getJobStatisticList = createAction(GET_JOB_STATISTIC_LIST, ({ search }) => search);
 export const [GET_JOB_STATISTIC_SEARCH_LIST, GET_JOB_STATISTIC_SEARCH_LIST_SUCCESS, GET_JOB_STATISTIC_SEARCH_LIST_FAILURE] = createRequestActionTypes(
     'schedule/GET_JOB_STATISTIC_SEARCH_LIST',
 );

@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
+import moment from 'moment';
 
 const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
     const [dateType, setDateType] = useState('today');
@@ -21,6 +22,7 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
 
     const handleClickSearch = () => {
         if (onSearch instanceof Function) {
+            console.log(options);
             onSearch(options);
         }
 
@@ -58,7 +60,7 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
             setDisabled({ ...disabled, date: false });
         } else {
             const { startDt, endDt } = commonUtil.toRangeDateForDateType(dateType);
-            setOptions({ ...options, startDt, endDt });
+            setOptions({ ...options, startDt: moment(startDt), endDt: moment(endDt) });
             //setDisabled({ ...disabled, date: true });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

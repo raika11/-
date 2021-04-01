@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.Date;
 import java.util.List;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
@@ -16,6 +17,7 @@ import jmnet.moka.core.tps.mvc.schedule.server.entity.QDistributeServer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 배포서버 Repository 2021. 1. 26. 김정민
@@ -72,6 +74,40 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
 
         return new PageImpl<DistributeServer>(list.getResults(), pageable, list.getTotal());
 
+    }
+
+    @Override
+    @Transactional
+    public DistributeServer updateDistributeServer(DistributeServer distServer) {
+        QDistributeServer distributeServer = QDistributeServer.distributeServer;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(distributeServer.serverSeq.eq(distServer.getServerSeq()));
+
+        if (McpString.isNotEmpty(distServer.getAccessPwd())) {
+            update(distributeServer)
+                    .where(builder)
+                    .set(distributeServer.delYn, distServer.getDelYn())
+                    .set(distributeServer.serverNm, distServer.getServerNm())
+                    .set(distributeServer.serverIp, distServer.getServerIp())
+                    .set(distributeServer.accessId, distServer.getAccessId())
+                    .set(distributeServer.accessPwd, distServer.getAccessPwd())
+                    .set(distributeServer.modId, distServer.getModId())
+                    .set(distributeServer.modDt, new Date())
+                    .execute();
+        } else {
+            update(distributeServer)
+                    .where(builder)
+                    .set(distributeServer.delYn, distServer.getDelYn())
+                    .set(distributeServer.serverNm, distServer.getServerNm())
+                    .set(distributeServer.serverIp, distServer.getServerIp())
+                    .set(distributeServer.accessId, distServer.getAccessId())
+                    .set(distributeServer.modId, distServer.getModId())
+                    .set(distributeServer.modDt, new Date())
+                    .execute();
+        }
+
+        return distServer;
     }
 
 

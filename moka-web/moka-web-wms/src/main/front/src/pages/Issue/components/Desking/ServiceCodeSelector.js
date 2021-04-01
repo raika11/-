@@ -1,6 +1,7 @@
 import React, { forwardRef, useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import produce from 'immer';
 import { useSelector } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
@@ -53,6 +54,10 @@ const propTypes = {
      * 매체 sourceCode의 리스트 (필수)
      */
     value: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.oneOf([null])]),
+    /**
+     * onChange (필수)
+     */
+    onChange: PropTypes.func.isRequired,
 };
 const defaultProps = {
     dropdownHeight: 200,
@@ -65,43 +70,44 @@ const defaultProps = {
  * 구조적으로 문제있음.. 차후 방법을 찾아서 수정
  */
 const ServiceCodeSelector = (props) => {
-    const { className, width, dropdownHeight, value } = props;
+    const { className, width, dropdownHeight, value, onChange } = props;
     const serviceCodeList = useSelector(({ code }) => code.service.list);
     const [isAllChecked, setAllChecked] = useState(true);
-    const [labelList, setLabelList] = useState([]);
+    const [checkedList, setCheckedList] = useState([]); // 선택된 코드들
     const [renderList, setRenderList] = useState([]);
 
     /**
      * 체크박스 change
      * @param {object} e 이벤트
      */
-    const handleChangeValue = useCallback((e) => {
-        const { checked, id } = e.target;
-        let resultList = [];
+    const handleChangeValue = useCallback(
+        (e) => {
+            const { checked, id } = e.target;
+            let resultList = [];
 
-        if (id === 'all') {
-            // 매체 전체 예외처리
-            // resultList = checked ? renderList : [];
-        } else {
-            // const target = findSource(id);
-            // if (checked) {
-            //     resultList = [...selectedList, target].sort(function (a, b) {
-            //         return a.index - b.index;
-            //     });
-            // } else {
-            //     const isSelected = selectedList.findIndex((sl) => sl.sourceCode === id);
-            //     if (isSelected > -1) {
-            //         resultList = produce(selectedList, (draft) => {
-            //             draft.splice(isSelected, 1);
-            //         });
-            //     }
-            // }
-        }
+            if (id === 'all') {
+                // 매체 전체 예외처리
+                resultList = checked ? renderList : [];
+            } else {
+                const target = renderList.find((c) => c.masterCode === id);
+                if (checked) {
+                    resultList = [...checkedList, target].sort(function (a, b) {
+                        return a.index - b.index;
+                    });
+                } else {
+                    const idx = checkedList.findIndex((c) => c.masterCode === id);
+                    resultList = produce(checkedList, (draft) => {
+                        draft.splice(idx, 1);
+                    });
+                }
+            }
 
-        if (typeof onChange === 'function') {
-            // onChange(resultList.map((r) => r.sourceCode).join(','));
-        }
-    }, []);
+            if (typeof onChange === 'function') {
+                onChange(resultList.map((r) => r.masterCode).join(','));
+            }
+        },
+        [checkedList, onChange, renderList],
+    );
 
     /**
      * 코드 렌더러
@@ -126,13 +132,15 @@ const ServiceCodeSelector = (props) => {
                 .filter((v) => v !== '')
                 .map((val) => renderList.find((s) => s.masterCode === val))
                 .filter(Boolean);
-            setLabelList(codes);
+            setCheckedList(codes);
 
             if (codes.length === renderList.length) {
                 setAllChecked(true);
+            } else {
+                setAllChecked(false);
             }
         } else {
-            setLabelList([]);
+            setCheckedList([]);
         }
     }, [value, renderList]);
 
@@ -141,12 +149,16 @@ const ServiceCodeSelector = (props) => {
             <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
                 <PerfectScrollbar options={{ suppressScrollY: true, wheelPropagation: true }}>
                     <div className="d-flex flex-nowrap align-items-center h-100" style={{ width: 0 }}>
-                        {labelList.map((c) => (
-                            <Badge key={c.masterCode} className="mr-1" variant="searching">
-                                {c.serviceKorname}
-                                {/* <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => {}} /> */}
-                            </Badge>
-                        ))}
+                        {isAllChecked ? (
+                            <Badge variant="searching">카테고리 전체</Badge>
+                        ) : (
+                            checkedList.map((c) => (
+                                <Badge key={c.masterCode} className="mr-1" variant="searching">
+                                    {c.serviceKorname}
+                                    {/* <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => {}} /> */}
+                                </Badge>
+                            ))
+                        )}
                     </div>
                 </PerfectScrollbar>
             </Dropdown.Toggle>
@@ -156,12 +168,13 @@ const ServiceCodeSelector = (props) => {
                     label: '카테고리 전체',
                     custom: true,
                     id: 'all',
+                    checked: isAllChecked,
                 })}
                 {renderList.map((cd, idx) =>
                     renderCode({
                         label: cd.serviceKorname,
-                        checked: false,
                         id: cd.masterCode,
+                        checked: checkedList.findIndex((l) => l.masterCode === cd.masterCode) > -1,
                     }),
                 )}
             </Dropdown.Menu>

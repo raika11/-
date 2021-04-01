@@ -37,15 +37,11 @@ export const initialState = {
         usedYn: null, // 노출 여부
         keyword: '',
     },
+    // 구독 검색조건
     scbYnSearchTypeList: [
         { id: '', name: '구독 전체 ' },
         { id: 'Y', name: '구독' },
         { id: 'N', name: '비구독' },
-    ],
-    divSearchTypeList: [
-        { id: 'T', name: 'T' },
-        { id: 'I', name: 'I' },
-        { id: 'S', name: 'S' },
     ],
     pkg: {
         pkgSeq: null,

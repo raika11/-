@@ -2,6 +2,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaSearchInput } from '@components';
+import { initialState } from '@store/issue';
 import ServiceCodeSelector from './ServiceCodeSelector';
 
 /**
@@ -49,8 +50,16 @@ const Search = (props) => {
         }
     };
 
+    /**
+     * 카테고리 변경
+     * @param {string} category 카테고리(text)
+     */
+    const handleChangeCategory = (category) => {
+        onChangeSearchOption({ key: 'category', value: category });
+    };
+
     return (
-        <Form>
+        <Form className="mb-14">
             <Form.Row className="mb-2">
                 {/* 검색기간 */}
                 <div style={{ width: 78 }} className="flex-shrink-0 mr-2">
@@ -81,23 +90,28 @@ const Search = (props) => {
                 </div>
 
                 {/* 카테고리 */}
-                <ServiceCodeSelector value={search.category} className="flex-fill mr-2" />
+                <ServiceCodeSelector value={search.category} className="flex-fill mr-2" onChange={handleChangeCategory} />
 
                 {/* 초기화 */}
                 <Button variant="negative" className="flex-shrink-0" onClick={onReset}>
                     초기화
                 </Button>
             </Form.Row>
-            <Form.Row className="d-flex mb-14 justify-content-between">
+            <Form.Row className="d-flex justify-content-between">
                 <div className="flex-shrink-0 mr-2">
                     <MokaInput as="select" disabled>
                         <option>유형 전체</option>
                     </MokaInput>
                 </div>
 
+                {/* 구독 전체 */}
                 <div className="flex-shrink-0 mr-2">
-                    <MokaInput as="select" disabled>
-                        <option>구독 전체</option>
+                    <MokaInput as="select" name="scbYn" value={search.scbYn} onChange={handleChangeValue}>
+                        {initialState.scbYnSearchTypeList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
                     </MokaInput>
                 </div>
 

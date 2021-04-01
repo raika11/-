@@ -70,8 +70,12 @@ const propTypes = {
     sourceType: PropTypes.oneOf(['DESKING', 'JOONGANG', 'CONSALES', 'JSTORE', 'SOCIAL', 'BULK', 'RCV']).isRequired,
     /**
      * 드롭다운 메뉴의 height
+     * @default
      */
     dropdownHeight: PropTypes.number,
+    /**
+     * width
+     */
     width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
@@ -83,7 +87,7 @@ const defaultProps = {
 };
 
 /**
- * 매체 선택자
+ * 공통 > 매체 선택자
  * 이 컴포넌트는 dispatch하지 않는다
  * (sourceType, value, onChange 필수로 받음)
  */

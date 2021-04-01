@@ -14,10 +14,15 @@ export const clearIssue = createAction(CLEAR_ISSUE);
  */
 export const [GET_ISSUE_LIST, GET_ISSUE_LIST_SUCCESS, GET_ISSUE_LIST_FAILURE] = createRequestActionTypes('issue/GET_ISSUE_LIST');
 export const getIssueList = createAction(GET_ISSUE_LIST, ({ search, callback }) => ({ search, callback }));
-export const GET_ISSUE_LIST_MODAL = 'issue/GET_ISSUE_LIST_MODAL';
-export const getIssueListModal = createAction(GET_ISSUE_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
 export const [GET_ISSUE_LIST_GROUP_BY_ORDNO] = createRequestActionTypes('issue/GET_ISSUE_LIST_GROUP_BY_ORDNO');
 export const getIssueListGroupByOrdno = createAction(GET_ISSUE_LIST_GROUP_BY_ORDNO, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 이슈 목록 조회 (Modal)
+ * @desc getServiceCodeList === true이면 서비스코드 목록 조회 => 서비스 코드 검색조건 (모든 코드)에 포함
+ */
+export const GET_ISSUE_LIST_MODAL = 'issue/GET_ISSUE_LIST_MODAL';
+export const getIssueListModal = createAction(GET_ISSUE_LIST_MODAL, ({ search, callback, getServiceCodeList }) => ({ search, callback, getServiceCodeList }));
 
 /**
  * 이슈 조회

@@ -32,12 +32,21 @@ export const initialState = {
         startDt: null, // 시작일시
         endDt: null, // 종료일시
         category: null, // 카테고리
-        div: null, // 패키지 유형
-        scbYn: null, // 구독 여부
+        div: 'all', // 패키지 유형
+        scbYn: 'all', // 구독 여부
         usedYn: null, // 노출 여부
         keyword: '',
     },
-    invalidList: [],
+    scbYnSearchTypeList: [
+        { id: '', name: '구독 전체 ' },
+        { id: 'Y', name: '구독' },
+        { id: 'N', name: '비구독' },
+    ],
+    divSearchTypeList: [
+        { id: 'T', name: 'T' },
+        { id: 'I', name: 'I' },
+        { id: 'S', name: 'S' },
+    ],
     pkg: {
         pkgSeq: null,
         artCnt: 0,
@@ -46,6 +55,7 @@ export const initialState = {
         updDt: null,
         usedYn: 'Y',
     },
+    invalidList: [],
     initialPkgKeyword,
 };
 

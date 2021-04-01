@@ -1,7 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import moment from 'moment';
+import { initialState, getIssueListModal } from '@store/issue';
+import { messageBox } from '@utils/toastUtil';
 import Search from './Search';
 import AgGrid from './AgGrid';
 
@@ -36,23 +39,45 @@ const defaultProps = {
     show: false,
 };
 
-const initialSearch = {};
-
 /**
  * 홈 섹션편집 > 패키지 목록
  */
-const PackageList = (props) => {
+const IssueList = (props) => {
     const { className, selectedComponent, dropTargetAgGrid, onDragStop, show } = props;
+    const dispatch = useDispatch();
     const loading = false;
     const [period, setPeriod] = useState([2, 'days']);
-    const [search, setSearch] = useState(initialSearch);
+    const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
     const [total, setTotal] = useState(0);
+    const cntRef = useRef(0);
 
     /**
      * 패키지 목록 조회
      */
-    const getPackageList = useCallback(({ search: appendSearch }) => {}, []);
+    const getIssueList = useCallback(
+        ({ search: appendSearch }) => {
+            const ns = { ...search, ...appendSearch };
+            setSearch(ns);
+
+            dispatch(
+                getIssueListModal({
+                    search: ns,
+                    getServiceCodeList: true,
+                    callback: ({ header, body, search }) => {
+                        if (header.success) {
+                            setRowData(body.list);
+                            setTotal(body.totalCnt);
+                            setSearch({ ...ns, category: search.category });
+                        } else {
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
+        },
+        [dispatch, search],
+    );
 
     /**
      * 검색조건 변경
@@ -80,9 +105,9 @@ const PackageList = (props) => {
         ({ key, value }) => {
             let ns = { [key]: value };
             if (key !== 'page') ns['page'] = 0;
-            getPackageList({ search: ns });
+            getIssueList({ search: ns });
         },
-        [getPackageList],
+        [getIssueList],
     );
 
     /**
@@ -92,12 +117,21 @@ const PackageList = (props) => {
         const nd = new Date();
         setPeriod([1, 'days']);
         setSearch({
-            ...initialSearch,
+            ...initialState.search,
             page: search.page,
             startServiceDay: moment(nd).subtract(1, 'days').startOf('day'),
             endServiceDay: moment(nd).endOf('day'),
         });
     }, [search.page]);
+
+    useEffect(() => {
+        if (show) {
+            if (cntRef.current === 0) {
+                getIssueList({});
+                cntRef.current += 1;
+            }
+        }
+    }, [show, getIssueList]);
 
     return (
         <div className={clsx('d-flex flex-column h-100', className)}>
@@ -123,7 +157,7 @@ const PackageList = (props) => {
     );
 };
 
-PackageList.propTypes = propTypes;
-PackageList.defaultProps = defaultProps;
+IssueList.propTypes = propTypes;
+IssueList.defaultProps = defaultProps;
 
-export default PackageList;
+export default IssueList;

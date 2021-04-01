@@ -2,6 +2,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaSearchInput } from '@components';
+import ServiceCodeSelector from './ServiceCodeSelector';
 
 /**
  * 홈 섹션편집 > 패키지 목록 > 패키지 검색
@@ -30,9 +31,9 @@ const Search = (props) => {
      */
     const handleChangeSDate = (date) => {
         if (date !== '') {
-            onChangeSearchOption({ key: 'startServiceDay', value: date });
+            onChangeSearchOption({ key: 'startDt', value: date });
         } else {
-            onChangeSearchOption({ key: 'startServiceDay', value: null });
+            onChangeSearchOption({ key: 'startDt', value: null });
         }
     };
 
@@ -42,15 +43,15 @@ const Search = (props) => {
      */
     const handleChangeEDate = (date) => {
         if (date !== '') {
-            onChangeSearchOption({ key: 'endServiceDay', value: date });
+            onChangeSearchOption({ key: 'endDt', value: date });
         } else {
-            onChangeSearchOption({ key: 'endServiceDay', value: null });
+            onChangeSearchOption({ key: 'endDt', value: null });
         }
     };
 
     return (
         <Form>
-            <Form.Row className="d-flex mb-2">
+            <Form.Row className="mb-2">
                 {/* 검색기간 */}
                 <div style={{ width: 78 }} className="flex-shrink-0 mr-2">
                     <MokaInput as="select" name="period" onChange={handleChangePeriod} value={period.join('')}>
@@ -70,22 +71,17 @@ const Search = (props) => {
                 </div>
 
                 {/* 시작일 */}
-                <div className="mr-2">
-                    <MokaInput
-                        as="dateTimePicker"
-                        inputProps={{ timeFormat: null, timeDefault: 'start', width: 140 }}
-                        onChange={handleChangeSDate}
-                        value={search.startServiceDay}
-                    />
+                <div style={{ width: 140 }} className="flex-shrink-0 mr-2">
+                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'start', width: 140 }} onChange={handleChangeSDate} value={search.startDt} />
                 </div>
 
                 {/* 종료일 */}
-                <div className="mr-2">
-                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'end', width: 140 }} onChange={handleChangeEDate} value={search.endServiceDay} />
+                <div style={{ width: 140 }} className="flex-shrink-0 mr-2">
+                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'end', width: 140 }} onChange={handleChangeEDate} value={search.endDt} />
                 </div>
 
                 {/* 카테고리 */}
-                <MokaInput placeholder="카테고리 전체" className="mr-2" disabled />
+                <ServiceCodeSelector value={search.category} className="flex-fill mr-2" />
 
                 {/* 초기화 */}
                 <Button variant="negative" className="flex-shrink-0" onClick={onReset}>

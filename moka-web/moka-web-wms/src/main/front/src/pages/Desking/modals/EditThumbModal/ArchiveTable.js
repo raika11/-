@@ -65,7 +65,7 @@ const ArchiveTable = (props) => {
                                 showPhotoDetail={showPhotoDetail}
                                 setRepImg={setRepImg}
                                 isRep={data.id === repImg?.id}
-                                dataType={data.dataType}
+                                cardType="archive"
                                 boxShadow="0px 8px 10px -1px #bbb"
                             />
                         ))}

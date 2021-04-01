@@ -159,12 +159,6 @@ public class Reporter extends BaseAudit {
     private Integer replyCnt;
 
     /**
-     * 필진타입 (J1:기자필진,J2:외부필진,J3:그룹필진,J0:필진해지)
-     */
-    @Column(name = "JPLUS_REP_DIV", updatable = false)
-    private String jplusRepDiv;
-
-    /**
      * 직업정보
      */
     @Column(name = "JPLUS_JOB_INFO", updatable = false)
@@ -193,6 +187,12 @@ public class Reporter extends BaseAudit {
      */
     @Column(name = "JPLUS_USED_YN", updatable = false)
     private String jplusUsedYn;
+
+    /**
+     * 필진타입 (TB_15RE_CODE_MGT.GRP_CD=JPLUS_REP)
+     */
+    @Column(name = "JPLUS_REP_DIV", updatable = false)
+    private String jplusRepDiv;
 
     /**
      * 직접관리용 회사코드 (TB_15RE_CODE_MGT.GRP_CD=R1)

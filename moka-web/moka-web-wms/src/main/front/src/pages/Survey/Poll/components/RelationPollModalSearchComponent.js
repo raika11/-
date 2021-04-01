@@ -44,6 +44,7 @@ const RelationPollModalSearchComponent = ({ searchOptions, onSearch, codes }) =>
             <MokaSearchInput
                 className="flex-fill"
                 name="keyword"
+                placeholder="투표 제목을 입력하세요"
                 value={search.keyword}
                 onChange={(e) => {
                     const { name, value } = e.target;

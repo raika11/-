@@ -383,10 +383,6 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 /* 텍스트 간 구분선 */
 .div_line::before {content: ''; display: inline-block; width: 1px; height: 12px; margin: 0 16px; background-color: #d8d8d8;}
 
-
-
-
-
 /*** border ***/
 /* border 위치 */
 .bdr_top {border-top-style:solid;}

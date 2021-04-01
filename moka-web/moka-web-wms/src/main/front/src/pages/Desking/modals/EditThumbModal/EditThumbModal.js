@@ -299,12 +299,11 @@ const EditThumbModal = (props) => {
                         <ThumbCard
                             className="p-2"
                             img={repImg.thumbPath}
-                            dataType={repImg.dataType}
+                            cardType="represent"
                             onDeleteClick={handleDeleteClick}
                             data={repImg}
                             editPhoto={(origin) => editPhoto(origin, setRepImg)}
                             showPhotoDetail={showPhotoDetail}
-                            represent
                         />
                     </div>
 

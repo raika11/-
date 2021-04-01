@@ -33,6 +33,7 @@
         -webkit-outline-radius: 5px !important;
         transition: border-color 0.24s ease-in-out !important;
         box-sizing: border-box;
+        pointer-events: none;
         z-index: 1;
     }
 

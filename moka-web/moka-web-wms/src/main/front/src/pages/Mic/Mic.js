@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
 import { clearStore } from '@store/mic';
+import { clearStore as clearPollStore, getPollGroupCodes } from '@store/survey/poll/pollAction';
 import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import MicAgendaList from './MicAgendaList';
 import MicAgendaEdit from './MicAgendaEdit';
@@ -17,8 +18,13 @@ const Mic = ({ match }) => {
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     useEffect(() => {
+        dispatch(getPollGroupCodes());
+    }, [dispatch]);
+
+    useEffect(() => {
         return () => {
             dispatch(clearStore());
+            dispatch(clearPollStore());
         };
     }, [dispatch]);
 

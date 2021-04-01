@@ -8,7 +8,7 @@ import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import produce from 'immer';
-const initialState = { searchType: 'title', keyword: '', page: 0, size: 20, sort: 'pollSeq,desc', status: ['S', 'D'] };
+const initialState = { searchType: 'title', keyword: '', page: 0, size: 20, sort: 'pollSeq,desc', status: ['S', 'D'], pollGroup: '' };
 const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
     const [total, setTotal] = useState(0);
     const [search, setSearch] = useState(initialState);
@@ -57,7 +57,7 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
                                 response.body.list.map((row) => ({
                                     id: row.pollSeq,
                                     title: unescapeHtmlArticle(row.title),
-                                    category: commonUtil.toKorFromCode(row.pollCategory, codes.pollCategory),
+                                    group: commonUtil.toKorFromCode(row.pollGroup, codes.pollGroup),
                                     status: row.status === 'S' ? '진행' : '종료',
                                     onClick: handleClickAdd,
                                 })),
@@ -85,7 +85,7 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
 
     return (
         <MokaModal title="관련 투표 추가" show={show} onHide={onHide} size="md" width={600} loading={loading} draggable>
-            <RelationPollModalSearchComponent onSearch={setSearch} searchOptions={search} />
+            <RelationPollModalSearchComponent onSearch={setSearch} searchOptions={search} codes={codes} />
             <RelationPollModalAgGridComponent
                 rowData={rows}
                 searchOptions={search}

@@ -8,9 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @AutoConfigureBefore(MokaBulkConfiguration.class)
 public class MokaBulkApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(MokaBulkApplication.class, args);
 	}
-
 }

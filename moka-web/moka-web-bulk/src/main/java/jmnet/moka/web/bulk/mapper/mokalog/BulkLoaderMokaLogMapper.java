@@ -1,4 +1,4 @@
-package jmnet.moka.web.bulk.mapper.idb;
+package jmnet.moka.web.bulk.mapper.mokalog;
 
 import java.util.Map;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
@@ -19,6 +19,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Mapper
-public interface BulkLoaderIdbMapper {
-    void callUspBulkNewsTableIns( TotalVo<Map<String, Object>> totalVo);
+public interface BulkLoaderMokaLogMapper {
+     void callUspBulkLogInsByLoader( TotalVo<Map<String, Object>> totalVo );
 }

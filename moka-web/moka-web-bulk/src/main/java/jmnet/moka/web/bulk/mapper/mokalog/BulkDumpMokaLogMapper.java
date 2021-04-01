@@ -1,8 +1,7 @@
-package jmnet.moka.web.bulk.mapper.idb;
+package jmnet.moka.web.bulk.mapper.mokalog;
 
 import jmnet.moka.web.bulk.common.vo.TotalVo;
-import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobTotalVo;
-import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobVo;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Mapper
-public interface BulkSenderIdbMapper {
-    void callUspBulkLogInsBySender( TotalVo<BulkDumpJobTotalVo> totalVo );
-    void callUspBulkPortalLogInsBySender( TotalVo<BulkDumpJobVo> totalVo );
+public interface BulkDumpMokaLogMapper {
+    void callUspBulkLogInsByDump( TotalVo<BulkDumpTotalVo> totalVo );
+    void callUspBulkPortalLogInsByDump( TotalVo<BulkDumpTotalVo> totalVo );
 }

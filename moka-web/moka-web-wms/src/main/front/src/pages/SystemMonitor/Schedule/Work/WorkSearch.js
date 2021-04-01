@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaInput } from '@/components';
 import { SCHEDULE_PERIOD } from '@/constants';
+import { getGenCate } from '@/store/codeMgt';
 import { initialState, clearWorkSearch, getDistributeServerCode, getJobList, changeWorkSearchOption } from '@/store/schedule';
 
 /**
@@ -61,7 +62,7 @@ const WorkSearch = ({ show, match }) => {
 
     useEffect(() => {
         if (show) {
-            dispatch(getJobList(getDistributeServerCode()));
+            dispatch(getJobList(getGenCate(), getDistributeServerCode()));
         } else {
             dispatch(clearWorkSearch());
             setSearch(initialState.work.search);
@@ -74,7 +75,7 @@ const WorkSearch = ({ show, match }) => {
 
     return (
         <>
-            <Form className="mb-14">
+            <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
                 <Form.Row className="mb-2">
                     {/* 기타코드에서 가져옴 'GEN_CATE' */}
                     <Col xs={2} className="p-0 pr-2">

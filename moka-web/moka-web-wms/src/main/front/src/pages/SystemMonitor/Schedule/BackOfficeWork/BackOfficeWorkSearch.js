@@ -79,7 +79,7 @@ const BackOfficeWorkSearch = ({ show }) => {
 
     return (
         <Form className="mb-14">
-            <Form.Row className="mb-2">
+            <Form.Row className="mb-2" onsubmit={(e) => e.preventDefault()}>
                 <Col xs={5} className="p-0 pr-2 d-flex align-items-center">
                     <MokaInput
                         as="dateTimePicker"

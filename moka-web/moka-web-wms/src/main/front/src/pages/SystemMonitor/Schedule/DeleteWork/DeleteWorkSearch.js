@@ -5,7 +5,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
 import { SCHEDULE_PERIOD } from '@/constants';
-import { initialState, getDeleteJobList, changeDeleteWorkSearchOption, clearDeleteWorkSearch } from '@/store/schedule';
+import { getGenCate } from '@/store/codeMgt';
+import { getDistributeServerCode, initialState, getDeleteJobList, changeDeleteWorkSearchOption, clearDeleteWorkSearch } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 삭제 작업 목록 검색
@@ -52,7 +53,7 @@ const DeleteWorkSearch = ({ show }) => {
 
     useEffect(() => {
         if (show) {
-            dispatch(getDeleteJobList());
+            dispatch(getDeleteJobList(getGenCate(), getDistributeServerCode()));
         } else {
             dispatch(clearDeleteWorkSearch());
             setSearch(initialState.deleteWork.search);
@@ -64,7 +65,7 @@ const DeleteWorkSearch = ({ show }) => {
     }, [storeSearch]);
 
     return (
-        <Form className="mb-14">
+        <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
             <Form.Row className="mb-2">
                 {/* 기타코드에서 가져옴 'GEN_CATE' */}
                 <Col xs={2} className="p-0 pr-2">

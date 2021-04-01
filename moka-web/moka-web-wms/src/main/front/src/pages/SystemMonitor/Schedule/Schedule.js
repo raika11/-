@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { MokaCard } from '@/components';
-import { getGenCate } from '@/store/codeMgt';
 import { clearStore } from '@/store/schedule';
 import RunState from './RunState';
 import Work from './Work';
@@ -48,11 +47,6 @@ const Schedule = ({ match }) => {
             return null;
         });
     }, [activeKey, match, tabNavs]);
-
-    useEffect(() => {
-        // 기타코드 스케줄 작업 목록
-        dispatch(getGenCate());
-    }, [dispatch]);
 
     useEffect(() => {
         return () => {

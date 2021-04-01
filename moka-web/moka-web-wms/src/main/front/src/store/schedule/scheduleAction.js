@@ -20,18 +20,12 @@ export const changeBackOfficeWorkSearchOption = createAction(CHANGE_BACK_OFFICE_
  */
 export const CLEAR_STORE = 'schedule/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE, (payload) => payload);
-export const CLEAR_RUN_STATE_SEARCH = 'schedule/CLEAR_RUN_STATE_SEARCH';
-export const clearRunStateSearch = createAction(CLEAR_RUN_STATE_SEARCH, (payload) => payload);
-export const CLEAR_WORK_SEARCH = 'schedule/CLEAR_WORK_SEARCH';
-export const clearWorkSearch = createAction(CLEAR_WORK_SEARCH, (payload) => payload);
-export const CLEAR_DELETE_WORK_SEARCH = 'schedule/CLEAR_DELETE_WORK_SEARCH';
-export const clearDeleteWorkSearch = createAction(CLEAR_WORK_SEARCH, (payload) => payload);
-export const CLEAR_DEPLOY_SERVER_SEARCH = 'schedule/CLEAR_DEPLOY_SERVER_SEARCH';
-export const clearDeployServerSearch = createAction(CLEAR_DEPLOY_SERVER_SEARCH, (payload) => payload);
 export const CLEAR_JOB = 'schedule/CLEAR_WORK_JOB';
 export const clearJob = createAction(CLEAR_JOB, (payload) => payload);
 export const CLEAR_SERVER = 'schedule/CLEAR_SERVER';
 export const clearServer = createAction(CLEAR_SERVER, (payload) => payload);
+export const CLEAR_DELETE_JOB = 'schedule/CLEAR_DELETE_JOB';
+export const clearDeleteJob = createAction(CLEAR_DELETE_JOB, (payload) => payload);
 export const CLEAR_HISTORY_JOB = 'schedule/CLEAR_HISTORY';
 export const clearHistoryJob = createAction(CLEAR_HISTORY_JOB, (payload) => payload);
 

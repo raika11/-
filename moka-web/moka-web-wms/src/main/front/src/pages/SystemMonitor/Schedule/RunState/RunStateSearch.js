@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
 import { SCHEDULE_PERIOD } from '@/constants';
 import { getGenCate } from '@/store/codeMgt';
-import { initialState, getJobStatisticSearchList, getDistributeServerCode, changeRunStateSearchOption, clearRunStateSearch } from '@/store/schedule';
+import { initialState, getJobStatisticSearchList, getDistributeServerCode, changeRunStateSearchOption } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 작업 실행상태 검색
@@ -44,7 +44,6 @@ const RunStateSearch = ({ show }) => {
      * 초기화
      */
     const handleClickReset = () => {
-        dispatch(clearRunStateSearch());
         setSearch(initialState.runState.search);
     };
 
@@ -56,7 +55,6 @@ const RunStateSearch = ({ show }) => {
         if (show) {
             dispatch(getJobStatisticSearchList(getGenCate(), getDistributeServerCode()));
         } else {
-            dispatch(clearRunStateSearch());
             setSearch(initialState.runState.search);
         }
     }, [dispatch, show]);

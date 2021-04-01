@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaInput } from '@/components';
 import { SCHEDULE_PERIOD } from '@/constants';
 import { getGenCate } from '@/store/codeMgt';
-import { initialState, clearWorkSearch, getDistributeServerCode, getJobList, changeWorkSearchOption } from '@/store/schedule';
+import { initialState, getDistributeServerCode, getJobCode, getJobList, changeWorkSearchOption } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 작업 목록 검색
@@ -49,7 +49,6 @@ const WorkSearch = ({ show, match }) => {
      * 초기화
      */
     const handleClickReset = () => {
-        dispatch(clearWorkSearch());
         setSearch(initialState.work.search);
     };
 
@@ -62,9 +61,8 @@ const WorkSearch = ({ show, match }) => {
 
     useEffect(() => {
         if (show) {
-            dispatch(getJobList(getGenCate(), getDistributeServerCode()));
+            dispatch(getJobList(getGenCate(), getDistributeServerCode(), getJobCode()));
         } else {
-            dispatch(clearWorkSearch());
             setSearch(initialState.work.search);
         }
     }, [dispatch, show]);

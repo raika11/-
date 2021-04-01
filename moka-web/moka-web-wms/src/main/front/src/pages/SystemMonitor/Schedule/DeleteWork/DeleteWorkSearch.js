@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
 import { SCHEDULE_PERIOD } from '@/constants';
 import { getGenCate } from '@/store/codeMgt';
-import { getDistributeServerCode, initialState, getDeleteJobList, changeDeleteWorkSearchOption, clearDeleteWorkSearch } from '@/store/schedule';
+import { getDistributeServerCode, initialState, getDeleteJobList, changeDeleteWorkSearchOption } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 삭제 작업 목록 검색
@@ -47,7 +47,6 @@ const DeleteWorkSearch = ({ show }) => {
      * 초기화 버튼
      */
     const handleClickReset = () => {
-        dispatch(clearDeleteWorkSearch());
         setSearch(initialState.deleteWork.search);
     };
 
@@ -55,7 +54,6 @@ const DeleteWorkSearch = ({ show }) => {
         if (show) {
             dispatch(getDeleteJobList(getGenCate(), getDistributeServerCode()));
         } else {
-            dispatch(clearDeleteWorkSearch());
             setSearch(initialState.deleteWork.search);
         }
     }, [dispatch, show]);

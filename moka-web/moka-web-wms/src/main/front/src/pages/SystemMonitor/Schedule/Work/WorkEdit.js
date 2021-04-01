@@ -20,6 +20,7 @@ const WorkEdit = ({ match }) => {
     const history = useHistory();
     const { jobSeq } = useParams();
     const dispatch = useDispatch();
+    const jobCode = useSelector((store) => store.schedule.backOffice.jobCode);
     const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
     const deployServerCode = useSelector((store) => store.schedule.work.deployServerCode);
     const job = useSelector((store) => store.schedule.work.job);
@@ -72,6 +73,16 @@ const WorkEdit = ({ match }) => {
             });
             isInvalid = isInvalid || true;
         }
+
+        // if (obj.jobType === 'R') {
+        //     if (!obj.jobCd) {
+        //         errList.push({
+        //             field: 'jobCd',
+        //             reason: '백오피스 업무를 입력하세요',
+        //         });
+        //         isInvalid = isInvalid || true;
+        //     }
+        // }
 
         setError(invalidListToError(errList));
         return !isInvalid;
@@ -234,7 +245,18 @@ const WorkEdit = ({ match }) => {
                                     ))}
                                 </MokaInputLabel>
                             )}
-                            {data.jobType === 'R' && <MokaInputLabel label="백오피스 업무" name="jobCd" value={data.jobCd} onChange={handleChangeValue} />}
+                            {data.jobType === 'R' && (
+                                // <MokaInputLabel label="백오피스 업무" name="jobCd" value={data.jobCd} onChange={handleChangeValue} />
+                                <MokaInputLabel label="백오피스 업무" as="select" name="jobSeq" value={data.jobSeq} onChange={handleChangeValue}>
+                                    <option value="">업무 전체</option>
+                                    {jobCode &&
+                                        jobCode.map((j) => (
+                                            <option key={j.jobSeq} value={j.jobSeq}>
+                                                {j.jobNm}
+                                            </option>
+                                        ))}
+                                </MokaInputLabel>
+                            )}
                         </Col>
                     </Form.Row>
                     <Form.Row className="mb-2" style={{ maxHeight: 31 }}>

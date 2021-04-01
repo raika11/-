@@ -9,7 +9,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { MokaInput, MokaInputLabel } from '@/components';
 import { messageBox } from '@/utils/toastUtil';
 import { DB_DATEFORMAT, SCHEDULE_PERIOD } from '@/constants';
-import { getDeleteJob } from '@/store/schedule';
+import { getDeleteJob, clearDeleteJob } from '@/store/schedule';
 import AddJobModal from '../modals/AddJobModal';
 
 /**
@@ -76,6 +76,8 @@ const DeleteWorkEdit = ({ match }) => {
     useEffect(() => {
         if (jobSeq) {
             dispatch(getDeleteJob(jobSeq));
+        } else {
+            dispatch(clearDeleteJob());
         }
     }, [dispatch, jobSeq]);
 

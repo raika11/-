@@ -22,7 +22,7 @@ const PollPhotoComponent = ({ src, width, height, onChange, children }) => {
     const [file, setFile] = useState({});
     const [isError, setIsError] = useState(false);
     const { getRootProps, getInputProps, open } = useDropzone({
-        accept: ['image/jpeg', 'image/png'],
+        accept: ['image/jpeg', 'image/png', 'image/gif'],
         onDrop: (acceptedFiles) => {
             acceptedFiles[0] && setFile(Object.assign(acceptedFiles[0], { preview: URL.createObjectURL(acceptedFiles[0]) }));
             onChange instanceof Function && onChange(acceptedFiles[0]);

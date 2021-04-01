@@ -2,6 +2,8 @@ package jmnet.moka.core.tps.mvc.columnist.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +14,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import jmnet.moka.core.tps.common.code.JplusRepDivCode;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
 import lombok.AllArgsConstructor;
@@ -64,6 +67,13 @@ public class Columnist extends BaseAudit {
      */
     @Column(name = "REP_SEQ")
     private Long repSeq;
+
+    /**
+     * 필진타입 (J1:기자필진,J2:외부기자(밀리터리),J3:그룹필진,J0:필진해지,R1:일보기자(더오래),R2:외부기자(더오래))
+     */
+    @Column(name = "JPLUS_REP_DIV")
+    @Enumerated(value = EnumType.STRING)
+    private JplusRepDivCode jplusRepDiv;
 
     /**
      * nvarchar	30		NO	칼럼니스트이름

@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -322,6 +323,24 @@ public class ScheduleServerController extends AbstractCommonController {
     }
 
     /**
+     * 작업 > jobCd 중복확인
+     *
+     * @param jobCd
+     * @return boolean
+     */
+    @ApiOperation(value = "jobCd 중복확인")
+    @GetMapping("/job-check-jobcd/{jobCd}")
+    public ResponseEntity<?> getJobContentHistory(@ApiParam("jobCd(필수)") @PathVariable("jobCd") String jobCd) {
+        boolean result = jobContentService.findJobCd(jobCd) == 0 ? false : true;
+        HashMap<String, Boolean> resultMap = new HashMap<String, Boolean>();
+        resultMap.put("duplicated", result);
+        
+        ResultDTO<HashMap<String, Boolean>> resultDTO = new ResultDTO<HashMap<String, Boolean>>(resultMap);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
      * 삭제된 작업 목록조회
      *
      * @param search 검색조건 : 분류, 주기, 타입, 배포서버, 검색타입, 검색어
@@ -627,7 +646,7 @@ public class ScheduleServerController extends AbstractCommonController {
      * @param seqNo 일련번호
      * @return 작업
      */
-    @ApiOperation(value = "작업 상세조회")
+    @ApiOperation(value = "작업예약 상세조회")
     @GetMapping("/job-history/{seqNo}")
     public ResponseEntity<?> getJobContentHistory(@ApiParam("작업 번호(필수)") @PathVariable("seqNo") Long seqNo)
             throws NoDataException {
@@ -644,7 +663,6 @@ public class ScheduleServerController extends AbstractCommonController {
         ResultDTO<JobContentHistoryDTO> resultDTO = new ResultDTO<JobContentHistoryDTO>(dto);
         tpsLogger.success(true);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-
     }
 
     //패스워드 암호화 적용

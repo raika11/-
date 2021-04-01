@@ -3,8 +3,11 @@ package jmnet.moka.web.tms.mvc.handler;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.common.template.exception.TemplateMergeException;
+import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.mvc.handler.AbstractHandler;
 import org.slf4j.Logger;
@@ -34,7 +37,8 @@ public class PackageHandler extends AbstractHandler {
     }
 
     @Override
-    public HandlerMethod resolvable(HttpServletRequest request, String requestPath, List<String> pathList, String domainId) {
+    public HandlerMethod resolvable(HttpServletRequest request, String requestPath, List<String> pathList, String domainId)
+            throws TemplateMergeException, TemplateParseException {
         // case-insensitive URI 처리
         if (pathList.size() == 2 && !pathList.get(1).equals("list") &&
                 ( requestPath.toLowerCase().startsWith(MokaConstants.MERGE_ISSUE_PREFIX)

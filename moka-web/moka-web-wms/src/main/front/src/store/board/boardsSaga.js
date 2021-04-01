@@ -325,10 +325,6 @@ function* uploadBoardContentsImage({ payload: { boardId, imageForm, callback } }
             imageForm: imageForm,
         });
         callbackData = response.data;
-
-        if (!response.data.header.success) {
-            toast.error(callbackData.header?.message);
-        }
     } catch (e) {
         callbackData = errorResponse(e);
     }

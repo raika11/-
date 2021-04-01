@@ -156,10 +156,10 @@ const EditThumbModal = (props) => {
                 setRepImg({
                     dataType: 'local',
                     id: data.id,
-                    thumbPath: data.preview,
-                    imageOnlnPath: data.preview,
+                    thumbPath: data.thumbPath,
+                    imageOnlnPath: data.thumbPath,
                     path: {
-                        preview: data.preview,
+                        preview: data.thumbPath,
                     },
                     imgProps: data,
                 });

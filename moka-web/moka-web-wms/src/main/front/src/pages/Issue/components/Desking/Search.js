@@ -9,7 +9,7 @@ import ServiceCodeSelector from './ServiceCodeSelector';
  * 홈 섹션편집 > 패키지 목록 > 패키지 검색
  */
 const Search = (props) => {
-    const { onChangeSearchOption, search, period, onReset, onSearch } = props;
+    const { onChangeSearchOption, search, period, onReset, onSearch, loading } = props;
 
     /**
      * 입력값 변경
@@ -90,7 +90,7 @@ const Search = (props) => {
                 </div>
 
                 {/* 카테고리 */}
-                <ServiceCodeSelector value={search.category} className="flex-fill mr-2" onChange={handleChangeCategory} />
+                <ServiceCodeSelector value={search.category} className="flex-fill mr-2" onChange={handleChangeCategory} loading={loading} />
 
                 {/* 초기화 */}
                 <Button variant="negative" className="flex-shrink-0" onClick={onReset}>

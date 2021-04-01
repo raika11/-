@@ -7,7 +7,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { MokaIcon, MokaInput } from '@components';
+import { MokaIcon, MokaInput, MokaLoader } from '@components';
 
 /**
  * 커스텀 메뉴
@@ -70,7 +70,7 @@ const defaultProps = {
  * 구조적으로 문제있음.. 차후 방법을 찾아서 수정
  */
 const ServiceCodeSelector = (props) => {
-    const { className, width, dropdownHeight, value, onChange } = props;
+    const { className, width, dropdownHeight, value, onChange, loading } = props;
     const serviceCodeList = useSelector(({ code }) => code.service.list);
     const [isAllChecked, setAllChecked] = useState(true);
     const [checkedList, setCheckedList] = useState([]); // 선택된 코드들
@@ -147,6 +147,7 @@ const ServiceCodeSelector = (props) => {
     return (
         <Dropdown style={{ width }} className={className}>
             <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
+                {loading && <MokaLoader />}
                 <PerfectScrollbar options={{ suppressScrollY: true, wheelPropagation: true }}>
                     <div className="d-flex flex-nowrap align-items-center h-100" style={{ width: 0 }}>
                         {isAllChecked ? (

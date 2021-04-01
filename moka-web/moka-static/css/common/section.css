@@ -70,8 +70,8 @@
 .card_in .fa_rect_w::after { left: 11px; top: 8px; width: 22px; height: 14px;}
 .card_image .fa_rect_w { position: absolute; right: 14px; bottom: 12px;}
 
-.section_unique_warp .top_area_wrap .sub_title { font-size: 18px; }
-.section_unique_warp .top_area_wrap .sub_title .fa_arrow_right_b { margin-top: 2px; margin-left: 4px; }
+.section_unique_wrap .top_area_wrap .sub_title { font-size: 18px; }
+.section_unique_wrap .top_area_wrap .sub_title .fa_arrow_right_b { margin-top: 2px; margin-left: 4px; }
 /* 임시 아이콘 이미지 변경시 소스 수정해야됨 */
 .fa_rect_w { display: inline-block; width: 15px; height: 10px; border: 1.5px solid #fff;  }
 .fa_rect_w::after { content: ''; position: absolute; left: 6px; top: 4px; width: 10px; height: 6px; border: 1.5px solid #fff;}

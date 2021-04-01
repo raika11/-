@@ -235,4 +235,11 @@ public class JobContentServiceImpl implements JobContentService {
             log.error("update job for scheduler is failed.");
         }
     }
+
+    @Override
+    public int findJobCd(String jobCd) {
+        return jobContentRepository
+                .findByJobCd(jobCd)
+                .size();
+    }
 }

@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
-import { initialState, getIssueListModal } from '@store/issue';
+import { initialState, getIssueListModal, GET_ISSUE_LIST_MODAL } from '@store/issue';
 import { messageBox } from '@utils/toastUtil';
 import Search from './Search';
 import AgGrid from './AgGrid';
@@ -33,7 +33,7 @@ const propTypes = {
 const defaultProps = {
     show: false,
 };
-const defaultPeriod = [1, 'days'];
+const defaultPeriod = [0, 'days'];
 
 /**
  * 홈 섹션편집 > 패키지 목록
@@ -41,7 +41,7 @@ const defaultPeriod = [1, 'days'];
 const IssueList = (props) => {
     const { className, dropTargetAgGrid, onDragStop, show } = props;
     const dispatch = useDispatch();
-    const loading = false;
+    const loading = useSelector(({ loading }) => loading[GET_ISSUE_LIST_MODAL]);
     const [period, setPeriod] = useState(defaultPeriod);
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
@@ -147,6 +147,7 @@ const IssueList = (props) => {
                 onChangeSearchOption={handleSearchOption}
                 // onSearch={handleSearch}
                 onReset={handleReset}
+                loading={loading}
             />
 
             <AgGrid

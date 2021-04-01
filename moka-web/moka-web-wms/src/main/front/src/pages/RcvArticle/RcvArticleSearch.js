@@ -12,6 +12,8 @@ import { getLocalItem, setLocalItem } from '@utils/storageUtil';
 
 moment.locale('ko');
 
+const defaultPeriod = [0, 'days'];
+
 /**
  * 수신기사 검색
  */
@@ -22,7 +24,7 @@ const RcvArticleSearch = () => {
     const [sourceOn, setSourceOn] = useState(false);
     const [sourceList, setSourceList] = useState(getLocalItem(RCV_ARTICLE_SOURCE_LIST_KEY));
     const [error, setError] = useState({});
-    const [period, setPeriod] = useState([3, 'months']);
+    const [period, setPeriod] = useState(defaultPeriod);
 
     /**
      * 입력값 변경
@@ -82,12 +84,12 @@ const RcvArticleSearch = () => {
         e.stopPropagation();
 
         const date = new Date();
-        setPeriod([0, 'days']);
+        setPeriod(defaultPeriod);
         dispatch(
             changeSearchOption({
                 ...initialState.search,
                 page: search.page,
-                startDay: moment(date).subtract(0, 'days').startOf('day').format(DB_DATEFORMAT),
+                startDay: moment(date).subtract(defaultPeriod[0], defaultPeriod[1]).startOf('day').format(DB_DATEFORMAT),
                 endDay: moment(date).format(DB_DATEFORMAT),
                 sourceList,
             }),

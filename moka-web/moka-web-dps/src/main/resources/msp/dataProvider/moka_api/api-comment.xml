@@ -34,11 +34,11 @@
 
   <!--
   댓글 목록 조회
-  기사의 댓글목록조회: http://localhost:8081/moka_api/comment?contentId=23530553&referrer=joongang.joins.com/article&order=3
-  레퍼러기준 댓글목록조회: http://localhost:8081/moka_api/comment?referrer=joongang.joins.com/eo_i/4
-  기사의 내댓글목록조회: http://localhost:8081/moka_api/comment?contentId=23530553&referrer=joongang.joins.com/article&my=Y
+  기사의 댓글목록조회: http://local.joongang.co.kr:8081/moka_api/comment?contentId=23530553&referrer=joongang.joins.com/article&order=3
+  레퍼러기준 댓글목록조회: http://local.joongang.co.kr:8081/moka_api/comment?referrer=joongang.joins.com/eo_i/4
+  기사의 내댓글목록조회: http://local.joongang.co.kr:8081/moka_api/comment?contentId=23530553&referrer=joongang.joins.com/article&my=Y
   -->
-  <api id="comment" membership="cookie">
+  <api id="comment" membership="cookiePass">
     <description>기사 또는 기자 또는 레퍼러의 댓글 목록조회을 조회한다.</description>
     <parameter>
       <contentId desc="기사키 또는 기자키">^[0-9]{1,9}$</contentId>
@@ -47,18 +47,29 @@
       <my desc="내댓글 여부" defualt="N">^[Y|N]{1}$</my>
     </parameter>
     <request eval="Y" dmlType="sp" setNames="_DATA" outParam="_TOTAL,_DISP_TOTAL"><![CDATA[
+          var memberError = false;
+
           //1. 내 댓글 조회가 아닐경우 파라미터 변경
           if ($param.get("my") == null || $param.get("my").equals("N")) {
             $param.put("member_memSeq", null);
             $param.put("member_loginType", null);
           }
 
+          // 멤버십포함 쿼리해야하는데, 멤버십정보 없으면 에러
+          if ($param.get("my") != null && $param.get("my").equals("Y")) {
+            if ( $param.get("member_memSeq") == null) {
+              memberError = true;
+            }
+          }
+
           //2. SP변경
           var queryId = "";
-    			if ($param.get("contentId") != null) {
-    			  queryId = "dps.comment.list";           // 기사댓글목록조회
-    			} else if ($param.get("referrer") != null) {
-    			  queryId = "dps.comment.referrerList";   // 기자댓글목록조회
+          if(!memberError) {
+            if ($param.get("contentId") != null) {
+              queryId = "dps.comment.list";           // 기사댓글목록조회
+            } else if ($param.get("referrer") != null) {
+              queryId = "dps.comment.referrerList";   // 기자댓글목록조회
+            }
     			}
     			queryId;
     		]]></request>
@@ -71,21 +82,43 @@
     </keys>
   </api>
 
-  <!--  <api id="comment.insert" membership="cookie" method="post">-->
-  <!--    <description>댓글을 등록한다</description>-->
-  <!--    <parameter>-->
-  <!--      <parent desc="부모댓글SEQ" default="0" type="number">^[0-9]$</parent>-->
-  <!--      <contentId desc="기사ID 또는 기자SEQ">^[0-9]$</contentId>-->
-  <!--      <remoteIp/>-->
-  <!--    </parameter>-->
-  <!--    <request dmlType="sp" setNames="_DATA">dps.comment.commentInsert</request>-->
-  <!--    <keys>-->
-  <!--      parent-->
-  <!--      contentId-->
-  <!--      content-->
-  <!--      referer-->
-  <!--    </keys>-->
-  <!--  </api>-->
+  <!--
+  내가 단 댓글 목록 조회
+  http://local.joongang.co.kr:8081/moka_api/comment.my
+  -->
+  <api id="comment.my" membership="cookie">
+    <description>내가 단 댓글 목록 조회을 조회한다.</description>
+    <parameter>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL,_DISP_TOTAL">dps.comment.my</request>
+    <keys>
+      #paging
+    </keys>
+  </api>
+
+  <!-- 댓글등록 -->
+  <api id="comment.insert" membership="cookie" method="post">
+    <description>댓글을 등록한다</description>
+    <parameter>
+      <referrer desc="레퍼러" require="Y">^.{1,500}$</referrer>
+      <totalId desc="기사ID" type="number">^[0-9]{1,9}$</totalId>
+      <repSeq desc="기자SEQ" type="number">^[0-9]{1,9}$</repSeq>
+      <parentSeq desc="부모댓글SEQ" type="number">^[0-9]{1,9}$</parentSeq>
+      <content desc="댓글내용"></content>
+      <remoteIp/>
+      <regDev desc="등록기기" default="M">^.{1}$</regDev>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.comment.insert</request>
+    <keys>
+      referrer
+      totalId
+      repSeq
+      parentSeq
+      content
+      remoteIp
+      regDev
+    </keys>
+  </api>
 
 </apiConfig>
 

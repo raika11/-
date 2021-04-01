@@ -70,6 +70,8 @@
 .card_in .fa_rect_w::after { left: 11px; top: 8px; width: 22px; height: 14px;}
 .card_image .fa_rect_w { position: absolute; right: 14px; bottom: 12px;}
 
+.section_unique_warp .top_area_wrap .sub_title { font-size: 18px; }
+.section_unique_warp .top_area_wrap .sub_title .fa_arrow_right_b { margin-top: 2px; margin-left: 4px; }
 /* 임시 아이콘 이미지 변경시 소스 수정해야됨 */
 .fa_rect_w { display: inline-block; width: 15px; height: 10px; border: 1.5px solid #fff;  }
 .fa_rect_w::after { content: ''; position: absolute; left: 6px; top: 4px; width: 10px; height: 6px; border: 1.5px solid #fff;}
@@ -89,7 +91,7 @@
 
     /* nav */
     .header_nav_wrap .header_nav_area {display:flex;flex-flow:column;}
-    .header_nav_wrap .header_nav_area .page_title {padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid #e2e2e2;}
+    .header_nav_wrap .header_nav_area .header_nav {padding-top:10px;margin-top:10px;border-top:1px solid #e2e2e2;}
     .header_nav_wrap .header_nav_area .header_nav .nav {display:flex;width:calc(100% + 40px);margin-left:-20px;padding-left:20px;overflow-y:hidden;overflow-x:scroll;scrollbar-width:none;scrollbar-color:transparent transparent;}
     .header_nav_wrap .header_nav_area .header_nav .nav::-webkit-scrollbar {display:none;width:0px;background:transparent;}
     
@@ -263,6 +265,7 @@
     .card_in .card_body .headline { font-size: 28px; }
     .card_in .card_body .description { max-width: 48%; font-size: 14px; line-height: 22px; letter-spacing: -0.4px; }
     .card_in .card_body .date { padding-top: 8px; }
+    .section_unique_wrap .top_area_wrap .sub_title { font-size: 18px; }
     .unique_trend .top_area_wrap .sub_title { font-size: 20px; line-height: 24px; letter-spacing: -0.4px; }
     .unique_trend .card_group .card_body .headline { font-size: 18px; line-height: 26px; letter-spacing: -0.4px; }
 }
@@ -372,6 +375,8 @@
     
     .ad_wrap{display:none;}
 
+    /***************************************    unique     ************************************/
+    .section_unique_wrap .chain_wrap:not(.unique_trend) .card {margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e2e2;}
 }
 
 /* Medium devices (tablet + pc, 768px and up) */

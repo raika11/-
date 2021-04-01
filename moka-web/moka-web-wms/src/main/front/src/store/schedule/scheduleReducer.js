@@ -17,7 +17,7 @@ export const initialState = {
             sort: 'jobSeq,desc',
             page: 0,
             size: PAGESIZE_OPTIONS[0],
-            searchType: '',
+            searchType: 'keyword0',
             keyword: '',
             useTotal: '',
             category: '',
@@ -35,7 +35,7 @@ export const initialState = {
             sort: 'jobSeq,desc',
             page: 0,
             size: PAGESIZE_OPTIONS[0],
-            searchType: '',
+            searchType: 'keyword0',
             keyword: '',
             useTotal: '',
             category: '',
@@ -79,7 +79,7 @@ export const initialState = {
             sort: 'jobSeq,desc',
             page: 0,
             size: PAGESIZE_OPTIONS[0],
-            searchType: '',
+            searchType: 'keyword0',
             keyword: '',
             useTotal: '',
             category: '',
@@ -87,25 +87,7 @@ export const initialState = {
             sendType: '',
             serverSeq: '',
         },
-        deleteJob: {
-            seqNo: '',
-            jobSeq: '',
-            serverSeq: '',
-            category: '',
-            period: '',
-            sendType: '',
-            ftpPort: '',
-            ftpPassive: '',
-            targetPath: '',
-            jobDesc: '',
-            regDt: '',
-            regId: '',
-            jobStatus: '',
-            regMember: {
-                memberId: '',
-                memberNm: '',
-            },
-        },
+        deleteJob: {},
     },
     deployServer: {
         list: [],
@@ -206,26 +188,6 @@ export default handleActions(
         },
         // 스토어 데이터 초기화
         [act.CLEAR_STORE]: () => initialState,
-        [act.CLEAR_RUN_STATE_SEARCH]: (state) => {
-            return produce(state, (draft) => {
-                draft.runState.search = initialState.runState.search;
-            });
-        },
-        [act.CLEAR_WORK_SEARCH]: (state) => {
-            return produce(state, (draft) => {
-                draft.work.search = initialState.work.search;
-            });
-        },
-        [act.CLEAR_DELETE_WORK_SEARCH]: (state) => {
-            return produce(state, (draft) => {
-                draft.deleteWork.search = initialState.deleteWork.search;
-            });
-        },
-        [act.CLEAR_DEPLOY_SERVER_SEARCH]: (state) => {
-            return produce(state, (draft) => {
-                draft.deployServer.search = initialState.deployServer.search;
-            });
-        },
         [act.CLEAR_JOB]: (state) => {
             return produce(state, (draft) => {
                 draft.work.job = initialState.work.job;
@@ -234,6 +196,11 @@ export default handleActions(
         [act.CLEAR_SERVER]: (state) => {
             return produce(state, (draft) => {
                 draft.deployServer.server = initialState.deployServer.server;
+            });
+        },
+        [act.CLEAR_DELETE_JOB]: (state) => {
+            return produce(state, (draft) => {
+                draft.deleteWork.deleteJob = initialState.deleteWork.deleteJob;
             });
         },
         [act.CLEAR_HISTORY_JOB]: (state) => {

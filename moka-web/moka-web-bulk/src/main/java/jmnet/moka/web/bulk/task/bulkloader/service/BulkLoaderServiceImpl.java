@@ -5,6 +5,7 @@ import java.util.Map;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.mapper.idb.BulkLoaderIdbMapper;
 import jmnet.moka.web.bulk.mapper.moka.BulkLoaderMokaMapper;
+import jmnet.moka.web.bulk.mapper.mokalog.BulkLoaderMokaLogMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +27,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class BulkLoaderServiceImpl implements BulkLoaderService {
     private final BulkLoaderIdbMapper bulkLoaderIdbMapper;
     private final BulkLoaderMokaMapper bulkLoaderMokaMapper;
+    private final BulkLoaderMokaLogMapper bulkLoaderMokaLogMapper;
 
-    public BulkLoaderServiceImpl(BulkLoaderIdbMapper bulkLoaderIdbMapper, BulkLoaderMokaMapper bulkLoaderMokaMapper) {
+    public BulkLoaderServiceImpl(BulkLoaderIdbMapper bulkLoaderIdbMapper, BulkLoaderMokaMapper bulkLoaderMokaMapper,
+            BulkLoaderMokaLogMapper bulkLoaderMokaLogMapper) {
         this.bulkLoaderIdbMapper = bulkLoaderIdbMapper;
         this.bulkLoaderMokaMapper = bulkLoaderMokaMapper;
+        this.bulkLoaderMokaLogMapper = bulkLoaderMokaLogMapper;
     }
 
     @Override
@@ -53,7 +57,7 @@ public class BulkLoaderServiceImpl implements BulkLoaderService {
             totalVo.logInfo(message);
         totalVo.setMsg(totalVo.getInfoMessageList());
 
-        this.bulkLoaderIdbMapper.callUspBulkLogInsByLoader(totalVo);
+        this.bulkLoaderMokaLogMapper.callUspBulkLogInsByLoader(totalVo);
 
         totalVo.setInfoMessageFlush();
     }

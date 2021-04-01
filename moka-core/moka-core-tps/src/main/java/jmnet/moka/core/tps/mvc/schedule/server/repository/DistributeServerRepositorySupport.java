@@ -1,17 +1,14 @@
 package jmnet.moka.core.tps.mvc.schedule.server.repository;
 
+import java.util.List;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.DistributeServer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 /**
- * 배포서버 Repository
- * 2021. 1. 26. 김정민
- *
+ * 배포서버 Repository 2021. 1. 26. 김정민
  */
 public interface DistributeServerRepositorySupport {
 
@@ -31,6 +28,13 @@ public interface DistributeServerRepositorySupport {
      */
     Page<DistributeServer> findDistibuteServerList(DistributeServerSearchDTO search, Pageable pageable);
 
+    /**
+     * 배포서버 수정
+     *
+     * @param distServer 배포서버
+     * @return 배포서버
+     */
+    DistributeServer updateDistributeServer(DistributeServer distServer);
 
     //미사용 추후 삭제예정
     Page<DistributeServerDTO> findList2(DistributeServerSearchDTO search, Pageable pageable);

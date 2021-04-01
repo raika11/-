@@ -4,8 +4,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
@@ -39,20 +37,8 @@ public class JobContentHistoryRepositorySupportImpl extends TpsQueryDslRepositor
         String jobCd = search.getJobCd();
 
         if (startDay != null && endDay != null) {
-            try {
-                SimpleDateFormat format1 = new SimpleDateFormat("yyyyMMdd");
-                String start = format1.format(startDay);
-                String end = format1.format(endDay);
-                SimpleDateFormat format2 = new SimpleDateFormat("yyyyMMddHHmmss");
-
-                startDay = format2.parse(start + "000000");
-                endDay = format2.parse(end + "235959");
-                jobContentHistory.reserveDt.between(startDay, endDay);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            builder.and(jobContentHistory.reserveDt.between(startDay, endDay));
         }
-
         if (!McpString.isEmpty(jobSeq)) {
             builder.and(jobContent.jobSeq.eq(jobSeq));
         }

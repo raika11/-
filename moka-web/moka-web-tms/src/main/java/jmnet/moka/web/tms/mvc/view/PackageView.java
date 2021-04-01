@@ -22,6 +22,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
+import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
@@ -47,12 +48,12 @@ public class PackageView extends AbstractView {
     private boolean templateMergeDebug;
     @Value("${tms.page.cache}")
     private boolean isPageCache;
-    @Value("${package.issue.pageItem.id}")
-    private String issuePageItemId;
-    @Value("${package.series.pageItem.id}")
-    private String seriesPageItemId;
-    @Value("${package.topic.pageItem.id}")
-    private String topicPageItemId;
+    @Value("${package.issue.home.url}")
+    private String issueHomeUrl;
+    @Value("${package.series.home.url}")
+    private String seriesHomeUrl;
+    @Value("${package.topic.home.url}")
+    private String topicHomeUrl;
     @Autowired
     private MokaDomainTemplateMerger domainTemplateMerger;
     @Autowired(required = false)
@@ -99,14 +100,20 @@ public class PackageView extends AbstractView {
         String packageId = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_PACKAGE_ID);
         HttpParamMap httpParamMap = (HttpParamMap) mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
 
-        String itemType = MokaConstants.ITEM_PAGE;
-        String itemId = issuePageItemId;
+        // 홈(이슈, 시리즈, 토픽) url로 pageItem 조회
+        String homeUrl = this.issueHomeUrl;
         if (packageType.equals(PACKAGE_TYPE_SERIES)) {
-            itemId = seriesPageItemId;
+            homeUrl = this.seriesHomeUrl;
         } else if (packageType.equals(PACKAGE_TYPE_TOPIC)) {
-            itemId = topicPageItemId;
+            homeUrl = topicHomeUrl;
         }
+        String itemKey = this.domainTemplateMerger.getItemKey(domainId, homeUrl);
+        String itemType = KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_TYPE);
+        String itemId = KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_ID);
         MergeItem item = this.domainTemplateMerger.getItem(domainId, itemType, itemId);
+
+        // 이슈, 시리즈, 토픽에 필요한 데이터를 설정한다.
+
         response.setContentType("text/html; charset=UTF-8");
 
         PrintWriter writer = null;

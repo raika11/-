@@ -8,8 +8,8 @@ import Button from 'react-bootstrap/Button';
 import { useHistory, useParams } from 'react-router-dom';
 import { MokaInput, MokaInputLabel } from '@/components';
 import { messageBox } from '@/utils/toastUtil';
-import { DB_DATEFORMAT } from '@/constants';
-import { getDeleteJob } from '@/store/schedule';
+import { DB_DATEFORMAT, SCHEDULE_PERIOD } from '@/constants';
+import { getDeleteJob, clearDeleteJob } from '@/store/schedule';
 import AddJobModal from '../modals/AddJobModal';
 
 /**
@@ -19,6 +19,7 @@ const DeleteWorkEdit = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { jobSeq } = useParams();
+    const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
     const deleteJob = useSelector((store) => store.schedule.deleteWork.deleteJob);
     const [data, setData] = useState({});
     const [addJobModal, setAddJobModal] = useState(false);
@@ -44,12 +45,39 @@ const DeleteWorkEdit = ({ match }) => {
     };
 
     useEffect(() => {
-        setData(deleteJob);
-    }, [deleteJob]);
+        // 카테고리, 주기 데이터 매핑
+        if (genCateRows && SCHEDULE_PERIOD) {
+            let findCateIndex = genCateRows.findIndex((c) => c.id === deleteJob.category);
+            let findPeriodIndex = SCHEDULE_PERIOD.findIndex((p) => p.period === deleteJob.period);
+            let categoryNm, periodNm;
+
+            if (findCateIndex > -1) {
+                categoryNm = genCateRows[findCateIndex].name;
+            } else {
+                categoryNm = deleteJob.category;
+            }
+
+            if (findPeriodIndex > -1) {
+                periodNm = SCHEDULE_PERIOD[findPeriodIndex].periodNm;
+            } else {
+                periodNm = deleteJob.period;
+            }
+
+            let nd = {
+                ...deleteJob,
+                category: categoryNm,
+                period: periodNm,
+            };
+            setData(nd);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [deleteJob, genCateRows, SCHEDULE_PERIOD]);
 
     useEffect(() => {
         if (jobSeq) {
             dispatch(getDeleteJob(jobSeq));
+        } else {
+            dispatch(clearDeleteJob());
         }
     }, [dispatch, jobSeq]);
 
@@ -130,11 +158,12 @@ const DeleteWorkEdit = ({ match }) => {
                     <MokaInputLabel label="설명" className="mb-2" name="jobDesc" value={data.jobDesc} inputProps={{ readOnly: true }} />
                     <MokaInputLabel
                         label="삭제 정보"
-                        value={data.regDt ? `${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember?.memberNm}(${data.regMember?.memberNm})` : ''}
+                        value={
+                            data.modDt
+                                ? `${moment(data.modDt).format(DB_DATEFORMAT)} ${data.modMember?.memberNm || ''} ${data.modMember?.memberId ? `(${data.modMember?.memberId})` : ''}`
+                                : ''
+                        }
                         inputProps={{ readOnly: true }}
-                        onChange={(e) => {
-                            console.log(e.target.value);
-                        }}
                     />
                 </Form>
             </Card.Body>
@@ -146,7 +175,7 @@ const DeleteWorkEdit = ({ match }) => {
                     취소
                 </Button>
             </Card.Footer>
-            <AddJobModal show={addJobModal} onHide={() => setAddJobModal(false)} job={data} />
+            <AddJobModal match={match} show={addJobModal} onHide={() => setAddJobModal(false)} job={deleteJob} />
         </>
     );
 };

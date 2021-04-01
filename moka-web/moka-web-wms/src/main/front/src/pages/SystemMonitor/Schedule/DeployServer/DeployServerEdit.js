@@ -107,7 +107,7 @@ const DeployServerEdit = ({ match }) => {
      */
     const handleClickDelete = () => {
         messageBox.confirm(
-            '작업을 삭제하시겠습니까?',
+            '서버를 삭제하시겠습니까?',
             () =>
                 dispatch(
                     deleteServer({
@@ -181,7 +181,9 @@ const DeployServerEdit = ({ match }) => {
                                     className="flex-fill"
                                     value={
                                         data.regDt
-                                            ? `${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember ? `${data.regMember.memberNm} (${data.regMember.memberId})` : ''}`
+                                            ? `${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember?.memberNm || ''} ${
+                                                  data.regMember?.memberId ? `(${data.regMember?.memberId})` : ''
+                                              }`
                                             : ''
                                     }
                                     inputProps={{ readOnly: true, plaintext: true }}
@@ -194,7 +196,9 @@ const DeployServerEdit = ({ match }) => {
                                     className="flex-fill"
                                     value={
                                         data.modDt
-                                            ? `${moment(data.modDt).format(DB_DATEFORMAT)} ${data.modMember ? `${data.modMember.memberNm} (${data.modMember.memberId})` : ''}`
+                                            ? `${moment(data.modDt).format(DB_DATEFORMAT)} ${data.modMember?.memberNm || ''} ${
+                                                  data.modMember?.memberId ? `(${data.modMember?.memberId})` : ''
+                                              }`
                                             : ''
                                     }
                                     inputProps={{ readOnly: true, plaintext: true }}

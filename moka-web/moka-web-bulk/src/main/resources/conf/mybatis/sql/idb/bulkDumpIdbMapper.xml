@@ -152,39 +152,5 @@
       }
     ]]>
   </select>
-
-  <insert id="callUspBulkLogInsByDump" parameterType="TotalVo" statementType="CALLABLE">
-    <![CDATA[
-    {
-      call USP_BULK_LOG_INS_BY_DUMP(
-      #{mainData.seqNo, mode=IN, jdbcType=INTEGER, javaType=int},
-      #{mainData.contentId, mode=IN, jdbcType=INTEGER, javaType=int},
-      #{mainData.iud, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{mainData.dumpStatus, mode=IN, jdbcType=INTEGER, javaType=int},
-      #{msg, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{mainData.contentDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{mainData.title, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{mainData.orgSourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{mainData.dumpLogSeq, mode=OUT, jdbcType=INTEGER, javaType=int}
-      )
-      }
-    ]]>
-  </insert>
-
-  <insert id="callUspBulkPortalLogInsByDump" parameterType="TotalVo" statementType="CALLABLE">
-    <![CDATA[
-    {
-      call USP_BULK_PORTAL_LOG_INS_BY_DUMP(
-      #{mainData.seqNo, mode=IN, jdbcType=INTEGER, javaType=int},
-      #{mainData.curPortalDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{mainData.curPortalIud, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{mainData.curPortalSenderStatus, mode=IN, jdbcType=INTEGER, javaType=int},
-      '',
-      #{mainData.dumpLogSeq, mode=IN, jdbcType=INTEGER, javaType=int},
-      #{mainData.curPortalContent, mode=IN, jdbcType=NVARCHAR, javaType=string}
-      )
-      }
-    ]]>
-  </insert>
 </mapper>
 

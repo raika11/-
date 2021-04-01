@@ -122,8 +122,8 @@
     .card_in .card_body { position: static; padding:0;}
     .card_in .card_body .headline { color: #111; font-size: 20px; }
     .card_in .card_body .description { color: #777; }
+    .section_unique_wrap .card_group .headline { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
     .unique_trend .card_group { margin: -20px -10px 16px; }
-    .unique_trend .card_group .headline { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
     .unique_trend .card_group .card_image { margin-bottom: 10px; }
     .unique_trend .card_group .card_body .byline { padding-top: 4px; }
     .unique_trend .card_group .col_lg4 { margin-top: 15px; padding: 0 10px; }
@@ -377,6 +377,7 @@
 
     /***************************************    unique     ************************************/
     .section_unique_wrap .chain_wrap:not(.unique_trend) .card {margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e2e2;}
+    .section_unique_wrap .chain_wrap:not(.unique_trend) .card:first-child { margin-top: 0; }
 }
 
 /* Medium devices (tablet + pc, 768px and up) */

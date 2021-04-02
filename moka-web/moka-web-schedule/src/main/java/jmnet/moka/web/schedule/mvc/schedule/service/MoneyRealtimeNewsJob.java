@@ -120,6 +120,9 @@ public class MoneyRealtimeNewsJob extends AbstractScheduleJob {
                                 + "\", \"title\":\"" + sArticleTitle + "\", \"summary\":\"" + sArticleSummary + "\", \"thumbnail\":\""
                                 + sArticleThumbnail + "\", \"service_day\":\"" + sServiceDay + "\", \"serivce_time\":\"" + sServiceTime
                                 + "\", \"serivce_date\":\"" + sServiceDate + "\"}");
+                if (list.indexOf(vo) + 1 < list.size()) {
+                    stringBuffer.append(",");
+                }
                 stringBuffer.append(System.lineSeparator());
 
             }

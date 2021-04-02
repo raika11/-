@@ -53,7 +53,7 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                         value={options.pollGroup}
                     >
                         <option key="0" value="">
-                            그룹
+                            그룹 전체
                         </option>
                         {codes.pollGroup.map((option) => (
                             <option key={option.key} value={option.key}>

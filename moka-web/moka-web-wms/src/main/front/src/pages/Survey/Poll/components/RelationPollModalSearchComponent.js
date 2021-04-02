@@ -29,7 +29,7 @@ const RelationPollModalSearchComponent = ({ searchOptions, onSearch, codes }) =>
                         handleChangeValue(name, value);
                     }}
                 >
-                    <option value="">분류</option>
+                    <option value="">그룹 전체</option>
                     {codes.pollGroup.map((code) => {
                         return (
                             <option key={code.key} value={code.key}>
@@ -37,14 +37,26 @@ const RelationPollModalSearchComponent = ({ searchOptions, onSearch, codes }) =>
                             </option>
                         );
                     })}
-                    {/*<option value="title">투표 제목</option>
-                    <option value="pollSeq">투표 ID</option>*/}
+                </MokaInput>
+            </div>
+            <div className="flex-shrink-0 mr-2">
+                <MokaInput
+                    as="select"
+                    name="searchType"
+                    value={search.searchType}
+                    onChange={(e) => {
+                        const { name, value } = e.target;
+                        handleChangeValue(name, value);
+                    }}
+                >
+                    <option value="title">투표 제목</option>
+                    <option value="pollSeq">투표 ID</option>
                 </MokaInput>
             </div>
             <MokaSearchInput
                 className="flex-fill"
                 name="keyword"
-                placeholder="투표 제목을 입력하세요"
+                placeholder="검색어를 입력하세요"
                 value={search.keyword}
                 onChange={(e) => {
                     const { name, value } = e.target;

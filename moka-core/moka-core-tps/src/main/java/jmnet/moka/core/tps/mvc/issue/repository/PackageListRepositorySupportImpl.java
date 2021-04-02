@@ -10,6 +10,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.article.entity.QArticleBasic;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageListSearchDTO;
@@ -51,7 +52,9 @@ public class PackageListRepositorySupportImpl extends TpsQueryDslRepositorySuppo
                         qPackageList.regDt, ExpressionUtils.as(JPAExpressions
                                 .select(qArticleBasic.artTitle)
                                 .from(qArticleBasic)
-                                .where(qArticleBasic.totalId.eq(qPackageList.totalId)), "title")))
+                                .where(qArticleBasic.totalId
+                                        .eq(qPackageList.totalId)
+                                        .and(qArticleBasic.serviceFlag.eq(MokaConstants.YES))), "title")))
                 .innerJoin(qPackageList.packageMaster, qPackageMaster)
                 .orderBy(qPackageList.ordNo.asc())
                 .fetchResults();

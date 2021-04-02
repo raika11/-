@@ -5,32 +5,14 @@
 
 <apiConfig>
 
-  <!-- 댓글 차단ID 목록  period="*/5 * * * * *"-->
-  <api id="comment.blockid" expire="2m">
-    <description>댓글 차단ID 목록을 조회한다.</description>
-    <parameter>
-      <div desc="태그타입" require="Y" default="U">^[I|U|W]$</div>
-    </parameter>
-    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.comment.banned</request>
-  </api>
-
-  <!-- 댓글 차단IP 목록 -->
-  <api id="comment.blockip" expire="2m">
-    <description>댓글 차단IP 목록을 조회한다.</description>
-    <parameter>
-      <div desc="태그타입" require="Y" default="I">^[I|U|W]$</div>
-    </parameter>
-    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.comment.banned</request>
-  </api>
-
-  <!-- 댓글 금지어 목록 -->
-  <api id="comment.blockword" expire="2m">
-    <description>댓글 금지어 목록을 조회한다.</description>
-    <parameter>
-      <div desc="태그타입" require="Y" default="W">^[I|U|W]$</div>
-    </parameter>
-    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.comment.banned</request>
-  </api>
+  <!-- 댓글 금지어 목록  period="*/5 * * * * *"-->
+  <!--  <api id="comment.bannedword" expire="3s">-->
+  <!--    <description>댓글 금지어 목록을 조회한다.</description>-->
+  <!--    <parameter>-->
+  <!--      <div desc="태그타입" require="Y" default="W">W</div>-->
+  <!--    </parameter>-->
+  <!--    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.comment.banned</request>-->
+  <!--  </api>-->
 
   <!--
   댓글 목록 조회
@@ -97,7 +79,8 @@
   </api>
 
   <!-- 댓글등록 -->
-  <api id="comment.insert" membership="cookie" method="post">
+  <!--  <api id="comment.insert" membership="cookie" method="post" expire="0">-->
+  <api id="comment.insert" membership="cookie" expire="0">
     <description>댓글을 등록한다</description>
     <parameter>
       <referrer desc="레퍼러" require="Y">^.{1,500}$</referrer>
@@ -108,7 +91,7 @@
       <remoteIp/>
       <regDev desc="등록기기" default="M">^.{1}$</regDev>
     </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.comment.insert</request>
+    <request type="module" setNames="_DATA">jmnet.moka.web.dps.module.CommentModule</request>
     <keys>
       referrer
       totalId

@@ -182,8 +182,15 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 							resultObject = apiResult;
 						}
 					}
-					cachedString =
+					if ( api.getContentType() != null) {
+						responseHeaders.set("Content-Type", api.getContentType());
+						cachedString =
 								ApiCacheHelper.setCache(apiContext, this.cacheManager, resultObject);
+					} else {
+						responseHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+						cachedString =
+								ApiCacheHelper.setCache(apiContext, this.cacheManager, resultObject);
+					}
 				} catch (JsonProcessingException e) {
 					actionLogger.error(remoteIp, ActionType.API,
 							System.currentTimeMillis() - startTime,
@@ -191,12 +198,6 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 					logger.error("api Request:{} {} : {}", apiContext.getApiPath(), apiContext.getApiId(), e.toString(), e);
 
 				}
-			}
-            // content-type 설정
-			if ( api.getContentType() != null) {
-				responseHeaders.set("Content-Type", api.getContentType());
-			} else {
-				responseHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
 			}
 			responseEntity = ResponseEntity.ok().headers(responseHeaders).body(cachedString);
 			actionLogger.success(remoteIp, ActionType.API,

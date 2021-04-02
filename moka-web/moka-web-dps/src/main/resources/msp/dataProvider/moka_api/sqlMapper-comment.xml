@@ -7,11 +7,21 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dps.comment">
 
-  <!-- 댓글차단목록 -->
-  <select id="banned" parameterType="hashmap" resultType="hashmap"
+  <!-- 댓글 차단 IP, 차단User 체크 -->
+  <select id="bannedExist" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_COMMENT_BANNED_EXIST(
+      #{type, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{tag, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{_EXIST, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!-- 댓글 금지어 목록 -->
+  <select id="bannedWord" parameterType="hashmap" resultType="hashmap"
     statementType="CALLABLE">
     {call UPU_COMMENT_BANNED_LIST_SEL(
-      #{div, mode=IN, jdbcType=VARCHAR, javaType=string},
+      'W',
       #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
       ) }
   </select>

@@ -36,6 +36,8 @@ const BackOfficeWorkSearch = ({ show }) => {
             getJobHistoryList(
                 changeBackOfficeWorkSearchOption({
                     ...search,
+                    startDay: moment(search.startDay).format(DB_DATEFORMAT),
+                    endDay: moment(search.endDay).format(DB_DATEFORMAT),
                     page: 0,
                 }),
             ),

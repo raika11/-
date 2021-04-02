@@ -26,12 +26,16 @@ import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageKeywordDTO;
+import jmnet.moka.core.tps.mvc.issue.dto.PackageListDTO;
+import jmnet.moka.core.tps.mvc.issue.dto.PackageListSearchDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageMasterDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageSearchDTO;
+import jmnet.moka.core.tps.mvc.issue.entity.PackageList;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import jmnet.moka.core.tps.mvc.issue.service.PackageService;
 import jmnet.moka.core.tps.mvc.issue.vo.PackageVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -84,6 +88,39 @@ public class IssueRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO LOAD PACKAGE LIST]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD PACKAGE LIST]", e, true);
+            throw new Exception(msg("tps.common.error.select"), e);
+        }
+    }
+
+    /**
+     * 패키지의 기사목록
+     *
+     * @return 검색 결과
+     */
+    @ApiOperation(value = "패키지의 기사목록조회")
+    @GetMapping("/{pkgSeq}/list")
+    public ResponseEntity<?> getPackageList(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
+            @Valid @SearchParam PackageListSearchDTO search)
+            throws Exception {
+
+        try {
+            // 조회
+            Page<PackageList> returnValue = packageService.findAllPackageList(search);
+
+            // 리턴값 설정
+            ResultListDTO<PackageListDTO> resultListMessage = new ResultListDTO<>();
+            List<PackageListDTO> dtoList = modelMapper.map(returnValue.getContent(), PackageListDTO.TYPE);
+            resultListMessage.setTotalCnt(returnValue.getTotalElements());
+            resultListMessage.setList(dtoList);
+
+            ResultDTO<ResultListDTO<PackageListDTO>> resultDto = new ResultDTO<>(resultListMessage);
+
+            tpsLogger.success(ActionType.SELECT);
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD PACKAGE ARTICLE LIST]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD PACKAGE ARTICLE LIST]", e, true);
             throw new Exception(msg("tps.common.error.select"), e);
         }
     }

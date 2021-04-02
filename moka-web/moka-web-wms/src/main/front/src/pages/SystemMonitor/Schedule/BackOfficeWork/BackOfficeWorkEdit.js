@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import { MokaInputLabel } from '@/components';
+import { MokaCard, MokaInputLabel } from '@/components';
 import { DB_DATEFORMAT, SCHEDULE_STATUS } from '@/constants';
 import { getHistoryJob, clearHistoryJob } from '@/store/schedule';
 
@@ -23,7 +21,7 @@ const BackOfficeWorkEdit = ({ match }) => {
      * 취소
      */
     const handleClickCancel = () => {
-        history.push(`${match.path}`);
+        history.push(`${match.path}/back-office-work`);
     };
 
     useEffect(() => {
@@ -53,28 +51,30 @@ const BackOfficeWorkEdit = ({ match }) => {
     }, [dispatch, seqNo]);
 
     return (
-        <>
-            <Card.Header>
-                <Card.Title as="h2">작업 정보</Card.Title>
-            </Card.Header>
-            <Card.Body className="custom-scroll" style={{ height: 496 }}>
-                <Form>
-                    <MokaInputLabel label="작업 설명" className="mb-2" value={data.jobDesc} inputProps={{ readOnly: true }} />
-                    <MokaInputLabel label="백오피스 업무" className="mb-2" value={data.jobNm} inputProps={{ readOnly: true }} />
-                    <MokaInputLabel label="예약 일시" className="mb-2" value={data.reserveDt} inputProps={{ readOnly: true }} />
-                    <MokaInputLabel label="시작 일시" className="mb-2" value={data.startDt} inputProps={{ readOnly: true }} />
-                    <MokaInputLabel label="종료 일시" className="mb-2" value={data.endDt} inputProps={{ readOnly: true }} />
-                    <MokaInputLabel label="상태" className="mb-2" value={data.status} inputProps={{ readOnly: true }} />
-                    <MokaInputLabel label="작업 식별 정보" className="mb-2" value={data.jobCd} inputProps={{ readOnly: true }} />
-                    <MokaInputLabel label="파라미터" className="custom-scroll resize-none" as="textarea" value={data.paramDesc} inputProps={{ rows: 5, readOnly: true }} />
-                </Form>
-            </Card.Body>
-            <Card.Footer className="d-flex justify-content-center card-footer">
-                <Button variant="negative" onClick={handleClickCancel}>
-                    취소
-                </Button>
-            </Card.Footer>
-        </>
+        <MokaCard
+            title="작업 정보"
+            className="flex-fill"
+            // bodyClassName="d-flex flex-column"
+            footer
+            footerButtons={[
+                {
+                    text: '취소',
+                    onClick: handleClickCancel,
+                    variant: 'negative',
+                },
+            ].filter((a) => a)}
+        >
+            <Form>
+                <MokaInputLabel label="작업 설명" className="mb-2" value={data.jobDesc} inputProps={{ readOnly: true }} />
+                <MokaInputLabel label="백오피스 업무" className="mb-2" value={data.jobNm} inputProps={{ readOnly: true }} />
+                <MokaInputLabel label="예약 일시" className="mb-2" value={data.reserveDt} inputProps={{ readOnly: true }} />
+                <MokaInputLabel label="시작 일시" className="mb-2" value={data.startDt} inputProps={{ readOnly: true }} />
+                <MokaInputLabel label="종료 일시" className="mb-2" value={data.endDt} inputProps={{ readOnly: true }} />
+                <MokaInputLabel label="상태" className="mb-2" value={data.status} inputProps={{ readOnly: true }} />
+                <MokaInputLabel label="작업 식별 정보" className="mb-2" value={data.jobCd} inputProps={{ readOnly: true }} />
+                <MokaInputLabel label="파라미터" className="custom-scroll resize-none" as="textarea" value={data.paramDesc} inputProps={{ rows: 5, readOnly: true }} />
+            </Form>
+        </MokaCard>
     );
 };
 

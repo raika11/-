@@ -7,7 +7,6 @@ import io.swagger.models.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -34,14 +33,13 @@ import jmnet.moka.core.tps.mvc.poll.dto.TrendpollSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollStatSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.entity.Trendpoll;
 import jmnet.moka.core.tps.mvc.poll.entity.TrendpollDetail;
-import jmnet.moka.core.tps.mvc.poll.entity.TrendpollVote;
 import jmnet.moka.core.tps.mvc.poll.service.TrendpollService;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollCntVO;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollStatVO;
+import jmnet.moka.core.tps.mvc.poll.vo.TrendpollVoteVO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -270,25 +268,9 @@ public class TrendpollRestController extends AbstractCommonController {
             @ApiParam(hidden = true) ModelMap map) {
 
         TrendpollExcelView excelView = new TrendpollExcelView();
-        // 최종 페이지
-        int totalPages;
-        int size = 200;
-        // 현재 페이지
-        AtomicInteger currentPage = new AtomicInteger(0);
 
+        List<TrendpollVoteVO> resultList = trendpollService.findAllByPollSeq(pollSeq);
 
-        Page<TrendpollVote> list = trendpollService.findAllTrendpollVote(pollSeq, PageRequest.of(currentPage.getAndAdd(1), size));
-
-        totalPages = list.getTotalPages();
-
-        List<TrendpollVote> resultList = new ArrayList<>();
-        if (totalPages > 0) {
-            resultList.addAll(list.getContent());
-            while (currentPage.get() < totalPages) {
-                list = trendpollService.findAllTrendpollVote(pollSeq, PageRequest.of(currentPage.getAndAdd(1), size));
-                resultList.addAll(list.getContent());
-            }
-        }
         String[] columns = new String[] {"선택 항목", "디바이스 구분", "등록일시", "등록IP주소", "로그인SITE", "회원ID", "PC_ID"};
 
         map.addAttribute("title", "투표 통계");

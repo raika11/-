@@ -44,10 +44,10 @@
     resultMap="AllStatMap,DailyStatMap,DeviceStatMap"
     statementType="CALLABLE">
     {call UPA_TRENDPOLL_STAT_SEL(
-			#{pollSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-			#{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+      #{pollSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
       #{endDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date}
-		) }
+      ) }
   </select>
 
   <!-- 투표 건수 조회 -->
@@ -55,9 +55,10 @@
     resultMap="AllCntMap,DailyCntMap,DeviceCntMap"
     statementType="CALLABLE">
     {call UPA_TRENDPOLL_CNT_SEL(
-			#{pollSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-			#{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+      #{pollSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
       #{endDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date}
-		) }
+      ) }
   </select>
+
 </mapper>

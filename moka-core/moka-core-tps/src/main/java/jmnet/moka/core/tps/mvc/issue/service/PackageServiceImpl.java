@@ -6,13 +6,17 @@ package jmnet.moka.core.tps.mvc.issue.service;
 
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.core.tps.mvc.issue.dto.PackageListSearchDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageSearchDTO;
+import jmnet.moka.core.tps.mvc.issue.entity.PackageList;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import jmnet.moka.core.tps.mvc.issue.mapper.IssueMapper;
 import jmnet.moka.core.tps.mvc.issue.repository.PackageKeywordRepository;
+import jmnet.moka.core.tps.mvc.issue.repository.PackageListRepository;
 import jmnet.moka.core.tps.mvc.issue.repository.PackageRepository;
 import jmnet.moka.core.tps.mvc.issue.vo.PackageVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,10 +36,14 @@ public class PackageServiceImpl implements PackageService {
 
     private final PackageKeywordRepository packageKeywordRepository;
 
-    public PackageServiceImpl(PackageRepository packageRepository, IssueMapper issueMapper, PackageKeywordRepository packageKeywordRepository) {
+    private final PackageListRepository packageListRepository;
+
+    public PackageServiceImpl(PackageRepository packageRepository, IssueMapper issueMapper, PackageKeywordRepository packageKeywordRepository,
+            PackageListRepository packageListRepository) {
         this.packageRepository = packageRepository;
         this.packageKeywordRepository = packageKeywordRepository;
         this.issueMapper = issueMapper;
+        this.packageListRepository = packageListRepository;
     }
 
     @Override
@@ -78,5 +86,10 @@ public class PackageServiceImpl implements PackageService {
     @Override
     public PackageMaster updatePackageMaster(PackageMaster packageMaster) {
         return packageRepository.save(packageMaster);
+    }
+
+    @Override
+    public Page<PackageList> findAllPackageList(PackageListSearchDTO search) {
+        return packageListRepository.findAll(search);
     }
 }

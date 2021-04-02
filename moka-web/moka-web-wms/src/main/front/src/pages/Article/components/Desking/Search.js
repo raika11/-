@@ -59,6 +59,12 @@ const Search = (props) => {
      */
     const handleChangeMasterCode = (value) => onChangeSearchOption({ key: 'masterCode', value });
 
+    /**
+     * 매체 변경
+     * @param {string} value 매체
+     */
+    const handleChangeSourceList = (value) => onChangeSearchOption({ key: 'sourceList', value });
+
     return (
         <Form>
             <Form.Row className="d-flex mb-2">
@@ -125,14 +131,7 @@ const Search = (props) => {
                     </div>
 
                     {/* 매체 */}
-                    <SourceSelector
-                        key={movie ? 'movie' : 'article'}
-                        sourceList={sourceList}
-                        className="mr-2"
-                        value={search.sourceList}
-                        onChange={(value) => onChangeSearchOption({ key: 'sourceList', value })}
-                        isInvalid={error.sourceList}
-                    />
+                    <SourceSelector sourceList={sourceList} className="mr-2" value={search.sourceList} onChange={handleChangeSourceList} isInvalid={error.sourceList} />
 
                     {/* 면 */}
                     <div style={{ width: 60 }} className="mr-2">

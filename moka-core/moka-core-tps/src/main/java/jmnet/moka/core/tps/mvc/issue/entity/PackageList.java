@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,6 +51,9 @@ public class PackageList implements Serializable {
     @Column(name = "TOTAL_ID")
     private Long totalId;
 
+    @Transient
+    private String title;
+    
     @Column(name = "REG_DT")
     private Date regDt;
 

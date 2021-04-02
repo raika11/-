@@ -10,18 +10,17 @@ import jmnet.moka.core.tps.mvc.poll.dto.TrendpollSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollStatSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.entity.Trendpoll;
 import jmnet.moka.core.tps.mvc.poll.entity.TrendpollDetail;
-import jmnet.moka.core.tps.mvc.poll.entity.TrendpollVote;
 import jmnet.moka.core.tps.mvc.poll.mapper.TrendpollStatMapper;
+import jmnet.moka.core.tps.mvc.poll.mapper.TrendpollVoteMapper;
 import jmnet.moka.core.tps.mvc.poll.repository.TrendpollDetailRepository;
 import jmnet.moka.core.tps.mvc.poll.repository.TrendpollItemRepository;
 import jmnet.moka.core.tps.mvc.poll.repository.TrendpollRelateRepository;
 import jmnet.moka.core.tps.mvc.poll.repository.TrendpollRepository;
-import jmnet.moka.core.tps.mvc.poll.repository.TrendpollVoteRepository;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollCntVO;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollStatVO;
+import jmnet.moka.core.tps.mvc.poll.vo.TrendpollVoteVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -49,13 +48,14 @@ public class TrendpollServiceImpl implements TrendpollService {
     private TrendpollItemRepository trendpollItemRepository;
 
     @Autowired
-    private TrendpollVoteRepository trendpollVoteRepository;
-
-    @Autowired
     private TrendpollRelateRepository trendpollRelateRepository;
 
     @Autowired
     private TrendpollStatMapper trendpollStatMapper;
+
+    @Autowired
+    private TrendpollVoteMapper trendpollVoteMapper;
+
 
     @Override
     public Page<Trendpoll> findAllTrendpoll(TrendpollSearchDTO search) {
@@ -145,17 +145,10 @@ public class TrendpollServiceImpl implements TrendpollService {
         return newTrendpoll;
     }
 
-
     @Override
     public long updateTrendpollStatus(Long pollSeq, PollStatusCode status) {
         return trendpollRepository.updateTrendpollStatus(pollSeq, status);
     }
-
-    @Override
-    public Page<TrendpollVote> findAllTrendpollVote(Long pollSeq, Pageable pageable) {
-        return trendpollVoteRepository.findAllByPollSeq(pollSeq, pageable);
-    }
-
 
     @Override
     public List<List<TrendpollStatVO>> findAllTrendpollVoteStat(TrendpollStatSearchDTO search) {
@@ -167,5 +160,10 @@ public class TrendpollServiceImpl implements TrendpollService {
         return trendpollStatMapper.findByParamForCntMapList(search);
     }
 
+    @Override
+    public List<TrendpollVoteVO> findAllByPollSeq(Long seq) {
+        String pollSeq = Long.toString(seq);
+        return trendpollVoteMapper.findAllByPollSeq(pollSeq);
+    }
 
 }

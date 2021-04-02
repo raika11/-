@@ -116,8 +116,8 @@
 
     /*.section_general_wrap */.card_group .card {margin-top: 20px; padding-top: 16px;}
     /* .card_group .card:first-child{margin-top:0;} */
-    .card_group .card::before{content:'';position:absolute;top:0;left:10px;display:block;width:100%;height:1px;background:#e2e2e2;}
-    .card_group.add_pdlr .card::before{width:calc(100% - 20px);}
+    .card_group .card::before{content:'';position:absolute;top:0;left:0;display:block;width:100%;height:1px;background:#e2e2e2;}
+    .card_group.add_pdlr .card::before{left:10px;width:calc(100% - 20px);}
 
     .section_general_wrap .chain_wrap:not(.showcase_general) .card:first-child {margin-top: 0;}
     .section_general_wrap .chain_wrap.showcase_general ul:first-child .card {margin-top: 0; padding-top: 0; border-top: 0;}

@@ -381,8 +381,8 @@
     /***************************************    unique     ************************************/
     .section_unique_wrap .card_body .date { padding-top: 6px; }
     .section_unique_wrap .chain_wrap .card_in { padding-bottom: 20px; }
-    .section_unique_wrap .chain_wrap:not(.unique_trend) .card { padding: 16px 0; border-top: 1px solid #e2e2e2;}
-
+    .section_unique_wrap .chain_wrap:not(.unique_trend) .card { margin-top: 16px;}
+    .section_unique_wrap .chain_wrap:not(.unique_trend) .card:first-child { margin-top: 0; }
 }
 
 /* Medium devices (tablet + pc, 768px and up) */

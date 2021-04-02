@@ -6,9 +6,12 @@ package jmnet.moka.core.tps.mvc.issue.service;
 
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.core.tps.mvc.issue.dto.PackageListSearchDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageSearchDTO;
+import jmnet.moka.core.tps.mvc.issue.entity.PackageList;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import jmnet.moka.core.tps.mvc.issue.vo.PackageVO;
+import org.springframework.data.domain.Page;
 
 
 /**
@@ -66,4 +69,12 @@ public interface PackageService {
      * @return 패키지
      */
     PackageMaster updatePackageMaster(PackageMaster packageMaster);
+
+    /**
+     * 패키지의 기사목록 조회
+     *
+     * @param search 검색조건
+     * @return 기사목록
+     */
+    Page<PackageList> findAllPackageList(PackageListSearchDTO search);
 }

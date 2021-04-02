@@ -16,6 +16,7 @@
 .title_wrap {display: flex; align-items: center; justify-content: space-between; padding: 16px 0 20px; border-top: 1px solid #000;}
 .title_wrap .title_area {display: flex; align-items: center; width: 100%;}
 .title_wrap .title_area .title {font-size: 16px; font-weight: 700;}
+.title_wrap.with_btn {padding:12px 0 12px;}
 
 /** card **/
 .card {position: relative;}
@@ -109,7 +110,9 @@
 
     .section_general_wrap .chain_wrap.view_lank .headline {font-size: 14px;}
 
-    /*.section_general_wrap */.chain_wrap .card {margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e2e2;}
+    /*.section_general_wrap */.chain_wrap .card {margin-top: 20px; padding-top: 16px;}
+    .chain_wrap .card:first-child{margin-top:0;}
+    .chain_wrap .card::before{content:'';position:absolute;top:0;left:10px;display:block;width:calc(100% - 20px);height:1px;background:#e2e2e2;}
     .section_general_wrap .chain_wrap:not(.showcase_general) .card:first-child {margin-top: 0;}
     .section_general_wrap .chain_wrap.showcase_general ul:first-child .card {margin-top: 0; padding-top: 0; border-top: 0;}
     .section_general_wrap .chain_wrap.latest .card:last-child {margin-bottom: 16px; padding-bottom: 20px; border-bottom: 1px solid #e2e2e2;}
@@ -217,7 +220,7 @@
     .title_wrap {padding: 19px 0 23px;}
     .title_wrap .title_area .title {font-size: 18px;}
     .title_wrap .title_area .exp {font-size: 14px;}
-    .title_wrap.with_btn {padding:12px 0 12px;}
+    
 
 
     /* card*/

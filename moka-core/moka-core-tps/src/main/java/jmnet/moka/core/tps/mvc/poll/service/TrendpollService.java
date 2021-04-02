@@ -10,6 +10,7 @@ import jmnet.moka.core.tps.mvc.poll.entity.TrendpollDetail;
 import jmnet.moka.core.tps.mvc.poll.entity.TrendpollVote;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollCntVO;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollStatVO;
+import jmnet.moka.core.tps.mvc.poll.vo.TrendpollVoteVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -101,4 +102,13 @@ public interface TrendpollService {
      * @return 투표 건수 조회 결과
      */
     List<List<TrendpollCntVO>> findAllTrendpollVoteCnt(TrendpollStatSearchDTO search);
+
+
+    /**
+     * 투표 목록 조회
+     *
+     * @param pollSeq 검색 조건
+     * @return 투표 조회 결과
+     */
+    List<TrendpollVoteVO> findAllByPollSeq(Long pollSeq);
 }

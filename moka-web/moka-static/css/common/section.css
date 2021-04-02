@@ -13,9 +13,12 @@
 .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2{font-size:16px;font-weight: 500;line-height: 1.5;letter-spacing: -0.56px;color: #111;}
 
 /* sub title 영역-필요시 */
-.title_wrap {display: flex; align-items: center; justify-content: space-between; padding: 16px 0 20px; border-top: 1px solid #000;}
+.title_wrap {display: flex; align-items: center; justify-content: space-between; padding: 16px 0 21px; border-top: 1px solid #000;}
 .title_wrap .title_area {display: flex; align-items: center; width: 100%;}
 .title_wrap .title_area .title {font-size: 16px; font-weight: 700;}
+
+/* 컴포넌트 */
+.chain_wrap {margin-bottom: 40px;}
 
 /** card **/
 .card {position: relative;}
@@ -37,8 +40,6 @@
 .card.border .card_body {padding:16px 16px;}
 
 /***************************************    general     ************************************/
-.section_general_wrap .chain_wrap {margin-bottom: 40px;}
-
 .section_general_wrap .chain_wrap.showcase_general {padding: 0 0 20px; margin-bottom: 0;}
 .section_general_wrap .chain_wrap.showcase_general .headline {font-size: 18px;}
 
@@ -51,6 +52,8 @@
 
 .section_general_wrap .chain_wrap.latest .title_wrap,
 .section_general_wrap .chain_wrap.view_lank .title_wrap {border-width: 3px;}
+.section_general_wrap .chain_wrap.view_lank .title_wrap,
+.section_general_wrap .chain_wrap.latest .title_wrap {padding: 16px 0;}
 
 
 /***************************************    catalog     ************************************/
@@ -132,8 +135,6 @@
 @media (min-width:768px) {
     .contents {padding-top:30px;}
 
-    /* .contents .page_title {margin-right: 24px;} */
-
     .header_nav_wrap {align-items: flex-end; flex-wrap: nowrap;padding-bottom:18px;border-bottom-width:3px;}
     .header_nav_wrap .page_title {padding-top:5px;font-size: 40px; }
     .header_nav .nav .nav_item {padding-right: 24px;}
@@ -147,8 +148,11 @@
     .header_nav_wrap .header_nav_area .btn_area {position: absolute; right: 16px; bottom: 16px; width: auto;}
     
     /* sub title 영역 */
-    .title_wrap {padding: 17px 0 19px;}
+    .title_wrap {padding: 16px 0 19px;}
     .title_wrap .title_area .exp {font-size: 13px; color: #888; margin-left: 16px;}
+
+    /* 컴포넌트 */
+    .chain_wrap {margin-bottom: 50px;}
 
     /* card*/
     .card_body .headline {color:#000; font-size: 14px;}
@@ -160,8 +164,6 @@
     .card.img_left_md .card_image {margin-bottom: 0;}
 
     /***************************************    general     ************************************/
-    /*.section_general_wrap */.chain_wrap {margin-bottom: 50px;}
-
     .showcase_general .card_group .card {margin-top: 20px; padding: 20px 0 0; border-top: 1px solid #e2e2e2;}
     .showcase_general .card_group .card:first-child {padding-left: 0;}
     .showcase_general .card_group .card:last-child {padding-right: 0; border-right: 0;}
@@ -173,6 +175,8 @@
 
     .section_general_wrap .chain_wrap.latest,
     .section_general_wrap .chain_wrap.view_lank {margin-bottom: 0;}
+    .section_general_wrap .chain_wrap.view_lank .title_wrap,
+    .section_general_wrap .chain_wrap.latest .title_wrap {padding: 16px 0 21px;}
     
     .section_general_wrap .chain_wrap.view_lank .card {margin-bottom: 20px;}
     .section_general_wrap .chain_wrap.view_lank .img_right .card_body {padding-right: 0 !important;}
@@ -226,15 +230,6 @@
     .card.img_left_md .card_body {padding-left: 0 !important;}
 
     /***************************************    general     ************************************/
-    /* .showcase_general .card_group.row,
-    .showcase_general .card > .row,
-    .latest .card_group.row,
-    .latest .card > .row {margin-left:0;margin-right:0;}
-    .showcase_general .card_group.row > *,
-    .showcase_general .card > .row > *,
-    .latest .card_group.row > *,
-    .latest .card > .row > * {padding-left:0;padding-right:0;} */
-
     .showcase_general .card_group .card .card_body {padding: 0; border-right: 0;}
 
     .section_general_wrap .chain_wrap.showcase_general .card_group .card {margin-top: 30px; padding-top: 18px; border-top: 1px solid #ddd; border-right: 0;}
@@ -243,6 +238,9 @@
 
     .fb_wrap {padding: 30px 30px 30px 40px;}
     .fb_wrap .fb_area .title {font-size: 18px;}
+
+    .section_general_wrap .chain_wrap.view_lank .title_wrap,
+    .section_general_wrap .chain_wrap.latest .title_wrap {padding: 16px 0 34px;}
 
     .section_general_wrap .chain_wrap.view_lank .card {margin-bottom: 30px;}
     .section_general_wrap .chain_wrap.view_lank .img_right .card_body {padding-right: 20px !important;}

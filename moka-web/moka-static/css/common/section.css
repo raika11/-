@@ -114,8 +114,7 @@
 
     .section_general_wrap .chain_wrap.view_lank .headline {font-size: 14px;}
 
-    /*.section_general_wrap */.card_group .card {margin-top: 20px; padding-top: 16px;}
-    /* .card_group .card:first-child{margin-top:0;} */
+    .card_group .card {margin-top: 20px; padding-top: 16px;}
     .card_group .card::before{content:'';position:absolute;top:0;left:0;display:block;width:100%;height:1px;background:#e2e2e2;}
     .card_group.add_pdlr .card::before{left:10px;width:calc(100% - 20px);}
 
@@ -161,7 +160,7 @@
     .title_wrap .title_area .exp {font-size: 13px; color: #888; margin-left: 16px;}
 
     /* 컴포넌트 */
-    .chain_wrap {margin-bottom: 50px;}
+    .chain_wrap {margin-bottom: 30px;}
 
     /* card*/
     .card_body .headline {color:#000; font-size: 14px;}
@@ -180,6 +179,7 @@
     .showcase_general .card_group .card:first-child .card_body {padding-left: 0;}
     .showcase_general .card_group .card:last-child .card_body {padding-right: 0; border-right: 0;}
 
+    .section_general_wrap .chain_wrap.showcase_general {margin-bottom: 20px;}
     .section_general_wrap .chain_wrap.showcase_general .headline {font-size: 16px;}
 
     .section_general_wrap .chain_wrap.latest,
@@ -227,9 +227,10 @@
     .title_wrap {padding: 19px 0 23px;}
     .title_wrap .title_area .title {font-size: 18px;}
     .title_wrap .title_area .exp {font-size: 14px;}
+
+    /* 컴포넌트 */
+    .chain_wrap {margin-bottom: 50px;}
     
-
-
     /* card*/
     .card_body .headline {font-size: 16px;}
     .card_body .description {color: #444; font-size: 14px;}

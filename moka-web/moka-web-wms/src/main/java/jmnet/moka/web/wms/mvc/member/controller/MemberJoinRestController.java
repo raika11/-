@@ -245,11 +245,11 @@ public class MemberJoinRestController extends AbstractCommonController {
             @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws Exception {
 
-        String noDataMsg = msg("tps.common.error.no-data");
-
-        MemberInfo member = memberService
-                .findMemberById(memberId)
-                .orElseThrow(() -> new NoDataException(noDataMsg));
+        //        String noDataMsg = msg("tps.common.error.no-data");
+        //
+        //        MemberInfo member = memberService
+        //                .findMemberById(memberId)
+        //                .orElseThrow(() -> new NoDataException(noDataMsg));
 
         // 비밀번호와 비밀번호 확인 비교
         /*
@@ -289,7 +289,7 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         memberService.insertMemberSms(memberSms);
 
-        MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
+        MemberDTO memberDTO = modelMapper.map(memberSms, MemberDTO.class);
 
         String smsInfoMsg = msg("wms.login.info.sms-sand");
 

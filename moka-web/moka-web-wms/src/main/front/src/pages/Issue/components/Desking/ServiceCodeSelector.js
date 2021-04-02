@@ -164,7 +164,7 @@ const ServiceCodeSelector = (props) => {
                 </PerfectScrollbar>
             </Dropdown.Toggle>
 
-            <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll w-100">
+            <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll pb-0 w-100">
                 {renderCode({
                     label: '카테고리 전체',
                     custom: true,

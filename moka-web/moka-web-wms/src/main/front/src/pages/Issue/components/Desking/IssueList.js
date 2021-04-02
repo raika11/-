@@ -55,7 +55,7 @@ const IssueList = (props) => {
      */
     const getIssueList = useCallback(
         ({ search: appendSearch, getServiceCodeList = false }) => {
-            const ns = { ...search, ...appendSearch };
+            const ns = { ...search, usedYn: 'Y,E', ...appendSearch }; // 노출 중이거나 종료한 것만
             setSearch(ns);
 
             // 실검색에 쓰는 날짜 text
@@ -164,12 +164,30 @@ const IssueList = (props) => {
     useEffect(() => {
         if (list.length > 0) {
             setRowData(
-                list.map((data) => ({
-                    ...data,
-                    catName: data.catList.split('|')[1],
-                    divName: pkgDiv.find((d) => d.code === data.pkgDiv)?.name || '',
-                    regDt: (data.regDt || '').slice(0, 10),
-                })),
+                list.map((data) => {
+                    // 기자명 replace
+                    let repName = '';
+                    const rep = (data.repList || '').split(',').map((r) => r.replace(/(.*\|)(.*)/, '$2'));
+                    if (rep.length > 1) repName = `${rep[0]} 외 ${rep.length - 1}명`;
+                    else if (rep.length === 1) repName = rep[0];
+                    const fullRepName = rep.join(',');
+
+                    // 카테고리
+                    let catName = '';
+                    catName = (data.catList || '')
+                        .split(',')
+                        .map((t) => t.replace(/(.*\|)(.*)/, '$2'))
+                        .join(',');
+
+                    return {
+                        ...data,
+                        catName,
+                        repName,
+                        fullRepName,
+                        divName: pkgDiv.find((d) => d.code === data.pkgDiv)?.name || '',
+                        regDt: (data.regDt || '').slice(0, 10),
+                    };
+                }),
             );
         }
     }, [list, pkgDiv]);

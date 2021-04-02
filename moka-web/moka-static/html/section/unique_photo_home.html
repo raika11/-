@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="ko">
-
 <head>
     <meta charset="utf-8">
 
@@ -14,28 +13,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Responsive meta tag / 브라우저 확대 및 축소를 비활성화 / 접근성 문제 -->
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">
+
+    <link href="//stg-static.joongang.co.kr/css/plugin/swiper.css" rel="stylesheet">
     <link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">
     <link href="//stg-static.joongang.co.kr/css/common/section.css" rel="stylesheet">
-    <link href="//stg-static.joongang.co.kr/css/plugin/swiper.css" rel="stylesheet">
+    
     <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
     <script src="//stg-static.joongang.co.kr/js/plugin/swiper.min.js"></script>
     <script src="//stg-static.joongang.co.kr/js/utils/scroll.js"></script>
 </head>
-
 <body>
     <div id="wrapper">
         <!-- header -->
         <header id="header" class="header">
             <div class="uh flex flex_align_center flex_justify_center">
                 <a href="#" class="btn_navbar"><i class="icon_navbar">서비스 바로가기</i></a>
-                <h2 class="lh_sm22 lh_md16 lh_lg22">The JoongAng</h2>
+                <a href="javascript:(0);"><h2 class="logo">The JoongAng</h2></a>
                 <div class="right_area flex flex_align_center">
                     <a href="#" class="btn btn_myinfo">마이페이지</a> <!--임시 이미지-->
                     <a href="#" class="btn btn_search">검색하기</a> <!--임시 이미지-->
                 </div>
             </div>
         </header>
-        <!-- // header -->
 
         <!-- container -->
         <main role="main" id="container">
@@ -68,12 +69,14 @@
                         </div>
                     </section>
                     <!-- 디자인 변경 예정 : N개 케이스 추가 -->
-    
+                    <!-- 사진관 영역 -->
                     <section class="chain_wrap">
+                        <!-- 타이틀 -->
                         <header class="title_wrap with_btn">
                             <h2 class="title"><a href="#" class="flex flex_align_center">권혁재의 핸드폰 사진관 <i class="fa fa_arrow_right_b"></i></a></h2>
                             <button type="button" class="btn_outline_orange" ><i class="fa_plus_orange"></i>구독</button>
                         </header>
+                        <!-- //타이틀 -->
                         <ul class="card_group row add_pdlr">
                             <li class="card col_sm12 col_md3 col_lg3 img_right">
                                 <div class="row flex_row_reverse">
@@ -133,11 +136,15 @@
                             </li>
                         </ul>
                     </section>
+                    <!-- //사진관 영역 -->
+                    <!-- 사진관 영역 -->
                     <section class="chain_wrap">
+                        <!-- 타이틀 -->
                         <header class="title_wrap with_btn">
                             <h2 class="title"><a href="#" class="flex flex_align_center">서소문 사진관 <i class="fa fa_arrow_right_b"></i></a></h2>
                             <button type="button" class="btn_outline_orange" ><i class="fa_plus_orange"></i>구독</button>
                         </header>
+                        <!-- //타이틀 -->
                         <ul class="card_group row add_pdlr">
                             <li class="card col_sm12 col_md3 col_lg3 img_right">
                                 <div class="row flex_row_reverse">
@@ -197,9 +204,12 @@
                             </li>
                         </ul>
                     </section>
-    
+                    <!-- //사진관 영역 -->
+                    <!-- 최신 포토 영역 -->
                     <section class="chain_wrap unique_trend">
+                        <!-- 타이틀 -->
                         <header class="title_wrap bdr_width3"><h2 class="title">최신 포토</h2></header>
+                        <!-- //타이틀 -->
                         <ul class="card_group row add_pdlr">
                             <li class="card col_sm6 col_md4 col_lg4">
                                 <div class="card_image"><a href="#"><img srcset="https://via.placeholder.com/376x212 1x, https://via.placeholder.com/752x424 2x, https://via.placeholder.com/1128x636 3x" width="376" height="212" src="https://via.placeholder.com/376x212" alt="..." > </a></div>
@@ -267,6 +277,7 @@
                         </ul>
                         <button type="button" class="card_more font_gray7">최신 포토 더보기<i class="fa fa_arrow_down_g"></i></button>
                     </section>
+                    <!-- //최신 포토 영역 -->
                 </div>
             </div>
             <!-- // contents -->

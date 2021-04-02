@@ -28,8 +28,8 @@
 .card_image img {width: 100%; height: auto;}
 .img_right .card_body + .card_image {margin-bottom: 0; padding-left: 0; padding-right: 0;}
 .img_right_all .card_body {padding-right: 20px !important;}
-.card .lank_num {position: absolute; width: auto; font-size: 46px;}
-.card .lank_num + .card_body {padding-left: 58px;}
+.card .lank_num {position: absolute; width: 16px; font-size: 46px;}
+.card .lank_num + .card_body {padding-left: 40px;}
 .card_more { display: flex; align-items: center; justify-content: center; width: 100%; color: #999;}
 .card_more .fa_arrow_down_g { margin-left: 8px;}
 

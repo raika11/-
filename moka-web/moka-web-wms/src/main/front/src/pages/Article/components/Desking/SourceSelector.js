@@ -1,9 +1,10 @@
-import React, { forwardRef, useState, useCallback, useEffect } from 'react';
+import React, { forwardRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import produce from 'immer';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
+import util from '@utils/commonUtil';
 import { MokaInput, MokaInputGroup, MokaIcon } from '@components';
 
 /**
@@ -104,20 +105,21 @@ const SourceSelector = forwardRef(({ className, isInvalid, value, onChange, widt
      * @param {object} e 이벤트
      */
     const handleChangeValue = (e) => {
-        const { checked, id } = e.target;
+        const { checked } = e.target;
+        const sc = e.target.dataset['sc'];
         let resultList = [];
 
-        if (id === 'all') {
+        if (sc === 'all') {
             // 매체 전체 예외처리
             resultList = checked ? renderList : [];
         } else {
-            const target = renderList.find((s) => s.sourceCode === id);
+            const target = renderList.find((s) => s.sourceCode === sc);
             if (checked) {
                 resultList = [...checkedList, target].sort(function (a, b) {
                     return a.index - b.index;
                 });
             } else {
-                const isSelected = checkedList.findIndex((sl) => sl.sourceCode === id);
+                const isSelected = checkedList.findIndex((sl) => sl.sourceCode === sc);
                 if (isSelected > -1) {
                     resultList = produce(checkedList, (draft) => {
                         draft.splice(isSelected, 1);
@@ -134,11 +136,22 @@ const SourceSelector = forwardRef(({ className, isInvalid, value, onChange, widt
     /**
      * 체크박스 렌더러
      */
-    const renderSc = ({ id, label, checked }) => (
-        <div key={id} className="mb-2">
-            <MokaInput as="checkbox" name="service" id={id} inputProps={{ custom: true, label, checked }} onChange={handleChangeValue} />
-        </div>
-    );
+    const renderSc = ({ id, label, checked, onChange }) => {
+        const key = util.getUniqueKey();
+
+        return (
+            <MokaInput
+                key={`${key}-${id}`}
+                className="mb-2"
+                as="checkbox"
+                name="service"
+                id={`${key}-${id}`}
+                data-sc={id}
+                inputProps={{ custom: true, label, checked, key: `${key}-${id}` }}
+                onChange={onChange}
+            />
+        );
+    };
 
     useEffect(() => {
         setRenderList((sourceList || []).map((s, idx) => ({ ...s, index: idx })));
@@ -171,48 +184,29 @@ const SourceSelector = forwardRef(({ className, isInvalid, value, onChange, widt
     }, [renderList, value]);
 
     return (
-        <div style={{ width }} className={clsx('flex-fill', className)} ref={ref}>
-            <Dropdown>
-                <Dropdown.Toggle as={CustomToggle} isInvalid={isInvalid} id="dropdown-custom-components">
-                    {toggleText}
-                </Dropdown.Toggle>
+        <Dropdown style={{ width }} className={clsx('flex-fill', className)} ref={ref}>
+            <Dropdown.Toggle as={CustomToggle} isInvalid={isInvalid} id="dropdown-custom-components">
+                {toggleText}
+            </Dropdown.Toggle>
 
-                <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll w-100 pb-0">
-                    {/* 매체 전체 옵션 */}
-                    {renderSc({
-                        label: '카테고리 전체',
-                        id: 'all',
-                        checked: isAllChecked,
-                    })}
-                    {renderList.map((cd) =>
-                        renderSc({
-                            label: cd.sourceName,
-                            id: cd.sourceCode,
-                            checked: checkedList.findIndex((c) => c.sourceCode === cd.sourceCode) > -1,
-                        }),
-                    )}
-                    {/* <MokaInput
-                        name="sourceList"
-                        onChange={handleChangeValue}
-                        className="mb-2"
-                        as="checkbox"
-                        inputProps={{ label: '매체 전체', custom: true, checked: isAllChecked }}
-                        id="all"
-                    />
-                    {renderList.map((cd, idx) => (
-                        <MokaInput
-                            key={cd.sourceCode}
-                            name="sourceList"
-                            onChange={handleChangeValue}
-                            className="mb-2"
-                            as="checkbox"
-                            inputProps={{ label: cd.sourceName, custom: true, checked: chkTrue(cd.sourceCode) }}
-                            id={cd.sourceCode}
-                        />
-                    ))} */}
-                </Dropdown.Menu>
-            </Dropdown>
-        </div>
+            <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll w-100 pb-0">
+                {/* 매체 전체 옵션 */}
+                {renderSc({
+                    label: '카테고리 전체',
+                    id: 'all',
+                    checked: isAllChecked,
+                    onChange: handleChangeValue,
+                })}
+                {renderList.map((cd) =>
+                    renderSc({
+                        label: cd.sourceName,
+                        id: cd.sourceCode,
+                        checked: checkedList.findIndex((c) => c.sourceCode === cd.sourceCode) > -1,
+                        onChange: handleChangeValue,
+                    }),
+                )}
+            </Dropdown.Menu>
+        </Dropdown>
     );
 });
 

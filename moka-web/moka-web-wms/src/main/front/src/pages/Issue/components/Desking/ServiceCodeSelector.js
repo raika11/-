@@ -7,6 +7,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import util from '@utils/commonUtil';
 import { MokaIcon, MokaInput, MokaLoader } from '@components';
 
 /**
@@ -82,20 +83,21 @@ const ServiceCodeSelector = (props) => {
      */
     const handleChangeValue = useCallback(
         (e) => {
-            const { checked, id } = e.target;
+            const { checked } = e.target;
+            const cd = e.target.dataset['cd'];
             let resultList = [];
 
-            if (id === 'all') {
+            if (cd === 'all') {
                 // 매체 전체 예외처리
                 resultList = checked ? renderList : [];
             } else {
-                const target = renderList.find((c) => c.masterCode === id);
+                const target = renderList.find((c) => c.masterCode === cd);
                 if (checked) {
                     resultList = [...checkedList, target].sort(function (a, b) {
                         return a.index - b.index;
                     });
                 } else {
-                    const idx = checkedList.findIndex((c) => c.masterCode === id);
+                    const idx = checkedList.findIndex((c) => c.masterCode === cd);
                     resultList = produce(checkedList, (draft) => {
                         draft.splice(idx, 1);
                     });
@@ -113,11 +115,22 @@ const ServiceCodeSelector = (props) => {
      * 코드 렌더러
      */
     const renderCode = useCallback(
-        ({ className, id, label, checked }) => (
-            <div key={id} className={clsx('mb-2 mr-2 float-left', className)}>
-                <MokaInput as="checkbox" name="service" className="flex-grow-0" id={id} inputProps={{ custom: true, label, checked }} onChange={handleChangeValue} />
-            </div>
-        ),
+        ({ className, id, label, checked }) => {
+            const key = util.getUniqueKey();
+            return (
+                <div key={`${key}-${id}`} className={clsx('mb-2 mr-2 float-left', className)}>
+                    <MokaInput
+                        as="checkbox"
+                        name="service"
+                        className="flex-grow-0"
+                        id={`${key}-${id}`}
+                        data-cd={id}
+                        inputProps={{ custom: true, label, checked }}
+                        onChange={handleChangeValue}
+                    />
+                </div>
+            );
+        },
         [handleChangeValue],
     );
 

@@ -5,11 +5,7 @@ export default [
         maxWidth: 28,
         suppressMenu: true,
         rowDragText: (params, dragItemCount) => {
-            if (dragItemCount > 1) {
-                const message = params.rowNodes ? params.rowNodes[0].data.artTitle : params.rowNode.data.artTitle;
-                return `${message}외 [${dragItemCount - 1}건]`;
-            }
-            return params.rowNode.data.artTitle;
+            return params.rowNode.data.pkgTitle;
         },
     },
     {
@@ -21,6 +17,7 @@ export default [
         headerName: '카테고리',
         width: 110,
         field: 'catName',
+        tooltipField: 'catName',
     },
     {
         headerName: '유형',
@@ -30,16 +27,15 @@ export default [
     {
         headerName: '패키지명',
         width: 200,
-        flex: 2,
+        flex: 1,
         field: 'pkgTitle',
         tooltipField: 'pkgTitle',
     },
     {
         headerName: '기자정보',
-        field: 'artTitle',
-        width: 186,
-        flex: 1,
-        tooltipField: 'artTitle',
+        field: 'repName',
+        width: 110,
+        tooltipField: 'fullRepName',
     },
     {
         headerName: '기사수',

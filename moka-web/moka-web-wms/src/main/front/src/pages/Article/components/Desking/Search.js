@@ -135,12 +135,12 @@ const Search = (props) => {
 
                     {/* 면 */}
                     <div style={{ width: 60 }} className="mr-2">
-                        <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} type="number" />
+                        <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} />
                     </div>
 
                     {/* 판 */}
                     <div style={{ width: 60 }} className="mr-2">
-                        <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} type="number" />
+                        <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} />
                     </div>
                 </div>
 

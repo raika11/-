@@ -144,7 +144,7 @@ const WorkEdit = ({ match }) => {
                             if (header.success) {
                                 toast.success('삭제되었습니다.');
                                 dispatch(getDeleteJobList());
-                                history.push(`${match.path}`);
+                                history.push(`${match.path}/work`);
                             } else {
                                 messageBox.alert(header.message);
                             }
@@ -159,7 +159,7 @@ const WorkEdit = ({ match }) => {
      * 취소
      */
     const handleClickCancel = () => {
-        history.push(`${match.path}/work`);
+        history.push(`${match.path}/work-list`);
     };
 
     useEffect(() => {

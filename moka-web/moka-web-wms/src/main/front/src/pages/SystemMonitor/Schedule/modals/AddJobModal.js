@@ -50,7 +50,7 @@ const AddJobModal = (props) => {
                     if (header.success) {
                         toast.success('삭제된 작업이 복원되었습니다.');
                         handleClickHide();
-                        history.push(`${match.path}`);
+                        history.push(`${match.path}/work-delete`);
                         dispatch(getDeleteJobList());
                     } else {
                         messageBox.alert(header.message);

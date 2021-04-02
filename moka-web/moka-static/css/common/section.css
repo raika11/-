@@ -115,6 +115,10 @@
 
     .section_general_wrap .chain_wrap.view_lank .headline {font-size: 14px;}
 
+
+    .card_group.catalog_card .card:first-child,
+    .card_group.catalog_card .card.col_sm6:nth-child(2) {margin-top:0;}
+    
     .section_general_wrap .chain_wrap:not(.showcase_general) .card:first-child {margin-top: 0;}
     .section_general_wrap .chain_wrap.showcase_general ul:first-child .card {margin-top: 0; padding-top: 0; border-top: 0;}
     .section_general_wrap .chain_wrap.latest .card:last-child {margin-bottom: 16px; padding-bottom: 20px; border-bottom: 1px solid #e2e2e2;}

@@ -7,12 +7,12 @@ import Button from 'react-bootstrap/Button';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { messageBox } from '@utils/toastUtil';
 import { CodeAutocomplete } from '@pages/commons';
-import SourceSelector from '@pages/commons/SourceSelector';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaModal, MokaInput, MokaTable } from '@/components';
-import columnDefs from './ArticleListModalAgGridCoulmns';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { GET_ARTICLE_LIST_MODAL, initialState, getArticleListModal } from '@store/article';
+import SourceSelector from '@pages/Article/components/Desking/SourceSelector';
+import columnDefs from './ArticleListModalAgGridCoulmns';
 
 const propTypes = {
     show: PropTypes.bool,
@@ -32,11 +32,12 @@ const ArticleListModal = (props) => {
     const { show, onHide, onRowClicked } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST_MODAL]);
+    const sourceList = useSelector(({ articleSource }) => articleSource.typeSourceList.JOONGANG);
     const [setGridInstance] = useState(null);
     const [period, setPeriod] = useState([0, 'days']);
     const [search, setSearch] = useState(initialSearch);
-    const [type] = useState('JOONGANG');
     const [valError, setValError] = useState({});
+    const [list, setList] = useState([]);
     const [rowData, setRowData] = useState([]);
     const [total, setTotal] = useState(0);
 
@@ -111,17 +112,18 @@ const ArticleListModal = (props) => {
      * @param {object} searchObj 검색객체
      */
     const loadList = useCallback(
-        ({ search: appendSearch, getSourceList }) => {
+        ({ search: appendSearch }) => {
             const nt = new Date();
             const startServiceDay = !search.startServiceDay ? moment(nt).subtract(period[0], period[1]).startOf('day') : search.startServiceDay;
             const endServiceDay = !search.endServiceDay ? moment(nt).endOf('day') : search.endServiceDay;
             const ns = { ...search, ...appendSearch, startServiceDay, endServiceDay };
+            const needCallSource = !ns.sourceList; // 매체 api 호출해야하는지
             setSearch(ns);
 
             dispatch(
                 getArticleListModal({
-                    getSourceList,
-                    type,
+                    getSourceList: needCallSource,
+                    type: 'JOONGANG',
                     search: {
                         ...ns,
                         startServiceDay: moment(startServiceDay).format(DB_DATEFORMAT),
@@ -129,16 +131,9 @@ const ArticleListModal = (props) => {
                     },
                     callback: ({ header, body, search }) => {
                         if (header.success) {
+                            setList(body.list);
                             setTotal(body.totalCnt);
                             setSearch({ ...ns, sourceList: search.sourceList });
-                            setRowData(
-                                body.list.map((art) => ({
-                                    ...art,
-                                    unescapeTitle: unescapeHtmlArticle(art.artTitle),
-                                    serviceDaytime: (art.serviceDaytime || '').slice(0, -3),
-                                    onClick: handleRowClicked,
-                                })),
-                            );
                         } else {
                             messageBox.alert('기사리스트 조회에 실패했습니다.');
                         }
@@ -146,7 +141,7 @@ const ArticleListModal = (props) => {
                 }),
             );
         },
-        [dispatch, handleRowClicked, period, search, type],
+        [dispatch, period, search],
     );
 
     /**
@@ -209,11 +204,12 @@ const ArticleListModal = (props) => {
         setPeriod([0, 'days']);
         setSearch({
             ...initialSearch,
+            sourceList: (sourceList || []).map((s) => s.sourceCode).join(','),
             masterCode: null,
             startServiceDay: startServiceDay,
             endServiceDay: endServiceDay,
         });
-    }, []);
+    }, [sourceList]);
 
     /**
      * 테이블 검색옵션 변경
@@ -229,8 +225,7 @@ const ArticleListModal = (props) => {
 
     useEffect(() => {
         // 기사 처음 로드 + 매체도 조회 (매체가 변경되는 경우 이 effect를 탄다)
-        if (show) loadList({ getSourceList: true });
-
+        if (show) loadList({});
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]);
 
@@ -245,6 +240,17 @@ const ArticleListModal = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show, handleRowClicked]);
+
+    useEffect(() => {
+        setRowData(
+            list.map((art) => ({
+                ...art,
+                unescapeTitle: unescapeHtmlArticle(art.artTitle),
+                serviceDaytime: (art.serviceDaytime || '').slice(0, -3),
+                onClick: handleRowClicked,
+            })),
+        );
+    }, [handleRowClicked, list]);
 
     return (
         <MokaModal title="기사 검색" show={show} onHide={handelHide} size="lg" width={1000} height={800} bodyClassName="d-flex flex-column" draggable>
@@ -296,7 +302,7 @@ const ArticleListModal = (props) => {
                         width={390}
                         onChange={(value) => handleChangeValue({ target: { name: 'sourceList', value } })}
                         isInvalid={valError.sourceList}
-                        sourceType="JOONGANG"
+                        sourceList={sourceList}
                     />
 
                     {/* 검색 조건 */}

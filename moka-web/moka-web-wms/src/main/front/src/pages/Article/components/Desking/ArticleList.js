@@ -61,12 +61,14 @@ const defaultProps = {
 const ArticleList = (props) => {
     const { className, selectedComponent, dropTargetAgGrid, onDragStop, isNaverChannel, show, movie } = props;
     const dispatch = useDispatch();
+    const loading = useSelector(({ loading }) => loading[GET_ARTICLE_LIST_MODAL]);
 
     // initial setting
+    const sourceList = useSelector(({ articleSource }) => (isNaverChannel ? articleSource.typeSourceList.BULK : articleSource.deskingSourceList));
     const initialSearch = isNaverChannel ? initialState.bulk.search : initialState.service.search;
+
     const [type, setType] = useState('DESKING');
     const [period, setPeriod] = useState([2, 'days']);
-    const loading = useSelector(({ loading }) => loading[GET_ARTICLE_LIST_MODAL]);
     const [search, setSearch] = useState(initialSearch);
     const [error, setError] = useState({});
     const [rowData, setRowData] = useState([]);
@@ -141,12 +143,13 @@ const ArticleList = (props) => {
         setPeriod([2, 'days']);
         setSearch({
             ...initialSearch,
+            sourceList: (sourceList || []).map((s) => s.sourceCode).join(','),
             page: search.page,
             masterCode: selectedComponent.schCodeId || null,
             startServiceDay: moment(nd).subtract(2, 'days').startOf('day'),
             endServiceDay: moment(nd).endOf('day'),
         });
-    }, [initialSearch, search.page, selectedComponent.schCodeId]);
+    }, [initialSearch, search.page, selectedComponent.schCodeId, sourceList]);
 
     /**
      * validate
@@ -203,7 +206,7 @@ const ArticleList = (props) => {
     }, [show, isNaverChannel, selectedComponent.schCodeId]);
 
     return (
-        <div className={clsx('d-flex flex-column h-100', className)}>
+        <div className={clsx('d-flex flex-column h-100', className)} key={movie ? 'movie' : 'article'}>
             <Search
                 search={search}
                 period={period}
@@ -215,6 +218,7 @@ const ArticleList = (props) => {
                 // 그룹넘버 변경 후 실행함수
                 onChangeGroupNumber={handleSearch}
                 movie={movie}
+                sourceList={sourceList}
             />
 
             <AgGrid

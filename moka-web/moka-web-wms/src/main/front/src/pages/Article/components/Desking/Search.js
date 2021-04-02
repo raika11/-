@@ -4,14 +4,14 @@ import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaSearchInput } from '@components';
 import { CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
-import { SourceSelector } from '@pages/commons';
 import { initialState } from '@store/article';
+import SourceSelector from './SourceSelector';
 
 /**
  * 페이지편집 > 기사 목록 > 기사 검색
  */
 const Search = (props) => {
-    const { onChangeSearchOption, search, period, isNaverChannel, error, onSearch, onReset, onChangeGroupNumber, movie } = props;
+    const { onChangeSearchOption, search, period, isNaverChannel, error, onSearch, onReset, onChangeGroupNumber, movie, sourceList } = props;
     const [modalShow, setModalShow] = useState(false);
 
     /**
@@ -58,12 +58,6 @@ const Search = (props) => {
      * @param {string} value value
      */
     const handleChangeMasterCode = (value) => onChangeSearchOption({ key: 'masterCode', value });
-
-    /**
-     * 매체 변경
-     * @param {string} value 매체리스트
-     */
-    const handleChangeSourceList = (value) => onChangeSearchOption({ key: 'sourceList', value });
 
     return (
         <Form>
@@ -132,10 +126,11 @@ const Search = (props) => {
 
                     {/* 매체 */}
                     <SourceSelector
+                        key={movie ? 'movie' : 'article'}
+                        sourceList={sourceList}
                         className="mr-2"
                         value={search.sourceList}
-                        onChange={handleChangeSourceList}
-                        sourceType={isNaverChannel ? 'BULK' : 'DESKING'}
+                        onChange={(value) => onChangeSearchOption({ key: 'sourceList', value })}
                         isInvalid={error.sourceList}
                     />
 

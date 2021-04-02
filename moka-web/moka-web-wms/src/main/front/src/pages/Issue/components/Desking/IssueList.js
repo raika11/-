@@ -42,17 +42,19 @@ const IssueList = (props) => {
     const { className, dropTargetAgGrid, onDragStop, show } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_ISSUE_LIST_MODAL]);
+    const pkgDiv = useSelector(({ app }) => app.PACKAGE_DIV); // packageDiv 종류 (서버에서 내려줌)
     const [period, setPeriod] = useState(defaultPeriod);
     const [search, setSearch] = useState(initialState.search);
-    const [rowData, setRowData] = useState([]);
+    const [list, setList] = useState([]); // api 결과 담는 리스트
     const [total, setTotal] = useState(0);
+    const [rowData, setRowData] = useState([]); // ag-grid 그리는 rowData
     const cntRef = useRef(0);
 
     /**
      * 패키지 목록 조회
      */
     const getIssueList = useCallback(
-        ({ search: appendSearch }) => {
+        ({ search: appendSearch, getServiceCodeList = false }) => {
             const ns = { ...search, ...appendSearch };
             setSearch(ns);
 
@@ -63,10 +65,10 @@ const IssueList = (props) => {
             dispatch(
                 getIssueListModal({
                     search: { ...ns, startDt, endDt },
-                    getServiceCodeList: true,
+                    getServiceCodeList,
                     callback: ({ header, body, search }) => {
                         if (header.success) {
-                            setRowData(body.list);
+                            setList(body.list);
                             setTotal(body.totalCnt);
                             setSearch({ ...ns, category: search.category });
                         } else {
@@ -124,8 +126,27 @@ const IssueList = (props) => {
         });
     }, [search.page]);
 
+    /**
+     * validate
+     */
+    const validate = useCallback(() => {
+        let isInvalid = false;
+        return !isInvalid;
+    }, []);
+
+    /**
+     * 검색
+     */
+    const handleSearch = useCallback(() => {
+        let ns = { page: 0 };
+        if (validate()) {
+            getIssueList({ search: ns });
+        }
+    }, [getIssueList, validate]);
+
     useEffect(() => {
         if (show) {
+            // 패키지 목록 로딩 (최초)
             if (cntRef.current === 0) {
                 const nd = new Date();
                 getIssueList({
@@ -133,22 +154,29 @@ const IssueList = (props) => {
                         startDt: moment(nd).subtract(defaultPeriod[0], defaultPeriod[1]).startOf('day'),
                         endDt: moment(nd).endOf('day'),
                     },
+                    getServiceCodeList: true,
                 });
                 cntRef.current += 1;
             }
         }
     }, [show, getIssueList]);
 
+    useEffect(() => {
+        if (list.length > 0) {
+            setRowData(
+                list.map((data) => ({
+                    ...data,
+                    catName: data.catList.split('|')[1],
+                    divName: pkgDiv.find((d) => d.code === data.pkgDiv)?.name || '',
+                    regDt: (data.regDt || '').slice(0, 10),
+                })),
+            );
+        }
+    }, [list, pkgDiv]);
+
     return (
         <div className={clsx('d-flex flex-column h-100', className)}>
-            <Search
-                search={search}
-                period={period}
-                onChangeSearchOption={handleSearchOption}
-                // onSearch={handleSearch}
-                onReset={handleReset}
-                loading={loading}
-            />
+            <Search search={search} period={period} onChangeSearchOption={handleSearchOption} onSearch={handleSearch} onReset={handleReset} loading={loading} pkgDiv={pkgDiv} />
 
             <AgGrid
                 search={search}

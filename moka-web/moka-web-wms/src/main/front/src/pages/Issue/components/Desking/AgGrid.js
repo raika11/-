@@ -45,7 +45,7 @@ const AgGrid = forwardRef((props, ref) => {
                 setGridInstance={setGridInstance}
                 columnDefs={columnDefs}
                 rowData={list}
-                onRowNodeId={(article) => article.totalId}
+                onRowNodeId={(pkg) => pkg.pkgSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 total={total}

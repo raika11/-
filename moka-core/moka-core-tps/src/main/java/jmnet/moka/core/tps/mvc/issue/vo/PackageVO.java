@@ -134,6 +134,7 @@ public class PackageVO implements Serializable {
     /**
      * 생성일
      */
+    @DTODateTimeFormat
     @Column(name = "REG_DT")
     private String regDt;
 

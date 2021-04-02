@@ -268,25 +268,6 @@ public class TrendpollRestController extends AbstractCommonController {
             @ApiParam(hidden = true) ModelMap map) {
 
         TrendpollExcelView excelView = new TrendpollExcelView();
-        //        // 최종 페이지
-        //        int totalPages;
-        //        int size = 200;
-        //        // 현재 페이지
-        //        AtomicInteger currentPage = new AtomicInteger(0);
-        //
-        //
-        //        Page<TrendpollVote> list = trendpollService.findAllTrendpollVote(pollSeq, PageRequest.of(currentPage.getAndAdd(1), size));
-        //
-        //        totalPages = list.getTotalPages();
-        //
-        //        List<TrendpollVote> resultList = new ArrayList<>();
-        //        if (totalPages > 0) {
-        //            resultList.addAll(list.getContent());
-        //            while (currentPage.get() < totalPages) {
-        //                list = trendpollService.findAllTrendpollVote(pollSeq, PageRequest.of(currentPage.getAndAdd(1), size));
-        //                resultList.addAll(list.getContent());
-        //            }
-        //        }
 
         List<TrendpollVoteVO> resultList = trendpollService.findAllByPollSeq(pollSeq);
 

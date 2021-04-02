@@ -7,12 +7,10 @@ import jmnet.moka.core.tps.mvc.poll.dto.TrendpollSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollStatSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.entity.Trendpoll;
 import jmnet.moka.core.tps.mvc.poll.entity.TrendpollDetail;
-import jmnet.moka.core.tps.mvc.poll.entity.TrendpollVote;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollCntVO;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollStatVO;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollVoteVO;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  * <pre>
@@ -76,16 +74,6 @@ public interface TrendpollService {
      * @return 저장 된 투표 정보
      */
     long updateTrendpollStatus(Long pollSeq, PollStatusCode status);
-
-
-    /**
-     * 투표 목록 조회
-     *
-     * @param pollSeq 투표 일련번호
-     * @return 투표 목록 조회 결과
-     */
-    Page<TrendpollVote> findAllTrendpollVote(Long pollSeq, Pageable pageable);
-
 
     /**
      * 투표 현황 목록 조회

@@ -79,8 +79,8 @@
   </api>
 
   <!-- 댓글등록 -->
-  <!--  <api id="comment.insert" membership="cookie" method="post" expire="0">-->
-  <api id="comment.insert" membership="cookie" expire="0">
+  <api id="comment.insert" membership="cookie" method="post" expire="0">
+    <!--  <api id="comment.insert" membership="cookie" expire="0">-->
     <description>댓글을 등록한다</description>
     <parameter>
       <referrer desc="레퍼러" require="Y">^.{1,500}$</referrer>

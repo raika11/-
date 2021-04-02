@@ -82,16 +82,14 @@ const DeleteWorkSearch = ({ show, match }) => {
                     <Button variant="searching" className="mr-1" onClick={handleClickSearch}>
                         검색
                     </Button>
-                    <Button variant="negative" onClick={handleClickReset}>
+                    <Button variant="negative" className="mr-1" onClick={handleClickReset}>
                         초기화
+                    </Button>
+                    <Button variant="positive" onClick={handleClickAdd}>
+                        등록
                     </Button>
                 </div>
             </Form.Row>
-            <div className="d-flex justify-content-end">
-                <Button variant="positive" onClick={handleClickAdd}>
-                    등록
-                </Button>
-            </div>
         </Form>
     );
 };

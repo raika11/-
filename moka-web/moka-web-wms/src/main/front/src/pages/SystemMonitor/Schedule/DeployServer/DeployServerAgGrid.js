@@ -44,7 +44,7 @@ const DeployServerAgGrid = ({ match }) => {
 
     return (
         <MokaTable
-            className="overflow-hidden flex-fill"
+            agGridHeight={583}
             columnDefs={columnDefs}
             rowData={list}
             onRowNodeId={(row) => row.serverSeq}

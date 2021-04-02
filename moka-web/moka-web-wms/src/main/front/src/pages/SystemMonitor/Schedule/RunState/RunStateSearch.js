@@ -5,7 +5,6 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
 import { SCHEDULE_PERIOD } from '@/constants';
-import { getGenCate } from '@/store/codeMgt';
 import { initialState, getJobStatisticSearchList, getDistributeServerCode, changeRunStateSearchOption } from '@/store/schedule';
 
 /**
@@ -53,7 +52,7 @@ const RunStateSearch = ({ show }) => {
 
     useEffect(() => {
         if (show) {
-            dispatch(getJobStatisticSearchList(getGenCate(), getDistributeServerCode()));
+            dispatch(getJobStatisticSearchList(getDistributeServerCode()));
         } else {
             setSearch(initialState.runState.search);
         }

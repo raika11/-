@@ -10,6 +10,7 @@ import { GET_JOB_STATISTIC_SEARCH_LIST, getJobStatisticSearchList, changeRunStat
  */
 const RunStateSearchAgGrid = () => {
     const dispatch = useDispatch();
+    const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
     const total = useSelector((store) => store.schedule.runState.runStateTotal);
     const list = useSelector((store) => store.schedule.runState.runStateList);
     const search = useSelector((store) => store.schedule.runState.search);
@@ -43,9 +44,11 @@ const RunStateSearchAgGrid = () => {
         setRowData(
             list.map((job) => {
                 let targetIndex = SCHEDULE_PERIOD.findIndex((p) => p.period === job.period);
+                let cateIndex = genCateRows.findIndex((c) => c.id === job.category);
 
                 return {
                     ...job,
+                    category: genCateRows[cateIndex]?.name || job.category,
                     serverNm: job.distributeServerSimple?.serverNm,
                     periodNm: SCHEDULE_PERIOD[targetIndex].periodNm || '',
                 };

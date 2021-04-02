@@ -23,7 +23,7 @@ const WorkDescRenderer = forwardRef(({ data }, ref) => {
         <div className="d-flex flex-column justify-content-center h-100">
             <p className="mb-0 text-truncate">{data.pkgNm}</p>
             <p className="mb-0 color-secondary text-truncate">{data.targetPath}</p>
-            <p className="mb-0 color-success text-truncate">{data.jobDesc}</p>
+            <p className="mb-0 color-gray-700 text-truncate">{data.jobDesc}</p>
         </div>
         // </OverlayTrigger>
     );

@@ -68,7 +68,6 @@
 .card_in .card_body .description { color: #fff;}
 
 .card_image .fa_rect_w { position: absolute; right: 6%; bottom: 8%; }
-.section_unique_wrap .title_wrap { padding: 12px 0; }
 .section_unique_wrap .title_wrap .title { font-size: 18px; }
 .section_unique_wrap .title_wrap .title .fa_arrow_right_b { margin-top: 2px; margin-left: 4px; }
 /* 임시 아이콘 이미지 변경시 소스 수정해야됨 */

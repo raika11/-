@@ -93,6 +93,10 @@
     .header_nav_wrap .header_nav_area .header_nav .nav {display:flex;width:calc(100% + 40px);margin-left:-20px;padding-left:20px;overflow-y:hidden;overflow-x:scroll;scrollbar-width:none;scrollbar-color:transparent transparent;}
     .header_nav_wrap .header_nav_area .header_nav .nav::-webkit-scrollbar {display:none;width:0px;background:transparent;}
     
+    /* section chain_wrap */
+    .chain_wrap {margin-bottom:19px;}
+
+
     /* card */
     .img_right_sm:first-child {padding-top: 15px; border-top: 1px solid #e2e2e2;}
     .img_right_sm .card_body {padding-right: 15px;}
@@ -105,7 +109,7 @@
 
     .section_general_wrap .chain_wrap.view_lank .headline {font-size: 14px;}
 
-    .section_general_wrap .chain_wrap .card {margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e2e2;}
+    /*.section_general_wrap */.chain_wrap .card {margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e2e2;}
     .section_general_wrap .chain_wrap:not(.showcase_general) .card:first-child {margin-top: 0;}
     .section_general_wrap .chain_wrap.showcase_general ul:first-child .card {margin-top: 0; padding-top: 0; border-top: 0;}
     .section_general_wrap .chain_wrap.latest .card:last-child {margin-bottom: 16px; padding-bottom: 20px; border-bottom: 1px solid #e2e2e2;}

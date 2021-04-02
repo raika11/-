@@ -47,7 +47,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
      */
     const handleChangeFile = (e) => {
         let tempFile = e.target.files[0].name.split('.');
-        let tempFileExt = tempFile[1];
+        let tempFileExt = tempFile[1].toLowerCase();
 
         if (selectBoard.allowFileExt?.split(',').indexOf(tempFileExt) < 0) {
             // 허용하는 확장자가 아닐경우

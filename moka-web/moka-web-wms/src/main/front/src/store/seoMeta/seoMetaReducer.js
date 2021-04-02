@@ -2,6 +2,7 @@ import { PAGESIZE_OPTIONS } from '@/constants';
 import { handleActions } from 'redux-actions';
 import * as actions from './seoMetaAction';
 import produce from 'immer';
+import moment from 'moment';
 
 export const initialState = {
     total: 0,
@@ -16,8 +17,8 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        startDt: null,
-        endDt: null,
+        startDt: moment().set('hour', 0).set('minute', 0).set('seconds', 0),
+        endDt: moment(),
         searchType: 'artTitle',
         keyword: '',
     },

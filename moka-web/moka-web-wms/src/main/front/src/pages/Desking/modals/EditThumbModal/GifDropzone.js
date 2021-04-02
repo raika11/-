@@ -65,7 +65,7 @@ const GifDropzone = (props) => {
                 return;
             }
 
-            if (item.type === 'gif') {
+            if (item.type === ItemTypes.GIF) {
                 if (addIndex > -1) {
                     setImgList(
                         produce(imgList, (draft) => {
@@ -115,8 +115,7 @@ const GifDropzone = (props) => {
         editPhoto(origin, (newImgData) => {
             setImgList(
                 produce(imgList, (draft) => {
-                    draft.splice(newImgData.index + 1, 0, newImgData);
-                    draft.splice(newImgData.index, 1);
+                    draft.splice(newImgData.index, 1, newImgData);
                 }),
             );
         });
@@ -218,8 +217,8 @@ const GifDropzone = (props) => {
                                 height={125}
                                 className={clsx('flex-shrink-0 mr-2', { 'mb-2': imgList.length > 5 })}
                                 key={idx}
-                                dataType="drop"
-                                data={{ ...data, move: true, index: idx, dataType: 'drop' }}
+                                cardType="drop"
+                                data={{ ...data, move: true, index: idx }}
                                 img={data.thumbPath}
                                 moveCard={moveCard}
                                 setAddIndex={setAddIndex}

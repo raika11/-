@@ -1,2 +1,2 @@
-import PackageList from './PackageList';
-export default PackageList;
+import IssueList from './IssueList';
+export default IssueList;

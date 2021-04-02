@@ -23,6 +23,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.ChannelTypeCode;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import lombok.AllArgsConstructor;
@@ -84,6 +85,12 @@ public class DeskingHist implements Serializable {
      */
     @Column(name = "PARENT_CONTENT_ID")
     private String parentContentId;
+
+    /**
+     * 채널타입(기사A/영상M/패키지I/기자R/칼럼니스트C)
+     */
+    @Column(name = "CHANNEL_TYPE")
+    private String channelType = ChannelTypeCode.ARTICLE.getCode();
 
     /**
      * 콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상
@@ -303,6 +310,7 @@ public class DeskingHist implements Serializable {
     @PreUpdate
     public void prePersist() {
         this.artType = McpString.defaultValue(TpsConstants.DEFAULT_ART_TYPE);
+        this.channelType = McpString.defaultValue(ChannelTypeCode.ARTICLE.getCode());
         this.contentOrd = this.contentOrd == null ? 1 : this.contentOrd;
         this.relOrd = this.relOrd == null ? 1 : this.relOrd;
         this.lang = this.lang == null ? TpsConstants.DEFAULT_LANG : this.lang;

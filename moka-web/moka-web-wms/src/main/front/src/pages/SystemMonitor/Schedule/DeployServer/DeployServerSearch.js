@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@/components';
-import { initialState, getDistributeServerList, changeDeployServerSearchOption, clearDeployServerSearch } from '@/store/schedule';
+import { initialState, getDistributeServerList, changeDeployServerSearchOption } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 배포 서버 검색
@@ -45,7 +45,6 @@ const DeleteWorkSearch = ({ show, match }) => {
      * 초기화 버튼
      */
     const handleClickReset = () => {
-        dispatch(clearDeployServerSearch());
         setSearch(initialState.deployServer.search);
     };
 
@@ -64,7 +63,6 @@ const DeleteWorkSearch = ({ show, match }) => {
         if (show) {
             dispatch(getDistributeServerList());
         } else {
-            dispatch(clearDeployServerSearch());
             setSearch(initialState.deployServer.search);
         }
     }, [dispatch, show]);

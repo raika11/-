@@ -43,17 +43,7 @@ const ArticleSourceSearch = ({ match }) => {
      * 초기화 버튼
      */
     const handleClickInitialize = () => {
-        dispatch(
-            getSourceList(
-                changeSearchOption({
-                    ...search,
-                    page: 0,
-                    searchType: 'all',
-                    rcvUsedYn: 'all',
-                    keyword: '',
-                }),
-            ),
-        );
+        setSearch(initialState.search);
     };
 
     /**

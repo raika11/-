@@ -5,7 +5,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
 import { SCHEDULE_PERIOD } from '@/constants';
-import { initialState, getJobStatisticSearchList, changeRunStateSearchOption, clearRunStateSearch } from '@/store/schedule';
+import { getGenCate } from '@/store/codeMgt';
+import { initialState, getJobStatisticSearchList, getDistributeServerCode, changeRunStateSearchOption } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 작업 실행상태 검색
@@ -43,7 +44,6 @@ const RunStateSearch = ({ show }) => {
      * 초기화
      */
     const handleClickReset = () => {
-        dispatch(clearRunStateSearch());
         setSearch(initialState.runState.search);
     };
 
@@ -53,15 +53,14 @@ const RunStateSearch = ({ show }) => {
 
     useEffect(() => {
         if (show) {
-            dispatch(getJobStatisticSearchList());
+            dispatch(getJobStatisticSearchList(getGenCate(), getDistributeServerCode()));
         } else {
-            dispatch(clearRunStateSearch());
             setSearch(initialState.runState.search);
         }
     }, [dispatch, show]);
 
     return (
-        <Form className="mb-14">
+        <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
             <Form.Row className="mb-2">
                 {/* 기타코드에서 가져옴 'GEN_CATE' */}
                 <Col xs={2} className="p-0 pr-2">

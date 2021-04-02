@@ -151,12 +151,6 @@ public class ReporterVO implements Serializable {
     private String replyCnt;
 
     /**
-     * 필진타입 (J1:기자필진,J2:외부필진,J3:그룹필진,J0:필진해지)
-     */
-    @Column(name = "JPLUS_REP_DIV")
-    private String jplusRepDiv;
-
-    /**
      * 직업정보
      */
     @Column(name = "JPLUS_JOB_INFO")
@@ -185,6 +179,18 @@ public class ReporterVO implements Serializable {
      */
     @Column(name = "JPLUS_USED_YN")
     private String jplusUsedYn;
+
+    /**
+     * 필진타입 (TB_15RE_CODE_MGT.GRP_CD=JPLUS_REP)
+     */
+    @Column(name = "JPLUS_REP_DIV")
+    private String jplusRepDiv;
+
+    /**
+     * 필진타입명
+     */
+    @Column(name = "JPLUS_REP_DIV_NM")
+    private String jplusRepDivNm;
 
     /**
      * 직접관리용 회사코드 (TB_15RE_CODE_MGT.GRP_CD=R1)

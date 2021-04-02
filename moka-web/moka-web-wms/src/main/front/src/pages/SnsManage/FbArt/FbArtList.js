@@ -22,7 +22,7 @@ const FbArtList = () => {
         if (callback instanceof Function) {
             callback(initialState.sendArticle.search);
         }
-        dispatch(changeSnsSendArticleSearchOptions(initialState.sendArticle.search));
+        //dispatch(changeSnsSendArticleSearchOptions(initialState.sendArticle.search));
     };
 
     useEffect(() => {

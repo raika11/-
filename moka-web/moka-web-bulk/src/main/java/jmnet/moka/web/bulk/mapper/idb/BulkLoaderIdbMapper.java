@@ -21,5 +21,4 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface BulkLoaderIdbMapper {
     void callUspBulkNewsTableIns( TotalVo<Map<String, Object>> totalVo);
-    void callUspBulkLogInsByLoader( TotalVo<Map<String, Object>> totalVo );
 }

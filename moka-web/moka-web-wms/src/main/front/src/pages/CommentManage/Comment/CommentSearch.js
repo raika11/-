@@ -92,7 +92,7 @@ const CommentSearch = ({ selectBannedItem }) => {
     const handleClickReloadButton = () => {
         dispatch(changeSearchOption(initialState.comments.search));
         setSearchData(initialState.comments.search);
-        dispatch(getCommentList());
+        //dispatch(getCommentList());
     };
 
     // 차단 모달에서 완료시

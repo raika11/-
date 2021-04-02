@@ -25,7 +25,7 @@ const BoardsSummernote = forwardRef((props, ref) => {
         <ReactSummernote
             ref={ref}
             className="overflow-hidden flex-fill mb-0"
-            value={contentValue || ''}
+            value={contentValue}
             options={{
                 lang: 'ko-KR',
                 height: 250,
@@ -33,6 +33,7 @@ const BoardsSummernote = forwardRef((props, ref) => {
             }}
             onChange={(value) => onChangeValue(value)}
             onImageUpload={(e) => onImageUpload(e)}
+            focus
         />
     );
 });

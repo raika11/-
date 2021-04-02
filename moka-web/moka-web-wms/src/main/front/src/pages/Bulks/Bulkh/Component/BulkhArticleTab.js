@@ -7,6 +7,7 @@ import ReporterList from '@pages/Reporter/components/Desking/ReporterList';
 import ColumnistList from '@pages/Columnist/components/Desking/ColumnistList';
 import { messageBox } from '@utils/toastUtil';
 import { getRowIndex } from '@utils/agGridUtil';
+import IssueList from '@pages/Issue/components/Desking';
 
 /**
  * 아티클 핫클릭 > 기사탭
@@ -14,7 +15,7 @@ import { getRowIndex } from '@utils/agGridUtil';
 const BulkhArticleTab = (props) => {
     const { componentAgGridInstances } = props;
     const dispatch = useDispatch();
-    const [tabNavs] = useState(['기사', '영상', '이슈키워드', '기자', '칼럼니스트']);
+    const [tabNavs] = useState(['기사', '영상', '패키지', '기자', '칼럼니스트']);
     const [navIdx, setNavIdx] = useState(0);
 
     const { hotClickList } = useSelector((store) => ({
@@ -116,6 +117,18 @@ const BulkhArticleTab = (props) => {
                         onDragStop={handleArticleDragStop}
                         show={navIdx === idx}
                         movie
+                    />
+                );
+            }
+            // 패키지 조회 컴포넌트
+            else if (nav === '패키지') {
+                return (
+                    <IssueList
+                        selectedComponent={{}}
+                        dropTargetAgGrid={componentAgGridInstances}
+                        //dropTargetComponent={componentList}
+                        // onDragStop={}
+                        show={navIdx === idx}
                     />
                 );
             }

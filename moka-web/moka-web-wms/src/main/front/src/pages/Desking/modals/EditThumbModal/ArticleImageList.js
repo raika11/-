@@ -54,7 +54,7 @@ const ArticleImageList = (props) => {
                         key={data.seqNo}
                         img={data.thumbPath}
                         data={data}
-                        dataType={data.dataType}
+                        cardType="article"
                         showPhotoDetail={showPhotoDetail}
                         isRep={data.id === repImg?.id}
                         setRepImg={setRepImg}

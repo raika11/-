@@ -154,5 +154,75 @@
       "name": "bulk.taskmanager.allow.ips",
       "type": "java.lang.String",
       "description": "Description for bulk.taskmanager.allow.ips."
+    },
+    {
+      "name": "mokalog.spring.datasource.driver-class-name",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.spring.datasource.driver-class-name."
+    },
+    {
+      "name": "mokalog.spring.datasource.url",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.spring.datasource.url."
+    },
+    {
+      "name": "mokalog.spring.datasource.username",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.spring.datasource.username."
+    },
+    {
+      "name": "mokalog.spring.datasource.password",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.spring.datasource.password."
+    },
+    {
+      "name": "mokalog.spring.datasource.validation-query",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.spring.datasource.validation-query."
+    },
+    {
+      "name": "mokalog.spring.datasource.initial-size",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.spring.datasource.initial-size."
+    },
+    {
+      "name": "mokalog.spring.datasource.max-active",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.spring.datasource.max-active."
+    },
+    {
+      "name": "mokalog.spring.datasource.max-wait",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.spring.datasource.max-wait."
+    },
+    {
+      "name": "mokalog.spring.datasource.max-idle",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.spring.datasource.max-idle."
+    },
+    {
+      "name": "mokalog.spring.datasource.min-idle",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.spring.datasource.min-idle."
+    },
+    {
+      "name": "mokalog.spring.datasource.auto-commit",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.spring.datasource.auto-commit."
+    },
+    {
+      "name": "mokalog.mybatis.check-config-location",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.mybatis.check-config-location."
+    },
+    {
+      "name": "mokalog.mybatis.config-location",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.mybatis.config-location."
+    },
+    {
+      "name": "mokalog.mybatis.mapper-locations",
+      "type": "java.lang.String",
+      "description": "Description for mokalog.mybatis.mapper-locations."
     }
   ] }

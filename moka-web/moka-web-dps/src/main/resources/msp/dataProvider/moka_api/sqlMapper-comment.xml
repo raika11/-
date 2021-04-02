@@ -16,25 +16,8 @@
       ) }
   </select>
 
-  <!-- 댓글 목록 조회 -->
+  <!-- 기사 또는 기자 댓글 목록 조회 -->
   <select id="list" parameterType="hashmap" resultType="hashmap"
-    statementType="CALLABLE">
-    {call UPU_COMMENT_LIST_SEL_BY_CONTENT_ID(
-      #{totalId, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{referrer, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      NULL,
-      NULL,
-      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      'Y',
-      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{_DISP_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
-      ) }
-  </select>
-
-  <!-- 내댓글 목록 조회 -->
-  <select id="listMy" parameterType="hashmap" resultType="hashmap"
     statementType="CALLABLE">
     {call UPU_COMMENT_LIST_SEL_BY_CONTENT_ID(
       #{contentId, mode=IN, jdbcType=VARCHAR, javaType=string},
@@ -50,13 +33,53 @@
       ) }
   </select>
 
+  <!-- 레퍼러 댓글 목록 조회 -->
+  <select id="referrerList" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_COMMENT_LIST_SEL_BY_REFERRER(
+      #{referrer, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{_DISP_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!-- 모든 내댓글목록조회 -->
+  <select id="my" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_COMMENT_LIST_SEL_BY_MEM(
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{_DISP_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
   <!--댓글등록-->
-  <!--  <select id="commentInsert" parameterType="map" resultType="string" statementType="CALLABLE">-->
-  <!--    { call UPU_COMMENT_INS(-->
-  <!--      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},-->
-  <!--      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},-->
-  <!--      #{remoteIP, mode=IN, jdbcType=VARCHAR, javaType=string}-->
-  <!--      )}-->
-  <!--  </select>-->
+  <select id="insert" parameterType="hashmap" resultType="hashmap" statementType="CALLABLE">
+    { call UPU_COMMENT_INS(
+      #{referrer, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{repSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{parentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{content, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{remoteIP, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{regDev, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
+  </select>
 
 </mapper>

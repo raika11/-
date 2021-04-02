@@ -36,8 +36,6 @@ const BackOfficeWorkSearch = ({ show }) => {
             getJobHistoryList(
                 changeBackOfficeWorkSearchOption({
                     ...search,
-                    startDay: moment().startOf('day').format(DB_DATEFORMAT),
-                    endDay: moment().endOf('day').format(DB_DATEFORMAT),
                     page: 0,
                 }),
             ),
@@ -48,7 +46,7 @@ const BackOfficeWorkSearch = ({ show }) => {
      * 초기화
      */
     const handleClickReset = () => {
-        changeBackOfficeWorkSearchOption({ ...search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) });
+        setSearch({ ...initialState.backOffice.search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) });
     };
 
     useEffect(() => {
@@ -72,13 +70,13 @@ const BackOfficeWorkSearch = ({ show }) => {
                 ),
             );
         } else {
-            changeBackOfficeWorkSearchOption({ ...search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) });
+            setSearch({ ...initialState.backOffice.search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]);
 
     return (
-        <Form className="mb-14">
+        <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
             <Form.Row className="mb-2">
                 <Col xs={5} className="p-0 pr-2 d-flex align-items-center">
                     <MokaInput

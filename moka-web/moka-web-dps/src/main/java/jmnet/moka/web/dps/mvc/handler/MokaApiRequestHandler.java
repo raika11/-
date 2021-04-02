@@ -45,7 +45,9 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 
 	private static final String PARAM_REMOTE_IP = "remoteIP";
 	private static final String MEMBERSHIP_COOKIE = "cookie";
+	private static final String MEMBERSHIP_COOKIE_PASS = "cookiePass";
 	private static final String MEMBERSHIP_API = "api";
+	private static final String MEMBERSHIP_API_PASS = "apiPass";
 
 	public MokaApiRequestHandler(ForwardHandler forwardHandler) {
 		super(forwardHandler);
@@ -120,9 +122,9 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 			String membership = api.getMembership();
 			if ( membership != null) {
 				try {
-					if (membership.equals(MEMBERSHIP_COOKIE)) {
+					if (membership.equals(MEMBERSHIP_COOKIE) || membership.equals(MEMBERSHIP_COOKIE_PASS)) {
 						this.membershipHelper.setMembershipByCookie(apiContext);
-					} else if ( membership.equals(MEMBERSHIP_API)) {
+					} else if ( membership.equals(MEMBERSHIP_API) || membership.equals(MEMBERSHIP_API_PASS)) {
 						this.membershipHelper.setMembershipByApi(apiContext);
 					}
 				}catch (Exception e) {
@@ -130,7 +132,10 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 							System.currentTimeMillis() - startTime,
 							String.format( "%s/%s : %s", apiResolver.getPath(),apiResolver.getId(),
 									e.getMessage()));
-					return getMembershipErrorResponse(request, apiResolver);
+					// 멤버십이 cookie나 api일경우 오류를 반환하고, cookiePass나 apiPass인 경우 계속 진행한다.
+					if ( membership.equals(MEMBERSHIP_COOKIE) || membership.equals(MEMBERSHIP_API)) {
+						return getMembershipErrorResponse(request, apiResolver);
+					}
 				}
 			}
 

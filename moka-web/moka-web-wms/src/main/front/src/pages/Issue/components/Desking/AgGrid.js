@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useEffect } from 'react';
 import { MokaTable } from '@components';
 import columnDefs from './AgGridColumns';
 

@@ -57,6 +57,9 @@ public class DeskingWorkDTO implements Serializable {
     @ApiModelProperty("부모 서비스기사아이디. 있을경우 관련기사")
     private String parentContentId;
 
+    @ApiModelProperty("채널타입(기사A/영상M/패키지I/기자R/칼럼니스트C)")
+    private String channelType;
+
     @ApiModelProperty("콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상")
     private String contentType;
 

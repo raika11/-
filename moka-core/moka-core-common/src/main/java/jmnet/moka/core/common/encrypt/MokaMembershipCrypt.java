@@ -31,15 +31,17 @@ public class MokaMembershipCrypt {
     private final String algorithm = "AES/CBC/PKCS5Padding";
 
     public MokaMembershipCrypt(String key) {
-        byte[] keyBytes = new byte[16];
+        byte[] keyBytes = new byte[32];
+        byte[] ivBytes = new byte[16];
         byte[] b = key.getBytes(StandardCharsets.UTF_8);
-        int len = b.length;
-        if (len > keyBytes.length) {
-            len = keyBytes.length;
-        }
-        System.arraycopy(b, 0, keyBytes, 0, len);
+//        int len = b.length;
+//        if (len > keyBytes.length) {
+//            len = keyBytes.length;
+//        }
+        System.arraycopy(b, 0, keyBytes, 0, 32);
+        System.arraycopy(b, 0, ivBytes, 0, 16);
         this.keySpec = new SecretKeySpec(keyBytes, "AES");
-        this.ivSpec = new IvParameterSpec(keyBytes);
+        this.ivSpec = new IvParameterSpec(ivBytes);
     }
 
     /**

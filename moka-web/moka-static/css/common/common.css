@@ -500,10 +500,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .md_hidden {display:none;}
     .md_only_hidden {display:none;} /* <<- .tb {display:none;} */
 
-    .add_pdlr {margin-left: -10px; margin-right: -10px;}
-    .add_pdlr > * {padding-left:10px; padding-right:10px;}
-    /* .add_pdlr > *:first-child {padding-left:0;}
-    .add_pdlr > *:last-child {padding-right:0;} */
+    .row.add_pdlr {margin-left: -10px; margin-right: -10px;}
+    .row.add_pdlr > * {padding-left:10px; padding-right:10px;}
 
     .header {height: 42px;}
     .header .uh .btn_navbar .icon_navbar {background-color: #fff;}
@@ -591,8 +589,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .md_only_hidden {display:block;}
     .lg_hidden {display:none;}
 
-    .add_pdlr {margin-left: -18px; margin-right: -18px;}
-    .add_pdlr > * {padding-left:18px;padding-right:18px;}
+    .row.add_pdlr {margin-left: -18px; margin-right: -18px;}
+    .row.add_pdlr > * {padding-left:18px;padding-right:18px;}
 
     .header {height: 48px; padding: 0;}
     .header .uh .btn_navbar {left: 25px;}

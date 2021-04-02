@@ -181,31 +181,6 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
                 throw new WmsUsernameNotFoundException(messageByLocale.get("wms.login.error.UsernameNotFoundException"));
             }
 
-            // 3. 패스워드 오류
-            if (!passwordEncoder.matches(userPassword, userDetails.getPassword())) {
-                int errorCnt = userDetails.getErrorCnt() + 1;
-                if (errorCnt < passwordErrorLimit) { // 오류 한도 초과 전
-                    String errMsg = messageByLocale.get("wms.login.error.BadCredentials", errorCnt, passwordErrorLimit);
-                    memberService.addMemberLoginErrorCount(userId);
-
-                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.PASSWORD_UNMATCHED.getCode()));
-                    loginLog.setErrMsg(errMsg);
-
-                    throw new WmsBadCredentialsException(errMsg, errorCnt);
-                } else {// 한도가 초과한 경우
-                    String errMsg = messageByLocale.get("wms.login.error.limit-excesss-bad-credentials", McpDate.nowDateStr());
-                    if (userDetails.getErrorCnt() + 1 == passwordErrorLimit) { // 현재 오류 횟수가 한도와 동일한 경우 update
-                        memberService.updateMemberStatus(userId, MemberStatusCode.P, passwordErrorLimit, errMsg);
-                    }
-
-                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.PASSWORD_LIMIT.getCode()));
-                    loginLog.setErrMsg(errMsg);
-
-                    throw new LimitExcessBadCredentialsException(
-                            messageByLocale.get("wms.login.error.LimitExcessBadCredentialsException", passwordErrorLimit), passwordErrorLimit);
-                }
-            }
-
             // 4. status 체크
             if (MemberStatusCode.Y != userDetails.getStatus()) {
                 if (MemberStatusCode.P == userDetails.getStatus()) { // 잠김 상태
@@ -253,6 +228,31 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
                     loginLog.setErrMsg(messageByLocale.get("wms.login.error.InsufficientAuthenticationException"));
 
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.InsufficientAuthenticationException"));
+                }
+            }
+
+            // 3. 패스워드 오류
+            if (!passwordEncoder.matches(userPassword, userDetails.getPassword())) {
+                int errorCnt = userDetails.getErrorCnt() + 1;
+                if (errorCnt < passwordErrorLimit) { // 오류 한도 초과 전
+                    String errMsg = messageByLocale.get("wms.login.error.BadCredentials", errorCnt, passwordErrorLimit);
+                    memberService.addMemberLoginErrorCount(userId);
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.PASSWORD_UNMATCHED.getCode()));
+                    loginLog.setErrMsg(errMsg);
+
+                    throw new WmsBadCredentialsException(errMsg, errorCnt);
+                } else {// 한도가 초과한 경우
+                    String errMsg = messageByLocale.get("wms.login.error.limit-excesss-bad-credentials", McpDate.nowDateStr());
+                    if (userDetails.getErrorCnt() + 1 == passwordErrorLimit) { // 현재 오류 횟수가 한도와 동일한 경우 update
+                        memberService.updateMemberStatus(userId, MemberStatusCode.P, passwordErrorLimit, errMsg);
+                    }
+
+                    loginLog.setErrCd(String.valueOf(UnauthrizedErrorCode.PASSWORD_LIMIT.getCode()));
+                    loginLog.setErrMsg(errMsg);
+
+                    throw new LimitExcessBadCredentialsException(
+                            messageByLocale.get("wms.login.error.LimitExcessBadCredentialsException", passwordErrorLimit), passwordErrorLimit);
                 }
             }
 

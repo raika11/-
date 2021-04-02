@@ -199,6 +199,10 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         try {
 
+            if (MemberStatusCode.D == member.getStatus()) {
+                throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
+            }
+            
             // String passwordSameMessage = msg("tps.member.error.same.password");
             String passwordSameMessage = msg("tps.member.error.PasswordNotMatchedException");
 
@@ -354,6 +358,10 @@ public class MemberJoinRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
         //throwPasswordCheck(memberRequestDTO.getPassword(), memberRequestDTO.getConfirmPassword(), member);
+
+        if (MemberStatusCode.D == member.getStatus()) {
+            throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
+        }
 
         if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS
                 || memberRequestDTO.getRequestType() == MemberRequestCode.NEW_SMS) {// SMS 인증문자로 잠김해제 요청 또는 신규 등록 신청

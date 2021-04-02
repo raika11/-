@@ -98,7 +98,18 @@ public class MemberJoinRestController extends AbstractCommonController {
     @GetMapping("/groupware-users/{groupWareUserId}")
     public ResponseEntity<?> getGroupWareMember(@ApiParam("그룹웨어 사용자 ID") @PathVariable("groupWareUserId")
     @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String groupWareUserId)
-            throws MokaException {
+            throws MokaException, NoDataException, InvalidDataException {
+
+        String message = msg("tps.common.error.no-data");
+        MemberInfo member = memberService
+                .findMemberById(groupWareUserId)
+                .orElseThrow(() -> new NoDataException(message));
+        if (!McpString.isEmpty(member.getMemberId())) {
+            if (MemberStatusCode.D == member.getStatus()) {
+                throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
+            }
+        }
+
         try {
             GroupWareUserInfo groupWareUserInfo = groupWareAuthClient.getUserInfo(groupWareUserId);
             groupWareUserInfo.setUserId(groupWareUserId);
@@ -149,7 +160,7 @@ public class MemberJoinRestController extends AbstractCommonController {
     @GetMapping("/{memberId}")
     public ResponseEntity<?> getMember(
             @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
-            throws NoDataException {
+            throws NoDataException, InvalidDataException {
 
         String message = msg("tps.common.error.no-data");
         MemberInfo member = memberService
@@ -170,6 +181,10 @@ public class MemberJoinRestController extends AbstractCommonController {
         result.put("UNLOCK_SMS", MemberRequestCode.UNLOCK_SMS.getCode());
 
         result.put("member", dto);
+
+        if (MemberStatusCode.D == member.getStatus()) {
+            throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
+        }
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
 
@@ -199,10 +214,6 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         try {
 
-            if (MemberStatusCode.D == member.getStatus()) {
-                throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
-            }
-            
             // String passwordSameMessage = msg("tps.member.error.same.password");
             String passwordSameMessage = msg("tps.member.error.PasswordNotMatchedException");
 

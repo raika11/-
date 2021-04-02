@@ -502,7 +502,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .md_hidden {display:none;}
     .md_only_hidden {display:none;} /* <<- .tb {display:none;} */
 
-    .row.add_pdlr {margin-left: -10px; margin-right: -10px;}
+    /* 그리드 */
+    .row.add_pdlr {margin-left: -10px; margin-right: -10px;} /* 최상위 row에만 적용 */
     .row.add_pdlr > * {padding-left:10px; padding-right:10px;}
 
     .header {height: 42px;}

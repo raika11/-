@@ -86,84 +86,32 @@ const DeskingWorkAgGrid = (props) => {
      * @param {object} overNode target기사
      */
     const mainToMain = useCallback((api, displayedRows, overNode) => {
-        let result = [];
+        const sds = api.getSelectedNodes().map((node) => node.data); // 선택한 노드 데이터 (순서 변경 대상)
+        const mt = displayedRows.filter((con) => !sds.find((s) => s.contentId === con.contentId)); // 유지되는 데이터
+        const maintain = { main: mt.filter((d) => !d.rel), rel: mt.filter((d) => d.rel) }; // 유지되는 데이터를 주기사, 관련기사 나눔
+        let result = [...maintain.main];
 
-        // selected 정렬
-        let selected = api.getSelectedNodes().sort(function (a, b) {
-            if (a.data.contentOrd === b.data.contentOrd) {
-                if (a.data.relOrd === b.data.relOrd) {
-                    return a.data.rel ? 1 : -1;
-                } else {
-                    return a.data.relOrd - b.data.relOrd;
-                }
-            } else {
-                return a.data.contentOrd - b.data.contentOrd;
-            }
-        });
+        // 선택한 노드 데이터를 주기사, 관련기사 나눔
+        let selected = {
+            main: sds
+                .filter((d) => !d.rel)
+                .sort(function (a, b) {
+                    return a.contentOrd - b.contentOrd;
+                }),
+            rel: sds.filter((d) => d.rel),
+        };
 
-        // overNode가 없으면 첫번째 데이터로, 있으면 overNode의 order 밑으로 이동
-        // selected 순번 수정
-        let contentOrd = !overNode ? 0 : overNode.data.contentOrd;
-        selected.forEach((node) => {
-            if (!node.data.rel) {
-                contentOrd++;
-            }
-            displayedRows.forEach((a) => {
-                if (a.contentId === node.data.contentId) {
-                    a.contentOrd = contentOrd;
-                }
-            });
-        });
+        // overNode가 없으면 첫번째 데이터로, 있으면 overNode 밑으로 이동
+        let insertOrd = !overNode ? 0 : overNode.data.contentOrd;
+        result.splice(insertOrd, 0, ...selected.main);
+        result = result.map((r, idx) => ({ ...r, contentOrd: idx + 1 }));
 
-        // 겹치는 순번에서 selected를 우선으로 정렬
-        let selectedSeqs = selected.map((node) => node.data.contentId);
-        result = displayedRows.sort(function (a, b) {
-            if (a.contentOrd === b.contentOrd) {
-                if (a.relOrd === b.relOrd) {
-                    if (a.rel === b.rel) {
-                        if (selectedSeqs.includes(a.contentId) && selectedSeqs.includes(b.contentId)) {
-                            return a.rel ? 1 : -1;
-                        } else if (selectedSeqs.includes(a.contentId)) {
-                            return -1;
-                        } else if (selectedSeqs.includes(b.contentId)) {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
-                    } else {
-                        if (selectedSeqs.includes(a.contentId) && selectedSeqs.includes(b.contentId)) {
-                            return a.rel ? 1 : -1;
-                        } else if (selectedSeqs.includes(a.contentId)) {
-                            return -1;
-                        } else if (selectedSeqs.includes(b.contentId)) {
-                            return 1;
-                        } else {
-                            return a.rel ? 1 : -1;
-                        }
-                    }
-                } else {
-                    if (selectedSeqs.includes(a.contentId) && selectedSeqs.includes(b.contentId)) {
-                        return a.rel ? 1 : -1;
-                    } else if (selectedSeqs.includes(a.contentId)) {
-                        return -1;
-                    } else if (selectedSeqs.includes(b.contentId)) {
-                        return 1;
-                    } else {
-                        return a.relOrd - b.relOrd;
-                    }
-                }
-            } else {
-                return a.contentOrd - b.contentOrd;
-            }
-        });
-
-        // 기사의 contentOrd 순번 1부터 지정
-        contentOrd = 0;
-        result.forEach((node) => {
-            if (!node.rel) {
-                contentOrd++;
-            }
-            node.contentOrd = contentOrd;
+        // 관련기사를 주기사 사이사이에 추가 (부모키 별 관련기사 나누고 contentOrd 셋팅해서 끼워넣음)
+        const allRel = [...maintain.rel, ...selected.rel].reduce((all, cu) => ({ ...all, [cu.parentContentId]: [...(all[cu.parentContentId] || []), cu] }), {});
+        Object.keys(allRel).forEach((parentContentId) => {
+            const pidx = result.findIndex((m) => m.contentId === parentContentId);
+            const nr = allRel[parentContentId].map((p) => ({ ...p, contentOrd: result[pidx].contentOrd }));
+            result.splice(pidx + 1, 0, ...nr);
         });
 
         return result;

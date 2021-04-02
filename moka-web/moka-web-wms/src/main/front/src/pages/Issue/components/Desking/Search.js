@@ -9,7 +9,7 @@ import ServiceCodeSelector from './ServiceCodeSelector';
  * 홈 섹션편집 > 패키지 목록 > 패키지 검색
  */
 const Search = (props) => {
-    const { onChangeSearchOption, search, period, onReset, onSearch, loading } = props;
+    const { onChangeSearchOption, search, period, onReset, onSearch, loading, pkgDiv = [] } = props;
 
     /**
      * 입력값 변경
@@ -98,9 +98,15 @@ const Search = (props) => {
                 </Button>
             </Form.Row>
             <Form.Row className="d-flex justify-content-between">
+                {/* 패지키 유형 (이슈, 토픽, 연재) */}
                 <div className="flex-shrink-0 mr-2">
-                    <MokaInput as="select" disabled>
-                        <option>유형 전체</option>
+                    <MokaInput as="select" name="div" value={search.div} onChange={handleChangeValue}>
+                        <option value="all">유형 전체</option>
+                        {pkgDiv.map((code) => (
+                            <option key={code.code} value={code.code}>
+                                {code.name}
+                            </option>
+                        ))}
                     </MokaInput>
                 </div>
 

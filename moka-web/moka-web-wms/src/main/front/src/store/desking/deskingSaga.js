@@ -191,6 +191,7 @@ const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
         appendData = {
             componentWorkSeq: component.seq,
             seq: null,
+            channelType: data.channelType, // 채널타입
             deskingSeq: null,
             datasetSeq: component.datasetSeq,
             contentId: String(data.totalId),
@@ -264,6 +265,7 @@ const makeRowNode = (data, contentOrd, component, etc) => {
         appendData = {
             componentWorkSeq: component.seq,
             seq: null,
+            channelType: data.channelType, // 채널타입
             deskingSeq: null,
             datasetSeq: component.datasetSeq,
             contentId: String(data.totalId),

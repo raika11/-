@@ -39,7 +39,7 @@ export const initialState = {
     },
     // 구독 검색조건
     scbYnSearchTypeList: [
-        { id: '', name: '구독 전체 ' },
+        { id: 'all', name: '구독 전체' },
         { id: 'Y', name: '구독' },
         { id: 'N', name: '비구독' },
     ],

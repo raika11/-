@@ -6,7 +6,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.util.AbstractExcelView;
-import jmnet.moka.core.tps.mvc.poll.entity.TrendpollVote;
+import jmnet.moka.core.tps.mvc.poll.vo.TrendpollVoteVO;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 
@@ -27,15 +27,16 @@ public class TrendpollExcelView extends AbstractExcelView {
     @Override
     protected void makeColumnValue(HSSFSheet worksheet, Object resultList) {
 
-        List<TrendpollVote> votes = (List<TrendpollVote>) resultList;
+        //List<TrendpollVote> votes = (List<TrendpollVote>) resultList;
+
+        List<TrendpollVoteVO> votes = (List<TrendpollVoteVO>) resultList;
+
 
         AtomicInteger rowIdx = new AtomicInteger(0);
-        for (TrendpollVote vote : votes) {
+        for (TrendpollVoteVO vote : votes) {
             HSSFRow row = worksheet.createRow(rowIdx.addAndGet(1));
             AtomicInteger cellNum = new AtomicInteger(0);
-            String cellValue = McpString.forceLineBreak(vote
-                    .getPollItem()
-                    .getTitle(), MokaConstants.EXCEL_CELL_VALUE_MAX_LENGTH);
+            String cellValue = McpString.forceLineBreak(vote.getTitle(), MokaConstants.EXCEL_CELL_VALUE_MAX_LENGTH);
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(cellValue);

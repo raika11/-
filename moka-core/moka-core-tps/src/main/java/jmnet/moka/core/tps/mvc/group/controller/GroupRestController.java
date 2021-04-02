@@ -195,7 +195,7 @@ public class GroupRestController extends AbstractCommonController {
                 dto.setRegMember(modelMapper.map(memberInfo, MemberSimpleDTO.class));
             }
 
-            ResultDTO<GroupDTO> resultDto = new ResultDTO<>(dto);
+            ResultDTO<GroupDTO> resultDto = new ResultDTO<>(dto, msg("tps.group.success.insert"));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.INSERT);
@@ -247,7 +247,8 @@ public class GroupRestController extends AbstractCommonController {
 
             // 결과리턴
             GroupDTO dto = modelMapper.map(returnValue, GroupDTO.class);
-            ResultDTO<GroupDTO> resultDto = new ResultDTO<>(dto);
+
+            ResultDTO<GroupDTO> resultDto = new ResultDTO<>(dto, msg("tps.group.success.update"));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);

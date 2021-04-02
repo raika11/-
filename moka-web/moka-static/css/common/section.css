@@ -163,14 +163,14 @@
     /***************************************    general     ************************************/
     .section_general_wrap .chain_wrap {margin-bottom: 50px;}
 
-    .showcase_general .card_group.row,
+    /* .showcase_general .card_group.row,
     .showcase_general .card > .row,
     .latest .card_group.row,
     .latest .card > .row {margin-left:0;margin-right:0;}
     .showcase_general .card_group.row > *,
     .showcase_general .card > .row > *,
     .latest .card_group.row > *,
-    .latest .card > .row > * {padding-left:0;padding-right:0;}
+    .latest .card > .row > * {padding-left:0;padding-right:0;} */
 
     .showcase_general .card_group .card {margin-top: 20px; padding: 20px 0 0; border-top: 1px solid #e2e2e2;}
     .showcase_general .card_group .card:first-child {padding-left: 0;}
@@ -232,14 +232,14 @@
     .card.img_left_md .card_body {padding-left: 0 !important;}
 
     /***************************************    general     ************************************/
-    .showcase_general .card_group.row,
+    /* .showcase_general .card_group.row,
     .showcase_general .card > .row,
     .latest .card_group.row,
     .latest .card > .row {margin-left:0;margin-right:0;}
     .showcase_general .card_group.row > *,
     .showcase_general .card > .row > *,
     .latest .card_group.row > *,
-    .latest .card > .row > * {padding-left:0;padding-right:0;}
+    .latest .card > .row > * {padding-left:0;padding-right:0;} */
 
     .showcase_general .card_group .card .card_body {padding: 0; border-right: 0;}
 

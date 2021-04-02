@@ -207,11 +207,12 @@ public class MemberJoinRestController extends AbstractCommonController {
                     .equals(memberDTO.getConfirmPassword())) {
                 throw new MokaException(passwordSameMessage);
             }
+
             member.setRemark(memberDTO.getRequestReason());
-            MemberInfo returnValue = processUserSave(member, memberDTO.getMemberGroups(), MemberRequestCode.NEW_REQUEST.getNextStatus());
+            MemberInfo returnValue = processUserSave(member, memberDTO.getMemberGroups(), MemberRequestCode.NEW_SMS.getNextStatus());
 
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
-            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, msg(MemberRequestCode.NEW_REQUEST.getMessageKey()));
+            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, msg(MemberRequestCode.NEW_SMS.getMessageKey()));
 
             // 담당자에게 요청 Email 발송
             String[] mailTo = toEmailAddress;
@@ -497,7 +498,7 @@ public class MemberJoinRestController extends AbstractCommonController {
             throw new PasswordNotMatchedException(msg("tps.member.error.sms-unmatched"));
         }
 
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(same);
+        ResultDTO<Boolean> resultDto = new ResultDTO<>(same, msg("tps.member.success.sms-matched"));
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }

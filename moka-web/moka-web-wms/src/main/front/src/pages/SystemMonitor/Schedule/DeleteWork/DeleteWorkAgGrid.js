@@ -80,7 +80,7 @@ const DeleteWorkAgGrid = ({ match }) => {
 
     return (
         <MokaTable
-            className="overflow-hidden flex-fill"
+            agGridHeight={544}
             columnDefs={columnDefs}
             rowData={rowData}
             onRowNodeId={(row) => row.jobSeq}

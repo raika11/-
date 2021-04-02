@@ -1,5 +1,4 @@
 import React from 'react';
-// import WorkIpHostRenderer from '../components/WorkIpHostRenderer';
 import WorkStateRenderer from '../components/WorkStateRenderer';
 
 export default [
@@ -16,7 +15,6 @@ export default [
     {
         headerName: 'IP / HOST',
         field: 'serverIp',
-        // cellRendererFramework: (row) => <WorkIpHostRenderer {...row} />,
         flex: 1,
     },
     {

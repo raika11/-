@@ -113,7 +113,7 @@ const DeployServerEdit = ({ match }) => {
                         callback: ({ header }) => {
                             if (header.success) {
                                 toast.success('삭제되었습니다.');
-                                history.push(`${match.path}`);
+                                history.push(`${match.path}/deploy-server`);
                             } else {
                                 messageBox.alert(header.message);
                             }

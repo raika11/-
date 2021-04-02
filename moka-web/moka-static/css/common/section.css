@@ -160,7 +160,7 @@
     .card.img_left_md .card_image {margin-bottom: 0;}
 
     /***************************************    general     ************************************/
-    .section_general_wrap .chain_wrap {margin-bottom: 50px;}
+    /*.section_general_wrap */.chain_wrap {margin-bottom: 50px;}
 
     .showcase_general .card_group .card {margin-top: 20px; padding: 20px 0 0; border-top: 1px solid #e2e2e2;}
     .showcase_general .card_group .card:first-child {padding-left: 0;}
@@ -208,12 +208,14 @@
     /* nav */
     .header_nav_wrap{margin-bottom:40px;border-bottom-width:4px;}
     .header_nav_wrap .header_nav_area .page_title {padding-top:10px;font-size: 40px;letter-spacing:-0.5px;}
-    .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2{font-size:16px;letter-spacing:-0.2px;}
+    .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2 {font-size:16px;letter-spacing:-0.2px;}
     
     /* sub title 영역 */
     .title_wrap {padding: 19px 0 23px;}
     .title_wrap .title_area .title {font-size: 18px;}
     .title_wrap .title_area .exp {font-size: 14px;}
+    .title_wrap.with_btn {padding:12px 0 12px;}
+
 
     /* card*/
     .card_body .headline {font-size: 16px;}

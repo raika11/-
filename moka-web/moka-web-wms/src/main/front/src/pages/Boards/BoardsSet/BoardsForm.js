@@ -343,7 +343,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                 <Col xs={6} className="p-0 pr-40">
                     <MokaInputLabel label="채널" as="select" name="channelType" id="channelType" value={boardInfoData.channelType} onChange={handleChangeValue}>
                         <option key="blankChoice" hidden value="">
-                            선택
+                            선택하세요
                         </option>
                         {channelTypeList.map((item, index) => (
                             <option key={index} value={item.dtlCd}>

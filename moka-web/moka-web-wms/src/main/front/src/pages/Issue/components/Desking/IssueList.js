@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { initialState, getIssueListModal } from '@store/issue';
+import { DB_DATEFORMAT } from '@/constants';
+import { initialState, getIssueListModal, GET_ISSUE_LIST_MODAL } from '@store/issue';
 import { messageBox } from '@utils/toastUtil';
 import Search from './Search';
 import AgGrid from './AgGrid';
@@ -15,11 +16,6 @@ const propTypes = {
      * className
      */
     className: PropTypes.string,
-    /**
-     * 선택한 컴포넌트의 데이터
-     * @default
-     */
-    selectedComponent: PropTypes.object,
     /**
      * drag&drop 타겟 ag-grid
      */
@@ -35,18 +31,18 @@ const propTypes = {
     show: PropTypes.bool,
 };
 const defaultProps = {
-    selectedComponent: {},
     show: false,
 };
+const defaultPeriod = [0, 'days'];
 
 /**
  * 홈 섹션편집 > 패키지 목록
  */
 const IssueList = (props) => {
-    const { className, selectedComponent, dropTargetAgGrid, onDragStop, show } = props;
+    const { className, dropTargetAgGrid, onDragStop, show } = props;
     const dispatch = useDispatch();
-    const loading = false;
-    const [period, setPeriod] = useState([2, 'days']);
+    const loading = useSelector(({ loading }) => loading[GET_ISSUE_LIST_MODAL]);
+    const [period, setPeriod] = useState(defaultPeriod);
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
     const [total, setTotal] = useState(0);
@@ -60,9 +56,13 @@ const IssueList = (props) => {
             const ns = { ...search, ...appendSearch };
             setSearch(ns);
 
+            // 실검색에 쓰는 날짜 text
+            const startDt = ns.startDt && ns.startDt.isValid() ? moment(ns.startDt).format(DB_DATEFORMAT) : null;
+            const endDt = ns.endDt && ns.endDt.isValid() ? moment(ns.endDt).format(DB_DATEFORMAT) : null;
+
             dispatch(
                 getIssueListModal({
-                    search: ns,
+                    search: { ...ns, startDt, endDt },
                     getServiceCodeList: true,
                     callback: ({ header, body, search }) => {
                         if (header.success) {
@@ -88,9 +88,9 @@ const IssueList = (props) => {
                 // 기간 설정
                 setPeriod([Number(number), date]);
                 const nd = new Date();
-                const startServiceDay = moment(nd).subtract(Number(number), date).startOf('day');
-                const endServiceDay = moment(nd).endOf('day');
-                setSearch({ ...search, startServiceDay, endServiceDay });
+                const startDt = moment(nd).subtract(Number(number), date).startOf('day');
+                const endDt = moment(nd).endOf('day');
+                setSearch({ ...search, startDt, endDt });
             } else {
                 setSearch({ ...search, [key]: value });
             }
@@ -115,19 +115,25 @@ const IssueList = (props) => {
      */
     const handleReset = useCallback(() => {
         const nd = new Date();
-        setPeriod([1, 'days']);
+        setPeriod(defaultPeriod);
         setSearch({
             ...initialState.search,
             page: search.page,
-            startServiceDay: moment(nd).subtract(1, 'days').startOf('day'),
-            endServiceDay: moment(nd).endOf('day'),
+            startDt: moment(nd).subtract(defaultPeriod[0], defaultPeriod[1]).startOf('day'),
+            endDt: moment(nd).endOf('day'),
         });
     }, [search.page]);
 
     useEffect(() => {
         if (show) {
             if (cntRef.current === 0) {
-                getIssueList({});
+                const nd = new Date();
+                getIssueList({
+                    search: {
+                        startDt: moment(nd).subtract(defaultPeriod[0], defaultPeriod[1]).startOf('day'),
+                        endDt: moment(nd).endOf('day'),
+                    },
+                });
                 cntRef.current += 1;
             }
         }
@@ -141,6 +147,7 @@ const IssueList = (props) => {
                 onChangeSearchOption={handleSearchOption}
                 // onSearch={handleSearch}
                 onReset={handleReset}
+                loading={loading}
             />
 
             <AgGrid

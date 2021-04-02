@@ -26,8 +26,8 @@ import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberGroupSaveDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberRequestDTO;
-import jmnet.moka.core.tps.mvc.member.dto.MemberSnsRequestDTO;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
+import jmnet.moka.core.tps.mvc.member.entity.MemberSms;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.core.tps.mvc.member.vo.SmtpApplyVO;
 import jmnet.moka.web.wms.config.security.exception.GroupWareException;
@@ -234,16 +234,14 @@ public class MemberJoinRestController extends AbstractCommonController {
     /**
      * Member SMS 인증문자 요청
      *
-     * @param memberId         MemberID
-     * @param memberRequestDTO 잠금 해제 요청 정보
+     * @param memberId MemberID
      * @return 사용자 정보
      * @throws NoDataException 데이터없음 예외처리
      */
     @ApiOperation(value = "Member SMS 인증문자 요청")
     @GetMapping("/{memberId}/sms-request")
     public ResponseEntity<?> putSmsRequest(
-            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
-            @Valid MemberSnsRequestDTO memberRequestDTO)
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws Exception {
 
         String noDataMsg = msg("tps.common.error.no-data");
@@ -269,13 +267,16 @@ public class MemberJoinRestController extends AbstractCommonController {
             throw new PasswordNotMatchedException(msg("wms.login.error.PasswordUnMatchedException"));
         }
         */
-
+        MemberSms memberSms = new MemberSms();
         // SMS 서버에 문자 발송 요청
         String smsAuth = "4885";
         Date smsExp = McpDate.minutePlus(McpDate.now(), 3);
+        Date regDt = McpDate.now();
 
-        member.setSmsAuth(smsAuth);
-        member.setSmsExp(smsExp);
+        memberSms.setMemberId(memberId);
+        memberSms.setSmsAuth(smsAuth);
+        memberSms.setSmsExp(smsExp);
+        memberSms.setRegDt(regDt);
         /*
         String remark = McpString.defaultValue(member.getRemark());
         if (McpString.isNotEmpty(remark)) {
@@ -285,7 +286,7 @@ public class MemberJoinRestController extends AbstractCommonController {
         member.setRemark(remark);
          */
 
-        memberService.updateMember(member);
+        memberService.insertMemberSms(memberSms);
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
@@ -479,11 +480,19 @@ public class MemberJoinRestController extends AbstractCommonController {
      * @return 인증번호 확인
      */
     @ApiOperation(value = "인증번호 확인")
-    @GetMapping("/{smsAuth}/exists")
+    @GetMapping("/{memberId}/{smsAuth}/exists")
     public ResponseEntity<?> smsAuthCheck(
-            @ApiParam("인증번호") @PathVariable("smsAuth") @Size(min = 1, max = 6, message = "{tps.member.error.pattern.smsAuth}") String smsAuth) {
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @ApiParam("인증번호") @PathVariable("smsAuth") @Size(min = 1, max = 6, message = "{tps.member.error.pattern.smsAuth}") String smsAuth)
+            throws NoDataException {
 
-        boolean same = smsAuth.equals("4885");
+        String noDataMsg = msg("tps.common.error.no-data");
+
+        MemberSms memberSms = memberService
+                .findFirstByMemberIdOrderByRegDtDesc(memberId)
+                .orElseThrow(() -> new NoDataException(noDataMsg));
+
+        boolean same = smsAuth.equals(memberSms.getSmsAuth());
         if (!same) {
             throw new PasswordNotMatchedException(msg("tps.member.error.sms-unmatched"));
         }

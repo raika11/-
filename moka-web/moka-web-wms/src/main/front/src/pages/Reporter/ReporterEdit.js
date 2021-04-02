@@ -76,23 +76,12 @@ const ReporterEdit = ({ match }) => {
     }, [dispatch, paramSeq]);
 
     useEffect(() => {
-        let typeCode = 'R1: 중앙일보 기자';
+        let typeCode;
 
-        if (!commonUtil.isEmpty(reporter.r1CdNm)) {
-            typeCode = `R1: ${reporter.r1CdNm}`;
-        }
-
-        typeCode += ', R2:';
         if (!commonUtil.isEmpty(reporter.jplusRepDiv)) {
-            typeCode += ` ${reporter.jplusRepDiv}`;
-        }
-
-        if (!commonUtil.isEmpty(reporter.jplusRepDiv) && !commonUtil.isEmpty(reporter.r2CdNm)) {
-            typeCode += ' -';
-        }
-
-        if (!commonUtil.isEmpty(reporter.r2CdNm)) {
-            typeCode += ` ${reporter.r2CdNm}`;
+            typeCode = `${reporter.jplusRepDiv}: ${reporter.jplusRepDivNm}`;
+        } else {
+            typeCode = '일보기자';
         }
 
         setTemp({
@@ -211,7 +200,7 @@ const ReporterEdit = ({ match }) => {
                 </Form.Row>*/}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <ReporterInput label="타입코드" value={temp.typeCode || '중앙일보 기자'} />
+                        <ReporterInput label="타입코드" value={temp.typeCode} />
                     </Col>
                     <Col xs={6} className="p-0">
                         <ReporterInput label="집배신 이메일" value={temp.repEmail1 || '-'} />

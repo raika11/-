@@ -153,7 +153,7 @@ const ReporterEdit = ({ match }) => {
                                     id="usedYn"
                                     name="usedYn"
                                     as="switch"
-                                    inputProps={{ label: '사용여부', checked: temp.usedYn === 'Y' }}
+                                    inputProps={{ label: '노출여부', checked: temp.usedYn === 'Y' }}
                                     onChange={handleChangeValue}
                                 />
                                 <MokaInput

@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Route, Switch } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import Tab from 'react-bootstrap/Tab';
-import Nav from 'react-bootstrap/Nav';
-import { MokaCard } from '@/components';
+import { MokaCard, MokaCardTabs } from '@/components';
 import { clearStore } from '@/store/schedule';
-import RunState from './RunState';
-import Work from './Work';
-import DeleteWork from './DeleteWork';
-import DeployServer from './DeployServer';
-import BackOfficeWork from './BackOfficeWork';
+import { RunStateList } from './RunState';
+import { WorkList } from './Work';
+import { DeleteWorkList } from './DeleteWork';
+import { DeployServerList } from './DeployServer';
+import { BackOfficeWorkList } from './BackOfficeWork';
+import ScheduleEdit from './ScheduleEdit';
 
 /**
  * 시스템 모니터링 > 스케줄 서버 관리
@@ -18,31 +18,20 @@ const Schedule = ({ match }) => {
     const dispatch = useDispatch();
     const [activeKey, setActiveKey] = useState(0);
 
-    const [tabNavs] = useState(['작업 실행상태', '작업 목록', '삭제 작업 목록', '배포 서버 관리', '백오피스 예약작업']);
-
-    /**
-     * Nav 선택 콜백
-     * @param {any} eventKey 이벤트키
-     */
-    const handleSelect = useCallback((eventKey, e) => {
-        setActiveKey(eventKey);
-        if (e) {
-            e.currentTarget.blur();
-        }
-    }, []);
+    const [tabNavs] = useState(['작업 실행상태 현황', '작업 목록', '삭제 작업 목록', '배포 서버 관리', '백오피스 예약작업']);
 
     const createTabs = useCallback(() => {
         return tabNavs.map((nav, idx) => {
-            if (nav === '작업 실행상태') {
-                return <RunState show={Number(activeKey) === idx} match={match} />;
+            if (nav === '작업 실행상태 현황') {
+                return <RunStateList show={Number(activeKey) === idx} match={match} />;
             } else if (nav === '작업 목록') {
-                return <Work show={Number(activeKey) === idx} match={match} />;
+                return <WorkList show={Number(activeKey) === idx} match={match} />;
             } else if (nav === '삭제 작업 목록') {
-                return <DeleteWork show={Number(activeKey) === idx} match={match} />;
+                return <DeleteWorkList show={Number(activeKey) === idx} match={match} />;
             } else if (nav === '배포 서버 관리') {
-                return <DeployServer show={Number(activeKey) === idx} match={match} />;
+                return <DeployServerList show={Number(activeKey) === idx} match={match} />;
             } else if (nav === '백오피스 예약작업') {
-                return <BackOfficeWork show={Number(activeKey) === idx} match={match} />;
+                return <BackOfficeWorkList show={Number(activeKey) === idx} match={match} />;
             }
             return null;
         });
@@ -55,40 +44,35 @@ const Schedule = ({ match }) => {
     }, [dispatch]);
 
     return (
-        <>
+        <div className="d-flex">
             <Helmet>
                 <title>스케줄 서버 관리</title>
                 <meta name="description" content="스케줄 서버 관리 페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            <MokaCard className="w-100 h-100" title="스케줄 서버 관리">
-                <div className="tab card-tab w-100 h-100" style={{ boxShadow: 'none' }}>
-                    <Tab.Container activeKey={activeKey}>
-                        <div className="d-flex">
-                            <Nav activeKey={activeKey} variant="tabs" className="flex-row" onSelect={handleSelect}>
-                                {tabNavs.map((nav, idx) => (
-                                    <Nav.Item key={idx} style={{ width: 120 }}>
-                                        <Nav.Link eventKey={idx} className="h4">
-                                            {nav}
-                                        </Nav.Link>
-                                    </Nav.Item>
-                                ))}
-                            </Nav>
-                        </div>
-                        <div className="d-flex custom-scroll">
-                            <Tab.Content className="p-0">
-                                {createTabs().map((tab, idx) => (
-                                    <Tab.Pane key={idx} eventKey={idx} className="overflow-hidden h-100">
-                                        <div className="pb-3 pt-20 h-100 custom-scroll">{tab}</div>
-                                    </Tab.Pane>
-                                ))}
-                            </Tab.Content>
-                        </div>
-                    </Tab.Container>
-                </div>
+            {/* 목록 */}
+            <MokaCard className="mr-gutter" headerClassName="pb-0" bodyClassName="px-0 mb-0" width={900} title="스케줄 서버 관리">
+                <MokaCardTabs className="w-100 h-100" navWidth={120} onSelectNav={(idx) => setActiveKey(idx)} tabs={createTabs()} tabNavs={tabNavs} />
             </MokaCard>
-        </>
+
+            {/* 편집 */}
+            <Switch>
+                <Route
+                    path={[
+                        `${match.path}`,
+                        `${match.path}/work-list/add`,
+                        `${match.path}/work-list/:jobSeq`,
+                        `${match.path}/work-delete/:jobSeq`,
+                        `${match.path}/deploy-server/add`,
+                        `${match.path}/deploy-server/:serverSeq`,
+                        `${match.path}/back-office-work/:seqNo`,
+                    ]}
+                    exact
+                    render={() => <ScheduleEdit match={match} activeKey={activeKey} />}
+                ></Route>
+            </Switch>
+        </div>
     );
 };
 

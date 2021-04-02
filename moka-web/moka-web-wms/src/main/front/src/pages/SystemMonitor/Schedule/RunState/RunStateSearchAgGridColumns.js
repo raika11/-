@@ -12,10 +12,10 @@ export default [
     },
     {
         headerName: '분류',
-        field: 'serverNm',
+        field: 'category',
         cellStyle: { lineHeight: '60px' },
         width: 60,
-        tooltipField: 'serverNm',
+        tooltipField: 'category',
     },
     {
         headerName: '주기',

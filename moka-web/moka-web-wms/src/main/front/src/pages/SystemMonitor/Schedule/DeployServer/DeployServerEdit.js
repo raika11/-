@@ -2,11 +2,9 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import { MokaInputLabel } from '@/components';
+import { MokaCard, MokaInputLabel } from '@/components';
 import { DB_DATEFORMAT } from '@/constants';
 import { invalidListToError } from '@/utils/convertUtil';
 import { REQUIRED_REGEX } from '@/utils/regexUtil';
@@ -130,7 +128,7 @@ const DeployServerEdit = ({ match }) => {
      * 취소 버튼
      */
     const handleClickCancel = () => {
-        history.push(`${match.path}`);
+        history.push(`${match.path}/deploy-server`);
     };
 
     useEffect(() => {
@@ -146,82 +144,88 @@ const DeployServerEdit = ({ match }) => {
     }, [dispatch, serverSeq]);
 
     return (
-        <div className="flex-fill">
-            <Card.Header>
-                <Card.Title as="h2">{serverSeq ? '배포 서버 수정' : '배포 서버 등록'}</Card.Title>
-            </Card.Header>
-            <Card.Body className="custom-scroll" style={{ height: 496 }}>
-                <Form>
-                    <Form.Row className="mb-2">
-                        <Col xs={7} className="p-0">
-                            <MokaInputLabel label="별칭" name="serverNm" value={data.serverNm} onChange={handleChangeValue} isInvalid={error.serverNm} />
-                        </Col>
-                    </Form.Row>
-                    <Form.Row className="mb-2">
-                        <Col xs={7} className="p-0">
-                            <MokaInputLabel label="서버IP" name="serverIp" value={data.serverIp} onChange={handleChangeValue} isInvalid={error.serverIp} />
-                        </Col>
-                    </Form.Row>
-                    <Form.Row className="mb-2">
-                        <Col xs={7} className="p-0">
-                            <MokaInputLabel label="로그인 계정" name="accessId" value={data.accessId} onChange={handleChangeValue} isInvalid={error.accessId} />
-                        </Col>
-                    </Form.Row>
-                    <Form.Row className={serverSeq && 'mb-2'}>
-                        <Col xs={7} className="p-0">
-                            <MokaInputLabel label="로그인 암호" name="accessPwd" value={data.accessPwd} onChange={handleChangeValue} isInvalid={error.accessPwd} />
-                        </Col>
-                    </Form.Row>
-                    {serverSeq && (
-                        <>
-                            <Form.Row className="mb-2">
-                                <MokaInputLabel
-                                    label="등록 정보"
-                                    inputClassName="text-truncate"
-                                    className="flex-fill"
-                                    value={
-                                        data.regDt
-                                            ? `${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember?.memberNm || ''} ${
-                                                  data.regMember?.memberId ? `(${data.regMember?.memberId})` : ''
-                                              }`
-                                            : ''
-                                    }
-                                    inputProps={{ readOnly: true, plaintext: true }}
-                                />
-                            </Form.Row>
-                            <Form.Row className="mb-2">
-                                <MokaInputLabel
-                                    label="수정 정보"
-                                    inputClassName="text-truncate"
-                                    className="flex-fill"
-                                    value={
-                                        data.modDt
-                                            ? `${moment(data.modDt).format(DB_DATEFORMAT)} ${data.modMember?.memberNm || ''} ${
-                                                  data.modMember?.memberId ? `(${data.modMember?.memberId})` : ''
-                                              }`
-                                            : ''
-                                    }
-                                    inputProps={{ readOnly: true, plaintext: true }}
-                                />
-                            </Form.Row>
-                        </>
-                    )}
-                </Form>
-            </Card.Body>
-            <Card.Footer className="d-flex justify-content-center card-footer">
-                <Button variant="positive" className="mr-1" onClick={handleClickSave}>
-                    {serverSeq ? '수정' : '등록'}
-                </Button>
+        <MokaCard
+            title={serverSeq ? '배포 서버 수정' : '배포 서버 등록'}
+            className="flex-fill"
+            bodyClassName="d-flex flex-column"
+            footer
+            footerButtons={[
+                {
+                    text: serverSeq ? '수정' : '저장',
+                    onClick: handleClickSave,
+                    variant: 'positive',
+                    className: 'mr-1',
+                },
+                serverSeq && {
+                    text: '삭제',
+                    onClick: handleClickDelete,
+                    variant: 'negative',
+                    className: 'mr-1',
+                },
+                {
+                    text: '취소',
+                    onClick: handleClickCancel,
+                    variant: 'negative',
+                },
+            ].filter((a) => a)}
+        >
+            <Form>
+                <Form.Row className="mb-2">
+                    <Col xs={7} className="p-0">
+                        <MokaInputLabel label="별칭" name="serverNm" value={data.serverNm} onChange={handleChangeValue} isInvalid={error.serverNm} />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={7} className="p-0">
+                        <MokaInputLabel label="서버IP" name="serverIp" value={data.serverIp} onChange={handleChangeValue} isInvalid={error.serverIp} />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={7} className="p-0">
+                        <MokaInputLabel label="로그인 계정" name="accessId" value={data.accessId} onChange={handleChangeValue} isInvalid={error.accessId} />
+                    </Col>
+                </Form.Row>
+                <Form.Row className={serverSeq && 'mb-2'}>
+                    <Col xs={7} className="p-0">
+                        <MokaInputLabel label="로그인 암호" name="accessPwd" value={data.accessPwd} onChange={handleChangeValue} isInvalid={error.accessPwd} />
+                    </Col>
+                </Form.Row>
                 {serverSeq && (
-                    <Button variant="negative" className="mr-1" onClick={handleClickDelete}>
-                        삭제
-                    </Button>
+                    <>
+                        <Form.Row className="mb-2">
+                            <MokaInputLabel
+                                label="등록 정보"
+                                inputClassName="text-truncate"
+                                className="flex-fill"
+                                value={
+                                    data.regDt
+                                        ? `${moment(data.regDt).format(DB_DATEFORMAT)} ${data.regMember?.memberNm || ''} ${
+                                              data.regMember?.memberId ? `(${data.regMember?.memberId})` : ''
+                                          }`
+                                        : ''
+                                }
+                                inputProps={{ readOnly: true, plaintext: true }}
+                            />
+                        </Form.Row>
+                        <Form.Row className="mb-2">
+                            <MokaInputLabel
+                                label="수정 정보"
+                                inputClassName="text-truncate"
+                                className="flex-fill"
+                                value={
+                                    data.modDt
+                                        ? `${moment(data.modDt).format(DB_DATEFORMAT)} ${data.modMember?.memberNm || ''} ${
+                                              data.modMember?.memberId ? `(${data.modMember?.memberId})` : ''
+                                          }`
+                                        : ''
+                                }
+                                inputProps={{ readOnly: true, plaintext: true }}
+                            />
+                        </Form.Row>
+                    </>
                 )}
-                <Button variant="negative" onClick={handleClickCancel}>
-                    취소
-                </Button>
-            </Card.Footer>
-        </div>
+            </Form>
+        </MokaCard>
     );
 };
 

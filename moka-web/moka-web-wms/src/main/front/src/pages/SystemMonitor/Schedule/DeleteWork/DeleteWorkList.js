@@ -1,5 +1,5 @@
-import React from 'react';
-import Card from 'react-bootstrap/Card';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router';
 import Search from './DeleteWorkSearch';
 import AgGrid from './DeleteWorkAgGrid';
 
@@ -7,15 +7,19 @@ import AgGrid from './DeleteWorkAgGrid';
  * 스케줄 서버 관리 > 삭제 작업 목록
  */
 const DeleteWorkList = ({ show, match }) => {
+    const history = useHistory();
+
+    useEffect(() => {
+        if (show) {
+            history.push(`${match.path}/delete-work`);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show]);
+
     return (
         <>
-            <Card.Header>
-                <Card.Title as="h2">삭제 작업 목록</Card.Title>
-            </Card.Header>
-            <Card.Body className="d-flex flex-column custom-scroll" style={{ height: 600 }}>
-                <Search show={show} />
-                <AgGrid match={match} />
-            </Card.Body>
+            <Search show={show} />
+            <AgGrid match={match} />
         </>
     );
 };

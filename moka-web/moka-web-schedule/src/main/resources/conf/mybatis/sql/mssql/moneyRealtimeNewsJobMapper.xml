@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.web.schedule.mvc.mybatis.mapper.MoneyRealtimeNewsJobMapper">
+
+  <!-- 실시간 기사 리스트 -->
+  <select id="findAll" parameterType="MoneyRealtimeNewsJobDTO"
+    resultType="jmnet.moka.web.schedule.mvc.mybatis.vo.MoneyRealtimeNewsVO"
+    statementType="CALLABLE">
+    {call UPU_15RE_ARTICLE_LIST_SEL(
+      #{pageIndex, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{pageSize, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      NULL,
+      #{serviceCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+      NULL,
+      NULL,
+      #{usageType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      #{exceptSourceCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+      NULL,
+      NULL,
+      NULL,
+      #{totalCount, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
+  </select>
+
+</mapper>

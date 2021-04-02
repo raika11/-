@@ -23,20 +23,23 @@ const CommentSearch = ({ selectBannedItem }) => {
     };
     const dispatch = useDispatch();
     const [defaultInputModalState, setDefaultInputModalState] = useState(false); // 차단 등록 모달용 스테이트
+    const [searchData, setSearchData] = useState({
+        // 검색옵션
+        ...initialState.comments.search,
+        startDt: moment().startOf('day'),
+        endDt: moment().endOf('day'),
+    });
 
-    // 검색 옵션 설정.
-    const [searchData, setSearchData] = useState(initialState.comments.search);
-
-    // 검색용 select 값과 store 값을 연결.
-    const { COMMENT_STATUS_CODE, COMMENT_ORDER_CODE, COMMENT_MEDIA_CODE, COMMENT_SITE_CODE } = useSelector((store) => ({
-        COMMENT_ORDER_CODE: store.comment.common.COMMENT_ORDER_CODE,
-        COMMENT_STATUS_CODE: store.comment.common.COMMENT_STATUS_CODE,
-        COMMENT_MEDIA_CODE: store.comment.common.COMMENT_MEDIA_CODE,
-        COMMENT_SITE_CODE: store.comment.common.COMMENT_SITE_CODE,
+    // 검색용 select 값과 store 값을 연결
+    const { COMMENT_STATUS_CODE, COMMENT_ORDER_CODE, COMMENT_MEDIA_CODE, COMMENT_SITE_CODE } = useSelector(({ comment }) => ({
+        COMMENT_ORDER_CODE: comment.common.COMMENT_ORDER_CODE,
+        COMMENT_STATUS_CODE: comment.common.COMMENT_STATUS_CODE,
+        COMMENT_MEDIA_CODE: comment.common.COMMENT_MEDIA_CODE,
+        COMMENT_SITE_CODE: comment.common.COMMENT_SITE_CODE,
     }));
 
     /**
-     * 검색 옵션 변경시 업데이트.
+     * 검색 옵션 변경
      */
     const handleChangeSearchInput = (e) => {
         const { name, value } = e.target;
@@ -47,7 +50,7 @@ const CommentSearch = ({ selectBannedItem }) => {
     };
 
     /**
-     * 검색 날짜 변경 처리.
+     * 검색 날짜 변경 처리
      */
     const handleDateChange = (name, date) => {
         if (name === 'startDt') {
@@ -75,7 +78,7 @@ const CommentSearch = ({ selectBannedItem }) => {
     };
 
     /**
-     * 검색 버튼 처리.
+     * 검색 버튼 처리
      */
     const handleClickSearchButton = () => {
         dispatch(
@@ -88,14 +91,18 @@ const CommentSearch = ({ selectBannedItem }) => {
         dispatch(getCommentList());
     };
 
-    // 새로 고침 버튼 처리.
+    /**
+     * 새로고침
+     */
     const handleClickReloadButton = () => {
         dispatch(changeSearchOption(initialState.comments.search));
         setSearchData(initialState.comments.search);
         //dispatch(getCommentList());
     };
 
-    // 차단 모달에서 완료시
+    /**
+     * 차단 모달 완료
+     */
     const BlockModalSave = (data) => {
         // console.log(data);
     };
@@ -112,9 +119,17 @@ const CommentSearch = ({ selectBannedItem }) => {
     //     messageBox.alert('서비스 준비 중입니다.');
     // };
 
-    // 최초 로딩시 목록 가지고 옴.
     useEffect(() => {
+        // 최초 로딩시 목록 가지고 옴
+        dispatch(
+            changeSearchOption({
+                ...searchData,
+                startDt: searchData.startDt ? moment(searchData.startDt).format(DB_DATEFORMAT) : '',
+                endDt: searchData.endDt ? moment(searchData.endDt).format(DB_DATEFORMAT) : '',
+            }),
+        );
         dispatch(getCommentList());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
     return (

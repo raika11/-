@@ -2,7 +2,6 @@ import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './commentAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
-import moment from 'moment';
 
 /**
  * initialState
@@ -28,8 +27,8 @@ export const initialState = {
             domain: '',
             orderType: 'A',
             status: 'Y',
-            startDt: moment().format('YYYY-MM-DD'),
-            endDt: moment().format('YYYY-MM-DD'),
+            startDt: null,
+            endDt: null,
             memType: '',
             groupId: '',
         },

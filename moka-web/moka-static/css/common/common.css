@@ -418,6 +418,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     img {width:100%;}
 
     .flex_row_reverse_sm {flex-wrap:wrap-reverse;}
+    .row.add_pdlr {margin-left:-9px;margin-right:-9px;}
+    .row.add_pdlr > * {padding-left:9px;padding-right:9px;}
 
     .sm_hidden {display:none;} /* <<- .pc {display:none;} */
 

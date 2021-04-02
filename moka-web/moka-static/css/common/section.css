@@ -70,8 +70,8 @@
 .card_in .fa_rect_w::after { left: 11px; top: 8px; width: 22px; height: 14px;}
 .card_image .fa_rect_w { position: absolute; right: 14px; bottom: 12px;}
 
-.section_unique_wrap .top_area_wrap .sub_title { font-size: 18px; }
-.section_unique_wrap .top_area_wrap .sub_title .fa_arrow_right_b { margin-top: 2px; margin-left: 4px; }
+.section_unique_wrap .title_wrap .title { font-size: 18px; }
+.section_unique_wrap .title_wrap .title .fa_arrow_right_b { margin-top: 2px; margin-left: 4px; }
 /* 임시 아이콘 이미지 변경시 소스 수정해야됨 */
 .fa_rect_w { display: inline-block; width: 15px; height: 10px; border: 1.5px solid #fff;  }
 .fa_rect_w::after { content: ''; position: absolute; left: 6px; top: 4px; width: 10px; height: 6px; border: 1.5px solid #fff;}
@@ -199,11 +199,12 @@
 
 
     /***************************************    unique     ************************************/
+    .section_unique_wrap .chain_wrap:not(.unique_trend) { margin-bottom: 30px;  }
     .card_in .card_body .headline { font-size: 20px; line-height: 28px; letter-spacing: -0.4px; }
     .card_in .card_body .description { max-width: 78%; font-size: 13px; line-height: 21px; }
-    .card_in .card_body .date { padding-top: 12px; color: #aaa; }
+    .card_in .card_body .date { padding-top: 12px; }
     .card_in .card_body .headline + .description { margin-top: 6px; }
-    .unique_trend .top_area_wrap .sub_title { font-size: 16px;  }
+    .unique_trend .title_wrap .title { font-size: 16px;  }
     .unique_trend .card_body .headline { font-size: 14px; line-height: 22px; letter-spacing: -0.4px; }
 }
 
@@ -265,8 +266,7 @@
     .card_in .card_body .headline { font-size: 28px; }
     .card_in .card_body .description { max-width: 48%; font-size: 14px; line-height: 22px; letter-spacing: -0.4px; }
     .card_in .card_body .date { padding-top: 8px; }
-    .section_unique_wrap .top_area_wrap .sub_title { font-size: 18px; }
-    .unique_trend .top_area_wrap .sub_title { font-size: 20px; line-height: 24px; letter-spacing: -0.4px; }
+    .unique_trend .title_wrap .title { font-size: 20px; line-height: 24px; letter-spacing: -0.4px; }
     .unique_trend .card_group .card_body .headline { font-size: 18px; line-height: 26px; letter-spacing: -0.4px; }
 }
 
@@ -376,7 +376,8 @@
     .ad_wrap{display:none;}
 
     /***************************************    unique     ************************************/
-    .section_unique_wrap .chain_wrap:not(.unique_trend) .card {margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e2e2;}
+    .section_unique_wrap .chain_wrap .card_in { padding-bottom: 20px; }
+    .section_unique_wrap .chain_wrap:not(.unique_trend) .card { margin-top: 16px; margin-bottom: 16px; padding-top: 16px; border-top: 1px solid #e2e2e2;}
     .section_unique_wrap .chain_wrap:not(.unique_trend) .card:first-child { margin-top: 0; }
 }
 

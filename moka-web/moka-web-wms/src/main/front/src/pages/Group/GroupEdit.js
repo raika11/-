@@ -232,7 +232,7 @@ const GroupEdit = ({ match }) => {
                     // 만약 response.header.message로 서버 메세지를 전달해준다면, 그 메세지를 보여준다.
                     if (response.header.success) {
                         dispatch(getGroup(paramCd));
-                        toast.success('수정하였습니다.');
+                        toast.result(response);
                     } else {
                         toast.fail('실패하였습니다.');
                     }
@@ -263,7 +263,7 @@ const GroupEdit = ({ match }) => {
                                 ],
                                 callback: (response) => {
                                     if (response.header.success) {
-                                        toast.success('등록하였습니다.');
+                                        toast.result(response);
                                         history.push(`${match.path}/${groupCd}`);
                                     } else {
                                         toast.fail('실패하였습니다.');

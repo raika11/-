@@ -121,15 +121,6 @@ public class MemberJoinRestController extends AbstractCommonController {
 
             ResultMapDTO resultDTO = new ResultMapDTO(result);
 
-            MemberInfo member = memberService
-                    .findMemberById(groupWareUserId)
-                    .orElseThrow();
-            if (!McpString.isEmpty(member.getMemberId())) {
-                if (MemberStatusCode.D == member.getStatus()) {
-                    throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
-                }
-            }
-
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (GroupWareException ex) {
@@ -258,6 +249,17 @@ public class MemberJoinRestController extends AbstractCommonController {
     public ResponseEntity<?> putSmsRequest(
             @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws Exception {
+
+        String noDataMsg = msg("tps.common.error.no-data");
+        MemberInfo member = memberService
+                .findMemberById(memberId)
+                .orElseThrow(() -> new NoDataException(noDataMsg));
+
+        //throwPasswordCheck(memberRequestDTO.getPassword(), memberRequestDTO.getConfirmPassword(), member);
+
+        if (MemberStatusCode.D == member.getStatus()) {
+            throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
+        }
 
         //        String noDataMsg = msg("tps.common.error.no-data");
         //

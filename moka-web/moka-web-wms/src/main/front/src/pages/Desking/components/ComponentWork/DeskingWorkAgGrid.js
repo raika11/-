@@ -8,7 +8,7 @@ import { columnDefs, rowClassRules, naverChannelColumnDefs } from './DeskingWork
 import DeskingReadyGrid from '@pages/Desking/components/DeskingReadyGrid';
 import DeskingEditorRenderer from './DeskingEditorRenderer';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { putDeskingWorkListSort } from '@store/desking';
 import { getRow, getRowIndex, classElementsFromPoint, autoScroll } from '@utils/agGridUtil';
 import { findWork, makeHoverBox, getMoveMode, clearHoverStyle, clearNextStyle, clearWorkStyle, findNextMainRow, addNextRowStyle } from '@utils/deskingUtil';
@@ -123,7 +123,7 @@ const DeskingWorkAgGrid = (props) => {
      * @param {array} displayedRows 기사목록
      * @param {object} overNode target기사
      */
-    const relToRel = (draggingNode, displayedRows, overNode) => {
+    const relToRel = useCallback((draggingNode, displayedRows, overNode) => {
         // overNode기준으로 source의 순번을 조정
         let relOrd = overNode.data.relOrd + 1;
         displayedRows.forEach((a) => {
@@ -163,7 +163,7 @@ const DeskingWorkAgGrid = (props) => {
         });
 
         return result;
-    };
+    }, []);
 
     /**
      * 패밀리내에서 관련기사를 주기사로 이동
@@ -171,7 +171,7 @@ const DeskingWorkAgGrid = (props) => {
      * @param {array} displayedRows 기사목록
      * @param {object} overNode target기사
      */
-    const relToMain = (draggingNode, displayedRows, overNode) => {
+    const relToMain = useCallback((draggingNode, displayedRows, overNode) => {
         let moveForward = draggingNode.childIndex > overNode.childIndex;
         let forwardNode = moveForward ? overNode : draggingNode;
         let backwardNode = moveForward ? draggingNode : overNode;
@@ -214,12 +214,12 @@ const DeskingWorkAgGrid = (props) => {
         let result = firstArr.concat(fourthArr).concat(thirdArr).concat(secondArr).concat(fifthArr).concat(lastArr);
 
         return result;
-    };
+    }, []);
 
     /**
-     * 관련기사 추가
+     * 기사 추가
      */
-    const appendRelRows = useCallback(
+    const appendRows = useCallback(
         (api, type, draggingNode, overNode) => {
             // display 기준으로 새로운 rows생성
             let displayedRows = [],
@@ -243,13 +243,16 @@ const DeskingWorkAgGrid = (props) => {
                     componentWorkSeq: component.seq,
                     datasetSeq: component.datasetSeq,
                     list: result,
-                    callback: () => {
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.message);
+                        }
                         api.deselectAll();
                     },
                 }),
             );
         },
-        [component.datasetSeq, component.seq, dispatch, mainToMain],
+        [component.datasetSeq, component.seq, dispatch, mainToMain, relToRel, relToMain],
     );
 
     /**
@@ -365,9 +368,9 @@ const DeskingWorkAgGrid = (props) => {
                 return;
             }
 
-            appendRelRows(params.api, type, draggingNode, overNode);
+            appendRows(params.api, type, draggingNode, overNode);
         },
-        [appendRelRows, handleRowDragLeave],
+        [appendRows, handleRowDragLeave],
     );
 
     /**

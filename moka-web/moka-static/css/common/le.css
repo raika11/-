@@ -807,6 +807,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     /***************************************    general     ************************************/
     .section_general_wrap .chain_wrap {margin-bottom: 40px;}
     .section_general_wrap .chain_wrap.correct_general {width: calc(100% + 40px); margin: 18px 0 20px; padding: 15px 20px;  margin-left: -20px; border-top: 0; background: #f5f5f5;}
+    .showcase_wrap .showcase_1st .card_image{width:100%;}
+    .showcase_wrap .card_image img{width:100%;}
 
     .section_general_wrap .chain_wrap.facebook {width: calc(100% + 40px); margin-left: -20px; margin-bottom: 20px;}
 
@@ -878,7 +880,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .showcase_general .card_group .card:first-child .card_body {padding-left: 0;}
     .showcase_general .card_group .card:last-child .card_body {padding-right: 0; border-right: 0;}
 
-    .showcase_wrap .card{position:relative;padding-bottom:20px;padding-bottom: 20px;}
+    .showcase_wrap .card{position:relative;padding-bottom: 20px;}
     .showcase_wrap .card::before{content:'';position:absolute;bottom:0;left:10px;width:calc(100% - 20px);height:1px;background-color:lightgray}
     .showcase_wrap .showcase_2nd .card:first-child::before,
     .showcase_wrap .showcase_3rd .card:first-child::before{display:none;}
@@ -923,9 +925,9 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .showcase_wrap .showcase_2nd,
     .showcase_wrap .showcase_3rd{position: relative;}
     .showcase_wrap .showcase_2nd::before,
-    .showcase_wrap .showcase_3rd::before{content: '';position: absolute;top: 0;left: 10px;width: calc(100% - 20px);height: 1px;background-color: lightgray;}
+    .showcase_wrap .showcase_3rd::before{content: '';position: absolute;top: 0;left: 20px;width: calc(100% - 20px);height: 1px;background-color: lightgray;}
     
-    .showcase_wrap .card::before {content: '';position: absolute;top: 10px;left: 0;width:1px;height:calc(100% - 20px);background-color: lightgray;}
+    .showcase_wrap .card::before {content: '';position: absolute;top: 20px;left: 0;width:1px;height:calc(100% - 40px);background-color: lightgray;}
     
 
 }

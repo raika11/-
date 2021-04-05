@@ -2,6 +2,7 @@
     "name": "front",
     "version": "0.1.0",
     "private": true,
+    "main": "./src/index.js",
     "scripts": {
         "sass:compile": "node-sass-chokidar --include-path ./node_modules/ --output-style compact ./src/assets/styles/classic.scss -o ./public/css",
         "sass:autoprefixer": "postcss public/css/*.css --use autoprefixer -d public/css --no-map",

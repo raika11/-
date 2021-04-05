@@ -51,10 +51,10 @@
 .fb_wrap .fb_area .title {color: #000; font-size: 18px; font-weight: 700;}
 .fb_wrap .fa_facebook {margin-right: 10px;}
 
-.section_general_wrap .chain_wrap.latest .title_wrap,
-.section_general_wrap .chain_wrap.view_lank .title_wrap {border-width: 3px;}
-.section_general_wrap .chain_wrap.view_lank .title_wrap,
-.section_general_wrap .chain_wrap.latest .title_wrap {padding: 16px 0;}
+.chain_wrap.latest .title_wrap,
+.chain_wrap.view_lank .title_wrap {border-width: 3px;}
+.chain_wrap.view_lank .title_wrap,
+.title_wrap {padding: 16px 0;}
 
 
 /***************************************    catalog     ************************************/
@@ -123,6 +123,7 @@
     .section_general_wrap .chain_wrap:not(.showcase_general) .card:first-child {margin-top: 0;}
     .section_general_wrap .chain_wrap.showcase_general ul:first-child .card {margin-top: 0; padding-top: 0; border-top: 0;}
     .section_general_wrap .chain_wrap.latest .card:last-child {margin-bottom: 16px; padding-bottom: 20px; border-bottom: 1px solid #e2e2e2;}
+    .chain_wrap.view_lank .card:first-child {margin-top: 0;}
     .img_right .card_body {padding-right: 20px;}
     .img_right .card_image {margin-bottom: 0;}
 
@@ -184,13 +185,13 @@
     .section_general_wrap .chain_wrap.showcase_general {margin-bottom: 20px;}
     .section_general_wrap .chain_wrap.showcase_general .headline {font-size: 16px;}
 
-    .section_general_wrap .chain_wrap.latest,
-    .section_general_wrap .chain_wrap.view_lank {margin-bottom: 0;}
+    .chain_wrap.latest,
+    .chain_wrap.view_lank {margin-bottom: 0;}
     .section_general_wrap .chain_wrap.view_lank .title_wrap,
     .section_general_wrap .chain_wrap.latest .title_wrap {padding: 16px 0 21px;}
     
-    .section_general_wrap .chain_wrap.view_lank .card {margin-bottom: 20px;}
-    .section_general_wrap .chain_wrap.view_lank .img_right .card_body {padding-right: 0 !important;}
+    .chain_wrap.view_lank .card {margin-bottom: 20px;}
+    .chain_wrap.view_lank .img_right .card_body {padding-right: 0 !important;}
 
     .section_general_wrap .chain_wrap.latest .card {margin-bottom: 17px; padding-bottom: 20px; border-bottom: 1px solid #ddd;}
     .section_general_wrap .chain_wrap.latest .headline {font-size: 16px;}
@@ -199,7 +200,7 @@
     .fb_wrap {padding: 20px 30px;}
     .fb_wrap .fb_area .title {font-size: 16px;}
 
-    .section_general_wrap .chain_wrap.banner {height: 213px; margin-bottom: 0;}
+    .chain_wrap.banner {margin-bottom: 0;}
 
 
     /***************************************    catalog     ************************************/
@@ -254,13 +255,11 @@
     .section_general_wrap .chain_wrap.view_lank .title_wrap,
     .section_general_wrap .chain_wrap.latest .title_wrap {padding: 16px 0 34px;}
 
-    .section_general_wrap .chain_wrap.view_lank .card {margin-bottom: 30px;}
-    .section_general_wrap .chain_wrap.view_lank .img_right .card_body {padding-right: 20px !important;}
+    .chain_wrap.view_lank .card {margin-bottom: 30px;}
+    .chain_wrap.view_lank .img_right .card_body {padding-right: 20px !important;}
 
     .section_general_wrap .chain_wrap.latest .card {margin-bottom: 20px; padding-bottom: 30px;}
     .section_general_wrap .chain_wrap.latest .headline {font-size: 20px;}
-
-    .section_general_wrap .chain_wrap.banner {height: 366px;}
 
 
     /***************************************    catalog     ************************************/

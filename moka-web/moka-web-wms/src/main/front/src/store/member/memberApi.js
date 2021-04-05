@@ -49,3 +49,7 @@ export const updateMemberMenuAuth = (memberId, changeMenuAuthList) => {
         throw err;
     });
 };
+
+export const changePassword = (memberId, passwords) => {
+    console.log(memberId, passwords);
+};

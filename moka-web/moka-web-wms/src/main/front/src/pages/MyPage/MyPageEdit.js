@@ -2,21 +2,32 @@ import React, { useEffect, useState } from 'react';
 import { Form, Col } from 'react-bootstrap';
 import { MokaCard, MokaInputLabel } from '@components';
 import produce from 'immer';
-import { messageBox } from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import clsx from 'clsx';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
-import { changePassword } from '@store/member';
+import { changePassword, getMember } from '@store/member';
 
 const MyPageEdit = () => {
     const dispatch = useDispatch();
-    const { AUTH } = useSelector(
+    const { AUTH, member } = useSelector(
         (store) => ({
             AUTH: store.app.AUTH,
+            member: store.member.member,
         }),
         shallowEqual,
     );
+
+    const [user, setUser] = useState({
+        phone: '',
+        dept: '',
+        email: '',
+        groupName: '',
+        id: '',
+        name: '',
+        regDt: '',
+    });
 
     const [passwords, setPasswords] = useState({
         current: '',
@@ -24,15 +35,25 @@ const MyPageEdit = () => {
         confirm: '',
     });
 
-    const [hideMessages, setHideMessages] = useState({
-        change: true,
-        confirm: true,
+    const [messages, setMessages] = useState({
+        change: {
+            hide: true,
+            variant: 'positive',
+            message: '',
+        },
+        confirm: {
+            hide: true,
+            variant: 'positive',
+            message: '비밀번호가 일치하지 않습니다.',
+        },
     });
 
     const handleChangeValue = (name, value) => {
         if (name === 'change') {
             console.log(getPasswordValidateType(value));
-            setHideMessages(
+            console.log(getPasswordValidateHtml(getPasswordValidateType(value)));
+            setMessages({ ...messages, change: getPasswordValidateHtml(getPasswordValidateType(value)) });
+            /*setHideMessages(
                 produce(hideMessages, (draft) => {
                     draft[
                         name
@@ -40,13 +61,19 @@ const MyPageEdit = () => {
                         value,
                     );
                 }),
-            );
+            );*/
         }
 
         if (name === 'confirm') {
-            setHideMessages(
-                produce(hideMessages, (draft) => {
-                    draft[name] = passwords.change === value;
+            setMessages(
+                produce(messages, (draft) => {
+                    if (value === '' || passwords.change === value) {
+                        draft[name].hide = true;
+                        draft[name].variant = 'success';
+                    } else {
+                        draft[name].hide = false;
+                        draft[name].variant = 'positive';
+                    }
                 }),
             );
         }
@@ -66,6 +93,7 @@ const MyPageEdit = () => {
                     passwords,
                     callback: (response) => {
                         console.log(response);
+                        toast.result(response.data);
                     },
                 }),
             );
@@ -200,9 +228,54 @@ const MyPageEdit = () => {
         else return '21';
     }
 
+    //-----------------------------------------------------------------------------------------------
+    // 비밀번호TypeCode에 따른 풍선도움말 HTML 반환
+    //-----------------------------------------------------------------------------------------------
+    function getPasswordValidateHtml(type) {
+        let helpMessage = {
+            hide: true,
+            variant: '',
+            message: '',
+        };
+
+        if (type == '') {
+        } else if (type == '00') {
+            helpMessage = { hide: false, variant: 'positive', message: '사용불가' };
+        } else if (type == '01') {
+            helpMessage = { hide: false, variant: 'positive', message: '사용불가' };
+        } else if (type == '02') {
+            helpMessage = { hide: false, variant: 'positive', message: '사용불가' };
+        } else if (type == '03') {
+            helpMessage = { hide: false, variant: 'positive', message: '사용불가' };
+        } else if (type == '04') {
+            helpMessage = { hide: false, variant: 'positive', message: '사용불가' };
+        } else if (type == '05') {
+            helpMessage = { hide: false, variant: 'positive', message: '사용불가', alert: '동일한 문자, 숫자를 반복해서 사용하실 수 없습니다.' };
+        } else if (type == '11') {
+            helpMessage = { hide: false, variant: 'positive', message: '취약' };
+        } else if (type == '12') {
+            helpMessage = { hide: false, variant: 'positive', message: '취약' };
+        } else if (type == '13') {
+            helpMessage = { hide: false, variant: 'positive', message: '취약' };
+        } else if (type == '21') {
+            helpMessage = { hide: false, variant: 'success', message: '적정' };
+        } else if (type == '31') {
+            helpMessage = { hide: false, variant: 'success', message: '안전' };
+        }
+
+        return helpMessage;
+    }
+
     useEffect(() => {
-        console.log(AUTH);
+        dispatch(getMember(AUTH.userId));
     }, [AUTH]);
+
+    useEffect(() => {
+        if (member.memberId) {
+            const groupName = member.groupMembers.map((group) => group.group.groupKorNm).join(', ');
+            setUser({ ...user, id: member.memberId, name: member.memberNm, dept: member.dept, regDt: member.regDt, phone: member.mobilePhone, groupName });
+        }
+    }, [member]);
 
     return (
         <MokaCard
@@ -217,12 +290,12 @@ const MyPageEdit = () => {
             <Form>
                 <Form.Row className="mb-2">
                     <Col xs={12}>
-                        <MokaInputLabel labelWidth={80} label="아이디" disabled={true} value={AUTH.userId} />
+                        <MokaInputLabel labelWidth={80} label="아이디" disabled={true} inputProps={{ plaintext: true }} value={user.id} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12}>
-                        <MokaInputLabel labelWidth={80} label="이름" disabled={true} value={AUTH.userName} />
+                        <MokaInputLabel labelWidth={80} label="이름" disabled={true} inputProps={{ plaintext: true }} value={user.name} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -252,11 +325,17 @@ const MyPageEdit = () => {
                                 const { name, value } = e.target;
                                 handleChangeValue(name, value);
                             }}
+                            onBlur={(e) => {
+                                const { name } = e.target;
+                                if (messages.change.variant === 'positive') {
+                                    handleChangeValue(name, '');
+                                }
+                            }}
                         />
                     </Col>
-                    <Col xs={4} className={clsx({ 'd-none': hideMessages.change })}>
+                    <Col xs={4} className={clsx({ 'd-none': messages.change.hide })}>
                         <div className="h-100 align-items-center d-flex">
-                            <span className="color-positive">사용불가</span>
+                            <span className={`color-${messages.change.variant}`}>{messages.change.message}</span>
                         </div>
                     </Col>
                 </Form.Row>
@@ -272,37 +351,49 @@ const MyPageEdit = () => {
                                 const { name, value } = e.target;
                                 handleChangeValue(name, value);
                             }}
+                            onBlur={(e) => {
+                                const { name } = e.target;
+                                if (messages.confirm.variant === 'positive') {
+                                    handleChangeValue(name, '');
+                                }
+                            }}
                         />
                     </Col>
-                    <Col xs={4} className={clsx({ 'd-none': hideMessages.confirm })}>
+                    <Col xs={4} className={clsx({ 'd-none': messages.confirm.hide })}>
                         <div className="h-100 align-items-center d-flex">
-                            <span className="color-positive">비밀번호가 일치하지 않습니다.</span>
+                            <span className={`color-${messages.confirm.variant}`}>{messages.confirm.message}</span>
                         </div>
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12}>
-                        <MokaInputLabel labelWidth={80} label="소속그룹" disabled={true} />
+                        <MokaInputLabel labelWidth={80} label="소속그룹" disabled={true} inputProps={{ plaintext: true }} value={user.groupName} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12}>
-                        <MokaInputLabel labelWidth={80} label="소속부서" disabled={true} value={AUTH.dept} />
+                        <MokaInputLabel labelWidth={80} label="소속부서" disabled={true} inputProps={{ plaintext: true }} value={user.dept} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12}>
-                        <MokaInputLabel labelWidth={80} label="핸드폰번호" disabled={true} value={AUTH.cellPhoneNo} />
+                        <MokaInputLabel labelWidth={80} label="핸드폰번호" disabled={true} inputProps={{ plaintext: true }} value={user.phone} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12}>
-                        <MokaInputLabel labelWidth={80} label="등록일" disabled={true} />
+                        <MokaInputLabel labelWidth={80} label="등록일" disabled={true} inputProps={{ plaintext: true }} value={user.regDt} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12}>
-                        <MokaInputLabel labelWidth={80} label="마지막 비번 변경일" disabled={true} value={moment(AUTH.passwordModDt).format(DB_DATEFORMAT)} />
+                        <MokaInputLabel
+                            labelWidth={80}
+                            label="마지막 비번 변경일"
+                            disabled={true}
+                            inputProps={{ plaintext: true }}
+                            value={moment(AUTH.passwordModDt).format(DB_DATEFORMAT)}
+                        />
                     </Col>
                 </Form.Row>
             </Form>

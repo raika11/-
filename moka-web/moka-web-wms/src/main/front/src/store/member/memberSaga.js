@@ -216,7 +216,17 @@ function* saveMember({ payload: { type, actions, callback } }) {
 
 function* changePassword({ type, payload: { memberId, passwords, callback } }) {
     const { current: password, change: newPassword, confirm: confirmPassword } = passwords;
-    const response = memberAPI.changePassword(memberId, { password, newPassword, confirmPassword });
+    yield put(startLoading(type));
+    try {
+        const response = yield call(memberAPI.changePassword, memberId, { password, newPassword, confirmPassword });
+        if (callback instanceof Function) {
+            callback(response);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+    yield put(finishLoading(type));
 }
 
 /**

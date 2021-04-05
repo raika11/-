@@ -47,11 +47,11 @@ const ColumnistAgGrid = ({ match }) => {
             setRowData(
                 list.map((data) => {
                     let jplusRelDiv = jplusRepRows.find((code) => code.dtlCd === data.jplusRelDiv);
-                    const jplusRelDivNm = (jplusRelDiv?.cdNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2);
+                    const jplusRelDivNm = data.repSeq ? (jplusRelDiv?.cdNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2) : '';
 
                     return {
                         ...data,
-                        jplusRelDivNm,
+                        jplusRelDivNm: jplusRelDivNm || '   -',
                         repSeqText: data.repSeq || '   -',
                         regMember: `${data.regMember.memberNm}(${data.regMember.memberId})`,
                         regDt: (data.regDt || '').slice(0, -3),

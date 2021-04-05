@@ -9,7 +9,7 @@ export default [
         headerName: '타입코드',
         field: 'jplusRelDivNm',
         width: 63,
-        cellStyle: { lineHeight: '43px' },
+        cellStyle: { lineHeight: '43px', whiteSpace: 'pre-wrap' },
     },
     {
         headerName: '사진',

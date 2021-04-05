@@ -75,7 +75,7 @@ const ColumnistEdit = ({ match }) => {
                 email2: tmpEmail[1],
                 position: reporter.jplusJobInfo,
                 jplusRepDiv: reporter.jplusRepDiv,
-                jplusRepDivNm: reporter.jplusRepDivNm,
+                jplusRepDivNm: reporter.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT,
                 profile: '',
                 selectImg: '',
                 profilePhoto: reporter.repImg,
@@ -267,7 +267,7 @@ const ColumnistEdit = ({ match }) => {
                 {/* 타입코드 (변경불가, 기자 선택 시 자동 입력) */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <MokaInputLabel label="타입코드" value={temp.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT} disabled />
+                        <MokaInputLabel label="타입코드" value={temp.jplusRepDivNm} disabled />
                     </Col>
                 </Form.Row>
 

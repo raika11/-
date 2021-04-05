@@ -57,7 +57,7 @@ public class CodeMgtServiceImpl implements CodeMgtService {
 
     @Override
     public List<CodeSimple> findUseSimpleList(String grpCd) {
-        return codeSimpleRepository.findByGrpCdAndUsedYn(grpCd, MokaConstants.YES);
+        return codeSimpleRepository.findByGrpCdAndUsedYnOrderByCdOrd(grpCd, MokaConstants.YES);
     }
 
     @Override

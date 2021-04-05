@@ -65,4 +65,11 @@ public class CodeSimple implements Serializable {
     @Builder.Default
     private String usedYn = MokaConstants.YES;
 
+    /**
+     * 코드순서
+     */
+    @Column(name = "CD_ORD")
+    @Builder.Default
+    private Integer cdOrd = 1;
+
 }

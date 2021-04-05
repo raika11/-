@@ -101,8 +101,8 @@ const DeskingWorkAgGrid = (props) => {
             rel: sds.filter((d) => d.rel),
         };
 
-        // overNode가 없으면 첫번째 데이터로, 있으면 overNode 밑으로 이동
-        let insertOrd = !overNode ? 0 : overNode.data.contentOrd;
+        // overNode가 없으면 첫번째 데이터로, 있으면 overNode 밑으로 이동 (contentOrd로 체크하지 않음, contentOrd에는 빠지는 row가 반영되어 있지 않음)
+        let insertOrd = !overNode ? 0 : maintain.main.findIndex((m) => m.contentId === overNode.data.contentId) + 1;
         result.splice(insertOrd, 0, ...selected.main);
         result = result.map((r, idx) => ({ ...r, contentOrd: idx + 1 }));
 

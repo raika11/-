@@ -390,7 +390,7 @@
 @media (min-width:768px) {
 
     /* catalog main swiper */
-    .catalog_home.swiper-container .swiper-pagination {width:fit-content;left:66.666667%;}
+    .catalog_home.swiper-container .swiper-pagination {width:auto;left:66.666667%;}
 
 
     /* card */

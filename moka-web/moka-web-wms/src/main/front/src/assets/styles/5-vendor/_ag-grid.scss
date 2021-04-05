@@ -193,10 +193,13 @@ $row-hover-color: darken($desking-row-color, 5);
         .ag-body-viewport {
             @include custom-scroll;
             overflow-y: auto;
+            padding-top: 6px;
         }
 
         .ag-row {
-            border-top: 3px solid $white;
+            &:not(:first-child) {
+                border-top: 3px solid $white;
+            }
             border-bottom: 3px solid $white;
             border-radius: 8px;
         }

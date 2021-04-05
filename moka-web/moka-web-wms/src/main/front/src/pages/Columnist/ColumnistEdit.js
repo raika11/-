@@ -21,9 +21,7 @@ const ColumnistEdit = ({ match }) => {
     const { seqNo } = useParams();
     const loading = useSelector(({ loading }) => loading[GET_COLUMNIST]);
     const { columnist, invalidList } = useSelector(({ columnist }) => columnist);
-    const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
     const [temp, setTemp] = useState(initialState.columnist);
-    const [jplusRepDivNm, setJplusRepDivNm] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState({});
     const imgFileRef = useRef(null);
@@ -62,9 +60,6 @@ const ColumnistEdit = ({ match }) => {
             let tmpEmail = [];
             tmpEmail = reporter.repEmail1 && reporter.repEmail1.split('@');
 
-            // 2021.03.31 reporter.jplusRepDiv가 코드가 아니라 코드명(cdNm)이 넘어옴.
-            // 칼럼니스트 저장할 때 코드가 넘어가야합니다. 코드 -> 코드명으로 변환하는 로직은 하위 useEffect에서 처리하고 있음
-            // 만약 서버에서 jplusRepDivNm같이 코드명을 넘겨준다면 useEffect제거하고 그 코드명을 노출하세요
             // test case1) 선택한 기자 없음 (NULL => JPLUS_REP_DIV_DEFAULT 노출)
             // test case2) 강인춘 (jplusRepDiv === R2)
             // test case3) 서회란 (jplusRepDiv === R1)
@@ -80,6 +75,7 @@ const ColumnistEdit = ({ match }) => {
                 email2: tmpEmail[1],
                 position: reporter.jplusJobInfo,
                 jplusRepDiv: reporter.jplusRepDiv,
+                jplusRepDivNm: reporter.jplusRepDivNm,
                 profile: '',
                 selectImg: '',
                 profilePhoto: reporter.repImg,
@@ -166,14 +162,6 @@ const ColumnistEdit = ({ match }) => {
             });
         }
     }, [columnist]);
-
-    useEffect(() => {
-        // 코드타입 명칭 셋팅
-        if (jplusRepRows) {
-            const jplusRepDivNm = (jplusRepRows.map((code) => code.dtlCd === temp.jplusRepDiv)?.cdNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2);
-            setJplusRepDivNm(jplusRepDivNm);
-        }
-    }, [temp.repSeq, temp.jplusRepDiv, jplusRepRows]);
 
     useEffect(() => {
         setError(invalidListToError(invalidList));
@@ -279,7 +267,7 @@ const ColumnistEdit = ({ match }) => {
                 {/* 타입코드 (변경불가, 기자 선택 시 자동 입력) */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <MokaInputLabel label="타입코드" value={jplusRepDivNm} disabled />
+                        <MokaInputLabel label="타입코드" value={temp.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT} disabled />
                     </Col>
                 </Form.Row>
 

@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
-import { errorResponse } from '@store/commons/saga';
+import { errorResponse, createRequestSaga } from '@store/commons/saga';
 import * as api from '@store/issue/issueApi';
 import * as act from '@store/issue/issueAction';
 import * as codeApi from '@store/code/codeApi';
@@ -111,9 +111,15 @@ function* getIssueListModal({ payload }) {
 }
 
 /**
+ * 이슈 컨텐츠 목록 조회 (모달)
+ */
+const getIssueContentsListModal = createRequestSaga(act.GET_ISSUE_CONTENTS_LIST_MODAL, api.getIssueContentsList);
+
+/**
  * saga
  */
 export default function* saga() {
     yield takeLatest(act.GET_ISSUE_LIST, getIssueList);
     yield takeLatest(act.GET_ISSUE_LIST_MODAL, getIssueListModal);
+    yield takeLatest(act.GET_ISSUE_CONTENTS_LIST_MODAL, getIssueContentsListModal);
 }

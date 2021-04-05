@@ -9,6 +9,14 @@ export const getIssueList = ({ search }) => {
     });
 };
 
+// 이슈 컨텐츠 목록 조회
+export const getIssueContentsList = ({ search }) => {
+    const queryString = qs.stringify(search);
+    return instance.get(`/api/issue/${search.pkgSeq}?${queryString}`).catch((err) => {
+        throw err;
+    });
+};
+
 // 이슈 조회
 export const getIssue = ({ pkgSeq }) => {
     return instance.get(`/api/issue/${pkgSeq}`).catch((err) => {

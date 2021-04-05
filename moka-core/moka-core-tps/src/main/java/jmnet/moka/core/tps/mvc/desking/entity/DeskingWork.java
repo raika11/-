@@ -80,6 +80,7 @@ public class DeskingWork implements Serializable {
      * 채널타입(기사A/영상M/패키지I/기자R/칼럼니스트C)
      */
     @Column(name = "CHANNEL_TYPE")
+    @Builder.Default
     private String channelType = ChannelTypeCode.ARTICLE.getCode();
 
     /**

@@ -24,7 +24,7 @@ public interface CodeSimpleRepository extends JpaRepository<CodeSimple, Long>, C
      * @param usedYn 사용여부
      * @return
      */
-    List<CodeSimple> findByGrpCdAndUsedYn(String grpCd, String usedYn);
+    List<CodeSimple> findByGrpCdAndUsedYnOrderByCdOrd(String grpCd, String usedYn);
 
 
 }

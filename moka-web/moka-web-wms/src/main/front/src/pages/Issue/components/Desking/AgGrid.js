@@ -1,4 +1,5 @@
 import React, { useState, forwardRef, useEffect } from 'react';
+import { addDeskingWorkDropzone } from '@utils/deskingUtil';
 import { MokaTable } from '@components';
 import columnDefs from './AgGridColumns';
 
@@ -20,22 +21,22 @@ const AgGrid = forwardRef((props, ref) => {
      */
     const handleRowClicked = (data, params) => {};
 
-    // useEffect(() => {
-    //     // 드롭 타겟 ag-grid에 drop-zone 설정
-    //     if (gridInstance) {
-    //         if (Array.isArray(dropTargetAgGrid)) {
-    //             // 타겟이 리스트인 경우
-    //             dropTargetAgGrid.forEach((targetGrid, agGridIndex) => {
-    //                 addDeskingWorkDropzone(onDragStop, gridInstance, targetGrid, agGridIndex);
-    //             });
-    //         } else {
-    //             // 타겟이 1개인 경우
-    //             addDeskingWorkDropzone(onDragStop, gridInstance, dropTargetAgGrid);
-    //         }
-    //     }
+    useEffect(() => {
+        // 드롭 타겟 ag-grid에 drop-zone 설정
+        if (gridInstance) {
+            if (Array.isArray(dropTargetAgGrid)) {
+                // 타겟이 리스트인 경우
+                dropTargetAgGrid.forEach((targetGrid, agGridIndex) => {
+                    addDeskingWorkDropzone(onDragStop, gridInstance, targetGrid, agGridIndex);
+                });
+            } else {
+                // 타겟이 1개인 경우
+                addDeskingWorkDropzone(onDragStop, gridInstance, dropTargetAgGrid);
+            }
+        }
 
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [dropTargetAgGrid, gridInstance, onDragStop]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dropTargetAgGrid, gridInstance, onDragStop]);
 
     return (
         <React.Fragment>

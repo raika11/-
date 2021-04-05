@@ -38,13 +38,7 @@ const defaultProps = {
  * 페이지편집 > 칼럼니스트 목록
  */
 const ColumnistList = (props) => {
-    const {
-        show,
-        className,
-        // selectedComponent,
-        //  dropTargetAgGrid,
-        //   onDragStop,
-    } = props;
+    const { show, className, dropTargetAgGrid, onDragStop } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_COLUMNIST_LIST_MODAL]);
     const [search, setSearch] = useState(initialState.search);
@@ -132,7 +126,15 @@ const ColumnistList = (props) => {
     return (
         <div className={clsx('d-flex flex-column h-100', className)}>
             <Search search={search} onChangeSearchOption={handleSearchOption} onSearch={handleSearch} onReset={handleReset} />
-            <AgGrid loading={loading} search={search} list={rowData} total={total} onChangeSearchOption={changeTableSearchOption} />
+            <AgGrid
+                loading={loading}
+                search={search}
+                list={rowData}
+                total={total}
+                onChangeSearchOption={changeTableSearchOption}
+                dropTargetAgGrid={dropTargetAgGrid}
+                onDragStop={onDragStop}
+            />
         </div>
     );
 };

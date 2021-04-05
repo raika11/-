@@ -37,14 +37,8 @@ const defaultProps = {
 /**
  * 페이지편집 > 기자 목록
  */
-const ReporterList = (props, ref) => {
-    const {
-        show,
-        className,
-        // selectedComponent,
-        //  dropTargetAgGrid,
-        //   onDragStop,
-    } = props;
+const ReporterList = (props) => {
+    const { show, className, dropTargetAgGrid, onDragStop } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_REPORTER_LIST_MODAL]);
     const [search, setSearch] = useState(initialState.search);
@@ -129,7 +123,15 @@ const ReporterList = (props, ref) => {
     return (
         <div className={clsx('d-flex flex-column h-100', className)}>
             <Search search={search} onChangeSearchOption={handleSearchOption} onSearch={handleSearch} />
-            <AgGrid loading={loading} search={search} list={rowData} total={total} onChangeSearchOption={changeTableSearchOption} />
+            <AgGrid
+                loading={loading}
+                search={search}
+                list={rowData}
+                total={total}
+                onChangeSearchOption={changeTableSearchOption}
+                dropTargetAgGrid={dropTargetAgGrid}
+                onDragStop={onDragStop}
+            />
         </div>
     );
 };

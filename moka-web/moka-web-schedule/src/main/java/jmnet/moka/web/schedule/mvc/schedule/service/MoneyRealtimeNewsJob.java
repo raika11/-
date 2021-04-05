@@ -46,8 +46,6 @@ public class MoneyRealtimeNewsJob extends AbstractScheduleJob {
         try {
             MoneyRealtimeNewsJobDTO dto = new MoneyRealtimeNewsJobDTO();
             List<MoneyRealtimeNewsVO> list = moneyRealtimeNewsJobMapper.findAll(dto);
-            log.debug("list : {}", list.size());
-
 
             StringBuffer stringBuffer = new StringBuffer();
             stringBuffer.append("[");
@@ -95,13 +93,13 @@ public class MoneyRealtimeNewsJob extends AbstractScheduleJob {
                 Date now = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
                 Date articleDate = sdf.parse(vo.getServiceDaytime());
-                log.debug("sServiceDate : {} : {}", now, articleDate);
+                //log.debug("sServiceDate : {} : {}", now, articleDate);
                 long diff = now.getTime() - articleDate.getTime();
                 long diffSeconds = diff / 1000;
                 long diffMinutes = diff / (60 * 1000);
                 long diffHours = diff / (60 * 60 * 1000);
                 long diffDays = diff / (60 * 60 * 1000 * 24);
-                log.debug("sServiceDate diff : {} : {} : {} : {} : {}", diff, diffSeconds, diffMinutes, diffHours, diffDays);
+                //log.debug("sServiceDate diff : {} : {} : {} : {} : {}", diff, diffSeconds, diffMinutes, diffHours, diffDays);
                 if (diffSeconds < 60) {
                     sServiceDate = "방금 전";
                 } else if (diffMinutes < 60) {

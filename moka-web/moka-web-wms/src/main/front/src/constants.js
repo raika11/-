@@ -230,3 +230,13 @@ export const SCHEDULE_STATUS = [
     { status: '4', statusNm: '실행 결과 실패' },
     { status: '9', statusNm: '진행 중' },
 ];
+
+// 데스킹 기사의 채널 타입
+export const CHANNEL_TYPE = {
+    A: { code: 'A', name: '기사' },
+    D: { code: 'D', name: '더미기사' },
+    M: { code: 'M', name: '영상' },
+    I: { code: 'I', name: '패키지' },
+    R: { code: 'R', name: '기자' },
+    C: { code: 'C', name: '칼럼니스트' },
+};

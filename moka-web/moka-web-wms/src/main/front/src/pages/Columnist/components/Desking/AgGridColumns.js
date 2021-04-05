@@ -15,6 +15,12 @@ export default [
         cellStyle: { lineHeight: '43px', whiteSpace: 'pre-wrap' },
     },
     {
+        headerName: '타입코드',
+        field: 'jplusRepDiv',
+        width: 63,
+        cellStyle: { lineHeight: '43px' },
+    },
+    {
         headerName: '사진',
         field: 'profilePhoto',
         width: 50,
@@ -41,12 +47,6 @@ export default [
         width: 300,
         flex: 1,
         tooltipField: 'profile',
-        cellStyle: { lineHeight: '43px' },
-    },
-    {
-        headerName: '내/외부 필진',
-        field: 'inoutText',
-        width: 85,
         cellStyle: { lineHeight: '43px' },
     },
     {

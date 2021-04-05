@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 import { MokaTable } from '@components';
 import columnDefs from './AgGridColumns';
 
@@ -19,7 +20,7 @@ const AgGrid = (props) => {
             list.map((l) => ({
                 ...l,
                 repSeqText: l.repSeq || '   -',
-                inoutText: l.inout === 'O' ? '외부 필진' : '내부 필진',
+                jplusRepDiv: (l.jplusRepDiv || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
             })),
         );
     }, [list]);

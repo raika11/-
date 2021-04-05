@@ -39,8 +39,11 @@ const ColumnistSearch = ({ match }) => {
      */
     const handleSearch = useCallback(
         ({ key, value }) => {
-            let temp = { ...search, [key]: value };
-            if (key !== 'page') temp['page'] = 0;
+            let temp = { ...search };
+            if (key) {
+                let temp = { ...search, [key]: value };
+                if (key !== 'page') temp['page'] = 0;
+            }
 
             dispatch(changeSearchOption(temp));
             dispatch(getColumnistList({ search: temp }));
@@ -93,7 +96,7 @@ const ColumnistSearch = ({ match }) => {
                     placeholder={'칼럼니스트 이름 검색'}
                     value={search.keyword}
                     onChange={handleChangeValue}
-                    onSearch={handleSearch}
+                    onSearch={() => handleSearch({})}
                     className="flex-fill mr-1"
                 />
 

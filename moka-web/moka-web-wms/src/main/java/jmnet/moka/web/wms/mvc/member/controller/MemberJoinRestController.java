@@ -100,16 +100,6 @@ public class MemberJoinRestController extends AbstractCommonController {
     @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String groupWareUserId)
             throws MokaException, NoDataException, InvalidDataException {
 
-        String message = msg("tps.common.error.no-data");
-        MemberInfo member = memberService
-                .findMemberById(groupWareUserId)
-                .orElseThrow(() -> new NoDataException(message));
-        if (!McpString.isEmpty(member.getMemberId())) {
-            if (MemberStatusCode.D == member.getStatus()) {
-                throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
-            }
-        }
-
         try {
             GroupWareUserInfo groupWareUserInfo = groupWareAuthClient.getUserInfo(groupWareUserId);
             groupWareUserInfo.setUserId(groupWareUserId);
@@ -130,6 +120,15 @@ public class MemberJoinRestController extends AbstractCommonController {
             result.put("groupWareUser", groupWareUserInfo);
 
             ResultMapDTO resultDTO = new ResultMapDTO(result);
+
+            MemberInfo member = memberService
+                    .findMemberById(groupWareUserId)
+                    .orElseThrow();
+            if (!McpString.isEmpty(member.getMemberId())) {
+                if (MemberStatusCode.D == member.getStatus()) {
+                    throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
+                }
+            }
 
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 

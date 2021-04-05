@@ -10,7 +10,7 @@ import DeskingEditorRenderer from './DeskingEditorRenderer';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { putDeskingWorkListSort } from '@store/desking';
-import { getRow, getRowIndex, classElementsFromPoint, autoScroll } from '@utils/agGridUtil';
+import { getRow, getRowIndex, classElementsFromPoint, autoScroll, getDisplayedRows } from '@utils/agGridUtil';
 import { findWork, makeHoverBox, getMoveMode, clearHoverStyle, clearNextStyle, clearWorkStyle, findNextMainRow, addNextRowStyle } from '@utils/deskingUtil';
 
 let hoverBox = makeHoverBox();
@@ -38,7 +38,7 @@ const DeskingWorkAgGrid = (props) => {
      */
     const handleCellClicked = useCallback(
         (params) => {
-            if (params.colDef.field === 'title' || params.colDef.field === 'relTitle') return;
+            if (params.colDef.field === 'relOrdEx' || params.colDef.field === 'contentOrdEx' || params.colDef.field === 'title' || params.colDef.field === 'relTitle') return;
             onRowClicked(params.node.data, params);
         },
         [onRowClicked],
@@ -118,7 +118,7 @@ const DeskingWorkAgGrid = (props) => {
     }, []);
 
     /**
-     * 패밀리내에서 관련기사간 이동
+     * 관련기사 간 이동
      * @param {object} draggingNode 이동하는 기사
      * @param {array} displayedRows 기사목록
      * @param {object} overNode target기사
@@ -152,13 +152,9 @@ const DeskingWorkAgGrid = (props) => {
         });
 
         // 순번 1부터 지정
-        relOrd = 1;
-        result.forEach((node) => {
-            if (node.rel) {
-                if (node.parentContentId === draggingNode.data.parentContentId) {
-                    node.relOrd = relOrd;
-                    relOrd++;
-                }
+        result.forEach((node, idx) => {
+            if (node.rel && node.parentContentId === draggingNode.data.parentContentId) {
+                node.relOrd = idx + 1;
             }
         });
 
@@ -166,7 +162,7 @@ const DeskingWorkAgGrid = (props) => {
     }, []);
 
     /**
-     * 패밀리내에서 관련기사를 주기사로 이동
+     * 관련기사와 주기사 변경
      * @param {object} draggingNode 이동하는 기사
      * @param {array} displayedRows 기사목록
      * @param {object} overNode target기사
@@ -222,11 +218,8 @@ const DeskingWorkAgGrid = (props) => {
     const appendRows = useCallback(
         (api, type, draggingNode, overNode) => {
             // display 기준으로 새로운 rows생성
-            let displayedRows = [],
-                result = [];
-            for (let i = 0; i < api.getDisplayedRowCount(); i++) {
-                displayedRows.push(api.getDisplayedRowAtIndex(i).data);
-            }
+            let result = [];
+            let displayedRows = getDisplayedRows(api);
 
             if (type === 'mainToMain') {
                 result = mainToMain(api, displayedRows, overNode);
@@ -458,11 +451,7 @@ const DeskingWorkAgGrid = (props) => {
                 onDragStop: (source) => {
                     if (!source.node.data.rel && source.node.childIndex > 0) {
                         // 주기사이고 첫번째 기사 아닌 것만 이동
-                        let displayedRows = [];
-
-                        for (let i = 0; i < params.api.getDisplayedRowCount(); i++) {
-                            displayedRows.push(params.api.getDisplayedRowAtIndex(i).data);
-                        }
+                        let displayedRows = getDisplayedRows(params.api);
 
                         // 첫번째로 데이터 추가
                         const result = mainToMain(source.api, displayedRows, null);

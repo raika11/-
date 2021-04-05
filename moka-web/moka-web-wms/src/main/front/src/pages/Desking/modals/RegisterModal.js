@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { MokaModal, MokaLoader } from '@components';
-import { GET_COMPONENT_WORK_LIST, postDeskingWorkListMove } from '@store/desking';
+import { GET_COMPONENT_WORK_LIST, POST_DESKING_WORK_LIST_MOVE, postDeskingWorkListMove } from '@store/desking';
 import { getAllRowData } from '@utils/agGridUtil';
 import { messageBox } from '@utils/toastUtil';
 
@@ -12,7 +12,7 @@ import { messageBox } from '@utils/toastUtil';
 const RegisterModal = (props) => {
     const { show, onHide, component, agGridIndex, componentAgGridInstances } = props;
     const dispatch = useDispatch();
-    const loading = useSelector(({ loading }) => loading[GET_COMPONENT_WORK_LIST]);
+    const loading = useSelector(({ loading }) => loading[GET_COMPONENT_WORK_LIST] || loading[POST_DESKING_WORK_LIST_MOVE]);
     const list = useSelector(({ desking }) => desking.list);
     const [filterList, setFilterList] = useState([]);
 
@@ -95,7 +95,7 @@ const RegisterModal = (props) => {
 
     return (
         <MokaModal title="기사 이동" show={show} onHide={onHide} size="sm" width={300} height={441} centered draggable>
-            {loading && <MokaLoader />}
+            {show && loading && <MokaLoader />}
             <ListGroup variant="flush" className="border custom-scroll" style={{ maxHeight: '100%' }}>
                 {filterList.length < 1 && (
                     <div className="d-flex align-items-center justify-content-center h-100 v-100 p-2">

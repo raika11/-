@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 import { MokaTable } from '@components';
 import columnDefs from './ColumnistAgGridColumns';
 import { getJplusRep } from '@store/codeMgt';

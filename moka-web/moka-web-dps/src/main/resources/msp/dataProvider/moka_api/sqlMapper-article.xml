@@ -189,7 +189,7 @@
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{remoteIP, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 
@@ -198,7 +198,7 @@
     { call UPU_ARTICLE_SCRAP_UPD(
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{remoteIP, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 
@@ -208,6 +208,14 @@
       #{tea, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{year, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
+  </select>
+  <!-- 기사존재여부 -->
+  <select id="isArticle" parameterType="map" resultType="map"
+    statementType="CALLABLE">
+    {call UPU_ARTICLE_BASIC_ISEXIST(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{_EXIST, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
   </select>
 
 

@@ -20,7 +20,7 @@ const AgGrid = (props) => {
             list.map((l) => ({
                 ...l,
                 repSeqText: l.repSeq || '   -',
-                jplusRepDiv: (l.jplusRepDiv || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
+                jplusRepDiv: l.repSeq ? (l.jplusRepDiv || JPLUS_REP_DIV_DEFAULT).slice(0, 2) : '   -',
             })),
         );
     }, [list]);

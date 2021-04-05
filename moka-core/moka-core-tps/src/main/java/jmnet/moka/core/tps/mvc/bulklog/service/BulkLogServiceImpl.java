@@ -1,18 +1,16 @@
 package jmnet.moka.core.tps.mvc.bulklog.service;
 
+import java.util.List;
 import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogSearchDTO;
 import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogTotalDTO;
 import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogTotalIdDTO;
 import jmnet.moka.core.tps.mvc.bulklog.mapper.BulkLogMapper;
-import jmnet.moka.core.tps.mvc.bulklog.repository.BulkLogRepository;
-import jmnet.moka.core.tps.mvc.bulklog.vo.BulkTotalLogVO;
 import jmnet.moka.core.tps.mvc.bulklog.vo.BulkLogVO;
+import jmnet.moka.core.tps.mvc.bulklog.vo.BulkTotalLogVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * <pre>
@@ -30,9 +28,6 @@ import java.util.List;
 public class BulkLogServiceImpl implements BulkLogService {
 
     @Autowired
-    private BulkLogRepository bulkLogRepository;
-
-    @Autowired
     private BulkLogMapper bulkLogMapper;
 
     @Override
@@ -45,13 +40,17 @@ public class BulkLogServiceImpl implements BulkLogService {
         String chkSorceCode = searchDTO.getOrgSourceCode();
         String chkPortalDiv = searchDTO.getPortalDiv();
 
-        if (chkPortalDiv == null || searchDTO.getPortalDiv().isEmpty()) {
+        if (chkPortalDiv == null || searchDTO
+                .getPortalDiv()
+                .isEmpty()) {
             searchDTO.setPortalDiv(" ");
         }
-        if (chkSorceCode == null || searchDTO.getOrgSourceCode().isEmpty()) {
+        if (chkSorceCode == null || searchDTO
+                .getOrgSourceCode()
+                .isEmpty()) {
             searchDTO.setOrgSourceCode("");
-        }else{
-            if(chkSorceCode.equals("all")){
+        } else {
+            if (chkSorceCode.equals("all")) {
                 searchDTO.setOrgSourceCode("");
             }
         }

@@ -7,7 +7,7 @@ export default [
     },
     {
         headerName: '타입코드',
-        field: 'jplusRelDivNm',
+        field: 'jplusRepDivNm',
         width: 63,
         cellStyle: { lineHeight: '43px', whiteSpace: 'pre-wrap' },
     },

@@ -75,7 +75,7 @@ const ColumnistEdit = ({ match }) => {
                 email2: tmpEmail[1],
                 position: reporter.jplusJobInfo,
                 jplusRepDiv: reporter.jplusRepDiv,
-                jplusRepDivNm: reporter.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT,
+                jplusRepDivNm: reporter.jplusRepDivNm || '',
                 profile: '',
                 selectImg: '',
                 profilePhoto: reporter.repImg,

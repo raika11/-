@@ -46,12 +46,12 @@ const ColumnistAgGrid = ({ match }) => {
         if (jplusRepRows) {
             setRowData(
                 list.map((data) => {
-                    let jplusRelDiv = jplusRepRows.find((code) => code.dtlCd === data.jplusRelDiv);
-                    const jplusRelDivNm = data.repSeq ? (jplusRelDiv?.cdNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2) : '';
+                    let jplusRepDiv = jplusRepRows.find((code) => code.dtlCd === data.jplusRepDiv);
+                    const jplusRepDivNm = jplusRepDiv?.cdNm.slice(0, 2);
 
                     return {
                         ...data,
-                        jplusRelDivNm: jplusRelDivNm || '   -',
+                        jplusRepDivNm: jplusRepDivNm || '  -',
                         repSeqText: data.repSeq || '   -',
                         regMember: `${data.regMember.memberNm}(${data.regMember.memberId})`,
                         regDt: (data.regDt || '').slice(0, -3),
@@ -60,6 +60,8 @@ const ColumnistAgGrid = ({ match }) => {
             );
         }
     }, [list, jplusRepRows]);
+
+    console.log(rowData);
 
     return (
         <React.Fragment>

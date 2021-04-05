@@ -35,7 +35,6 @@ export default [
                         boxSizing: 'border-box',
                         whiteSpace: 'normal',
                         lineHeight: '20px',
-                        fontSize: '14px',
                         display: '-webkit-box',
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: 'vertical',

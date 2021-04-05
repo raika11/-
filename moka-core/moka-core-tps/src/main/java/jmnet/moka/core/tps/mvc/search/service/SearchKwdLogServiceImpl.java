@@ -3,7 +3,6 @@ package jmnet.moka.core.tps.mvc.search.service;
 import java.util.List;
 import jmnet.moka.core.tps.mvc.search.dto.SearchKwdLogSearchDTO;
 import jmnet.moka.core.tps.mvc.search.mapper.SearchKwdLogMapper;
-import jmnet.moka.core.tps.mvc.search.repository.SearchKwdLogRepository;
 import jmnet.moka.core.tps.mvc.search.vo.SearchKwdLogVO;
 import jmnet.moka.core.tps.mvc.search.vo.SearchKwdTotalLogVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SearchKwdLogServiceImpl implements SearchKwdLogService {
-
-    @Autowired
-    private SearchKwdLogRepository searchKwdLogRepository;
 
     @Autowired
     private SearchKwdLogMapper searchKwdLogMapper;

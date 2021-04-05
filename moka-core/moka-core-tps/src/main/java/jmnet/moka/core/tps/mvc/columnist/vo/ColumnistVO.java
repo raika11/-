@@ -63,7 +63,7 @@ public class ColumnistVO implements Serializable {
      * 칼럼니스트이름
      */
     @Column(name = "COLUMNIST_NM")
-    private String jplusRcolumnistNm;
+    private String columnistNm;
 
     /**
      * 등록자
@@ -120,5 +120,5 @@ public class ColumnistVO implements Serializable {
      */
     @Column(name = "PROFILE")
     private String profile;
-    
+
 }

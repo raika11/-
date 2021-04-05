@@ -33,7 +33,7 @@ const propTypes = {
 const defaultProps = {
     show: false,
 };
-const defaultPeriod = [0, 'days'];
+const defaultPeriod = [''];
 
 /**
  * 홈 섹션편집 > 패키지 목록
@@ -42,6 +42,7 @@ const IssueList = (props) => {
     const { className, dropTargetAgGrid, onDragStop, show } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_ISSUE_LIST_MODAL]);
+    const serviceCodeList = useSelector(({ code }) => code.service.list);
     const pkgDiv = useSelector(({ app }) => app.PACKAGE_DIV); // packageDiv 종류 (서버에서 내려줌)
     const [period, setPeriod] = useState(defaultPeriod);
     const [search, setSearch] = useState(initialState.search);
@@ -88,11 +89,16 @@ const IssueList = (props) => {
         ({ key, value, number, date }) => {
             if (key === 'period') {
                 // 기간 설정
-                setPeriod([Number(number), date]);
-                const nd = new Date();
-                const startDt = moment(nd).subtract(Number(number), date).startOf('day');
-                const endDt = moment(nd).endOf('day');
-                setSearch({ ...search, startDt, endDt });
+                if (!value) {
+                    setPeriod(defaultPeriod);
+                    setSearch({ ...search, startDt: null, endDt: null });
+                } else {
+                    setPeriod([Number(number), date]);
+                    const nd = new Date();
+                    const startDt = moment(nd).subtract(Number(number), date).startOf('day');
+                    const endDt = moment(nd).endOf('day');
+                    setSearch({ ...search, startDt, endDt });
+                }
             } else {
                 setSearch({ ...search, [key]: value });
             }
@@ -116,15 +122,14 @@ const IssueList = (props) => {
      * 검색조건 초기화
      */
     const handleReset = useCallback(() => {
-        const nd = new Date();
         setPeriod(defaultPeriod);
         setSearch({
             ...initialState.search,
+            category: (serviceCodeList || []).map((s) => s.masterCode).join(','),
             page: search.page,
-            startDt: moment(nd).subtract(defaultPeriod[0], defaultPeriod[1]).startOf('day'),
-            endDt: moment(nd).endOf('day'),
+            endDt: null,
         });
-    }, [search.page]);
+    }, [search.page, serviceCodeList]);
 
     /**
      * validate
@@ -148,12 +153,8 @@ const IssueList = (props) => {
         if (show) {
             // 패키지 목록 로딩 (최초)
             if (cntRef.current === 0) {
-                const nd = new Date();
                 getIssueList({
-                    search: {
-                        startDt: moment(nd).subtract(defaultPeriod[0], defaultPeriod[1]).startOf('day'),
-                        endDt: moment(nd).endOf('day'),
-                    },
+                    search: {},
                     getServiceCodeList: true,
                 });
                 cntRef.current += 1;
@@ -204,7 +205,6 @@ const IssueList = (props) => {
                 loading={loading}
                 dropTargetAgGrid={dropTargetAgGrid}
                 onDragStop={onDragStop}
-                // onSearch={handleSearch}
                 onChangeSearchOption={changeTableSearchOption}
             />
         </div>

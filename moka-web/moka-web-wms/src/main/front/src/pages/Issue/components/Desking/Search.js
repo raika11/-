@@ -23,7 +23,7 @@ const Search = (props) => {
      */
     const handleChangePeriod = (e) => {
         const { number, date } = e.target.selectedOptions[0].dataset;
-        onChangeSearchOption({ key: 'period', number, date });
+        onChangeSearchOption({ key: 'period', number, date, value: e.target.value });
     };
 
     /**
@@ -64,6 +64,7 @@ const Search = (props) => {
                 {/* 검색기간 */}
                 <div style={{ width: 78 }} className="flex-shrink-0 mr-2">
                     <MokaInput as="select" name="period" onChange={handleChangePeriod} value={period.join('')}>
+                        <option value="">선택</option>
                         <option value="1days" data-number="1" data-date="days">
                             1일
                         </option>

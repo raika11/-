@@ -158,7 +158,7 @@ const putComponentWorkTemplate = createDeskingRequestSaga(act.PUT_COMPONENT_WORK
  * @param {object} etc 그 외 데이터
  */
 const makeRowNode = (data, contentOrd, component, etc) => {
-    const cid = data.totalId || data.contentId || data.repSeq;
+    const cid = data.totalId || data.contentId || data.repSeq || data.seqNo || data.pkgSeq;
 
     // 데이터가 없거나 기사키가 올바르지 않음 => 에러
     if (!data || cid === null) return DRAG_STOP_RESULT.incorrectRow;
@@ -168,8 +168,8 @@ const makeRowNode = (data, contentOrd, component, etc) => {
     if (existRow && existRow.length > 0) return DRAG_STOP_RESULT.existRow;
 
     let appendData = null;
-    if (data.isDesking) {
-        // 데스킹 데이터 -> 편집 컴포넌트
+    if (data.isDesking || data.channelType === CHANNEL_TYPE.D.code) {
+        // 데스킹 데이터, 더미 데이터 -> 편집 컴포넌트
         appendData = {
             ...data,
             regDt: undefined,
@@ -238,12 +238,94 @@ const makeRowNode = (data, contentOrd, component, etc) => {
         };
     } else if (data.channelType === CHANNEL_TYPE.R.code) {
         // 기자 데이터 -> 편집 컴포넌트
+        appendData = {
+            contentId: String(data.repSeq),
+            /**
+             * 데스킹 워크 정보
+             */
+            seq: null,
+            componentWorkSeq: component.seq,
+            channelType: data.channelType,
+            deskingSeq: null,
+            datasetSeq: component.datasetSeq,
+            parentContentId: null, // 주기사일 경우 null, 관련기사일경우 주기사 키 지정.
+            contentOrd,
+            relOrd: 1,
+            lang: DEFAULT_LANG,
+            distDt: null,
+            title: data.repName,
+            subTitle: '',
+            nameplate: null,
+            titlePrefix: null,
+            bodyHead: '',
+            linkUrl: '',
+            linkTarget: '_self',
+            boxUrl: null,
+            boxTarget: '_self',
+            thumbFileName: data.repImg,
+            rel: false,
+            relSeqs: null,
+        };
     } else if (data.channelType === CHANNEL_TYPE.C.code) {
         // 칼럼니스트 데이터 -> 편집 컴포넌트
-    } else if (data.channelType === CHANNEL_TYPE.D.code) {
-        // 더미 데이터 -> 편집 컴포넌트
+        appendData = {
+            contentId: String(data.seqNo),
+            /**
+             * 데스킹 워크 정보
+             */
+            seq: null,
+            componentWorkSeq: component.seq,
+            channelType: data.channelType,
+            deskingSeq: null,
+            datasetSeq: component.datasetSeq,
+            parentContentId: null, // 주기사일 경우 null, 관련기사일경우 주기사 키 지정.
+            contentOrd,
+            relOrd: 1,
+            lang: DEFAULT_LANG,
+            distDt: null,
+            title: data.columnistNm,
+            subTitle: '',
+            nameplate: null,
+            titlePrefix: null,
+            bodyHead: '',
+            linkUrl: '',
+            linkTarget: '_self',
+            boxUrl: null,
+            boxTarget: '_self',
+            thumbFileName: data.profilePhoto,
+            rel: false,
+            relSeqs: null,
+        };
     } else if (data.channelType === CHANNEL_TYPE.I.code) {
         // 패키지 데이터 -> 편집 컴포넌트
+        appendData = {
+            contentId: String(data.pkgSeq),
+            /**
+             * 데스킹 워크 정보
+             */
+            seq: null,
+            componentWorkSeq: component.seq,
+            channelType: data.channelType,
+            deskingSeq: null,
+            datasetSeq: component.datasetSeq,
+            parentContentId: null, // 주기사일 경우 null, 관련기사일경우 주기사 키 지정.
+            contentOrd,
+            relOrd: 1,
+            lang: DEFAULT_LANG,
+            distDt: null,
+            title: data.pkgTitle,
+            subTitle: '',
+            nameplate: null,
+            titlePrefix: null,
+            bodyHead: '',
+            linkUrl: '',
+            linkTarget: '_self',
+            boxUrl: null,
+            boxTarget: '_self',
+            thumbFileName: null,
+            rel: false,
+            relSeqs: null,
+        };
     }
 
     return { success: true, appendData };

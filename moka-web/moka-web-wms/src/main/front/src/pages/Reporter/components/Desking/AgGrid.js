@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 import { MokaTable } from '@components';
 import columnDefs from './AgGridColumns';
 
@@ -7,17 +8,27 @@ import columnDefs from './AgGridColumns';
  */
 const AgGrid = (props) => {
     const { search, list, total, loading, onChangeSearchOption } = props;
+    const [rowData, setRowData] = useState([]);
 
     /**
      * 목록에서 Row클릭
      */
     const handleRowClicked = useCallback((list) => {}, []);
 
+    useEffect(() => {
+        setRowData(
+            list.map((l) => ({
+                ...l,
+                jplusRepDivNm: (l.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
+            })),
+        );
+    }, [list]);
+
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
-            rowData={list}
+            rowData={rowData}
             rowHeight={45}
             onRowNodeId={(reporter) => reporter.repSeq}
             onRowClicked={handleRowClicked}

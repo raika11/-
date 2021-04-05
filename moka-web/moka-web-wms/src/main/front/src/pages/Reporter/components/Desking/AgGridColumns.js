@@ -18,6 +18,12 @@ export default [
         cellStyle: { lineHeight: '43px' },
     },
     {
+        headerName: '타입코드',
+        field: 'jplusRepDivNm',
+        width: 63,
+        cellStyle: { lineHeight: '43px' },
+    },
+    {
         headerName: '사진',
         field: 'repImg',
         width: 50,

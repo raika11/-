@@ -62,7 +62,7 @@ const WorkSearch = ({ show, match }) => {
     useEffect(() => {
         if (show) {
             dispatch(getJobList(getGenCate(), getDistributeServerCode(), getJobCode()));
-        } else {
+        } else if (!show) {
             setSearch(initialState.work.search);
         }
     }, [dispatch, show]);

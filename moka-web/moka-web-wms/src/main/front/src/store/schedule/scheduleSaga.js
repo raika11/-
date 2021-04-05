@@ -230,6 +230,11 @@ function* getHistoryJob({ payload: seqNo }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * jobCd 중복 체크
+ */
+const getJobCdCheck = createRequestSaga(act.GET_JOB_CD_CHECK, api.getJobCdCheck);
+
 export default function* scheduleSaga() {
     yield takeLatest(act.GET_JOB_STATISTIC_LIST, getJobStatistic);
     yield takeLatest(act.GET_JOB_STATISTIC_SEARCH_LIST, getJobStatisticSearch);
@@ -248,4 +253,5 @@ export default function* scheduleSaga() {
     yield takeLatest(act.GET_JOB_CODE, getJobCode);
     yield takeLatest(act.GET_JOB_HISTORY_LIST, getJobHistoryList);
     yield takeLatest(act.GET_HISTORY_JOB, getHistoryJob);
+    yield takeLatest(act.GET_JOB_CD_CHECK, getJobCdCheck);
 }

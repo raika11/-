@@ -58,6 +58,8 @@ export const [GET_JOB_HISTORY_LIST, GET_JOB_HISTORY_LIST_SUCCESS, GET_JOB_HISTOR
 export const getJobHistoryList = createAction(GET_JOB_HISTORY_LIST, (...actions) => actions);
 export const [GET_HISTORY_JOB, GET_HISTORY_JOB_SUCCESS] = createRequestActionTypes('schedule/GET_HISTORY_JOB');
 export const getHistoryJob = createAction(GET_HISTORY_JOB, (seqNo) => seqNo);
+export const GET_JOB_CD_CHECK = 'schedule/GET_JOB_CD_CHECK';
+export const getJobCdCheck = createAction(GET_JOB_CD_CHECK, ({ jobCd, callback }) => ({ jobCd, callback }));
 
 /**
  * 저장, 등록, 수정 액션

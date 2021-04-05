@@ -5,9 +5,17 @@ import TitleRenderer from './components/TitleRenderer';
 
 export default [
     {
-        headerName: '        매체/분류',
+        headerName: '',
+        field: 'bulkflag',
+        width: 22,
+        maxWidth: 22,
+        cellRenderer: 'usedYnRenderer',
+        cellStyle: { paddingRight: 0 },
+    },
+    {
+        headerName: '매체/분류',
         field: 'source',
-        width: 150,
+        width: 123,
         wrapText: true,
         autoHeight: true,
         cellStyle: { lineHeight: '18px', display: 'flex', alignItems: 'center' },

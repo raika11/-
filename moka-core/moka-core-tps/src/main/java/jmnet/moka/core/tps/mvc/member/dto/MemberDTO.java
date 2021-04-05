@@ -168,4 +168,11 @@ public class MemberDTO {
     @ApiModelProperty(hidden = true)
     @DTODateTimeFormat
     private Date regDt;
+
+    /**
+     * 비밀번호 수정일시
+     */
+    @ApiModelProperty("비밀번호 수정일시")
+    @DTODateTimeFormat
+    private Date passwordModDt;
 }

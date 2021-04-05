@@ -12,6 +12,7 @@ export default [
         headerName: 'ID',
         width: 55,
         field: 'pkgSeq',
+        cellClass: 'user-select-text',
     },
     {
         headerName: '카테고리',

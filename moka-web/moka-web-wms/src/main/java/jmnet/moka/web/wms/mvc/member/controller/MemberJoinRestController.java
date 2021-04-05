@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiParam;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import jmnet.moka.common.utils.MapBuilder;
@@ -120,15 +122,6 @@ public class MemberJoinRestController extends AbstractCommonController {
             result.put("groupWareUser", groupWareUserInfo);
 
             ResultMapDTO resultDTO = new ResultMapDTO(result);
-
-            MemberInfo member = memberService
-                    .findMemberById(groupWareUserId)
-                    .orElseThrow();
-            if (!McpString.isEmpty(member.getMemberId())) {
-                if (MemberStatusCode.D == member.getStatus()) {
-                    throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
-                }
-            }
 
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
@@ -258,6 +251,21 @@ public class MemberJoinRestController extends AbstractCommonController {
     public ResponseEntity<?> putSmsRequest(
             @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws Exception {
+        try {
+            Optional<MemberInfo> member = memberService.findById(memberId);
+
+            if (!McpString.isEmpty(member)) {
+                if (MemberStatusCode.D == member
+                        .get()
+                        .getStatus()) {
+                    throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
+                }
+            }
+        } catch (NoSuchElementException e) {
+            System.out.println("No such element");
+        }
+
+
 
         //        String noDataMsg = msg("tps.common.error.no-data");
         //

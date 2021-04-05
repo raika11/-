@@ -133,3 +133,10 @@ export const getHistoryJob = (seqNo) => {
         throw err;
     });
 };
+
+// JobCd 중복 확인
+export const getJobCdCheck = ({ jobCd }) => {
+    return instance.get(`/api/schedule-server/job-check-jobcd/${jobCd}`).catch((err) => {
+        throw err;
+    });
+};

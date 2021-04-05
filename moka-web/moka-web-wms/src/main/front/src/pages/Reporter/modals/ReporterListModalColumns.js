@@ -1,3 +1,6 @@
+import React from 'react';
+import ReporterPageButton from '../components/ReporterPageButton';
+
 export default [
     {
         headerName: '',
@@ -8,14 +11,13 @@ export default [
     {
         headerName: '번호',
         field: 'repSeq',
-        width: 60,
+        width: 52,
         cellStyle: { lineHeight: '43px' },
     },
     {
-        headerName: '아이디',
-        field: 'joinsId',
-        width: 100,
-        tooltipField: 'joinsId',
+        headerName: '타입코드',
+        field: 'jplusRepDivNm',
+        width: 63,
         cellStyle: { lineHeight: '43px' },
     },
     {
@@ -32,17 +34,10 @@ export default [
         cellStyle: { lineHeight: '43px' },
     },
     {
-        headerName: '소속',
-        field: 'belong',
-        width: 200,
-        tooltipField: 'belong',
-        cellStyle: { lineHeight: '43px' },
-    },
-    {
-        headerName: '직책',
-        field: 'repTitle',
+        headerName: '아이디',
+        field: 'joinsId',
         width: 100,
-        tooltipField: 'repTitle',
+        tooltipField: 'joinsId',
         cellStyle: { lineHeight: '43px' },
     },
     {
@@ -52,5 +47,17 @@ export default [
         flex: 1,
         tooltipField: 'repEmail1',
         cellStyle: { lineHeight: '43px' },
+    },
+    {
+        headerName: '노출여부',
+        field: 'usedYn',
+        width: 64,
+        cellRenderer: 'usedYnRenderer',
+    },
+    {
+        headerName: '',
+        field: 'reporterPage',
+        width: 95,
+        cellRendererFramework: (row) => <ReporterPageButton {...row} />,
     },
 ];

@@ -37,6 +37,11 @@ export const initialState = {
         usedYn: null, // 노출 여부
         keyword: '',
     },
+    contentsSearch: {
+        page: 0,
+        size: PAGESIZE_OPTIONS[0],
+        pkgSeq: null,
+    },
     // 구독 검색조건
     scbYnSearchTypeList: [
         { id: 'all', name: '구독 전체' },

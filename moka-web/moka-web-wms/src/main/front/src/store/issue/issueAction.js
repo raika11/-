@@ -25,6 +25,13 @@ export const GET_ISSUE_LIST_MODAL = 'issue/GET_ISSUE_LIST_MODAL';
 export const getIssueListModal = createAction(GET_ISSUE_LIST_MODAL, ({ search, callback, getServiceCodeList }) => ({ search, callback, getServiceCodeList }));
 
 /**
+ * 이슈의 컨텐츠 목록 조회 (Modal)
+ * 이슈의 최신 기사 (자동 기사)
+ */
+export const GET_ISSUE_CONTENTS_LIST_MODAL = 'issue/GET_ISSUE_CONTENTS_LIST_MODAL';
+export const getIssueContentsListModal = createAction(GET_ISSUE_CONTENTS_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+
+/**
  * 이슈 조회
  */
 export const [GET_ISSUE, GET_ISSUE_SUCCESS, GET_ISSUE_FAILURE] = createRequestActionTypes('issue/GET_ISSUE');

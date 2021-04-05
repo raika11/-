@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import ReporterListModal from '@pages/Reporter/modals/ReporterListModal';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -75,7 +74,7 @@ const ColumnistEdit = ({ match }) => {
                 email2: tmpEmail[1],
                 position: reporter.jplusJobInfo,
                 jplusRepDiv: reporter.jplusRepDiv,
-                jplusRepDivNm: reporter.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT,
+                jplusRepDivNm: reporter.jplusRepDivNm || '',
                 profile: '',
                 selectImg: '',
                 profilePhoto: reporter.repImg,

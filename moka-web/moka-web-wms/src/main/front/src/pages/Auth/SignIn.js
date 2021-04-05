@@ -51,7 +51,18 @@ const SignIn = () => {
                             /**
                              * 비밀번호 기간 만료 오류
                              */
-                            messageBox.alert(data.header.message);
+                            messageBox.confirm(
+                                data.header.message,
+                                () => {
+                                    delay(1000);
+                                    call(window.location.assign('/mypage'));
+                                },
+                                () => {
+                                    delay(1000);
+                                    call(window.location.reload());
+                                },
+                                '비밀번호 변경',
+                            );
                         }
                     } else {
                         const resultType = data.header.resultType;

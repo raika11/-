@@ -344,7 +344,7 @@ const ArticleSearch = ({ ja, sun }) => {
             </Form.Row>
             <div className="d-flex mb-14 justify-content-between align-items-end">
                 <p className="mb-0">
-                    <MokaIcon iconName="fas-circle" className="mr-1 color-info" />
+                    <MokaIcon iconName="fas-circle" className="mr-1 color-neutral" />
                     벌크전송기사
                 </p>
                 <div className="d-flex"></div>

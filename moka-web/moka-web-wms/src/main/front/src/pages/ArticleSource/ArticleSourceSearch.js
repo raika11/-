@@ -85,11 +85,9 @@ const ArticleSourceSearch = ({ match }) => {
                 <Button className="mr-1" variant="searching" onClick={handleSearch}>
                     검색
                 </Button>
-                <Button variant="negative" onClick={handleClickInitialize}>
+                <Button className="mr-1" variant="negative" onClick={handleClickInitialize}>
                     초기화
                 </Button>
-            </div>
-            <div className="mb-14 d-flex justify-content-end">
                 <Button variant="positive" onClick={handleClickAdd}>
                     등록
                 </Button>

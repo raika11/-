@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaSearchInput, MokaTable } from '@components';
 import { messageBox } from '@utils/toastUtil';
+import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 import { initialState, getReporterListModal, GET_REPORTER_LIST_MODAL } from '@store/reporter';
 import columnDefs from './ReporterListModalColumns';
 
@@ -57,11 +58,7 @@ const ReporterListModal = (props) => {
                             setRowData(
                                 body.list.map((reporter) => ({
                                     ...reporter,
-                                    belong:
-                                        (reporter.r1CdNm ? `${reporter.r1CdNm} / ` : '') +
-                                        (reporter.r2CdNm ? `${reporter.r2CdNm} / ` : '') +
-                                        (reporter.r3CdNm ? `${reporter.r3CdNm} / ` : '') +
-                                        (reporter.r4CdNm ? `${reporter.r4CdNm}` : ''),
+                                    jplusRepDivNm: (reporter.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
                                     onClick: handleRowClicked,
                                 })),
                             );

@@ -188,6 +188,7 @@ const IssueList = (props) => {
                         channelType: CHANNEL_TYPE.I.code,
                         divName: pkgDiv.find((d) => d.code === data.pkgDiv)?.name || '',
                         regDt: (data.regDt || '').slice(0, 10),
+                        onClick: () => window.open(`/issue/${data.pkgSeq}`),
                     };
                 }),
             );

@@ -12,6 +12,29 @@ $scale-colors: $gray-100, $gray-200, $gray-300, $gray-400, $gray-500, $gray-600,
   }
 }
 
+/* $brand-additional-1 => .color-brand-a1 */
+.color-brand-a1 {
+  color: $brand-additional-1;
+}
+.color-brand-a2 {
+  color: $brand-additional-2;
+}
+.color-brand-a3 {
+  color: $brand-additional-3;
+}
+.color-brand-a4 {
+  color: $brand-additional-4;
+}
+.color-brand-a5 {
+  color: $brand-additional-5;
+}
+.color-brand-a6 {
+  color: $brand-additional-6;
+}
+.color-brand-a7 {
+  color: $brand-additional-7;
+}
+
 @each $bg-color-name, $color in $bg-colors {
   .color-bg-#{$bg-color-name} {
     background-color: $color

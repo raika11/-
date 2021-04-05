@@ -49,3 +49,9 @@ export const updateMemberMenuAuth = (memberId, changeMenuAuthList) => {
         throw err;
     });
 };
+
+export const changePassword = (memberId, passwords) => {
+    return instance.put(`/api/members/${memberId}/change-password`, qs.stringify(passwords)).catch((err) => {
+        throw err;
+    });
+};

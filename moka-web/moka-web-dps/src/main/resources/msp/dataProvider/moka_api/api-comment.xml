@@ -21,7 +21,7 @@
   기사의 내댓글목록조회: http://local.joongang.co.kr:8081/moka_api/comment?contentId=23530553&referrer=joongang.joins.com/article&my=Y
   -->
   <api id="comment" membership="cookiePass">
-    <description>기사 또는 기자 또는 레퍼러의 댓글 목록조회을 조회한다.</description>
+    <description>기사 또는 기자 또는 레퍼러의 댓글 목록을 조회한다.</description>
     <parameter>
       <contentId desc="기사키 또는 기자키">^[0-9]{1,9}$</contentId>
       <referrer desc="레퍼러" require="Y">^.{1,500}$</referrer>
@@ -69,7 +69,7 @@
   http://local.joongang.co.kr:8081/moka_api/comment.my
   -->
   <api id="comment.my" membership="cookie">
-    <description>내가 단 댓글 목록 조회을 조회한다.</description>
+    <description>내가 단 댓글 목록을 조회한다.</description>
     <parameter>
     </parameter>
     <request dmlType="sp" setNames="_DATA" outParam="_TOTAL,_DISP_TOTAL">dps.comment.my</request>
@@ -80,7 +80,6 @@
 
   <!-- 댓글등록 -->
   <api id="comment.insert" membership="cookie" method="post" expire="0">
-    <!--  <api id="comment.insert" membership="cookie" expire="0">-->
     <description>댓글을 등록한다</description>
     <parameter>
       <referrer desc="레퍼러" require="Y">^.{1,500}$</referrer>
@@ -91,15 +90,67 @@
       <remoteIp/>
       <regDev desc="등록기기" default="M">^.{1}$</regDev>
     </parameter>
-    <request type="module" setNames="_DATA">jmnet.moka.web.dps.module.CommentModule</request>
+    <request type="module" setNames="_DATA" methodName="insert">
+      jmnet.moka.web.dps.module.CommentModule
+    </request>
     <keys>
       referrer
       totalId
       repSeq
       parentSeq
       content
-      remoteIp
       regDev
+    </keys>
+  </api>
+
+  <!-- 댓글신고등록 -->
+  <api id="comment.vote.insert" membership="cookie" method="post" expire="0">
+    <description>댓글을 신고한다</description>
+    <parameter>
+      <id desc="댓글번호" require="Y" type="number">^[0-9]{1,9}$</id>
+      <vote desc="좋아요/싫어요/신고" require="Y" default="1" type="number">^(0|-1|1)$</vote>
+      <pcid desc="PCID" require="Y">^[0-9]{23}$</pcid>
+      <remoteIp/>
+    </parameter>
+    <request type="module" setNames="_DATA" methodName="insertVote">
+      jmnet.moka.web.dps.module.CommentModule
+    </request>
+    <keys>
+      id
+      vote
+      pcid
+    </keys>
+  </api>
+
+  <!-- 댓글삭제 -->
+  <api id="comment.delete" membership="cookie" method="post" expire="0">
+    <description>댓글을 삭제한다</description>
+    <parameter>
+      <id desc="댓글번호" require="Y" type="number">^[0-9]{1,9}$</id>
+      <totalId desc="기사ID" type="number">^[0-9]{1,9}$</totalId>
+      <repSeq desc="기자SEQ" type="number">^[0-9]{1,9}$</repSeq>
+    </parameter>
+    <request type="module" setNames="_DATA" methodName="delete">
+      jmnet.moka.web.dps.module.CommentModule
+    </request>
+    <keys>
+      id
+      totalId
+      repSeq
+    </keys>
+  </api>
+
+  <!--
+  내가 신고한 모든 댓글 목록 조회
+  http://local.joongang.co.kr:8081/moka_api/comment.declare.my
+  -->
+  <api id="comment.declare.my" membership="cookie">
+    <description>내가 신고한 모든 댓글 목록을 조회한다.</description>
+    <parameter>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.comment.declareMy
+    </request>
+    <keys>
     </keys>
   </api>
 

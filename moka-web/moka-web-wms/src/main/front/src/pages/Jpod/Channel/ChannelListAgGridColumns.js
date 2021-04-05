@@ -36,7 +36,6 @@ export const columnDefs = [
             boxSizing: 'border-box',
             whiteSpace: 'normal',
             lineHeight: '20px',
-            fontSize: '14px',
             display: '-webkit-box',
             paddingTop: '1px',
             '-webkit-line-clamp': 2,

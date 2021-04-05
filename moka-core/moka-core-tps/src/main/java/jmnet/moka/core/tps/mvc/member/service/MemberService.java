@@ -14,6 +14,15 @@ import jmnet.moka.core.tps.mvc.member.entity.MemberSms;
 import org.springframework.data.domain.Page;
 
 public interface MemberService {
+
+    /**
+     * 멤버 조회
+     *
+     * @param memberId 검색 조건
+     * @return 검색 결과 목록
+     */
+    Optional<MemberInfo> findById(String memberId);
+
     /**
      * 멤버 목록 조회
      *

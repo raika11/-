@@ -25,12 +25,12 @@ $spacers: (
     1: ($spacer * 0.25), // 4px
     2: ($spacer * 0.5),  // 8px
     3: $spacer,          // 16px
-    4: ($spacer * 1.5),
-    5: ($spacer * 3),
-    6: ($spacer * 4.5),
-    7: ($spacer * 6),
+    4: ($spacer * 1.5),  // 24px
+    5: ($spacer * 3),    // 48px
     '03': ($spacer-px * 3),
     '05': ($spacer-px * 5),
+	'06': ($spacer-px  * 6),
+	'07': ($spacer-px * 7),
 	10: ($spacer-px * 10),
 	12: ($spacer-px * 12),
 	14: ($spacer-px * 14),
@@ -77,46 +77,54 @@ $enable-validation-icons: false !default;
 // Transitions
 $transition-base: all .35s ease-in-out !default;
 
-// Theme colors
-$blue: #5b7dff !default;
-$red: #f44455 !default;
-$yellow: #fcc100 !default;
-$orange: #ff5a00 !default;
-$green: #5fc27e !default;
-$cyan: #47bac1 !default;
-$pink: #a180da !default;
+// joongang brand color
+$brand-1: #750013;
+$brand-2: #FF3907;
+$brand-3: #FF6E4D;
+$brand-4: #FFB495;
+$brand-additional-1: #FF54B7;
+$brand-additional-2: #FF9197;
+$brand-additional-3: #0066D0;
+$brand-additional-4: #55AFFF;
+$brand-additional-5: #00A99D;
+$brand-additional-6: #7ED3AB;
+$brand-additional-7: #373D53;
 
-$white: #fff !default;
-$gray-100: #F9FAFC !default;
-$gray-200: #EAECF2 !default;
-$gray-300: #E1E3EB !default;
-$gray-400: #CED1DB !default;
-$gray-500: #ADB1BE !default;
-$gray-600: #6A6E7C !default;
-$gray-700: #4D5264 !default;
-$gray-800: #373D53 !default;
-$gray-900: #272C3F !default;
-$black: #000 !default;
+// gray color
+$white:    #fff;
+$gray-100: #F9FAFC;
+$gray-200: #EAECF2;
+$gray-300: #E1E3EB;
+$gray-400: #CED1DB;
+$gray-500: #ADB1BE;
+$gray-600: #6A6E7C;
+$gray-700: #4D5264;
+$gray-800: #373D53;
+$gray-900: #272C3F;
+$black:    #000;
 
-$gray-150: #e0e0e0 !default;
-$gray-160: #e5e5e5 !default;
-$gray-310: #dddddd !default;
-$gray-550: #9e9ea5 !default;
-$gray-650: #5c5c6a !default;
+// gray additional color
+$gray-150: #e0e0e0;
+$gray-160: #e5e5e5;
+$gray-310: #dddddd;
+$gray-550: #9e9ea5;
+$gray-650: #5c5c6a;
 
-$primary:          #FF3907 !default;
-$secondary:        #FF6E4D !default;
-$tertiary:         #00A99D !default;
-$success:          #00A99D !default;
-$info:             #0066D0 !default;
-$warning:          #FF54B7 !default;
-$danger:           #750013 !default;
-$light:            $gray-100 !default;
-$dark:             $gray-900 !default;
-$positive:         $primary !default;
-$neutral:          $secondary !default;
-$negative:         #6C78A0 !default;
-$searching:        $gray-800 !default;
+// theme-color
+$primary:   $brand-2;
+$secondary: $brand-3;
+$tertiary:  $brand-additional-5;
+$success:   $brand-additional-5;
+$info:      $brand-additional-3;
+$warning:   $brand-additional-1;
+$danger:    $brand-1;
+$light:     $gray-100;
+$dark:      $gray-900;
+$positive:  $primary;
+$positive-a: $brand-additional-5;
+$neutral:   $secondary;
+$negative:  #6C78A0;
+$searching: $gray-800;
 
 $theme-colors: (
 	"primary": $primary,
@@ -129,6 +137,7 @@ $theme-colors: (
 	"light": $light,
 	"dark": $dark,
 	"positive": $positive,
+	"positive-a": $positive-a,
 	"neutral": $neutral,
 	"negative": $negative,
 	"searching": $searching,

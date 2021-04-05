@@ -8,6 +8,7 @@ import { MokaInputLabel, MokaInput, MokaIcon } from '@components';
 import { clearReporter, getReporter, saveReporter } from '@store/reporter';
 import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
+import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 
 const ReporterInput = ({ label, value }) => (
     <div className="d-flex align-items-center h-100">
@@ -81,7 +82,7 @@ const ReporterEdit = ({ match }) => {
         if (!commonUtil.isEmpty(reporter.jplusRepDiv)) {
             typeCode = `${reporter.jplusRepDiv}: ${reporter.jplusRepDivNm}`;
         } else {
-            typeCode = '일보기자';
+            typeCode = JPLUS_REP_DIV_DEFAULT;
         }
 
         setTemp({

@@ -40,6 +40,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Optional<MemberInfo> findById(String memberId) {
+        return memberRepository.findById(memberId);
+    }
+
+
+    @Override
     public Page<MemberInfo> findAllMember(MemberSearchDTO search) {
         return memberRepository.findAllMember(search);
     }

@@ -74,3 +74,6 @@ export const updateMemberMenuAuth = createAction(UPDATE_MEMBER_MENU_AUTH, ({ mem
 
 export const CLEAR_MEMBER_MENU_AUTH = 'member/CLEAR_MEMBER_MENU_AUTH';
 export const clearMemberMenuAuth = createAction(CLEAR_MEMBER_MENU_AUTH);
+
+export const CHANGE_PASSWORD = 'member/CHANGE_PASSWORD';
+export const changePassword = createAction(CHANGE_PASSWORD);

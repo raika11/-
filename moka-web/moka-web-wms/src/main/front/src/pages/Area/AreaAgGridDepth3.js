@@ -112,7 +112,7 @@ const AreaAgGridDepth3 = ({ areaDepth2, areaDepth3, setAreaDepth3, flag, listDep
     return (
         <MokaCard header={false} width={280} className="mr-gutter" bodyClassName="d-flex flex-column">
             <div className="d-flex justify-content-end mb-14">
-                <Button variant="positive" onClick={handleClickAdd} className="mr-1" disabled={!areaDepth2?.area?.areaSeq}>
+                <Button variant="positive-a" onClick={handleClickAdd} className="mr-1" disabled={!areaDepth2?.area?.areaSeq}>
                     등록
                 </Button>
 

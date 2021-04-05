@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { CHANNEL_TYPE } from '@/constants';
 import { MokaCardTabs } from '@components';
 import { ArticleList } from '@pages/Article/components/Desking';
 import IssueList from '@pages/Issue/components/Desking';

@@ -231,6 +231,7 @@ const ArticleList = (props) => {
                 onSearch={handleSearch}
                 onChangeSearchOption={changeTableSearchOption}
                 getArticleList={() => getArticleList({ type, search })}
+                movie={movie}
             />
         </div>
     );

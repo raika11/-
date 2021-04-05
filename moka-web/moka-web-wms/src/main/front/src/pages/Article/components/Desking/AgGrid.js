@@ -1,7 +1,7 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
-import { DB_DATEFORMAT, ARTICLE_URL } from '@/constants';
+import { DB_DATEFORMAT, ARTICLE_URL, CHANNEL_TYPE } from '@/constants';
 import { MokaTable } from '@components';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { addDeskingWorkDropzone } from '@utils/deskingUtil';
@@ -13,7 +13,7 @@ import ChangeArtTitleModal from '@pages/Article/modals/ChangeArtTitleModal';
  * 페이지편집 > 기사 목록 > AgGrid
  */
 const AgGrid = forwardRef((props, ref) => {
-    const { search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption, getArticleList } = props;
+    const { search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption, getArticleList, movie } = props;
     const { PDS_URL, IR_URL } = useSelector((store) => ({
         PDS_URL: store.app.PDS_URL,
         IR_URL: store.app.IR_URL,
@@ -81,13 +81,13 @@ const AgGrid = forwardRef((props, ref) => {
                     myunPan,
                     articleDt,
                     reportersText,
-                    gridType: 'ARTICLE',
+                    channelType: movie ? CHANNEL_TYPE.M.code : CHANNEL_TYPE.A.code,
                     artThumb,
                     artPdsThumb,
                 };
             }),
         );
-    }, [IR_URL, PDS_URL, list]);
+    }, [IR_URL, PDS_URL, list, movie]);
 
     useEffect(() => {
         // 드롭 타겟 ag-grid에 drop-zone 설정

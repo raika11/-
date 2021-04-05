@@ -492,7 +492,7 @@ const DeskingWorkAgGrid = (props) => {
 
                 return {
                     ...desking,
-                    gridType: 'DESKING',
+                    isDesking: true,
                     componentWorkSeq: component.seq,
                     title: unescapeHtmlArticle(desking.title),
                     contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),

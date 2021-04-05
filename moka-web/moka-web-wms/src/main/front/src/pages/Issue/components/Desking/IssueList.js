@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
+import { DB_DATEFORMAT, CHANNEL_TYPE } from '@/constants';
 import { initialState, getIssueListModal, GET_ISSUE_LIST_MODAL } from '@store/issue';
 import { messageBox } from '@utils/toastUtil';
 import Search from './Search';
@@ -184,6 +184,7 @@ const IssueList = (props) => {
                         catName,
                         repName,
                         fullRepName,
+                        channelType: CHANNEL_TYPE.I.code,
                         divName: pkgDiv.find((d) => d.code === data.pkgDiv)?.name || '',
                         regDt: (data.regDt || '').slice(0, 10),
                     };

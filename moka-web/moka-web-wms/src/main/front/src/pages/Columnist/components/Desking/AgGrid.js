@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
+import { JPLUS_REP_DIV_DEFAULT, CHANNEL_TYPE } from '@/constants';
 import { MokaTable } from '@components';
 import columnDefs from './AgGridColumns';
 
@@ -19,6 +19,7 @@ const AgGrid = (props) => {
         setRowData(
             list.map((l) => ({
                 ...l,
+                channelType: CHANNEL_TYPE.C.code,
                 repSeqText: l.repSeq || '   -',
                 jplusRepDiv: l.repSeq ? (l.jplusRepDiv || JPLUS_REP_DIV_DEFAULT).slice(0, 2) : '   -',
             })),

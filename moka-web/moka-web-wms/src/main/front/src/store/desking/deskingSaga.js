@@ -8,7 +8,7 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import * as api from './deskingApi';
 import * as act from './deskingAction';
-import { DEFAULT_LANG } from '@/constants';
+import { DEFAULT_LANG, CHANNEL_TYPE } from '@/constants';
 
 moment.locale('ko');
 
@@ -151,78 +151,6 @@ const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPO
 const putComponentWorkTemplate = createDeskingRequestSaga(act.PUT_COMPONENT_WORK_TEMPLATE, api.putComponentWorkTemplate, 'work');
 
 /**
- * 데스킹 워크의 관련기사 Row 생성
- * @param {object} data 기사 데이터
- * @param {number} relOrd 관련기사 순서
- * @param {object} parentData 주기사 데이터
- * @param {object} component 컴포넌트워크 데이터
- * @param {object} etc 그 외 데이터
- */
-const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
-    const cid = data.gridType === 'ARTICLE' ? String(data.totalId) : data.contentId;
-
-    // 주기사 데이터 없음 => 에러
-    if (!parentData || parentData.contentId === null) return DRAG_STOP_RESULT.incorrectRow;
-
-    // 이미 존재하는 기사 => 에러
-    const existRow = component.deskingWorks.filter((desking) => desking.contentId === cid);
-    if (existRow && existRow.length > 0) return DRAG_STOP_RESULT.existRow;
-
-    // 영상기사 체크
-    const isOvp = data.ovpYn === 'Y';
-    const du = Number((data.duration || '').replace(/(.*)\d{3}/, '$1'));
-    const duration = isOvp ? moment.unix(du).utc().format('mm:ss') : null;
-
-    let appendData = null;
-    if (data.gridType === 'ARTICLE') {
-        const { areaComp, domain } = etc;
-
-        // 타이틀 변경, 1. 도메인에 따라 PC/M 타이틀 설정, 2. 데스킹파트 설정
-        let title = '';
-        if (domain?.servicePlatform === 'P') {
-            title = data.artEditTitle || data.artJamTitle || data.artTitle;
-        } else if (domain.servicePlatform === 'M') {
-            title = data.artEditMobTitle || data.artJamMobTitle || data.artTitle;
-        }
-        if (areaComp?.deskingPart && areaComp?.deskingPart.indexOf('TITLE') < 0) {
-            title = data.artTitle;
-        }
-
-        appendData = {
-            componentWorkSeq: component.seq,
-            seq: null,
-            channelType: data.channelType, // 채널타입
-            deskingSeq: null,
-            datasetSeq: component.datasetSeq,
-            contentId: String(data.totalId),
-            parentContentId: parentData.contentId,
-            contentType: data.contentType,
-            artType: data.artType,
-            sourceCode: data.sourceCode,
-            contentOrd: parentData.contentOrd,
-            relOrd,
-            lang: DEFAULT_LANG,
-            distDt: data.serviceDaytime,
-            title: unescapeHtmlArticle(title),
-            subTitle: unescapeHtmlArticle(data.artSubTitle),
-            nameplate: null,
-            titlePrefix: null,
-            bodyHead: unescapeHtmlArticle(data.artSummary),
-            linkUrl: `//${domain?.domainUrl}/article/${data.totalId}`,
-            linkTarget: '_self',
-            boxUrl: null,
-            boxTarget: '_self',
-            thumbFileName: !isOvp ? data.artPdsThumb : data.ovpThumb,
-            rel: true,
-            relSeqs: null,
-            duration,
-        };
-    }
-
-    return { success: true, list: appendData };
-};
-
-/**
  * 데스킹 워크의 주기사 Row 생성
  * @param {object} data 기사 데이터
  * @param {number} contentOrd 기사 순서
@@ -230,22 +158,28 @@ const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
  * @param {object} etc 그 외 데이터
  */
 const makeRowNode = (data, contentOrd, component, etc) => {
-    const cid = data.gridType === 'ARTICLE' ? String(data.totalId) : data.contentId;
+    const cid = data.totalId || data.contentId || data.repSeq;
 
     // 데이터가 없거나 기사키가 올바르지 않음 => 에러
     if (!data || cid === null) return DRAG_STOP_RESULT.incorrectRow;
 
-    // 이미 존재하는 기사 => 에러
-    const existRow = component.deskingWorks.filter((desking) => desking.contentId === cid);
+    // 이미 존재하는 데이터 => 에러
+    const existRow = component.deskingWorks.filter((desking) => desking.contentId === String(cid));
     if (existRow && existRow.length > 0) return DRAG_STOP_RESULT.existRow;
 
-    // 영상기사 체크
-    const isOvp = data.ovpYn === 'Y';
-    const du = Number((data.duration || '').replace(/(.*)\d{3}/, '$1'));
-    const duration = isOvp ? moment.unix(du).utc().format('mm:ss') : null;
-
     let appendData = null;
-    if (data.gridType === 'ARTICLE') {
+    if (data.isDesking) {
+        // 데스킹 데이터 -> 편집 컴포넌트
+        appendData = {
+            ...data,
+            regDt: undefined,
+            componentWorkSeq: component.seq,
+            componentSeq: component.componentSeq,
+            datasetSeq: component.datasetSeq,
+            contentOrd,
+        };
+    } else if (data.channelType === CHANNEL_TYPE.A.code || data.channelType === CHANNEL_TYPE.M.code) {
+        // 기사 데이터 -> 편집 컴포넌트
         const { areaComp, domain, isNaverChannel } = etc;
 
         // 타이틀 변경, 1. 도메인에 따라 PC/M 타이틀 설정, 2. 데스킹파트 설정, 3. 네이버채널일 경우 원본 제목
@@ -262,6 +196,11 @@ const makeRowNode = (data, contentOrd, component, etc) => {
             title = data.artTitle;
         }
 
+        // 영상 정보
+        const isOvp = data.ovpYn === 'Y';
+        const du = Number((data.duration || '').replace(/(.*)\d{3}/, '$1'));
+        const duration = isOvp ? moment.unix(du).utc().format('mm:ss') : null;
+
         appendData = {
             componentWorkSeq: component.seq,
             seq: null,
@@ -273,7 +212,7 @@ const makeRowNode = (data, contentOrd, component, etc) => {
             contentType: data.contentType,
             artType: data.artType,
             sourceCode: data.sourceCode,
-            contentOrd: contentOrd,
+            contentOrd,
             relOrd: 1,
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
@@ -291,19 +230,31 @@ const makeRowNode = (data, contentOrd, component, etc) => {
             relSeqs: null,
             duration,
         };
-    } else if (data.gridType === 'DESKING') {
-        // 편집 컴포넌트영역 -> 편집컴포넌트 이동
-        appendData = {
-            ...data,
-            regDt: undefined,
-            componentWorkSeq: component.seq,
-            componentSeq: component.componentSeq,
-            datasetSeq: component.datasetSeq,
-            contentOrd,
-        };
+    } else if (data.channelType === CHANNEL_TYPE.R.code) {
+        // 기자 데이터 -> 편집 컴포넌트
+    } else if (data.channelType === CHANNEL_TYPE.C.code) {
+        // 칼럼니스트 데이터 -> 편집 컴포넌트
+    } else if (data.channelType === CHANNEL_TYPE.D.code) {
+        // 더미 데이터 -> 편집 컴포넌트
+    } else if (data.channelType === CHANNEL_TYPE.I.code) {
+        // 패키지 데이터 -> 편집 컴포넌트
     }
 
-    return { success: true, list: appendData };
+    return { success: true, appendData };
+};
+
+/**
+ * 데스킹 워크의 관련기사 Row 생성
+ * @param {object} data 기사 데이터
+ * @param {number} relOrd 관련기사 순서
+ * @param {object} parentData 주기사 데이터
+ * @param {object} component 컴포넌트워크 데이터
+ * @param {object} etc 그 외 데이터
+ */
+const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
+    let result = makeRowNode(data, parentData.contentOrd, component, etc);
+    if (result.success) result.appendData = { ...result.appendData, rel: true, relOrd, parentContentId: parentData.contentId };
+    return result;
 };
 
 /**
@@ -311,8 +262,10 @@ const makeRowNode = (data, contentOrd, component, etc) => {
  */
 function* deskingDragStop({ payload }) {
     const { source, target, srcComponent, tgtComponent, areaComp, callback } = payload;
-    const domain = yield select((store) => store.desking.area.domain);
-    const isNaverChannel = yield select(({ desking }) => desking.isNaverChannel);
+    const { domain, isNaverChannel } = yield select(({ desking }) => ({
+        domain: desking.area.domain,
+        isNaverChannel: desking.isNaverChannel,
+    }));
 
     let overIndex = -1,
         addRelArt = false,
@@ -333,13 +286,12 @@ function* deskingDragStop({ payload }) {
         });
     }
 
-    // move api 호출 파악(컴포넌트 워크 간의 이동)
-    const bMoveComponents = srcComponent?.seq >= 0;
+    // 두 컴포넌트 간의 기사 이동인가? (move api 호출해야함)
+    const isMove = srcComponent?.seq >= 0;
 
     // 주기사 추가하는 함수
     const rd = (insertIndex) => {
         let ans = [];
-
         if (Array.isArray(sourceNode)) {
             // 기사 여러개 이동
             let contentOrdering = insertIndex - 1;
@@ -347,7 +299,7 @@ function* deskingDragStop({ payload }) {
                 if (!node.data.rel) contentOrdering++;
                 const result = makeRowNode(node.data, contentOrdering, tgtComponent, { domain, areaComp, isNaverChannel });
                 if (result.success) {
-                    ans.push(result.list);
+                    ans.push(result.appendData);
                     return false;
                 } else {
                     callback && callback({ header: result });
@@ -358,23 +310,21 @@ function* deskingDragStop({ payload }) {
         } else if (typeof sourceNode === 'object') {
             // 기사 1개 이동
             const result = makeRowNode(sourceNode.data, insertIndex, tgtComponent, { domain, areaComp, isNaverChannel });
-            if (result.success) ans.push(result.list);
+            if (result.success) ans.push(result.appendData);
             else callback && callback({ header: result });
         }
-
         return ans;
     };
 
     // 관련기사 추가하는 함수
     const rrd = (firstIndex, parentData) => {
         let ans = [];
-
         if (Array.isArray(sourceNode)) {
             // 기사 여러개 이동
             sourceNode.some((node, idx) => {
                 const result = makeRelRowNode(node.data, firstIndex + idx, parentData, tgtComponent, { domain, areaComp });
                 if (result.success) {
-                    ans.push(result.list);
+                    ans.push(result.appendData);
                     return false;
                 } else {
                     callback && callback({ header: result });
@@ -385,17 +335,16 @@ function* deskingDragStop({ payload }) {
         } else if (typeof sourceNode === 'object') {
             // 기사 1개 이동
             const result = makeRelRowNode(sourceNode.data, firstIndex, parentData, tgtComponent, { domain, areaComp });
-            if (result.success) ans.push(result.list);
+            if (result.success) ans.push(result.appendData);
             else callback && callback({ header: result });
         }
-
         return ans;
     };
 
     if (overIndex < 0) {
         // 1) 비어있는 ag-grid에 처음으로 데스킹할 때
         // 1-1) 워크 간의 이동일 때 이동가능한지 판단
-        if (bMoveComponents) {
+        if (isMove) {
             const movable = getMoveMode(sourceNode, null);
             if (!movable && callback) {
                 yield call(callback, { header: DRAG_STOP_RESULT.unmovableRow });
@@ -409,7 +358,7 @@ function* deskingDragStop({ payload }) {
         const targetRowData = target.api.getDisplayedRowAtIndex(overIndex).data;
 
         // 2-1) 워크 간의 이동일 때 이동가능한지 판단
-        if (bMoveComponents) {
+        if (isMove) {
             const movable = getMoveMode(sourceNode, targetRowData);
             if (!movable && callback) {
                 yield call(callback, { header: DRAG_STOP_RESULT.unmovableRow });
@@ -448,8 +397,8 @@ function* deskingDragStop({ payload }) {
     }
 
     if (appendNodes.length < 1) return;
-    if (bMoveComponents) {
-        // 이동
+    if (isMove) {
+        // 기사 이동
         yield put({
             type: act.POST_DESKING_WORK_LIST_MOVE,
             payload: {
@@ -462,7 +411,7 @@ function* deskingDragStop({ payload }) {
             },
         });
     } else {
-        // 추가
+        // 기사 추가
         yield put({
             type: act.POST_DESKING_WORK_LIST,
             payload: {

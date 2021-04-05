@@ -202,16 +202,23 @@ const makeRowNode = (data, contentOrd, component, etc) => {
         const duration = isOvp ? moment.unix(du).utc().format('mm:ss') : null;
 
         appendData = {
-            componentWorkSeq: component.seq,
-            seq: null,
-            channelType: data.channelType, // 채널타입
-            deskingSeq: null,
-            datasetSeq: component.datasetSeq,
             contentId: String(data.totalId),
-            parentContentId: null, // 주기사일 경우 null, 관련기사일경우 주기사 키 지정.
+            /**
+             * 기사 자체 정보
+             */
             contentType: data.contentType,
             artType: data.artType,
             sourceCode: data.sourceCode,
+            duration,
+            /**
+             * 데스킹 워크 정보
+             */
+            seq: null,
+            componentWorkSeq: component.seq,
+            channelType: data.channelType,
+            deskingSeq: null,
+            datasetSeq: component.datasetSeq,
+            parentContentId: null, // 주기사일 경우 null, 관련기사일경우 주기사 키 지정.
             contentOrd,
             relOrd: 1,
             lang: DEFAULT_LANG,
@@ -228,7 +235,6 @@ const makeRowNode = (data, contentOrd, component, etc) => {
             thumbFileName: !isOvp ? data.artPdsThumb : data.ovpThumb,
             rel: false,
             relSeqs: null,
-            duration,
         };
     } else if (data.channelType === CHANNEL_TYPE.R.code) {
         // 기자 데이터 -> 편집 컴포넌트

@@ -32,4 +32,13 @@
   </select>
 
 
+  <!-- 에피소드존재여부 -->
+  <select id="isEpisode" parameterType="map" resultType="map"
+    statementType="CALLABLE">
+    {call UPU_JPOD_EPISODE_ISEXIST(
+      #{epsdSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{_EXIST, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
 </mapper>

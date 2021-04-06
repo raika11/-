@@ -31,7 +31,8 @@
     statementType="CALLABLE">
     {call UPU_COMMENT_LIST_SEL_BY_CONTENT_ID(
       #{contentId, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{referrer, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{domain, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{section, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
@@ -47,7 +48,8 @@
   <select id="referrerList" parameterType="hashmap" resultType="hashmap"
     statementType="CALLABLE">
     {call UPU_COMMENT_LIST_SEL_BY_REFERRER(
-      #{referrer, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{domain, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{section, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
@@ -76,17 +78,17 @@
   <!--댓글등록-->
   <select id="insert" parameterType="hashmap" resultType="hashmap" statementType="CALLABLE">
     { call UPU_COMMENT_INS(
-      #{referrer, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{domain, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{section, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{repSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{epsdSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{parentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{content, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{regDev, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
@@ -99,16 +101,18 @@
       #{vote, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 
   <!--댓글 삭제-->
   <select id="delete" parameterType="hashmap" resultType="hashmap" statementType="CALLABLE">
     { call UPU_COMMENT_DEL(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{repSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{epsdSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
       )}
   </select>

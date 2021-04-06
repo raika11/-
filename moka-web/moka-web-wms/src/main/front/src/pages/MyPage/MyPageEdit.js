@@ -133,7 +133,7 @@ const MyPageEdit = () => {
 
             const temp_p = str.charAt(i + 1);
             const temp_char = parseInt(temp_p.charCodeAt(0));
-            if (next_char == temp_char) seqCnt = seqCnt + 1;
+            if (next_char === temp_char) seqCnt = seqCnt + 1;
             else seqCnt = 1;
 
             if (seqCnt > len - 1) {
@@ -154,7 +154,7 @@ const MyPageEdit = () => {
             const temp_char = str.charAt(i);
             const next_char = str.charAt(i + 1);
 
-            if (temp_char == next_char) repeatCnt = repeatCnt + 1;
+            if (temp_char === next_char) repeatCnt = repeatCnt + 1;
             else repeatCnt = 1;
 
             if (repeatCnt > len - 1) {
@@ -168,7 +168,7 @@ const MyPageEdit = () => {
     function getPasswordValidateType(password) {
         let pwdLength = password.length;
 
-        if (pwdLength == 0) return '';
+        if (pwdLength === 0) return '';
 
         //전체여부
 
@@ -238,28 +238,28 @@ const MyPageEdit = () => {
             message: '',
         };
 
-        if (type == '') {
-        } else if (type == '00') {
+        if (type === '') {
+        } else if (type === '00') {
             helpMessage = { hide: false, variant: 'positive', message: '사용불가' };
-        } else if (type == '01') {
+        } else if (type === '01') {
             helpMessage = { hide: false, variant: 'positive', message: '사용불가' };
-        } else if (type == '02') {
+        } else if (type === '02') {
             helpMessage = { hide: false, variant: 'positive', message: '사용불가' };
-        } else if (type == '03') {
+        } else if (type === '03') {
             helpMessage = { hide: false, variant: 'positive', message: '사용불가' };
-        } else if (type == '04') {
+        } else if (type === '04') {
             helpMessage = { hide: false, variant: 'positive', message: '사용불가' };
-        } else if (type == '05') {
+        } else if (type === '05') {
             helpMessage = { hide: false, variant: 'positive', message: '사용불가', alert: '동일한 문자, 숫자를 반복해서 사용하실 수 없습니다.' };
-        } else if (type == '11') {
+        } else if (type === '11') {
             helpMessage = { hide: false, variant: 'positive', message: '취약' };
-        } else if (type == '12') {
+        } else if (type === '12') {
             helpMessage = { hide: false, variant: 'positive', message: '취약' };
-        } else if (type == '13') {
+        } else if (type === '13') {
             helpMessage = { hide: false, variant: 'positive', message: '취약' };
-        } else if (type == '21') {
+        } else if (type === '21') {
             helpMessage = { hide: false, variant: 'success', message: '적정' };
-        } else if (type == '31') {
+        } else if (type === '31') {
             helpMessage = { hide: false, variant: 'success', message: '안전' };
         }
 

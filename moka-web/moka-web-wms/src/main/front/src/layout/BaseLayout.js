@@ -1,34 +1,33 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { closeSidebar, openSidebar } from '@store/layout';
+import Routes from '@/routes/Routes';
+import useBreakpoint from '@hooks/useBreakpoint';
 import Wrapper from './components/Wrapper';
 import Sidebar from './components/Sidebar';
 import Main from './components/Main';
 import Navbar from './components/Navbar';
 import Content from './components/Content';
 import NonResponsive from './components/NonResponsive';
-import { closeSidebar, openSidebar } from '@store/layout';
-import Routes from '../routes/Routes';
-import useBreakpoint from '@/hooks/useBreakpoint';
 
 /**
  * 기본 레이아웃(기본 레이아웃)
  * 라우트 페이지에서 사이드바를 닫고 싶으면 요청
- *
- * @param {Element} param0.children children
- * @param {boolean} param0.nonResponsive 반응형 여부
  */
-const DefaultLayout = ({ children, ...rest }) => {
+const DefaultLayout = () => {
     const dispatch = useDispatch();
-    const { currentMenu, nonResponsive, side } = useSelector((store) => ({
-        currentMenu: store.auth.currentMenu,
-        nonResponsive: store.auth.nonResponsive,
-        side: store.auth.side,
+    const { currentMenu, nonResponsive, side } = useSelector(({ auth }) => ({
+        currentMenu: auth.currentMenu,
+        nonResponsive: auth.nonResponsive,
+        side: auth.side,
     }));
 
     // 현재 브라우저 내부 사이즈 상태를 얻어옴
     const matchPoints = useBreakpoint();
 
+    /**
+     * control sidebar
+     */
     const resizeFunction = useCallback(() => {
         if (!nonResponsive) {
             // md의 최소width보다 작을 경우 메뉴가 닫힌다.
@@ -39,6 +38,24 @@ const DefaultLayout = ({ children, ...rest }) => {
             }
         }
     }, [dispatch, nonResponsive, matchPoints]);
+
+    /**
+     * render layout
+     */
+    const layout = useCallback(
+        () => (
+            <React.Fragment>
+                <Sidebar nonResponsive={nonResponsive} currentMenu={currentMenu} />
+                <Main>
+                    <Navbar nonResponsive={nonResponsive} currentMenu={currentMenu} />
+                    <Content>
+                        <Routes />
+                    </Content>
+                </Main>
+            </React.Fragment>
+        ),
+        [currentMenu, nonResponsive],
+    );
 
     useEffect(() => {
         if (side) {
@@ -60,21 +77,6 @@ const DefaultLayout = ({ children, ...rest }) => {
             window.removeEventListener('load', resizeFunction);
         };
     }, [dispatch, resizeFunction, nonResponsive, side, matchPoints]);
-
-    const layout = useCallback(
-        () => (
-            <React.Fragment>
-                <Sidebar nonResponsive={nonResponsive} currentMenu={currentMenu} {...rest} />
-                <Main>
-                    <Navbar nonResponsive={nonResponsive} currentMenu={currentMenu} {...rest} />
-                    <Content>
-                        <Routes />
-                    </Content>
-                </Main>
-            </React.Fragment>
-        ),
-        [currentMenu, nonResponsive, rest],
-    );
 
     if (nonResponsive) {
         return <NonResponsive className="so-layout">{layout()}</NonResponsive>;

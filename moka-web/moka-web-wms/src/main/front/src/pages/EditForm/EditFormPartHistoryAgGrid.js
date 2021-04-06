@@ -119,7 +119,7 @@ const EditFormPartHistoryAgGrid = (props) => {
             historyList.map((row) => ({
                 seqNo: String(row.seqNo),
                 regDt: row.regDt,
-                regNm: row.regMember.memberNm,
+                regNm: row.regMember ? row.regMember.memberNm : '',
                 formSeq: row.editFormPart.formSeq,
                 partSeq: row.editFormPart.partSeq,
                 status: row.status,

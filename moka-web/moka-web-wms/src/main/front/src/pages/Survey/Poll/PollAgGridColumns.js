@@ -115,7 +115,7 @@ export const columnDefs = [
             const regMember = param.data.regMember;
             let regMemberIdNm = '';
             if (regMember instanceof Object) {
-                regMemberIdNm = `${regMember.memberNm}(${regMember.memberId})`;
+                regMemberIdNm = regMember ? `${regMember.memberNm}(${regMember.memberId})` : '';
             }
             return <MultiRowColumnComponent values={[regMemberIdNm, param.value]} />;
         },

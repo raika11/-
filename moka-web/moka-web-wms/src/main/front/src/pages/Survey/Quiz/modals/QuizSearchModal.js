@@ -80,7 +80,7 @@ const QuizSearchModal = (props) => {
                     return {
                         quizSeq: element.quizSeq,
                         title: element.title,
-                        regMemberInfo: `${element.regMember.memberNm}(${element.regMember.memberId})`,
+                        regMemberInfo: element.regMember ? `${element.regMember.memberNm}(${element.regMember.memberId})` : '',
                         quzStsText: quzStsText,
                         quizInfo: element,
                     };

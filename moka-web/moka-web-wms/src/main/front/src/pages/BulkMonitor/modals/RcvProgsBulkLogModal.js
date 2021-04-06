@@ -3,6 +3,7 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaInputLabel, MokaModal, MokaTable } from '@/components';
+import { DB_DATEFORMAT } from '@/constants';
 import columnDefs from './RcvProgsBulkLogAgGridColumns';
 import { GET_BULK_STAT_LIST_INFO, getBulkStatListInfo } from '@/store/bulks';
 
@@ -66,8 +67,8 @@ const RcvProgsBulkLogModal = (props) => {
             bulkSendListInfo.map((data, idx) => ({
                 ...data,
                 seq: idx,
-                startDt: moment(data.startDt).format('YYYY-MM-DD HH:mm:ss'),
-                endDt: moment(data.endDt).format('YYYY-MM-DD HH:mm:ss'),
+                startDt: moment(data.startDt).format(DB_DATEFORMAT),
+                endDt: moment(data.endDt).format(DB_DATEFORMAT),
             })),
         );
     }, [bulkSendListInfo]);

@@ -209,6 +209,7 @@
       #{year, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
+
   <!-- 기사존재여부 -->
   <select id="isArticle" parameterType="map" resultType="map"
     statementType="CALLABLE">

@@ -113,6 +113,7 @@ const Package = React.lazy(() => import('@pages/Issue'));
 const Jopan = React.lazy(() => import('@pages/Jopan'));
 const MyPage = React.lazy(() => import('@pages/MyPage'));
 const AB = React.lazy(() => import('@pages/AB/AB'));
+const ABDirect = React.lazy(() => import('@pages/AB/Direct'));
 
 const routes = [
     {
@@ -711,7 +712,15 @@ const routes = [
         path: '/ab',
         name: 'ab',
         component: AB,
-        displayName: '',
+        side: true,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/ab-direct',
+        name: 'abDirect',
+        component: ABDirect,
         side: true,
         nonResponsive: true,
         exact: false,

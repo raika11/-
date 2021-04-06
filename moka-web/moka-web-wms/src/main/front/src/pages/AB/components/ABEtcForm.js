@@ -19,13 +19,13 @@ const ABEtcForm = () => {
             <Form.Row className="mb-2 align-items-center">
                 <MokaInputLabel label="로그인 상태" as="none" />
                 <Row className="flex-fill" noGutters>
-                    <Col xs={4}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-login-all" name="login" inputProps={{ label: '전체' }} disabled />
                     </Col>
-                    <Col xs={4}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-login-user" name="login" inputProps={{ label: '로그인 사용자' }} disabled />
                     </Col>
-                    <Col xs={4}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-login-no" name="login" inputProps={{ label: '비로그인 사용자' }} disabled />
                     </Col>
                 </Row>
@@ -34,16 +34,16 @@ const ABEtcForm = () => {
             <Form.Row className="mb-2 align-items-center">
                 <MokaInputLabel label="디바이스" as="none" />
                 <Row className="flex-fill" noGutters>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-device-all" name="device" inputProps={{ label: '전체' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-device-p" name="device" inputProps={{ label: 'PC' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-device-m" name="device" inputProps={{ label: 'Mobile Web' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-device-app" name="device" inputProps={{ label: 'Mobile APP' }} disabled />
                     </Col>
                 </Row>
@@ -52,16 +52,16 @@ const ABEtcForm = () => {
             <Form.Row className="mb-2 align-items-center">
                 <MokaInputLabel label="브라우저" as="none" />
                 <Row className="flex-fill" noGutters>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-browser-all" name="browser" inputProps={{ label: '전체' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-browser-ie11" name="browser" inputProps={{ label: 'IE11' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-browser-chrome" name="browser" inputProps={{ label: 'Chrome' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-browser-edge" name="browser" inputProps={{ label: 'Edge' }} disabled />
                     </Col>
                 </Row>
@@ -70,16 +70,16 @@ const ABEtcForm = () => {
             <Form.Row className="mb-2 align-items-center">
                 <MokaInputLabel label=" " as="none" />
                 <Row className="flex-fill" noGutters>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-browser-safari" name="browser" inputProps={{ label: 'Safari' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-browser-and" name="browser" inputProps={{ label: 'Android Web View' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-browser-samsung" name="browser" inputProps={{ label: 'Samsung Internet' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-browser-etc" name="browser" inputProps={{ label: '기타' }} disabled />
                     </Col>
                 </Row>
@@ -88,16 +88,16 @@ const ABEtcForm = () => {
             <Form.Row className="mb-2 align-items-center">
                 <MokaInputLabel label="유입처별" as="none" />
                 <Row className="flex-fill" noGutters>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-referrer-all" name="referrer" inputProps={{ label: '전체' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-referrer-direct" name="referrer" inputProps={{ label: '직접방문' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-referrer-naver" name="referrer" inputProps={{ label: 'Naver' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-referrer-google" name="referrer" inputProps={{ label: 'Google' }} disabled />
                     </Col>
                 </Row>
@@ -106,13 +106,13 @@ const ABEtcForm = () => {
             <Form.Row className="mb-2 align-items-center">
                 <MokaInputLabel label=" " as="none" />
                 <Row className="flex-fill" noGutters>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-referrer-kakao" name="referrer" inputProps={{ label: 'Kakao' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-referrer-twitter" name="referrer" inputProps={{ label: 'Twitter' }} disabled />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pr-2">
                         <MokaInput as="checkbox" id="checkbox-referrer-etc" name="referrer" inputProps={{ label: '기타' }} disabled />
                     </Col>
                 </Row>

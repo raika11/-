@@ -5,7 +5,8 @@ import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 
 /**
- * A/B 테스트 > 전체 목록 > 리스트 > 검색
+ * A/B 테스트 > 리스트 > 검색
+ * 공통 UI
  */
 const ABSearch = ({ match }) => {
     return (

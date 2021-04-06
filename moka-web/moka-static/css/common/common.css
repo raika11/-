@@ -475,6 +475,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .lh_sm14 {line-height: 14px !important;}
 
     /* grid */
+    .row > .col_sm0 {flex:0 0 auto;width:0;}
     .row > .col_sm1 {flex:0 0 auto;width:calc(100% / 12 * 1 - 0.01%);}
     .row > .col_sm2 {flex:0 0 auto;width:calc(100% / 12 * 2 - 0.01%);}
     .row > .col_sm3 {flex:0 0 auto;width:calc(100% / 12 * 3 - 0.01%);}
@@ -561,7 +562,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
     /* grid */
     .row.no_grid {display: flex; flex-wrap: nowrap; justify-content: space-between;}
-    .row > .col_md0 {flex:0 0 auto;width:0;display:none;}
+    .row > .col_md0 {flex:0 0 auto;width:0;}
     .row > .col_md1 {flex:0 0 auto;width:calc(100% / 12 * 1 - 0.01%);}
     .row > .col_md2 {flex:0 0 auto;width:calc(100% / 12 * 2 - 0.01%);}
     .row > .col_md3 {flex:0 0 auto;width:calc(100% / 12 * 3 - 0.01%);}
@@ -649,6 +650,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .lh_lg14 {line-height: 14px;}
 
     /* grid */
+    .row > .col_lg0 {flex:0 0 auto;width:0;}
     .row > .col_lg1 {flex:0 0 auto;width:calc(100% / 12 * 1 - 0.01%);}
     .row > .col_lg2 {flex:0 0 auto;width:calc(100% / 12 * 2 - 0.01%);}
     .row > .col_lg3 {flex:0 0 auto;width:calc(100% / 12 * 3 - 0.01%);}

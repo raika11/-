@@ -28,16 +28,14 @@ const MenuBox = ({ children, menu, path, nonResponsive = false, side = true }) =
         }
     }, [side, dispatch, history, menu.length, menu.menuById, menu.menuPaths, nonResponsive, path]);
 
-    return React.cloneElement(children, { menuPaths: menu.menuPaths, menuById: menu.menuById, nonResponsive, side });
+    return children;
 };
 
 /**
  * 페이지 Routes
  */
 const Routes = () => {
-    const { menu } = useSelector((store) => ({
-        menu: store.auth.menu,
-    }));
+    const menu = useSelector(({ auth }) => auth.menu);
 
     return (
         <ScrollToTop>

@@ -58,6 +58,7 @@ import {
     faFileExcel as falFileExcel,
     faLink as falLink,
     faUnlink as falUnlink,
+    faMoneyCheckEdit as falMoneyCheckEdit,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import {
     faThList as fasThList,
@@ -137,6 +138,7 @@ library.add(falUserCircle);
 library.add(falFileExcel);
 library.add(falLink);
 library.add(falUnlink);
+library.add(falMoneyCheckEdit);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);

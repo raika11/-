@@ -1,10 +1,11 @@
 import React from 'react';
 import { MokaIconTabs, MokaIcon } from '@components';
+import ABEdit from './ABEdit';
 
 /**
  * A/B 테스트 > 전체 목록 > 탭
  */
-const ABTab = () => {
+const ABTab = (props) => {
     return (
         <MokaIconTabs
             foldable={false}
@@ -13,6 +14,7 @@ const ABTab = () => {
                 { title: '정보', text: 'Info' },
                 { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
             ]}
+            tabs={[<ABEdit {...props} />]}
         />
     );
 };

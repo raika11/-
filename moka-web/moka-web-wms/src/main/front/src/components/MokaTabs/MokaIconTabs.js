@@ -26,7 +26,7 @@ const propTypes = {
     /**
      * 탭 컨텐츠의 className
      */
-    tabContentClass: PropTypes.string,
+    tabContentClassName: PropTypes.string,
     /**
      * tab 컨텐츠(array)
      */
@@ -118,7 +118,7 @@ const MokaIconTabs = forwardRef((props, ref) => {
         expansion,
         onExpansion,
         onSelectNav,
-        tabContentClass,
+        tabContentClassName,
         activeKey: parentKey,
         hasHotkeys,
     } = props;
@@ -195,7 +195,7 @@ const MokaIconTabs = forwardRef((props, ref) => {
                         {
                             'd-none': !isExpand,
                         },
-                        tabContentClass,
+                        tabContentClassName,
                     )}
                     style={{ width: tabWidth }}
                 >

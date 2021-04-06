@@ -1,22 +1,22 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { MokaInput, MokaInputLabel, MokaPrependLinkInput, MokaIcon } from '@components';
+import { MokaInput, MokaInputLabel, MokaPrependLinkInput } from '@components';
 
 /**
  * A/B 테스트 > 탭 > 정보 > 주요 설정폼
  * 공통 UI
  */
-const ABMainForm = () => {
+const ABMainForm = (props) => {
+    const {
+        // direct,
+        // alternative,
+        data = {},
+        //  onChange
+    } = props;
     return (
         <div>
-            <Form.Row className="mb-2 align-items-center">
-                <MokaIcon iconName="fas-circle" fixedWidth className="color-neutral mr-2" />
-                <span className="mr-32">대기</span>
-                <span>수정일시</span>
-            </Form.Row>
-
-            <MokaInputLabel label="매체" className="mb-2" as="select" required disabled>
+            <MokaInputLabel label="매체" className="mb-2" as="select" value={data.source} required disabled>
                 <option>매체</option>
             </MokaInputLabel>
 

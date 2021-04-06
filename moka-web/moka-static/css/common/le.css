@@ -1014,7 +1014,9 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
 
 
-
+.card_group {display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1 !important;}
 
 
 

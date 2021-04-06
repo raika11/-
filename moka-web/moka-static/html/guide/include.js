@@ -9,8 +9,8 @@ var include = {
     },
     head: function () {
         document.write('<link rel="canonical" href="">');
-        document.write('<link href="https://getbootstrap.com/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet">');
-        document.write('<link href="https://static.joins.com/html/guide/guide.css" rel="stylesheet">');
+        // document.write('<link href="https://getbootstrap.com/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet">');
+        // document.write('<link href="https://static.joins.com/html/guide/guide.css" rel="stylesheet">');
         document.write('<link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">');
         document.write('<link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">');
         

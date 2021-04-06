@@ -13,10 +13,9 @@
 .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2{font-size:16px;font-weight: 500;line-height: 1.5;letter-spacing: -0.56px;color: #111;}
 
 /* sub title 영역-필요시 */
-.title_wrap {display: flex; align-items: center; justify-content: space-between; padding: 16px 0 21px; border-top: 1px solid #000;}
+.title_wrap {display: flex; align-items: center; justify-content: space-between; padding: 12px 0; height: 60px; border-top: 1px solid #000;}
 .title_wrap .title_area {display: flex; align-items: center; width: 100%;}
-.title_wrap .title_area .title {font-size: 16px; font-weight: 700;}
-.title_wrap.with_btn {padding:12px 0 12px;}
+.title_wrap .title {font-size: 16px; font-weight: 700;}
 
 /** card **/
 .card {position: relative;}
@@ -52,8 +51,7 @@
 
 .chain_wrap.latest .title_wrap,
 .chain_wrap.view_lank .title_wrap {border-width: 3px;}
-.chain_wrap.view_lank .title_wrap,
-.title_wrap {padding: 16px 0;}
+.chain_wrap.view_lank .title_wrap {padding: 16px 0;}
 
 
 /***************************************    catalog     ************************************/
@@ -77,7 +75,7 @@
 .fa_rect_w { display: inline-block; width: 15px; height: 10px; border: 1.5px solid #fff;  }
 .fa_rect_w::after { content: ''; position: absolute; left: 38%; top: 48%; width: 80%; height: 80%; border: 1.5px solid #fff;}
 .img_thumbnail { display: block; position: relative; }
-.unique_trend .card_group { margin-top: -20px; margin-bottom: 20px; padding-bottom: 30px; border-bottom: 1px solid #e2e2e2; }
+.unique_trend .card_group { margin-top: -20px; margin-bottom: 20px; }
 .unique_trend .card_group .col_lg4 { margin-top: 20px; }
 
 
@@ -157,7 +155,6 @@
     .header_nav_wrap .header_nav_area .btn_area {position: absolute; right: 16px; bottom: 16px; width: auto;}
     
     /* sub title 영역 */
-    .title_wrap {padding: 16px 0 19px;}
     .title_wrap .title_area .exp {font-size: 13px; color: #888; margin-left: 16px;}
 
     /* 컴포넌트 */
@@ -230,9 +227,8 @@
     .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2 {font-size:16px;letter-spacing:-0.2px;}
     
     /* sub title 영역 */
-    .title_wrap {padding: 19px 0 23px;}
-    .title_wrap .title_area .title {font-size: 18px;}
-    .title_wrap .title_area .exp {font-size: 14px;}
+    .title_wrap .title {font-size: 18px;}
+    .title_wrap .exp {font-size: 14px;}
 
     /* 컴포넌트 */
     .chain_wrap {margin-bottom: 50px;}

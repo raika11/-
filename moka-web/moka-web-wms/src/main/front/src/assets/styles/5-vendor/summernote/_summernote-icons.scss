@@ -1,12 +1,10 @@
 // Variables
-
 $sni-filename:   "summernote";
 $sni-font-name:  "summernote";
 $sni-font-path:  "../font" !default;
 $sni-css-prefix: note-icon !default;
 
 // Path
-
 @font-face {
   font-family: "summernote";
   font-style: normal;
@@ -16,7 +14,6 @@ $sni-css-prefix: note-icon !default;
 }
 
 // Core
-
 [class^="#{$sni-css-prefix}"]:before,
 [class*=" #{$sni-css-prefix}"]:before {
   display: inline-block;
@@ -33,7 +30,6 @@ $sni-css-prefix: note-icon !default;
 }
 
 // Extras
-
 .#{$sni-css-prefix}-fw {
   text-align: center;
   width: 1.25em;
@@ -63,7 +59,6 @@ $sni-css-prefix: note-icon !default;
 }
 
 // Functions
-
 @function char($character-code) {
   @if function-exists("selector-append") {
     @return unquote("\"\\#{$character-code}\"");
@@ -78,8 +73,6 @@ $sni-css-prefix: note-icon !default;
 }
 
 // Icons
-
-
 .note-icon-align::before {
   content: "\ea01";
 }

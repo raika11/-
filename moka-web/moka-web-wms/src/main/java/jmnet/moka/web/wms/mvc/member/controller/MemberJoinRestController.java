@@ -375,70 +375,66 @@ public class MemberJoinRestController extends AbstractCommonController {
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
-        //throwPasswordCheck(memberRequestDTO.getPassword(), memberRequestDTO.getConfirmPassword(), member);
-
-        System.out.println("====================================================================");
-        System.out.println("--------------------->" + member.getStatus());
+        MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
         if (MemberStatusCode.N == member.getStatus()) {
             throw new InvalidDataException(msg("wms.login.error.NewApprovalException"));
-        }
-        if (MemberStatusCode.D == member.getStatus()) {
+        } else if (MemberStatusCode.D == member.getStatus()) {
             throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
-        }
-        if (MemberStatusCode.R != member.getStatus()) {
+        } else if (MemberStatusCode.R == member.getStatus() || MemberStatusCode.P == member.getStatus()) {
+
+            if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS
+                    || memberRequestDTO.getRequestType() == MemberRequestCode.NEW_SMS) {// SMS 인증문자로 잠김해제 요청 또는 신규 등록 신청
+                if (McpString.isEmpty(member.getSmsAuth())) {
+                    throw new InvalidDataException(msg("wms.login.error.notempty.smsAuth"));
+                }
+                //            if (!member
+                //                    .getSmsAuth()
+                //                    .equals(memberRequestDTO.getSmsAuth())) {
+                //                throw new SmsAuthNumberBadCredentialsException(msg("wms.login.error.sms-unmatched"));
+                //            }
+
+                //            if (McpDate.term(member.getSmsExp()) < 0) {
+                //                throw new SmsAuthNumberExpiredException(msg("wms.login.error.unlock-sms-expired"));
+                //            }
+            }
+
+            String remark = McpString.defaultValue(member.getRemark());
+            if (McpString.isNotEmpty(remark)) {
+                remark += "\n";
+            }
+            remark += "· " + memberRequestDTO.getRequestReason();
+            member.setRemark(remark);
+
+            // 잠금 해제
+            member.setPassword(passwordEncoder.encode(memberRequestDTO.getPassword()));
+            member.setPasswordModDt(McpDate.now());
+            member.setErrCnt(0);
+
+            member.setStatus(memberRequestDTO
+                    .getRequestType()
+                    .getNextStatus());
+            memberService.updateMember(member);
+            successMsg = msg(memberRequestDTO
+                    .getRequestType()
+                    .getMessageKey());
+
+            if (successMsg != null) {
+
+                if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_REQUEST) {
+
+                    // 담당자에게 요청 Email 발송
+                    String[] mailTo = toEmailAddress;
+                    String memberNm = member.getMemberNm();
+                    String requestReason = memberRequestDTO.getRequestReason();
+                    sendEmail(mailTo, memberId, memberNm, "R", requestReason);
+                }
+            }
+
+        } else {
             throw new InvalidDataException(msg("wms.login.error.NotStopUsingException"));
         }
 
-        if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS
-                || memberRequestDTO.getRequestType() == MemberRequestCode.NEW_SMS) {// SMS 인증문자로 잠김해제 요청 또는 신규 등록 신청
-            if (McpString.isEmpty(member.getSmsAuth())) {
-                throw new InvalidDataException(msg("wms.login.error.notempty.smsAuth"));
-            }
-            //            if (!member
-            //                    .getSmsAuth()
-            //                    .equals(memberRequestDTO.getSmsAuth())) {
-            //                throw new SmsAuthNumberBadCredentialsException(msg("wms.login.error.sms-unmatched"));
-            //            }
-
-            //            if (McpDate.term(member.getSmsExp()) < 0) {
-            //                throw new SmsAuthNumberExpiredException(msg("wms.login.error.unlock-sms-expired"));
-            //            }
-        }
-
-        String remark = McpString.defaultValue(member.getRemark());
-        if (McpString.isNotEmpty(remark)) {
-            remark += "\n";
-        }
-        remark += "· " + memberRequestDTO.getRequestReason();
-        member.setRemark(remark);
-
-        // 잠금 해제
-        member.setPassword(passwordEncoder.encode(memberRequestDTO.getPassword()));
-        member.setPasswordModDt(McpDate.now());
-        member.setErrCnt(0);
-
-        member.setStatus(memberRequestDTO
-                .getRequestType()
-                .getNextStatus());
-        memberService.updateMember(member);
-        successMsg = msg(memberRequestDTO
-                .getRequestType()
-                .getMessageKey());
-
-        MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
-
-        if (successMsg != null) {
-
-            if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_REQUEST) {
-
-                // 담당자에게 요청 Email 발송
-                String[] mailTo = toEmailAddress;
-                String memberNm = member.getMemberNm();
-                String requestReason = memberRequestDTO.getRequestReason();
-                sendEmail(mailTo, memberId, memberNm, "R", requestReason);
-            }
-        }
 
         // 결과리턴
         ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO, successMsg);

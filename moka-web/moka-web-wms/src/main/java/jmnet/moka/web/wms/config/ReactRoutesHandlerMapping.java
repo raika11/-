@@ -3,6 +3,7 @@ package jmnet.moka.web.wms.config;
 import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.AbstractHandlerMapping;
 
@@ -17,6 +18,8 @@ import org.springframework.web.servlet.handler.AbstractHandlerMapping;
  */
 public class ReactRoutesHandlerMapping extends AbstractHandlerMapping {
 
+    @Value("${getHandlerInternal.routePath}")
+    private String routePath;
 
     private Set<String> reactRoutesList;
     private HandlerMethod reactRoutesHandlerMethod;
@@ -73,7 +76,7 @@ public class ReactRoutesHandlerMapping extends AbstractHandlerMapping {
                 return this.reactRoutesHandlerMethod;
             }
         }
-        for (String routePath : "/403,/404,/mypage".split(",")) {
+        for (String routePath : routePath.split(",")) {
             if (uri.startsWith(routePath)) {
                 return this.reactRoutesHandlerMethod;
             }

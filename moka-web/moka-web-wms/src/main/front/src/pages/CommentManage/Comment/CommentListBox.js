@@ -166,64 +166,65 @@ const CommentListBox = ({ setSelectBannedItem }) => {
 
     useEffect(() => {
         // store 에 list 내용이 업데이트 되면 grid 목록을 설정
-        setRowData(
-            list.map((element) => {
-                // 상태 코드
-                let statusText = element.status;
-                let elementState = COMMENT_STATUS_CODE.filter((e) => e.code === element.status);
-                if (elementState.length > 0) {
-                    statusText = elementState[0].name;
-                }
+        if (COMMENT_STATUS_CODE && COMMENT_MEDIA_CODE) {
+            setRowData(
+                list.map((element) => {
+                    // 상태 코드
+                    let statusText = element.status;
+                    let elementState = COMMENT_STATUS_CODE.filter((e) => e.code === element.status);
+                    if (elementState.length > 0) {
+                        statusText = elementState[0].name;
+                    }
 
-                // 매체 코드
-                let mediaText = '';
-                let urlGrpInfo = COMMENT_MEDIA_CODE.filter((e) => Number(e.dtlCd) === element.urlGrp);
-                if (urlGrpInfo.length > 0) {
-                    mediaText = urlGrpInfo[0].cdNm;
-                }
+                    // 매체 코드
+                    let mediaText = '';
+                    let urlGrpInfo = COMMENT_MEDIA_CODE.filter((e) => Number(e.dtlCd) === element.urlGrp);
+                    if (urlGrpInfo.length > 0) {
+                        mediaText = urlGrpInfo[0].cdNm;
+                    }
 
-                return {
-                    ...element,
-                    statusText: statusText,
-                    mediaText: mediaText,
-                    regMember: element.memId ? `${element.memNm}(${element.memId})` : '',
-                    action: {
-                        cmtSeq: element.cmtSeq,
-                        status: element.status,
-                        memNm: element.memNm,
-                        memId: element.memId,
-                    },
-                    onClickTitle: (params) => {
-                        const { api: gridApi, rowIndex, reactContainer } = params;
-                        const row = gridApi.getDisplayedRowAtIndex(rowIndex);
-                        const contHeight = reactContainer.querySelector('span').clientHeight + 26;
-                        if (row.rowHeight < contHeight) {
-                            row.setRowHeight(contHeight);
-                        } else {
-                            gridApi.resetRowHeights();
-                        }
-
-                        gridApi.onRowHeightChanged();
-                    },
-                    onPreview: (params) => {
-                        const { commentUrl, contentId } = params.data;
-                        let url = commentUrl;
-                        if (url !== null) {
-                            window.open(url);
-                        } else {
-                            url = 'https://news.joins.com';
-                            if (!commonUtil.isEmpty(contentId)) {
-                                url = `${url}/article/${contentId}`;
+                    return {
+                        ...element,
+                        statusText: statusText,
+                        mediaText: mediaText,
+                        regMember: element.memId ? `${element.memNm}(${element.memId})` : '',
+                        action: {
+                            cmtSeq: element.cmtSeq,
+                            status: element.status,
+                            memNm: element.memNm,
+                            memId: element.memId,
+                        },
+                        onClickTitle: (params) => {
+                            const { api: gridApi, rowIndex, reactContainer } = params;
+                            const row = gridApi.getDisplayedRowAtIndex(rowIndex);
+                            const contHeight = reactContainer.querySelector('span').clientHeight + 26;
+                            if (row.rowHeight < contHeight) {
+                                row.setRowHeight(contHeight);
+                            } else {
+                                gridApi.resetRowHeights();
                             }
-                            window.open(url);
-                        }
-                    },
-                };
-            }),
-        );
-        // console.log(list);
+
+                            gridApi.onRowHeightChanged();
+                        },
+                        onPreview: (params) => {
+                            const { commentUrl, contentId } = params.data;
+                            let url = commentUrl;
+                            if (url !== null) {
+                                window.open(url);
+                            } else {
+                                url = 'https://news.joins.com';
+                                if (!commonUtil.isEmpty(contentId)) {
+                                    url = `${url}/article/${contentId}`;
+                                }
+                                window.open(url);
+                            }
+                        },
+                    };
+                }),
+            );
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [list]);
+    }, [list, COMMENT_STATUS_CODE, COMMENT_MEDIA_CODE]);
 
     return (
         <CommentAgGrid

@@ -88,6 +88,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
             throws Exception {
         return new InboundIpAuthenticationFilter(this.authenticationManager(), this.inboundIps);
     }
+
     @Bean
     public WmsJwtAuthenticationFilter jwtAuthenticationFilter()
             throws Exception {
@@ -126,7 +127,9 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .disable()    // Cross-Site Request Forgery 공격 방지
                 .cors()
                 .and()
-                .headers().httpStrictTransportSecurity().disable()
+                .headers()
+                .httpStrictTransportSecurity()
+                .disable()
                 .and()
                 .sessionManagement()
                 .sessionFixation()
@@ -147,8 +150,8 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             // home, react 소스, 미리보기, 템플릿 이미지 허용
             .antMatchers("/", TpsConstants.HEALTH_PAGE, "/preview/**", "/moka_storage/**", "/" + uploadPathPrefix + "/**", "/swagger-ui.html",
-                    "/swagger-resources/**", "/v2/api-docs", "/api/user/test-login", "/api/member-join/**", "/api/app/image-proxy",
-                    "/font/**", "/403", "/404")
+                    "/swagger-resources/**", "/v2/api-docs", "/api/user/test-login", "/api/member-join/**", "/api/app/image-proxy", "/font/**",
+                    "/403", "/404", "/mypage")
             .permitAll()
             // react 서버렌더링 허용
             .antMatchers(reactRoutes)

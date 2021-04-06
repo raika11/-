@@ -116,7 +116,10 @@
     .card_group.catalog_card .card:first-child,
     .card_group.catalog_card .card.col_sm6:nth-child(2) {margin-top:0;}
     
-    .chain_wrap.showcase_general ul:first-child .card {margin-top: 0; padding-top: 0; border-top: 0;}
+    .chain_wrap.showcase_general >.row > div:first-child .card {padding-top: 0;}
+    .showcase_general .card_group.row .card {padding-top: 20px; padding-bottom: 20px;}
+    .showcase_general .card_group.row .card::before{content:'';position:absolute;top:0;left:0;display:block;width:100%;height:1px;background:#e2e2e2;}
+    .showcase_general .card_group.row > .card::before{left:10px;width:calc(100% - 20px);}
 
     /* .img_right .card_body {padding-right: 20px;} */
     /* .img_right .card_image {margin-bottom: 0;} */
@@ -167,8 +170,9 @@
 
     /***************************************    general     ************************************/
     .showcase_general .card_group .card {margin-top: 20px; padding-top: 20px;}
-    .showcase_general .card_group .card::before{content:'';position:absolute;top:0;left:0;display:block;width:100%;height:1px;background:#e2e2e2;}
-    .showcase_general .card_group .card:first-child::before {left: 10px;}
+    .showcase_general .card_group.row .card::before{content:'';position:absolute;top:0;left:0;display:block;width:100%;height:1px;background:#e2e2e2;}
+    .showcase_general .card_group.row .card:first-child::before {left: 10px;}
+    .showcase_general .card_group.row .card:last-child::before {left: -10px;}
     .showcase_general .card_group .card .card_body {border-right: 1px solid #e2e2e2;}
 
     .chain_wrap.showcase_general {margin-bottom: 20px;}
@@ -234,14 +238,15 @@
     .card.img_left_md .card_image {margin-bottom: 12px;}
 
     /***************************************    general     ************************************/
-    .showcase_general .card:first-child::before {content: none;}
-    .showcase_general .card_group.row > .card::before,
-    .latest .card_group.row > .card::before {left:18px; width:calc(100% - 36px);}
-    .showcase_general .card_group .card .card_body {border-right: 0;}
-
     .chain_wrap.showcase_general .card_group .card {margin-top: 30px; padding-top: 18px;}
     .chain_wrap.showcase_general .card_group .card:first-child {margin-top: 0; padding-top: 0;}
     .chain_wrap.showcase_general .headline {font-size: 20px;}
+
+    .showcase_general .card_group.row > .card::before,
+    .latest .card_group.row > .card::before {left:18px; width:calc(100% - 36px);}
+    .showcase_general .card_group.row .card:first-child::before {content: none;}
+    .showcase_general .card_group.row .card:last-child::before {left: 18px;}
+    .showcase_general .card_group .card .card_body {border-right: 0;}
 
     .fb_wrap {padding: 30px 30px 30px 40px;}
     .fb_wrap .fb_area .title {font-size: 18px;}

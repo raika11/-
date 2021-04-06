@@ -219,5 +219,12 @@
       ) }
   </select>
 
+  <!-- 공유등록 -->
+  <select id="shareInsert" parameterType="map" resultType="map"
+    statementType="CALLABLE">
+    {call UPU_15RE_ARTICLE_SHARE_ONLY_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
 
 </mapper>

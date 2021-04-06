@@ -37,7 +37,7 @@ public class CommentVote implements Serializable {
     @Column(name = "VOTE_VALUE", nullable = false)
     private Integer voteValue = 0;
 
-    @Column(name = "MEM_SEQ")
+    @Column(name = "MEM_SEQ", nullable = false)
     private Long memSeq;
 
     @Nationalized

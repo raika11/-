@@ -108,7 +108,7 @@
   </api>
 
   <!-- 댓글신고등록 -->
-  <api id="comment.vote.insert" method="post" expire="0">
+  <api id="comment.vote.insert" membership="cookiePass" method="post" expire="0">
     <description>댓글을 신고한다</description>
     <parameter>
       <id desc="댓글번호" require="Y" type="number">^[0-9]{1,9}$</id>

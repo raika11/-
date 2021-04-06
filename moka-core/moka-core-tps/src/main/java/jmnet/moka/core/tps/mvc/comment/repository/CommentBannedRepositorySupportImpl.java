@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
  *
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.comment.repository
- * ClassName : CommentMemberRepositorySupportImpl
+ * ClassName : CommentBannedRepositorySupportImpl
  * Created : 2021-01-08 ince
  * </pre>
  *

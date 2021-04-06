@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
  *
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.comment.repository
- * ClassName : CommentMemberRepositorySupport
+ * ClassName : CommentBannedRepositorySupport
  * Created : 2021-01-08 ince
  * </pre>
  *

@@ -421,8 +421,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     img {width:100%;}
 
     .flex_row_reverse_sm {flex-wrap:wrap-reverse;}
-    .row.add_pdlr {margin-left:-9px;margin-right:-9px;}
-    .row.add_pdlr > * {padding-left:9px;padding-right:9px;}
+    .row {margin-left:-9px;margin-right:-9px;}
+    .row > * {padding-left:9px;padding-right:9px;}
 
     .sm_hidden {display:none;} /* <<- .pc {display:none;} */
 
@@ -507,8 +507,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .md_only_hidden {display:none;} /* <<- .tb {display:none;} */
 
     /* 그리드 */
-    .row.add_pdlr {margin-left: -10px; margin-right: -10px;}
-    .row.add_pdlr > * {padding-left:10px; padding-right:10px;}
+    .row {margin-left: -10px; margin-right: -10px;}
+    .row > * {padding-left:10px; padding-right:10px;}
 
     .header {height: 42px;}
     .header .uh .btn_navbar .icon_navbar {background-color: #fff;}
@@ -597,8 +597,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .md_only_hidden {display:block;}
     .lg_hidden {display:none;}
 
-    .row.add_pdlr {margin-left: -18px; margin-right: -18px;}
-    .row.add_pdlr > * {padding-left:18px;padding-right:18px;}
+    .row {margin-left: -18px; margin-right: -18px;}
+    .row > * {padding-left:18px;padding-right:18px;}
 
     .header {height: 48px; padding: 0;}
     .header .uh .btn_navbar {left: 25px;}

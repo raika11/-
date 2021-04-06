@@ -9,7 +9,7 @@ const tabNavs = ['주요 설정', '기타 설정'];
  */
 const ABEdit = () => {
     return (
-        <MokaCard title="AB테스트명" className="w-100 shadow-none" bodyClassName="p-0">
+        <MokaCard title="AB테스트명" className="w-100 shadow-none" bodyClassName="p-0 m-0">
             <MokaCardTabs className="w-100 h-100 shadow-none" tabNavs={tabNavs} tabs={[<ABMainForm />]} />
         </MokaCard>
     );

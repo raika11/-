@@ -179,7 +179,7 @@ const Menu = () => {
                 height={CARD_DEFAULT_HEIGHT}
             >
                 <div className="mb-2 d-flex justify-content-end">
-                    <Button depth="1" parentmenuid={rootParentMenuId} variant="secondary" className="mr-1" onClick={handleNewMenu}>
+                    <Button depth="1" parentmenuid={rootParentMenuId} variant="positive-a" className="mr-1" onClick={handleNewMenu}>
                         등록
                     </Button>
                     <Button
@@ -214,7 +214,7 @@ const Menu = () => {
                 height={CARD_DEFAULT_HEIGHT}
             >
                 <div className="mb-2 d-flex justify-content-end">
-                    <Button depth="2" parentmenuid={largeMenuId} variant="secondary" className="mr-1" onClick={handleNewMenu}>
+                    <Button depth="2" parentmenuid={largeMenuId} variant="positive-a" className="mr-1" onClick={handleNewMenu}>
                         등록
                     </Button>
                     <Button
@@ -249,7 +249,7 @@ const Menu = () => {
                 height={CARD_DEFAULT_HEIGHT}
             >
                 <div className="mb-2 d-flex justify-content-end">
-                    <Button depth="3" parentmenuid={middleMenuId} variant="secondary" className="mr-1" onClick={handleNewMenu}>
+                    <Button depth="3" parentmenuid={middleMenuId} variant="positive-a" className="mr-1" onClick={handleNewMenu}>
                         등록
                     </Button>
                     <Button

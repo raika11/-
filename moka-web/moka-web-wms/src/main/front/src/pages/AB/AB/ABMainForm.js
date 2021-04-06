@@ -1,7 +1,7 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { MokaInputLabel } from '@components';
+import { MokaInput, MokaInputLabel, MokaPrependLinkInput } from '@components';
 
 /**
  * A/B 테스트 > 전체 목록 > 탭 > 정보 > 주요 설정
@@ -40,6 +40,13 @@ const ABMainForm = () => {
 
             <Form.Row className="mb-2">
                 <MokaInputLabel label="변수 선택" as="none" />
+                <MokaPrependLinkInput linkText="ID 235" inputList={{ as: 'autocomplete', options: [], placeholder: '' }} className="mr-32" />
+                <MokaPrependLinkInput linkText="ID 236" inputList={{ as: 'autocomplete', options: [], placeholder: '' }} />
+            </Form.Row>
+
+            <Form.Row className="mb-2">
+                <MokaInputLabel label="그룹할당" as="radio" id="group-1" name="group" inputProps={{ label: '랜덤그룹' }} disabled />
+                <MokaInput as="radio" id="group-2" name="group" inputProps={{ label: '고정그룹' }} disabled />
             </Form.Row>
         </div>
     );

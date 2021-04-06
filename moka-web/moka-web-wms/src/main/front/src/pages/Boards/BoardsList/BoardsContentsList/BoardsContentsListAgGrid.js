@@ -56,26 +56,24 @@ const BoardsContentsListAgGrid = ({ match }) => {
     );
 
     useEffect(() => {
-        // store에서 게시글 목록 변경 되었을 때 그리드 리스트 업데이트
-        if (list) {
-            setRowData(
-                list.map((data) => {
-                    let replay = data.boardSeq !== data.parentBoardSeq;
-                    return {
-                        ...data,
-                        number: replay || data.delYn === 'Y' ? '' : data.boardSeq,
-                        titlePrefix1: replay ? '' : data.titlePrefix1,
-                        titlePrefix2: replay ? '' : data.titlePrefix2,
-                        regInfo: `${data.regName}(${data.regId})`,
-                        regDt: data.modDt ? moment(data.modDt).format(BASIC_DATEFORMAT) : moment(data.regDt).format(BASIC_DATEFORMAT),
-                        recomInfo: `${data.recomCnt} / ${data.decomCnt}`,
-                        fileItem: {
-                            attaches: data.attaches,
-                        },
-                    };
-                }),
-            );
-        }
+        // 게시글 목록
+        setRowData(
+            list.map((data) => {
+                let replay = data.boardSeq !== data.parentBoardSeq;
+                return {
+                    ...data,
+                    number: replay || data.delYn === 'Y' ? '' : data.boardSeq,
+                    titlePrefix1: replay ? '' : data.titlePrefix1,
+                    titlePrefix2: replay ? '' : data.titlePrefix2,
+                    regInfo: `${data.regName}(${data.regId})`,
+                    regDt: data.modDt ? moment(data.modDt).format(BASIC_DATEFORMAT) : moment(data.regDt).format(BASIC_DATEFORMAT),
+                    recomInfo: `${data.recomCnt} / ${data.decomCnt}`,
+                    fileItem: {
+                        attaches: data.attaches,
+                    },
+                };
+            }),
+        );
     }, [list]);
 
     return (

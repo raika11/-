@@ -32,6 +32,7 @@ export const columnDefs = [
         field: 'status',
         width: 70,
         cellStyle: { diplay: 'flex', alignItems: 'center' },
+        cellRenderer: 'usedYnRenderer',
     },
     /*{
         headerName: '시작일',

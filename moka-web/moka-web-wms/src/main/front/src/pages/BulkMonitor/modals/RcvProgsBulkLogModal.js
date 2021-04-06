@@ -43,7 +43,6 @@ const RcvProgsBulkLogModal = (props) => {
     const handleRowClicked = useCallback((data) => {
         setRcvProgs(true);
         setType('');
-        // console.log(data);
         setBulkContent(data.content);
         setBulkMsg(data.msg);
     }, []);
@@ -63,22 +62,21 @@ const RcvProgsBulkLogModal = (props) => {
 
     useEffect(() => {
         // startDt, endDt 모멘트 객체로
-        if (bulkSendListInfo.length > 0) {
-            setRowData(
-                bulkSendListInfo.map((data) => ({
-                    ...data,
-                    startDt: moment(data.startDt).format('YYYY-MM-DD HH:mm:ss'),
-                    endDt: moment(data.endDt).format('YYYY-MM-DD HH:mm:ss'),
-                })),
-            );
-        }
+        setRowData(
+            bulkSendListInfo.map((data, idx) => ({
+                ...data,
+                seq: idx,
+                startDt: moment(data.startDt).format('YYYY-MM-DD HH:mm:ss'),
+                endDt: moment(data.endDt).format('YYYY-MM-DD HH:mm:ss'),
+            })),
+        );
     }, [bulkSendListInfo]);
 
     return (
         <MokaModal size="xl" width={rcvProgs === false ? 700 : 1120} height={850} show={show} onHide={handleHide} draggable>
             <div className="d-flex justify-content-between">
                 <div style={{ width: 700 }}>
-                    <Form className="mb-3">
+                    <Form className="mb-14">
                         <MokaInputLabel className="mb-2" label="기사 ID" value={data.contentId} inputProps={{ readOnly: true, plaintext: true }} />
                         <MokaInputLabel className="mb-2" label="제목" value={data.title} inputProps={{ readOnly: true, plaintext: true }} />
                         <Form.Row className="d-flex justify-content-between mb-2">
@@ -91,19 +89,18 @@ const RcvProgsBulkLogModal = (props) => {
                     </Form>
                     <div className="d-flex flex-column">
                         <MokaTable
-                            agGridHeight={595}
+                            agGridHeight={577}
                             columnDefs={columnDefs}
                             rowData={rowData}
                             loading={loading}
-                            onRowNodeId={(params) => params.portalDiv}
+                            onRowNodeId={(params) => params.seq}
                             onRowClicked={handleRowClicked}
                             paging={false}
-                            className="mr-2"
                         />
                     </div>
                 </div>
                 {rcvProgs === true && (
-                    <div className="ml-2 d-flex flex-column" style={{ width: 420 }}>
+                    <div className="ml-gutter d-flex flex-column" style={{ width: 420 }}>
                         {type !== 'btn' && (
                             <>
                                 <p className="mb-2">생성 XML</p>
@@ -111,7 +108,7 @@ const RcvProgsBulkLogModal = (props) => {
                             </>
                         )}
                         <p className="mb-2">메세지</p>
-                        <MokaInput as="textarea" value={type === 'btn' ? data.msg : bulkMsg} className="custom-scroll resize-none" readOnly inputProps={{ rows: 15 }} />
+                        <MokaInput as="textarea" value={type === 'btn' ? data.msg : bulkMsg} className="custom-scroll resize-none" readOnly inputProps={{ rows: 16 }} />
                     </div>
                 )}
             </div>

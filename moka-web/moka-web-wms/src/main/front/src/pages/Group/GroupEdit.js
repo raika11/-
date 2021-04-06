@@ -49,7 +49,7 @@ const GroupEdit = ({ match }) => {
                 group: store.group.group,
                 menus: store.group.menus,
                 invalidList: store.group.invalidList,
-                memberNm: store.group.group.regMember && store.group.group.regMember.memberNm,
+                memberNm: store.group.group.regMember?.memberNm || '',
                 loading: store.loading[GET_GROUP] || store.loading[SAVE_GROUP] || store.loading[DELETE_GROUP],
             };
         },

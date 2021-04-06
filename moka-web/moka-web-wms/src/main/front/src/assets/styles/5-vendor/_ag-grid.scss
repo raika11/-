@@ -36,6 +36,10 @@
     background-color: rgba(33, 150, 243, 0.2);
 }
 
+.ag-center-cols-viewport {
+    overflow: hidden;
+}
+
 // ag-theme-moka-grid (include ag-theme-aplpine)
 // 기본 테이블 + appStack 테이블 스타일
 .ag-theme-moka-grid {
@@ -365,10 +369,6 @@ $rel-row-hover-color: darken($rel-row-color, 5);
 
     .ag-center-cols-clipper {
         min-height: 32px;
-
-        .ag-center-cols-viewport {
-            overflow: hidden;
-        }
     }
 
     // 벌크 핫클릭 예외처리

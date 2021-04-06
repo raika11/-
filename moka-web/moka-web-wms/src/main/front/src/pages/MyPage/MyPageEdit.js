@@ -268,6 +268,7 @@ const MyPageEdit = () => {
 
     useEffect(() => {
         dispatch(getMember(AUTH.userId));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [AUTH]);
 
     useEffect(() => {
@@ -275,6 +276,7 @@ const MyPageEdit = () => {
             const groupName = member.groupMembers.map((group) => group.group.groupKorNm).join(', ');
             setUser({ ...user, id: member.memberId, name: member.memberNm, dept: member.dept, regDt: member.regDt, phone: member.mobilePhone, groupName });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [member]);
 
     return (

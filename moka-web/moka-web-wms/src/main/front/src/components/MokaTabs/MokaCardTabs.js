@@ -111,7 +111,7 @@ const MokaCardTabs = (props) => {
                             else if (typeof nav === 'string') {
                                 return (
                                     <Nav.Item key={idx} style={{ width: navWidth }}>
-                                        <Nav.Link eventKey={idx} className="h4">
+                                        <Nav.Link eventKey={idx} className="h4 pre-wrap">
                                             {nav}
                                         </Nav.Link>
                                     </Nav.Item>

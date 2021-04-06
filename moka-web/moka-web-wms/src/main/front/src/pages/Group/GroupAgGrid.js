@@ -58,7 +58,7 @@ const GroupAgGrid = (props) => {
                 groupCd: row.groupCd,
                 groupNm: row.groupNm,
                 groupKorNm: row.groupKorNm,
-                regId: row.regMember.memberNm,
+                regId: row.regMember ? row.regMember?.memberNm : '',
                 regDt: moment(row.regDt).format(BASIC_DATEFORMAT),
                 onDelete,
             })),

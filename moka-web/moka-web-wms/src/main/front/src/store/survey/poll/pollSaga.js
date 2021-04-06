@@ -36,7 +36,7 @@ function toPollListData(list, codes) {
             id: data.pollSeq,
             category: commonUtil.toKorFromCode(data.pollCategory, codes.pollCategory),
             group: commonUtil.toKorFromCode(data.pollGroup, codes.pollGroup),
-            status: commonUtil.toKorFromCode(data.status, codes.status),
+            status: data.status === 'S' ? 'Y' : 'N',
             title: unescapeHtmlArticle(data.title),
             regDt,
             modDt,

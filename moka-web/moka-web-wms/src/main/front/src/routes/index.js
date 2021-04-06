@@ -112,6 +112,7 @@ const InternalApi = React.lazy(() => import('@pages/InternalApi'));
 const Package = React.lazy(() => import('@pages/Issue'));
 const Jopan = React.lazy(() => import('@pages/Jopan'));
 const MyPage = React.lazy(() => import('@pages/MyPage'));
+const AB = React.lazy(() => import('@pages/AB/AB'));
 
 const routes = [
     {
@@ -720,6 +721,16 @@ const routes = [
         component: Jopan,
         side: true,
         nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/ab',
+        name: 'ab',
+        component: AB,
+        displayName: '',
+        side: true,
+        nonResponsive: true,
         exact: false,
         strict: true,
     },

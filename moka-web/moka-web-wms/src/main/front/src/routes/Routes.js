@@ -7,6 +7,9 @@ import { getUserMenuTree, changeLatestMenuId } from '@store/auth/authAction';
 import { MokaLoader, ScrollToTop, MokaErrorBoundary } from '@components';
 import routes from './index'; // routes
 
+/**
+ * 메뉴 데이터 주입
+ */
 const MenuBox = ({ children, menu, path, nonResponsive = false, side = true }) => {
     const history = useHistory();
     const dispatch = useDispatch();

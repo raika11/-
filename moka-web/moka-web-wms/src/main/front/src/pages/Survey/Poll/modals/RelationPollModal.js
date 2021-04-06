@@ -9,7 +9,7 @@ import commonUtil from '@utils/commonUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import produce from 'immer';
 const initialState = { searchType: 'title', keyword: '', page: 0, size: 20, sort: 'pollSeq,desc', status: ['S', 'D'], pollGroup: '' };
-const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
+const RelationPollModal = ({ title, show, onHide, onAdd, onRowClicked, codes }) => {
     const [total, setTotal] = useState(0);
     const [search, setSearch] = useState(initialState);
     const [rows, setRows] = useState([]);
@@ -84,7 +84,7 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
     }, [show, search]);
 
     return (
-        <MokaModal title="관련 투표 추가" show={show} onHide={onHide} size="md" width={600} loading={loading} draggable>
+        <MokaModal title={title} show={show} onHide={onHide} size="md" width={600} loading={loading} draggable>
             <RelationPollModalSearchComponent onSearch={setSearch} searchOptions={search} codes={codes} />
             <RelationPollModalAgGridComponent
                 rowData={rows}

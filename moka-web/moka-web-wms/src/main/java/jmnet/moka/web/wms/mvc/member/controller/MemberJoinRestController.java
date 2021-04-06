@@ -262,7 +262,7 @@ public class MemberJoinRestController extends AbstractCommonController {
                 }
             }
         } catch (NoSuchElementException e) {
-            System.out.println("No such element");
+            log.debug("No such element");
         }
 
 
@@ -377,8 +377,17 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         //throwPasswordCheck(memberRequestDTO.getPassword(), memberRequestDTO.getConfirmPassword(), member);
 
+        System.out.println("====================================================================");
+        System.out.println("--------------------->" + member.getStatus());
+
+        if (MemberStatusCode.N == member.getStatus()) {
+            throw new InvalidDataException(msg("wms.login.error.NewApprovalException"));
+        }
         if (MemberStatusCode.D == member.getStatus()) {
             throw new InvalidDataException(msg("wms.login.error.StopUsingException"));
+        }
+        if (MemberStatusCode.R != member.getStatus()) {
+            throw new InvalidDataException(msg("wms.login.error.NotStopUsingException"));
         }
 
         if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS

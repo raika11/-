@@ -73,7 +73,7 @@ public class ReactRoutesHandlerMapping extends AbstractHandlerMapping {
                 return this.reactRoutesHandlerMethod;
             }
         }
-        for (String routePath : "/403,/404".split(",")) {
+        for (String routePath : "/403,/404,/mypage".split(",")) {
             if (uri.startsWith(routePath)) {
                 return this.reactRoutesHandlerMethod;
             }

@@ -186,7 +186,7 @@ const CommentListBox = ({ setSelectBannedItem }) => {
                     ...element,
                     statusText: statusText,
                     mediaText: mediaText,
-                    regMember: `${element.memNm}(${element.memId})`,
+                    regMember: element.memId ? `${element.memNm}(${element.memId})` : '',
                     action: {
                         cmtSeq: element.cmtSeq,
                         status: element.status,

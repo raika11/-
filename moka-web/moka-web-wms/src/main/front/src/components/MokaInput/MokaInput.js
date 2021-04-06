@@ -186,7 +186,7 @@ const MokaInput = forwardRef((props, ref) => {
 
     // 셀렉트
     if (as === 'select') {
-        contextProps = { ...contextProps, as, custom: true };
+        contextProps = { custom: true, ...contextProps, as };
     }
     // textarea
     else if (as === 'textarea') {
@@ -195,17 +195,17 @@ const MokaInput = forwardRef((props, ref) => {
     // 라디오
     else if (as === 'radio') {
         Type = Form.Check;
-        contextProps = { ...contextProps, type: as };
+        contextProps = { custom: true, ...contextProps, type: as };
     }
     // 스위치
     else if (as === 'switch') {
         Type = Form.Check;
-        contextProps = { ...contextProps, type: as, label: inputProps.label || '' };
+        contextProps = { custom: true, ...contextProps, type: as, label: inputProps.label || '' };
     }
     // 체크박스
     else if (as === 'checkbox') {
         Type = Form.Check;
-        contextProps = { ...contextProps, type: as };
+        contextProps = { custom: true, ...contextProps, type: as };
     }
     // 파일
     else if (as === 'file') {

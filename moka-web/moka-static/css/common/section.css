@@ -30,7 +30,7 @@
 /* .img_right_all .card_body {padding-right: 20px !important;} */
 /* .img_right_all .card_image {margin-bottom: 0;} */
 .card .lank_num {position: absolute; width: 16px; font-size: 46px;}
-.card .lank_num + .card_body {padding-left: 40px;}
+.card .lank_num + .card_body {padding-left: 58px;}
 .card_more { display: flex; align-items: center; justify-content: center; width: 100%; padding-top:30px; border-top:1px solid #ddd; color: #999;}
 .card_more .fa_arrow_down_g { margin-left: 8px;}
 
@@ -72,11 +72,8 @@
 .card_in_txt .card_body .description { color: #fff;}
 
 .card_image .fa_rect_w { position: absolute; right: 6%; bottom: 8%; }
-.section_unique_wrap .title_wrap .title { font-size: 18px; }
-.section_unique_wrap .title_wrap .title .fa_arrow_right_b { margin-top: 2px; margin-left: 4px; }
-/* 임시 아이콘 이미지 변경시 소스 수정해야됨 */
-.fa_rect_w { display: inline-block; width: 15px; height: 10px; border: 1.5px solid #fff;  }
-.fa_rect_w::after { content: ''; position: absolute; left: 38%; top: 48%; width: 80%; height: 80%; border: 1.5px solid #fff;}
+.fa_rect_w { display: inline-block; width: 15px; height: 10px; border: 1.5px solid #fff;  } /*임시-추후 이미지형태 아이콘으로 수정 예정*/
+.fa_rect_w::after { content: ''; position: absolute; left: 38%; top: 48%; width: 80%; height: 80%; border: 1.5px solid #fff;} /*임시-추후 이미지형태 아이콘으로 수정 예정*/
 .img_thumbnail { display: block; position: relative; }
 
 

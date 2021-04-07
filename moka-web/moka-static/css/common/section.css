@@ -14,7 +14,7 @@
 
 /* sub title 영역-필요시 */
 .title_wrap {display:flex; align-items:center; justify-content:space-between; padding:12px 0; height:60px; border-top:1px solid #000;}
-.title_wrap .title_area {display:flex; align-items:center; width:100%;}
+.title_wrap .title_area {display:flex; align-items:center; }
 .title_wrap .title {font-size:16px; font-weight:700;}
 
 /** card **/

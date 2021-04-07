@@ -9,8 +9,6 @@ var include = {
     },
     head: function () {
         document.write('<link rel="canonical" href="">');
-        // document.write('<link href="https://getbootstrap.com/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet">');
-        // document.write('<link href="https://static.joins.com/html/guide/guide.css" rel="stylesheet">');
         document.write('<link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">');
         document.write('<link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">');
         
@@ -23,28 +21,13 @@ var include = {
         document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs2015.min.css">');
         document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>');
         document.write('<script>hljs.initHighlightingOnLoad();</script>');
-        document.write('');
-
+        document.write('<link href="guide.css" rel="stylesheet">');
+        document.write('<script src="guide.js"></script>');
     },
-
-    
-    
-    
 
 
     header: function () {
-        
-
-
         document.write('');
-
-
-
-
-
-
-
-
         document.write('<header class="header">');
         document.write('    <nav class="gnb">');
         document.write('        <h1 class="logo">중앙일보</h1>');
@@ -69,7 +52,7 @@ var include = {
         },
         menu0: function(){
 
-            document.write('<aside class="sidebar_guide col_sm12 col_md2 col_lg2"  style="border:1px solid violet">');
+            document.write('<aside class="sidebar_guide col_sm12 col_md2 col_lg2">');
 
             document.write('<!-- side navigation -->');
             document.write('<nav class="accordian side_nav side_nav_guide"  id="">');
@@ -81,6 +64,7 @@ var include = {
             document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Container</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Grid</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Section</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="title.html">타이틀</a></li>');
             document.write('            </ul>');
             document.write('        </li>');
             document.write('        <li class="nav_item">');
@@ -105,6 +89,7 @@ var include = {
             document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Menu3</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">버튼</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="card.html">카드</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="list_group.html">리스트 그룹</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="rank.html">많이본기사(rank)</a></li>');
             document.write('            </ul>');
             document.write('        </li>');

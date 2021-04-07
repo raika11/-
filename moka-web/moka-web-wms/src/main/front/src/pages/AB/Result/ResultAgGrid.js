@@ -1,0 +1,24 @@
+import React from 'react';
+import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
+import { MokaTable } from '@components';
+import columnDefs from './ResultAgGridColumns';
+
+/**
+ * A/B 테스트 > 테스트 결과 > 리스트 > AgGrid
+ */
+const ResultAgGrid = () => {
+    return (
+        <React.Fragment>
+            <Row className="mb-14 justify-content-end" noGutters>
+                <Button variant="positive" onClick={() => {}}>
+                    다운로드
+                </Button>
+            </Row>
+
+            <MokaTable headerHeight={45} rowHeight={43} className="overflow-hidden flex-fill" columnDefs={columnDefs} onRowNodeId={(data) => data.seq} />
+        </React.Fragment>
+    );
+};
+
+export default ResultAgGrid;

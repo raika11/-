@@ -5,13 +5,13 @@ import { Route, Switch } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
-import AutoList from './AutoList';
-import AutoEdit from './AutoEdit';
+import JamList from './JamList';
+import JamEdit from './JamEdit';
 
 /**
- * A/B 테스트 > 직접 설계
+ * A/B 테스트 > JAM 설계
  */
-const Auto = ({ match }) => {
+const JAM = ({ match }) => {
     const currentMenu = useSelector(({ auth }) => auth.currentMenu);
 
     return (
@@ -25,7 +25,7 @@ const Auto = ({ match }) => {
             {/* 리스트 */}
             <Col xs={7} className="pr-gutter">
                 <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
-                    <AutoList match={match} />
+                    <JamList match={match} />
                 </MokaCard>
             </Col>
 
@@ -36,7 +36,7 @@ const Auto = ({ match }) => {
                     exact
                     render={() => (
                         <Col xs={5}>
-                            <AutoEdit match={match} />
+                            <JamEdit match={match} />
                         </Col>
                     )}
                 />
@@ -45,4 +45,4 @@ const Auto = ({ match }) => {
     );
 };
 
-export default Auto;
+export default JAM;

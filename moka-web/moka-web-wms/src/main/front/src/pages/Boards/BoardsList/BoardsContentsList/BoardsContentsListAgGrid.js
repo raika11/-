@@ -5,7 +5,7 @@ import moment from 'moment';
 import { MokaTable } from '@components';
 import { BASIC_DATEFORMAT, DISPLAY_PAGE_NUM } from '@/constants';
 import FileItemRenderer from './FileItemRenderer';
-import useBoardDefs from './BoardsContentsListAgGridColumns';
+import { boardColumnDefs } from './BoardsContentsListAgGridColumns';
 import { GET_LIST_MENU_CONTENTS_LIST, changeListMenuSearchOption, getListMenuContentsList } from '@store/board';
 
 /**
@@ -23,14 +23,16 @@ const BoardsContentsListAgGrid = ({ match }) => {
     const contentsReply = useSelector((store) => store.board.listMenu.contents.reply);
     const loading = useSelector((store) => store.loading[GET_LIST_MENU_CONTENTS_LIST]);
 
-    const [columnsState] = useBoardDefs(selectBoard);
+    // const [gridApi, setGridApi] = useState(null);
+    // const [gridColumnApi, setGridColumnApi] = useState(null);
+
     // rowData
     const [rowData, setRowData] = useState([]);
 
     /**
      * 테이블 row 클릭
      */
-    const handleOnRowClicked = (row) => {
+    const handleRowClicked = (row) => {
         // 게시글의 답변이 없으면
         if (row.boardSeq === row.parentBoardSeq) {
             history.push(`${match.path}/${row.boardId}/${row.boardSeq}`);
@@ -63,9 +65,9 @@ const BoardsContentsListAgGrid = ({ match }) => {
                 return {
                     ...data,
                     number: replay || data.delYn === 'Y' ? '' : data.boardSeq,
-                    titlePrefix1: replay ? '' : data.titlePrefix1,
-                    titlePrefix2: replay ? '' : data.titlePrefix2,
-                    regInfo: `${data.regName}(${data.regId})`,
+                    titlePrefix1: replay ? '' : data.titlePrefix1 || '',
+                    titlePrefix2: replay ? '' : data.titlePrefix2 || '',
+                    regInfo: data.regName && data.regId ? `${data.regName}(${data.regId})` : '',
                     regDt: data.modDt ? moment(data.modDt).format(BASIC_DATEFORMAT) : moment(data.regDt).format(BASIC_DATEFORMAT),
                     recomInfo: `${data.recomCnt} / ${data.decomCnt}`,
                     fileItem: {
@@ -77,27 +79,24 @@ const BoardsContentsListAgGrid = ({ match }) => {
     }, [list]);
 
     return (
-        <>
-            {loading === false && columnsState.loading === 'success' && columnsState.columnsDefs && (
-                <MokaTable
-                    className="overflow-hidden flex-fill"
-                    headerHeight={50}
-                    rowHeight={50}
-                    columnDefs={columnsState.columnsDefs}
-                    rowData={rowData}
-                    onRowNodeId={(row) => row.boardSeq}
-                    onRowClicked={handleOnRowClicked}
-                    loading={loading}
-                    total={total}
-                    page={search.page}
-                    size={search.size}
-                    displayPageNum={DISPLAY_PAGE_NUM}
-                    onChangeSearchOption={handleChangeSearchOption}
-                    selected={contentsInfo.boardSeq || contentsReply.boardSeq}
-                    frameworkComponents={{ fileItemRenderer: FileItemRenderer }}
-                />
-            )}
-        </>
+        <MokaTable
+            className="overflow-hidden flex-fill"
+            headerHeight={50}
+            rowHeight={50}
+            columnDefs={boardColumnDefs(selectBoard)}
+            rowData={rowData}
+            onRowNodeId={(row) => row.boardSeq}
+            onRowClicked={handleRowClicked}
+            loading={loading}
+            total={total}
+            page={search.page}
+            size={search.size}
+            displayPageNum={DISPLAY_PAGE_NUM}
+            onChangeSearchOption={handleChangeSearchOption}
+            selected={contentsInfo.boardSeq || contentsReply.boardSeq}
+            frameworkComponents={{ fileItemRenderer: FileItemRenderer }}
+            applyColumnDefOrder
+        />
     );
 };
 

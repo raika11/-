@@ -1,23 +1,18 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import clsx from 'clsx';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaCardTabs } from '@components';
 import { ABMainForm, ABEtcForm, ABStatusRow } from '../components';
 
 /**
- * A/B 테스트 > 직접 설계 > 등록, 수정
+ * A/B 테스트 > JAM 설계 > 등록, 수정
  */
-const AutoEdit = ({ match }) => {
-    const { abTestSeq } = useParams();
+const JamEdit = ({ match }) => {
+    const isAdd = true;
     const history = useHistory();
-    const [isAdd, setIsAdd] = useState(true);
     const [activeKey, setActiveKey] = useState(0);
-    const [temp, setTemp] = useState({});
 
-    /**
-     * 카드 버튼 렌더러
-     */
     const renderFooter = useCallback(() => {
         return (
             <React.Fragment>
@@ -33,7 +28,7 @@ const AutoEdit = ({ match }) => {
                 {isAdd && (
                     <Button
                         variant="negative"
-                        style={{ marginLeft: 170 }}
+                        style={{ marginLeft: 162 }}
                         onClick={() => {
                             if (activeKey === 0) setActiveKey(1);
                             else setActiveKey(0);
@@ -46,32 +41,9 @@ const AutoEdit = ({ match }) => {
         );
     }, [activeKey, history, isAdd, match]);
 
-    /**
-     * 탭 nav 렌더러
-     */
     const renderTabNavs = useCallback(() => {
         return isAdd ? ['STEP 1\n주요 설정', 'STEP 2\n기타 설정'] : ['주요 설정', '기타 설정'];
     }, [isAdd]);
-
-    /**
-     * AB데이터 수정
-     * @param {object} 변경될 값들이 담겨져있는 obj
-     */
-    const handleChange = useCallback(
-        (valueObj) => {
-            setTemp({ ...temp, ...valueObj });
-        },
-        [temp],
-    );
-
-    useEffect(() => {
-        if (!abTestSeq) {
-            // 등록페이지
-            setIsAdd(true);
-        } else {
-            setIsAdd(false);
-        }
-    }, [abTestSeq]);
 
     return (
         <MokaCard
@@ -95,13 +67,13 @@ const AutoEdit = ({ match }) => {
                 tabs={[
                     <React.Fragment>
                         {!isAdd && <ABStatusRow />}
-                        <ABMainForm data={temp} onChange={handleChange} />
+                        <ABMainForm />
                     </React.Fragment>,
-                    <ABEtcForm data={temp} onChange={handleChange} />,
+                    <ABEtcForm />,
                 ]}
             />
         </MokaCard>
     );
 };
 
-export default AutoEdit;
+export default JamEdit;

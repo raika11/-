@@ -115,6 +115,8 @@ const MyPage = React.lazy(() => import('@pages/MyPage'));
 const AB = React.lazy(() => import('@pages/AB/AB'));
 const ABAuto = React.lazy(() => import('@pages/AB/Auto')); // 직접설계
 const ABEdit = React.lazy(() => import('@pages/AB/Edit')); // 대안입력
+const ABJam = React.lazy(() => import('@pages/AB/Jam')); // JAM 설계
+const ABResult = React.lazy(() => import('@pages/AB/Result')); // 테스트 결과
 
 const routes = [
     {
@@ -731,6 +733,24 @@ const routes = [
         path: '/ab-edit',
         name: 'abEdit',
         component: ABEdit,
+        side: true,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/ab-jam',
+        name: 'abJam',
+        component: ABJam,
+        side: true,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/ab-result',
+        name: 'abResult',
+        component: ABResult,
         side: true,
         nonResponsive: true,
         exact: false,

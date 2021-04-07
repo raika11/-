@@ -5,13 +5,13 @@ import { Route, Switch } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
-import AutoList from './AutoList';
-import AutoEdit from './AutoEdit';
+import ResultList from './ResultList';
+import ResultInfo from './ResultInfo';
 
 /**
- * A/B 테스트 > 직접 설계
+ * A/B 테스트 > 테스트 결과
  */
-const Auto = ({ match }) => {
+const Result = ({ match }) => {
     const currentMenu = useSelector(({ auth }) => auth.currentMenu);
 
     return (
@@ -25,18 +25,18 @@ const Auto = ({ match }) => {
             {/* 리스트 */}
             <Col xs={7} className="pr-gutter">
                 <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
-                    <AutoList match={match} />
+                    <ResultList match={match} />
                 </MokaCard>
             </Col>
 
             {/* 탭 */}
             <Switch>
                 <Route
-                    path={[`${match.path}/add`, `${match.path}/:abTestSeq`]}
+                    path={[match.path, `${match.path}/add`, `${match.path}/:abTestSeq`]}
                     exact
                     render={() => (
                         <Col xs={5}>
-                            <AutoEdit match={match} />
+                            <ResultInfo match={match} />
                         </Col>
                     )}
                 />
@@ -45,4 +45,4 @@ const Auto = ({ match }) => {
     );
 };
 
-export default Auto;
+export default Result;

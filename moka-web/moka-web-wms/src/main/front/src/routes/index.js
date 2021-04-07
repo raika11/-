@@ -113,7 +113,8 @@ const Package = React.lazy(() => import('@pages/Issue'));
 const Jopan = React.lazy(() => import('@pages/Jopan'));
 const MyPage = React.lazy(() => import('@pages/MyPage'));
 const AB = React.lazy(() => import('@pages/AB/AB'));
-const ABDirect = React.lazy(() => import('@pages/AB/Direct'));
+const ABAuto = React.lazy(() => import('@pages/AB/Auto')); // 직접설계
+const ABEdit = React.lazy(() => import('@pages/AB/Edit')); // 대안입력
 
 const routes = [
     {
@@ -718,9 +719,18 @@ const routes = [
         strict: true,
     },
     {
-        path: '/ab-direct',
-        name: 'abDirect',
-        component: ABDirect,
+        path: '/ab-auto',
+        name: 'abAuto',
+        component: ABAuto,
+        side: true,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/ab-edit',
+        name: 'abEdit',
+        component: ABEdit,
         side: true,
         nonResponsive: true,
         exact: false,

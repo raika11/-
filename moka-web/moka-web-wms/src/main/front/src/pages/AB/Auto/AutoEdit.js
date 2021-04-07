@@ -8,7 +8,7 @@ import { ABMainForm, ABEtcForm, ABStatusRow } from '../components';
 /**
  * A/B 테스트 > 직접 설계 > 등록, 수정
  */
-const DirectEdit = ({ match }) => {
+const AutoEdit = ({ match }) => {
     const isAdd = true;
     const history = useHistory();
     const [activeKey, setActiveKey] = useState(0);
@@ -76,4 +76,4 @@ const DirectEdit = ({ match }) => {
     );
 };
 
-export default DirectEdit;
+export default AutoEdit;

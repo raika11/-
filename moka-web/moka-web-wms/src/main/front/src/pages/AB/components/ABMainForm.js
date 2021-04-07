@@ -1,7 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaInputLabel, MokaPrependLinkInput } from '@components';
+
+const propTypes = {
+    /**
+     * ABTEST_TYPE
+     * A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터
+     * @default
+     */
+    abTestType: PropTypes.string,
+};
+const defaultProps = {
+    abTestType: 'A',
+};
 
 /**
  * A/B 테스트 > 탭 > 정보 > 주요 설정폼
@@ -49,6 +62,7 @@ const ABMainForm = (props) => {
                 <MokaInput as="radio" id="group-2" name="group" inputProps={{ label: '고정그룹' }} disabled />
             </Form.Row>
 
+            {/* 랜덤그룹일 때 노출 */}
             <Form.Row className="mb-2 align-items-center">
                 <MokaInputLabel label=" " as="none" />
                 <MokaInputLabel label="A그룹" labelWidth={40} className="mr-2" disabled inputProps={{ style: { width: 90 } }} />
@@ -57,11 +71,30 @@ const ABMainForm = (props) => {
                 <span>%</span>
             </Form.Row>
 
+            {/* 고정그룹일 때 노출 */}
+            <Form.Row className="mb-2 align-items-center">
+                <MokaInputLabel label=" " as="none" />
+                <MokaInputLabel label="A그룹" labelWidth={40} as="none" />
+                {[...Array(10)].map((x, idx) => (
+                    <MokaInput key={`fix-a-${idx}`} value={idx} as="checkbox" id={`fix-a-${idx}`} inputProps={{ label: String(idx) }} disabled />
+                ))}
+            </Form.Row>
+
+            {/* 고정그룹일 때 노출 */}
+            <Form.Row className="mb-2 align-items-center">
+                <MokaInputLabel label=" " as="none" />
+                <MokaInputLabel label="B그룹" labelWidth={40} as="none" />
+                {[...Array(10)].map((x, idx) => (
+                    <MokaInput key={`fix-b-${idx}`} value={idx} as="checkbox" id={`fix-b-${idx}`} inputProps={{ label: String(idx) }} disabled />
+                ))}
+            </Form.Row>
+
+            {/* 고정그룹일 때 달력 위치 -> 아래로 바꿔주기 */}
             <Form.Row className="mb-2 align-items-center">
                 <MokaInputLabel label="기간" as="none" />
-                <MokaInputLabel label="시작일시" as="dateTimePicker" className="mr-3" required />
+                <MokaInputLabel label="시작일시" as="dateTimePicker" className="mr-3" inputClassName="top" required />
                 <MokaInput as="checkbox" id="check-enddt" inputProps={{ label: ' ' }} disabled />
-                <MokaInputLabel label="종료일시" as="dateTimePicker" inputClassName="right" />
+                <MokaInputLabel label="종료일시" as="dateTimePicker" inputClassName="right top" />
             </Form.Row>
 
             <Form.Row className="mb-2">
@@ -112,5 +145,8 @@ const ABMainForm = (props) => {
         </div>
     );
 };
+
+ABMainForm.propTypes = propTypes;
+ABMainForm.defaultProps = defaultProps;
 
 export default ABMainForm;

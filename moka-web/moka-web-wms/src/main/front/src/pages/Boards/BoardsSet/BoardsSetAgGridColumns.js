@@ -7,7 +7,6 @@ export const columnDefs = [
     {
         headerName: '게시판명',
         field: 'boardName',
-        width: 180,
         flex: 1,
         tooltipField: 'boardName',
     },

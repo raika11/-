@@ -199,7 +199,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                 selectValue={data.channelId}
                                 onChange={(value) => {
                                     onChangeFormData({
-                                        channelId: value,
+                                        channelId: value.value,
                                     });
                                 }}
                             />

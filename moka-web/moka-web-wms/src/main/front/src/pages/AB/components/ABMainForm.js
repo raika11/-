@@ -28,7 +28,7 @@ const ABMainForm = (props) => {
      * 입력값 변경
      */
     const handleChangeValue = (e) => {
-        const { name, value, checked } = e.target;
+        const { name, value } = e.target;
         let changeData = {};
 
         changeData[name] = value;

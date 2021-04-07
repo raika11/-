@@ -23,7 +23,6 @@ const BoardsContentsListAgGrid = ({ match }) => {
     const contentsReply = useSelector((store) => store.board.listMenu.contents.reply);
     const loading = useSelector((store) => store.loading[GET_LIST_MENU_CONTENTS_LIST]);
 
-    // const [columnData, setColumnData] = useState(columnDefs);
     // const [gridApi, setGridApi] = useState(null);
     // const [gridColumnApi, setGridColumnApi] = useState(null);
 
@@ -66,9 +65,9 @@ const BoardsContentsListAgGrid = ({ match }) => {
                 return {
                     ...data,
                     number: replay || data.delYn === 'Y' ? '' : data.boardSeq,
-                    titlePrefix1: replay ? '' : data.titlePrefix1,
-                    titlePrefix2: replay ? '' : data.titlePrefix2,
-                    regInfo: `${data.regName}(${data.regId})`,
+                    titlePrefix1: replay ? '' : data.titlePrefix1 || '',
+                    titlePrefix2: replay ? '' : data.titlePrefix2 || '',
+                    regInfo: data.regName && data.regId ? `${data.regName}(${data.regId})` : '',
                     regDt: data.modDt ? moment(data.modDt).format(BASIC_DATEFORMAT) : moment(data.regDt).format(BASIC_DATEFORMAT),
                     recomInfo: `${data.recomCnt} / ${data.decomCnt}`,
                     fileItem: {

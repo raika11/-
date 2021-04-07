@@ -7,23 +7,20 @@ export const boardColumnDefs = (data) => {
         {
             headerName: '번호',
             field: 'number',
+            cellStyle: { lineHeight: '48px' },
             width: 50,
         },
         titlePrefixNm1 && {
             headerName: titlePrefixNm1,
             field: 'titlePrefix1',
-            // cellStyle: {
-            //     paddingTop: '8px',
-            // },
+            cellStyle: { lineHeight: '48px' },
             width: 80,
             tooltipField: 'titlePrefix1',
         },
         titlePrefixNm2 && {
             headerName: titlePrefixNm2,
             field: 'titlePrefix2',
-            // cellStyle: {
-            //     paddingTop: '8px',
-            // },
+            cellStyle: { lineHeight: '48px' },
             width: 80,
             tooltipField: 'titlePrefix2',
         },
@@ -31,25 +28,26 @@ export const boardColumnDefs = (data) => {
             headerName: '제목',
             field: 'title',
             flex: 1,
-            // cellStyle: {
-            //     paddingTop: '8px',
-            // },
+            cellStyle: { lineHeight: '48px' },
             tooltipField: 'title',
         },
         {
             headerName: '등록자',
             field: 'regInfo',
+            cellStyle: { lineHeight: '48px' },
             width: 100,
             tooltipField: 'regInfo',
         },
         {
             headerName: '작성일시',
             field: 'regDt',
+            cellStyle: { lineHeight: '48px' },
             width: 120,
         },
         {
             headerName: '조회수',
             field: 'viewCnt',
+            cellStyle: { lineHeight: '48px' },
             width: 50,
             tooltipField: 'viewCnt',
         },
@@ -62,18 +60,21 @@ export const boardColumnDefs = (data) => {
         recomFlag === '1' && {
             headerName: '추천/비추천',
             field: 'recomInfo',
+            cellStyle: { lineHeight: '48px' },
             width: 100,
             tooltipField: 'recomInfo',
         },
         recomFlag === '2' && {
             headerName: '추천',
             field: 'recomCnt',
+            cellStyle: { lineHeight: '48px' },
             width: 50,
             tooltipField: 'recomCnt',
         },
         declareYn === 'Y' && {
             headerName: '신고',
             field: 'declareCnt',
+            cellStyle: { lineHeight: '48px' },
             width: 50,
             tooltipField: 'declareCnt',
         },

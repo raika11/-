@@ -147,7 +147,7 @@ const BannedListBox = () => {
                     tagSource = tempTagValueArray[1];
                 }
 
-                // 2021-01-25 09:31  tagDesc 내용과 등록자가 같이 붙어 있어서 _ 구분자로 앞에 내용만 뿌려주기로.
+                // 2021-01-25 09:31  tagDesc 내용과 등록자가 같이 붙어 있어서 _ 구분자로 앞에 내용만 뿌려주기로
                 let tagDesc = element.tagDesc;
 
                 if (tagDesc && tagDesc !== undefined && tagDesc !== null && tagDesc.indexOf('_') > 0) {

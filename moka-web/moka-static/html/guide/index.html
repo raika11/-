@@ -25,15 +25,12 @@
     <link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">
     <link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">
 
-    <link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">
-    <link href="//stg-static.joongang.co.kr/css/common/section.css" rel="stylesheet">
-    <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
-    <script src="//stg-static.joongang.co.kr/js/utils/scroll.js"></script>
 
-    <link rel="stylesheet" href="guide.css">
+
+    <!-- <link rel="stylesheet" href="guide.css"> -->
     <script src="guide.js"></script>
 
-
+<style>section{border:1px solid red}</style>
 </head>
 <body class="guide">
 <div id="wrapper">
@@ -41,20 +38,37 @@
     <script>include.header()</script>
     <!-- // header -->
 
-    <div class="container_guide row">
-        <script>include.aside.menu0()</script>
+    <div class="container ">
+        <section class="contents">
+            <section class="row">
+                <script>include.aside.menu0()</script>
+                <!-- <section class=" col_sm12 col_md2 col_lg2">asdad</section>
+                <section class=" col_sm12 col_md10 col_lg10">sdf</section> -->
+                <main class="main_guide col_sm12 col_md10 col_lg10" style="border:1px solid blue">
 
-        <main class="main_guide col_lg10">
-                sdfsdfs
+                    <pre><code class="css">body { background:red; }</code></pre>
+                    <pre><code class="html">&lt;p&gt;test&lt;/p&gt;</code></pre>
+                    <pre><code class="javascript">const aa = x => x * 3;</code></pre>
 
 
-                <pre><code class="css">body { background:red; }</code></pre>
-                <pre><code class="html">&lt;p&gt;test&lt;/p&gt;</code></pre>
-                <pre><code class="javascript">const aa = x => x * 3;</code></pre>
-
-
-        </main>
+                </main>
+            </section>
+        </section>
     </div>
+    <!-- container -->
+    <main role="main" id="container">
+        <!-- contents -->
+        <section class="contents">
+            <div class="container_guide row">
+                
+
+                
+            </div>
+        </section>
+        <!-- // contents -->
+    </main>
+    <!-- // container -->
+
 
     <script>include.footer()</script>
     

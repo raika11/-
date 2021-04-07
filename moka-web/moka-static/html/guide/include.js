@@ -14,6 +14,12 @@ var include = {
         document.write('<link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">');
         document.write('<link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">');
         
+        document.write('<link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">');
+        document.write('<link href="//stg-static.joongang.co.kr/css/common/section.css" rel="stylesheet">');
+
+        document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>');
+        document.write('<script src="//stg-static.joongang.co.kr/js/utils/scroll.js"></script>');
+
         document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs2015.min.css">');
         document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>');
         document.write('<script>hljs.initHighlightingOnLoad();</script>');
@@ -27,42 +33,7 @@ var include = {
 
 
     header: function () {
-        // document.write('<div class="skippy overflow-hidden">');
-        // document.write('<div class="container-xl">');
-        // document.write('<a class="visually-hidden-focusable d-inline-flex p-2 m-1" href="#content">Skip to main content</a>');
-        // document.write('<a class="visually-hidden-focusable d-none d-md-inline-flex p-2 m-1" href="#bd-docs-nav">Skip to docs navigation</a>');
-        // document.write('</div>');
-        // document.write('</div>');
-        // document.write('<header class="header navbar navbar-expand-md navbar-dark bd-navbar">');
-        // document.write('<nav class="container-xxl flex-wrap flex-md-nowrap">');
-        // document.write('<div class="collapse navbar-collapse" id="bdNavbar">');
-        // document.write('<ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">');
-        // document.write('<li class="nav-item col-6 col-md-auto"><a class="nav-link p-2 active" href="https://static.joins.com/html/guide/">중앙일보 퍼블가이드</a></li>');
-        // document.write('<li class="nav-item col-6 col-md-auto"><a class="nav-link p-2" href="https://static.joins.com/html/guide/html.html">Html</a></li>');
-        // document.write('<li class="nav-item col-6 col-md-auto"><a class="nav-link p-2" href="https://static.joins.com/html/guide/css.html">Css</a></li>');
-        // document.write('<li class="nav-item col-6 col-md-auto"><a class="nav-link p-2" href="https://static.joins.com/html/guide/sass.html">Sass</a></li>');
-        // document.write('<li class="nav-item col-6 col-md-auto"><a class="nav-link p-2" href="https://static.joins.com/html/guide/font.html">Font</a></li>');
-        // document.write('<li class="nav-item col-6 col-md-auto"><a class="nav-link p-2" href="https://static.joins.com/html/guide/image.html">Image</a></li>');
-        // document.write('<li class="nav-item col-6 col-md-auto"><a class="nav-link p-2" href="https://static.joins.com/html/guide/accessibility.html">웹접근성</a></li>');
-        // document.write('<li class="nav-item col-6 col-md-auto"><a class="nav-link p-2" href="https://static.joins.com/html/guide/seo.html">SEO</a></li>');
-        // document.write('</ul>');
-        // document.write('</div>');
-        // document.write('<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">');
-        // document.write('<svg class="bi" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">');
-        // document.write('<path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path>');
-        // document.write('</svg>');
-        // document.write('</button>');
-        // document.write('<button class="btn bd-sidebar-toggle d-md-none py-0 px-1 ms-3 order-3 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav" aria-expanded="false" aria-label="Toggle docs navigation">');
-        // document.write('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi bi-expand" viewBox="0 0 16 16">');
-        // document.write('<path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zM7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708l2-2zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10z"/>');
-        // document.write('</svg>');
-        // document.write('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi bi-collapse" viewBox="0 0 16 16">');
-        // document.write('<path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zm7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0zm-.5 11.707l-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0v-3.793z"/>');
-        // document.write('</svg>');
-
-        // document.write('</button>');
-        // document.write('</nav>');
-        // document.write('</header>');
+        
 
 
         document.write('');
@@ -98,7 +69,7 @@ var include = {
         },
         menu0: function(){
 
-            document.write('<aside class="sidebar_guide col_lg2">');
+            document.write('<aside class="sidebar_guide col_sm12 col_md2 col_lg2"  style="border:1px solid violet">');
 
             document.write('<!-- side navigation -->');
             document.write('<nav class="accordian side_nav side_nav_guide"  id="">');

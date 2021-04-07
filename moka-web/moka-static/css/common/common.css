@@ -389,6 +389,14 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 .swiper-scrollbar {background:transparent;}
 
 
+.title {width:100%;padding-top:4px;padding-bottom:4px;}
+.headline {width:100%;padding-top:4px;padding-bottom:4px; color:#111; font-size:16px; font-weight:700; line-height:1.5; word-break:break-all;}
+.description {padding-top:4px;padding-bottom:4px;color:#777; font-size:15px; line-height:1.5; word-break:break-all;}
+.byline {padding-top:4px;padding-bottom:4px;color:#aaa; font-size:13px; line-height:1.5;}
+.date {padding-top:4px;padding-bottom:4px; color:#aaa; font-size:12px; line-height:1.5;}
+.play_count {padding-top:4px;padding-bottom:4px;color:#aaa; font-size:12px; line-height:1.5;}
+
+
 /****************************************************************************************************/
 /***                                          list_group                                          ***/
 /****************************************************************************************************
@@ -403,12 +411,6 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 .list .list_item .list_body .headline {font-size: 20px;font-weight: 700;line-height: 1.45;letter-spacing: -0.31px;color: #000;}
 .list .list_item .list_body .description {font-size: 14px;line-height: 1.57;letter-spacing: -0.37px;color: #444;}
 
-
-/* Mobile devices (mobile, 375px and down) */
-@media (max-width:375px) {
-    /* list */
-    .list {list-style-type: none;}
-}
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {

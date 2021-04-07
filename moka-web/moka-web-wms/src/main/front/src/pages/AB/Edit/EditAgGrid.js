@@ -3,13 +3,13 @@ import { useHistory } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';
-import columnDefs from './DirectAgGridColumns';
+import columnDefs from './EditAgGridColumns';
 import { StatusRenderer, StatusBar } from '../components';
 
 /**
- * A/B 테스트 > 직접 설계 > 리스트 > AgGrid
+ * A/B 테스트 > 대안 설계 > 리스트 > AgGrid
  */
-const DirectAgGrid = ({ match }) => {
+const EditAgGrid = ({ match }) => {
     const history = useHistory();
 
     return (
@@ -33,4 +33,4 @@ const DirectAgGrid = ({ match }) => {
     );
 };
 
-export default DirectAgGrid;
+export default EditAgGrid;

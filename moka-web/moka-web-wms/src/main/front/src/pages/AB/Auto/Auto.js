@@ -5,13 +5,13 @@ import { Route, Switch } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
-import DirectList from './DirectList';
-import DirectEdit from './DirectEdit';
+import AutoList from './AutoList';
+import AutoEdit from './AutoEdit';
 
 /**
  * A/B 테스트 > 직접 설계
  */
-const AB = ({ match }) => {
+const Auto = ({ match }) => {
     const currentMenu = useSelector(({ auth }) => auth.currentMenu);
 
     return (
@@ -25,7 +25,7 @@ const AB = ({ match }) => {
             {/* 리스트 */}
             <Col xs={7} className="pr-gutter">
                 <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
-                    <DirectList match={match} />
+                    <AutoList match={match} />
                 </MokaCard>
             </Col>
 
@@ -36,7 +36,7 @@ const AB = ({ match }) => {
                     exact
                     render={() => (
                         <Col xs={5}>
-                            <DirectEdit match={match} />
+                            <AutoEdit match={match} />
                         </Col>
                     )}
                 />
@@ -45,4 +45,4 @@ const AB = ({ match }) => {
     );
 };
 
-export default AB;
+export default Auto;

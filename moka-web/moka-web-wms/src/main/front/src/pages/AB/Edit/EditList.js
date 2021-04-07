@@ -1,11 +1,11 @@
 import React from 'react';
 import { ABSearch } from '../components';
-import AgGrid from './DirectAgGrid';
+import AgGrid from './EditAgGrid';
 
 /**
- * A/B 테스트 > 직접 설계 > 리스트
+ * A/B 테스트 > 대안 설계 > 리스트
  */
-const DirectList = (props) => {
+const EditList = (props) => {
     return (
         <React.Fragment>
             <ABSearch {...props} />
@@ -14,4 +14,4 @@ const DirectList = (props) => {
     );
 };
 
-export default DirectList;
+export default EditList;

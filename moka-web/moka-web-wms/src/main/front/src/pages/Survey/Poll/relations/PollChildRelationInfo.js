@@ -224,7 +224,7 @@ const PollChildRelation = () => {
                 </Form>
             </MokaCard>
             <ArticleListModal show={isArticleModalShow} onHide={() => setIsArticleModalShow(false)} onRowClicked={handleClickRelationArticleAdd} />
-            <RelationPollModal show={isPollModalShow} onHide={handleClickPollModalClose} onAdd={handleClickRelationPollAdd} codes={codes} />
+            <RelationPollModal title="관련 투표 찾기" show={isPollModalShow} onHide={handleClickPollModalClose} onAdd={handleClickRelationPollAdd} codes={codes} />
         </div>
     );
 };

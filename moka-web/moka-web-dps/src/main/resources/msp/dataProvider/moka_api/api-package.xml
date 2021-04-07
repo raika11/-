@@ -28,12 +28,14 @@
       <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
       <start type="number" desc="연재시작번호">^[0-9]{1,20}$</start><!-- 연재패키지 시즌기사목록일때 사용 -->
       <end type="number" desc="연재끝번호">^[0-9]{1,20}$</end><!-- 연재패키지 시즌기사목록일때 사용 -->
+      <finish desc="완결여부" default="N">^[Y|N]$</finish>
     </parameter>
     <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.package.article</request>
     <keys>
       id
       start
       end
+      finish
       #paging
     </keys>
   </api>

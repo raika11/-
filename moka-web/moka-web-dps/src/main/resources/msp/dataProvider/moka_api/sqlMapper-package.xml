@@ -36,7 +36,7 @@
     {call UPU_MOKA_PACKAGE_LIST_SEL(
       #{div, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{finish, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{finish, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       'Y',

@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 @Entity
 @Table(name = "TB_COMMENT_VOTE")
@@ -39,13 +40,17 @@ public class CommentVote implements Serializable {
     @Column(name = "MEM_SEQ", nullable = false)
     private Long memSeq;
 
+    @Nationalized
+    @Column(name = "LOGIN_TYPE")
+    private String loginType;
+
     @Column(name = "REG_DT", nullable = false)
     private Date regDt;
 
-    @Column(name = "REG_IP", nullable = false)
+    @Column(name = "REG_IP")
     private String regIp;
 
-    @Column(name = "PC_ID", nullable = false)
+    @Column(name = "PC_ID")
     private String pcId;
 
 }

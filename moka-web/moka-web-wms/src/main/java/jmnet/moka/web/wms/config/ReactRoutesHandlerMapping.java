@@ -75,7 +75,7 @@ public class ReactRoutesHandlerMapping extends AbstractHandlerMapping {
             if (uri.startsWith(routePath)) {
                 return this.reactRoutesHandlerMethod;
             }
-        }
+        }//routePath 공통 추가
         for (String routePath : routePath.split(",")) {
             if (uri.startsWith(routePath)) {
                 return this.reactRoutesHandlerMethod;

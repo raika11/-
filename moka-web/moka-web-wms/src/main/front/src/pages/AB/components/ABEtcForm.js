@@ -16,6 +16,8 @@ const ABEtcForm = (props) => {
      * 입력값 변경
      */
     const handleChangeValue = (e) => {
+        if (!onChange) return;
+
         const { name, value, checked } = e.target;
         let changeData = {};
 

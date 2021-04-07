@@ -32,7 +32,7 @@ const Auto = ({ match }) => {
             {/* 탭 */}
             <Switch>
                 <Route
-                    path={[`${match.path}/add`, `${match.path}/:seq`]}
+                    path={[`${match.path}/add`, `${match.path}/:abTestSeq`]}
                     exact
                     render={() => (
                         <Col xs={5}>

@@ -205,7 +205,7 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                 </Button>
 
                 {/* 투표 모달 */}
-                <RelationPollModal show={show} onHide={() => setShow(false)} codes={codes} onAdd={handleChangePoll} />
+                <RelationPollModal title="관련 투표 추가" show={show} onHide={() => setShow(false)} codes={codes} onAdd={handleChangePoll} />
             </Form.Row>
 
             {/* 배경이미지 */}

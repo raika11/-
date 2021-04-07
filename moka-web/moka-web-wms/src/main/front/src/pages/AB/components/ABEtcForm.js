@@ -46,7 +46,7 @@ const ABEtcForm = (props) => {
 
     const isChecked = (field, value) => new RegExp(`(^${value})|,${value}`).test(data[field] || '');
 
-    const isAllChecked = (field, count) => (data[field] || '').split(',').length >= count;
+    const isAllChecked = (field, count) => (data[field] || '').split(',').filter(Boolean).length >= count;
 
     useEffect(() => {
         onChange ? setDisabled(false) : setDisabled(true);

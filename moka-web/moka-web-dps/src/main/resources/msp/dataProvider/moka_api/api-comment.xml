@@ -23,7 +23,7 @@
   <api id="comment" membership="cookiePass">
     <description>기사 또는 기자 또는 레퍼러의 댓글 목록을 조회한다.</description>
     <parameter>
-      <contentId desc="기사키 또는 기자키">^[0-9]{1,9}$</contentId>
+      <contentId desc="컨텐트아이디">^[0-9]{1,9}$</contentId>
       <domain desc="도메인" require="Y">^.{1,100}$</domain>
       <section desc="섹션">^.{1,100}$</section>
       <order desc="정렬" type="number">^[0-9]{1}$</order>
@@ -84,8 +84,8 @@
     <parameter>
       <domain desc="도메인" require="Y">^.{1,100}$</domain>
       <section desc="섹션">^.{1,100}$</section>
-      <id desc="컨텐트아이디" type="number">^[0-9]{1,9}$</id>
-      <type desc="컨텐트타입">^[A|D|J|R|M]$</type>
+      <cid desc="컨텐트아이디" type="number">^[0-9]{1,9}$</cid>
+      <ctype desc="컨텐트타입">^[A|D|J|R|M]$</ctype>
       <content desc="댓글내용"></content>
       <remoteIp/>
     </parameter>
@@ -95,8 +95,8 @@
     <keys>
       domain
       section
-      id
-      type
+      cid
+      ctype
       parentSeq
       content
     </keys>
@@ -126,18 +126,16 @@
     <description>댓글을 삭제한다</description>
     <parameter>
       <id desc="댓글번호" require="Y" type="number">^[0-9]{1,9}$</id>
-      <totalId desc="기사ID" type="number">^[0-9]{1,9}$</totalId>
-      <repSeq desc="기자SEQ" type="number">^[0-9]{1,9}$</repSeq>
-      <epsdSeq desc="에피소드SEQ" type="number">^[0-9]{1,9}$</epsdSeq>
+      <cid desc="컨텐트아이디" type="number">^[0-9]{1,9}$</cid>
+      <ctype desc="컨텐트타입">^[A|D|J|R|M]$</ctype>
     </parameter>
     <request type="module" setNames="_DATA" methodName="delete">
       jmnet.moka.web.dps.module.CommentModule
     </request>
     <keys>
       id
-      totalId
-      repSeq
-      epsdSeq
+      cid
+      ctype
     </keys>
   </api>
 

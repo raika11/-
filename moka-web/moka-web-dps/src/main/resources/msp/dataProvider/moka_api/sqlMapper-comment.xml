@@ -80,8 +80,8 @@
     { call UPU_COMMENT_INS(
       #{domain, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{section, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{type, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{cid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{parentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{content, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
@@ -109,10 +109,10 @@
   <select id="delete" parameterType="hashmap" resultType="hashmap" statementType="CALLABLE">
     { call UPU_COMMENT_DEL(
       #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{repSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{epsdSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      #{cid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 

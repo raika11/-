@@ -65,12 +65,6 @@ public class CommentModule implements ModuleInterface {
         try {
             Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
 
-            // totalId와 repSeq중 하나만 세팅되야 함.
-            if (!this.checkId(checkedParamMap)) {
-                returnMap.put("SUCCESS", false);
-                return returnMap;
-            }
-
             // 차단정보체크.
             Banned banned = this.checkBanned(apiContext);
             if (banned.isBanned()) {
@@ -80,24 +74,10 @@ public class CommentModule implements ModuleInterface {
                 return returnMap;
             }
 
-            // 기자체크
-            if (!this.checkReporter(apiContext)) {
+            // id의 정보체크
+            if (!this.checkId(apiContext)) {
                 returnMap.put("SUCCESS", false);
-                returnMap.put("TARGET", "해당 기자가 존재하지 않습니다.");
-                return returnMap;
-            }
-
-            // 기사체크
-            if (!this.checkArticle(apiContext)) {
-                returnMap.put("SUCCESS", false);
-                returnMap.put("TARGET", "해당 기사가 존재하지 않습니다");
-                return returnMap;
-            }
-
-            // 에피소드 체크
-            if (!this.checkEpisode(apiContext)) {
-                returnMap.put("SUCCESS", false);
-                returnMap.put("TARGET", "해당 에피소드가 존재하지 않습니다");
+                returnMap.put("TARGET", "해당 정보가 존재하지 않습니다.");
                 return returnMap;
             }
 
@@ -196,45 +176,76 @@ public class CommentModule implements ModuleInterface {
         }
     }
 
+    //    /**
+    //     * totalId, repSeq, epsdSeq중 하나만 세팅되야 함.
+    //     *
+    //     * @param checkedParamMap 파라미터정보
+    //     * @return 셋다 세팅되어 있으면  false
+    //     */
+    //    private boolean checkId(Map<String, Object> checkedParamMap) {
+    //        int checkCnt = 0;
+    //
+    //        Integer totalId = 0;
+    //        if (checkedParamMap.containsKey("totalId") && checkedParamMap.get("totalId") != null) {
+    //            totalId = Integer.parseInt(checkedParamMap
+    //                    .get("totalId")
+    //                    .toString());
+    //            if (totalId > 0) {
+    //                checkCnt++;
+    //            }
+    //        }
+    //        Integer repSeq = 0;
+    //        if (checkedParamMap.containsKey("repSeq") && checkedParamMap.get("repSeq") != null) {
+    //            repSeq = Integer.parseInt(checkedParamMap
+    //                    .get("repSeq")
+    //                    .toString());
+    //            if (repSeq > 0) {
+    //                checkCnt++;
+    //            }
+    //        }
+    //        Integer epsdSeq = 0;
+    //        if (checkedParamMap.containsKey("epsdSeq") && checkedParamMap.get("epsdSeq") != null) {
+    //            epsdSeq = Integer.parseInt(checkedParamMap
+    //                    .get("epsdSeq")
+    //                    .toString());
+    //            if (epsdSeq > 0) {
+    //                checkCnt++;
+    //            }
+    //        }
+    //
+    //        if (checkCnt > 1) {
+    //            return false;
+    //        }
+    //        return true;
+    //    }
+
     /**
-     * totalId, repSeq, epsdSeq중 하나만 세팅되야 함.
+     * id의 정보체크
      *
-     * @param checkedParamMap 파라미터정보
-     * @return 셋다 세팅되어 있으면  false
+     * @param apiContext
+     * @return
+     * @throws ApiException
      */
-    private boolean checkId(Map<String, Object> checkedParamMap) {
-        int checkCnt = 0;
+    private boolean checkId(ApiContext apiContext)
+            throws ApiException {
+        Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
+        if (checkedParamMap.containsKey("type") && checkedParamMap.get("type") != null) {
+            String contentType = checkedParamMap
+                    .get("type")
+                    .toString();
 
-        Integer totalId = 0;
-        if (checkedParamMap.containsKey("totalId") && checkedParamMap.get("totalId") != null) {
-            totalId = Integer.parseInt(checkedParamMap
-                    .get("totalId")
-                    .toString());
-            if (totalId > 0) {
-                checkCnt++;
+            if (contentType.equals("A")) {
+                return this.checkArticle(apiContext);
             }
-        }
-        Integer repSeq = 0;
-        if (checkedParamMap.containsKey("repSeq") && checkedParamMap.get("repSeq") != null) {
-            repSeq = Integer.parseInt(checkedParamMap
-                    .get("repSeq")
-                    .toString());
-            if (repSeq > 0) {
-                checkCnt++;
+            if (contentType.equals("R")) {
+                return this.checkReporter(apiContext);
             }
-        }
-        Integer epsdSeq = 0;
-        if (checkedParamMap.containsKey("epsdSeq") && checkedParamMap.get("epsdSeq") != null) {
-            epsdSeq = Integer.parseInt(checkedParamMap
-                    .get("epsdSeq")
-                    .toString());
-            if (epsdSeq > 0) {
-                checkCnt++;
+            if (contentType.equals("J")) {
+                return this.checkEpisode(apiContext);
             }
-        }
-
-        if (checkCnt > 1) {
-            return false;
+            if (contentType.equals("D")) {
+                return this.checkDigital(apiContext);
+            }
         }
         return true;
     }
@@ -248,9 +259,9 @@ public class CommentModule implements ModuleInterface {
     private boolean checkArticle(ApiContext apiContext) {
         Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
         Integer totalId = 0;
-        if (checkedParamMap.containsKey("totalId") && checkedParamMap.get("totalId") != null) {
+        if (checkedParamMap.containsKey("id") && checkedParamMap.get("id") != null) {
             totalId = Integer.parseInt(checkedParamMap
-                    .get("totalId")
+                    .get("id")
                     .toString());
         }
 
@@ -297,9 +308,9 @@ public class CommentModule implements ModuleInterface {
             throws ApiException {
         Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
         Integer repSeq = 0;
-        if (checkedParamMap.containsKey("repSeq") && checkedParamMap.get("repSeq") != null) {
+        if (checkedParamMap.containsKey("id") && checkedParamMap.get("id") != null) {
             repSeq = Integer.parseInt(checkedParamMap
-                    .get("repSeq")
+                    .get("id")
                     .toString());
         }
 
@@ -332,9 +343,9 @@ public class CommentModule implements ModuleInterface {
         Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
 
         Integer epsdSeq = 0;
-        if (checkedParamMap.containsKey("epsdSeq") && checkedParamMap.get("epsdSeq") != null) {
+        if (checkedParamMap.containsKey("id") && checkedParamMap.get("id") != null) {
             epsdSeq = Integer.parseInt(checkedParamMap
-                    .get("epsdSeq")
+                    .get("id")
                     .toString());
         }
 
@@ -343,6 +354,41 @@ public class CommentModule implements ModuleInterface {
             parameterMap.put("epsdSeq", epsdSeq);
             parameterMap.put("_EXIST", 0);
             this.call(apiContext, "dps.jpod.isEpisode", parameterMap);
+            if (parameterMap.containsKey("_EXIST")) {
+                int exist = Integer.parseInt(parameterMap
+                        .get("_EXIST")
+                        .toString());
+                if (exist == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 디지털스페셜 존재여부 조회
+     *
+     * @param apiContext
+     * @return 존재하지 않으면 false
+     * @throws ApiException
+     */
+    private Boolean checkDigital(ApiContext apiContext)
+            throws ApiException {
+        Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
+
+        Integer did = 0;
+        if (checkedParamMap.containsKey("id") && checkedParamMap.get("id") != null) {
+            did = Integer.parseInt(checkedParamMap
+                    .get("id")
+                    .toString());
+        }
+
+        if (did > 0) {
+            Map<String, Object> parameterMap = new HashMap<>();
+            parameterMap.put("id", did);
+            parameterMap.put("_EXIST", 0);
+            this.call(apiContext, "dps.article.isDigitalSpecial", parameterMap);
             if (parameterMap.containsKey("_EXIST")) {
                 int exist = Integer.parseInt(parameterMap
                         .get("_EXIST")

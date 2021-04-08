@@ -72,8 +72,6 @@
   -->
   <api id="comment.my" membership="cookie">
     <description>내가 단 댓글 목록을 조회한다.</description>
-    <parameter>
-    </parameter>
     <request dmlType="sp" setNames="_DATA" outParam="_TOTAL,_DISP_TOTAL">dps.comment.my</request>
     <keys>
       #paging
@@ -86,10 +84,8 @@
     <parameter>
       <domain desc="도메인" require="Y">^.{1,100}$</domain>
       <section desc="섹션">^.{1,100}$</section>
-      <totalId desc="기사ID" type="number">^[0-9]{1,9}$</totalId>
-      <repSeq desc="기자SEQ" type="number">^[0-9]{1,9}$</repSeq>
-      <epsdSeq desc="에피소드SEQ" type="number">^[0-9]{1,9}$</epsdSeq>
-      <parentSeq desc="부모댓글SEQ" type="number">^[0-9]{1,9}$</parentSeq>
+      <id desc="컨텐트아이디" type="number">^[0-9]{1,9}$</id>
+      <type desc="컨텐트타입">^[A|D|J|R|M]$</type>
       <content desc="댓글내용"></content>
       <remoteIp/>
     </parameter>
@@ -99,9 +95,8 @@
     <keys>
       domain
       section
-      totalId
-      repSeq
-      epsdSeq
+      id
+      type
       parentSeq
       content
     </keys>
@@ -152,8 +147,6 @@
   -->
   <api id="comment.declare.my" membership="cookie">
     <description>내가 신고한 모든 댓글 목록을 조회한다.</description>
-    <parameter>
-    </parameter>
     <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.comment.declareMy
     </request>
     <keys>

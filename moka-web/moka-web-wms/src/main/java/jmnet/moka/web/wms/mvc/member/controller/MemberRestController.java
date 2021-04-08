@@ -389,9 +389,9 @@ public class MemberRestController extends AbstractCommonController {
     public ResponseEntity<?> putChangePassword(
             @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @ApiParam("패스워드") @RequestParam("password")
-            @Pattern(regexp = "^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*)$", message = "{tps.member.error.pattern.password}") String password,
-            @ApiParam("신규 패스워드") @RequestParam("newPassword")
-            @Pattern(regexp = "^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*)$", message = "{tps.member.error.pattern.password}") String newPassword,
+                    //@Pattern(regexp = "^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*)$", message = "{tps.member.error.pattern.password}")
+                    String password, @ApiParam("신규 패스워드") @RequestParam("newPassword")
+    @Pattern(regexp = "^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*)$", message = "{tps.member.error.pattern.password}") String newPassword,
             @ApiParam("확인 패스워드") @RequestParam("confirmPassword")
             @Pattern(regexp = "^((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).*)|((?=.{8,15}$)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*)$", message = "{tps.member.error.pattern.password}") String confirmPassword)
             throws Exception {
@@ -402,12 +402,17 @@ public class MemberRestController extends AbstractCommonController {
         MemberInfo orgMember = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(infoMessage));
-
+        String chk = "";
         try {
             // 현재 패스워드 일치 여부 확인
-            oldPasswordCheck(password, orgMember.getPassword());
+            boolean same = passwordEncoder.matches(password, orgMember.getPassword());
+            if (!same) {
+                chk = "old";
+                throw new PasswordNotMatchedException(msg("tps.member.error.new.old.not.password"));
+            }
 
             if (password.equals(newPassword)) {
+                chk = "new";
                 throw new PasswordNotMatchedException(msg("tps.member.error.same.password"));
             }
             // 신규 패스워드와 패스워드 확인 비교
@@ -435,24 +440,14 @@ public class MemberRestController extends AbstractCommonController {
             log.error("[FAIL TO UPDATE MEMBER]", e);
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, e);
-            throw new Exception(e);
-        }
-    }
 
-    /**
-     * 비밀번호 확인
-     *
-     * @param password    비밀번호 입력값
-     * @param oldPassword 비밀번호 확인 입력값
-     * @throws PasswordNotMatchedException 비밀번호와 비밀번호 확인 불일치
-     */
-    private void oldPasswordCheck(String password, String oldPassword)
-            throws PasswordNotMatchedException {
-
-        boolean same = passwordEncoder.matches(password, oldPassword);
-
-        if (!same) {
-            throw new PasswordNotMatchedException(msg("tps.member.error.new.old.not.password"));
+            if (chk.equals("old")) {
+                throw new PasswordNotMatchedException(msg("tps.member.error.new.old.not.password"));
+            } else if (chk.equals("new")) {
+                throw new PasswordNotMatchedException(msg("tps.member.error.same.password"));
+            } else {
+                throw new Exception(e);
+            }
         }
     }
 

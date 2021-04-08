@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -276,7 +277,7 @@ public class IssueRestController extends AbstractCommonController {
             @RequestBody @Valid PackageMasterDTO packageMasterDTO)
             throws InvalidDataException, Exception {
         if (packageMasterDTO.getPkgSeq() == null) {
-            throw new MokaException("pkgSeq is not null.");
+            throw new MokaException(msg("tps.common.error.notnull.seq"));
         }
 
         // transform
@@ -302,9 +303,8 @@ public class IssueRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "패키지 타이틀 중복 여부")
     @GetMapping("/{pkgTitle}/exists")
-    public ResponseEntity<?> duplicatePkgTitle(@ApiParam("패키지 타이틀")
-    @PathVariable("pkgTitle") /* @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") */ String pkgTitle) {
-        log.debug("request pkgTitle : {}", pkgTitle);
+    public ResponseEntity<?> duplicatePkgTitle(
+            @ApiParam("패키지 타이틀") @PathVariable("pkgTitle") @Size(min = 1, max = 100, message = "{tps.issue.error.length.pkgTitle}") String pkgTitle) {
 
         boolean duplicated = packageService
                 .findByPkgTitle(pkgTitle)
@@ -375,7 +375,10 @@ public class IssueRestController extends AbstractCommonController {
                 .sorted(Comparator.comparingLong(PackageKeywordDTO::getKwdOrd))
                 .map(keyword -> String.valueOf(keyword.getRepMaster()))
                 .collect(Collectors.toList())));
-        dataDto.setPackageKeywords(keywords);
+        dataDto.setPackageKeywords(keywords
+                .stream()
+                .sorted(Comparator.comparing(PackageKeywordDTO::getOrdno))
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
         return dataDto;
     }
 

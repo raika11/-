@@ -390,12 +390,12 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 .swiper-scrollbar {background:transparent;}
 
 
-.title {padding-top:4px;padding-bottom:4px;}
-.headline {padding-top:4px;padding-bottom:4px; color:#111; font-size:16px; font-weight:700; line-height:1.5; word-break:break-all;}
-.description {padding-top:4px;padding-bottom:4px;color:#777; font-size:15px; line-height:1.5; word-break:break-all;}
-.byline {padding-top:4px;padding-bottom:4px;color:#aaa; font-size:13px; line-height:1.5;}
-.date {padding-top:4px;padding-bottom:4px; color:#aaa; font-size:12px; line-height:1.5;}
-.play_count {padding-top:4px;padding-bottom:4px;color:#aaa; font-size:12px; line-height:1.5;}
+.title {}
+.headline { color:#111; font-size:16px; font-weight:700; line-height:1.5; word-break:break-all;}
+.description {color:#777; font-size:15px; line-height:1.5; word-break:break-all;}
+.byline {color:#aaa; font-size:13px; line-height:1.5;}
+.date { color:#aaa; font-size:12px; line-height:1.5;}
+.play_count {color:#aaa; font-size:12px; line-height:1.5;}
 
 
 /****************************************************************************************************/
@@ -503,6 +503,11 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
     .pagination {display:none;}
 
+    /*  */
+    .headline +.description,
+    .headline ~ .meta,
+    .headline ~ .date,
+    .headline ~ .byline {padding-top:4px;}
 }
 
 /* Medium devices (tablet + pc, 768px and up) */
@@ -594,6 +599,11 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     /* table */
     .info_table th {width: 20%;}
 
+    /*  */
+    .headline +.description,
+    .headline ~ .meta,
+    .headline ~ .date,
+    .headline ~ .byline {padding-top:6px;}
 }
 
 /* Large devices (desktops, 1024px and up) */
@@ -676,6 +686,11 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .el.el_lg5 {-webkit-line-clamp: 5;}
     .el.el_lg6 {-webkit-line-clamp: 6;}
 
+    /*  */
+    .headline +.description,
+    .headline ~ .meta,
+    .headline ~ .date,
+    .headline ~ .byline {padding-top:8px;}
 }
 
 /* X-Large devices (large desktops, 1200px and up) */

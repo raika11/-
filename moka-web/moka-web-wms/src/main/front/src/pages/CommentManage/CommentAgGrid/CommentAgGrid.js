@@ -3,7 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import clsx from 'clsx';
 import { MokaPagination, MokaLoader } from '@components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
-import { DeleteButtonRenderer, DateItemRenderer, UserInfoRenderer, BanneButtonRenderer, HistoryButtonRenderer, MemSiteRenderer } from './CommentGridRenderer';
+import { DeleteButtonRenderer, DateItemRenderer, UserInfoRenderer, BanneButtonRenderer, HistoryButtonRenderer } from './CommentGridRenderer';
 
 /**
  * 댓글 관리 > 댓글 목록 AgGrid
@@ -75,7 +75,6 @@ const CommentAgGrid = (props) => {
                         userInfoRenderer: UserInfoRenderer,
                         banneButtonRenderer: BanneButtonRenderer,
                         historyButtonRenderer: HistoryButtonRenderer,
-                        memSiteRenderer: MemSiteRenderer,
                     }}
                     preventRowClickCell={preventRowClickCell}
                 />

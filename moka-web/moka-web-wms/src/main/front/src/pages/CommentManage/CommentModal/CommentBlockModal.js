@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import { MokaModal, MokaInputLabel, MokaInput } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
-import { saveBlocks, getCommentList } from '@store/commentManage';
+import { saveBlocks, blocksUsed, getCommentList } from '@store/commentManage';
 import { BannedConfirmModal } from '@pages/CommentManage/CommentModal';
 
 /**
@@ -18,19 +18,19 @@ const CommentBlockModal = (props) => {
     // 댓글 차단 사유 목록
     const COMMENT_TAG_DIV_CODE = useSelector((store) => store.comment.common.COMMENT_TAG_DIV_CODE);
 
+    // local state
     const [editData, setEditData] = useState({
         bannedType: 'U',
         tagValues: '',
         tagDiv: 'A',
         tagDesc: '',
     });
-    const [error, setError] = useState({});
-
     const [confirmModal, setConfirmModal] = useState(false);
     const [confirmModalUsage, setConfirmModalUsage] = useState({
         title: '',
         content: '',
     });
+    const [error, setError] = useState({});
 
     /**
      * 닫기
@@ -112,20 +112,44 @@ const CommentBlockModal = (props) => {
                 blockFormData: formData,
                 callback: ({ header, body }) => {
                     const { success, message, resultType } = header;
-                    const { totalCnt, list } = body;
 
-                    if (success === false && resultType === 0) {
-                        if (totalCnt > 0 && Array.isArray(list)) {
-                            // 에러 메시지 확인.
-                            messageBox.alert(list[0].reason, () => {});
+                    if (!success) {
+                        if (resultType === 400) {
+                            messageBox.confirm(
+                                message,
+                                () => {
+                                    dispatch(
+                                        blocksUsed({
+                                            seqNo: body.seqNo,
+                                            usedYn: body.usedYn === 'Y' ? 'N' : 'Y',
+                                            callback: ({ header: { success, message }, body }) => {
+                                                if (success === true) {
+                                                    toast.success(message);
+                                                } else {
+                                                    const { totalCnt, list } = body;
+                                                    if (totalCnt > 0 && Array.isArray(list)) {
+                                                        // 에러 메시지 확인
+                                                        messageBox.alert(list[0].reason, () => {});
+                                                    } else {
+                                                        // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함
+                                                        messageBox.alert(message, () => {});
+                                                    }
+                                                }
+                                            },
+                                        }),
+                                    );
+                                },
+                                () => {
+                                    return;
+                                },
+                            );
                         } else {
-                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
                             messageBox.alert(message, () => {});
+                            return;
                         }
-                        return;
                     }
 
-                    if (success === true) {
+                    if (success === true && body) {
                         toast.success(message);
                         dispatch(getCommentList());
                     }
@@ -166,14 +190,14 @@ const CommentBlockModal = (props) => {
     };
 
     /**
-     * 저장 버튼 클릭 이벤트
+     * 저장
      */
     const handleClickSave = (e) => {
         let formData = new FormData();
         formData.append('tagType', modalUsage);
         formData.append('usedYn', 'Y');
 
-        // 댓글 관리 처리.
+        // 댓글 관리 처리
         const doCommentMenu = () => {
             if (editData.tagDiv === '') {
                 messageBox.alert('차단 사유를 선택해 주세요.');
@@ -200,7 +224,7 @@ const CommentBlockModal = (props) => {
             }
         };
 
-        // id 차단 처리.
+        // id 차단 처리
         const doUMenu = () => {
             if (editData.tagValues === '') {
                 messageBox.alert('차단 아이디를 입력해 주세요.');
@@ -217,7 +241,7 @@ const CommentBlockModal = (props) => {
             handleSaveBlocks(formData);
         };
 
-        // ip 차단 처리.
+        // ip 차단 처리
         const doIMenu = () => {
             if (editData.tagValues === '') {
                 messageBox.alert('차단 IP를 입력해 주세요.');
@@ -241,7 +265,7 @@ const CommentBlockModal = (props) => {
             handleSaveBlocks(formData);
         };
 
-        // 금지어 처리.
+        // 금지어 처리
         const doWMenu = () => {
             if (editData.tagValues === '') {
                 messageBox.alert('금지어를 입력해 주세요.');

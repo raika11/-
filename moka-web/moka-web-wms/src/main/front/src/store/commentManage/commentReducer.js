@@ -71,25 +71,19 @@ export const initialState = {
  */
 export default handleActions(
     {
-        /**
-         * 검색조건 변경
-         */
+        // 검색조건 변경
         [act.CHANGE_SEARCH_OPTION]: (state, { payload: newSearch }) => {
             return produce(state, (draft) => {
                 draft.comments.search = newSearch;
             });
         },
-        /**
-         * 차단 관리 검색 옵션.
-         */
+        // 차단 관리 검색 옵션
         [act.CHANGE_BANNEDS_SEARCH_OPTION]: (state, { payload: newSearch }) => {
             return produce(state, (draft) => {
                 draft.banneds.commentsBlocks.search = newSearch;
             });
         },
-        /**
-         * 데이터 변경
-         */
+        // 데이터 변경
         [act.CHANGE_COMMENT]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.comments = payload;
@@ -105,17 +99,13 @@ export default handleActions(
                 draft.invalidList = payload;
             });
         },
-        /**
-         * 댓글 화면 초기 설정 정보 조회
-         */
+        // 댓글 화면 초기 설정 정보 조회
         [act.GET_INIT_DATA_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.common = body;
             });
         },
-        /**
-         * 스토어 데이터 초기화
-         */
+        // 스토어 데이터 초기화
         [act.CLEAR_STORE]: () => initialState,
         [act.CLEAR_LIST]: (state) => {
             return produce(state, (draft) => {
@@ -139,9 +129,7 @@ export default handleActions(
                 draft.banneds.commentsBlocks.list = initialState.banneds.commentsBlocks.list;
             });
         },
-        /**
-         * 차단 메뉴 구분값
-         */
+        // 차단 메뉴 구분값
         [act.INITIALIZE_BANNED_PARAMS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.banneds.pagePathName = payload.pagePathName;
@@ -149,9 +137,7 @@ export default handleActions(
                 draft.banneds.pageName = payload.pageName;
             });
         },
-        /**
-         * 목록
-         */
+        // 목록
         [act.GET_COMMENT_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.comments.list = body.list;
@@ -178,9 +164,7 @@ export default handleActions(
                 draft.banneds.commentsBlocks.total = initialState.banneds.commentsBlocks.total;
             });
         },
-        /**
-         * 삭제
-         */
+        // 삭제
         [act.DELETE_COMMENT_SUCCESS]: (state) => {
             return produce(state, (draft) => {
                 // draft.comment = initialState.comment;
@@ -192,9 +176,7 @@ export default handleActions(
                 draft.commentError = payload;
             });
         },
-        /**
-         * 조회
-         */
+        // 조회
         [act.GET_BLOCK_HISTORY_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.blockHistory.list = body.list;

@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -206,7 +207,7 @@ public class IssueRestController extends AbstractCommonController {
         ResultDTO<PackageMasterDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.insert"));
 
         tpsLogger.success(ActionType.INSERT);
-        return new ResponseEntity<>(packageMaster, HttpStatus.OK);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
@@ -313,7 +314,7 @@ public class IssueRestController extends AbstractCommonController {
             @RequestBody @Valid PackageMasterDTO packageMasterDTO)
             throws InvalidDataException, Exception {
         if (packageMasterDTO.getPkgSeq() == null) {
-            throw new MokaException("pkgSeq is not null.");
+            throw new MokaException(msg("tps.common.error.notnull.seq"));
         }
 
         // transform
@@ -339,9 +340,8 @@ public class IssueRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "패키지 타이틀 중복 여부")
     @GetMapping("/{pkgTitle}/exists")
-    public ResponseEntity<?> duplicatePkgTitle(@ApiParam("패키지 타이틀")
-    @PathVariable("pkgTitle") /* @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") */ String pkgTitle) {
-        log.debug("request pkgTitle : {}", pkgTitle);
+    public ResponseEntity<?> duplicatePkgTitle(
+            @ApiParam("패키지 타이틀") @PathVariable("pkgTitle") @Size(min = 1, max = 100, message = "{tps.issue.error.length.pkgTitle}") String pkgTitle) {
 
         boolean duplicated = packageService
                 .findByPkgTitle(pkgTitle)
@@ -373,15 +373,13 @@ public class IssueRestController extends AbstractCommonController {
                                 .builder()
                                 .keyword("")
                                 .schCondi("")
-                                .build(), (stored, newDto) -> {
-                            return newDto
-                                    .toBuilder()
-                                    .pkgSeq(dataDto.getPkgSeq())
-                                    .keyword(stored.getKeyword() + "," + newDto.getKeyword())
-                                    .schCondi(stored.getSchCondi() + "," + newDto.getSchCondi())
-                                    .build();
-                        }))
-                .map(keyword -> {
+                                .build(), (stored, newDto) -> newDto
+                                .toBuilder()
+                                .pkgSeq(dataDto.getPkgSeq())
+                                .keyword(stored.getKeyword() + "," + newDto.getKeyword())
+                                .schCondi(stored.getSchCondi() + "," + newDto.getSchCondi())
+                                .build()))
+                .peek(keyword -> {
                     Set<String> keywordSet = new LinkedSet<>();
                     Set<String> schCondiSet = new LinkedSet<>();
                     Arrays
@@ -389,21 +387,20 @@ public class IssueRestController extends AbstractCommonController {
                                     .getKeyword()
                                     .split(","))
                             .filter(kwd -> kwd.length() > 0 && !kwd.contains("null"))
-                            .forEach(kwd -> keywordSet.add(kwd));
+                            .forEach(keywordSet::add);
                     Arrays
                             .stream(keyword
                                     .getSchCondi()
                                     .replace("null", "")
                                     .split(","))
                             .filter(condi -> condi.length() > 0 && !condi.contains("null"))
-                            .forEach(condi -> schCondiSet.add(condi));
+                            .forEach(schCondiSet::add);
                     keyword.setKeyword(String.join(",", keywordSet));
                     keyword.setSchCondi(String.join(",", schCondiSet));
-                    return keyword;
                 })
                 .collect(Collectors.toSet());
         // 카테고리
-        dataDto.setCatList(String.join(",", dataDto
+        dataDto.setCatList(dataDto
                 .getPackageKeywords()
                 .stream()
                 .filter(keyword -> keyword
@@ -411,8 +408,11 @@ public class IssueRestController extends AbstractCommonController {
                         .contains("C"))
                 .sorted(Comparator.comparingLong(PackageKeywordDTO::getKwdOrd))
                 .map(keyword -> String.valueOf(keyword.getRepMaster()))
-                .collect(Collectors.toList())));
-        dataDto.setPackageKeywords(keywords);
+                .collect(Collectors.joining(",")));
+        dataDto.setPackageKeywords(keywords
+                .stream()
+                .sorted(Comparator.comparing(PackageKeywordDTO::getOrdno))
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
         return dataDto;
     }
 
@@ -452,27 +452,23 @@ public class IssueRestController extends AbstractCommonController {
                 .filter(keyword -> Optional
                         .ofNullable(keyword.getSchCondi())
                         .isPresent())
-                .forEach(keyword -> {
-                    Arrays
-                            .stream(keyword
-                                    .getSchCondi()
-                                    .split(","))
-                            .forEach(schCondi -> {
-                                AtomicLong kwdOrd = new AtomicLong();
-                                Arrays
-                                        .stream(keyword
-                                                .getKeyword()
-                                                .split(","))
-                                        .forEach(kwd -> {
-                                            keywords.add(keyword
-                                                    .toBuilder()
-                                                    .schCondi(schCondi)
-                                                    .keyword(kwd)
-                                                    .kwdOrd(kwdOrd.incrementAndGet())
-                                                    .build());
-                                        });
-                            });
-                });
+                .forEach(keyword -> Arrays
+                        .stream(keyword
+                                .getSchCondi()
+                                .split(","))
+                        .forEach(schCondi -> {
+                            AtomicLong kwdOrd = new AtomicLong();
+                            Arrays
+                                    .stream(keyword
+                                            .getKeyword()
+                                            .split(","))
+                                    .forEach(kwd -> keywords.add(keyword
+                                            .toBuilder()
+                                            .schCondi(schCondi)
+                                            .keyword(kwd)
+                                            .kwdOrd(kwdOrd.incrementAndGet())
+                                            .build()));
+                        }));
         // 카테고리
         if (viewDto.getCatList() != null && viewDto
                 .getCatList()
@@ -482,16 +478,14 @@ public class IssueRestController extends AbstractCommonController {
                     .stream(viewDto
                             .getCatList()
                             .split(","))
-                    .forEach((category) -> {
-                        keywords.add(PackageKeywordDTO
-                                .builder()
-                                .catDiv("C")
-                                //                                .keyword(category)
-                                .repMaster(Long.parseLong(category))
-                                .kwdOrd(kwdOrd.incrementAndGet())
-                                .ordno(0L)
-                                .build());
-                    });
+                    .forEach((category) -> keywords.add(PackageKeywordDTO
+                            .builder()
+                            .catDiv("C")
+                            //                                .keyword(category)
+                            .repMaster(Long.parseLong(category))
+                            .kwdOrd(kwdOrd.incrementAndGet())
+                            .ordno(0L)
+                            .build()));
         }
         return viewDto
                 .toBuilder()

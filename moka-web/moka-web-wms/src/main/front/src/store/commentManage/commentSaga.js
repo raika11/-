@@ -16,7 +16,6 @@ const getInitData = createRequestSaga(act.GET_INIT_DATA, api.getInitData);
  */
 const getCommentList = callApiAfterActions(act.GET_COMMENT_LIST, api.getCommentList, (state) => state.comment.comments);
 const getCommentsBlocks = callApiAfterActions(act.GET_COMMENTS_BLOCKS, api.getCommentsBlocks, (state) => state.comment.banneds.commentsBlocks);
-// const getInitDataSaga = callApiAfterActions(act.GET_INIT_DATA, api.getInitData, (state) => state);
 
 /**
  * 등록/수정
@@ -82,7 +81,9 @@ function* deleteComment({ payload: { cmtSeq, params, callback } }) {
     yield put(finishLoading(act.DELETE_COMMENT));
 }
 
-// 차단 목록 차단// 복원
+/**
+ * 차단 목록 차단 복원
+ */
 function* blocksUsedSaga({ payload: { seqNo, usedYn, callback } }) {
     const ACTION = act.BLOCKS_USED;
     let callbackData = {};
@@ -106,11 +107,9 @@ function* blocksUsedSaga({ payload: { seqNo, usedYn, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
-// 차단 히스토리 목록 사가.
-// const getBlockHistorySaga = callApiAfterActions(act.GET_BLOCK_HISTORY, api.getBlockHistory, (e) => {
-//     console.log(e);
-// });
-
+/**
+ * 차단 히스토리 목록 사가
+ */
 function* getBlockHistorySaga({ payload: { seqNo } }) {
     yield put(startLoading(act.GET_BLOCK_HISTORY));
 

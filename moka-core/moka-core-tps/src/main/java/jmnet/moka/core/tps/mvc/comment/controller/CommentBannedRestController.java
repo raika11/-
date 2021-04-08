@@ -205,8 +205,22 @@ public class CommentBannedRestController extends AbstractCommonController {
                     .getTagType()
                     .getFullname());
             if (tagValues.size() > 0) {
-                msg = msg("tps.comment-banned.error.part", CommentBannedType.U.getFullname(), CommentBannedType.U.getName(),
-                        CommentBannedType.U.getName(), McpString.collectionToDelimitedString(tagValues, ", "));
+                if (!McpString.isEmpty(commentBannedSaveDTO.getTagType())) {
+                    if (commentBannedSaveDTO
+                            .getTagType()
+                            .toString()
+                            .equals("I")) {
+                        msg = msg("tps.comment-banned.error.part", CommentBannedType.I.getFullname(), CommentBannedType.I.getName(),
+                                CommentBannedType.I.getName(), McpString.collectionToDelimitedString(tagValues, ", "));
+                    }
+                    if (commentBannedSaveDTO
+                            .getTagType()
+                            .toString()
+                            .equals("U")) {
+                        msg = msg("tps.comment-banned.error.part", CommentBannedType.U.getFullname(), CommentBannedType.U.getName(),
+                                CommentBannedType.U.getName(), McpString.collectionToDelimitedString(tagValues, ", "));
+                    }
+                }
                 success = false;
             }
             ResultDTO<Boolean> resultDto = new ResultDTO<>(success, msg);

@@ -19,13 +19,12 @@
 
 /** card **/
 .card {position:relative;}
-.card_image + .card_body{padding-top:16px;}
 .card_body {flex: 1 1 auto;}
-.card_body .title {width:100%; padding-bottom:8px;}
+.card_body .title {width:100%;}
 .card_body .headline {width:100%; color:#111; font-size:16px; font-weight:700; line-height:1.5; word-break:break-all;}
-.card_body .description {padding-top:8px; color:#777; font-size:15px; line-height:1.5; word-break:break-all;}
-.card_body .byline {padding-top:8px; color:#aaa; font-size:13px; line-height:1.5;}
-.card_body .date { padding-top:8px; color:#aaa; font-size:12px; line-height:1.5;}
+.card_body .description {color:#777; font-size:15px; line-height:1.5; word-break:break-all;}
+.card_body .byline { color:#aaa; font-size:13px; line-height:1.5;}
+.card_body .date { color:#aaa; font-size:12px; line-height:1.5;}
 .card_body .play_count { padding-top:8px; color:#aaa; font-size:12px; line-height:1.5;}
 .card_image img {width:100%; height:auto;}
 .card .lank_num {position:absolute; width:16px; font-size:46px;}
@@ -95,8 +94,8 @@
     .card::before{content:'';position:absolute;top:0;left:0;display:block;width:100%;height:1px;background:#e2e2e2;}
     .card_group.row > .card::before{left:10px;width:calc(100% - 20px);}
     .card_more { height: 53px; padding-top:16px; padding-bottom: 16px; }
-
-
+    .card_image + .card_body{padding-top:10px;}
+    .flex_row_reverse .card_image + .card_body{padding-top:0;}
     /***************************************    general     ************************************/
     .showcase_general >.row > div:first-child .card {padding-top:0;}
     .showcase_general .card_group.row .card {padding-top:20px; padding-bottom:20px;}
@@ -120,7 +119,7 @@
     /***************************************    unique     ************************************/
     .card_in_txt .card_body { position:static; padding:0;}
     .card_in_txt .card_body .headline { color:#111; font-size:20px; line-height:28px; }
-    .card_in_txt .card_body .description { overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; color:#777; }
+    .card_in_txt .card_body .description { color:#777; }
     .unique_trend .card { padding-top:0; }
     .unique_trend .card::before { display:none; }
 }
@@ -188,7 +187,6 @@
     .card_in_txt .card_body .headline { font-size:20px; line-height:28px; letter-spacing:-0.4px; }
     .card_in_txt .card_body .description { max-width:78%; font-size:13px; line-height:21px; }
     .card_in_txt .card_body .date { padding-top:12px; }
-    .card_in_txt .card_body .headline + .description { margin-top:6px; }
     .unique_trend .title_wrap .title { font-size:16px;  }
     .unique_trend .card_body .headline { font-size:14px; line-height:22px; letter-spacing:-0.4px; }
     .unique_trend .card_group { margin-top:-20px; margin-bottom:20px; }
@@ -216,6 +214,7 @@
     .card_body .headline {font-size:16px;}
     .card_body .description {color:#444; font-size:14px;}
     .card .lank_num {font-size:44px;}
+    .card_image + .card_body{padding-top:12px;}
     .card_more { height: 61px; padding-top:20px; padding-bottom: 20px; }
 
     /***************************************    general     ************************************/
@@ -225,6 +224,7 @@
     .showcase_general .card_group.row .card:last-child::before {left:18px; width: calc(100% - 36px); }
     .showcase_general .card_group .card .card_body {border-right:0;}
     .showcase_general .headline {font-size:20px;}
+    .showcase_general .card_image + .card_body{padding-top:18px;}
     
     .fb_wrap {padding:30px 30px 30px 40px;}
     .fb_wrap .fb_area .title {font-size:18px;}
@@ -240,7 +240,6 @@
     /***************************************    unique     ************************************/
     .card_in_txt .card_body .headline { font-size:28px; }
     .card_in_txt .card_body .description { max-width:48%; font-size:14px; line-height:22px; letter-spacing:-0.4px; }
-    .card_in_txt .card_body .date { padding-top:8px; }
     .unique_trend .title_wrap .title { font-size:20px; line-height:24px; letter-spacing:-0.4px; }
     .unique_trend .card_group .card_body .headline { font-size:18px; line-height:26px; letter-spacing:-0.4px; }
 }

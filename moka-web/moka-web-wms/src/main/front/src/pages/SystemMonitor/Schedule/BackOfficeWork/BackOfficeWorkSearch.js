@@ -11,7 +11,7 @@ import { initialState, getJobHistoryList, getJobCode, changeBackOfficeWorkSearch
 /**
  * 스케줄 서버 관리 > 백오피스 예약작업 검색
  */
-const BackOfficeWorkSearch = () => {
+const BackOfficeWorkSearch = ({ show }) => {
     const dispatch = useDispatch();
     const jobCode = useSelector((store) => store.schedule.backOffice.jobCode);
     const storeSearch = useSelector((store) => store.schedule.backOffice.search);
@@ -36,8 +36,8 @@ const BackOfficeWorkSearch = () => {
             getJobHistoryList(
                 changeBackOfficeWorkSearchOption({
                     ...search,
-                    startDay: moment().startOf('day').format(DB_DATEFORMAT),
-                    endDay: moment().endOf('day').format(DB_DATEFORMAT),
+                    startDay: moment(search.startDay).format(DB_DATEFORMAT),
+                    endDay: moment(search.endDay).format(DB_DATEFORMAT),
                     page: 0,
                 }),
             ),
@@ -48,7 +48,7 @@ const BackOfficeWorkSearch = () => {
      * 초기화
      */
     const handleClickReset = () => {
-        changeBackOfficeWorkSearchOption({ ...search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) });
+        setSearch({ ...initialState.backOffice.search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) });
     };
 
     useEffect(() => {
@@ -64,17 +64,21 @@ const BackOfficeWorkSearch = () => {
     }, [storeSearch]);
 
     useEffect(() => {
-        dispatch(
-            getJobHistoryList(
-                getJobCode(),
-                changeBackOfficeWorkSearchOption({ ...search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) }),
-            ),
-        );
+        if (show) {
+            dispatch(
+                getJobHistoryList(
+                    getJobCode(),
+                    changeBackOfficeWorkSearchOption({ ...search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) }),
+                ),
+            );
+        } else {
+            setSearch({ ...initialState.backOffice.search, startDay: moment().startOf('day').format(DB_DATEFORMAT), endDay: moment().endOf('day').format(DB_DATEFORMAT) });
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [show]);
 
     return (
-        <Form className="mb-14">
+        <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
             <Form.Row className="mb-2">
                 <Col xs={5} className="p-0 pr-2 d-flex align-items-center">
                     <MokaInput

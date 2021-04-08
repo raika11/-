@@ -293,7 +293,6 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                 {/* 입력 권한 */}
                 <Col xs={6} className="p-0 pr-40">
                     <MokaInputLabel label="입력 권한" as="select" name="insLevel" id="insLevel" value={boardInfoData.insLevel} onChange={handleChangeValue}>
-                        <option value="">선택</option>
                         <option value="0">전체</option>
                         <option value="1">회원</option>
                         <option value="9">관리자</option>
@@ -303,7 +302,6 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                 {/* 조회 권한 */}
                 <Col xs={6} className="p-0">
                     <MokaInputLabel label="조회 권한" as="select" name="viewLevel" id="viewLevel" value={boardInfoData.viewLevel} onChange={handleChangeValue}>
-                        <option value="">선택</option>
                         <option value="0">전체</option>
                         <option value="1">회원</option>
                         <option value="9">관리자</option>
@@ -324,7 +322,6 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                         isInvalid={error.answLevel}
                         disabled={boardInfoData.answYn !== 'Y' ? true : false}
                     >
-                        <option value="">선택</option>
                         <option value="0">전체</option>
                         <option value="1">회원</option>
                         <option value="9">관리자</option>
@@ -334,7 +331,6 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                 {/* 추천 */}
                 <Col xs={6} className="p-0">
                     <MokaInputLabel label="추천" as="select" name="recomFlag" id="recomFlag" value={boardInfoData.recomFlag} onChange={handleChangeValue}>
-                        <option value="">선택</option>
                         <option value="0">미사용</option>
                         <option value="1">추천/비추천</option>
                         <option value="2">추천만</option>
@@ -346,7 +342,9 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
             <Form.Row className="mb-2">
                 <Col xs={6} className="p-0 pr-40">
                     <MokaInputLabel label="채널" as="select" name="channelType" id="channelType" value={boardInfoData.channelType} onChange={handleChangeValue}>
-                        <option value="">선택</option>
+                        <option key="blankChoice" hidden value="">
+                            선택하세요
+                        </option>
                         {channelTypeList.map((item, index) => (
                             <option key={index} value={item.dtlCd}>
                                 {item.cdNm}

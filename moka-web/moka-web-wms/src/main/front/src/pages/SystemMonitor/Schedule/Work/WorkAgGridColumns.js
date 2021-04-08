@@ -5,12 +5,6 @@ import WorkStateRenderer from '../components/WorkStateRenderer';
 
 export default [
     {
-        headerName: '',
-        field: 'usedYn',
-        width: 36,
-        cellRenderer: 'usedYnRenderer',
-    },
-    {
         headerName: '번호',
         field: 'jobSeq',
         cellStyle: { display: 'flex', alignItems: 'center' },
@@ -19,7 +13,7 @@ export default [
     {
         headerName: '분류',
         field: 'categoryNm',
-        cellStyle: { textOverflow: 'ellipsis', lineHeight: '57px' },
+        cellStyle: { lineHeight: '60px' },
         width: 50,
         tooltipField: 'categoryNm',
     },
@@ -43,5 +37,11 @@ export default [
         cellStyle: { lineHeight: '18px' },
         width: 240,
         cellRendererFramework: (row) => <WorkStateRenderer {...row} />,
+    },
+    {
+        headerName: '사용',
+        field: 'usedYn',
+        width: 40,
+        cellRenderer: 'usedYnRenderer',
     },
 ];

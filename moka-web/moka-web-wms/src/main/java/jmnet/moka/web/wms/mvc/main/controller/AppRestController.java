@@ -33,6 +33,7 @@ import jmnet.moka.core.tps.common.code.AnswerLoginSnsCode;
 import jmnet.moka.core.tps.common.code.AnswerRelDivCode;
 import jmnet.moka.core.tps.common.code.LinkTargetCode;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
+import jmnet.moka.core.tps.common.code.PackageDivCode;
 import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import jmnet.moka.core.tps.common.code.TourStatusCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
@@ -211,7 +212,11 @@ public class AppRestController {
         // 링크 타켓 유형
         result.put("LINK_TARGET", LinkTargetCode.toList());
 
+        // 패키지 유형
+        result.put("PACKAGE_DIV", PackageDivCode.toList());
 
+        // 편집기사 채널타입
+        //        result.put("CHANNEL_TYPE", ChannelTypeCode.toList());
 
         Authentication authentication = SecurityContextHolder
                 .getContext()

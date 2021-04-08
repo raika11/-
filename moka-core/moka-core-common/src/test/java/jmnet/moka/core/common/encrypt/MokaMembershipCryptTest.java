@@ -20,25 +20,29 @@ import org.springframework.web.client.RestTemplate;
 public class MokaMembershipCryptTest {
     public static final Logger logger = LoggerFactory.getLogger(MokaMembershipCryptTest.class);
 
+    private String KEY = "qsx#*03k8f*j3ldd0bkekf39f@(jbnd!";
+    private String TEXT = "1617327430615|10000003|4|ML01|MS01|Y";
+    private String ENCRYPTED = "I6ofSCX/e0VUhdzJcZthVxXVp/s9bPNp1awDVu6diIoqQ58Hr3yh1hPKGv34Mq1x";
+
     @Test
     public void membershipDecrypt()
             throws Exception {
-        MokaMembershipCrypt mokaCrypt = new MokaMembershipCrypt("qsx#*03k8f*j3ldd0bkekf39f@(jbnd!");
-        logger.info("decrypt:{}",mokaCrypt.decrypt("NSRtzCZrFqM/M2W7GUCZNOz2LHHHBKO2+OETkJIInJu/OrGgEkvpbS/By/wNZcI8"));
+        MokaMembershipCrypt mokaCrypt = new MokaMembershipCrypt(KEY);
+        logger.info("decrypt:{}",mokaCrypt.decrypt(ENCRYPTED));
     }
 
     @Test
     public void membershipEncrypt()
             throws Exception {
-        MokaMembershipCrypt mokaCrypt = new MokaMembershipCrypt("qsx#*03k8f*j3ldd0bkekf39f@(jbnd!");
-        logger.info("encrypt:{}",mokaCrypt.encrypt("1615271079996|10000022|49|ML01|MS01|Y"));
+        MokaMembershipCrypt mokaCrypt = new MokaMembershipCrypt(KEY);
+        logger.info("encrypt:{}",mokaCrypt.encrypt(TEXT));
     }
 
     @Test
     public void membershipInfo() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("client-id", "88f664f31a5c4e40");
-        headers.add("JaMemAuth", "WW6L02zpByhrg7RvIHWOT6v9E3lF1H7Ax85yId5SYhF3obiHp4kQTfGj+2jUpB+p");
+        headers.add("JaMemAuth", ENCRYPTED);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Map> response = restTemplate.exchange("https://account-api.joongang.co.kr/mem/basicinfo",
                 HttpMethod.GET,  new HttpEntity<>(headers), Map.class);

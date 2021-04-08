@@ -52,12 +52,6 @@ const DeskingTree = ({ setComponentAgGridInstances, match }) => {
      */
     const loadWork = useCallback(
         (areaSeq) => {
-            /**
-             * componentAgGridInstaces를 초기화한다.
-             * 트리 클릭 => (초기화) => 컴포넌트워크 데이터 조회 => 컴포넌트 agGrid인스턴스 추가
-             * (DeskingWorkAgGrid.js에서 agGrid인스턴스를 추가하고 있음)
-             */
-            setComponentAgGridInstances([]);
             dispatch(
                 getComponentWorkList({
                     areaSeq: areaSeq,
@@ -71,7 +65,7 @@ const DeskingTree = ({ setComponentAgGridInstances, match }) => {
                 }),
             );
         },
-        [dispatch, setComponentAgGridInstances],
+        [dispatch],
     );
 
     /**
@@ -102,13 +96,17 @@ const DeskingTree = ({ setComponentAgGridInstances, match }) => {
                     loadWork(item.areaSeq);
                 } else {
                     history.push(`${match.path}/${item.areaSeq}`);
+                    //  componentAgGridInstaces를 초기화한다.
+                    //  트리 클릭 => (페이지 이동 시에만 초기화) => 컴포넌트워크 데이터 조회 => 컴포넌트 agGrid인스턴스 추가
+                    //  DeskingWorkAgGrid.js에서 agGrid인스턴스를 추가하고 있음
+                    setComponentAgGridInstances([]);
                 }
             } else {
                 // compYn !== 'Y'이면 트리 확장
                 handleExpansion({ areaSeq: item.areaSeq });
             }
         },
-        [history, loadWork, areaSeq, match, handleExpansion],
+        [areaSeq, loadWork, history, match.path, setComponentAgGridInstances, handleExpansion],
     );
 
     useEffect(() => {

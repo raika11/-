@@ -1,7 +1,7 @@
 package jmnet.moka.web.bulk.task.bulksender.service;
 
 import jmnet.moka.web.bulk.common.vo.TotalVo;
-import jmnet.moka.web.bulk.mapper.idb.BulkSenderIdbMapper;
+import jmnet.moka.web.bulk.mapper.mokalog.BulkSenderMokaLogMapper;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobTotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobVo;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BulkSenderServiceImpl implements BulkSenderService{
-    final BulkSenderIdbMapper bulkSenderIdbMapper;
+    final BulkSenderMokaLogMapper bulkSenderMokaLogMapper;
 
-    public BulkSenderServiceImpl(BulkSenderIdbMapper bulkSenderIdbMapper) {
-        this.bulkSenderIdbMapper = bulkSenderIdbMapper;
+    public BulkSenderServiceImpl(BulkSenderMokaLogMapper bulkSenderMokaLogMapper) {
+        this.bulkSenderMokaLogMapper = bulkSenderMokaLogMapper;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class BulkSenderServiceImpl implements BulkSenderService{
         totalVo.logInfo(message);
         totalVo.setMsg(totalVo.getInfoMessageList());
 
-        this.bulkSenderIdbMapper.callUspBulkLogInsBySender(totalVo);
+        this.bulkSenderMokaLogMapper.callUspBulkLogInsBySender(totalVo);
 
         totalVo.setInfoMessageFlush();
     }
@@ -45,7 +45,7 @@ public class BulkSenderServiceImpl implements BulkSenderService{
             totalVo.logInfo(message);
         totalVo.setMsg(totalVo.getInfoMessageList());
 
-        this.bulkSenderIdbMapper.callUspBulkPortalLogInsBySender(totalVo);
+        this.bulkSenderMokaLogMapper.callUspBulkPortalLogInsBySender(totalVo);
 
         totalVo.setInfoMessageFlush();
     }

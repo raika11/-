@@ -64,13 +64,13 @@ export default [
         headerName: '구독',
         field: 'subsYn',
         width: 40,
-        cellRenderer: 'usedYnRenderer',
+        cellRenderer: 'usedYnSecondRenderer',
     },
     {
         headerName: '노출',
         field: 'expoYn',
         width: 40,
-        cellRenderer: 'usedYnRenderer',
+        cellRenderer: 'usedYnThirdRenderer',
     },
     {
         headerName: '바로가기',

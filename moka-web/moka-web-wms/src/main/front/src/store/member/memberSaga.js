@@ -11,7 +11,7 @@ import commonUtil from '@utils/commonUtil';
  * 목록
  */
 //const getMemberList = callApiAfterActions(memberAction.GET_MEMBER_LIST, memberAPI.getMemberList, (state) => state.member);
-function* getMemeberAuthMenuList({ type, payload }) {
+function* getMemberAuthMenuList({ type, payload }) {
     const ACTION = type;
     let callbackData;
 
@@ -214,6 +214,21 @@ function* saveMember({ payload: { type, actions, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+function* changePassword({ type, payload: { memberId, passwords, callback } }) {
+    const { current: password, change: newPassword, confirm: confirmPassword } = passwords;
+    yield put(startLoading(type));
+    try {
+        const response = yield call(memberAPI.changePassword, memberId, { password, newPassword, confirmPassword });
+        if (callback instanceof Function) {
+            callback(response);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+    yield put(finishLoading(type));
+}
+
 /**
  * 로그인 이력 조회
  */
@@ -225,6 +240,7 @@ export default function* memberSaga() {
     yield takeLatest(memberAction.DUPLICATE_CHECK, duplicateCheck);
     yield takeLatest(memberAction.SAVE_MEMBER, saveMember);
     yield takeLatest(memberAction.GET_LOGIN_HISTORY_LIST, getLoginHistoryList);
-    yield takeLatest(memberAction.GET_MEMBER_MENU_AUTH, getMemeberAuthMenuList);
-    yield takeLatest(memberAction.updateMemberMenuAuth, updateMemberMenuAuth);
+    yield takeLatest(memberAction.GET_MEMBER_MENU_AUTH, getMemberAuthMenuList);
+    yield takeLatest(memberAction.UPDATE_MEMBER_MENU_AUTH, updateMemberMenuAuth);
+    yield takeLatest(memberAction.CHANGE_PASSWORD, changePassword);
 }

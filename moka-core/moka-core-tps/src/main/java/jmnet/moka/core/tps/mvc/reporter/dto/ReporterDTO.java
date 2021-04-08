@@ -58,6 +58,16 @@ public class ReporterDTO implements Serializable {
     private String repName;
 
     /**
+     * 필진타입코드
+     */
+    private String jplusRepDiv;
+
+    /**
+     * 필진타입코드명
+     */
+    private String jplusRepDivNm;
+
+    /**
      * 직접관리용 회사코드
      */
     private String r1Cd;

@@ -13,7 +13,7 @@ import ColumnistList from './ColumnistList';
 import ColumnistEdit from '@pages/Columnist/ColumnistEdit';
 
 /**
- * 컬럼니스트 관리
+ * 칼럼니스트 관리
  */
 const Columnist = ({ match, displayName }) => {
     const dispatch = useDispatch();

@@ -67,7 +67,8 @@ export default [
     },
     {
         headerName: '상시',
-        field: '',
+        field: 'ab0',
         width: 65,
+        tooltipField: 'ab0',
     },
 ];

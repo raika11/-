@@ -54,4 +54,16 @@ public class LoginLogDTO {
      */
     @DTODateTimeFormat
     protected Date regDt;
+
+
+    /**
+     * 에러코드
+     */
+    private String errCd;
+
+
+    /**
+     * 에러메시지
+     */
+    private String errMsg;
 }

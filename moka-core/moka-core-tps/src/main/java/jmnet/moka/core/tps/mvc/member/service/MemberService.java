@@ -10,9 +10,19 @@ import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.LoginLog;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
+import jmnet.moka.core.tps.mvc.member.entity.MemberSms;
 import org.springframework.data.domain.Page;
 
 public interface MemberService {
+
+    /**
+     * 멤버 조회
+     *
+     * @param memberId 검색 조건
+     * @return 검색 결과 목록
+     */
+    Optional<MemberInfo> findById(String memberId);
+
     /**
      * 멤버 목록 조회
      *
@@ -37,6 +47,14 @@ public interface MemberService {
     Optional<MemberInfo> findMemberById(String memberId);
 
     /**
+     * 멤버 ID로 백오피스 사용자 SMS인증 조회
+     *
+     * @param memberId 멤버 ID
+     * @return
+     */
+    Optional<MemberSms> findFirstByMemberIdOrderByRegDtDesc(String memberId);
+
+    /**
      * 멤버 ID로 멤버 상세 조회
      *
      * @param memberId   멤버 ID
@@ -44,6 +62,14 @@ public interface MemberService {
      * @return
      */
     Optional<MemberInfo> findMemberById(String memberId, boolean isGroupAll);
+
+    /**
+     * 백오피스 사용자 SMS인증 등록
+     *
+     * @param memberSms 멤버 정보
+     * @return 멤버 정보
+     */
+    MemberSms insertMemberSms(MemberSms memberSms);
 
     /**
      * 멤버 등록

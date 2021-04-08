@@ -1,15 +1,22 @@
 package jmnet.moka.core.tps.mvc.schedule.server.entity;
 
 
-import lombok.*;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * 작업 상태 엔티티
- * 2021. 2. 1. 김정민
+ * 작업 상태 엔티티 2021. 2. 1. 김정민
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -65,4 +72,10 @@ public class JobStatus implements Serializable {
      */
     @Column(name = "ERR_MSG")
     private String errMgs;
+
+    /**
+     * 실행 내용
+     */
+    @Column(name = "CONTENT")
+    private String content;
 }

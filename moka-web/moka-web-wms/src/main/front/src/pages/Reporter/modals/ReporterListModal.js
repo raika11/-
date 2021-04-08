@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaSearchInput, MokaTable } from '@components';
 import { messageBox } from '@utils/toastUtil';
+import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 import { initialState, getReporterListModal, GET_REPORTER_LIST_MODAL } from '@store/reporter';
 import columnDefs from './ReporterListModalColumns';
 
@@ -57,11 +58,7 @@ const ReporterListModal = (props) => {
                             setRowData(
                                 body.list.map((reporter) => ({
                                     ...reporter,
-                                    belong:
-                                        (reporter.r1CdNm ? `${reporter.r1CdNm} / ` : '') +
-                                        (reporter.r2CdNm ? `${reporter.r2CdNm} / ` : '') +
-                                        (reporter.r3CdNm ? `${reporter.r3CdNm} / ` : '') +
-                                        (reporter.r4CdNm ? `${reporter.r4CdNm}` : ''),
+                                    jplusRepDivNm: (reporter.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
                                     onClick: handleRowClicked,
                                 })),
                             );
@@ -79,9 +76,10 @@ const ReporterListModal = (props) => {
     /**
      * 검색조건 변경
      */
-    const handleSearchOption = useCallback(
-        ({ key, value }) => {
-            setSearch({ ...search, [key]: value });
+    const handleChange = useCallback(
+        (e) => {
+            const { name, value } = e.target;
+            setSearch({ ...search, [name]: value });
         },
         [search],
     );
@@ -153,12 +151,13 @@ const ReporterListModal = (props) => {
             draggable
         >
             <div className="mb-14">
-                <MokaSearchInput name="keyword" value={search.keyword} onChange={handleSearchOption} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
+                <MokaSearchInput name="keyword" value={search.keyword} onChange={handleChange} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
             </div>
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={45}
                 onRowNodeId={(reporter) => reporter.repSeq}
                 onRowClicked={() => {}}
                 loading={loading}

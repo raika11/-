@@ -5,10 +5,13 @@ package jmnet.moka.core.tps.mvc.columnist.service;
 
 import java.util.Optional;
 import jmnet.moka.common.utils.McpFile;
+import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.tps.mvc.columnist.dto.ColumnistSearchDTO;
 import jmnet.moka.core.tps.mvc.columnist.entity.Columnist;
+import jmnet.moka.core.tps.mvc.columnist.mapper.ColumnistMapper;
 import jmnet.moka.core.tps.mvc.columnist.repository.ColumnistRepository;
+import jmnet.moka.core.tps.mvc.columnist.vo.ColumnistVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,9 +41,18 @@ public class ColumnistServiceImpl implements ColumnistService {
     @Value("${columnist.save.filepath}")
     private String saveFilePath;
 
+    @Autowired
+    private ColumnistMapper columnistMapper;
+
     @Override
     public Page<Columnist> findAllColumnist(ColumnistSearchDTO search) {
         return columnistRepository.findAllColumnist(search);
+    }
+
+    @Override
+    public ColumnistVO findId(Long seq) {
+        String seqNo = Long.toString(seq);
+        return columnistMapper.findById(seqNo);
     }
 
     @Override
@@ -74,13 +86,14 @@ public class ColumnistServiceImpl implements ColumnistService {
         String extension = McpFile
                 .getExtension(thumbnail.getOriginalFilename())
                 .toLowerCase();
-        String fileName = String.valueOf(columnist.getSeqNo()) + "." + extension;
+
+        String filename = UUIDGenerator.uuid() + "." + extension;
 
         // 파일 저장
-        boolean upload = ftpHelper.upload(FtpHelper.PDS, fileName, thumbnail.getInputStream(), saveFilePath);
+        boolean upload = ftpHelper.upload(FtpHelper.PDS, filename, thumbnail.getInputStream(), saveFilePath);
         if (upload) {
             log.debug("SAVE COLUMNIST IMAGE");
-            String path = pdsUrl + saveFilePath + "/" + fileName;
+            String path = pdsUrl + saveFilePath + "/" + filename;
             return path;
         } else {
             log.debug("SAVE FAIL COLUMNIST IMAGE");

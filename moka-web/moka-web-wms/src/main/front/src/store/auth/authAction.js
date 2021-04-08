@@ -54,3 +54,6 @@ export const changeDomainSearchOption = createAction(CHANGE_DOMAIN_SEARCH_OPTION
 // 오픈 중인 domainId 공유
 export const CHANGE_LATEST_DOMAINID = 'auth/CHANGE_LATEST_DOMAINID';
 export const changeLatestDomainId = createAction(CHANGE_LATEST_DOMAINID, (domainId) => domainId);
+
+export const CONFIRM_SMS_AUTHENTICATION = 'auth/CONFIRM_AUTHENTICATION_NUMBER';
+export const confirmSmsAuthentication = createAction(CONFIRM_SMS_AUTHENTICATION);

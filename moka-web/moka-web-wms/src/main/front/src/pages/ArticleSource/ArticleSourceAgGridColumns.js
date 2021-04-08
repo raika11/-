@@ -53,13 +53,13 @@ export default [
         headerName: 'CP수신여부',
         field: 'rcvUsedYn',
         width: 80,
-        cellRenderer: 'usedYnRenderer',
+        cellRenderer: 'usedYnSecondRenderer',
     },
     {
         headerName: '벌크여부',
         field: 'bulkFlag',
         width: 65,
-        cellRenderer: 'usedYnRenderer',
+        cellRenderer: 'usedYnThirdRenderer',
     },
     {
         headerName: '등록일시',

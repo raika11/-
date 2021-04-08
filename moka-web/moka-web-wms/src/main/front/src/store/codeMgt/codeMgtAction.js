@@ -91,6 +91,7 @@ export const GET_PRESS_CATE_JA = 'codeMgt/GET_PRESS_CATE_JA';
 export const GET_PRESS_CATE_SUNDAY = 'codeMgt/GET_PRESS_CATE_SUNDAY';
 export const GET_GEN_CATE = 'codeMgt/GET_GEN_CATE';
 export const GET_BO_SCHJOB = 'codeMgt/GET_BO_SCHJOB';
+export const GET_JPLUS_REP = 'codeMgt/GET_JPLUS_REP';
 export const getTpSize = createAction(GET_TP_SIZE);
 export const getTpZone = createAction(GET_TP_ZONE);
 export const getLang = createAction(GET_LANG);
@@ -116,6 +117,7 @@ export const getApiType = createAction(GET_API_TYPE);
 export const getTourAge = createAction(GET_TOUR_AGE);
 export const getBulkSite = createAction(GET_BULK_SITE);
 export const getGenCate = createAction(GET_GEN_CATE);
+export const getJplusRep = createAction(GET_JPLUS_REP);
 
 export const [GET_SPECIAL_CHAR_CODE, GET_SPECIAL_CHAR_CODE_SUCCESS, GET_SPECIAL_CHAR_CODE_FAILURE] = createRequestActionTypes('codeMgt/GET_SPECIAL_CHAR_CODE');
 export const getSpecialCharCode = createAction(GET_SPECIAL_CHAR_CODE);

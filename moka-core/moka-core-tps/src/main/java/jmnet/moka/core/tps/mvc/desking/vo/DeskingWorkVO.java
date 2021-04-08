@@ -59,6 +59,10 @@ public class DeskingWorkVO implements Serializable {
     @Column(name = "PARENT_CONTENT_ID")
     private String parentContentId;
 
+    @ApiModelProperty("채널타입(기사A/영상M/패키지I/기자R/칼럼니스트C)")
+    @Column(name = "CHANNEL_TYPE")
+    private String channelType;
+
     @ApiModelProperty("콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상")
     @Column(name = "CONTENT_TYPE")
     private String contentType;

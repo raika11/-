@@ -13,6 +13,11 @@ export const initialState = {
         status: '',
         keyword: '',
     },
+    statusSearchTypeList: [
+        { name: '사용여부 전체', id: '' },
+        { name: '사용', id: 'Y' },
+        { name: '미사용', id: 'N' },
+    ],
     columnist: {
         seqNo: '',
         repNo: '',

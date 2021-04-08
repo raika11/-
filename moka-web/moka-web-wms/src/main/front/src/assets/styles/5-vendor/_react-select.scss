@@ -87,4 +87,9 @@
 
 .input-group > .react-select-container {
     flex: 1 1 auto;
+
+    .react-select__control {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
 }

@@ -6,6 +6,7 @@ package jmnet.moka.core.tps.mvc.columnist.service;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.columnist.dto.ColumnistSearchDTO;
 import jmnet.moka.core.tps.mvc.columnist.entity.Columnist;
+import jmnet.moka.core.tps.mvc.columnist.vo.ColumnistVO;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +34,14 @@ public interface ColumnistService {
      * @return 칼럼리스트 단건조회
      */
     Optional<Columnist> findById(Long seqNo);
+
+    /**
+     * 칼럼리스트 조회
+     *
+     * @param seqNo 일련번호
+     * @return 칼럼리스트 단건조회
+     */
+    public ColumnistVO findId(Long seqNo);
 
     /**
      * 칼럼리스트 수정

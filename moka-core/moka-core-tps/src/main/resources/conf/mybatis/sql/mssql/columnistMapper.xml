@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.columnist.mapper.ColumnistMapper">
+  <select id="findById" parameterType="String" resultType="ColumnistVO" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_COLUMNIST_SEL(#{seqNo, mode=IN, jdbcType=VARCHAR, javaType=string})
+      }
+    ]]>
+
+  </select>
+</mapper>

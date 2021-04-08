@@ -469,6 +469,14 @@ const mergeArray = ({ key }, ...arrays) => {
     return val;
 };
 
+/**
+ * unique key 생성 (함수 변경 필요함)
+ * @returns 키생성
+ */
+const getUniqueKey = () => {
+    return new Date().getTime();
+};
+
 export default {
     fileDownload,
     base64ToBlob,
@@ -489,4 +497,5 @@ export default {
     validateForDateRange,
     toKorFromCode,
     mergeArray,
+    getUniqueKey,
 };

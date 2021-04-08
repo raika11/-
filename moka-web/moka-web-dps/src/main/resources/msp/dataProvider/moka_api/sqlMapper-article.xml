@@ -175,23 +175,12 @@
       AND USED_YN = 'Y'
   </select>
 
-  <!--issueInfo-->
-  <select id="issueInfo" parameterType="hashmap" resultType="hashmap"
+  <!-- digitalSpecial 존재여부 -->
+  <select id="isDigitalSpecial" parameterType="map" resultType="map"
     statementType="CALLABLE">
-    {call UPU_MOKA_PACKAGE_SEL(
-      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
-      ) }
-  </select>
-
-  <!--issue-->
-  <select id="issue" parameterType="map" resultType="map" resultMap="map"
-    statementType="CALLABLE">
-    {call UPU_MOKA_PACKAGE_LIST_SEL(
+    {call UPU_15RE_SPECIAL_PAGE_MGT_ISEXIST(
       #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      'Y',
-      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      #{_EXIST, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
       ) }
   </select>
 
@@ -209,7 +198,7 @@
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{remoteIP, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 
@@ -218,7 +207,7 @@
     { call UPU_ARTICLE_SCRAP_UPD(
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{remoteIP, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 
@@ -230,5 +219,42 @@
       )}
   </select>
 
+  <!-- 기사존재여부 -->
+  <select id="isArticle" parameterType="map" resultType="map"
+    statementType="CALLABLE">
+    {call UPU_ARTICLE_BASIC_ISEXIST(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{_EXIST, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!-- 공유, 좋아요/싫어요 등록 -->
+  <select id="shareInsert" parameterType="map" resultType="map"
+    statementType="CALLABLE">
+    {call UPU_15RE_ARTICLE_SHARE_ONLY_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{div, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{site, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{dev, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{subSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{loginDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_memberSeq, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string}
+      ) }
+  </select>
+
+  <!-- 내가 좋아요/싫어요한 기사목록 -->
+  <select id="shareListMy" parameterType="map" resultType="map"
+    statementType="CALLABLE">
+    {call UPU_15RE_ARTICLE_SHARE_LIST_SEL_BY_MEM(
+      #{member_memberSeq, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
 
 </mapper>

@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import imageEditer from '@utils/imageEditorUtil';
 import commonUtil from '@utils/commonUtil';
+import { CHANNEL_TYPE } from '@/constants';
 import { MokaImage, MokaInputLabel } from '@components';
 import { EditThumbModal } from '@pages/Desking/modals';
 
@@ -60,10 +61,11 @@ const ImageForm = ({ component, contentId, partKey, temp, onChange, fileName }) 
                 cropHeight={component?.cropHeight}
                 cropWidth={component?.cropWidth}
                 onHide={() => setShow(false)}
-                totalId={contentId}
+                totalId={temp.channelType === CHANNEL_TYPE.A.code || temp.channelType === CHANNEL_TYPE.M.code ? contentId : null}
                 saveFileName={String(fileName)}
                 thumbFileName={temp.thumbFileName}
                 apply={handleThumbFileApply}
+                accept="image/jpeg, image/gif"
             />
         </Form.Row>
     );

@@ -49,7 +49,7 @@ const CdnArticleSearch = ({ match }) => {
 
     return (
         <Form className="mb-14">
-            <Form.Row className="mb-14 d-flex">
+            <Form.Row>
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((type) => (
@@ -61,16 +61,14 @@ const CdnArticleSearch = ({ match }) => {
                 </Col>
                 <Col xs={10} className="p-0 d-flex">
                     <MokaSearchInput value={search.keyword} name="keyword" className="mr-1 flex-fill" onChange={handleChangeValue} onSearch={handleSearch} />
-                    <Button variant="negative" className="flex-shrink-0" onClick={handleReset}>
+                    <Button variant="negative" className="mr-1" onClick={handleReset}>
                         초기화
+                    </Button>
+                    <Button variant="positive" className="flex-shrink-0" onClick={() => history.push(`${match.path}/add`)}>
+                        등록
                     </Button>
                 </Col>
             </Form.Row>
-            <div className="d-flex justify-content-end">
-                <Button variant="positive" onClick={() => history.push(`${match.path}/add`)}>
-                    등록
-                </Button>
-            </div>
         </Form>
     );
 };

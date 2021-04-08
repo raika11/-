@@ -21,6 +21,7 @@ import jmnet.moka.core.tps.mvc.columnist.dto.ColumnistDTO;
 import jmnet.moka.core.tps.mvc.columnist.dto.ColumnistSearchDTO;
 import jmnet.moka.core.tps.mvc.columnist.entity.Columnist;
 import jmnet.moka.core.tps.mvc.columnist.service.ColumnistService;
+import jmnet.moka.core.tps.mvc.columnist.vo.ColumnistVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -112,15 +113,11 @@ public class ColumnistRestController extends AbstractCommonController {
             @PathVariable("seqNo") @Min(value = 0, message = "{tps.columnist.error.pattern.seqNo}") Long seqNo)
             throws NoDataException {
 
-        String message = msg("tps.columnist.error.no-data");
-        Columnist columnist = columnistService
-                .findById(seqNo)
-                .orElseThrow(() -> new NoDataException(message));
-        ColumnistDTO dto = modelMapper.map(columnist, ColumnistDTO.class);
-        tpsLogger.success(ActionType.SELECT);
-        ResultDTO<ColumnistDTO> resultDto = new ResultDTO<>(dto);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
-
+        // 조회(mybatis)
+        ColumnistVO returnValue = columnistService.findId(seqNo);
+        ResultDTO<ColumnistVO> resultDTO = new ResultDTO<ColumnistVO>(returnValue);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
     /**

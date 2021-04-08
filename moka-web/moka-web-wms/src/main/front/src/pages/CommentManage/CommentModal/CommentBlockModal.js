@@ -99,35 +99,6 @@ const CommentBlockModal = (props) => {
             isInvalid = isInvalid | true;
         }
 
-        // if (!/^[A-Za-z0-9_-`/]+$/g.test(obj.dtlCd)) {
-        //     errList.push({
-        //         field: 'dtlCd',
-        //         reason: '코드 형식이 올바르지 않습니다. 영문 대소문자, 숫자, _, -만 입력 가능합니다.',
-        //     });
-        //     isInvalid = isInvalid | true;
-        // }
-        // if (!obj.cdNm) {
-        //     errList.push({
-        //         field: 'cdNm',
-        //         reason: '코드 한글명은 필수 입력 항목입니다.',
-        //     });
-        //     isInvalid = isInvalid | true;
-        // }
-        // if (!obj.cdOrd) {
-        //     errList.push({
-        //         field: 'cdOrd',
-        //         reason: '순서는 필수 입력 항목입니다.',
-        //     });
-        //     isInvalid = isInvalid | true;
-        // }
-        // if (!/^[0-9]+$/g.test(obj.cdOrd)) {
-        //     errList.push({
-        //         field: 'cdOrd',
-        //         reason: '순서는 숫자만 입력 가능합니다.',
-        //     });
-        //     isInvalid = isInvalid | true;
-        // }
-
         setError(invalidListToError(errList));
         return !isInvalid;
     };
@@ -145,7 +116,6 @@ const CommentBlockModal = (props) => {
                 callback: ({ header, body }) => {
                     const { success, message, resultType } = header;
                     const { totalCnt, list } = body;
-                    const { seqNo, tagValue } = body;
 
                     if (success === false && resultType === 0) {
                         if (totalCnt > 0 && Array.isArray(list)) {

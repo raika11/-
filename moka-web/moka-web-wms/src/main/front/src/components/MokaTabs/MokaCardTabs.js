@@ -26,7 +26,7 @@ const propTypes = {
     /**
      * 탭 컨텐츠의 className
      */
-    tabContentClass: PropTypes.string,
+    tabContentClassName: PropTypes.string,
     /**
      * 탭 컨텐츠 wrapper의 className
      */
@@ -73,7 +73,7 @@ const defaultProps = {
  * 카드 외형 + 상단에 탭이 달린 컴포넌트 (SSC 개발)
  */
 const MokaCardTabs = (props) => {
-    const { className, fill, id, tabs, tabNavs, width, navWidth, height, tabContentClass, tabContentWrapperClassName, onSelectNav, activeKey: parentKey } = props;
+    const { className, fill, id, tabs, tabNavs, width, navWidth, height, tabContentClassName, tabContentWrapperClassName, onSelectNav, activeKey: parentKey } = props;
     const [activeKey, setActiveKey] = useState(0);
 
     /**
@@ -111,7 +111,7 @@ const MokaCardTabs = (props) => {
                             else if (typeof nav === 'string') {
                                 return (
                                     <Nav.Item key={idx} style={{ width: navWidth }}>
-                                        <Nav.Link eventKey={idx} className="h4">
+                                        <Nav.Link eventKey={idx} className="h4 pre-wrap">
                                             {nav}
                                         </Nav.Link>
                                     </Nav.Item>
@@ -128,12 +128,12 @@ const MokaCardTabs = (props) => {
                         })}
                     </Nav>
                 </div>
-                <div className={clsx('d-flex custom-scroll', tabContentWrapperClassName)}>
-                    <Tab.Content className={clsx('p-0', tabContentClass)}>
+                <div className={clsx('d-flex mb-card overflow-hidden', tabContentWrapperClassName)}>
+                    <Tab.Content className={clsx('p-0', tabContentClassName)}>
                         {tabs.map((tab, idx) =>
                             tab ? (
                                 <Tab.Pane key={idx} eventKey={tab.idx || idx} className="overflow-hidden h-100">
-                                    <div className="pb-card pt-20 px-card h-100 custom-scroll">{tab}</div>
+                                    <div className="pt-20 px-card h-100 custom-scroll">{tab}</div>
                                 </Tab.Pane>
                             ) : (
                                 ''

@@ -3,7 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { MokaTable } from '@components';
 import { columnDefs } from './ReporterAgGridColumns';
+import { BASIC_DATEFORMAT, JPLUS_REP_DIV_DEFAULT } from '@/constants';
 import { changeSearchOption, GET_REPORTER_LIST, getReporterList } from '@store/reporter';
+import moment from 'moment';
 
 /**
  * 기자 관리 > 기자 목록 AgGrid
@@ -41,10 +43,9 @@ const ReporterMgrAgGrid = ({ match }) => {
         setRepoterRows(
             list.map((row) => ({
                 ...row,
+                jplusRepDivNm: (row.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
                 id: String(row.repSeq),
-                modDt: row.modDt && row.modDt.length > 10 ? row.modDt.substr(0, 16) : row.modDt,
-                belong:
-                    (row.r1CdNm ? `${row.r1CdNm} / ` : '') + (row.r2CdNm ? `${row.r2CdNm} / ` : '') + (row.r3CdNm ? `${row.r3CdNm} / ` : '') + (row.r4CdNm ? `${row.r4CdNm}` : ''),
+                modDt: row.modDt && moment(row.modDt).format(BASIC_DATEFORMAT),
             })),
         );
     }, [list]);
@@ -64,6 +65,7 @@ const ReporterMgrAgGrid = ({ match }) => {
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={reporterRows}
+            rowHeight={45}
             onRowNodeId={(reporter) => reporter.repSeq}
             onRowClicked={handleRowClicked}
             loading={loading}

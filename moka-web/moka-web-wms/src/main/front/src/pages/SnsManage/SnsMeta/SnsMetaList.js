@@ -23,7 +23,7 @@ const SnsMetaList = () => {
         if (callback instanceof Function) {
             callback(initialState.meta.search);
         }
-        dispatch(changeSnsMetaSearchOptions(initialState.meta.search));
+        //dispatch(changeSnsMetaSearchOptions(initialState.meta.search));
     };
 
     useEffect(() => {

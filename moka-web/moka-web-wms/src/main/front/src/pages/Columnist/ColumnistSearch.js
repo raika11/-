@@ -39,8 +39,11 @@ const ColumnistSearch = ({ match }) => {
      */
     const handleSearch = useCallback(
         ({ key, value }) => {
-            let temp = { ...search, [key]: value };
-            if (key !== 'page') temp['page'] = 0;
+            let temp = { ...search };
+            if (key) {
+                let temp = { ...search, [key]: value };
+                if (key !== 'page') temp['page'] = 0;
+            }
 
             dispatch(changeSearchOption(temp));
             dispatch(getColumnistList({ search: temp }));
@@ -78,9 +81,11 @@ const ColumnistSearch = ({ match }) => {
             {/* 상태정보 */}
             <Col xs={2} className="p-0 pr-2">
                 <MokaInputLabel as="select" name="status" value={search.status} onChange={handleChangeValue} className="mb-0">
-                    <option value="">상태전체</option>
-                    <option value="Y">사용</option>
-                    <option value="N">미사용</option>
+                    {initialState.statusSearchTypeList.map((type) => (
+                        <option key={type.id} value={type.id}>
+                            {type.name}
+                        </option>
+                    ))}
                 </MokaInputLabel>
             </Col>
 
@@ -91,7 +96,7 @@ const ColumnistSearch = ({ match }) => {
                     placeholder={'칼럼니스트 이름 검색'}
                     value={search.keyword}
                     onChange={handleChangeValue}
-                    onSearch={handleSearch}
+                    onSearch={() => handleSearch({})}
                     className="flex-fill mr-1"
                 />
 

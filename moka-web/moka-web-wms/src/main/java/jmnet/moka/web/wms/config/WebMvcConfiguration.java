@@ -3,6 +3,7 @@ package jmnet.moka.web.wms.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import jmnet.moka.common.data.support.DTOModelMapper;
 import jmnet.moka.common.data.support.SearchParamResolver;
@@ -43,6 +44,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Value("${corsAllowedOrigin}")
     private String corsAllowedOrigin;
+
+    @Value("${react.extra.routePath}")
+    private String[] extraRoutePath;
 
     @Autowired
     private ApplicationContext appContext;
@@ -181,7 +185,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Bean
     public HandlerMapping reactRoute()
             throws NoSuchMethodException, SecurityException {
-        ReactRoutesHandlerMapping handlerMapping = new ReactRoutesHandlerMapping(menuService.findAllMenuUrl());
+        Set<String> routePaths = menuService.findAllMenuUrl();
+        routePaths.addAll(Arrays.asList(extraRoutePath.clone()));
+        ReactRoutesHandlerMapping handlerMapping = new ReactRoutesHandlerMapping(routePaths);
         handlerMapping.setOrder(-1);
         return handlerMapping;
     }

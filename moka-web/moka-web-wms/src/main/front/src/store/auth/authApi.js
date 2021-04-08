@@ -76,3 +76,9 @@ export const getUserMenuTree = () => {
         throw err;
     });
 };
+
+export const authenticationSmsAuth = (memberId, smsAuth) => {
+    return instance.get(`/api/member-join/${memberId}/${smsAuth}/exists`).catch((err) => {
+        throw err;
+    });
+};

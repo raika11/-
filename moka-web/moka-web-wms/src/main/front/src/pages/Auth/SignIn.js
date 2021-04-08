@@ -42,16 +42,36 @@ const SignIn = () => {
                 userPassword: password,
                 idSave: idSave,
                 callback: ({ headers, data }) => {
+                    const pathname = window.location.pathname;
                     if (headers.authorization) {
                         if (data.header.resultType === 0) {
                             toast.success(data.header.message);
                             delay(1000);
-                            call(window.location.reload());
+                            if (pathname === '/404' || pathname === '/403') {
+                                call(window.location.assign('/mypage'));
+                            } else {
+                                call(window.location.reload());
+                            }
                         } else {
                             /**
                              * 비밀번호 기간 만료 오류
                              */
-                            messageBox.alert(data.header.message);
+                            messageBox.confirm(
+                                data.header.message,
+                                () => {
+                                    delay(1000);
+                                    call(window.location.assign('/mypage'));
+                                },
+                                () => {
+                                    delay(1000);
+                                    if (pathname === '/404' || pathname === '/403') {
+                                        call(window.location.assign('/mypage'));
+                                    } else {
+                                        call(window.location.reload());
+                                    }
+                                },
+                                '비밀번호 변경',
+                            );
                         }
                     } else {
                         const resultType = data.header.resultType;

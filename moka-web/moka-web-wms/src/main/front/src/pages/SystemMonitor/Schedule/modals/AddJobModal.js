@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaModal, MokaInputLabel, MokaInput } from '@/components';
 import { SCHEDULE_PERIOD } from '@/constants';
 import toast, { messageBox } from '@/utils/toastUtil';
-import { saveJob } from '@/store/schedule';
+import { saveJob, getDeleteJobList } from '@/store/schedule';
 
 /**
  * 스케줄 서버 관리 > 삭제 작업 목록 > 복원 > 등록 모달
  */
 const AddJobModal = (props) => {
-    const { show, onHide, job } = props;
+    const { match, show, onHide, job } = props;
     const dispatch = useDispatch();
+    const history = useHistory();
     const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
-    const boSchjobRows = useSelector((store) => store.codeMgt.boSchjobRows);
     const deployServerCode = useSelector((store) => store.schedule.work.deployServerCode);
     const [data, setData] = useState({});
 
@@ -47,8 +48,10 @@ const AddJobModal = (props) => {
                 jobSeq: Number(data.jobSeq),
                 callback: ({ header }) => {
                     if (header.success) {
-                        toast.success(header.message);
+                        toast.success('삭제된 작업이 복원되었습니다.');
                         handleClickHide();
+                        history.push(`${match.path}/work-delete`);
+                        dispatch(getDeleteJobList());
                     } else {
                         messageBox.alert(header.message);
                     }
@@ -141,27 +144,17 @@ const AddJobModal = (props) => {
                     <Col xs={5} className="p-0">
                         {data.jobType === 'S' && (
                             <MokaInputLabel label="주기" as="select" name="period" value={data.period} onChange={handleChangeValue}>
-                                {SCHEDULE_PERIOD &&
-                                    SCHEDULE_PERIOD.filter((p) => p.period !== 0).map((p) => (
-                                        <option key={p.period} value={p.period}>
-                                            {p.periodNm}
-                                        </option>
-                                    ))}
+                                {SCHEDULE_PERIOD.filter((p) => p.period !== 0).map((p) => (
+                                    <option key={p.period} value={p.period}>
+                                        {p.periodNm}
+                                    </option>
+                                ))}
                             </MokaInputLabel>
                         )}
-                        {data.jobType === 'R' && (
-                            <MokaInputLabel label="백오피스 업무" as="select" name="backOffice" value={data.backOffice} onChange={handleChangeValue}>
-                                {boSchjobRows &&
-                                    boSchjobRows.map((b) => (
-                                        <option key={b.id} value={b.id}>
-                                            {b.name}
-                                        </option>
-                                    ))}
-                            </MokaInputLabel>
-                        )}
+                        {data.jobType === 'R' && <MokaInputLabel label="백오피스 업무" name="jobCd" value={data.jobCd} onChange={handleChangeValue} />}
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-2" style={{ maxHeight: 31 }}>
                     <Col xs={5} className="p-0">
                         <MokaInputLabel label="전송 타입" as="select" name="sendType" value={data.sendType} onChange={handleChangeValue}>
                             <option value=""></option>
@@ -171,23 +164,20 @@ const AddJobModal = (props) => {
                     </Col>
                     {data.sendType === 'FTP' && (
                         <>
-                            <Col xs={4} className="p-0 d-flex justify-content-center">
-                                <div style={{ width: 110 }}>
-                                    <MokaInputLabel label="FTP\nPORT" name="ftpPort" labelWidth={40} value={data.ftpPort} onChange={handleChangeValue} />
-                                </div>
+                            <Col xs={3} className="p-0">
+                                <MokaInputLabel label="FTP PORT" className="pl-20" labelWidth={40} name="ftp\nPort" value={data.ftpPort} onChange={handleChangeValue} />
                             </Col>
-                            <Col xs={3} className="p-0 d-flex justify-content-center">
-                                <div style={{ width: 100 }}>
-                                    <MokaInputLabel
-                                        label="PASSIVE\n모드"
-                                        labelWidth={40}
-                                        name="ftpPassive"
-                                        as="checkbox"
-                                        id="schedule-work-ftpPassive"
-                                        inputProps={{ label: '', custom: true, checked: data.ftpPassive === 'Y' }}
-                                        onChange={handleChangeValue}
-                                    />
-                                </div>
+                            <Col xs={3} className="p-0">
+                                <MokaInputLabel
+                                    label="PASSIVE\n모드"
+                                    labelWidth={40}
+                                    name="ftpPassive"
+                                    className="pl-20"
+                                    as="checkbox"
+                                    id="delete-work-ftpPassive"
+                                    inputProps={{ label: '', custom: true, checked: data.ftpPassive === 'Y' }}
+                                    onChange={handleChangeValue}
+                                />
                             </Col>
                         </>
                     )}
@@ -205,9 +195,10 @@ const AddJobModal = (props) => {
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>
+                <MokaInputLabel label="작업명" className="mb-2" name="jobNm" value={data.jobNm} onChange={handleChangeValue} />
+                <MokaInputLabel label="옵션 파라미터" className="mb-2" name="pkgOpt" value={data.pkgOpt} onChange={handleChangeValue} />
                 <MokaInputLabel label="배포 경로" className="mb-2" name="targetPath" value={data.targetPath} onChange={handleChangeValue} />
                 <MokaInputLabel label="패키지명" className="mb-2" name="pkgNm" value={data.pkgNm} onChange={handleChangeValue} required />
-                {/* <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} onChange={handleChangeValue} required /> */}
                 <MokaInputLabel as="textarea" label="설명" name="jobDesc" inputProps={{ rows: 5 }} value={data.jobDesc} onChange={handleChangeValue} />
             </Form>
         </MokaModal>

@@ -44,10 +44,10 @@ const propTypes = {
      */
     data: PropTypes.shape({}),
     /**
-     * 데이터타입
+     * 카드 타입
      * @default
      */
-    dataType: PropTypes.oneOf(['archive', 'article', 'local', 'represent', 'drop']),
+    cardType: PropTypes.oneOf(['archive', 'article', 'drop', 'represent']),
     /**
      * (이미지리스트에서) 대표사진과 동일 여부
      */
@@ -59,7 +59,7 @@ const defaultProps = {
     height: 168,
     alt: '',
     data: {},
-    dataType: 'archive',
+    cardType: 'archive',
     isRep: false,
 };
 
@@ -81,11 +81,10 @@ const ThumbCard = forwardRef((props, ref) => {
         className,
         moveCard,
         setAddIndex,
-        dataType,
+        cardType,
         editPhoto,
         // 대표사진과 관련된 props
         boxShadow,
-        represent,
         showPhotoDetail,
         onDeleteClick,
         isRep,
@@ -105,8 +104,8 @@ const ThumbCard = forwardRef((props, ref) => {
         accept: ItemTypes.GIF,
         hover: (item, monitor) => {
             if (!cardRef.current) return;
-            const dragIndex = item.index;
             const hoverIndex = data.index;
+            const dragIndex = item.index;
 
             if (dragIndex === hoverIndex) return;
 
@@ -126,11 +125,8 @@ const ThumbCard = forwardRef((props, ref) => {
             // index, 마우스의 위치가 모두 hover된 것의 이후면 그대로
             if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
 
-            if (item.move) {
-                // moveCard 함수 실행
-                if (moveCard) {
-                    moveCard(dragIndex, hoverIndex);
-                }
+            if (item.move && moveCard) {
+                moveCard(dragIndex, hoverIndex);
                 item.index = hoverIndex;
             } else {
                 if (setAddIndex) setAddIndex(hoverIndex);
@@ -143,14 +139,13 @@ const ThumbCard = forwardRef((props, ref) => {
      */
     const [{ isDragging }, drag] = useDrag({
         // 드래그 되는 element 정보
-        item: { type: ItemTypes.GIF, ...data },
+        item: { ...data, type: ItemTypes.GIF },
         // 드래그 되고 있는지를 확인
         collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
+            isDragging: monitor.isDragging(),
         }),
     });
 
-    // return ref 설정
     useImperativeHandle(
         ref,
         () => ({
@@ -164,13 +159,17 @@ const ThumbCard = forwardRef((props, ref) => {
 
     return (
         <div className={className} style={{ width, height, opacity: isDragging ? 0.5 : 1 }}>
-            <div ref={drag(drop(cardRef))} className={clsx('d-flex flex-direction-column h-100 w-100 border rounded')} style={{ boxShadow }}>
+            <div
+                ref={cardType === 'drop' ? drag(drop(cardRef)) : cardType === 'represent' ? cardRef : drag(cardRef)}
+                className="d-flex flex-direction-column h-100 w-100 border rounded"
+                style={{ boxShadow }}
+            >
                 <div className="position-relative overflow-hidden flex-fill">
                     <div
                         ref={wrapperRef}
                         className={clsx('w-100 h-100 d-inline-flex align-items-center justify-content-center position-relative bg-gray-600 overflow-hidden', {
-                            'rounded-top': dataType === 'archive',
-                            rounded: dataType !== 'archive',
+                            'rounded-top': cardType === 'archive',
+                            rounded: cardType !== 'archive',
                         })}
                         onMouseOver={() => setMouseOver(true)}
                         onMouseLeave={() => setMouseOver(false)}
@@ -179,7 +178,7 @@ const ThumbCard = forwardRef((props, ref) => {
 
                         <div className="w-100 h-100 absolute-top">
                             {/* 마우스 오버 -> 대표 사진 등록 */}
-                            {mouseOver && !represent && (
+                            {mouseOver && cardType !== 'represent' && (
                                 <Button
                                     variant={isRep ? 'positive' : 'negative'}
                                     size="sm"
@@ -191,21 +190,21 @@ const ThumbCard = forwardRef((props, ref) => {
                             )}
 
                             {/* 초상권 주의 */}
-                            {dataType !== 'drop' && !represent && data.atpnPoriatentYn === 'Y' && (
+                            {cardType !== 'drop' && cardType !== 'represent' && data.atpnPoriatentYn === 'Y' && (
                                 <Button variant="searching" className="border-0 p-0 moka-table-button" style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}>
                                     <MokaIcon iconName="fal-eye-slash" />
                                 </Button>
                             )}
 
                             {/* 재사용 금지 */}
-                            {dataType !== 'drop' && !represent && data.atpnReusprhibtYn === 'Y' && (
+                            {cardType !== 'drop' && cardType !== 'represent' && data.atpnReusprhibtYn === 'Y' && (
                                 <Button variant="searching" className="border-0 p-0 moka-table-button" style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}>
                                     <MokaIcon iconName="fal-exclamation-triangle" />
                                 </Button>
                             )}
 
                             {/* 상세 조회 */}
-                            {dataType !== 'drop' && !represent && !data.preview && (
+                            {cardType !== 'drop' && cardType !== 'represent' && !data.preview && (
                                 <Button
                                     variant="searching"
                                     className="border-0 p-0 moka-table-button"
@@ -217,7 +216,7 @@ const ThumbCard = forwardRef((props, ref) => {
                             )}
 
                             {/* 삭제 */}
-                            {(dataType === 'drop' || represent) && (
+                            {(cardType === 'drop' || cardType === 'represent') && (
                                 <Button
                                     variant="searching"
                                     className="border-0 p-0 moka-table-button"
@@ -229,7 +228,7 @@ const ThumbCard = forwardRef((props, ref) => {
                             )}
 
                             {/* 수정 */}
-                            {(dataType === 'drop' || represent) && (
+                            {(cardType === 'drop' || cardType === 'represent') && (
                                 <Button
                                     variant="searching"
                                     className="border-0 p-0 moka-table-button"
@@ -241,7 +240,7 @@ const ThumbCard = forwardRef((props, ref) => {
                             )}
 
                             {/* 대표이미지 마크 */}
-                            {represent && (
+                            {cardType === 'represent' && (
                                 <Badge variant="positive" style={{ position: 'absolute', bottom: '5px', left: '5px' }}>
                                     대표 이미지
                                 </Badge>
@@ -250,8 +249,8 @@ const ThumbCard = forwardRef((props, ref) => {
                     </div>
                 </div>
 
-                {/* 아카이브만 텍스트영역 노출 필요없음 */}
-                {dataType === 'archive' && !represent && (
+                {/* 아카이브만 텍스트 영역 노출 */}
+                {cardType === 'archive' && (
                     <div className="p-03 border-top" style={{ minHeight: 48 }}>
                         <div className="d-flex justify-content-between" style={{ height: 20 }}>
                             <p className="pt-05 pl-05 mb-0 flex-fill ft-12 h5 text-truncate">{data.text}</p>

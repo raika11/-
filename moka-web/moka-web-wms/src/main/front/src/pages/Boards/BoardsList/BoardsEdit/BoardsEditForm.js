@@ -47,7 +47,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
      */
     const handleChangeFile = (e) => {
         let tempFile = e.target.files[0].name.split('.');
-        let tempFileExt = tempFile[1];
+        let tempFileExt = tempFile[1].toLowerCase();
 
         if (selectBoard.allowFileExt?.split(',').indexOf(tempFileExt) < 0) {
             // 허용하는 확장자가 아닐경우
@@ -190,38 +190,37 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                     </>
                 )}
                 {/* 채널 게시판일 때 */}
-                {loading === false &&
-                    (selectBoard.channelType === 'BOARD_DIVC2' ? (
-                        // 기자
+                {selectBoard.channelType === 'BOARD_DIVC2' ? (
+                    // 기자
+                    <Form.Row className="mb-2">
+                        <Col xs={8} className="p-0">
+                            <BoardRepoterSelect
+                                channalList={channalList}
+                                selectValue={data.channelId}
+                                onChange={(value) => {
+                                    onChangeFormData({
+                                        channelId: value?.value,
+                                    });
+                                }}
+                            />
+                        </Col>
+                    </Form.Row>
+                ) : (
+                    channalList.length > 0 && (
                         <Form.Row className="mb-2">
-                            <Col xs={8} className="p-0">
-                                <BoardRepoterSelect
-                                    channalList={channalList}
-                                    selectValue={data.channelId}
-                                    onChange={(value) => {
-                                        onChangeFormData({
-                                            channelId: value,
-                                        });
-                                    }}
-                                />
+                            <Col xs={6} className="p-0">
+                                <MokaInputLabel as="select" label="채널명" name="channelId" value={data.channelId} onChange={handleChangeValue}>
+                                    <option value="">선택</option>
+                                    {channalList.map((item, index) => (
+                                        <option key={index} value={item.value}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </MokaInputLabel>
                             </Col>
                         </Form.Row>
-                    ) : (
-                        channalList.length > 0 && (
-                            <Form.Row className="mb-2">
-                                <Col xs={6} className="p-0">
-                                    <MokaInputLabel as="select" label="채널명" name="channelId" value={data.channelId} onChange={handleChangeValue}>
-                                        <option value="">선택</option>
-                                        {channalList.map((item, index) => (
-                                            <option key={index} value={item.value}>
-                                                {item.name}
-                                            </option>
-                                        ))}
-                                    </MokaInputLabel>
-                                </Col>
-                            </Form.Row>
-                        )
-                    ))}
+                    )
+                )}
                 {/* 분류 */}
                 {selectBoard.boardId && (selectBoard.titlePrefixNm1 || selectBoard.titlePrefixNm2) && (
                     <Form.Row className="mb-2">

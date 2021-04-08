@@ -1,8 +1,11 @@
 package jmnet.moka.web.wms.config;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.AbstractHandlerMapping;
 
@@ -16,8 +19,6 @@ import org.springframework.web.servlet.handler.AbstractHandlerMapping;
  * @since 2019. 9. 10. 오후 3:53:26
  */
 public class ReactRoutesHandlerMapping extends AbstractHandlerMapping {
-
-
     private Set<String> reactRoutesList;
     private HandlerMethod reactRoutesHandlerMethod;
 
@@ -44,6 +45,7 @@ public class ReactRoutesHandlerMapping extends AbstractHandlerMapping {
     }
 
 
+    @Deprecated
     public ReactRoutesHandlerMapping(String routesPath)
             throws NoSuchMethodException, SecurityException {
         String[] splitted = routesPath.split(",");
@@ -69,11 +71,6 @@ public class ReactRoutesHandlerMapping extends AbstractHandlerMapping {
             throws Exception {
         String uri = request.getRequestURI();
         for (String routePath : this.reactRoutesList) {
-            if (uri.startsWith(routePath)) {
-                return this.reactRoutesHandlerMethod;
-            }
-        }
-        for (String routePath : "/403,/404".split(",")) {
             if (uri.startsWith(routePath)) {
                 return this.reactRoutesHandlerMethod;
             }

@@ -6,6 +6,7 @@ import java.util.Map;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.mapper.idb.BulkDumpIdbMapper;
+import jmnet.moka.web.bulk.mapper.mokalog.BulkDumpMokaLogMapper;
 import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvTarget;
 import jmnet.moka.web.bulk.task.bulkdump.process.joinsland.BulkJoinsLandArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticle;
@@ -35,9 +36,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class BulkDumpServiceImpl implements BulkDumpService {
     final private BulkDumpIdbMapper bulkDumpIdbMapper;
+    final private BulkDumpMokaLogMapper bulkDumpMokaLogMapper;
 
-    public BulkDumpServiceImpl(BulkDumpIdbMapper bulkDumpIdbMapper) {
+    public BulkDumpServiceImpl(BulkDumpIdbMapper bulkDumpIdbMapper, BulkDumpMokaLogMapper bulkDumpMokaLogMapper) {
         this.bulkDumpIdbMapper = bulkDumpIdbMapper;
+        this.bulkDumpMokaLogMapper = bulkDumpMokaLogMapper;
     }
 
     @Override
@@ -69,7 +72,7 @@ public class BulkDumpServiceImpl implements BulkDumpService {
             totalVo.logInfo(message);
         totalVo.setMsg(totalVo.getInfoMessageList());
 
-        this.bulkDumpIdbMapper.callUspBulkLogInsByDump(totalVo);
+        this.bulkDumpMokaLogMapper.callUspBulkLogInsByDump(totalVo);
 
         totalVo.setInfoMessageFlush();
     }
@@ -82,7 +85,7 @@ public class BulkDumpServiceImpl implements BulkDumpService {
 
     @Override
     public void insertBulkPortalLog(TotalVo<BulkDumpTotalVo> totalVo) {
-        this.bulkDumpIdbMapper.callUspBulkPortalLogInsByDump(totalVo);
+        this.bulkDumpMokaLogMapper.callUspBulkPortalLogInsByDump(totalVo);
     }
 
     @Override

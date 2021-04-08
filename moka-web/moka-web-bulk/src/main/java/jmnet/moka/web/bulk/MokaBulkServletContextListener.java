@@ -35,7 +35,6 @@ public class MokaBulkServletContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         actionLogger.success("SYSTEM", LoggerCodes.ActionType.STARTUP, 0L);
-
         if (!taskManager.loadEnvFile()) {
             throw new RuntimeException("TaskManager Can't Load Env File");
         }
@@ -49,7 +48,6 @@ public class MokaBulkServletContextListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-
         try {
             taskManager.operation(OpCode.stop);
         } catch (InterruptedException e) {

@@ -6,6 +6,7 @@ package jmnet.moka.core.tps.mvc.directlink.service;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
+import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
@@ -97,13 +98,13 @@ public class DirectLinkServiceImpl implements DirectLinkService {
         String extension = McpFile
                 .getExtension(thumbnail.getOriginalFilename())
                 .toLowerCase();
-        String fileName = String.valueOf(directLink.getLinkSeq()) + "." + extension;
+        String filename = UUIDGenerator.uuid() + "." + extension;
 
         // 파일 저장
-        boolean upload = ftpHelper.upload(FtpHelper.PDS, fileName, thumbnail.getInputStream(), saveFilePath);
+        boolean upload = ftpHelper.upload(FtpHelper.PDS, filename, thumbnail.getInputStream(), saveFilePath);
         if (upload) {
             log.debug("SAVE DIRECT_LINK IMAGE");
-            String path = pdsUrl + saveFilePath + "/" + fileName;
+            String path = pdsUrl + saveFilePath + "/" + filename;
             return path;
         } else {
             log.debug("SAVE FAIL DIRECT_LINK IMAGE");

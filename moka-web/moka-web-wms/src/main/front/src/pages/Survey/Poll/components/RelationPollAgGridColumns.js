@@ -14,8 +14,8 @@ export const columnDefs = [
         cellStyle: { lineHeight: '65px' },
     },
     {
-        headerName: '분류',
-        field: 'category',
+        headerName: '그룹',
+        field: 'group',
         width: 70,
         cellStyle: { lineHeight: '65px' },
     },

@@ -33,8 +33,8 @@ const defaultProps = {
 const defaultOptions = {
     interval: 0.5,
     sizeType: 'self',
-    selfWidth: 300,
-    selfHeight: 300,
+    edWidth: 300, // 수정가능한 너비
+    edHeight: 300, //  수정가능한 높이
     gifWidth: 300,
     gifHeight: 300,
 };
@@ -52,15 +52,16 @@ const MakeGifModal = (props) => {
      * gif 생성
      */
     const makeGif = useCallback(() => {
-        if (imgList.length > 0) {
+        if (imgList.length > 0 && gifOptions.gifWidth && gifOptions.gifHeight) {
             setLoading(true);
+
             gifshot.createGIF(
                 {
                     images: imgList,
                     crossOrigin: 'Anonymous',
                     ...gifOptions,
                 },
-                (obj) => {
+                function (obj) {
                     if (!obj.error) {
                         const blob = commonUtil.base64ToBlob(obj.image);
                         const gifImage = URL.createObjectURL(blob);
@@ -83,7 +84,7 @@ const MakeGifModal = (props) => {
 
         if (name === 'sizeType') {
             if (value === 'self') {
-                setGifOptions({ ...gifOptions, [name]: value, gifWidth: gifOptions.selfWidth, gifHeight: gifOptions.selfHeight });
+                setGifOptions({ ...gifOptions, [name]: value, gifWidth: gifOptions.edWidth, gifHeight: gifOptions.edHeight });
             } else {
                 const { width, height } = e.target.dataset;
                 setGifOptions({ ...gifOptions, [name]: value, gifWidth: Number(width), gifHeight: Number(height) });
@@ -104,17 +105,17 @@ const MakeGifModal = (props) => {
     useEffect(() => {
         setGifOptions({
             ...gifOptions,
-            gifWidth,
-            gifHeight,
-            selfWidth: gifWidth,
-            selfHeight: gifHeight,
+            gifWidth: gifWidth > 0 ? gifWidth : gifOptions.gifWidth,
+            gifHeight: gifHeight > 0 ? gifWidth : gifOptions.gifHeight,
+            edWidth: gifWidth > 0 ? gifWidth : gifOptions.edWidth,
+            edHeight: gifHeight > 0 ? gifHeight : gifOptions.edHeight,
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gifWidth, gifHeight]);
 
     useEffect(() => {
         if (show) makeGif();
-    }, [makeGif, show]);
+    }, [show, makeGif]);
 
     useEffect(() => {
         return () => {
@@ -151,7 +152,7 @@ const MakeGifModal = (props) => {
 
                     {/* 이미지 사이즈 설정 */}
                     <p className="h4 mb-14">GIF 이미지 사이즈</p>
-                    <div className="mb-2 d-flex align-items-center">
+                    <div className="mb-2 d-flex">
                         <MokaInput
                             as="radio"
                             value="self"
@@ -160,9 +161,9 @@ const MakeGifModal = (props) => {
                             onChange={handleChangeValue}
                             name="sizeType"
                         />
-                        <MokaInput name="selfWidth" value={gifOptions.selfWidth} onChange={handleChangeValue} className="mr-1" />
+                        <MokaInput name="edWidth" value={gifOptions.edWidth} onChange={handleChangeValue} className="mr-1" />
                         <span>*</span>
-                        <MokaInput name="selfHeight" value={gifOptions.selfHeight} onChange={handleChangeValue} className="ml-1" />
+                        <MokaInput name="edHeight" value={gifOptions.edHeight} onChange={handleChangeValue} className="ml-1" />
                     </div>
                     <MokaInput
                         as="radio"

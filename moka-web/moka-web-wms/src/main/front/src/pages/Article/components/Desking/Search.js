@@ -4,14 +4,14 @@ import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaSearchInput } from '@components';
 import { CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
-import { SourceSelector } from '@pages/commons';
 import { initialState } from '@store/article';
+import SourceSelector from './SourceSelector';
 
 /**
  * 페이지편집 > 기사 목록 > 기사 검색
  */
 const Search = (props) => {
-    const { onChangeSearchOption, search, period, isNaverChannel, error, onSearch, onReset, onChangeGroupNumber, media = false } = props;
+    const { onChangeSearchOption, search, period, isNaverChannel, error, onSearch, onReset, onChangeGroupNumber, movie, sourceList } = props;
     const [modalShow, setModalShow] = useState(false);
 
     /**
@@ -61,7 +61,7 @@ const Search = (props) => {
 
     /**
      * 매체 변경
-     * @param {string} value 매체리스트
+     * @param {string} value 매체
      */
     const handleChangeSourceList = (value) => onChangeSearchOption({ key: 'sourceList', value });
 
@@ -131,26 +131,20 @@ const Search = (props) => {
                     </div>
 
                     {/* 매체 */}
-                    <SourceSelector
-                        className="mr-2"
-                        value={search.sourceList}
-                        onChange={handleChangeSourceList}
-                        sourceType={isNaverChannel ? 'BULK' : 'DESKING'}
-                        isInvalid={error.sourceList}
-                    />
+                    <SourceSelector sourceList={sourceList} className="mr-2" value={search.sourceList} onChange={handleChangeSourceList} isInvalid={error.sourceList} />
 
                     {/* 면 */}
                     <div style={{ width: 60 }} className="mr-2">
-                        <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} disabled={media} />
+                        <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} />
                     </div>
 
                     {/* 판 */}
                     <div style={{ width: 60 }} className="mr-2">
-                        <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} disabled={media} />
+                        <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} />
                     </div>
                 </div>
 
-                {!isNaverChannel && (
+                {!isNaverChannel && !movie && (
                     <React.Fragment>
                         <Button variant="outline-neutral" className="flex-shrink-0" onClick={() => setModalShow(true)}>
                             그룹지정

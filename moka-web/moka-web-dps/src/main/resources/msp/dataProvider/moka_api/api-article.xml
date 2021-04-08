@@ -102,33 +102,6 @@
     </keys>
   </api>
 
-  <!-- 이슈기사목록-->
-  <api id="issue.info">
-    <description>패키지 상세정보를 조회한다.</description>
-    <parameter>
-      <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
-    </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.article.issueInfo</request>
-    <request type="apiCall" resultName="LIST" apiId="issue"/>
-    <keys>
-      id
-      #paging
-    </keys>
-  </api>
-
-  <!-- 이슈기사목록-->
-  <api id="issue">
-    <description>패키지 기사목록을 조회한다.</description>
-    <parameter>
-      <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
-    </parameter>
-    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.article.issue</request>
-    <keys>
-      id
-      #paging
-    </keys>
-  </api>
-
   <!--기사 FLAG 정보-->
   <api id="article.flag">
     <description>기사 FLAG정보를 조회한다.</description>
@@ -147,7 +120,7 @@
     <description>북마크를 등록한다.</description>
     <parameter>
       <totalId desc="기사Id" default="0" require="Y" type="number">^[0-9]{1,9}$</totalId>
-      <remoteIP/>
+      <remoteIp/>
     </parameter>
     <request dmlType="sp" setNames="_DATA">dps.article.scrapInsert</request>
     <keys>
@@ -160,7 +133,7 @@
     <description>북마크를 삭제한다.</description>
     <parameter>
       <totalId desc="기사Id" default="0" require="Y" type="number">^[0-9]{1,9}$</totalId>
-      <remoteIP/>
+      <remoteIp/>
     </parameter>
     <request dmlType="sp" setNames="_DATA">dps.article.scrapDelete</request>
     <keys>
@@ -179,6 +152,40 @@
     <keys>
       tea
       year
+    </keys>
+  </api>
+
+  <!--공유, 좋아요/싫어요 등록-->
+  <api id="share.insert" membership="cookiePass" expire="0" method="post">
+    <description>공유, 좋아요/싫어요를 등록한다.</description>
+    <parameter>
+      <totalId desc="기사Id" require="Y" type="number">^[0-9]{1,9}$</totalId>
+      <div desc="공유구분" require="Y" default="A">^[A|R|I|D]$</div>
+      <site desc="사이트" require="Y" default="0">^([0-9]{1,2}|A|B|H|L)$</site>
+      <dev desc="공유디바이스" require="Y" default="P">^[P|M|T|A|B]$</dev>
+      <subSeq desc="서브일련번호" default="0" type="number">^[0-9]{1,9}$</subSeq>
+      <loginDiv desc="로그인구분" require="Y" default="0">^(0|1|2|3)$</loginDiv>
+      <pcid desc="PCID" require="Y">^[0-9]{23}$</pcid>
+      <remoteIp/>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.article.shareInsert</request>
+    <keys>
+      totalId
+      div
+      site
+      dev
+      subSeq
+      loginDiv
+      pcid
+    </keys>
+  </api>
+
+  <!--내가 좋아요/싫어요한 기사목록-->
+  <api id="share.my" membership="cookie">
+    <description>내가 좋아요/싫어요한 기사목록을 조회한다.</description>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.article.shareListMy</request>
+    <keys>
+      #paging
     </keys>
   </api>
 

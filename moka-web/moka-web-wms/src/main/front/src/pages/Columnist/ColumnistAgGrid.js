@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
 import columnDefs from './ColumnistAgGridColumns';
+import { getJplusRep } from '@store/codeMgt';
 import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption } from '@store/columnist';
 
 /**
@@ -13,6 +14,7 @@ const ColumnistAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_COLUMNIST_LIST]);
     const { list, search, total, columnist } = useSelector(({ columnist }) => columnist);
+    const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
     const [rowData, setRowData] = useState([]);
 
     /**
@@ -36,16 +38,29 @@ const ColumnistAgGrid = ({ match }) => {
     );
 
     useEffect(() => {
-        setRowData(
-            list.map((data) => {
-                return {
-                    ...data,
-                    regMember: `${data.regMember.memberNm}(${data.regMember.memberId})`,
-                    regDt: (data.regDt || '').slice(0, -3),
-                };
-            }),
-        );
-    }, [list]);
+        if (!jplusRepRows) dispatch(getJplusRep());
+    }, [dispatch, jplusRepRows]);
+
+    useEffect(() => {
+        if (jplusRepRows) {
+            setRowData(
+                list.map((data) => {
+                    let jplusRepDiv = jplusRepRows.find((code) => code.dtlCd === data.jplusRepDiv);
+                    const jplusRepDivNm = jplusRepDiv?.cdNm.slice(0, 2);
+
+                    return {
+                        ...data,
+                        jplusRepDivNm: jplusRepDivNm || '  -',
+                        repSeqText: data.repSeq || '   -',
+                        regMember: data.regMember ? `${data.regMember.memberNm}(${data.regMember.memberId})` : '',
+                        regDt: (data.regDt || '').slice(0, -3),
+                    };
+                }),
+            );
+        }
+    }, [list, jplusRepRows]);
+
+    console.log(rowData);
 
     return (
         <React.Fragment>
@@ -53,6 +68,7 @@ const ColumnistAgGrid = ({ match }) => {
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={45}
                 onRowNodeId={(data) => data.seqNo}
                 onRowClicked={handleRowClicked}
                 loading={loading}

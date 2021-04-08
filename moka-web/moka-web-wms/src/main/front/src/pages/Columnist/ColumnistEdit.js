@@ -54,12 +54,18 @@ const ColumnistEdit = ({ match }) => {
      * @param {object} reporter 기자 데이터
      */
     const addReporter = (reporter) => {
-        setShowModal(false);
         try {
             // 기자 정보 설정
             let tmpEmail = [];
             tmpEmail = reporter.repEmail1 && reporter.repEmail1.split('@');
+
+            // test case1) 선택한 기자 없음 (NULL => JPLUS_REP_DIV_DEFAULT 노출)
+            // test case2) 강인춘 (jplusRepDiv === R2)
+            // test case3) 서회란 (jplusRepDiv === R1)
+            // J1은 데이터가 없어서 테스트 불가능
+
             setTemp({
+                ...initialState.reporter,
                 seqNo: temp.seqNo,
                 repSeq: reporter.repSeq,
                 columnistNm: reporter.repName,
@@ -67,13 +73,16 @@ const ColumnistEdit = ({ match }) => {
                 email1: tmpEmail[0],
                 email2: tmpEmail[1],
                 position: reporter.jplusJobInfo,
+                jplusRepDiv: reporter.jplusRepDiv,
+                jplusRepDivNm: reporter.jplusRepDivNm || '',
                 profile: '',
                 selectImg: '',
                 profilePhoto: reporter.repImg,
             });
         } catch (e) {
-            console.log('기자 선택후 데이터 set 중 에러발생.', e);
+            console.log('기자 데이터 파싱 중 에러', e);
         }
+        setShowModal(false);
     };
 
     /**
@@ -110,6 +119,7 @@ const ColumnistEdit = ({ match }) => {
      */
     const handleSave = () => {
         let saveData = temp;
+        saveData.inout = saveData.repSeq ? 'I' : 'O'; // 외부/내부 필진 설정
 
         if (validate(saveData)) {
             // 이메일 설정
@@ -134,6 +144,7 @@ const ColumnistEdit = ({ match }) => {
             );
         }
     };
+
     /**
      * 취소
      */
@@ -159,6 +170,7 @@ const ColumnistEdit = ({ match }) => {
     }, [invalidList]);
 
     useEffect(() => {
+        setError({});
         if (seqNo) {
             dispatch(
                 getColumnist({
@@ -178,6 +190,7 @@ const ColumnistEdit = ({ match }) => {
     useEffect(() => {
         return () => {
             dispatch(clearColumnist());
+            dispatch(changeInvalidList([]));
         };
     }, [dispatch]);
 
@@ -250,6 +263,13 @@ const ColumnistEdit = ({ match }) => {
                     </Col>
                 </Form.Row>
 
+                {/* 타입코드 (변경불가, 기자 선택 시 자동 입력) */}
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="p-0">
+                        <MokaInputLabel label="타입코드" value={temp.jplusRepDivNm} disabled />
+                    </Col>
+                </Form.Row>
+
                 {/* 직책 */}
                 <MokaInputLabel className="mb-2" label="직책" name="position" value={temp.position} onChange={handleChangeValue} isInvalid={error.position} required />
 
@@ -298,10 +318,10 @@ const ColumnistEdit = ({ match }) => {
                     ref={imgFileRef}
                     inputProps={{
                         width: 267,
-                        img: temp.profilePhoto ? `${temp.profilePhoto}?t=${new Date().getTime()}` : null,
-                        selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
+                        img: temp.profilePhoto,
                         setFileValue: handleChangeFile,
                         deleteButton: true,
+                        accept: 'image/jpeg',
                     }}
                 />
             </div>

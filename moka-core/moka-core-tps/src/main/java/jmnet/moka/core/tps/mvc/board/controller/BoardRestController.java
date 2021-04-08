@@ -461,7 +461,7 @@ public class BoardRestController extends AbstractCommonController {
 
             String attachMessage = saveAttachFiles(returnValue, dto, boardAttachSaveDTOSet);
 
-            String successMsg = msg("tps.board.success.save");
+            String successMsg = msg("tps.board.success.update");
             if (attachMessage.length() > 0) {
                 successMsg += "\n" + attachMessage;
             }

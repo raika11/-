@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import Image from 'react-bootstrap/Image';
+import { Link } from 'react-router-dom';
 // import Dropdown from 'react-bootstrap/Dropdown';
 // import bg from '@assets/images/bg.jpeg';
 
@@ -18,10 +19,12 @@ import Image from 'react-bootstrap/Image';
 const Profile = ({ className, info }) => {
     return (
         <div className={clsx('d-flex', 'align-items-center', 'position-relative', className)}>
-            <div className="d-flex flex-direction-column align-items-end mr-3">
-                <p className="h5 mb-0">{info.userId}</p>
-                <p className="mb-0">{info.userName}</p>
-            </div>
+            <Link to="/mypage" className="text-decoration-none">
+                <div className="d-flex flex-direction-column align-items-end mr-3">
+                    <p className="h5 mb-0">{info.userId}</p>
+                    <p className="mb-0 color-gray-900">{info.userName}</p>
+                </div>
+            </Link>
             <Image
                 width="40"
                 height="40"

@@ -9,7 +9,7 @@ const BoardRepoterSelect = ({ channalList, selectValue, onChange }) => {
     const [value, setValue] = useState({});
 
     useEffect(() => {
-        if (channalList.length > 0) {
+        if (selectValue) {
             let tempSelectValue = channalList.filter((e) => e.value === String(selectValue));
             if (tempSelectValue[0]) {
                 setValue(tempSelectValue[0]);
@@ -23,11 +23,11 @@ const BoardRepoterSelect = ({ channalList, selectValue, onChange }) => {
             <MokaInputLabel as="none" label="기자명" />
             <MokaAutocomplete
                 options={channalList}
-                closeMenuOnSelect={true}
-                searchIcon={true}
+                closeMenuOnSelect
                 value={value}
                 onChange={(value, event) => {
-                    onChange(value.value);
+                    setValue(value);
+                    onChange(value);
                 }}
             />
         </Form.Row>

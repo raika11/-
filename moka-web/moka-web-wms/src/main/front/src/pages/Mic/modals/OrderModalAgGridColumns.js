@@ -15,13 +15,13 @@ export default [
         width: 30,
         maxWidth: 30,
         valueGetter: (params) => replaceNo(params.data.ordNo),
-        cellStyle: { lineHeight: '34px' },
+        cellStyle: { lineHeight: '35px' },
     },
     {
         headerName: '아젠다명',
         field: 'agndKwd',
         tooltipField: 'agndKwd',
         flex: 1,
-        cellStyle: { lineHeight: '34px' },
+        cellStyle: { lineHeight: '35px' },
     },
 ];

@@ -50,7 +50,7 @@ const ChannelSearchBox = ({ match }) => {
      * 검색조건 초기화
      */
     const handleReset = () => {
-        dispatch(changeChnlSearchOption(initialState.channel.search));
+        setSearchData(initialState.channel.search);
     };
 
     /**
@@ -94,7 +94,7 @@ const ChannelSearchBox = ({ match }) => {
     useEffect(() => {
         dispatch(getChnlList({ search: searchData }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch]);
+    }, []);
 
     return (
         <Form.Row className="mb-14">
@@ -122,7 +122,7 @@ const ChannelSearchBox = ({ match }) => {
 
             {/* 검색 조건 */}
             <div className="flex-shrink-0 mr-2">
-                <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={handleSearch}>
+                <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={handleChangeValue}>
                     {initialState.channel.searchTypeList.map((item, index) => (
                         <option key={index} value={item.id}>
                             {item.name}

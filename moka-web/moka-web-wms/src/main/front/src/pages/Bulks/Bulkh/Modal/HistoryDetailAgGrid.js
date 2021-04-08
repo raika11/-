@@ -48,7 +48,7 @@ const HistoryDetailAgGrid = () => {
                 {
                     text: '불러오기',
                     onClick: handleClickLoadButton,
-                    variant: 'outline-neutral',
+                    variant: 'positive',
                     disabled: rowData.length < 1,
                 },
             ]}

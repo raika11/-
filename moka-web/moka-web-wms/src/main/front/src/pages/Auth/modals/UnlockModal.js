@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBackOfficeUser, smsRequest, unlockRequest, approvalRequest, GET_GROUP_WARE_USER, SMS_REQUEST, UNLOCK_REQUEST, UNLOCK_SMS } from '@store/auth';
+import { getBackOfficeUser, smsRequest, unlockRequest, approvalRequest, GET_GROUP_WARE_USER, SMS_REQUEST, UNLOCK_REQUEST, UNLOCK_SMS, confirmSmsAuthentication } from '@store/auth';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaModal, MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
+import defaultImage from '@assets/images/img_logo@2x@orange.png';
+import commonUtil from '@utils/commonUtil';
 
 const propTypes = {
     /**
@@ -19,6 +20,12 @@ const propTypes = {
      * hide 함수
      */
     onHide: PropTypes.func.isRequired,
+
+    /**
+     * default User object
+     */
+
+    defaultUserObj: PropTypes.object,
 };
 
 /**
@@ -30,7 +37,7 @@ const UnlockModal = (props) => {
     // modal 항목 userObj
     const defaultMinutes = 3;
     const defaultSeconds = 0;
-    const [userObj, setUserObj] = useState({});
+    const [userObj, setUserObj] = useState({ userId: '', userName: '', groupName: '', mobilePhone: '', phone: '', email: '' });
     const [backOfficeId, setBackOfficeId] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -83,7 +90,6 @@ const UnlockModal = (props) => {
                 getBackOfficeUser({
                     memberId: backOfficeId,
                     callback: ({ header, body }) => {
-                        console.log(header, body);
                         if (header.success) {
                             setUnlockRequestCode(body.UNLOCK_REQUEST);
                             setUnlockSmsCode(body.UNLOCK_SMS);
@@ -157,54 +163,37 @@ const UnlockModal = (props) => {
     };
 
     /**
-     * 본인인증 해제
-     */
-    const handleClickSmsUnlock = useCallback(() => {
-        const member = {
-            memberId: userObj.memberId,
-            password,
-            confirmPassword,
-            requestReason,
-        };
-
-        if (validate(member)) {
-            setSmsUnlock(true);
-            setBtnOkDisplay('block');
-        }
-    }, [confirmPassword, password, requestReason, userObj.memberId]);
-
-    /**
      * 인증번호 요청
      */
     const handleClickSmsRequest = useCallback(() => {
         if (!requestSms || parseInt(minutes) <= defaultMinutes - 2) {
             const member = {
                 memberId: userObj.memberId,
-                password,
+                /*password,
                 confirmPassword,
-                requestReason,
+                requestReason,*/
             };
-            if (validate(member)) {
-                dispatch(
-                    smsRequest({
-                        member: member,
-                        callback: ({ header, body }) => {
-                            if (header.success) {
-                                messageBox.alert(header.message);
-                                setRequestSms(true);
-                                setMinutes(defaultMinutes);
-                                setSeconds(defaultSeconds);
+            /*if (validate(member)) {*/
+            dispatch(
+                smsRequest({
+                    member: member,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            messageBox.alert(header.message);
+                            setRequestSms(true);
+                            setMinutes(defaultMinutes);
+                            setSeconds(defaultSeconds);
+                        } else {
+                            if (body.totalCnt) {
+                                setInvalidList(body.list);
                             } else {
-                                if (body.totalCnt) {
-                                    setInvalidList(body.list);
-                                } else {
-                                    messageBox.alert(header.message);
-                                }
+                                messageBox.alert(header.message);
                             }
-                        },
-                    }),
-                );
-            }
+                        }
+                    },
+                }),
+            );
+            /*}*/
         } else {
             messageBox.alert('재전송 간격이 빠릅니다.\n잠시 후 다시 시도하시기 바랍니다.');
         }
@@ -253,8 +242,9 @@ const UnlockModal = (props) => {
         setRequestReason('');
         setSmsUnlock(false);
         setRequestSms(false);
-        setUserObj({});
+        setUserObj({ userId: '', userName: '', groupName: '', mobilePhone: '', phone: '', email: '' });
         setBtnOkDisplay('none');
+        setSmsAuth('');
         setError({
             password: false,
             confirmPassword: false,
@@ -326,6 +316,28 @@ const UnlockModal = (props) => {
         }
     }, [confirmPassword, dispatch, error, onHide, password, requestReason, unlockRequestCode, userObj.memberId]);
 
+    const confirmSmsAuthenticationNumber = (memberId, smsAuth) => {
+        if (!commonUtil.isEmpty(memberId) && !commonUtil.isEmpty(smsAuth) && memberId !== '' && smsAuth !== '') {
+            dispatch(
+                confirmSmsAuthentication({
+                    memberId,
+                    smsAuth,
+                    callback: (response) => {
+                        if (response.header.success) {
+                            setBtnOkDisplay('block');
+                            setRequestSms(false);
+                            setSmsUnlock(true);
+                        } else {
+                            messageBox.alert(response.header.message);
+                        }
+                    },
+                }),
+            );
+        } else {
+            messageBox.alert('인증번호를 입력해주세요.');
+        }
+    };
+
     /**
      * 닫기
      */
@@ -338,15 +350,27 @@ const UnlockModal = (props) => {
         <>
             <MokaModal
                 loading={loading}
-                width={420}
+                width={600}
+                height={800}
                 size="md"
                 draggable
                 show={show}
                 onHide={handleHide}
-                title="BackOffice 잠금해제"
+                headerClassName="p-0 d-block"
+                bodyClassName="d-flex justify-content-center"
+                titleAs={
+                    <div style={{ marginBottom: '24px' }}>
+                        <div className="text-left" style={{ marginTop: '20px', marginLeft: '32px', marginBottom: '14px' }}>
+                            <img src={defaultImage} width={147} height={49} />
+                        </div>
+                        <h1 className="text-center" style={{ fontSize: '26px' }}>
+                            잠금 해제
+                        </h1>
+                    </div>
+                }
                 buttons={[
                     {
-                        text: '확인',
+                        text: '잠금 해제',
                         variant: 'positive',
                         onClick: handleClickApprovalRequest,
                         style: { display: btnOkDisplay },
@@ -361,166 +385,110 @@ const UnlockModal = (props) => {
                 centered
             >
                 <Form className="mb-10">
-                    <Form.Group as={Row} className="mb-3 align-items-center">
-                        <Col xs={3} className="p-0">
-                            <Form.Label className="px-0 mb-0 position-relative flex-shrink-0 form-label" style={{ marginLeft: '8px' }}>
-                                BackOffice ID
-                            </Form.Label>
-                        </Col>
-                        <Col xs={9} className="p-0">
-                            <MokaSearchInput
-                                label="ID"
-                                labelWidth={80}
+                    <Form.Row className="mb-3 align-items-center">
+                        <Col xs={10} className="p-0 mr-2">
+                            <MokaInputLabel
+                                label="그룹웨어ID"
                                 value={backOfficeId}
                                 onChange={handleChangeValue}
-                                onSearch={handleSearch}
                                 name="backOfficeId"
-                                disabled={requestSms}
                                 placeholder="BackOffice ID를 입력하세요."
-                                inputProps={{ autoComplete: 'off' }}
+                                disabled={requestSms}
                             />
                         </Col>
-                    </Form.Group>
-                    {userObj.memberId ? (
-                        <>
-                            <Form.Group as={Row} className="mb-3">
-                                <Col xs={12} className="p-0 mb-0">
-                                    <MokaInputLabel
-                                        label="ID"
-                                        labelWidth={80}
-                                        name="memberId"
-                                        value={userObj.memberId}
-                                        onChange={handleChangeValue}
-                                        inputProps={{ plaintext: true, readOnly: true }}
-                                    />
-                                    <MokaInputLabel
-                                        label="이름"
-                                        labelWidth={80}
-                                        name="memberNm"
-                                        value={userObj.memberNm}
-                                        onChange={handleChangeValue}
-                                        inputProps={{ plaintext: true, readOnly: true }}
-                                    />
-                                    <MokaInputLabel
-                                        label="Email"
-                                        labelWidth={80}
-                                        name="email"
-                                        value={userObj.email}
-                                        onChange={handleChangeValue}
-                                        inputProps={{ plaintext: true, readOnly: true }}
-                                    />
-                                    <MokaInputLabel
-                                        label="휴대전화"
-                                        labelWidth={80}
-                                        name="mobilePhone"
-                                        value={userObj.mobilePhone.replace(/(^01.{1})-([0-9]+)-([0-9]{4})/, '$1-$2-XXXX')}
-                                        onChange={handleChangeValue}
-                                        inputProps={{ plaintext: true, readOnly: true }}
-                                    />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="mb-3">
-                                <Col xs={12} className="p-0">
-                                    <MokaInputLabel
-                                        type="password"
-                                        label="새 비밀번호"
-                                        labelWidth={80}
-                                        name="password"
-                                        value={password}
-                                        isInvalid={error.password}
-                                        onChange={handleChangeValue}
-                                        inputProps={{ autoComplete: 'off' }}
-                                        placeholder="대/소문자, 특문, 숫자조합 10자리 이상."
-                                        disabled={requestSms}
-                                        required
-                                        className="mb-2"
-                                    />
-                                    <MokaInputLabel
-                                        type="password"
-                                        label="새 비밀번호 확인"
-                                        labelWidth={80}
-                                        name="confirmPassword"
-                                        value={confirmPassword}
-                                        isInvalid={error.confirmPassword}
-                                        onChange={handleChangeValue}
-                                        inputProps={{ autoComplete: 'off' }}
-                                        placeholder="대/소문자, 특문, 숫자조합 10자리 이상."
-                                        disabled={requestSms}
-                                        required
-                                        className="mb-2"
-                                    />
-                                    <MokaInputLabel
-                                        label="사유"
-                                        labelWidth={80}
-                                        name="requestReason"
-                                        value={requestReason}
-                                        isInvalid={error.requestReason}
-                                        onChange={handleChangeValue}
-                                        inputProps={{ autoComplete: 'off' }}
-                                        placeholder="사유를 입력하세요."
-                                        disabled={requestSms}
-                                        required
-                                    />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="mb-3 justify-content-md-center align-items-center">
-                                <Button variant="outline-neutral" className="mr-10" onClick={handleClickUnlockRequest}>
-                                    관리자 해제 요청
-                                </Button>
-                                {!smsUnlock ? (
-                                    <Button variant="outline-neutral" onClick={handleClickSmsUnlock}>
-                                        본인인증 해제
-                                    </Button>
-                                ) : (
-                                    ''
-                                )}
-                            </Form.Group>
-                            {smsUnlock ? (
-                                <>
-                                    <Form.Group as={Row} className="mb-3 justify-content-md-center align-items-center">
-                                        <Form.Label className="form-label p-0 mb-0">
-                                            BackOffice에 등록된 휴대번호로 본인인증 문자가 발송됩니다.
-                                            <br />
-                                            수신한 인증번호 입력 후 '확인' 버튼을 누르면 잠금이 해제됩니다.
-                                        </Form.Label>
-                                    </Form.Group>
-                                    <Form.Group as={Row} className="mb-3 justify-content-md-center align-items-center">
-                                        {requestSms ? (
-                                            <>
-                                                <Col xs lg="2" className="p-0">
-                                                    <Form.Label className="form-label p-0 mb-0" style={{ width: 60, minWidth: 60 }}>
-                                                        인증번호
-                                                    </Form.Label>
-                                                </Col>
-                                                <Col xs lg="3" className="p-0 mr-10">
-                                                    <MokaInput name="smsAuth" value={smsAuth} onChange={handleChangeValue} inputProps={{ autoComplete: 'off' }} />
-                                                </Col>
-                                            </>
-                                        ) : (
-                                            ''
-                                        )}
-                                        <Col xs lg="4" className="p-0">
-                                            <Button variant="outline-neutral" className="mr-2" onClick={handleClickSmsRequest}>
-                                                인증번호 {requestSms ? '재전송' : '전송'}
-                                            </Button>
-                                        </Col>
-                                        {requestSms ? (
-                                            <Col xs lg="3" className="p-0">
-                                                <Form.Label className="form-label p-0 mb-0  text-right" style={{ width: 90, minWidth: 90 }}>
-                                                    남은시간 : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-                                                </Form.Label>
-                                            </Col>
-                                        ) : (
-                                            ''
-                                        )}
-                                    </Form.Group>
-                                </>
-                            ) : (
-                                ''
-                            )}
-                        </>
-                    ) : (
-                        ''
+                        <Button variant="searching" onClick={handleSearch}>
+                            조회
+                        </Button>
+                    </Form.Row>
+                    <hr />
+                    <Form.Row>
+                        <Col xs={12} className="p-0 mb-0">
+                            <MokaInputLabel label="ID" name="memberId" value={userObj.memberId} onChange={handleChangeValue} inputProps={{ readOnly: true }} className="mb-2" />
+                            <MokaInputLabel label="이름" name="memberNm" value={userObj.memberNm} onChange={handleChangeValue} inputProps={{ readOnly: true }} className="mb-2" />
+                            <MokaInputLabel label="Email" name="email" value={userObj.email} onChange={handleChangeValue} inputProps={{ readOnly: true }} className="mb-2" />
+                            <MokaInputLabel
+                                label="휴대전화"
+                                name="mobilePhone"
+                                value={userObj.mobilePhone.replace(/(^01.{1})-([0-9]+)-([0-9]{4})/, '$1-$2-$3')}
+                                onChange={handleChangeValue}
+                                inputProps={{ readOnly: true }}
+                                className="mb-2"
+                            />
+                            <div className="d-flex align-items-center" style={{ height: '16px' }}>
+                                <MokaInputLabel as="none" label=" " />
+                                <p className="color-positive p-0 m-0 ft-10">※ 위 정보가 다른 경우, 그룹웨어에 문의해 주십시오.</p>
+                            </div>
+                            <div className="d-flex align-items-center" style={{ height: '16px' }}>
+                                <MokaInputLabel as="none" label=" " />
+                                <p className="p-0 m-0 ft-10">[그룹웨어 문의] 02-2031-1633</p>
+                            </div>
+                        </Col>
+                    </Form.Row>
+                    <hr />
+                    <Form.Row>
+                        <Col xs={12} className="p-0 d-flex">
+                            <MokaInputLabel label="본인인증" name="smsAuth" onChange={handleChangeValue} value={smsAuth} className="mr-2" disabled={!requestSms} />
+                            <Button
+                                variant="positive"
+                                className="mr-2 overflow-unset"
+                                onClick={() => {
+                                    confirmSmsAuthenticationNumber(userObj.memberId, smsAuth);
+                                }}
+                                disabled={!requestSms}
+                            >
+                                확인
+                            </Button>
+                            <Button variant="searching" className="overflow-unset" onClick={handleClickSmsRequest}>
+                                본인인증
+                            </Button>
+                        </Col>
+                    </Form.Row>
+                    <hr />
+                    {smsUnlock && (
+                        <Form.Row>
+                            <Col xs={12} className="p-0">
+                                <div className="d-flex align-items-center mb-2" style={{ height: '16px' }}>
+                                    <p className="color-positive p-0 m-0 ft-10">※ 비밀번호는 8-15자의 영문, 대문자, 소문자, 숫자, 특수문자 중 3가지 이상 포함되어야 합니다.</p>
+                                </div>
+                                <MokaInputLabel
+                                    type="password"
+                                    label="새 비밀번호"
+                                    name="password"
+                                    value={password}
+                                    isInvalid={error.password}
+                                    onChange={handleChangeValue}
+                                    inputProps={{ autoComplete: 'off' }}
+                                    placeholder="대/소문자, 특문, 숫자조합 10자리 이상."
+                                    disabled={requestSms}
+                                    required
+                                    className="mb-2"
+                                />
+                                <MokaInputLabel
+                                    type="password"
+                                    label="새 비밀번호 확인"
+                                    name="confirmPassword"
+                                    value={confirmPassword}
+                                    isInvalid={error.confirmPassword}
+                                    onChange={handleChangeValue}
+                                    inputProps={{ autoComplete: 'off' }}
+                                    placeholder="대/소문자, 특문, 숫자조합 10자리 이상."
+                                    disabled={requestSms}
+                                    required
+                                    className="mb-2"
+                                />
+                                <MokaInputLabel
+                                    label="사유"
+                                    name="requestReason"
+                                    value={requestReason}
+                                    isInvalid={error.requestReason}
+                                    onChange={handleChangeValue}
+                                    inputProps={{ autoComplete: 'off' }}
+                                    placeholder="사유를 입력하세요."
+                                    disabled={requestSms}
+                                    required
+                                />
+                            </Col>
+                        </Form.Row>
                     )}
                 </Form>
             </MokaModal>

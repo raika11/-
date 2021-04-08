@@ -13,8 +13,10 @@ import jmnet.moka.core.tps.mvc.group.repository.GroupMemberRepository;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.LoginLog;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
+import jmnet.moka.core.tps.mvc.member.entity.MemberSms;
 import jmnet.moka.core.tps.mvc.member.repository.LoginLogRepository;
 import jmnet.moka.core.tps.mvc.member.repository.MemberRepository;
+import jmnet.moka.core.tps.mvc.member.repository.MemberSmsRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,16 +25,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberSmsRepository memberSmsRepository;
 
     private final GroupMemberRepository groupMemberRepository;
 
     private final LoginLogRepository loginLogRepository;
 
-    public MemberServiceImpl(MemberRepository memberRepository, GroupMemberRepository groupMemberRepository, LoginLogRepository loginLogRepository) {
+    public MemberServiceImpl(MemberRepository memberRepository, MemberSmsRepository memberSmsRepository, GroupMemberRepository groupMemberRepository,
+            LoginLogRepository loginLogRepository) {
         this.memberRepository = memberRepository;
+        this.memberSmsRepository = memberSmsRepository;
         this.groupMemberRepository = groupMemberRepository;
         this.loginLogRepository = loginLogRepository;
     }
+
+    @Override
+    public Optional<MemberInfo> findById(String memberId) {
+        return memberRepository.findById(memberId);
+    }
+
 
     @Override
     public Page<MemberInfo> findAllMember(MemberSearchDTO search) {
@@ -42,6 +53,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberInfo> findAllMember() {
         return memberRepository.findAll();
+    }
+
+    @Override
+    public Optional<MemberSms> findFirstByMemberIdOrderByRegDtDesc(String memberId) {
+        return memberSmsRepository.findFirstByMemberIdOrderByRegDtDesc(memberId);
     }
 
     @Override
@@ -58,6 +74,11 @@ public class MemberServiceImpl implements MemberService {
                             isGroupAll ? groupMemberRepository.findAllByMemberId(memberId) : groupMemberRepository.findAllByMemberId(memberId));
                 });
         return memberRepository.findByMemberId(memberId);
+    }
+
+    @Override
+    public MemberSms insertMemberSms(MemberSms memberSms) {
+        return memberSmsRepository.save(memberSms);
     }
 
     @Override

@@ -5,6 +5,7 @@ import { messageBox } from '@utils/toastUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { GET_BULK_CHAR, GET_DS_FONT_IMGD, GET_DS_FONT_IMGW, GET_DS_FONT_VODD, GET_DS_ICON, GET_DS_PRE, GET_DS_PRE_LOC, GET_DS_TITLE_LOC } from '@store/codeMgt';
 import { PUT_DESKING_WORK, POST_DESKING_WORK } from '@store/desking';
+import { CHANNEL_TYPE } from '@/constants';
 import { MokaModal } from '@components';
 import ImageForm from './ImageForm';
 import SpecialCharForm from './SpecialCharForm';
@@ -121,13 +122,19 @@ const EditDeskingWorkModal = (props) => {
      */
     const handleClickSave = () => {
         if (validate()) {
-            onSave(temp, ({ header }) => {
-                if (!header.success) {
-                    messageBox.alert(header.message);
-                } else {
-                    handleHide();
-                }
-            });
+            onSave(
+                {
+                    ...temp,
+                    channelType: isDummy ? CHANNEL_TYPE.D.code : temp.channelType,
+                },
+                ({ header }) => {
+                    if (!header.success) {
+                        messageBox.alert(header.message);
+                    } else {
+                        handleHide();
+                    }
+                },
+            );
         }
     };
 

@@ -167,16 +167,17 @@ const Container = ({ match }) => {
      */
     const handleAppendTag = useCallback(
         (row, itemType) => {
+            const nt = new Date().getTime();
             let tag = null;
             if (itemType === ITEM_CT) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.containerSeq}" name="${row.containerName}"/>\n`;
+                tag = `${nt}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.containerSeq}" name="${row.containerName}"/>\n`;
             } else if (itemType === ITEM_CP) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.componentSeq}" name="${row.componentName}"/>\n`;
+                tag = `${nt}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.componentSeq}" name="${row.componentName}"/>\n`;
             } else if (itemType === ITEM_TP) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.templateSeq}" name="${row.templateName}"/>\n`;
+                tag = `${nt}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.templateSeq}" name="${row.templateName}"/>\n`;
             }
             // } else if (itemType === ITEM_AD) {
-            //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
+            //     tag = `${nt}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
             dispatch(appendTag(tag));
         },
         [dispatch],

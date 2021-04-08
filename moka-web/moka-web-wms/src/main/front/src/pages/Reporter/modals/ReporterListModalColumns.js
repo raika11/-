@@ -1,3 +1,6 @@
+import React from 'react';
+import ReporterPageButton from '../components/ReporterPageButton';
+
 export default [
     {
         headerName: '',
@@ -8,36 +11,34 @@ export default [
     {
         headerName: '번호',
         field: 'repSeq',
-        width: 60,
+        width: 52,
+        cellStyle: { lineHeight: '43px' },
+    },
+    {
+        headerName: '타입코드',
+        field: 'jplusRepDivNm',
+        width: 63,
+        cellStyle: { lineHeight: '43px' },
+    },
+    {
+        headerName: '사진',
+        field: 'repImg',
+        width: 50,
+        cellRenderer: 'circleImageRenderer',
+        cellStyle: { padding: '3px 6px' },
+    },
+    {
+        headerName: '이름',
+        field: 'repName',
+        width: 75,
+        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '아이디',
         field: 'joinsId',
         width: 100,
         tooltipField: 'joinsId',
-    },
-    {
-        headerName: '사진',
-        field: 'repImg',
-        width: 50,
-        cellRenderer: 'imageRenderer',
-    },
-    {
-        headerName: '이름',
-        field: 'repName',
-        width: 75,
-    },
-    {
-        headerName: '소속',
-        field: 'belong',
-        width: 200,
-        tooltipField: 'belong',
-    },
-    {
-        headerName: '직책',
-        field: 'repTitle',
-        width: 100,
-        tooltipField: 'repTitle',
+        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '이메일',
@@ -45,5 +46,18 @@ export default [
         width: 180,
         flex: 1,
         tooltipField: 'repEmail1',
+        cellStyle: { lineHeight: '43px' },
+    },
+    {
+        headerName: '노출여부',
+        field: 'usedYn',
+        width: 64,
+        cellRenderer: 'usedYnRenderer',
+    },
+    {
+        headerName: '',
+        field: 'reporterPage',
+        width: 95,
+        cellRendererFramework: (row) => <ReporterPageButton {...row} />,
     },
 ];

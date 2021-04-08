@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSearchDTO;
@@ -173,16 +174,18 @@ public class TemplateServiceImpl implements TemplateService {
         String extension = McpFile
                 .getExtension(thumbnail.getOriginalFilename())
                 .toLowerCase();
-        String newFilename = String.valueOf(template.getTemplateSeq()) + "." + extension;
+
+        String filename = UUIDGenerator.uuid() + "." + extension;
+
         // 이미지를 저장할 실제 경로 생성
         String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, template
                 .getDomain()
-                .getDomainId(), newFilename);
+                .getDomainId(), filename);
 
         if (uploadFileHelper.saveImage(imageRealPath, thumbnail.getBytes())) {
             String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS, template
                     .getDomain()
-                    .getDomainId(), newFilename);
+                    .getDomainId(), filename);
             return uri;
         } else {
             return "";
@@ -195,11 +198,13 @@ public class TemplateServiceImpl implements TemplateService {
         String extension = McpFile
                 .getExtension(copyTargetImgPath)
                 .toLowerCase();
-        String newFilename = String.valueOf(template.getTemplateSeq()) + "." + extension;
+
+        String filename = UUIDGenerator.uuid() + "." + extension;
+
         // 이미지를 저장할 실제 경로 생성
         String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, template
                 .getDomain()
-                .getDomainId(), newFilename);
+                .getDomainId(), filename);
 
         // copy할 파일 실제 경로 구함
         //        String targetRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, copyTargetImgPath);
@@ -207,7 +212,7 @@ public class TemplateServiceImpl implements TemplateService {
         if (uploadFileHelper.copyFile(imageRealPath, copyTargetImgPath)) {
             String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS, template
                     .getDomain()
-                    .getDomainId(), newFilename);
+                    .getDomainId(), filename);
             return uri;
         } else {
             return "";

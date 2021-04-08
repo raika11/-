@@ -30,4 +30,14 @@
       #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
       ) }
   </select>
+
+  <!-- 기자존재여부 -->
+  <select id="isReporter" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_15RE_REPORTER_ISEXIST(
+      #{repSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{_EXIST, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
 </mapper>

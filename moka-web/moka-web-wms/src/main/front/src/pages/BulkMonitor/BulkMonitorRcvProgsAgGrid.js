@@ -5,8 +5,7 @@ import columnDefs from './BulkMonitorRcvProgsAgGridColumns';
 import RcvProgsModal from './modals/RcvProgsModal';
 import RcvProgsBulkLogModal from './modals/RcvProgsBulkLogModal';
 import { unescapeHtml } from '@utils/convertUtil';
-import { changeBmSearchOption, GET_BULK_STAT_LIST } from '@/store/bulks';
-import produce from 'immer';
+import { changeBmSearchOption, getBulkStatList, GET_BULK_STAT_LIST } from '@/store/bulks';
 
 /**
  * 벌크 모니터링 목록
@@ -32,36 +31,32 @@ const BulkMonitorRcvProgsAgGrid = () => {
         setShowBulkLogModal(true);
     }, []);
 
-    const handleChangeSearchOption = (option) => {
-        const { key, value } = option;
-        dispatch(
-            changeBmSearchOption(
-                produce(search, (draft) => {
-                    draft[key] = value;
-                    if (key === 'size') {
-                        draft['page'] = 0;
-                    }
-                }),
-            ),
-        );
-    };
+    /**
+     * 테이블 옵션 변경
+     */
+    const handleChangeSearchOption = useCallback(
+        ({ key, value }) => {
+            let temp = { ...search, [key]: value };
+            if (key !== 'page') {
+                temp['page'] = 0;
+            }
+            dispatch(getBulkStatList(changeBmSearchOption(temp)));
+        },
+        [dispatch, search],
+    );
 
     useEffect(() => {
         // row 생성
-        if (sendList.length > 0) {
-            setRowData(
-                sendList.map((data) => ({
-                    ...data,
-                    title: unescapeHtml(data.title),
-                    handleClickValue,
-                    handleClickBulkLog,
-                })),
-            );
-        } else {
-            setRowData([]);
-        }
+        setRowData(
+            sendList.map((data) => ({
+                ...data,
+                title: unescapeHtml(data.title),
+                handleClickValue,
+                handleClickBulkLog,
+            })),
+        );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [handleClickValue, sendList]);
+    }, [sendList]);
 
     return (
         <>

@@ -144,11 +144,11 @@ export const messageBox = {
         };
         toastr.confirm('', confirmOption);
     },
-    confirm: (message, ok, cancel) => {
+    confirm: (message, ok, cancel, okText = '확인') => {
         message = (message || '').replace(/\n/g, '<br />');
         const confirmOption = {
             closeButton: true,
-            okText: '확인',
+            okText,
             cancelText: '취소',
             title: DEFAULT_TITLE.CONFIRM,
             onOk: () => {

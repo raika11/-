@@ -1,9 +1,12 @@
 package jmnet.moka.core.tps.mvc.schedule.server.vo;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
-import org.checkerframework.checker.units.qual.A;
 
 /**
  * <pre>
@@ -28,6 +31,10 @@ public class JobStatisticVO {
     private Integer serverSeq;
 
     private String serverNm;
+
+    private Integer a0;
+
+    private Integer b0;
 
     private Integer a30;
 

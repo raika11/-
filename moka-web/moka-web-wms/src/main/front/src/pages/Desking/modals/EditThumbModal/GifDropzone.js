@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { useDrop } from 'react-dnd';
 import moment from 'moment';
-import { IMAGE_PROXY_API, ACCEPTED_IMAGE_TYPES } from '@/constants';
+import { IMAGE_PROXY_API } from '@/constants';
 import toast from '@utils/toastUtil';
 import { MokaIcon } from '@components';
 import ThumbCard, { ItemTypes } from './ThumbCard';
@@ -17,7 +17,7 @@ moment.locale('ko');
  * Gif를 생성하기 위한 이미지 드롭존
  */
 const GifDropzone = (props) => {
-    const { collapse, setCollapse, showPhotoDetail, setRepImg, repImg, cropWidth, cropHeight, editPhoto } = props;
+    const { collapse, setCollapse, showPhotoDetail, setRepImg, repImg, cropWidth, cropHeight, editPhoto, accept } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
     const [modalShow, setModalShow] = useState(false);
@@ -32,7 +32,7 @@ const GifDropzone = (props) => {
         (item) => {
             let imageFiles = [];
             Array.from(item.files).forEach((f, idx) => {
-                if (ACCEPTED_IMAGE_TYPES.includes(f.type)) {
+                if (f.type.indexOf('image/') > -1 && (accept === 'image/*' || accept.includes(f.type))) {
                     const id = `${moment().format('YYYYMMDDsss')}_${idx}`;
                     const preview = URL.createObjectURL(f);
                     const imageData = { id: id, File: f, preview, dataType: 'local', imageOnlnPath: preview, thumbPath: preview };
@@ -47,7 +47,7 @@ const GifDropzone = (props) => {
             setImgList(arr);
             fileRef.current.value = null;
         },
-        [imgList],
+        [imgList, accept],
     );
 
     /**
@@ -65,7 +65,7 @@ const GifDropzone = (props) => {
                 return;
             }
 
-            if (item.type === 'gif') {
+            if (item.type === ItemTypes.GIF) {
                 if (addIndex > -1) {
                     setImgList(
                         produce(imgList, (draft) => {
@@ -115,8 +115,7 @@ const GifDropzone = (props) => {
         editPhoto(origin, (newImgData) => {
             setImgList(
                 produce(imgList, (draft) => {
-                    draft.splice(newImgData.index + 1, 0, newImgData);
-                    draft.splice(newImgData.index, 1);
+                    draft.splice(newImgData.index, 1, newImgData);
                 }),
             );
         });
@@ -176,7 +175,7 @@ const GifDropzone = (props) => {
                     <Button variant="searching" className="mr-1" onClick={() => fileRef.current.click()}>
                         내 PC 사진
                     </Button>
-                    <input type="file" ref={fileRef} onChange={handleChangeFile} className="d-none" accept="image/*" />
+                    <input type="file" accept={accept} ref={fileRef} onChange={handleChangeFile} className="d-none" />
 
                     {/* GIF 생성 */}
                     <Button variant="searching" className="mr-1" onClick={() => setModalShow(true)} disabled={imgList.length < 2}>
@@ -218,8 +217,8 @@ const GifDropzone = (props) => {
                                 height={125}
                                 className={clsx('flex-shrink-0 mr-2', { 'mb-2': imgList.length > 5 })}
                                 key={idx}
-                                dataType="drop"
-                                data={{ ...data, move: true, index: idx, dataType: 'drop' }}
+                                cardType="drop"
+                                data={{ ...data, move: true, index: idx }}
                                 img={data.thumbPath}
                                 moveCard={moveCard}
                                 setAddIndex={setAddIndex}

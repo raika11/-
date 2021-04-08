@@ -1,6 +1,5 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
-import moment from 'moment';
 import * as act from './bulkMonitorAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
@@ -18,8 +17,8 @@ export const bmInitialState = {
         orgSourceCode: 'all',
         portalDiv: null,
         status: 'Y',
-        startDt: moment().format('YYYY-MM-DD'),
-        endDt: moment().format('YYYY-MM-DD'),
+        startDt: null,
+        endDt: null,
     },
     bulkSendListInfo: [],
 };

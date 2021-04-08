@@ -22,11 +22,11 @@ const RelArticleTable = ({ chnlSeq, epsdSeq, articles, gridInstance, setGridInst
         const currentRows = getDisplayedRows(gridInstance.api);
         let addData = { id: { chnlSeq, epsdSeq }, relLinkTarget: 'S', ordNo: currentRows.length + 1 };
 
-        // 1. 관련기사는 최대 4개까지만 추가 => 조건이 없음
-        // if (currentRows.length > 3) {
-        //     messageBox.alert('관련기사는 4개까지 등록 가능합니다.\n현재 기사를 추가하고 싶을 경우, 등록된 다른 관련기사를 삭제해주세요.');
-        //     return;
-        // }
+        // 1. 관련기사는 최대 4개까지만 추가
+        if (currentRows.length > 3) {
+            messageBox.alert('관련기사는 4개까지 등록 가능합니다.\n현재 기사를 추가하고 싶을 경우, 등록된 다른 관련기사를 삭제해주세요.');
+            return;
+        }
 
         if (articleData) {
             // 2. 동일한 기사 체크

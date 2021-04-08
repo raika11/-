@@ -113,6 +113,7 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                             img: special.imgUrl,
                             deleteButton: true,
                             setFileValue: handleFileValue,
+                            accept: 'image/jpeg, image/png, image/gif',
                         }}
                         ref={imgFileRef}
                         isInvalid={error.imgUrl}

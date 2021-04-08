@@ -32,6 +32,7 @@ export const columnDefs = [
         field: 'status',
         width: 70,
         cellStyle: { diplay: 'flex', alignItems: 'center' },
+        cellRenderer: 'usedYnRenderer',
     },
     /*{
         headerName: '시작일',
@@ -114,7 +115,7 @@ export const columnDefs = [
             const regMember = param.data.regMember;
             let regMemberIdNm = '';
             if (regMember instanceof Object) {
-                regMemberIdNm = `${regMember.memberNm}(${regMember.memberId})`;
+                regMemberIdNm = regMember ? `${regMember.memberNm}(${regMember.memberId})` : '';
             }
             return <MultiRowColumnComponent values={[regMemberIdNm, param.value]} />;
         },

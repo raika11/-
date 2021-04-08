@@ -298,7 +298,7 @@ const PollEdit = ({ onDelete }) => {
                         </MokaInputLabel>
                     </Col>
                     <Col xs={6}>
-                        <MokaInputLabel label="투표ID" labelWidth={35} className="ml-32" name="pollSeq" value={edit.pollSeq} disabled={true} />
+                        <MokaInputLabel label="투표ID" labelWidth={36} className="ml-32" name="pollSeq" value={edit.pollSeq} disabled={true} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2 justify-content-between">
@@ -323,7 +323,7 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInputLabel
                             as="select"
                             label="분류"
-                            labelWidth={35}
+                            labelWidth={36}
                             className="ml-32"
                             name="pollCategory"
                             value={edit.pollCategory}

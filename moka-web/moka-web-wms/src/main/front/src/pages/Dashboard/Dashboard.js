@@ -109,10 +109,6 @@ const Dashboard = () => {
                         },
                     ]}
                 >
-                    {/* 매체 selector */}
-                    <Form.Label>매체 select</Form.Label>
-                    <SourceSelector className="mb-2" value={sourceList} sourceType="BULK" onChange={(value) => setSourceList(value)} />
-
                     {/* MokaAlert 예제 */}
                     <Form.Label>1) Alert</Form.Label>
                     <MokaAlertWithButtons

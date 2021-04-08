@@ -4,7 +4,7 @@ import { MokaIcon } from '@components';
 /**
  * usedYn === 'Y' 표기
  * value는 field로 넘어온 값을 data에서 찾아서 사용한다
- *
+ * @desc color-neutral
  * @param {object} params ag grid params
  */
 const MokaTableUsedYnRenderer = forwardRef((params, ref) => {
@@ -23,7 +23,7 @@ const MokaTableUsedYnRenderer = forwardRef((params, ref) => {
 
     return (
         <div className="d-flex align-items-center justify-content-center h-100">
-            <MokaIcon iconName="fas-circle" fixedWidth className={data[field] === 'Y' ? 'color-primary' : 'color-gray-200'} />
+            <MokaIcon iconName="fas-circle" fixedWidth className={data[field] === 'Y' ? 'color-neutral' : 'color-gray-400'} />
         </div>
     );
 });

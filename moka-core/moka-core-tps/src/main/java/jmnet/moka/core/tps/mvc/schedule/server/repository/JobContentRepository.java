@@ -15,4 +15,6 @@ public interface JobContentRepository extends JpaRepository<JobContent, Long>, J
 
     List<JobContent> findAllByUsedYnAndDelYnAndJobType(String usedYn, String delYn, String jobType);
 
+    List<JobContent> findByJobCd(String jobCd);
+
 }

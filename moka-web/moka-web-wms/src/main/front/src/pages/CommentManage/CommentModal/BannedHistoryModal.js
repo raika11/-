@@ -80,7 +80,7 @@ const BannedHistoryModal = (props) => {
                     return {
                         id: `${e.regDt}-${index}`,
                         bannedYn: e.usedYn === 'Y' ? '차단' : '복원',
-                        regInfo: `${e.regMember.memberNm} / ${e.regMember.memberId}`,
+                        regInfo: e.regMember.memberId ? `${e.regMember.memberNm} / ${e.regMember.memberId}` : '',
                         regDt: e.regDt,
                     };
                 }),

@@ -11,7 +11,7 @@ export default [
     {
         headerName: '분류',
         field: 'categoryNm',
-        cellStyle: { textOverflow: 'ellipsis', lineHeight: '60px' },
+        cellStyle: { lineHeight: '60px' },
         width: 50,
         tooltipField: 'categoryNm',
     },
@@ -22,7 +22,7 @@ export default [
         width: 50,
     },
     {
-        headerName: 'URL / 배포 경로 / 설명',
+        headerName: '패키지명 / 배포 경로 / 설명',
         field: '',
         cellStyle: { lineHeight: '18px', height: '60px' },
         autoHeight: true,
@@ -32,7 +32,7 @@ export default [
     {
         headerName: '삭제 정보',
         field: 'delInfo',
-        cellStyle: { textOverflow: 'ellipsis', lineHeight: '60px' },
+        cellStyle: { lineHeight: '60px' },
         width: 250,
         tooltipField: 'delInfo',
     },

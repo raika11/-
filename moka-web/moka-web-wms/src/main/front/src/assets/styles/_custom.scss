@@ -21,6 +21,11 @@ body {
     position: absolute;
 }
 
+.dropzone-dragover-mask ~ .center-image {
+    max-width: calc(100% - 2px);
+    max-height: calc(100% - 2px);
+}
+
 .pointer-events-none {
     pointer-events: none;
 }
@@ -53,6 +58,7 @@ body {
 
 .onerror-image-wrap {
     background-color: $gray-400 !important;
+    pointer-events: none;
 }
 
 .onerror-image {
@@ -433,7 +439,7 @@ body {
             padding-left: 22px;
         }
         > .tree-category > div ul li div ul li .tree-label {
-            padding-left: 50px;
+            padding-left: 40px;
         }
 
         // 3뎁스 padding

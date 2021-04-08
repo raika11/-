@@ -92,4 +92,11 @@ public interface JobContentService {
      */
     void updateDeleteJobContent(JobContent jobContent);
 
+    /**
+     * 중복된 jobCd인지 체크
+     *
+     * @param jobCd
+     * @return boolean
+     */
+    int findJobCd(String jobCd);
 }

@@ -65,6 +65,11 @@ public class DeskingHistDTO implements Serializable {
     private String parentContentId;
 
     /**
+     * 채널타입(기사A/영상M/패키지I/기자R/칼럼니스트C)
+     */
+    private String channelType;
+
+    /**
      * 콘텐트순서
      */
     @Column(name = "CONTENT_ORD")

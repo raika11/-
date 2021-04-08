@@ -163,6 +163,7 @@ public class CommentBannedRestController extends AbstractCommonController {
             return processCommentBlock(commentBanned);
         } else {
             List<String> tagValues = new ArrayList<>();
+            int chk = 0;
             for (String tagValue : commentBannedSaveDTO.getTagValues()) {
 
                 Optional<CommentBanned> oldCommentBanned =
@@ -174,9 +175,10 @@ public class CommentBannedRestController extends AbstractCommonController {
                     commentBanned.setTagDiv(commentBannedSaveDTO.getTagDiv());
                     try {
                         commentBanned = commentBannedService.updateCommentBanned(commentBanned);
-                        if (commentBanned == null || (commentBanned.getSeqNo() == null || commentBanned.getSeqNo() <= 0)) {
-                            tagValues.add(tagValue);
-                        }
+
+                        //if (commentBanned == null || (commentBanned.getSeqNo() == null || commentBanned.getSeqNo() <= 0)) {
+                        tagValues.add(tagValue);
+                        //}
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         tagValues.add(tagValue);
@@ -185,7 +187,7 @@ public class CommentBannedRestController extends AbstractCommonController {
                     CommentBanned commentBanned = modelMapper.map(commentBannedSaveDTO, CommentBanned.class);
                     commentBanned.setTagValue(commentBannedSaveDTO
                             .getTagValues()
-                            .get(0));
+                            .get(chk));
                     try {
                         commentBanned = commentBannedService.insertCommentBanned(commentBanned);
                         if (commentBanned == null || (commentBanned.getSeqNo() == null || commentBanned.getSeqNo() <= 0)) {
@@ -195,6 +197,7 @@ public class CommentBannedRestController extends AbstractCommonController {
                         tagValues.add(tagValue);
                     }
                 }
+                chk++;
             }
 
             boolean success = true;
@@ -202,8 +205,22 @@ public class CommentBannedRestController extends AbstractCommonController {
                     .getTagType()
                     .getFullname());
             if (tagValues.size() > 0) {
-                msg = msg("tps.comment-banned.error.part", CommentBannedType.U.getFullname(), CommentBannedType.U.getName(),
-                        CommentBannedType.U.getName(), McpString.collectionToDelimitedString(tagValues, ", "));
+                if (!McpString.isEmpty(commentBannedSaveDTO.getTagType())) {
+                    if (commentBannedSaveDTO
+                            .getTagType()
+                            .toString()
+                            .equals("I")) {
+                        msg = msg("tps.comment-banned.error.part", CommentBannedType.I.getFullname(), CommentBannedType.I.getName(),
+                                CommentBannedType.I.getName(), McpString.collectionToDelimitedString(tagValues, ", "));
+                    }
+                    if (commentBannedSaveDTO
+                            .getTagType()
+                            .toString()
+                            .equals("U")) {
+                        msg = msg("tps.comment-banned.error.part", CommentBannedType.U.getFullname(), CommentBannedType.U.getName(),
+                                CommentBannedType.U.getName(), McpString.collectionToDelimitedString(tagValues, ", "));
+                    }
+                }
                 success = false;
             }
             ResultDTO<Boolean> resultDto = new ResultDTO<>(success, msg);

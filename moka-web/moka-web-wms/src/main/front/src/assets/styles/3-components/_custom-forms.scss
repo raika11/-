@@ -31,3 +31,9 @@
         }
     }
 }
+
+.custom-select {
+    &:disabled {
+        opacity: 1;
+    }
+}

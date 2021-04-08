@@ -8,9 +8,10 @@ import { MokaInputLabel, MokaInput, MokaIcon } from '@components';
 import { clearReporter, getReporter, saveReporter } from '@store/reporter';
 import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
+import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 
 const ReporterInput = ({ label, value }) => (
-    <div className="d-flex align-items-center">
+    <div className="d-flex align-items-center h-100">
         <MokaInputLabel label={label} as="none" />
         <div className="flex-fill text-dark text-truncate">
             <OverlayTrigger overlay={<Tooltip id={label}>{value}</Tooltip>}>
@@ -76,23 +77,12 @@ const ReporterEdit = ({ match }) => {
     }, [dispatch, paramSeq]);
 
     useEffect(() => {
-        let typeCode = 'R1: 중앙일보 기자';
+        let typeCode;
 
-        if (!commonUtil.isEmpty(reporter.r1CdNm)) {
-            typeCode = `R1: ${reporter.r1CdNm}`;
-        }
-
-        typeCode += ', R2:';
         if (!commonUtil.isEmpty(reporter.jplusRepDiv)) {
-            typeCode += ` ${reporter.jplusRepDiv}`;
-        }
-
-        if (!commonUtil.isEmpty(reporter.jplusRepDiv) && !commonUtil.isEmpty(reporter.r2CdNm)) {
-            typeCode += ' -';
-        }
-
-        if (!commonUtil.isEmpty(reporter.r2CdNm)) {
-            typeCode += ` ${reporter.r2CdNm}`;
+            typeCode = `${reporter.jplusRepDiv}: ${reporter.jplusRepDivNm}`;
+        } else {
+            typeCode = JPLUS_REP_DIV_DEFAULT;
         }
 
         setTemp({
@@ -153,7 +143,7 @@ const ReporterEdit = ({ match }) => {
                                     id="usedYn"
                                     name="usedYn"
                                     as="switch"
-                                    inputProps={{ label: '사용여부', checked: temp.usedYn === 'Y' }}
+                                    inputProps={{ label: '노출여부', checked: temp.usedYn === 'Y' }}
                                     onChange={handleChangeValue}
                                 />
                                 <MokaInput
@@ -211,7 +201,7 @@ const ReporterEdit = ({ match }) => {
                 </Form.Row>*/}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <ReporterInput label="타입코드" value={temp.typeCode || '중앙일보 기자'} />
+                        <ReporterInput label="타입코드" value={temp.typeCode} />
                     </Col>
                     <Col xs={6} className="p-0">
                         <ReporterInput label="집배신 이메일" value={temp.repEmail1 || '-'} />
@@ -263,7 +253,9 @@ const ReporterEdit = ({ match }) => {
                     </Col>
                 </Form.Row>
 
-                <MokaInputLabel as="none" className="mb-2" label="기자 한마디" />
+                <Form.Row className="mb-2">
+                    <MokaInputLabel as="none" label="기자 한마디" />
+                </Form.Row>
                 <MokaInput
                     as="textarea"
                     rows={3}

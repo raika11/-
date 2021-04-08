@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Col, Figure } from 'react-bootstrap';
+import { Figure } from 'react-bootstrap';
 import { MokaIcon } from '@components';
 import commonUtil from '@utils/commonUtil';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
+import defaultImage from '@assets/images/img_logo@3x.png';
+import clsx from 'clsx';
 
 const propTypes = {
     children: PropTypes.string,
@@ -18,16 +20,23 @@ const defaultProps = {
 
 const PollPhotoComponent = ({ src, width, height, onChange, children }) => {
     const [file, setFile] = useState({});
+    const [isError, setIsError] = useState(false);
     const { getRootProps, getInputProps, open } = useDropzone({
-        accept: ['image/jpeg', 'image/png'],
+        accept: ['image/jpeg', 'image/png', 'image/gif'],
         onDrop: (acceptedFiles) => {
             acceptedFiles[0] && setFile(Object.assign(acceptedFiles[0], { preview: URL.createObjectURL(acceptedFiles[0]) }));
             onChange instanceof Function && onChange(acceptedFiles[0]);
         },
     });
 
+    const handleErrorImage = (e) => {
+        setIsError(true);
+        setFile({ ...file, preview: defaultImage });
+    };
+
     useEffect(() => {
         //if (!commonUtil.isEmpty(src)) {
+        setIsError(false);
         setFile({ ...file, preview: src });
         //}
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,7 +46,10 @@ const PollPhotoComponent = ({ src, width, height, onChange, children }) => {
         <div>
             <Figure
                 {...getRootProps({
-                    className: 'd-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white overflow-hidden',
+                    className: clsx(
+                        'd-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white overflow-hidden',
+                        isError && 'onerror-image-wrap',
+                    ),
                     onClick: (e) => {
                         if (!commonUtil.isEmpty(file.preview)) {
                             e.stopPropagation();
@@ -47,8 +59,8 @@ const PollPhotoComponent = ({ src, width, height, onChange, children }) => {
                 as="div"
                 style={{ width, height }}
             >
-                <Figure.Image className="center-image" src={file.preview} />
-                {!commonUtil.isEmpty(file.preview) && (
+                <Figure.Image className={clsx('center-image', isError && 'onerror-image')} src={file.preview} onError={handleErrorImage} />
+                {!commonUtil.isEmpty(file.preview) && !isError && (
                     <Button
                         variant="searching"
                         className="border-0 p-0 moka-table-button"

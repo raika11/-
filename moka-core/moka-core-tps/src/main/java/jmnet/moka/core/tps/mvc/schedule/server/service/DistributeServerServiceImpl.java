@@ -1,5 +1,8 @@
 package jmnet.moka.core.tps.mvc.schedule.server.service;
 
+import java.util.List;
+import java.util.Optional;
+import javax.persistence.EntityManager;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.DistributeServer;
@@ -10,13 +13,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @Slf4j
-public class DistributeServerServiceImpl implements DistributeServerService{
+public class DistributeServerServiceImpl implements DistributeServerService {
 
     @Autowired
     private DistributeServerRepository distServerRepository;
@@ -34,7 +33,7 @@ public class DistributeServerServiceImpl implements DistributeServerService{
     }
 
     @Override
-    public Page<DistributeServer> findDistibuteServerList(DistributeServerSearchDTO search){
+    public Page<DistributeServer> findDistibuteServerList(DistributeServerSearchDTO search) {
         return distServerRepository.findDistibuteServerList(search, search.getPageable());
     }
 
@@ -44,13 +43,14 @@ public class DistributeServerServiceImpl implements DistributeServerService{
     }
 
     @Override
-    public DistributeServer insertDistributeServer(DistributeServer distServer){
+    public DistributeServer insertDistributeServer(DistributeServer distServer) {
         return distServerRepository.save(distServer);
     }
 
     @Override
     public DistributeServer updateDistributeServer(DistributeServer distServer) {
-        return distServerRepository.save(distServer);
+        return distServerRepository.updateDistributeServer(distServer);
+        //return distServerRepository.save(distServer);
     }
 
 

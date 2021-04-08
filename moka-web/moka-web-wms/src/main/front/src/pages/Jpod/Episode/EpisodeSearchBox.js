@@ -69,7 +69,7 @@ const EpisodeSearchBox = (props) => {
      * 검색조건 초기화
      */
     const handleReset = () => {
-        dispatch(changeEpsdSearchOption(initialState.episode.search));
+        setSearchData(initialState.episode.search);
     };
 
     /**

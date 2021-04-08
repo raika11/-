@@ -8,7 +8,7 @@ import toast from '@/utils/toastUtil';
 /**
  * 작업 실행 통계 목록 조회
  */
-const getJobStatistic = callApiAfterActions(act.GET_JOB_STATISTIC_LIST, api.getJobStatistic, (state) => state.schedule.runState);
+const getJobStatistic = createRequestSaga(act.GET_JOB_STATISTIC_LIST, api.getJobStatistic);
 
 /**
  * 작업 실행 현황 목록 조회
@@ -230,6 +230,11 @@ function* getHistoryJob({ payload: seqNo }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * jobCd 중복 체크
+ */
+const getJobCdCheck = createRequestSaga(act.GET_JOB_CD_CHECK, api.getJobCdCheck);
+
 export default function* scheduleSaga() {
     yield takeLatest(act.GET_JOB_STATISTIC_LIST, getJobStatistic);
     yield takeLatest(act.GET_JOB_STATISTIC_SEARCH_LIST, getJobStatisticSearch);
@@ -248,4 +253,5 @@ export default function* scheduleSaga() {
     yield takeLatest(act.GET_JOB_CODE, getJobCode);
     yield takeLatest(act.GET_JOB_HISTORY_LIST, getJobHistoryList);
     yield takeLatest(act.GET_HISTORY_JOB, getHistoryJob);
+    yield takeLatest(act.GET_JOB_CD_CHECK, getJobCdCheck);
 }

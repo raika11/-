@@ -2,7 +2,6 @@ package jmnet.moka.web.bulk.mapper.idb;
 
 import java.util.List;
 import java.util.Map;
-import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvTarget;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.joinsland.BulkJoinsLandArticle;
@@ -33,9 +32,6 @@ import org.springframework.stereotype.Repository;
 public interface BulkDumpIdbMapper {
     List<Map<String, Object>> callUspBulkDdrefListSel(Map<String, Integer> map);
     void callUspBulkDdrefDel( BulkDumpTotalVo bulkDumpTotal );
-
-    void callUspBulkLogInsByDump( TotalVo<BulkDumpTotalVo> totalVo );
-    void callUspBulkPortalLogInsByDump( TotalVo<BulkDumpTotalVo> totalVo );
 
     BulkDumpEnvCopyright callUspBulkCopyrightSel( BulkDumpEnvTarget bulkDumpEnvTarget );
 

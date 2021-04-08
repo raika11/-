@@ -240,6 +240,7 @@ const FbArtEdit = () => {
                                             thumbFileName={edit.fb.imgUrl}
                                             saveFileName={moment().format('YYYYMMDDsss')}
                                             apply={handleThumbFileApply}
+                                            accept="image/jpeg, image/gif"
                                         />
                                     </React.Fragment>
                                 }

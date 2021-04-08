@@ -83,7 +83,7 @@ const defaultProps = {
  * (value, onChange 필수로 받음)
  */
 const BulkSiteSelector = (props) => {
-    const { className, isInvalid, value, onChange, width, dropdownHeight } = props;
+    const { className, isInvalid, value, onChange, width, dropdownHeight, onReset } = props;
     const dispatch = useDispatch();
     const [selectedList, setSelectedList] = useState([]); // 체크 목록
     const [siteList, setSiteList] = useState([]); // 기타코드에서 받은 벌크 사이트 목록
@@ -142,6 +142,13 @@ const BulkSiteSelector = (props) => {
         },
         [value],
     );
+
+    useEffect(() => {
+        // 검색 초기화 시 셀렉트 해제
+        if (onReset) {
+            setSelectedList([]);
+        }
+    }, [onReset]);
 
     useEffect(() => {
         if (!bulkSiteRows) {

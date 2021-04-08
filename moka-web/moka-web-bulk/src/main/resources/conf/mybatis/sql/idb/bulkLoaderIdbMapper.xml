@@ -13,23 +13,5 @@
       }
     ]]>
   </insert>
-
-  <insert id="callUspBulkLogInsByLoader" parameterType="TotalVo" statementType="CALLABLE">
-    <![CDATA[
-    {
-      call USP_BULK_LOG_INS_BY_LOADER(
-      #{mainData.SEQ_NO, mode=IN, jdbcType=INTEGER, javaType=int},
-      #{mainData.contentDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{returnValue, mode=IN, jdbcType=INTEGER, javaType=int},
-      #{mainData.TOTAL_ID, mode=IN, jdbcType=INTEGER, javaType=int},
-      #{mainData.IUD, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{mainData.loadStatus, mode=IN, jdbcType=INTEGER, javaType=int},
-      #{msg, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{mainData.TITLE, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{mainData.ORG_SOURCE_CODE, mode=IN, jdbcType=VARCHAR, javaType=string}
-      )
-      }
-    ]]>
-  </insert>
 </mapper>
 

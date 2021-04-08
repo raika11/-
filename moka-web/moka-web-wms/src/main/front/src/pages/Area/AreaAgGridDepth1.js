@@ -129,7 +129,7 @@ const AreaAgGridDepth1 = (props) => {
                 </div>
 
                 <div className="d-flex justify-content-end mb-14">
-                    <Button variant="positive" onClick={handleClickAdd} className="mr-1">
+                    <Button variant="positive-a" onClick={handleClickAdd} className="mr-1">
                         등록
                     </Button>
 

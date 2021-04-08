@@ -1,6 +1,4 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
-import clsx from 'clsx';
-import { MokaIcon } from '@components';
 
 const SourceRenderer = forwardRef((params, ref) => {
     useImperativeHandle(ref, () => ({
@@ -9,7 +7,6 @@ const SourceRenderer = forwardRef((params, ref) => {
 
     return (
         <div className="d-flex align-items-center h-auto">
-            <MokaIcon iconName="fas-circle" className={clsx('mr-2', { 'color-info': params.data.bulkflag === 'Y', 'color-gray-200': params.data.bulkflag !== 'Y' })} />
             <span>
                 {params.data.sourceName}
                 <br />

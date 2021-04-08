@@ -127,6 +127,7 @@ export function* getUserMenuTree({ payload: { pathName } }) {
             const menuById = {};
             menuPaths['/404'] = '';
             menuPaths['/403'] = '';
+            menuPaths['/mypage'] = '';
             if (commonUtil.isEmpty(response.data.body)) {
                 response.data.body = {};
             } else {
@@ -243,6 +244,13 @@ export function* getDomainList({ payload: domainId }) {
     yield put(finishLoading(ACTION));
 }
 
+function* confirmSmsAuthentication({ payload: { memberId, smsAuth, callback } }) {
+    const response = yield call(api.authenticationSmsAuth, memberId, smsAuth);
+    if (callback instanceof Function) {
+        callback(response.data);
+    }
+}
+
 /**
  * authSaga
  */
@@ -257,4 +265,5 @@ export default function* authSaga() {
     yield takeLatest(authAction.REGISTER_REQUEST, registerRequest);
     yield takeLatest(authAction.GET_USER_MENU_TREE, getUserMenuTree);
     yield takeLatest(authAction.GET_DOMAIN_LIST, getDomainList);
+    yield takeLatest(authAction.CONFIRM_SMS_AUTHENTICATION, confirmSmsAuthentication);
 }

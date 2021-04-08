@@ -176,11 +176,18 @@ public class JobContentServiceImpl implements JobContentService {
     @Override
     public Page<JobContent> findDeletedJobContentList(JobDeletedContentSearchDTO search) {
         JobContentSearchDTO searchDeleted = new JobContentSearchDTO();
+        searchDeleted.setSort(search.getSort());
+        searchDeleted.setSize(search.getSize());
+        searchDeleted.setSearchType(search.getSearchType());
+        searchDeleted.setKeyword(search.getKeyword());
+        searchDeleted.setUseTotal(search.getUseTotal());
+
         searchDeleted.setDelYn(MokaConstants.YES);
         searchDeleted.setCategory(search.getCategory());
         searchDeleted.setPeriod(search.getPeriod());
         searchDeleted.setSendType(search.getSendType());
         searchDeleted.setServerSeq(search.getServerSeq());
+
 
 
         return jobContentRepository.findJobContentList(searchDeleted, search.getPageable());
@@ -227,5 +234,12 @@ public class JobContentServiceImpl implements JobContentService {
         } catch (Exception e) {
             log.error("update job for scheduler is failed.");
         }
+    }
+
+    @Override
+    public int findJobCd(String jobCd) {
+        return jobContentRepository
+                .findByJobCd(jobCd)
+                .size();
     }
 }

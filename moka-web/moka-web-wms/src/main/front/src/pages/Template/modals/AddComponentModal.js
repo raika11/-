@@ -169,7 +169,7 @@ const AddComponentModal = (props) => {
                                     <MokaIcon iconName="fal-plus" />
                                 </Button>
                             ) : (
-                                <Button variant="outline-neutral" onClick={(e) => removeComponent(e, idx)}>
+                                <Button variant="negative" onClick={(e) => removeComponent(e, idx)}>
                                     <MokaIcon iconName="fal-minus" />
                                 </Button>
                             )}

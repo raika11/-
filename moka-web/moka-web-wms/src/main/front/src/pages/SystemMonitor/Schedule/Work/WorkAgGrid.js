@@ -47,7 +47,7 @@ const WorkAgGrid = ({ match }) => {
     );
 
     useEffect(() => {
-        // 스케줄 작업 카테고리를 가져와서 categoryNm 매핑
+        // 스케줄 작업 카테고리를 가져와서 categoryNm 조회
         if (genCateRows) {
             let findIndex = (code) => genCateRows.findIndex((c) => c.dtlCd === code);
             let findPeriodIndex = (period) => SCHEDULE_PERIOD.findIndex((c) => c.period === period);
@@ -77,7 +77,7 @@ const WorkAgGrid = ({ match }) => {
 
     return (
         <MokaTable
-            className="overflow-hidden flex-fill"
+            agGridHeight={544}
             columnDefs={columnDefs}
             rowData={rowData}
             onRowNodeId={(row) => row.jobSeq}

@@ -14,7 +14,6 @@ const SundayJopanEdit = () => {
     const [loading, setLoding] = useState(true);
     const iframeRef = useRef(null);
 
-    console.log(temp);
     useEffect(() => {
         // 조판 정보 셋팅
         setTemp({

@@ -152,12 +152,8 @@ export const InfoItemRenderer = (props) => {
  */
 export const MemSiteRenderer = (props) => {
     const { data } = props;
-    console.log(data);
-    return (
-        <>
-            <p className="mb-0">test</p>
-        </>
-    );
+    return;
+    <p className="mb-0">test</p>;
 };
 
 /**

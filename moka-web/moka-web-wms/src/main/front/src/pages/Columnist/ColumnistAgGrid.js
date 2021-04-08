@@ -60,8 +60,6 @@ const ColumnistAgGrid = ({ match }) => {
         }
     }, [list, jplusRepRows]);
 
-    console.log(rowData);
-
     return (
         <React.Fragment>
             <MokaTable

@@ -149,10 +149,33 @@ public class CommentRestController extends AbstractCommonController {
                 throw new InvalidDataException("tps.comment-banned.error.notnull.deleteType");
             }
         }
+
+        /**     CommentStatusType 댓글상태
+         A("A", "노출"),
+         N("N", "관리자삭제"),
+         D("D", "사용자삭제");
+         */
+        System.out.println("======================================================");
+
         long result = commentService.updateCommentStatus(comment, statusType, deleteType);
         String msg = "";
         if (result > 0) {
+            System.out.println("댓글상태 comment.getStatus()    =" + comment.getStatus());
 
+            System.out.println("statusType.getCode()    =" + statusType.getCode());
+            System.out.println("deleteType.getCode()    =" + deleteType
+                    .getCode()
+                    .toString());
+            System.out.println("deleteType.getName()    =" + deleteType
+                    .getName()
+                    .toString());
+
+            /**         deleteType
+             CMT("DTCO", "이 댓글만 삭제"),
+             ALL("UDC", "해당 사용자의 과거 댓글 전체 삭제"),
+             BNC("BNC", "해당 사용자 ID 차단 및 해당 댓글 삭제"),
+             BNA("BNA", "해당 사용자 ID 차단 및 과거 댓글 전체 삭제");
+             */
             if (statusType.equals(CommentStatusType.N)) {
                 switch (deleteType) {
                     case BNA:

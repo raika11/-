@@ -3,7 +3,6 @@ package jmnet.moka.web.wms.mvc.member.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +20,6 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.exception.InvalidDataException;
-import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
@@ -399,7 +397,6 @@ public class MemberRestController extends AbstractCommonController {
             throws Exception {
 
         String infoMessage = msg("tps.common.error.no-data");
-        String passwordSameMessage = msg("tps.member.error.same.password");
 
         // 오리진 데이터 조회
         MemberInfo orgMember = memberService
@@ -407,24 +404,20 @@ public class MemberRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
         try {
-            if (password.equals(newPassword)) {
-                throw new MokaException(passwordSameMessage);
-            }
-
             // 현재 패스워드 일치 여부 확인
-            boolean same = passwordEncoder.matches(password, orgMember.getPassword());
+            oldPasswordCheck(password, orgMember.getPassword());
 
-            if (!same) {
-                throw new UserPrincipalNotFoundException(memberId);
+            if (password.equals(newPassword)) {
+                throw new PasswordNotMatchedException(msg("tps.member.error.same.password"));
             }
             // 신규 패스워드와 패스워드 확인 비교
             throwPasswordCheck(newPassword, confirmPassword);
 
-            String bcryptPassword = passwordEncoder.encode(newPassword);
+            String SHA256_Password = passwordEncoder.encode(newPassword);
             orgMember.setExpireDt(McpDate.datePlus(McpDate.now(), 30));
             orgMember.setErrCnt(0);
             orgMember.setPasswordModDt(McpDate.now());
-            orgMember.setPassword(bcryptPassword);
+            orgMember.setPassword(SHA256_Password);
 
             // 결과리턴
             MemberInfo returnValue = memberService.updateMember(orgMember);
@@ -443,6 +436,23 @@ public class MemberRestController extends AbstractCommonController {
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, e);
             throw new Exception(e);
+        }
+    }
+
+    /**
+     * 비밀번호 확인
+     *
+     * @param password    비밀번호 입력값
+     * @param oldPassword 비밀번호 확인 입력값
+     * @throws PasswordNotMatchedException 비밀번호와 비밀번호 확인 불일치
+     */
+    private void oldPasswordCheck(String password, String oldPassword)
+            throws PasswordNotMatchedException {
+
+        boolean same = passwordEncoder.matches(password, oldPassword);
+
+        if (!same) {
+            throw new PasswordNotMatchedException(msg("tps.member.error.new.old.not.password"));
         }
     }
 

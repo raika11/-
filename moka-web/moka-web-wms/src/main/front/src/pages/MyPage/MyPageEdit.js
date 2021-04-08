@@ -8,6 +8,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { changePassword, getMember } from '@store/member';
+import commonUtil from '@utils/commonUtil';
 
 const MyPageEdit = () => {
     const dispatch = useDispatch();
@@ -50,8 +51,6 @@ const MyPageEdit = () => {
 
     const handleChangeValue = (name, value) => {
         if (name === 'change') {
-            console.log(getPasswordValidateType(value));
-            console.log(getPasswordValidateHtml(getPasswordValidateType(value)));
             setMessages({ ...messages, change: getPasswordValidateHtml(getPasswordValidateType(value)) });
             /*setHideMessages(
                 produce(hideMessages, (draft) => {
@@ -92,8 +91,22 @@ const MyPageEdit = () => {
                     memberId: AUTH.userId,
                     passwords,
                     callback: (response) => {
-                        console.log(response);
-                        toast.result(response.data);
+                        const { data } = response;
+                        const { header, body } = data;
+                        if (header.success) {
+                            setPasswords({
+                                current: '',
+                                change: '',
+                                confirm: '',
+                            });
+                            toast.result(data);
+                        } else {
+                            if (!commonUtil.isEmpty(body.list) && body.list.length > 0) {
+                                messageBox.alert(body.list.map((element) => element.reason).join('\n'), () => {});
+                            } else {
+                                messageBox.alert(header.message);
+                            }
+                        }
                     },
                 }),
             );
@@ -269,7 +282,7 @@ const MyPageEdit = () => {
     useEffect(() => {
         dispatch(getMember(AUTH.userId));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [AUTH]);
+    }, [dispatch, AUTH]);
 
     useEffect(() => {
         if (member.memberId) {

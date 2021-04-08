@@ -402,7 +402,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 /****************************************************************************************************/
 /***                                             card                                             ***/
 /****************************************************************************************************/
-.card {position:relative;padding-top:16px;padding-bottom:16px;}
+/* .card {position:relative;padding-top:16px;padding-bottom:16px;} */
 
 
 /****************************************************************************************************/
@@ -606,11 +606,14 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     /* table */
     .info_table th {width: 20%;}
 
-    /*  */
-    .headline +.description,
-    .headline ~ .meta,
-    .headline ~ .date,
-    .headline ~ .byline {padding-top:6px;}
+    /* 카드 아이템 간격 */
+    .card .headline +.description,
+    .card .headline ~ .meta,
+    .card .headline ~ .date,
+    .card .headline ~ .byline {padding-top:6px;}
+
+
+    
 }
 
 /* Large devices (desktops, 1024px and up) */
@@ -698,6 +701,11 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .headline ~ .meta,
     .headline ~ .date,
     .headline ~ .byline {padding-top:8px;}
+
+    /****************************************************************************************************/
+    /***                                             card                                             ***/
+    /****************************************************************************************************/
+    /* .card {padding-top:20px;padding-bottom:20px;} */
 }
 
 /* X-Large devices (large desktops, 1200px and up) */

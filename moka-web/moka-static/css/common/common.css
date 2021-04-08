@@ -510,11 +510,11 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
     .pagination {display:none;}
 
-    /*  */
-    .headline +.description,
-    .headline ~ .meta,
-    .headline ~ .date,
-    .headline ~ .byline {padding-top:4px;}
+    /* 카드 아이템 간격  */
+    .card .headline +.description,
+    .card .headline ~ .meta,
+    .card .headline ~ .date,
+    .card .headline ~ .byline {padding-top:4px;}
 }
 
 /* Medium devices (tablet + pc, 768px and up) */
@@ -696,11 +696,11 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .el.el_lg5 {-webkit-line-clamp: 5;}
     .el.el_lg6 {-webkit-line-clamp: 6;}
 
-    /*  */
-    .headline +.description,
-    .headline ~ .meta,
-    .headline ~ .date,
-    .headline ~ .byline {padding-top:8px;}
+    /* 카드 아이템 간격 */
+    .card .headline +.description,
+    .card .headline ~ .meta,
+    .card .headline ~ .date,
+    .card .headline ~ .byline {padding-top:8px;}
 
     /****************************************************************************************************/
     /***                                             card                                             ***/

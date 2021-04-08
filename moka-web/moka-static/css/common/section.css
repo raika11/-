@@ -6,7 +6,7 @@
 .contents {padding-top:26px; padding-bottom:60px;}
 
 /* header - nav */
-.header_nav_wrap {margin-bottom:20px; padding:0 0 13px;border-bottom:1px solid #000;}
+.header_nav_wrap {padding:0 0 13px;border-bottom:1px solid #000;}
 .header_nav_wrap .header_nav_area {display:flex;}
 .header_nav_wrap .header_nav_area .page_title {font-size:24px;font-weight:bold;line-height:inherit;letter-spacing:-0.3px;color:#000;}
 .header_nav_wrap .header_nav_area .header_nav .nav .nav_item {display:inline-block;padding-right:26px;}
@@ -160,14 +160,11 @@
 
 
     /***************************************    general     ************************************/
-    .showcase_general .card_group .card {margin-top:20px; padding-top:20px;}
-    .showcase_general .card_group.row .card::before{content:'';position:absolute;top:0;left:0;display:block;width:100%;height:1px;background:#e2e2e2;}
-    .showcase_general .card_group.row .card:first-child::before {left:10px;}
-    .showcase_general .card_group.row .card:last-child::before {left:-10px;}
+    .showcase_general .card_group::before { content:'';position:absolute;top:0;left:18px;display:block;width:calc(100% - 36px);height:1px;background:#e2e2e2; }
+    .showcase_general .card_group .card {padding-top:20px; padding-bottom:20px;}
     .showcase_general .card_group .card .card_body {border-right:1px solid #e2e2e2;}
     .showcase_general .card_body:first-child:nth-last-child(2) { padding-right: 16px; }
     .showcase_general .card_body + .card_image { padding-left: 0; }
-    .showcase_general {margin-bottom:20px;}
     .showcase_general .headline {font-size:16px;}
     
     .new_latest .card::before {content:'';position:absolute;top:0;left:0;display:block;width:100%;height:1px;background:#e2e2e2;}
@@ -199,7 +196,7 @@
     .contents {padding-top:88px;padding-bottom:100px;}
 
     /* nav */
-    .header_nav_wrap{margin-bottom:40px;border-bottom-width:4px;}
+    .header_nav_wrap{border-bottom-width:4px;}
     .header_nav_wrap .header_nav_area .page_title {padding-top:10px;font-size:40px;letter-spacing:-0.5px;}
     .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2 {font-size:16px;letter-spacing:-0.2px;}
     
@@ -218,10 +215,11 @@
     .card_more { height: 61px; padding-top:20px; padding-bottom: 20px; }
 
     /***************************************    general     ************************************/
-    .showcase_general .card_group .card {margin-top:30px; padding-top:18px;}
-    .showcase_general .card_group .card:first-child {margin-top:0; padding-top:0;}
+    .showcase_general { padding-top: 40px; }
+    .showcase_general .card_group .card {padding-top:18px; padding-bottom: 30px; }
+    .showcase_general .card_group .card:first-child { padding-top:0;}
+    .showcase_general .card_group.row .card::before{content:'';position:absolute;top:0;left:18px;display:block;width:calc(100% - 36px);height:1px;background:#e2e2e2;}
     .showcase_general .card_group.row .card:first-child::before {content:none;}
-    .showcase_general .card_group.row .card:last-child::before {left:18px; width: calc(100% - 36px); }
     .showcase_general .card_group .card .card_body {border-right:0;}
     .showcase_general .headline {font-size:20px;}
     .showcase_general .card_image + .card_body{padding-top:18px;}

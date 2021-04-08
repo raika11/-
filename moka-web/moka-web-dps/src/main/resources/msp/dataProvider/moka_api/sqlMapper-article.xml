@@ -195,20 +195,37 @@
   <!--북마크등록-->
   <select id="scrapInsert" parameterType="map" resultType="string" statementType="CALLABLE">
     { call UPU_ARTICLE_SCRAP_INS(
+      #{cid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 
   <!--북마크삭제-->
   <select id="scrapDelete" parameterType="map" resultType="string" statementType="CALLABLE">
     { call UPU_ARTICLE_SCRAP_UPD(
+      #{cid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
+  </select>
+
+
+  <!-- 모든 내 북마크목록조회 -->
+  <select id="scrapMy" parameterType="map" resultType="map"
+    statementType="CALLABLE">
+    {call UPU_ARTICLE_SCRAP_LIST_SEL_BY_MEM(
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
   </select>
 
   <!--운세조회-->
@@ -236,7 +253,6 @@
       #{div, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{site, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{dev, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{subSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{loginDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_memberSeq, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},

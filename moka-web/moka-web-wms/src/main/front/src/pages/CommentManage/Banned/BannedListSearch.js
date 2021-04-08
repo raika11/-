@@ -241,10 +241,10 @@ const BannedListSearch = ({ match }) => {
                 <MokaSearchInput value={searchData.keyword} onChange={handleChangeSearchInput} onSearch={handleClickSearchButton} name="keyword" />
             </div>
             <div className="d-inline-block float-right">
-                <Button variant="positive" className="mr-1" onClick={() => setDefaultInputModalState(true)}>
+                <Button variant="positive-a" className="mr-1" onClick={() => setDefaultInputModalState(true)}>
                     등록
                 </Button>
-                <Button variant="negative" className="mr-1" onClick={handleOnClickApplyButton}>
+                <Button variant="positive" className="mr-1" onClick={handleOnClickApplyButton}>
                     적용하기
                 </Button>
                 <Button variant="negative" onClick={handleOnClickMemoryButton}>

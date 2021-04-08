@@ -188,6 +188,7 @@ section {width:100%;}
 
 /** flex **/
 .flex {display: flex;}
+.flex > * { flex: 0 0 auto; }
 .flex_col {display: flex; flex-direction: column;}
 .flex_align_center {align-items: center;}
 .flex_align_start {align-items: flex-start;}
@@ -389,8 +390,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 .swiper-scrollbar {background:transparent;}
 
 
-.title {width:100%;padding-top:4px;padding-bottom:4px;}
-.headline {width:100%;padding-top:4px;padding-bottom:4px; color:#111; font-size:16px; font-weight:700; line-height:1.5; word-break:break-all;}
+.title {padding-top:4px;padding-bottom:4px;}
+.headline {padding-top:4px;padding-bottom:4px; color:#111; font-size:16px; font-weight:700; line-height:1.5; word-break:break-all;}
 .description {padding-top:4px;padding-bottom:4px;color:#777; font-size:15px; line-height:1.5; word-break:break-all;}
 .byline {padding-top:4px;padding-bottom:4px;color:#aaa; font-size:13px; line-height:1.5;}
 .date {padding-top:4px;padding-bottom:4px; color:#aaa; font-size:12px; line-height:1.5;}

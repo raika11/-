@@ -117,6 +117,7 @@ const ABAuto = React.lazy(() => import('@pages/AB/Auto')); // 직접설계
 const ABEdit = React.lazy(() => import('@pages/AB/Edit')); // 대안입력
 const ABJam = React.lazy(() => import('@pages/AB/Jam')); // JAM 설계
 const ABResult = React.lazy(() => import('@pages/AB/Result')); // 테스트 결과
+const NewsLetter = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetter'));
 
 const routes = [
     {
@@ -751,6 +752,15 @@ const routes = [
         path: '/ab-result',
         name: 'abResult',
         component: ABResult,
+        side: true,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/news-letter',
+        name: 'newsLetter',
+        component: NewsLetter,
         side: true,
         nonResponsive: true,
         exact: false,

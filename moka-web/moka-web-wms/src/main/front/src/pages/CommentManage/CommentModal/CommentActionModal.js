@@ -34,7 +34,6 @@ const CommentActionModal = (props) => {
     const handleDeleteComment = (type) => {
         const paramsStatusType = type === 'restore' ? 'A' : 'N';
         const paramsDeleteType = type === 'restore' ? '' : type;
-        // dispatch(clearComment());
         dispatch(
             deleteComment({
                 cmtSeq: modalUsage.cmtSeq,
@@ -43,7 +42,6 @@ const CommentActionModal = (props) => {
                     deleteType: paramsDeleteType,
                 },
                 callback: ({ header: { success, message }, body }) => {
-                    // 임시로 모두 다시 가지고 옴.
                     if (success === true) {
                         toast.success(message);
                         dispatch(getCommentList());

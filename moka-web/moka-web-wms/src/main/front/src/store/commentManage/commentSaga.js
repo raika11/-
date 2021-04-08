@@ -37,13 +37,6 @@ function* saveBlock({ payload: { type, seqNo, blockFormData, callback } }) {
             response = yield call(api.postCommentsBlocks, { blockFormData: blockFormData });
         }
         callbackData = response.data;
-
-        if (response.data.header.success && response.data.body) {
-            // 성공
-        } else {
-            const msg = response.data.header.message;
-            toast.error(msg);
-        }
     } catch (e) {
         callbackData = errorResponse(e);
     }

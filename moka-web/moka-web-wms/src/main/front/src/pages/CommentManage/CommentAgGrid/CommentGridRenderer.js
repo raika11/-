@@ -113,7 +113,7 @@ export const DeleteButtonRenderer = (props) => {
                     </Dropdown>
                 </MokaOverlayTooltipButton>
             ) : (
-                <Button variant="outline-table-btn" className="mr-2" size="sm" onClick={handleClickRestore}>
+                <Button variant="outline-table-btn" size="sm" onClick={handleClickRestore}>
                     복구
                 </Button>
             )}
@@ -148,16 +148,7 @@ export const InfoItemRenderer = (props) => {
 };
 
 /**
- * 계정 정보
- */
-export const MemSiteRenderer = (props) => {
-    const { data } = props;
-    return;
-    <p className="mb-0">test</p>;
-};
-
-/**
- * 차단 관리에서 차단 복원 버튼 처리.
+ * 차단 관리에서 차단 복원 버튼 처리
  */
 export const BanneButtonRenderer = (props) => {
     const {
@@ -173,15 +164,14 @@ export const BanneButtonRenderer = (props) => {
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
                         toast.success(message);
-                        dispatch(clearBlocksList());
                         dispatch(getCommentsBlocks());
                     } else {
                         const { totalCnt, list } = body;
                         if (totalCnt > 0 && Array.isArray(list)) {
-                            // 에러 메시지 확인.
+                            // 에러 메시지 확인
                             messageBox.alert(list[0].reason, () => {});
                         } else {
-                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
+                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함
                             messageBox.alert(message, () => {});
                         }
                     }
@@ -227,7 +217,6 @@ export const HistoryButtonRenderer = ({ value }) => {
     return (
         <div className="h-100 d-flex align-items-center">
             <MokaIcon iconName="fal-history" onClick={handleClickHistoryModal} />
-
             <BannedHistoryModal
                 Element={value}
                 show={historyState}

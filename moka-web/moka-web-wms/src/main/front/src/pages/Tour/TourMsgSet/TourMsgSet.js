@@ -147,7 +147,7 @@ const MessageSettings = ({ displayName }) => {
                             <div className="d-flex flex-fill">
                                 <MokaInputLabel label="질의응답\n'자주하는 질문'" as="none" />
                                 <div className="flex-fill input-border overflow-hidden">
-                                    <MokaEditorCore value={mgObj.E} onBlur={handleBlur} />
+                                    {mgObj.E && <MokaEditorCore defaultValue={mgObj.E} value={mgObj.E} onBlur={handleBlur} />}
                                 </div>
                             </div>
                         </Col>

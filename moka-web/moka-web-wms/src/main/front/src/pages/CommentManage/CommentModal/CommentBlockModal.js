@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import { MokaModal, MokaInputLabel, MokaInput } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
-import { saveBlocks, getCommentsBlocks, getCommentList } from '@store/commentManage';
+import { saveBlocks, getCommentList } from '@store/commentManage';
 import { BannedConfirmModal } from '@pages/CommentManage/CommentModal';
 
 /**

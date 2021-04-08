@@ -12,14 +12,12 @@ import { BannedConfirmModal } from '@pages/CommentManage/CommentModal';
  * ModalBody로 Input 한개 있는 Modal
  */
 const CommentBlockModal = (props) => {
+    const { show, onHide, modalUsage, selectBannedItem } = props;
     const dispatch = useDispatch();
 
     // 댓글 차단 사유 목록
-    const { COMMENT_TAG_DIV_CODE } = useSelector((store) => ({
-        COMMENT_TAG_DIV_CODE: store.comment.common.COMMENT_TAG_DIV_CODE,
-    }));
+    const COMMENT_TAG_DIV_CODE = useSelector((store) => store.comment.common.COMMENT_TAG_DIV_CODE);
 
-    const { show, onHide, modalUsage, selectBannedItem } = props;
     const [editData, setEditData] = useState({
         bannedType: 'U',
         tagValues: '',
@@ -62,25 +60,25 @@ const CommentBlockModal = (props) => {
         let isInvalid = false,
             errList = [];
 
-        if (!obj.tagValues && modalUsage.usage === `U`) {
+        if (!obj.tagValues && modalUsage === `U`) {
             errList.push({
                 field: 'tagValues',
                 reason: 'ID는 필수 입력 항목입니다.',
             });
             isInvalid = isInvalid | true;
-        } else if (!obj.tagValues && modalUsage.usage === `I`) {
+        } else if (!obj.tagValues && modalUsage === `I`) {
             errList.push({
                 field: 'tagValues',
                 reason: 'IP는 필수 입력 항목입니다.',
             });
-        } else if (!obj.tagValues && modalUsage.usage === `W`) {
+        } else if (!obj.tagValues && modalUsage === `W`) {
             errList.push({
                 field: 'tagValues',
                 reason: '금지어는 필수 입력 항목입니다.',
             });
         }
 
-        if (!/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/g.test(obj.tagValues) && modalUsage.usage === `U`) {
+        if (!/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/g.test(obj.tagValues) && modalUsage === `U`) {
             errList.push({
                 field: 'tagValues',
                 reason: 'ID는 이메일 형식입니다.',
@@ -90,7 +88,7 @@ const CommentBlockModal = (props) => {
             !/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/g.test(
                 obj.tagValues,
             ) &&
-            modalUsage.usage === `I`
+            modalUsage === `I`
         ) {
             errList.push({
                 field: 'tagValues',
@@ -107,7 +105,6 @@ const CommentBlockModal = (props) => {
      * 차단 등록 처리
      */
     const handleSaveBlocks = (formData) => {
-        // if (validate(formData))
         dispatch(
             saveBlocks({
                 type: 'SAVE',
@@ -130,17 +127,15 @@ const CommentBlockModal = (props) => {
 
                     if (success === true) {
                         toast.success(message);
-                        dispatch(getCommentsBlocks());
+                        dispatch(getCommentList());
                     }
-
-                    handleClickHide(); // 모달창 닫기
-                    dispatch(getCommentList());
+                    handleClickHide();
                 },
             }),
         );
     };
 
-    const ConfirmModalResult = (e) => {
+    const confirmModalResult = (e) => {
         const { gubun, type } = e;
         let formData = new FormData();
 
@@ -175,7 +170,7 @@ const CommentBlockModal = (props) => {
      */
     const handleClickSave = (e) => {
         let formData = new FormData();
-        formData.append('tagType', modalUsage.usage);
+        formData.append('tagType', modalUsage);
         formData.append('usedYn', 'Y');
 
         // 댓글 관리 처리.
@@ -263,13 +258,13 @@ const CommentBlockModal = (props) => {
             handleSaveBlocks(formData);
         };
 
-        if (modalUsage.usage === `comment`) {
+        if (modalUsage === `comment`) {
             doCommentMenu();
-        } else if (modalUsage.usage === `U`) {
+        } else if (modalUsage === `U`) {
             doUMenu();
-        } else if (modalUsage.usage === `I`) {
+        } else if (modalUsage === `I`) {
             doIMenu();
-        } else if (modalUsage.usage === `W`) {
+        } else if (modalUsage === `W`) {
             doWMenu();
         }
     };
@@ -280,7 +275,7 @@ const CommentBlockModal = (props) => {
             width={600}
             show={show}
             onHide={handleClickHide}
-            title={`차단 등록`}
+            title="차단 등록"
             buttons={[
                 { text: '저장', variant: 'positive', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleClickHide },
@@ -290,7 +285,7 @@ const CommentBlockModal = (props) => {
         >
             <Form onSubmit={(e) => e.preventDefault()}>
                 <Form.Row className="mb-2 align-items-center">
-                    {modalUsage.usage && modalUsage.usage === `comment` && (
+                    {modalUsage && modalUsage === `comment` && (
                         <>
                             <Col xs={3} className="p-0 mr-2">
                                 <MokaInputLabel
@@ -315,7 +310,7 @@ const CommentBlockModal = (props) => {
                             </Col>
                         </>
                     )}
-                    {modalUsage.usage && modalUsage.usage === `U` && (
+                    {modalUsage && modalUsage === `U` && (
                         <>
                             <Col className="p-0">
                                 <MokaInputLabel
@@ -329,7 +324,7 @@ const CommentBlockModal = (props) => {
                             </Col>
                         </>
                     )}
-                    {modalUsage.usage && modalUsage.usage === `I` && (
+                    {modalUsage && modalUsage === `I` && (
                         <>
                             <Col className="p-0">
                                 <MokaInputLabel
@@ -343,7 +338,7 @@ const CommentBlockModal = (props) => {
                             </Col>
                         </>
                     )}
-                    {modalUsage.usage && modalUsage.usage === `W` && (
+                    {modalUsage && modalUsage === `W` && (
                         <>
                             <Col className="p-0">
                                 <MokaInputLabel
@@ -389,7 +384,7 @@ const CommentBlockModal = (props) => {
                 modalUsage={confirmModalUsage}
                 show={confirmModal}
                 onHide={(e) => {
-                    ConfirmModalResult(e);
+                    confirmModalResult(e);
                     setConfirmModal(false);
                 }}
             />

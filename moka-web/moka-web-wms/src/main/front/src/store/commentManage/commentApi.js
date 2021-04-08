@@ -1,5 +1,5 @@
 import qs from 'qs';
-import instance from '../commons/axios';
+import instance from '@store/commons/axios';
 
 /**
  * 댓글 화면 초기 설정 정보 조회
@@ -7,8 +7,6 @@ import instance from '../commons/axios';
  * 댓글 상태: COMMENT_STATUS_CODE
  * 댓글 정렬 순서: COMMENT_ORDER_CODE
  * 계정 정보: COMMENT_SITE_CODE
- *
- *
  */
 export const getInitData = () => {
     return instance.get(`/api/comments/init`).catch((err) => {

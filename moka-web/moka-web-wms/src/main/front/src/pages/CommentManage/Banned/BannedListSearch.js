@@ -72,10 +72,8 @@ const BannedListSearch = ({ match }) => {
     const dispatch = useDispatch();
 
     // 차단 등록 모달 에 전달 할 값
-    const [modalUsage, setModalUsage] = useState({
-        usage: '',
-    });
-    // 스토어 연결.
+    const [modalUsage, setModalUsage] = useState('');
+    // 스토어 연결
     const { pageGubun, storeSearch, COMMENT_SITE_CODE, COMMENT_TAG_DIV_CODE } = useSelector(
         (store) => ({
             COMMENT_SITE_CODE: store.comment.common.COMMENT_SITE_CODE,
@@ -87,11 +85,10 @@ const BannedListSearch = ({ match }) => {
     );
 
     const [searchData, setSearchData] = useState(initialState.banneds.commentsBlocks.search);
-    // 차단 모달 열기 닫기.
     const [defaultInputModalState, setDefaultInputModalState] = useState(false);
 
     /**
-     * 검색 데이터 변경.
+     * 데이터 변경
      */
     const handleChangeSearchInput = (e) => {
         const { name, value } = e.target;
@@ -101,7 +98,9 @@ const BannedListSearch = ({ match }) => {
         });
     };
 
-    // 검색 버튼 처리.
+    /**
+     * 검색
+     */
     const handleClickSearchButton = () => {
         dispatch(getCommentsBlocks(changeBannedsSearchOption({ ...searchData, page: 0 })));
     };
@@ -116,10 +115,7 @@ const BannedListSearch = ({ match }) => {
 
     useEffect(() => {
         // 페이지 구분값이 변경 되었을때 모달에 전달할 구분값 업데이트.
-        setModalUsage({
-            ...modalUsage,
-            usage: pageGubun,
-        });
+        setModalUsage(pageGubun);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pageGubun]);
 
@@ -136,10 +132,7 @@ const BannedListSearch = ({ match }) => {
                 tagtype = 'W';
             }
 
-            setModalUsage({
-                ...modalUsage,
-                usage: tagtype,
-            });
+            setModalUsage(tagtype);
 
             dispatch(getCommentsBlocks(changeBannedsSearchOption({ ...searchData, tagType: tagtype })));
         };

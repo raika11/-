@@ -1,8 +1,10 @@
 package jmnet.moka.core.tps.mvc.comment.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <pre>
@@ -114,6 +117,31 @@ public class CommentBannedRepositorySupportImpl extends TpsQueryDslRepositorySup
         return Optional.ofNullable(commentBanned);
     }
 
+    @EntityGraph(attributePaths = {"tagDivCode", "regMember"}, type = EntityGraph.EntityGraphType.LOAD)
+    public Optional<CommentBanned> findCommentBannedOrderbySeqNoDesc(CommentBannedType tagType, String tagValue) {
+
+        QCommentBanned qCommentBanned = QCommentBanned.commentBanned;
+        QCodeSimple qCodeSimple = QCodeSimple.codeSimple;
+        QMemberSimpleInfo qRegMember = new QMemberSimpleInfo("regMember");
+        JPQLQuery<CommentBanned> query = from(qCommentBanned);
+
+        query.where(qCommentBanned.tagType
+                .eq(tagType)
+                .and(qCommentBanned.tagValue.eq(tagValue)));
+        query.where(qCommentBanned.tagDivCode.grpCd
+                .eq(TpsConstants.CMT_TAG_DIV)
+                .and(qCommentBanned.tagDivCode.usedYn.eq(MokaConstants.YES)));
+
+        CommentBanned commentBanned = query
+                .orderBy(qCommentBanned.seqNo.desc())
+                .leftJoin(qCommentBanned.tagDivCode, qCodeSimple)
+                .fetchJoin()
+                .leftJoin(qCommentBanned.regMember, qRegMember)
+                .fetchJoin()
+                .fetchFirst();
+
+        return Optional.ofNullable(commentBanned);
+    }
 
     @EntityGraph(attributePaths = {"tagDivCode", "regMember"}, type = EntityGraph.EntityGraphType.LOAD)
     public Optional<CommentBanned> findCommentBanned(Long seqNo) {
@@ -136,5 +164,41 @@ public class CommentBannedRepositorySupportImpl extends TpsQueryDslRepositorySup
                 .fetchFirst();
 
         return Optional.ofNullable(commentBanned);
+    }
+
+    @EntityGraph(attributePaths = {"tagDivCode", "regMember"}, type = EntityGraph.EntityGraphType.LOAD)
+    public List<CommentBanned> findAllByTagValue(String tagType, String tagValue) {
+
+        QCommentBanned qCommentBanned = QCommentBanned.commentBanned;
+        QCodeSimple qCodeSimple = QCodeSimple.codeSimple;
+        QMemberSimpleInfo qRegMember = new QMemberSimpleInfo("regMember");
+        JPQLQuery<CommentBanned> query = from(qCommentBanned);
+
+        query.where(qCommentBanned.tagType
+                .eq(CommentBannedType.valueOf(tagType))
+                .and(qCommentBanned.tagValue.eq(tagValue)));
+        query.where(qCommentBanned.tagDivCode.grpCd
+                .eq(TpsConstants.CMT_TAG_DIV)
+                .and(qCommentBanned.tagDivCode.usedYn.eq(MokaConstants.YES)));
+
+        return (List<CommentBanned>) query
+                .leftJoin(qCommentBanned.tagDivCode, qCodeSimple)
+                .fetchJoin()
+                .leftJoin(qCommentBanned.regMember, qRegMember)
+                .fetchJoin()
+                .fetchFirst();
+    }
+
+    @Transactional
+    @Override
+    public long updateUseYnBySeqNo(Long seqNo, String usedYn) {
+        QCommentBanned qCommentBanned = QCommentBanned.commentBanned;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qCommentBanned.seqNo.eq(seqNo));
+        return update(qCommentBanned)
+                .where(builder)
+                .set(qCommentBanned.usedYn, usedYn)
+                .execute();
     }
 }

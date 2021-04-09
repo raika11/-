@@ -155,5 +155,31 @@ public final class CommentCode {
                     .collect(Collectors.toList());
         }
     }
+
+
+    public enum CommentTagDivType implements EnumCode {
+        A("A", "광고"),
+        B("B", "비방"),
+        C("C", "욕설"),
+        D("D", "도배"),
+        E("E", "음란"),
+        F("F", "기타");
+
+        private String code;
+        private String name;
+
+        CommentTagDivType(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
 }
 

@@ -62,6 +62,11 @@ public class CommentBannedServiceImpl implements CommentBannedService {
     }
 
     @Override
+    public Optional<CommentBanned> findAllCommentBannedByTagValueOrderbySeqNoDesc(CommentBannedType tagType, String tagValue) {
+        return commentBannedRepository.findCommentBannedOrderbySeqNoDesc(tagType, tagValue);
+    }
+
+    @Override
     @Transactional
     public CommentBanned insertCommentBanned(CommentBanned commentBanned) {
         return saveCommentBanned(commentBanned);
@@ -70,7 +75,19 @@ public class CommentBannedServiceImpl implements CommentBannedService {
     @Override
     @Transactional
     public CommentBanned updateCommentBanned(CommentBanned commentBanned) {
-        return saveCommentBanned(commentBanned);
+        return upCommentBanned(commentBanned);
+    }
+
+    private CommentBanned upCommentBanned(CommentBanned commentBanned) {
+        CommentBanned currentCommentBanned = commentBannedRepository.save(commentBanned);
+        
+        commentBannedHistRepository.saveAndFlush(CommentBannedHist
+                .builder()
+                .bannedSeq(currentCommentBanned.getSeqNo())
+                .usedYn(currentCommentBanned.getUsedYn())
+                .build());
+
+        return currentCommentBanned;
     }
 
     private CommentBanned saveCommentBanned(CommentBanned commentBanned) {

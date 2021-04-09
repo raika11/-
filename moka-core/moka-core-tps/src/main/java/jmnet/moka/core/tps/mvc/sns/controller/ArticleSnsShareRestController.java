@@ -1,14 +1,22 @@
 package jmnet.moka.core.tps.mvc.sns.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.MapBuilder;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.UUIDGenerator;
@@ -21,6 +29,7 @@ import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.sns.SnsDeleteDTO;
 import jmnet.moka.core.common.sns.SnsPublishDTO;
 import jmnet.moka.core.common.sns.SnsTypeCode;
@@ -32,17 +41,28 @@ import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codemgt.repository.CodeMgtRepository;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSaveDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.InstanceArticleSaveDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.InstantArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsSharePK;
 import jmnet.moka.core.tps.mvc.sns.service.ArticleSnsShareService;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
+import jmnet.moka.core.tps.mvc.sns.vo.InstantArticleVO;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -59,6 +79,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.StringUtils;
 
 /**
  * <pre>
@@ -89,6 +110,21 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
 
     @Autowired
     private Environment env;
+
+    @Value("${sns.facebook.token-code}")
+    private String facebookTokenCode;
+
+    @Autowired
+    private CodeMgtRepository codeMgtRepository;
+
+    @Autowired
+    private RestTemplateHelper restTemplateHelper;
+
+    @Value("${sns.facebook.api-url}")
+    private String facebookApiUrl;
+
+    @Value("${sns.facebook.page-id}")
+    private String facebookPageId;
 
     public ArticleSnsShareRestController(ArticleSnsShareService articleSnsShareService, ArticleService articleService, FtpHelper ftpHelper) {
         this.articleSnsShareService = articleSnsShareService;
@@ -540,6 +576,99 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     }
 
     /**
+     * FB Instance Article 등록된 기사 제출
+     *
+     * @return 성공여부
+     * @throws Exception 예외처리
+     */
+    @ApiOperation(value = "TB_FB_INSTANT_ARTICLE_LIST 테이블에 등록된 기사 제출")
+    @GetMapping("/fb-instance-article/sync")
+    public ResponseEntity<?> syncFbIA()
+            throws Exception {
+        // access-token
+        CodeMgt tokenCode = codeMgtRepository
+                .findByDtlCd(facebookTokenCode)
+                .orElseThrow(() -> new NoDataException("Not Found Facebook Token"));
+        // import 상태 체크
+        List<InstantArticleVO> importingCheckList = articleSnsShareService.findFbInstantArticles(InstantArticleSearchDTO
+                .builder()
+                .sourceCode("1,3")
+                .count(5L)
+                .listType("C")
+                .build());
+        for (InstantArticleVO checkItem : importingCheckList) {
+            Map result = getImportStatus(checkItem.getFbStatusId(), tokenCode.getCdNm());
+            String importStatus = result
+                    .get("status")
+                    .toString();
+            if ("SUCCESS".equals(result)) {
+                checkItem.setCallbackMsg(importStatus);
+                checkItem.setFbArtId(((Map) result.get("instant_article"))
+                        .get("id")
+                        .toString());
+            } else if ("FAILED".equals(importStatus)) {
+                checkItem.setCallbackMsg(StringUtils.concat(importStatus, " : ", ((List<Map<String, String>>) result.get("errors"))
+                        .get(0)
+                        .get("message")));
+            }
+            articleSnsShareService.saveFbInstantArticle(checkItem);
+        }
+
+        // Instance Articles 대기 상태 조회
+        List<InstantArticleVO> returnValues = articleSnsShareService.findFbInstantArticles(InstantArticleSearchDTO
+                .builder()
+                .sourceCode("1,3")
+                .count(5L)
+                .listType("S")
+                .build());
+
+        // 게시, 수정 & 삭제
+        for (InstantArticleVO instantArticle : returnValues) {
+            switch (instantArticle.getIud()) {
+                case "I":
+                case "U":
+                    // articleContents Html -> facebook instance articles - htmlSource
+                    String htmlSource = transformArticle(articleService
+                            .findArticleDetailById(instantArticle.getTotalId())
+                            .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data"))));
+                    SnsPublishDTO pubInfo = SnsPublishDTO
+                            .builder()
+                            .tokenCode(tokenCode.getCdNm())
+                            .message(htmlSource)
+                            .build();
+                    // 게시 or 수정요청.
+                    Map result = postInstanceArticle(pubInfo);
+                    result.get("id");
+                    // 게시 결과 저장
+                    articleSnsShareService.saveFbInstantArticle(instantArticle
+                            .toBuilder()
+                            .fbArtId(result
+                                    .get("id")
+                                    .toString())
+                            .build());
+                    break;
+                case "D":
+                    if (!McpString.isNullOrEmpty(instantArticle.getFbArtId())) {
+                        // 삭제 요청.
+                        Map deleteResult = deleteInstantArticle(instantArticle.getFbArtId(), tokenCode.getCdNm());
+                        if (!McpString.isNullOrEmpty(deleteResult.get("success"))) {
+                            instantArticle.setSendDt(new Date());
+                            instantArticle.setCallbackMsg("SUCCESS");
+                        } else {
+                            instantArticle.setSendDt(new Date());
+                            instantArticle.setCallbackMsg("ERROR");
+                        }
+                        articleSnsShareService.saveFbInstantArticle(instantArticle);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
      * FB Instance Article 등록
      *
      * @param instanceArticle 등록할 페이스북 article 정보
@@ -608,5 +737,392 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
         } else {
             return McpString.isNotEmpty(imgUrl) ? imgUrl : pdsUrl + articleBasic.getArtThumb();
         }
+    }
+
+    /**
+     * 아티클 삭제 요청.
+     *
+     * @param facebookArticleId
+     * @param accessToken
+     * @return
+     * @throws Exception
+     */
+    private Map deleteInstantArticle(String facebookArticleId, String accessToken)
+            throws Exception {
+        String instanceArticleUrl = String.format(facebookApiUrl + "/%s", facebookArticleId);
+        // dumpy
+        //        ResponseEntity<String> content = new ResponseEntity<>("{\n" + "  \"success\": true\n" + "}", HttpStatus.OK);
+
+        ResponseEntity<String> content = restTemplateHelper.delete(instanceArticleUrl, MapBuilder
+                .getInstance()
+                .add("access_token", accessToken)
+                .getMultiValueMap());
+
+        String response = content.getBody();
+        return ResourceMapper
+                .getDefaultObjectMapper()
+                .readValue(response, new TypeReference<Map<String, Object>>() {
+                });
+    }
+
+    /**
+     * 임포트 상태 체크.
+     *
+     * @param facebookStatusId
+     * @param accessToken
+     * @return
+     * @throws Exception
+     */
+    private Map getImportStatus(String facebookStatusId, String accessToken)
+            throws Exception {
+        String instanceArticleUrl = String.format(facebookApiUrl + "/%s", facebookStatusId);
+        // dumpy
+        // 성공
+        //        ResponseEntity<String> content = new ResponseEntity<>(
+        //                "{\n" + "  \"html_source\": \"<!doctype html>...\",\n" + "  \"instant_article\": {\n" + "    \"id\": \"1234\",\n"
+        //                        + "    \"html_source\": \"<!doctype html>...\",\n" + "    \"canonical_url\": \"http://...\"\n" + "  },\n"
+        //                        + "  \"status\": \"SUCCESS\",\n" + "  \"id\": \"5678\"\n" + "}", HttpStatus.OK);
+        // 실패
+        //        ResponseEntity<String> content = new ResponseEntity<>(
+        //                "{\n" + "  \"id\": \"1234\",\n" + "  \"status\": \"IN_PROGRESS\",\n" + "  \"errors\": [\n" + "    {\n"
+        //                        + "      \"level\": \"ERROR\",\n"
+        //                        + "      \"message\": \"Could not find the Canonical URL within the document: Specify a valid canonical URL using <link rel=\\\"canonical\\\" and href=\\\"canonical url\\\">\"\n"
+        //                        + "    }\n" + "  ]\n" + "}", HttpStatus.OK);
+        ResponseEntity<String> content = restTemplateHelper.get(instanceArticleUrl, MapBuilder
+                .getInstance()
+                .add("access_token", accessToken)
+                .add("fields", "errors,html_source,instant_article,status")
+                .getMultiValueMap());
+
+        String response = content.getBody();
+        return ResourceMapper
+                .getDefaultObjectMapper()
+                .readValue(response, new TypeReference<Map<String, Object>>() {
+                });
+    }
+
+    /**
+     * 인스턴트 아티클 게시 or 수정 요청.
+     *
+     * @param pubInfo
+     * @return
+     * @throws Exception
+     */
+    private Map postInstanceArticle(SnsPublishDTO pubInfo)
+            throws Exception {
+        String instanceArticleUrl = String.format(facebookApiUrl + "/%s/instant_articles", facebookPageId);
+        // dummy
+        // ResponseEntity<String> content = new ResponseEntity<String>("{ \"id\": 1231231231 }", HttpStatus.OK);
+        ResponseEntity<String> content = restTemplateHelper.post(instanceArticleUrl, MapBuilder
+                .getInstance()
+                .add("access_token", pubInfo.getTokenCode())
+                .add("html_source", pubInfo.getMessage())
+                .add("published", true)
+                .add("development_mode", false)
+                .getMultiValueMap());
+
+        String response = content.getBody();
+        return ResourceMapper
+                .getDefaultObjectMapper()
+                .readValue(response, new TypeReference<Map<String, Object>>() {
+                });
+    }
+
+    private String transformArticle(ArticleDetailVO articleDetailVO) {
+        String iaHtmlTemp = new StringBuilder()
+                .append("<!doctype html>\n")
+                .append("	<html lang=\"ko\" prefix=\"op: http://media.facebook.com/op#\">\n")
+                .append("	<head><meta charset=\"utf-8\"></head>\n")
+                .append("	<body>\n")
+                .append("	<article>\n")
+                .append("	<header></header>\n")
+                .append("	</article>\n")
+                .append("	</body>\n")
+                .append("</html>\n")
+                .toString();
+
+        Document iahtmlDoc = Jsoup.parse(iaHtmlTemp, "", Parser.xmlParser());
+        Element headNode = iahtmlDoc.selectFirst("head");
+        Element articleHeaderNode = iahtmlDoc.selectFirst("header");
+        Element articleNode = iahtmlDoc.selectFirst("article");
+        headNode.appendChild(new Element("link")
+                .attr("rel", "canonical")
+                .attr("href", StringUtils.concat("https://mnews.joins.com/article/", articleDetailVO.getTotalId())));
+        headNode.appendChild(new Element("title").text(articleDetailVO.getMobTitle()));
+
+        // article > header
+        if (!McpString.isNullOrEmpty(articleDetailVO.getMultiLinkMobile())) {
+            articleHeaderNode.appendChild(new Element("figure").appendChild(new Element("img").attr("src", articleDetailVO.getMultiLinkMobile())));
+        }
+        articleHeaderNode.appendChild(new Element("h1").text(articleDetailVO.getMobTitle()));
+        if (!McpString.isNullOrEmpty(articleDetailVO.getArtSubTitle())) {
+            articleHeaderNode.appendChild(new Element("h2").text(articleDetailVO.getArtSubTitle()));
+        }
+        if (articleDetailVO.getCodes() != null && articleDetailVO
+                .getCodes()
+                .size() > 0) {
+            articleHeaderNode.appendChild(new Element("h3")
+                    .classNames(Set.of("op-kicker"))
+                    .text(articleDetailVO
+                            .getCodes()
+                            .get(0)
+                            .getServiceKorName()));
+        }
+        if (articleDetailVO.getReporters() != null && articleDetailVO
+                .getReporters()
+                .size() > 0) {
+            articleHeaderNode.appendChild(new Element("address").text(StringUtils.join(articleDetailVO
+                    .getReporters()
+                    .stream()
+                    .map(r -> r.getRepName())
+                    .collect(Collectors.toList()), ",")));
+        }
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
+        SimpleDateFormat simple = new SimpleDateFormat("yyyy'-'MM'-'dd HH':'mm':'ss");
+        articleHeaderNode.appendChild(new Element("time")
+                .classNames(Set.of("op-published"))
+                .attr("dateTime", dt.format(articleDetailVO.getArtRegDt()))
+                .text(simple.format(articleDetailVO.getArtRegDt())));
+        if (articleDetailVO.getArtModDt() != null) {
+            articleHeaderNode.appendChild(new Element("time")
+                    .classNames(Set.of("op-modified"))
+                    .attr("dateTime", dt.format(articleDetailVO.getArtModDt()))
+                    .text(simple.format(articleDetailVO.getArtModDt())));
+        }
+
+        // article
+        Document htmlDoc = Jsoup.parse(articleDetailVO.getArtContent(), "", Parser.xmlParser());
+        List<Node> targetList = htmlDoc.childNodesCopy();
+        htmlDoc.childNodes();
+        for (Node nNode : targetList) {
+
+            if (nNode instanceof TextNode) {
+                if (articleNode
+                        .childNodes()
+                        .size() > 0 && "p".equals(articleNode
+                        .children()
+                        .last()
+                        .nodeName())) {
+                    articleNode
+                            .children()
+                            .last()
+                            .text(articleNode
+                                    .children()
+                                    .last()
+                                    .text() + ((TextNode) nNode).text());
+                } else {
+                    articleNode.appendChild(new Element("p").text(((TextNode) nNode).text()));
+                }
+            } else if (nNode instanceof Element) {
+                Node transedNode = transformForFBIA(nNode);
+
+                if (transedNode != null) {
+                    if ("#text".equals(transedNode.nodeName())) {
+                        if (articleNode
+                                .childNodes()
+                                .size() > 0 && "p".equals(articleNode
+                                .children()
+                                .last()
+                                .nodeName())) {
+                            articleNode
+                                    .children()
+                                    .last()
+                                    .appendChild(transedNode);
+                        } else {
+                            articleNode.appendChild(new Element("p").text(((TextNode) nNode).text()));
+                        }
+                    } else if (articleNode
+                            .childNodes()
+                            .size() > 0 && "br".equals(articleNode
+                            .children()
+                            .last()
+                            .nodeName())) {
+                        articleNode.appendChild(new Element("p"));
+                    } else if ("div".equals(transedNode.nodeName())) {
+                        for (Node cNode : transedNode.childNodes()) {
+                            articleNode.appendChild(cNode);
+                        }
+                    } else {
+                        articleNode.appendChild(transedNode);
+                    }
+                }
+            }
+        }
+        articleNode.appendChild(new Element("footer").appendChild(new Element("small").text("© 중앙일보")));
+        return iahtmlDoc.html();
+    }
+
+    private Node transformForFBIA(Node node) {
+        Element figureNode = null;
+        Element elNode = (Element) node;
+        String className = node.attr("class");
+
+        if (className.contains("ab_photo")) {
+            // 이미지
+            figureNode = new Element("figure");
+            figureNode.appendChild(elNode.selectFirst("div>img,div>a>img"));
+            Element cNode = elNode.selectFirst("p.caption");
+            if (cNode != null) {
+                figureNode.appendChild(new Element("figcaption").text(cNode.text()));
+            }
+        } else if (className.contains("tag_vod")) {
+            // 동영상
+            figureNode = new Element("figure").classNames(Set.of("op-interactive"));
+            String serviceId = node.attr("data-service");
+            String dataId = node.attr("data-id");
+            String caption = node.attr("data-caption");
+
+            if ("ooyala".equals(serviceId)) {
+                figureNode.appendChild(new Element("iframe")
+                        .attr("width", "480")
+                        .attr("height", "270")
+                        .attr("src", StringUtils.concat("https://oya.joins.com/bc_iframe.html?ec=" + dataId.substring(0, dataId.indexOf("?")))));
+            } else if ("ovp".equals(serviceId)) {
+                figureNode.appendChild(new Element("iframe")
+                        .attr("width", "480")
+                        .attr("height", "270")
+                        .attr("src", StringUtils.concat("https://oya.joins.com/bc_iframe.html?videoId=" + dataId.substring(0, dataId.indexOf("?")))));
+            } else if ("navercast".equals(serviceId) || "kakaotv".equals(serviceId)) {
+                figureNode.appendChild(new Element("iframe")
+                        .attr("width", "480")
+                        .attr("height", "270")
+                        .attr("src", dataId));
+            } else {
+                figureNode.appendChild(new Element("iframe").attr("src", dataId));
+            }
+
+            if (!McpString.isNullOrEmpty(caption)) {
+                figureNode.appendChild(new Element("figcaption").text(caption));
+            }
+        } else if (className.contains("tag_sns")) {
+            // SNS 카드
+            String serviceId = node.attr("data-service");
+            String dataUrl = node.attr("data-url");
+            // string dataType = node.GetAttributeValue("data-type", "");
+            figureNode = new Element("figure").classNames(Set.of("op-interactive"));
+
+            if ("facebook".equals(serviceId)) {
+                Element embedTag = Jsoup.parse(String.format(
+                        "<script async defer src=\"https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v3.2\" ></script><div class=\"fb-post\" data-href=\"%s\" data-width=\"500\" ></div>",
+                        dataUrl), "", Parser.xmlParser());
+                Element iframe = new Element("iframe");
+                embedTag
+                        .children()
+                        .stream()
+                        .forEach(iframe::appendChild);
+                figureNode.appendChild(iframe);
+            } else if ("twitter".equals(serviceId)) {
+                Element embedTag = Jsoup.parse(String.format(
+                        "<script async defer src=\"https://platform.twitter.com/widgets.js\" ></script><blockquote class=\"twitter-tweet\" lang=\"ko\"><a href=\"%s\"></a></blockquote>",
+                        dataUrl), "", Parser.xmlParser());
+                Element iframe = new Element("iframe");
+                embedTag
+                        .children()
+                        .stream()
+                        .forEach(iframe::appendChild);
+                figureNode.appendChild(iframe);
+            } else if ("instagram".equals(serviceId)) {
+                Element embedTag = Jsoup.parse(String.format(
+                        "<blockquote class=\"instagram-media\" data-instgrm-captioned data-instgrm-version=\"4\"><div style=\"padding:16px;\"><a href=\"%s\"></a></div></blockquote><script async defer src=\"https://platform.instagram.com/en_US/embeds.js\" ></script>",
+                        dataUrl), "", Parser.xmlParser());
+                Element iframe = new Element("iframe");
+                embedTag
+                        .children()
+                        .stream()
+                        .forEach(iframe::appendChild);
+                figureNode.appendChild(iframe);
+            } else if ("pinterest".equals(serviceId)) {
+                Element embedTagScript = new Element("script")
+                        .attr("async", "async")
+                        .attr("defer", "defer")
+                        .attr("src", "https://assets.pinterest.com/js/pinit.js");
+                Element embedTagA = new Element("a")
+                        .attr("data-pin-do", "embedPin")
+                        .attr("href", dataUrl);
+                figureNode.appendChild(new Element("iframe")
+                        .appendChild(embedTagScript)
+                        .appendChild(embedTagA));
+            }
+        } else if (className.contains("ab_related_article")) {
+            // 관련기사
+            var articlelinks = elNode.select("a");
+
+            figureNode = new Element("ul")
+                    .classNames(Set.of("op-related-articles"))
+                    .attr("title", "관련기사");
+            for (Element link : articlelinks
+                    .stream()
+                    .limit(3)
+                    .collect(Collectors.toList())) {
+                link.attr("href", link
+                        .attr("href")
+                        .replaceAll("//news", "//mnews"));
+                figureNode
+                        .appendChild(new Element("li"))
+                        .appendChild(link);
+            }
+        } else if (className.contains("ab_map")) {
+            // 지도
+            figureNode = new Element("figure")
+                    .classNames(Set.of("op-interactive"))
+                    .appendChild(new Element("iframe"));
+            figureNode
+                    .selectFirst("iframe")
+                    .appendChild(node);
+        } else if (className.contains("tag_quotation")) {
+            // 인용문
+            figureNode = new Element("blockquote").text(elNode.text());
+        } else if (className.contains("tag_interview")) {
+            // 인터뷰
+            Element qNode = elNode.selectFirst("div.tag_question");
+            Element aNode = elNode.selectFirst("div.tag_answer");
+            figureNode = new Element("p");
+
+            if (qNode != null) {
+                figureNode.appendChild(new Element("b").text(String.format("Q. %s ", qNode.text())));
+            } else if (aNode != null) {
+                figureNode.appendChild(new Element("i").text(String.format("A. %s ", aNode.text())));
+            }
+        } else if (className.contains("tag_photobundle")) {
+            // 이미지 묶음
+            Elements images = elNode.select("img");
+
+            figureNode = new Element("figure").classNames(Set.of("op-slideshow"));
+
+            for (Element img : images) {
+                //                figureNode.appendChild(new Element("<figure></figure>"));
+                figureNode.appendChild(new Element("figure").appendChild(img));
+            }
+        } else if (className.contains("ab_box_article")) {
+            Element boxNode = elNode.selectFirst("div[class*=ab_box_inner]");
+            Element boxContentsNode = boxNode.selectFirst("div[class*=ab_box_content]");
+            Element titleNode = boxNode.selectFirst("div[class*=ab_box_title]");
+
+            // dummy
+            figureNode = new Element("div");
+
+            if (titleNode != null) {
+                figureNode.appendChild(new Element("h2").text(titleNode.text()));
+            }
+
+            for (Node cNode : boxContentsNode.childNodes()) {
+                Node transedNode = transformForFBIA(cNode);
+                if (transedNode != null) {
+                    figureNode.appendChild(transedNode);
+                }
+            }
+        } else if ("font".equals(node.nodeName())) {
+            return new TextNode(elNode.text());
+        } else if ("br".equals(node.nodeName())) {
+            figureNode = elNode;
+        } else if ("dim".equals(className)) {
+            //do nothing
+        } else {
+            if (!McpString.isNullOrEmpty(elNode.text())) {
+                figureNode = new Element("p").text(elNode.text());
+            }
+        }
+
+        return (Node) figureNode;
     }
 }

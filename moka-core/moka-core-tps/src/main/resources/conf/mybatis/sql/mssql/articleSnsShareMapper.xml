@@ -51,5 +51,29 @@
       }
   </select>
 
+  <!-- 페이스북 인스턴트 전송/체크 아티클 대기 리스트 조회 -->
+  <select id="findAllFbInstantArticles" parameterType="InstantArticleSearchDTO"
+    resultType="InstantArticleVO"
+    statementType="CALLABLE">
+    {call __UPA_FB_INSTANT_ARTICLE_SEND_LIST_SEL(
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+        #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+        #{listType, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+  </select>
 
+  <!-- 페이스북 인스턴트 전송/체크 아티클 수정 -->
+  <select id="saveFbInstantArticle" parameterType="InstantArticleVO" resultType="Integer"
+    statementType="CALLABLE">
+    {call __UPA_FB_INSTANT_ARTICLE_SEND_UPD(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+        #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+        #{iud, mode=IN, jdbcType=VARCHAR, javaType=string},
+        #{callbackMsg, mode=IN, jdbcType=VARCHAR, javaType=string},
+        #{fbStatusId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{fbArtId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      )
+      }
+  </select>
 </mapper>

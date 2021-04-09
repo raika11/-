@@ -1,8 +1,11 @@
 package jmnet.moka.core.tps.mvc.sns.mapper;
 
+import java.util.List;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.InstantArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
+import jmnet.moka.core.tps.mvc.sns.vo.InstantArticleVO;
 
 /**
  * <pre>
@@ -20,4 +23,7 @@ public interface ArticleSnsShareMapper extends BaseMapper<ArticleSnsShareItemVO,
 
     int insertFbInstanceArticle(ArticleSnsShareItemVO vo);
 
+    List<InstantArticleVO> findAllFbInstantArticles(InstantArticleSearchDTO search);
+
+    Integer saveFbInstantArticle(InstantArticleVO vo);
 }

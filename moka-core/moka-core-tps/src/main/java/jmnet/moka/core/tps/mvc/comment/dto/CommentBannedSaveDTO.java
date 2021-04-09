@@ -54,7 +54,7 @@ public class CommentBannedSaveDTO implements Serializable {
     @ApiModelProperty("태그구분 - 기타코드")
     @NotNull(message = "{tps.comment-banned.error.notnull.tagDiv}")
     @Size(max = 24, message = "{tps.comment-banned.error.size.tagDiv}")
-    private String tagDiv;
+    private String tagDiv = "F";
 
     /**
      * 태그설명

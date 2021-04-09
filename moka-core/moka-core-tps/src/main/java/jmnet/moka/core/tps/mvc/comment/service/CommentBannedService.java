@@ -30,6 +30,8 @@ public interface CommentBannedService {
 
     Optional<CommentBanned> findAllCommentBannedByTagValue(CommentBannedType tagType, String tagValue);
 
+    Optional<CommentBanned> findAllCommentBannedByTagValueOrderbySeqNoDesc(CommentBannedType tagType, String tagValue);
+
     CommentBanned insertCommentBanned(CommentBanned commentBanned);
 
     CommentBanned updateCommentBanned(CommentBanned commentBanned);

@@ -4,8 +4,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
@@ -14,11 +16,13 @@ import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentDeleteType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentOrderType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.Comment;
+import jmnet.moka.core.tps.mvc.comment.entity.CommentBanned;
 import jmnet.moka.core.tps.mvc.comment.service.CommentBannedService;
 import jmnet.moka.core.tps.mvc.comment.service.CommentService;
 import jmnet.moka.core.tps.mvc.comment.vo.CommentVO;
@@ -129,7 +133,7 @@ public class CommentRestController extends AbstractCommonController {
     public ResponseEntity<?> putComment(
             @ApiParam("댓글 ID") @PathVariable("cmtSeq") @Min(value = 1, message = "{comment.error.pattern.cmtSeq}") Long cmtSeq,
             @ApiParam("댓글 상태 유형") @RequestParam(value = "statusType") CommentStatusType statusType,
-            @ApiParam("삭제 유형, 댓글하나 : CMT,사용자 댓글 모두 : ALL, 사용자 차단과 해당 댓글 삭제 : BNC, 사용자 차단과 해당 댓글 삭제 : BNA")
+            @ApiParam("삭제 유형, 댓글하나 : CMT, 사용자 댓글 모두 : ALL, 사용자 ID차단 및 해당 댓글 삭제 : BNC, 사용자 ID차단 및 해당 댓글 전체 삭제 : BNA")
             @RequestParam(value = "deleteType", required = false) CommentDeleteType deleteType)
             throws InvalidDataException, NoDataException {
 
@@ -150,25 +154,24 @@ public class CommentRestController extends AbstractCommonController {
             }
         }
 
-        /**     CommentStatusType 댓글상태
-         A("A", "노출"),
-         N("N", "관리자삭제"),
-         D("D", "사용자삭제");
-         */
-        System.out.println("======================================================");
+        //차단된 사용자 ID 체크
+        String blockChk = "";
+
+        if (McpString.isNotEmpty(comment)) {
+            if (statusType.equals(CommentStatusType.N)) {
+
+                Optional<CommentBanned> oldCommentBanned =
+                        commentBannedService.findAllCommentBannedByTagValue(CommentBannedType.U, comment.getMemId());
+                if (oldCommentBanned.isPresent()) {
+                    CommentBanned commentBanned = oldCommentBanned.get();
+                    blockChk = "true";
+                }
+            }
+        }
 
         long result = commentService.updateCommentStatus(comment, statusType, deleteType);
         String msg = "";
         if (result > 0) {
-            System.out.println("댓글상태 comment.getStatus()    =" + comment.getStatus());
-
-            System.out.println("statusType.getCode()    =" + statusType.getCode());
-            System.out.println("deleteType.getCode()    =" + deleteType
-                    .getCode()
-                    .toString());
-            System.out.println("deleteType.getName()    =" + deleteType
-                    .getName()
-                    .toString());
 
             /**         deleteType
              CMT("DTCO", "이 댓글만 삭제"),
@@ -179,8 +182,18 @@ public class CommentRestController extends AbstractCommonController {
             if (statusType.equals(CommentStatusType.N)) {
                 switch (deleteType) {
                     case BNA:
+                        if (blockChk.equals("true")) {
+                            msg = msg("tps.comment-banned.id.comment.success.del");
+                        } else {
+                            msg = msg("tps.comment-banned.id.comment.success.block.del");
+                        }
+                        break;
                     case BNC:
-                        msg = msg("tps.comment-banned.success.id");
+                        if (blockChk.equals("true")) {
+                            msg = msg("tps.comment-banned.id.success.del");
+                        } else {
+                            msg = msg("tps.comment-banned.id.success.block.del");
+                        }
                         break;
                     case ALL:
                         msg = msg("tps.comment.success.delete-all");

@@ -183,7 +183,7 @@ public class CommentRestController extends AbstractCommonController {
         }
 
         long result = 0L;
-        result = commentService.updateCommentStatus(comment, statusType, deleteType, blockChk, seqNo);
+        result = commentService.updateCommentStatus(comment, statusType, deleteType, blockChk, seqNo, cmtSeq);
         String msg = "";
         if (result > 0) {
 

@@ -75,19 +75,7 @@ public class CommentBannedServiceImpl implements CommentBannedService {
     @Override
     @Transactional
     public CommentBanned updateCommentBanned(CommentBanned commentBanned) {
-        return upCommentBanned(commentBanned);
-    }
-
-    private CommentBanned upCommentBanned(CommentBanned commentBanned) {
-        CommentBanned currentCommentBanned = commentBannedRepository.save(commentBanned);
-        
-        commentBannedHistRepository.saveAndFlush(CommentBannedHist
-                .builder()
-                .bannedSeq(currentCommentBanned.getSeqNo())
-                .usedYn(currentCommentBanned.getUsedYn())
-                .build());
-
-        return currentCommentBanned;
+        return saveCommentBanned(commentBanned);
     }
 
     private CommentBanned saveCommentBanned(CommentBanned commentBanned) {

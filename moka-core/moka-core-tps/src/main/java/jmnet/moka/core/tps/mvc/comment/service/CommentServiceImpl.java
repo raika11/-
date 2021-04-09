@@ -135,7 +135,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public long updateCommentStatus(Comment comment, CommentStatusType statusType, CommentDeleteType deleteType, String blockChk, Long seqNo) {
+    public long updateCommentStatus(Comment comment, CommentStatusType statusType, CommentDeleteType deleteType, String blockChk, Long seqNo,
+            Long cmtSeq) {
         long result = 0l;
         if (deleteType != null) {
 
@@ -180,7 +181,11 @@ public class CommentServiceImpl implements CommentService {
                     // 처리 할 프로세스 없음
             }
         } else {
-            result = commentRepository.updateStatusByMemberId(comment.getMemId(), statusType);
+            if (McpString.isNotEmpty(cmtSeq)) {
+                result = commentRepository.updateStatusByCmtSeqByMemberId(cmtSeq, comment.getMemId(), statusType);
+            } else {
+                result = commentRepository.updateStatusByMemberId(comment.getMemId(), statusType);
+            }
         }
 
         return result;

@@ -241,9 +241,9 @@
     .showcase_general .card_body + .card_image { padding-left: 0; }
     .showcase_general .headline {font-size:16px;}
     
-    .new_latest .headline {font-size:16px;}
-    .new_latest > .row { margin-top: -20px; }
-    .new_latest .card { padding-top: 20px; padding-bottom: 20px; }
+    .story_list .headline {font-size:16px;}
+    .story_list > .row { margin-top: -20px; }
+    .story_list .card { padding-top: 20px; padding-bottom: 20px; }
     .view_lank > .row { margin-top: -15px; }
     .view_lank .card { padding-top: 15px; padding-bottom: 15px;}
 
@@ -294,7 +294,7 @@
     /* .rank_group2 .card_body {width:calc(100% - 30px);padding-right:0px;}
     .rank_group2 .card_image {display:none;} */
     
-    .new_latest .card_group.row > .card::before {left:10px; width:calc(100% - 20px);}
+    .story_list .card_group.row > .card::before {left:10px; width:calc(100% - 20px);}
 
     /***************************************    catalog     ************************************/
     .catalog_home .swiper-button-prev,
@@ -345,8 +345,8 @@
     .fb_wrap {padding:30px 30px 30px 40px;}
     .fb_wrap .fb_area .title {font-size:18px;}
     
-    .new_latest .headline {font-size:20px;}
-    .new_latest .card_group.row > .card::before {left:18px; width:calc(100% - 36px);}
+    .story_list .headline {font-size:20px;}
+    .story_list .card_group.row > .card::before {left:18px; width:calc(100% - 36px);}
 
 
     /***************************************    unique     ************************************/

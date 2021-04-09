@@ -13,10 +13,15 @@ $(document).ready( function() {
 	// 반응형 미리보기 버튼
 	$(".btn_view").click(function() {
 		var view_width = $(this).attr('data-rel');
-		if (view_width > 1){
-			$(this).parents('.sample_wrap').attr('style', "width:" + view_width + "px;");
-		} else {
-			$(this).parents('.sample_wrap').removeAttr("style");
-		}
+		$(this).parents('.sample_wrap').attr('style', `width: ${view_width}`);
+		// if (view_width = 0){
+			// $(this).parents('.sample_wrap').attr('style', "width:" + view_width + "px;");
+			
+			// console.log("t1 = " + t1 + ", t2 = " + t2);
+			// console.log(`t1 = ${t1}, t2 = ${t2}`);
+			// $(this).parents('.sample_wrap').removeAttr("style");
+		// } else {
+			
+		// }
 	});
 });

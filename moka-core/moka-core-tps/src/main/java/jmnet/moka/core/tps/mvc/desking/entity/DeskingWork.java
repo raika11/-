@@ -228,6 +228,12 @@ public class DeskingWork implements Serializable {
     private Integer thumbHeight = 0;
 
     /**
+     * 배경색상
+     */
+    @Column(name = "BG_COLOR")
+    private String bgColor;
+
+    /**
      * 생성일시
      */
     @Column(name = "REG_DT")

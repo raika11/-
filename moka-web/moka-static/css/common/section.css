@@ -157,7 +157,6 @@
 
     .e_written {width: 100vw; margin-left:-20px; margin-bottom:20px;}
     .e_written .fb_wrap { align-items: center; }
-    .e_written .title + .flex { padding-top: 8px; }
     .view_lank .headline {font-size:14px;}
 
 
@@ -351,6 +350,7 @@
 
 
     /***************************************    unique     ************************************/
+    .showcase_photo { padding-top: 30px; padding-bottom: 30px; }
     .card_in_txt .card_body .headline { font-size:28px; }
     .card_in_txt .card_body .description { max-width:48%; font-size:14px; line-height:22px; letter-spacing:-0.4px; }
     .unique_trend .title_wrap .title { font-size:20px; line-height:24px; letter-spacing:-0.4px; }

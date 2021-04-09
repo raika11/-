@@ -113,7 +113,7 @@ const CommentBlockModal = (props) => {
                 callback: ({ header, body }) => {
                     const { success, message, resultType } = header;
 
-                    if (!success) {
+                    if (success) {
                         if (resultType === 400) {
                             messageBox.confirm(
                                 message,
@@ -145,8 +145,9 @@ const CommentBlockModal = (props) => {
                             );
                         } else {
                             messageBox.alert(message, () => {});
-                            return;
                         }
+                    } else {
+                        messageBox.alert(message, () => {});
                     }
 
                     if (success === true && body) {

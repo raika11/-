@@ -9,7 +9,7 @@ const NewsLetterList = ({ match }) => {
     return (
         <>
             <Search />
-            {/* <AgGrid match={match} /> */}
+            <AgGrid match={match} />
         </>
     );
 };

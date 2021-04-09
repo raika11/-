@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.sns.service;
 
+import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.sns.SnsDeleteDTO;
@@ -7,9 +8,11 @@ import jmnet.moka.core.common.sns.SnsPublishDTO;
 import jmnet.moka.core.common.sns.SnsTypeCode;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.InstantArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsSharePK;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
+import jmnet.moka.core.tps.mvc.sns.vo.InstantArticleVO;
 import org.springframework.data.domain.Page;
 
 /**
@@ -110,5 +113,19 @@ public interface ArticleSnsShareService {
     String reserveDeleteSnsArticleSnsShare(SnsDeleteDTO snsDelete)
             throws Exception;
 
+    /**
+     * Facebook Instance Articles 조회.
+     *
+     * @param search 조회 조건
+     * @return 검색 결과
+     */
+    List<InstantArticleVO> findFbInstantArticles(InstantArticleSearchDTO search);
 
+    /**
+     * Facebook Instance Article 저장.
+     *
+     * @param instanceArticle
+     * @return
+     */
+    Integer saveFbInstantArticle(InstantArticleVO instanceArticle);
 }

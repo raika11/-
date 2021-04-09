@@ -20,11 +20,13 @@ import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.InstantArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsSharePK;
 import jmnet.moka.core.tps.mvc.sns.mapper.ArticleSnsShareMapper;
 import jmnet.moka.core.tps.mvc.sns.repository.ArticleSnsShareRepository;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
+import jmnet.moka.core.tps.mvc.sns.vo.InstantArticleVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -129,6 +131,16 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
     }
 
     @Override
+    public List<InstantArticleVO> findFbInstantArticles(InstantArticleSearchDTO search) {
+        return articleSnsShareMapper.findAllFbInstantArticles(search);
+    }
+
+    @Override
+    public Integer saveFbInstantArticle(InstantArticleVO instantArticle) {
+        return articleSnsShareMapper.saveFbInstantArticle(instantArticle);
+    }
+
+    @Override
     public ArticleSnsShare updateArticleSnsShare(ArticleSnsShare entity) {
         return articleSnsShareRepository.save(entity);
     }
@@ -136,7 +148,8 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
     @Override
     public ArticleSnsShare updateArticleSnsShareStatus(ArticleSnsShare entity)
             throws NoDataException {
-        ArticleSnsShare share = findArticleSnsShareById(entity.getId()).orElseThrow(() -> new NoDataException());
+        ArticleSnsShare share = findArticleSnsShareById(entity.getId())
+                .orElseThrow(() -> new NoDataException());
 
         share.setSnsArtId(entity.getSnsArtId());
         share.setSnsArtSts(entity.getSnsArtSts());
@@ -192,7 +205,8 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
             pubInfo.setTokenCode(tokenCode.getCdNm());
         }
 
-        Map<String, Object> result = getSnsAipService(pubInfo.getSnsType()).publish(pubInfo);
+        Map<String, Object> result = getSnsAipService(pubInfo.getSnsType())
+                .publish(pubInfo);
 
 
 
@@ -233,7 +247,8 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
         }
 
         // 삭제
-        Map<String, Object> result = getSnsAipService(snsDelete.getSnsType()).delete(delInfo);
+        Map<String, Object> result = getSnsAipService(snsDelete.getSnsType())
+                .delete(delInfo);
 
         if (McpString.isNotEmpty(result.getOrDefault("id", ""))) {
             share = updateArticleSnsShareStatus(ArticleSnsShare

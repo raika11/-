@@ -294,7 +294,6 @@
     /* .rank_group2 .card_body {width:calc(100% - 30px);padding-right:0px;}
     .rank_group2 .card_image {display:none;} */
     
-    .story_list .card_group.row > .card::before {left:10px; width:calc(100% - 20px);}
 
     /***************************************    catalog     ************************************/
     .catalog_home .swiper-button-prev,
@@ -346,7 +345,6 @@
     .fb_wrap .fb_area .title {font-size:18px;}
     
     .story_list .headline {font-size:20px;}
-    .story_list .card_group.row > .card::before {left:18px; width:calc(100% - 36px);}
 
 
     /***************************************    unique     ************************************/

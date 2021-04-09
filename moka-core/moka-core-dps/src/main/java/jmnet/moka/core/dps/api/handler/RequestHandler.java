@@ -16,6 +16,8 @@ public interface RequestHandler {
     String CONTEXT_PARAM = "$param";
     String CONTEXT_MERGER = "$merger";
 
+    String PARAM_MAP = "PARAM_MAP";
+
     ApiResult processRequest(ApiContext apiContext);
 
     void processAsyncRequest(AsyncRequestContext asyncRequestContext);

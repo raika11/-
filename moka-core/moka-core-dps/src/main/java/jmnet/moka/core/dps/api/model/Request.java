@@ -1,5 +1,7 @@
 package jmnet.moka.core.dps.api.model;
 
+import java.util.List;
+
 public interface Request {
     String TYPE_DB = "db";
     String TYPE_URL = "url";
@@ -16,4 +18,8 @@ public interface Request {
     String getResultName();
 
     Class<?> getHandlerClass();
+
+    default List<String> getOutParamList() {
+        return null;
+    }
 }

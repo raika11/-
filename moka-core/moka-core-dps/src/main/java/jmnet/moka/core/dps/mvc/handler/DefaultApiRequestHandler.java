@@ -22,19 +22,20 @@ import jmnet.moka.core.dps.api.ext.AsyncRequestContext;
 import jmnet.moka.core.dps.api.ext.AsyncRequestTask;
 import jmnet.moka.core.dps.api.ext.AsyncRequestTaskManager;
 import jmnet.moka.core.dps.api.handler.DbRequestHandler;
-import jmnet.moka.core.dps.api.model.DbRequest;
-import jmnet.moka.core.dps.mvc.forward.Forward;
-import jmnet.moka.core.dps.mvc.forward.ForwardHandler;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
 import jmnet.moka.core.dps.api.handler.RequestHandler;
 import jmnet.moka.core.dps.api.handler.SampleRequestHandler;
 import jmnet.moka.core.dps.api.handler.UrlRequestHandler;
 import jmnet.moka.core.dps.api.model.Api;
+import jmnet.moka.core.dps.api.model.DbRequest;
 import jmnet.moka.core.dps.api.model.DefaultApiConfig;
+import jmnet.moka.core.dps.api.model.ModuleRequest;
 import jmnet.moka.core.dps.api.model.Request;
 import jmnet.moka.core.dps.db.session.DpsSqlSessionFactory;
 import jmnet.moka.core.dps.excepton.ApiException;
 import jmnet.moka.core.dps.excepton.ParameterException;
+import jmnet.moka.core.dps.mvc.forward.Forward;
+import jmnet.moka.core.dps.mvc.forward.ForwardHandler;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,8 +94,7 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
                     // 빈등록방법1: RequestHandler registerBeanDefinition
                     GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
                     beanDefinition.setBeanClass(requestHandlerBeanType);
-                    appContext.registerBeanDefinition(requestHandlerBeanType.getName(),
-                            beanDefinition);
+                    appContext.registerBeanDefinition(requestHandlerBeanType.getName(), beanDefinition);
 
                     // 빈등록방법2: RequestHandler registerBean
                     //            appContext.registerBean(requestHandlerBeanType.getSimpleName(), requestHandlerBeanType,
@@ -103,18 +103,14 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
                     //                    });
 
                     if (requestHandlerBeanType.equals(UrlRequestHandler.class)) {
-                        HttpProxy httpProxy =
-                                (HttpProxy) appContext.getBean(HttpProxyConfiguration.HTTP_PROXY);
+                        HttpProxy httpProxy = (HttpProxy) appContext.getBean(HttpProxyConfiguration.HTTP_PROXY);
                         requestHandler = appContext.getBean(UrlRequestHandler.class, httpProxy);
                     } else if (requestHandlerBeanType.equals(ModuleRequestHandler.class)) {
-                        requestHandler = (RequestHandler) appContext
-                                .getBean(ModuleRequestHandler.class, this.appContext);
+                        requestHandler = (RequestHandler) appContext.getBean(ModuleRequestHandler.class, this.appContext);
                     } else if (requestHandlerBeanType.equals(SampleRequestHandler.class)) {
-                        requestHandler = (RequestHandler) appContext.getBean(requestHandlerBeanType,
-                                configBasePath, sampleJsonPath);
+                        requestHandler = (RequestHandler) appContext.getBean(requestHandlerBeanType, configBasePath, sampleJsonPath);
                     } else {
-                        requestHandler =
-                                (RequestHandler) appContext.getBean(requestHandlerBeanType);
+                        requestHandler = (RequestHandler) appContext.getBean(requestHandlerBeanType);
                     }
                     this.requestHandlerMap.put(requestHandlerBeanType, requestHandler);
                 }
@@ -133,8 +129,7 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
 
 
     /**
-     * @see ApiRequestHandler#processApi(jmnet.moka.core.dps.api.ApiContext,
-     *      boolean)
+     * @see ApiRequestHandler#processApi(jmnet.moka.core.dps.api.ApiContext, boolean)
      */
     public ApiResult processApi(ApiContext apiContext, boolean asyncOnly)
             throws ParameterException, ClassNotFoundException {
@@ -156,8 +151,8 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
                 sqlSession.rollback();
             }
             logger.error("request exception : {}", e.getMessage(), e);
-            return ApiResult.createApiErrorResult(String.format("%s %s %d", apiContext.getApiPath(),
-                    apiContext.getApiId(), apiContext.getCurrentRequestIndex()), e);
+            return ApiResult.createApiErrorResult(
+                    String.format("%s %s %d", apiContext.getApiPath(), apiContext.getApiId(), apiContext.getCurrentRequestIndex()), e);
         } finally {
             if (api.hasDbRequest()) {
                 sqlSession.close();
@@ -178,14 +173,15 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
                 Map<String, Object> paramMap = null;
                 List<String> outParamList = null;
                 // procedure의 OUT 파라미터 처리를 위해 PARAM_MAP 제거 및 임시보관
-                if ( request instanceof DbRequest ) {
-                    DbRequest dbRequest = (DbRequest) request;
-                    if ( dbRequest.getDmlType().equals(DbRequest.DML_TYPE_PROCEDURE)) {
+                if (request instanceof DbRequest || request instanceof ModuleRequest) {
+                    if (((Map<String, Object>) result).containsKey(DbRequestHandler.PARAM_MAP)) {
                         paramMap = (Map<String, Object>) result.remove(DbRequestHandler.PARAM_MAP);
-                        outParamList = dbRequest.getOutParamList();
+                        outParamList = request.getOutParamList();
                     }
                 }
-                if (request.getResultName().equals(ApiResult.MAIN_DATA)) {
+                if (request
+                        .getResultName()
+                        .equals(ApiResult.MAIN_DATA)) {
                     if (allResult == null) {
                         allResult = result;
                     } else {
@@ -203,16 +199,15 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
                     allResult.addApiResult(request.getResultName(), result);
                 }
                 // procedure의 OUT 파라미터 값 처리
-                if ( paramMap != null && outParamList != null) {
-                    for ( String outParam : outParamList) {
+                if (paramMap != null && outParamList != null) {
+                    for (String outParam : outParamList) {
                         Object outValue = paramMap.get(outParam);
-                        allResult.addApiResult(outParam,ApiResult.createApiResult(outValue));
+                        allResult.addApiResult(outParam, ApiResult.createApiResult(outValue));
                     }
                 }
             } else if (request.getAsync()) {
                 AsyncRequestContext asyncRequestContext = new AsyncRequestContext(apiContext);
-                AsyncRequestTask task = new AsyncRequestTask(
-                        getRequestHandler(request.getHandlerClass()), asyncRequestContext);
+                AsyncRequestTask task = new AsyncRequestTask(getRequestHandler(request.getHandlerClass()), asyncRequestContext);
                 this.asyncRequestTaskManager.processAsyncRequest(task);
             } else {
                 // onlyAsync == true && request.getAsync() == true 인 경우
@@ -223,14 +218,12 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
     }
 
     /**
-     * @see ApiRequestHandler#apiRequest(java.lang.String,
-     *      java.lang.String, java.util.Map)
+     * @see ApiRequestHandler#apiRequest(java.lang.String, java.lang.String, java.util.Map)
      */
     public ApiResult apiRequest(String apiPath, String apiId, Map<String, String> parameterMap) {
         try {
             ApiResolver apiResolver = new ApiResolver(apiPath, apiId);
-            ApiContext apiContext = new ApiContext(this.apiRequestHelper, this.apiParameterChecker,
-                    apiResolver, parameterMap);
+            ApiContext apiContext = new ApiContext(this.apiRequestHelper, this.apiParameterChecker, apiResolver, parameterMap);
             ApiResult apiResult = processApi(apiContext);
             return apiResult;
         } catch (ClassNotFoundException | ParameterException e) {
@@ -240,8 +233,7 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
     }
 
     /**
-     * @see ApiRequestHandler#apiRequest(javax.servlet.http.HttpServletRequest,
-     *      javax.servlet.http.HttpServletResponse)
+     * @see ApiRequestHandler#apiRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     public ResponseEntity<?> apiRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -252,47 +244,58 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
             if (this.apiRequestHelper.apiRequestExists(apiResolver) == false) {
                 Forward forward = this.forwardHandler.getForward(request);
                 if (forward != null) {
-                    apiResolver = new ApiResolver(forward.getApiPath(),forward.getApiId());
+                    apiResolver = new ApiResolver(forward.getApiPath(), forward.getApiId());
                     forward.rebuildHttpParameter(request, httpParamMap);
                 } else {
                     return this.getApiNotFoundResponse(request, apiResolver);
                 }
             }
 
-            ApiContext apiContext = new ApiContext(this.apiRequestHelper, this.apiParameterChecker,
-                    apiResolver, HttpHelper.getParamMap(request));
+            ApiContext apiContext = new ApiContext(this.apiRequestHelper, this.apiParameterChecker, apiResolver, HttpHelper.getParamMap(request));
 
             // ACL, Cross Origin 적용
             String referer = request.getHeader("Referer");
-            String accessControllAllowOrigin =  null;
-            if ( !isPermittedIp(request,apiContext) && referer == null) {
-                ApiResult errorResult = ApiResult.createApiErrorResult(new ApiException("Access Denied",
-                        apiContext.getApiPath(), apiContext.getApiId()));
-                ResponseEntity<?> responseEntity = ResponseEntity.badRequest()
-                                                                 .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
-                                                                 .body(errorResult);
+            String accessControllAllowOrigin = null;
+            if (!isPermittedIp(request, apiContext) && referer == null) {
+                ApiResult errorResult =
+                        ApiResult.createApiErrorResult(new ApiException("Access Denied", apiContext.getApiPath(), apiContext.getApiId()));
+                ResponseEntity<?> responseEntity = ResponseEntity
+                        .badRequest()
+                        .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
+                        .body(errorResult);
             } else {
-                accessControllAllowOrigin =  getAccessControllAllowOrigin(referer,apiContext);
+                accessControllAllowOrigin = getAccessControllAllowOrigin(referer, apiContext);
             }
 
             HttpHeaders responseHeaders = new HttpHeaders();
-            if (accessControllAllowOrigin != null ) {
+            if (accessControllAllowOrigin != null) {
                 responseHeaders.set("Access-Control-Allow-Origin", accessControllAllowOrigin);
             }
 
             ApiResult apiResult = processApi(apiContext);
             ResponseEntity<?> responseEntity = null;
-            if ( apiContext.getApi().getContentType() != null) {
-                responseHeaders.set("Content-Type",apiContext.getApi().getContentType());
-                responseEntity = ResponseEntity.ok().headers(responseHeaders).body(apiResult.get(ApiResult.MAIN_DATA));
+            if (apiContext
+                    .getApi()
+                    .getContentType() != null) {
+                responseHeaders.set("Content-Type", apiContext
+                        .getApi()
+                        .getContentType());
+                responseEntity = ResponseEntity
+                        .ok()
+                        .headers(responseHeaders)
+                        .body(apiResult.get(ApiResult.MAIN_DATA));
             } else {
-                responseEntity = ResponseEntity.ok().headers(responseHeaders).body(apiResult);
+                responseEntity = ResponseEntity
+                        .ok()
+                        .headers(responseHeaders)
+                        .body(apiResult);
             }
             return responseEntity;
         } catch (ParameterException | ClassNotFoundException e) {
             logger.error("api Request:{}", e.toString(), e);
             ApiResult errorResult = ApiResult.createApiErrorResult(e);
-            ResponseEntity<?> responseEntity = ResponseEntity.badRequest()
+            ResponseEntity<?> responseEntity = ResponseEntity
+                    .badRequest()
                     .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
                     .body(errorResult);
             return responseEntity;
@@ -306,66 +309,66 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
         String apiPath = apiContext.getApiPath();
         DefaultApiConfig defaultApiConfig = this.apiRequestHelper.getDefaultApiConfig(apiPath);
         if (defaultApiConfig != null && defaultApiConfig.isAllow(apiId, ip) == false) {
-           return false;
+            return false;
         }
         return true;
     }
 
     protected String getAccessControllAllowOrigin(String referer, ApiContext apiContext) {
-        if ( referer != null) {
+        if (referer != null) {
             try {
                 URL refererUrl = new URL(referer);
-                String host = refererUrl.getHost() + (refererUrl.getPort() == 80 ? "" : ":"+refererUrl.getPort());
+                String host = refererUrl.getHost() + (refererUrl.getPort() == 80 ? "" : ":" + refererUrl.getPort());
                 String apiPath = apiContext.getApiPath();
                 DefaultApiConfig defaultApiConfig = this.apiRequestHelper.getDefaultApiConfig(apiPath);
-                if (defaultApiConfig != null && defaultApiConfig.getRefererSet() !=  null) {
+                if (defaultApiConfig != null && defaultApiConfig.getRefererSet() != null) {
                     Set<String> refererSet = defaultApiConfig.getRefererSet();
                     if (refererSet.contains(host)) {
                         return refererUrl.getProtocol() + "://" + host;
                     } else {
-                        return apiContext.getApi().getCors();
+                        return apiContext
+                                .getApi()
+                                .getCors();
                     }
                 }
             } catch (MalformedURLException e) {
                 // referer 오류
-                logger.warn("Referer is malformed URL : {} ",referer);
+                logger.warn("Referer is malformed URL : {} ", referer);
             }
         }
         return null;
     }
 
-    protected ResponseEntity<?> getApiNotFoundResponse(HttpServletRequest request,
-            ApiResolver apiResolver) {
+    protected ResponseEntity<?> getApiNotFoundResponse(HttpServletRequest request, ApiResolver apiResolver) {
         // apiPath는 존재하지만 apiId를 찾을 수 없는 경우
-        ApiResult errorResult = ApiResult.createApiErrorResult(
-                new ApiException("Api Not Found", apiResolver.getPath(), apiResolver.getId()));
-        ResponseEntity<?> responseEntity = ResponseEntity.badRequest()
+        ApiResult errorResult = ApiResult.createApiErrorResult(new ApiException("Api Not Found", apiResolver.getPath(), apiResolver.getId()));
+        ResponseEntity<?> responseEntity = ResponseEntity
+                .badRequest()
                 .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
                 .body(errorResult);
         return responseEntity;
     }
 
-    protected ResponseEntity<?> getMethodNotAllowedResponse(HttpServletRequest request,
-            ApiResolver apiResolver) {
+    protected ResponseEntity<?> getMethodNotAllowedResponse(HttpServletRequest request, ApiResolver apiResolver) {
         // api는 존재하지만 method가 일치하지 않을 경우
-        ApiResult errorResult = ApiResult.createApiErrorResult(
-                new ApiException("Method Not Allowed", apiResolver.getPath(), apiResolver.getId()));
-        ResponseEntity<?> responseEntity = ResponseEntity.badRequest()
-                                                         .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
-                                                         .body(errorResult);
+        ApiResult errorResult = ApiResult.createApiErrorResult(new ApiException("Method Not Allowed", apiResolver.getPath(), apiResolver.getId()));
+        ResponseEntity<?> responseEntity = ResponseEntity
+                .badRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
+                .body(errorResult);
         return responseEntity;
     }
 
     @Override
-    public List<Map<String, Object>> purge(HttpServletRequest request,
-            HttpServletResponse response) throws CacheException {
+    public List<Map<String, Object>> purge(HttpServletRequest request, HttpServletResponse response)
+            throws CacheException {
         // api 결과를 캐시하지 않아 처리할 것이 없음
         return null;
     }
 
     @Override
-    public List<Map<String, Object>> purgeStartsWith(HttpServletRequest request,
-            HttpServletResponse response) throws CacheException {
+    public List<Map<String, Object>> purgeStartsWith(HttpServletRequest request, HttpServletResponse response)
+            throws CacheException {
         // api 결과를 캐시하지 않아 처리할 것이 없음
         return null;
     }
@@ -373,8 +376,7 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
     @Override
     public void apiPeriodicRequest(String path, String id) {
         try {
-            ApiContext apiContext = new ApiContext(this.apiRequestHelper, this.apiParameterChecker,
-                    new ApiResolver(path, id), EMPTY_PARAM_MAP);
+            ApiContext apiContext = new ApiContext(this.apiRequestHelper, this.apiParameterChecker, new ApiResolver(path, id), EMPTY_PARAM_MAP);
             processApi(apiContext);
         } catch (ClassNotFoundException | ParameterException e) {
             logger.error("apiPeriodicRequest exception : {}", e, e);

@@ -402,7 +402,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 /***                                             card                                             ***/
 /****************************************************************************************************/
 /* .card {position:relative;padding-top:16px;padding-bottom:16px;} */
-
+.card_image, .card_body{align-self:center;}
 
 /****************************************************************************************************/
 /***                                          list_group                                          ***/

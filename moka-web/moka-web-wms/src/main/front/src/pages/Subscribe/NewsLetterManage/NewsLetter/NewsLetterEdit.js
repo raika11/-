@@ -13,9 +13,9 @@ import NewsLetterLayoutModal from './modals/NewLetterLayoutModal';
  * 뉴스레터 관리 > 뉴스레터 상품 편집
  */
 const NewsLetterEdit = ({ match }) => {
-    const params = useParams();
-    console.log(params);
+    const { letterSeq } = useParams();
     const [temp, setTemp] = useState({
+        state: 'T',
         sendType: 'A',
         pkg: '',
         reporter: '',
@@ -39,10 +39,10 @@ const NewsLetterEdit = ({ match }) => {
     return (
         <MokaCard
             className="w-100"
-            title="뉴스레터 상품 등록"
+            title={`뉴스레터 상품 ${letterSeq ? '수정' : '등록'}`}
             footer
             footerButtons={[
-                {
+                letterSeq && {
                     text: '미리보기',
                     variant: 'outline-neutral',
                     className: 'mr-1',
@@ -61,9 +61,61 @@ const NewsLetterEdit = ({ match }) => {
                     text: '취소',
                     variant: 'negative',
                 },
-            ]}
+            ].filter(Boolean)}
         >
             <Form>
+                {letterSeq && (
+                    <>
+                        <Form.Row className="mb-2 align-items-center">
+                            <MokaInputLabel as="none" label="상태" />
+                            <Col xs={2} className="p-0 pr-2">
+                                <MokaInput
+                                    as="radio"
+                                    value="A"
+                                    name="state"
+                                    id="active"
+                                    inputProps={{ label: '활성', custom: true, checked: temp.state === 'A' ? true : false }}
+                                    onChange={handleChangeValue}
+                                />
+                            </Col>
+                            <Col xs={2} className="p-0 pr-2">
+                                <MokaInput
+                                    as="radio"
+                                    value="T"
+                                    name="state"
+                                    id="temp-storage"
+                                    inputProps={{ label: '임시 저장', custom: true, checked: temp.state === 'T' ? true : false }}
+                                    disabled={temp.state !== 'T'}
+                                    onChange={handleChangeValue}
+                                />
+                            </Col>
+                            <Col xs={2} className="p-0 pr-2">
+                                <MokaInput
+                                    as="radio"
+                                    value="S"
+                                    name="state"
+                                    id="stop"
+                                    inputProps={{ label: '중지', custom: true, checked: temp.state === 'S' ? true : false }}
+                                    onChange={handleChangeValue}
+                                />
+                            </Col>
+                            <Col xs={2} className="p-0 pr-2">
+                                <MokaInput
+                                    as="radio"
+                                    value="E"
+                                    name="state"
+                                    id="end"
+                                    inputProps={{ label: '종료', custom: true, checked: temp.state === 'E' ? true : false }}
+                                    onChange={handleChangeValue}
+                                />
+                            </Col>
+                            <Col xs={3} className="p-0 d-flex justify-content-end">
+                                <MokaInputLabel label="A/B TEST 여부" disabled />
+                            </Col>
+                        </Form.Row>
+                        <hr className="divider" />
+                    </>
+                )}
                 {/* 기본정보 설정 */}
                 <p className="mb-2">※ 기본정보 설정</p>
                 <Form.Row className="mb-2 align-items-center">

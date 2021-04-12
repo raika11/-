@@ -11,6 +11,7 @@ import { BannedConfirmModal } from '@pages/CommentManage/CommentModal';
 const CommentActionModal = (props) => {
     const { show, onHide, modalUsage } = props;
     const { deleteType } = modalUsage;
+    // console.log(modalUsage);
 
     const [confirmModalState, setConfirmModalState] = useState(false);
     const dispatch = useDispatch();
@@ -31,9 +32,9 @@ const CommentActionModal = (props) => {
      *   사용자 차단과 해당 댓글 삭제 : BNC
      *   사용자 차단과 해당 댓글 삭제 : BNA
      */
-    const handleDeleteComment = (type) => {
-        const paramsStatusType = type === 'restore' ? 'A' : 'N';
-        const paramsDeleteType = type === 'restore' ? '' : type;
+    const handleClickSave = () => {
+        const paramsStatusType = deleteType === 'restore' ? 'A' : 'N';
+        const paramsDeleteType = deleteType === 'restore' ? null : deleteType;
         dispatch(
             deleteComment({
                 cmtSeq: modalUsage.cmtSeq,
@@ -42,8 +43,9 @@ const CommentActionModal = (props) => {
                     deleteType: paramsDeleteType,
                 },
                 callback: ({ header: { success, message }, body }) => {
-                    if (success === true) {
+                    if (success) {
                         toast.success(message);
+                        onHide();
                         dispatch(getCommentList());
                     } else {
                         const { totalCnt, list } = body;
@@ -60,11 +62,6 @@ const CommentActionModal = (props) => {
         );
     };
 
-    const handleClickSave = () => {
-        handleDeleteComment(deleteType);
-        onHide();
-    };
-
     return (
         <MokaModal
             size="sm"
@@ -79,13 +76,13 @@ const CommentActionModal = (props) => {
             draggable
         >
             <p className="mb-0">{alertMessage[deleteType]}</p>
-            <BannedConfirmModal
+            {/* <BannedConfirmModal
                 modalUsage={modalUsage}
                 show={confirmModalState}
                 onHide={() => {
                     setConfirmModalState(false);
                 }}
-            />
+            /> */}
         </MokaModal>
     );
 };

@@ -67,7 +67,7 @@ public interface CommentService {
      * @param blockChk   차단여부
      * @return 변경 여부
      */
-    long updateCommentStatus(Comment comment, CommentStatusType statusType, CommentDeleteType deleteType, String blockChk, Long seqNo);
+    long updateCommentStatus(Comment comment, CommentStatusType statusType, CommentDeleteType deleteType, String blockChk, Long seqNo, Long cmtSeq);
 
     /**
      * 사용중인 댓글 URL 전체 목록 조회

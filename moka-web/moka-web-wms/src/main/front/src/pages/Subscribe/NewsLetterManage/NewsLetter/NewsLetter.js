@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@/components';
 import NewsLetterList from './NewsLetterList';
+import NewsLetterEdit from './NewsLetterEdit';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 목록
@@ -26,9 +27,9 @@ const NewsLetter = ({ match, displayName }) => {
                     </MokaCard>
                 </Col>
 
-                {/* <Col xs={5}>
-                    <ABTab match={match} />
-                </Col> */}
+                <Col xs={5}>
+                    <NewsLetterEdit match={match} />
+                </Col>
             </Row>
         </Container>
     );

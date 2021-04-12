@@ -4,6 +4,7 @@
 
 package jmnet.moka.web.dps.module;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
+import jmnet.moka.core.dps.api.handler.RequestHandler;
 import jmnet.moka.core.dps.api.handler.module.ModuleInterface;
 import jmnet.moka.core.dps.db.session.DpsSqlSessionFactory;
 import jmnet.moka.core.dps.excepton.ApiException;
@@ -39,6 +41,7 @@ public class CommentModule implements ModuleInterface {
     private ApiRequestHandler apiRequestHandler;
     private ApiRequestHelper apiRequestHelper;
     private ModuleRequestHandler moduleRequestHandler;
+    private static final List<Object> EMPTY_LIST = new ArrayList<>();
 
     public CommentModule(ModuleRequestHandler moduleRequestHandler, ApiRequestHandler apiRequestHandler, ApiRequestHelper apiRequestHelper) {
         this.apiRequestHandler = apiRequestHandler;
@@ -61,37 +64,40 @@ public class CommentModule implements ModuleInterface {
      */
     public Object insert(ApiContext apiContext)
             throws ApiException {
-        Map<String, Object> returnMap = new HashMap<>();
+        long startTime = System.currentTimeMillis();
+        Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
+        ApiResult apiResult = ApiResult.createApiResult(startTime, System.currentTimeMillis(), EMPTY_LIST, true, null);
         try {
-            Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
+            apiResult.put(RequestHandler.PARAM_MAP, checkedParamMap);
 
             // 차단정보체크.
             Banned banned = this.checkBanned(apiContext);
             if (banned.isBanned()) {
-                returnMap.put("SUCCESS", !banned.isBanned());
-                returnMap.put("CODE", banned.getType());
-                returnMap.put("TARGET", banned.getValue());
-                return returnMap;
+                checkedParamMap.put("_SUCCESS", !banned.isBanned());
+                checkedParamMap.put("_CODE", banned.getType());
+                checkedParamMap.put("_MESSAGE", banned.getValue());
+                return apiResult;
             }
 
             // id의 정보체크
             if (!this.checkId(apiContext)) {
-                returnMap.put("SUCCESS", false);
-                returnMap.put("TARGET", "해당 정보가 존재하지 않습니다.");
-                return returnMap;
+                checkedParamMap.put("_SUCCESS", false);
+                checkedParamMap.put("_MESSAGE", "해당 정보가 존재하지 않습니다.");
+                return apiResult;
             }
 
             // 등록
             List<Map> result = this.call(apiContext, "dps.comment.insert", checkedParamMap);
-            returnMap.put("SUCCESS", true);
-            returnMap.put("RESULT", result);
-            return returnMap;
+
+            checkedParamMap.put("_SUCCESS", true);
+            apiResult.put(ApiResult.MAIN_DATA, result);
+            return apiResult;
 
         } catch (Exception e) {
             log.error("module exception : {} {} {}", apiContext.getApiPath(), apiContext.getApiId(), e.getMessage(), e);
-            returnMap.put("SUCCESS", false);
-            returnMap.put("TARGET", e.getMessage());
-            return returnMap;
+            checkedParamMap.put("_SUCCESS", false);
+            checkedParamMap.put("_MESSAGE", e.getMessage());
+            return apiResult;
         }
     }
 
@@ -105,32 +111,36 @@ public class CommentModule implements ModuleInterface {
      */
     public Object delete(ApiContext apiContext)
             throws ApiException {
-        Map<String, Object> returnMap = new HashMap<>();
+        long startTime = System.currentTimeMillis();
+        Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
+        ApiResult apiResult = ApiResult.createApiResult(startTime, System.currentTimeMillis(), EMPTY_LIST, true, null);
         try {
-            Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
-            List<Map> result = this.call(apiContext, "dps.comment.delete", checkedParamMap);
-            returnMap.put("SUCCESS", false);
+            apiResult.put(RequestHandler.PARAM_MAP, checkedParamMap);
 
+            List<Map> result = this.call(apiContext, "dps.comment.delete", checkedParamMap);
+
+            checkedParamMap.put("_SUCCESS", false);
             if (result.size() > 0) {
                 int intVal = Integer.parseInt(result
                         .get(0)
                         .get("RESULT")
                         .toString());
                 if (intVal == 0) {
-                    returnMap.put("SUCCESS", false);
+                    checkedParamMap.put("_SUCCESS", false);
                 } else if (intVal == 1) {
-                    returnMap.put("SUCCESS", true);
+                    checkedParamMap.put("_SUCCESS", true);
+                    //                    apiResult.put(ApiResult.MAIN_DATA, result);
                 } else if (intVal == 2) {
-                    returnMap.put("SUCCESS", false);
-                    returnMap.put("CODE", "Unauthorized");
+                    checkedParamMap.put("_SUCCESS", false);
+                    apiResult.put("_MESSAGE", "Unauthorized");
                 }
             }
-            return returnMap;
+            return apiResult;
         } catch (Exception e) {
             log.error("module exception : {} {} {}", apiContext.getApiPath(), apiContext.getApiId(), e.getMessage(), e);
-            returnMap.put("SUCCESS", false);
-            returnMap.put("TARGET", e.getMessage());
-            return returnMap;
+            checkedParamMap.put("_SUCCESS", false);
+            checkedParamMap.put("_MESSAGE", e.getMessage());
+            return apiResult;
         }
     }
 
@@ -143,10 +153,12 @@ public class CommentModule implements ModuleInterface {
      */
     public Object insertVote(ApiContext apiContext)
             throws ApiException {
-        Map<String, Object> returnMap = new HashMap<>();
-
+        long startTime = System.currentTimeMillis();
+        Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
+        ApiResult apiResult = ApiResult.createApiResult(startTime, System.currentTimeMillis(), EMPTY_LIST, true, null);
         try {
-            Map<String, Object> checkedParamMap = apiContext.getCheckedParamMap();
+            apiResult.put(RequestHandler.PARAM_MAP, checkedParamMap);
+
             if (!checkedParamMap.containsKey("member_memSeq")) {
                 checkedParamMap.put("member_memSeq", null);
                 checkedParamMap.put("member_loginType", null);
@@ -159,65 +171,22 @@ public class CommentModule implements ModuleInterface {
                         .get("RESULT")
                         .toString());
                 if (intVal == 0) {
-                    returnMap.put("SUCCESS", false);
+                    checkedParamMap.put("_SUCCESS", false);
                 } else if (intVal == 1) {
-                    returnMap.put("SUCCESS", true);
+                    checkedParamMap.put("_SUCCESS", true);
                 } else if (intVal == 2) {
-                    returnMap.put("SUCCESS", false);
-                    returnMap.put("CODE", "Duplicated");
+                    checkedParamMap.put("_SUCCESS", false);
+                    checkedParamMap.put("_MESSAGE", "Duplicated");
                 }
             }
-            return returnMap;
+            return apiResult;
         } catch (Exception e) {
             log.error("module exception : {} {} {}", apiContext.getApiPath(), apiContext.getApiId(), e.getMessage(), e);
-            returnMap.put("SUCCESS", false);
-            returnMap.put("TARGET", e.getMessage());
-            return returnMap;
+            checkedParamMap.put("_SUCCESS", false);
+            checkedParamMap.put("_MESSAGE", e.getMessage());
+            return apiResult;
         }
     }
-
-    //    /**
-    //     * totalId, repSeq, epsdSeq중 하나만 세팅되야 함.
-    //     *
-    //     * @param checkedParamMap 파라미터정보
-    //     * @return 셋다 세팅되어 있으면  false
-    //     */
-    //    private boolean checkId(Map<String, Object> checkedParamMap) {
-    //        int checkCnt = 0;
-    //
-    //        Integer totalId = 0;
-    //        if (checkedParamMap.containsKey("totalId") && checkedParamMap.get("totalId") != null) {
-    //            totalId = Integer.parseInt(checkedParamMap
-    //                    .get("totalId")
-    //                    .toString());
-    //            if (totalId > 0) {
-    //                checkCnt++;
-    //            }
-    //        }
-    //        Integer repSeq = 0;
-    //        if (checkedParamMap.containsKey("repSeq") && checkedParamMap.get("repSeq") != null) {
-    //            repSeq = Integer.parseInt(checkedParamMap
-    //                    .get("repSeq")
-    //                    .toString());
-    //            if (repSeq > 0) {
-    //                checkCnt++;
-    //            }
-    //        }
-    //        Integer epsdSeq = 0;
-    //        if (checkedParamMap.containsKey("epsdSeq") && checkedParamMap.get("epsdSeq") != null) {
-    //            epsdSeq = Integer.parseInt(checkedParamMap
-    //                    .get("epsdSeq")
-    //                    .toString());
-    //            if (epsdSeq > 0) {
-    //                checkCnt++;
-    //            }
-    //        }
-    //
-    //        if (checkCnt > 1) {
-    //            return false;
-    //        }
-    //        return true;
-    //    }
 
     /**
      * id의 정보체크

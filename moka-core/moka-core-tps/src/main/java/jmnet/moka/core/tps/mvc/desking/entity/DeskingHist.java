@@ -245,6 +245,12 @@ public class DeskingHist implements Serializable {
     private Integer thumbHeight = 0;
 
     /**
+     * 배경색상
+     */
+    @Column(name = "BG_COLOR")
+    private String bgColor;
+
+    /**
      * 화면편집생성일시 : wms_desking.deskingDt == wms_desking_hist.deskingDt(편집시간)
      */
     @Column(name = "DESKING_DT")

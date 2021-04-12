@@ -390,7 +390,7 @@ public class ApiParser {
                 if (McpString.isNullOrEmpty(textContent) == false) {
                     textContent = textContent.trim();
                 }
-                api.addRequest(new ModuleRequest(type, textContent, methodName, async, resultName));
+                api.addRequest(new ModuleRequest(type, textContent, methodName, async, resultName, outParam));
             } else if (type.equals(Request.TYPE_API_CALL)) {
                 api.addRequest(new ApiCallRequest(type, async, resultName, apiPath, apiId));
             } else if (type.equals(Request.TYPE_SAMPLE)) {

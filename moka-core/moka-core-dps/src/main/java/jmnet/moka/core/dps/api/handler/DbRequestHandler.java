@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class DbRequestHandler implements RequestHandler {
     public final static Logger logger = LoggerFactory.getLogger(DbRequestHandler.class);
-    public final static String PARAM_MAP = "PARAM_MAP";
+
     @Autowired
     private DpsSqlSessionFactory sessionFactory;
 
@@ -67,7 +67,7 @@ public class DbRequestHandler implements RequestHandler {
             String setNames = dbRequest.getSetNames();
             if (McpString.isNotEmpty(setNames)) {
                 String[] setNamesArray = setNames.split(",");
-                if ( setNamesArray.length == 1) { // set이 하나일 경우 전체가 결과임
+                if (setNamesArray.length == 1) { // set이 하나일 경우 전체가 결과임
                     apiResult = ApiResult.createApiResult(startTime, endTime, resultList, true, null);
                 } else {
                     for (int i = 0; i < setNamesArray.length; i++) {
@@ -79,9 +79,11 @@ public class DbRequestHandler implements RequestHandler {
                             }
                         } else {
                             if (resultList.size() > 0) {
-                                apiResult.addApiResult(setNamesArray[i], ApiResult.createApiResult(startTime, endTime, resultList.get(i), true, null));
+                                apiResult.addApiResult(setNamesArray[i],
+                                        ApiResult.createApiResult(startTime, endTime, resultList.get(i), true, null));
                             } else {
-                                apiResult.addApiResult(setNamesArray[i], ApiResult.createApiResult(startTime, endTime, new ArrayList<>(), true, null));
+                                apiResult.addApiResult(setNamesArray[i],
+                                        ApiResult.createApiResult(startTime, endTime, new ArrayList<>(), true, null));
                             }
                         }
                     }

@@ -17,6 +17,7 @@ import jmnet.moka.core.tms.mvc.DefaultMergeHandlerMapping;
 import jmnet.moka.core.tms.mvc.DefaultMergeViewResolver;
 import jmnet.moka.core.tms.mvc.HandlerAndView;
 import jmnet.moka.core.tms.mvc.HttpParamFactory;
+import jmnet.moka.core.tms.mvc.abtest.AbTestResolver;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.domain.DpsDomainResolver;
 import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
@@ -63,40 +64,31 @@ public class TmsAutoConfiguration {
     public static final Logger logger = LoggerFactory.getLogger(TmsAutoConfiguration.class);
     public static final long ITEM_EXPIRE_TIME = 10 * 1000;
     public static final long RESERVED_EXPIRE_TIME = 10 * 1000;
-
-    @Value("${tms.merge.handlerAndView.list}")
-    private String[] handlerAndViewArray;
-
-    @Value("${tms.interceptor.enable}")
-    private boolean tmsInterceptorEnable;
-
-    @Value("${tms.item.api.host}")
-    private String itemApiHost;
-
-    @Value("${tms.item.api.path}")
-    private String itemApiPath;
-
-    @Value("${tms.default.api.host}")
-    private String defaultApiHost;
-
-    @Value("${tms.default.api.path}")
-    private String defaultApiPath;
-
-    @Value("${tms.default.api.hostPath.use}")
-    private boolean defaultApiHostUse;
-
     @Value("${tms.item.expire.time}")
     protected String itemExpireTimeStr;
-
     @Value("${tms.reserved.expire.time}")
     protected String reservedExpireTimeStr;
-
+    @Value("${tms.merge.handlerAndView.list}")
+    private String[] handlerAndViewArray;
+    @Value("${tms.interceptor.enable}")
+    private boolean tmsInterceptorEnable;
+    @Value("${tms.item.api.host}")
+    private String itemApiHost;
+    @Value("${tms.item.api.path}")
+    private String itemApiPath;
+    @Value("${tms.default.api.host}")
+    private String defaultApiHost;
+    @Value("${tms.default.api.path}")
+    private String defaultApiPath;
+    @Value("${tms.default.api.hostPath.use}")
+    private boolean defaultApiHostUse;
     @Value("${tms.template.loader.cache}")
     private boolean templateLoaderCache;
 
     private GenericApplicationContext appContext;
 
     private ApiHttpProxyFactory apiHttpProxyFactory;
+    private Contact contact = new Contact("중앙일보 Moka TMS", "http://joongang.co.kr", "mater@joongang.co.kr");
 
     @Autowired
     public TmsAutoConfiguration(GenericApplicationContext appContext, ApiHttpProxyFactory apiHttpProxyFactory) {
@@ -160,7 +152,7 @@ public class TmsAutoConfiguration {
     @Bean(name = "CdnRedirector")
     public CdnRedirector cdnRedirector() {
         HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
-        CdnRedirector cdnRedirector = new CdnRedirector( this.appContext, httpProxyDataLoader);
+        CdnRedirector cdnRedirector = new CdnRedirector(this.appContext, httpProxyDataLoader);
         return cdnRedirector;
     }
 
@@ -177,12 +169,13 @@ public class TmsAutoConfiguration {
     @Scope("prototype")
     @ConditionalOnMissingBean
     public AbstractTemplateLoader templateLoader(String domainId) {
-        CacheManager cacheManager = (CacheManager)appContext.getBean("cacheManager");
+        CacheManager cacheManager = (CacheManager) appContext.getBean("cacheManager");
         AbstractTemplateLoader templateLoader = null;
         try {
             HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
             long itemExpireTime = TimeHumanizer.parseLong(this.itemExpireTimeStr, ITEM_EXPIRE_TIME);
-            templateLoader = new DpsTemplateLoader(appContext, domainId, httpProxyDataLoader, cacheManager, templateLoaderCache, false, itemExpireTime);
+            templateLoader =
+                    new DpsTemplateLoader(appContext, domainId, httpProxyDataLoader, cacheManager, templateLoaderCache, false, itemExpireTime);
         } catch (Exception e) {
             logger.warn("TemplateLoader Creation failed: {}", e.getMessage());
         }
@@ -261,6 +254,7 @@ public class TmsAutoConfiguration {
 
     /**
      * 접속 디바이스 유형을 탐지하기 위한 Bean
+     *
      * @return LiteDeviceResolver
      */
     @Bean(name = "deviceResolver")
@@ -268,7 +262,14 @@ public class TmsAutoConfiguration {
         return new LiteDeviceResolver();
     }
 
-    private Contact contact = new Contact("중앙일보 Moka TMS", "http://joongang.co.kr", "mater@joongang.co.kr");
+    /**
+     * AB Test 정보를 유지하기 위한 Bean
+     * @return AbTestResolver
+     */
+    @Bean(name = "abTestResolver")
+    public AbTestResolver abTestResolver() {
+        return new AbTestResolver(this.appContext);
+    }
 
     @Bean
     public Docket tmsApi() {

@@ -137,6 +137,9 @@ public class DeskingWorkDTO implements Serializable {
     @Builder.Default
     private Integer thumbHeight = 0;
 
+    @ApiModelProperty("배경색상")
+    private String bgColor;
+
     @ApiModelProperty("생성일시")
     @DTODateTimeFormat
     private Date regDt;

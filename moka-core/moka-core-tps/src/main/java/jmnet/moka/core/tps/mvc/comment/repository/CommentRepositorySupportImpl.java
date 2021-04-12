@@ -52,4 +52,19 @@ public class CommentRepositorySupportImpl extends TpsQueryDslRepositorySupport i
                 .set(qComment.status, statusType)
                 .execute();
     }
+
+    @Transactional
+    @Override
+    public long updateStatusByCmtSeqByMemberId(Long cmtSeq, String memId, CommentStatusType statusType) {
+        QComment qComment = QComment.comment;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder
+                .and(qComment.cmtSeq.eq(cmtSeq))
+                .and(qComment.memId.eq(memId));
+        return update(qComment)
+                .where(builder)
+                .set(qComment.status, statusType)
+                .execute();
+    }
 }

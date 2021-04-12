@@ -25,6 +25,7 @@ import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DatasetItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
+import jmnet.moka.core.tms.mvc.abtest.AbTest;
 import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
 import jmnet.moka.core.tms.template.loader.DpsWorkTemplateLoader;
 import org.json.simple.JSONObject;
@@ -56,7 +57,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
 
     @Override
     public boolean hasPagingElement() {
-        TpTemplateRoot tpTemplateRoot = this.getTpTemplateRoot();
+        TpTemplateRoot tpTemplateRoot = this.getTpTemplateRoot(null);
         if (tpTemplateRoot != null) {
             return tpTemplateRoot.hasPagingElement();
         } else {
@@ -67,7 +68,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
 
     @Override
     public boolean hasArticleToken() {
-        TpTemplateRoot tpTemplateRoot = this.getTpTemplateRoot();
+        TpTemplateRoot tpTemplateRoot = this.getTpTemplateRoot(null);
         if (tpTemplateRoot != null) {
             return tpTemplateRoot.hasArticleToken();
         } else {
@@ -78,7 +79,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
 
     @Override
     public boolean hasParamToken() {
-        TpTemplateRoot tpTemplateRoot = this.getTpTemplateRoot();
+        TpTemplateRoot tpTemplateRoot = this.getTpTemplateRoot(null);
         if (tpTemplateRoot != null) {
             return tpTemplateRoot.hasParamToken();
         } else {
@@ -89,7 +90,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
 
     @Override
     public boolean hasPageToken() {
-        TpTemplateRoot tpTemplateRoot = this.getTpTemplateRoot();
+        TpTemplateRoot tpTemplateRoot = this.getTpTemplateRoot(null);
         if (tpTemplateRoot != null) {
             return tpTemplateRoot.hasPageToken();
         } else {
@@ -98,10 +99,17 @@ public class CpTemplateRoot extends MokaTemplateRoot {
         }
     }
 
-    private TpTemplateRoot getTpTemplateRoot() {
+    private TpTemplateRoot getTpTemplateRoot(MergeContext context) {
         TpTemplateRoot tpTemplateRoot = null;
         try {
-            tpTemplateRoot = (TpTemplateRoot) templateLoader.getParsedTemplate(MokaConstants.ITEM_TEMPLATE, templateId);
+            String effectiveTemplateId = templateId;
+            if (context != null && context.has(MokaConstants.MERGE_CONTEXT_ABTEST)) { // ABTest에 템플릿정보가 있으면 templateId 변경
+                AbTest abTest = (AbTest) context.get(MokaConstants.MERGE_CONTEXT_ABTEST);
+                if ( abTest.hasTemplate()) {
+                    effectiveTemplateId = abTest.getTemplateId();
+                }
+            }
+            tpTemplateRoot = (TpTemplateRoot) templateLoader.getParsedTemplate(MokaConstants.ITEM_TEMPLATE, effectiveTemplateId);
         } catch (TemplateParseException | TemplateLoadException e) {
             logger.error("Component's Template Load Fail:{} {}", this.item.get(ItemConstants.COMPONENT_ID),
                     this.item.get(ItemConstants.COMPONENT_TEMPLATE_ID), e);
@@ -116,9 +124,15 @@ public class CpTemplateRoot extends MokaTemplateRoot {
         logger.trace("Merge entered : {} {}", this.item.getItemType(), this.item.getItemId());
         String componentDataType = this.item.getString(ItemConstants.COMPONENT_DATA_TYPE);
         if (componentDataType != null && componentDataType.equals(ItemConstants.CP_DATA_TYPE_NONE) == false) {
+            String datasetId = this.item.getString(ItemConstants.COMPONENT_DATASET_ID);
+            if (context.has(MokaConstants.MERGE_CONTEXT_ABTEST)) { // AB테스트에 dataset 정보가 있으면 datasetId 변경
+                AbTest abTest = (AbTest) context.get(MokaConstants.MERGE_CONTEXT_ABTEST);
+                if ( abTest.hasDataset()) {
+                    datasetId = abTest.getDatasetId();
+                }
+            }
             // 컴포넌트에 설정된 파라미터를 가져온다.
-            DatasetItem datasetItem =
-                    (DatasetItem) merger.getItem(MokaConstants.ITEM_DATASET, this.item.getString(ItemConstants.COMPONENT_DATASET_ID));
+            DatasetItem datasetItem = (DatasetItem) merger.getItem(MokaConstants.ITEM_DATASET, datasetId);
             boolean datasetAutoCreateYn = datasetItem.getBoolYN(ItemConstants.DATASET_AUTO_CREATE_YN);
             HttpParamMap httpParamMap = (HttpParamMap) context.get(Constants.PARAM);
             Map<String, Object> datasetParam = new HashMap<String, Object>(4);
@@ -209,8 +223,16 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             HashMap<String, JSONResult> dataMap = (HashMap<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
 
             JSONResult jsonResult = null;
-            if (dataMap != null) {
-                jsonResult = dataMap.get(KeyResolver.makeDataId(this.getItemType(), this.getId()));
+            if (dataMap != null ) {
+                // AB테스트에 데이터셋이 설정되지 않은 경우만 dataMap에서 조회한다.
+                if (context.has(MokaConstants.MERGE_CONTEXT_ABTEST)) {
+                    AbTest abTest = (AbTest) context.get(MokaConstants.MERGE_CONTEXT_ABTEST);
+                    if ( !abTest.hasDataset()) {
+                        jsonResult = dataMap.get(KeyResolver.makeDataId(this.getItemType(), this.getId()));
+                    }
+                } else {
+                    jsonResult = dataMap.get(KeyResolver.makeDataId(this.getItemType(), this.getId()));
+                }
             }
             if (jsonResult == null) {
                 try {
@@ -223,7 +245,9 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             }
             // 데이터를 참조할 수 있도록 _RESULT에 추가
             context.set(DEFAULT_DATA_NAME, jsonResult);
-            context.set(DEFAULT_LOOP_DATA_SIZE,jsonResult.getDataList().size());
+            context.set(DEFAULT_LOOP_DATA_SIZE, jsonResult
+                    .getDataList()
+                    .size());
             rowDataContext.set(Constants.CURRENT_DATA_ID, this.item.getItemType() + this.item.getItemId());
             // loop 커스텀태그 없이(혹은 결과가 1건인 경우) 첫번째 데이터를 사용하는 경우를 위해 첫 row를 context에
             rowDataContext.set(Constants.LOOP_INDEX, 0);
@@ -263,7 +287,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             return;
         }
 
-        TemplateRoot tpTemplateRoot = this.getTpTemplateRoot();
+        TemplateRoot tpTemplateRoot = this.getTpTemplateRoot(context);
         /* mte:tp를 거치지 않고 바로 TpTemplateRoot를 처리하므로 wrapping을 처리한다. */
         wrapItemStart(merger, context, sb);
 

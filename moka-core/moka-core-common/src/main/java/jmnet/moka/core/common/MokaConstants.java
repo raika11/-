@@ -106,6 +106,8 @@ public class MokaConstants {
     public static final String MERGE_CONTEXT_BODY = "body";
     public static final String MERGE_CONTEXT_REG_ID = "regId";
     public static final String MERGE_CONTEXT_EDITION_SEQ = "editionSeq";
+    public static final String MERGE_CONTEXT_ABTEST = "abTest";
+    public static final String MERGE_CONTEXT_ABTEST_PREVIEW = "abTestPreview";
 
     /* Parameter & Component Paging */
     public static final String PARAM_PAGE = Constants.PARAM_PAGE;

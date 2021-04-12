@@ -40,6 +40,8 @@ import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
+import jmnet.moka.core.tms.mvc.abtest.AbTest;
+import jmnet.moka.core.tms.mvc.abtest.AbTestResolver;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +97,11 @@ public class CommandController {
     @Qualifier("domainTemplateMerger")
     @Autowired
     private MokaDomainTemplateMerger domainTemplateMerger;
+
+
+    @Qualifier("abTestResolver")
+    @Autowired
+    private AbTestResolver abTestResolver;
 
     @Value("${tms.merge.save.page.path}")
     private String savePagePath;
@@ -407,8 +414,6 @@ public class CommandController {
         }
     }
 
-
-
     @ApiOperation(value = "아이템 정보 조회", nickname = "itemInfo")
     @RequestMapping(method = RequestMethod.GET, path = "/command/item", produces = "application/json")
     @ApiImplicitParams({
@@ -427,6 +432,37 @@ public class CommandController {
             return responseException(e);
         }
     }
+
+    @ApiOperation(value = "AB테스트 정보 추가", nickname = "abTestAdd", notes="예제)url=/abtest,domain=2000,component=128,template=677,dataset=76")
+    @RequestMapping(method = RequestMethod.GET, path = "/command/abTestAdd", produces = "application/json")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "테스트 Id", required = true, dataType = "string", paramType = "query", defaultValue = ""),
+            @ApiImplicitParam(name = "domainId", value = "도메인 Id", required = true, dataType = "string", paramType = "query", defaultValue = ""),
+            @ApiImplicitParam(name = "componentId", value = "컴포넌트 Id", required = true, dataType = "string", paramType = "query", defaultValue = ""),
+            @ApiImplicitParam(name = "templateId", value = "템플릿 Id", required = false, dataType = "string", paramType = "query", defaultValue = ""),
+            @ApiImplicitParam(name = "datasetId", value = "데이터셋 Id", required = false, dataType = "string", paramType = "query", defaultValue = "")
+    })
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = String.class), @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> _abTestAdd(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String id = request.getParameter("id");
+            String domainId = request.getParameter("domainId");
+            String componentId = request.getParameter("componentId");
+            String templateId = request.getParameter("templateId");
+            String datasetId = request.getParameter("datasetId");
+            AbTest abTest = new AbTest();
+            abTest.setId(id);
+            abTest.setDomainId(domainId);
+            abTest.setComponentId(componentId);
+            abTest.setTemplateId(templateId);
+            abTest.setDatasetId(datasetId);
+            this.abTestResolver.addAbTest(abTest);
+            return new ResponseEntity<>(new ResultDTO<Map<String,AbTest>>(abTestResolver.getTestMap()), HttpStatus.OK);
+        } catch (Exception e) {
+            return responseException(e);
+        }
+    }
+
 
     @ApiOperation(value = "log level변경", nickname = "changeLogLevel")
     @RequestMapping(method = RequestMethod.GET, path = "/command/logLevel", produces = "application/json")

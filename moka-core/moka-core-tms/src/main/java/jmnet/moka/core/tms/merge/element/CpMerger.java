@@ -1,17 +1,21 @@
 package jmnet.moka.core.tms.merge.element;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
+import jmnet.moka.core.tms.mvc.HttpParamMap;
+import jmnet.moka.core.tms.mvc.abtest.AbTest;
 import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +32,10 @@ import org.slf4j.LoggerFactory;
 public class CpMerger extends MokaAbstractElementMerger {
 
     private static final Logger logger = LoggerFactory.getLogger(CpMerger.class);
+    private static final String ABTEST_START = "\n<abTestStart jnt=\"{0}\" cpId=\"{1}\"></abTestStart>\n";
+    private static final String ABTEST_END = "\n<abTestEnd jnt=\"{0}\" cpId=\"{1}\"></abTestEnd>\n";
+    private static final String ABTEST_TEMPLATE_START = "\n<template cpId=\"{0}\">\n";
+    private static final String ABTEST_TEMPLATE_END = "\n</template>\n";
 
     public CpMerger(TemplateMerger<MergeItem> templateMerger)
             throws IOException {
@@ -113,7 +121,39 @@ public class CpMerger extends MokaAbstractElementMerger {
             if (isWrapItem) {
                 startWrapItem(element, indent, cpSb);
             }
-            templateRoot.merge(templateMerger, childContext, cpSb);
+            // AB 테스트 여부 확인
+            AbTest abTest =
+                    this.abTestResolver.getAbTest(((MokaTemplateMerger) this.templateMerger).getDomainId(), element.getAttribute(Constants.ATTR_ID));
+            if (abTest == null) {
+                templateRoot.merge(templateMerger, childContext, cpSb);
+            } else {
+                String abTestPreview = (String) context.get(MokaConstants.MERGE_CONTEXT_ABTEST_PREVIEW);
+                // TODO 성능을 위해 제거 필요
+                if ( abTestPreview == null) { // http 파라메터에서도 확인한다.
+                    HttpParamMap httpParamMap = (HttpParamMap)context.get(MokaConstants.MERGE_CONTEXT_PARAM);
+                    if ( httpParamMap.containsKey(MokaConstants.MERGE_CONTEXT_ABTEST_PREVIEW)) {
+                        abTestPreview = httpParamMap.get(MokaConstants.MERGE_CONTEXT_ABTEST_PREVIEW);
+                    }
+                }
+                if (McpString.isEmpty(abTestPreview)) {
+                    cpSb.append(MessageFormat.format(ABTEST_START, abTest.getId(), abTest.getComponentId()));
+                }
+                if (McpString.isEmpty(abTestPreview) || abTestPreview.equals("A")) { // preview가 아니거나 A이면 표시
+                    templateRoot.merge(templateMerger, childContext, cpSb);
+                }
+                if (McpString.isEmpty(abTestPreview)) {
+                    cpSb.append(MessageFormat.format(ABTEST_TEMPLATE_START, abTest.getId()));
+                }
+                // B안 표시시 테스트정보로 Rendering
+                childContext.set(MokaConstants.MERGE_CONTEXT_ABTEST, abTest);
+                if (McpString.isEmpty(abTestPreview) || abTestPreview.equals("B")) {
+                    templateRoot.merge(templateMerger, childContext, cpSb);
+                }
+                if (McpString.isEmpty(abTestPreview)) {
+                    cpSb.append(ABTEST_TEMPLATE_END);
+                    cpSb.append(MessageFormat.format(ABTEST_END, abTest.getId(), abTest.getComponentId()));
+                }
+            }
             if (isWrapItem) {
                 endWrapItem(element, indent, cpSb);
             }

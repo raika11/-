@@ -17,6 +17,9 @@ export const getIssueList = createAction(GET_ISSUE_LIST, ({ search, callback }) 
 export const [GET_ISSUE_LIST_GROUP_BY_ORDNO] = createRequestActionTypes('issue/GET_ISSUE_LIST_GROUP_BY_ORDNO');
 export const getIssueListGroupByOrdno = createAction(GET_ISSUE_LIST_GROUP_BY_ORDNO, ({ search, callback }) => ({ search, callback }));
 
+export const CHANGE_ISSUE_SEARCH_OPTIONS = 'issue/CHANGE_SEARCH_OPTIONS';
+export const changeIssueSearchOptions = createAction(CHANGE_ISSUE_SEARCH_OPTIONS);
+
 /**
  * 이슈 목록 조회 (Modal)
  * @desc getServiceCodeList === true이면 서비스코드 목록 조회 => 서비스 코드 검색조건 (모든 코드)에 포함

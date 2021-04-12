@@ -9,6 +9,18 @@ import * as codeAct from '@store/code/codeAction';
 import { initialState as codeInitialState } from '@store/code';
 import { finishLoading, startLoading } from '@store/loading';
 import commonUtil from '@utils/commonUtil';
+import produce from 'immer';
+import { initialState } from '@store/issue/issueReducer';
+
+const CATE_DIV = {
+    SEARCH_KEYWORD: 'K',
+    REPORTER: 'R',
+    SECTION: 'S',
+    DIGITAL_SPECIAL: 'D',
+    OVP: 'O',
+    CATEGORY: 'C',
+    PACKAGE: 'P',
+};
 
 /**
  * 이슈 목록 조회
@@ -35,7 +47,7 @@ const toIssueListData = (list) => {
             const reporters = repList.split(',').map((info) => info.split('|')[1]);
             const reporterLength = reporters.length;
             if (reporters.length > 1) {
-                reporter = `${reporters[1]} 외 ${reporterLength - 1}명`;
+                reporter = `${reporters[0]} 외 ${reporterLength - 1}명`;
             } else {
                 reporter = reporters;
             }
@@ -50,9 +62,9 @@ function* getIssueList({ type, payload }) {
     yield put(startLoading(type));
 
     try {
-        const startDt = payload.startDt && payload.startDt.isValid() ? moment(payload.startDt).format(DB_DATEFORMAT) : null;
-        const endDt = payload.endDt && payload.endDt.isValid() ? moment(payload.endDt).format(DB_DATEFORMAT) : null;
-        const search = { ...payload, startDt, endDt };
+        const startDt = payload.search.startDt && payload.search.startDt.isValid() ? moment(payload.search.startDt).format(DB_DATEFORMAT) : null;
+        const endDt = payload.search.endDt && payload.search.endDt.isValid() ? moment(payload.search.endDt).format(DB_DATEFORMAT) : null;
+        const search = { ...payload.search, startDt, endDt };
 
         const response = yield call(api.getIssueList, { search });
         if (response.data.header.success) {
@@ -68,6 +80,95 @@ function* getIssueList({ type, payload }) {
     yield put(finishLoading(type));
 }
 
+const getKeyword = (keywords, type) => {
+    let defaultKeyword = initialState.initialPkgKeyword;
+    const selectKeywords = keywords.filter((keyword) => keyword.catDiv === type);
+    const isUsed = selectKeywords.length > 0;
+    let keyword = selectKeywords[0];
+
+    if (type === CATE_DIV.REPORTER) {
+        defaultKeyword = { ...defaultKeyword, reporter: { ordNo: 1, reporterId: null } };
+        const reporter = selectKeywords.map((selectKeyword) => ({
+            ordNo: selectKeyword.ordno,
+            reporterId: selectKeyword.repMaster,
+        }));
+
+        keyword = { ...keyword, reporter };
+    }
+
+    return {
+        isUsed,
+        keyword: isUsed ? keyword : defaultKeyword,
+    };
+};
+
+const toIssueData = (response) => {
+    const { pkgTitle, pkgDesc, pkgDiv, episView, packageKeywords, seasonNo } = response;
+
+    const search = getKeyword(packageKeywords, CATE_DIV.SEARCH_KEYWORD);
+    const reporter = getKeyword(packageKeywords, CATE_DIV.REPORTER);
+    const section = getKeyword(packageKeywords, CATE_DIV.SECTION);
+    const digitalSpecial = getKeyword(packageKeywords, CATE_DIV.DIGITAL_SPECIAL);
+    const ovp = getKeyword(packageKeywords, CATE_DIV.OVP);
+    const category = getKeyword(packageKeywords, CATE_DIV.CATEGORY);
+    const pkg = getKeyword(packageKeywords, CATE_DIV.PACKAGE);
+    let seasons = [
+        { checked: false, value: '' },
+        { checked: false, value: '' },
+        { checked: false, value: '' },
+    ];
+    if (!commonUtil.isEmpty(seasonNo)) {
+        seasonNo.split(',').forEach((season, index) => {
+            let checked = false;
+            let value = '';
+            if (season !== '') {
+                checked = true;
+                value = season;
+            }
+            seasons = produce(seasons, (draft) => {
+                draft[index].checked = checked;
+                draft[index].value = value;
+            });
+        });
+    }
+
+    console.log(seasons);
+
+    /*console.log('searchKeywords', searchKeywords);
+    console.log('reporterKeywords', reporterKeywords);
+    console.log('sectionKeywords', sectionKeywords);
+    console.log('digitalSpecialKeywords', digitalSpecialKeywords);
+    console.log('ovpKeywords', ovpKeywords);
+    console.log('categoryKeywords', categoryKeywords);*/
+
+    return {
+        pkgTitle,
+        pkgDesc,
+        pkgDiv,
+        episView,
+        packageKeywords: { search, reporter, section, digitalSpecial, ovp, category, pkg },
+        seasons,
+    };
+};
+
+function* getIssue({ type, payload }) {
+    yield put(startLoading(type));
+
+    try {
+        const response = yield call(api.getIssueGroupByOrdNo, payload.pkgSeq);
+        if (response.data.header.success) {
+            const data = toIssueData(response.data.body);
+
+            yield put({ type: `${type}_SUCCESS`, payload: data });
+        } else {
+            yield put({ type: `${type}_FAILURE`, payload: response.data });
+        }
+    } catch (e) {
+        console.log(e);
+        yield put({ type: `${type}_FAILURE`, payload: errorResponse(e) });
+    }
+    yield put(finishLoading(type));
+}
 /**
  * 이슈 목록 조회 (모달)
  */
@@ -120,6 +221,7 @@ const getIssueContentsListModal = createRequestSaga(act.GET_ISSUE_CONTENTS_LIST_
  */
 export default function* saga() {
     yield takeLatest(act.GET_ISSUE_LIST, getIssueList);
+    yield takeLatest(act.GET_ISSUE, getIssue);
     yield takeLatest(act.GET_ISSUE_LIST_MODAL, getIssueListModal);
     yield takeLatest(act.GET_ISSUE_CONTENTS_LIST_MODAL, getIssueContentsListModal);
 }

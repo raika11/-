@@ -35,13 +35,13 @@ const Issue = ({ match, displayName }) => {
                 {/* 패키지 등록, 수정 */}
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
-                        <Route path={[`${match.path}/add`, `${match.path}/:seqNo`]} exact render={() => <IssueEdit match={match} />} />
+                        <Route path={[`${match.path}/add`, `${match.path}/:pkgSeq`]} exact render={() => <IssueEdit match={match} />} />
                     </Col>
                 )}
 
                 {(matchPoints.xs || matchPoints.sm) && (
                     <Route
-                        path={[`${match.path}/add`, `${match.path}/:seqNo`]}
+                        path={[`${match.path}/add`, `${match.path}/:pkgSeq`]}
                         exact
                         render={() => (
                             <div className="absolute-top-right h-100 overlay-shadow" style={{ width: 640, zIndex: 2 }}>

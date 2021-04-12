@@ -48,28 +48,10 @@ public class ColumnistServiceImpl implements ColumnistService {
 
     @Override
     public Page<ColumnistVO> findAllColumnistStatList(ColumnistSearchDTO searchDTO) {
-        String chkJplusRepDivNm = searchDTO.getJplusRepDivNm();
-        String chkColumnistNm = searchDTO.getColumnistNm();
-
-        if (chkColumnistNm == null || searchDTO
-                .getColumnistNm()
-                .isEmpty()) {
-            searchDTO.setColumnistNm(" ");
-        }
-        if (chkJplusRepDivNm == null || searchDTO
-                .getJplusRepDivNm()
-                .isEmpty()) {
-            searchDTO.setJplusRepDivNm("");
-        } else {
-            if (chkJplusRepDivNm.equals("all")) {
-                searchDTO.setJplusRepDivNm("");
-            }
-        }
 
         List<ColumnistVO> list = columnistMapper.findAllList(searchDTO);
         return new PageImpl<>(list, searchDTO.getPageable(), searchDTO.getTotal() == null ? 0 : searchDTO.getTotal());
     }
-
 
     @Override
     public ColumnistVO findId(Long seq) {

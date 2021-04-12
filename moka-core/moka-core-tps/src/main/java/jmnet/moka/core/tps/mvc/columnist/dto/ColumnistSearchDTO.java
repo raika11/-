@@ -54,18 +54,6 @@ public class ColumnistSearchDTO extends SearchDTO {
     private String status;
 
     /**
-     * 칼럼니스트이름
-     */
-    @ApiModelProperty("칼럼니스트이름")
-
-    private String columnistNm;
-    /**
-     * 필진타입
-     */
-    @ApiModelProperty("필진타입")
-    private String jplusRepDivNm;
-
-    /**
      * 검색결과 성공여부
      */
     @ApiModelProperty(hidden = true)

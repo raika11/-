@@ -21,6 +21,7 @@
     statementType="CALLABLE">
     {call UPU_MOKA_PACKAGE_LIST_LIST_SEL(
       #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{start, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{end, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},

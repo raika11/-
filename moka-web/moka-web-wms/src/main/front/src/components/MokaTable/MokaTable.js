@@ -8,6 +8,7 @@ import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
 // cell renderer
 import ImageRenderer from './MokaTableImageRenderer';
+import FullImageRenderer from './MokaTableFullImageRenderer';
 import CircleImageRenderer from './MokaTableCircleImageRenderer';
 import UsedYnRenderer from './MokaTableUsedYnRenderer';
 import UsedYnSecondRenderer from './MokaTableUsedYnSecondRenderer';
@@ -310,7 +311,7 @@ const MokaTable = forwardRef((props, ref) => {
                     immutableData
                     columnDefs={columnDefs}
                     rowData={rowData}
-                    headerHeight={headerHeight}
+                    headerHeight={headerHeight || rowHeight}
                     rowHeight={rowHeight}
                     getRowNodeId={onRowNodeId}
                     rowClassRules={rowClassRules}
@@ -322,6 +323,7 @@ const MokaTable = forwardRef((props, ref) => {
                     tooltipShowDelay={0}
                     frameworkComponents={{
                         imageRenderer: ImageRenderer,
+                        fullImageRenderer: FullImageRenderer,
                         circleImageRenderer: CircleImageRenderer,
                         usedYnRenderer: UsedYnRenderer,
                         usedYnSecondRenderer: UsedYnSecondRenderer,

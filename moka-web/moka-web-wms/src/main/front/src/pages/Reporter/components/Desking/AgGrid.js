@@ -50,7 +50,6 @@ const AgGrid = (props) => {
             setGridInstance={setGridInstance}
             columnDefs={columnDefs}
             rowData={rowData}
-            rowHeight={45}
             onRowNodeId={(reporter) => reporter.repSeq}
             onRowClicked={handleRowClicked}
             loading={loading}

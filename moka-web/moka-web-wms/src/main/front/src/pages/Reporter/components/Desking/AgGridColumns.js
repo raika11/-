@@ -15,33 +15,28 @@ export default [
         headerName: '번호',
         field: 'repSeq',
         width: 52,
-        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '타입코드',
         field: 'jplusRepDivNm',
         width: 63,
-        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '사진',
         field: 'repImg',
         width: 50,
         cellRenderer: 'circleImageRenderer',
-        cellStyle: { padding: '3px 6px' },
     },
     {
         headerName: '이름',
         field: 'repName',
         width: 100,
-        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '아이디',
         field: 'joinsId',
         tooltipField: 'joinsId',
         width: 150,
-        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '이메일',
@@ -49,7 +44,6 @@ export default [
         tooltipField: 'repEmail1',
         width: 220,
         flex: 1,
-        cellStyle: { lineHeight: '43px' },
     },
     {
         headerName: '노출여부',

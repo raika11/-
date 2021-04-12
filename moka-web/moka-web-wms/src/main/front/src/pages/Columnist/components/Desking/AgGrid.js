@@ -51,7 +51,6 @@ const AgGrid = (props) => {
                 className="overflow-hidden flex-fill"
                 setGridInstance={setGridInstance}
                 columnDefs={columnDefs}
-                rowHeight={45}
                 rowData={rowData}
                 onRowNodeId={(data) => data.seqNo}
                 onRowClicked={handleRowClicked}

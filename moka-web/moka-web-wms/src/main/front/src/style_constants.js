@@ -7,14 +7,18 @@ export const CARD_DEFAULT_HEIGHT = 817;
 // 카드 접혔을 때 넓이
 export const CARD_FOLDING_WIDTH = 32;
 
-// AgGrid의 rowHeight (1줄, 2줄, 3줄)
-export const GRID_ROW_HEIGHT = [38, 54, 54];
+// AgGrid의 rowHeight
+export const GRID_ROW_HEIGHT = {
+    T: [34, 46, 46], // text
+    C: [38, 54, 54], // 복합형 (사진 or 버튼 or input)
+};
 
-// AgGrid의 lineHeight (1줄, 2줄, 3줄)
-export const GRID_LINE_HEIGHT = [GRID_ROW_HEIGHT[0] - 2, GRID_ROW_HEIGHT[1] - 2, GRID_ROW_HEIGHT[2] - 2];
-
-// AgGrid에서 한 row에 여러 줄의 텍스트를 노출할 때 lineHeight
-export const GRID_MULTI_LINE_HEIGHT = 18;
+// AgGrid의 lineHeight
+export const GRID_LINE_HEIGHT = {
+    T: GRID_ROW_HEIGHT.T.map((h) => h - 2),
+    C: GRID_ROW_HEIGHT.C.map((h) => h - 2),
+    M: 18, // multi line일 때
+};
 
 // AgGrid -webkit-box 생성
 export const WEBKIT_BOX = (lineClamp) => ({
@@ -23,5 +27,5 @@ export const WEBKIT_BOX = (lineClamp) => ({
     paddingTop: '3px',
     '-webkit-line-clamp': lineClamp,
     '-webkit-box-orient': 'vertical',
-    lineHeight: `${GRID_MULTI_LINE_HEIGHT}px`,
+    lineHeight: `${GRID_LINE_HEIGHT.M}px`,
 });

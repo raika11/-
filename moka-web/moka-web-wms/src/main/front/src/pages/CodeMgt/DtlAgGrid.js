@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaTable } from '@components';
 import { GET_DTL_LIST, getDtlList, changeDtlSearchOption } from '@store/codeMgt';
 import { messageBox } from '@utils/toastUtil';
@@ -85,8 +86,7 @@ const DtlAgGrid = ({ grpCd }) => {
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
-                rowHeight={43}
-                headerHeight={50}
+                rowHeight={GRID_ROW_HEIGHT.T[1]}
                 rowData={rowData}
                 onRowNodeId={(dtl) => dtl.seqNo}
                 onRowClicked={handleRowClicked}

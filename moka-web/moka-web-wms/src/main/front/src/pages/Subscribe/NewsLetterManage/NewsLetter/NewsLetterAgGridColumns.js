@@ -1,3 +1,5 @@
+import { GRID_LINE_HEIGHT } from '@/style_constants';
+
 export default [
     {
         headerName: 'NO',
@@ -40,9 +42,9 @@ export default [
         width: 70,
         wrapText: true,
         cellClassRules: {
-            'pre-cell': () => true,
+            'ag-pre-cell': () => true,
         },
-        cellStyle: { lineHeight: '16px' },
+        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
     },
     {
         headerName: '상태',

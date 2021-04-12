@@ -67,8 +67,7 @@ const OverallStatus = () => {
                 loading={loading}
                 columnDefs={columnDefs}
                 rowData={rowData}
-                className="ag-grid-align-center mb-14"
-                agGridHeight={70}
+                className="ag-grid-align-center mb-14 flex-shrink-0"
                 onRowNodeId={(row) => row.idx}
             />
         </>

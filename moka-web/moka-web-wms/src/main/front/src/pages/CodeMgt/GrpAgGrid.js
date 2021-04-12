@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaTable } from '@components';
 import { messageBox } from '@utils/toastUtil';
 import { GET_GRP_LIST, getGrpList, changeGrpSearchOption } from '@store/codeMgt';
@@ -86,10 +87,9 @@ const GrpAgGrid = ({ match }) => {
         <React.Fragment>
             <MokaTable
                 className="overflow-hidden flex-fill"
-                rowHeight={43}
-                headerHeight={50}
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={GRID_ROW_HEIGHT.T[1]}
                 onRowNodeId={(grp) => grp.grpCd}
                 onRowClicked={handleRowClicked}
                 loading={loading}

@@ -63,11 +63,11 @@
             cell-horizontal-padding: 5px,
             // row
             odd-row-background-color: $table-accent-bg,
-            row-height: 38px,
+            row-height: 34px,
             row-hover-color: rgba(33, 150, 243, 0.1),
             selected-row-background-color: rgba(33, 150, 243, 0.2),
             // header
-            header-height: 38px,
+            header-height: 34px,
             header-background-color: $white,
             header-column-separator: false,
         )
@@ -191,7 +191,7 @@ $row-hover-color: darken($desking-row-color, 5);
             odd-row-background-color: $desking-row-color,
             selected-row-background-color: $row-hover-color,
             // height
-            header-height: 38px,
+            header-height: 34px,
             header-column-separator: false,
             header-background-color: $white,
         )

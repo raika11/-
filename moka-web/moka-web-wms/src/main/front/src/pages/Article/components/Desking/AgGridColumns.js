@@ -1,5 +1,5 @@
 import React from 'react';
-import { GRID_LINE_HEIGHT, GRID_MULTI_LINE_HEIGHT } from '@/style_constants';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import ArticleTableCopyBtn from '../ArticleTableCopyBtn';
 
 export default [
@@ -30,7 +30,7 @@ export default [
         field: 'sourceName',
         tooltipField: 'sourceName',
         cellStyle: {
-            lineHeight: `${GRID_LINE_HEIGHT[1]}px`,
+            lineHeight: `${GRID_LINE_HEIGHT.C[1]}px`,
         },
     },
     {
@@ -43,7 +43,7 @@ export default [
             'user-select-text': () => true,
         },
         cellStyle: {
-            lineHeight: `${GRID_MULTI_LINE_HEIGHT}px`,
+            lineHeight: `${GRID_LINE_HEIGHT.M}px`,
         },
     },
     {
@@ -71,7 +71,7 @@ export default [
             // ...WEBKIT_BOX(2),
             display: 'flex',
             alignItems: 'center',
-            lineHeight: `${GRID_MULTI_LINE_HEIGHT}px`,
+            lineHeight: `${GRID_LINE_HEIGHT.M}px`,
         },
     },
     {
@@ -107,7 +107,7 @@ export default [
             'ag-prewrap-cell': () => true,
         },
         cellStyle: {
-            lineHeight: `${GRID_MULTI_LINE_HEIGHT}px`,
+            lineHeight: `${GRID_LINE_HEIGHT.M}px`,
         },
     },
     {

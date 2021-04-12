@@ -11,18 +11,12 @@ export const BASIC_DATEFORMAT = 'YYYY-MM-DD HH:mm';
 export const ACCEPTED_IMAGE_TYPES = ['image/gif', 'image/jpeg', 'image/png'];
 export const UPLOAD_PATH_URL = '/moka_storage/';
 
-// 카드 컴포넌트 기본 높이
-export const CARD_DEFAULT_HEIGHT = 817;
-
-// 카드 접혔을 때 넓이
-export const CARD_FOLDING_WIDTH = 32;
-
-// 한 페이지당 가능한 데이타 건수
+// 테이블의 페이징 사이즈
 export const PAGESIZE_OPTIONS = [20, 50, 100];
 export const MODAL_PAGESIZE_OPTIONS = [15, 30, 60];
 export const S_MODAL_PAGESIZE_OPTIONS = [10, 20, 30];
 
-// 그룹당 페이지수
+// 노출 페이지수
 export const DISPLAY_PAGE_NUM = 5;
 
 // TEMS 아이템 타입
@@ -33,7 +27,7 @@ export const ITEM_CP = 'CP';
 export const ITEM_TP = 'TP';
 export const ITEM_DS = 'DS';
 
-// 시스템코드 : API 시스템코드
+// 시스템코드 : API
 export const CODETYPE_API = 'API';
 // 시스템코드 : 페이지타입
 export const CODETYPE_PAGE_TYPE = 'PAGE_TYPE';

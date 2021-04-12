@@ -1,4 +1,5 @@
 import React from 'react';
+import { GRID_LINE_HEIGHT, GRID_MULTI_LINE_HEIGHT } from '@/style_constants';
 import ArticleTableCopyBtn from '../ArticleTableCopyBtn';
 
 export default [
@@ -29,34 +30,26 @@ export default [
         field: 'sourceName',
         tooltipField: 'sourceName',
         cellStyle: {
-            lineHeight: '48px',
+            lineHeight: `${GRID_LINE_HEIGHT[1]}px`,
         },
     },
     {
         headerName: 'ID\n기사유형',
         width: 83,
-        // width: 93,
         field: 'artIdType',
-        cellStyle: {
-            whiteSpace: 'pre-wrap',
-            lineHeight: '20px',
-            display: '-webkit-box',
-            '-webkit-line-clamp': 2,
-            '-webkit-box-orient': 'vertical',
-            overflow: 'hidden',
-            paddingTop: '3px',
-        },
         tooltipField: 'artTypeName',
-        cellClass: 'user-select-text',
+        cellClassRules: {
+            'ag-pre-cell': () => true,
+            'user-select-text': () => true,
+        },
+        cellStyle: {
+            lineHeight: `${GRID_MULTI_LINE_HEIGHT}px`,
+        },
     },
     {
         headerName: '사진',
         width: 73,
         field: 'artThumb',
-        cellStyle: {
-            paddingTop: '3px',
-            paddingBottom: '3px',
-        },
         cellRenderer: 'imageRenderer',
     },
     {
@@ -72,19 +65,13 @@ export default [
         field: 'artTitle',
         width: 186,
         flex: 1,
-        autoHeight: true,
         tooltipField: 'artTitle',
+        wrapText: true,
         cellStyle: {
-            boxSizing: 'border-box',
-            whiteSpace: 'normal',
-            lineHeight: '20px',
-            height: '48px',
-            display: '-webkit-box',
-            paddingTop: '4px',
-            '-webkit-line-clamp': 2,
-            '-webkit-box-orient': 'vertical',
-            overflow: 'hidden',
-            cursor: 'pointer',
+            // ...WEBKIT_BOX(2),
+            display: 'flex',
+            alignItems: 'center',
+            lineHeight: `${GRID_MULTI_LINE_HEIGHT}px`,
         },
     },
     {
@@ -105,11 +92,11 @@ export default [
         headerName: '면/판',
         width: 50,
         field: 'myunPan',
+        cellClassRules: {
+            'ag-pre-cell': () => true,
+        },
         cellStyle: {
-            display: 'flex',
-            alignItems: 'center',
             justifyContent: 'center',
-            whiteSpace: 'pre',
         },
     },
     {
@@ -117,18 +104,19 @@ export default [
         width: 92,
         field: 'articleDt',
         cellClassRules: {
-            'pre-wrap-cell': () => true,
+            'ag-prewrap-cell': () => true,
         },
-        cellStyle: { lineHeight: '20px' },
+        cellStyle: {
+            lineHeight: `${GRID_MULTI_LINE_HEIGHT}px`,
+        },
     },
     {
         headerName: '기자명',
         width: 95,
         field: 'reportersText',
         tooltipField: 'artReporter',
-        cellStyle: {
-            display: 'flex',
-            alignItems: 'center',
+        cellClassRules: {
+            'ag-center-cell': () => true,
         },
     },
 ];

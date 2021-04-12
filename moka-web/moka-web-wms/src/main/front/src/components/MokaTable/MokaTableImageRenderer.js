@@ -4,6 +4,7 @@ import img_logo from '@assets/images/img_logo.png';
 
 const defaultProps = {
     roundedCircle: false,
+    autoRatio: true,
 };
 
 /**
@@ -13,7 +14,7 @@ const defaultProps = {
  * @param {object} params ag grid params
  */
 const MokaTableImageRenderer = forwardRef((params, ref) => {
-    const { colDef, roundedCircle } = params;
+    const { colDef, roundedCircle, autoRatio } = params;
     const [field] = useState(colDef.field);
     const [data, setData] = useState(params.node.data);
     const boxRef = useRef(null);
@@ -58,25 +59,33 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
     }, [data, field]);
 
     useEffect(() => {
-        // 동그라미인 경우 정사각형으로 셋팅
-        if (roundedCircle && boxRef.current) {
-            const w = boxRef.current.offsetWidth;
-            const h = boxRef.current.offsetHeight;
-            if (w > h) boxRef.current.style.setProperty('width', `${h}px`, 'important');
-            else if (h > w) boxRef.current.style.setProperty('height', `${w}px`, 'important');
+        if (boxRef.current) {
+            const w = boxRef.current.parentElement.offsetWidth;
+            let h = boxRef.current.parentElement.offsetHeight;
+            if (autoRatio) {
+                // 16:9 자동 셋팅
+                h = ((w || 0) / 16) * 9;
+            } else if (roundedCircle) {
+                // 동그라미인 경우 정사각형으로 셋팅
+                if (h > w) h = w;
+                else if (w > h) boxRef.current.style.setProperty('width', `${h}px`, 'important');
+            }
+            boxRef.current.style.setProperty('height', `${h}px`, `important`);
         }
-    }, [roundedCircle]);
+    }, [params, colDef, autoRatio, roundedCircle]);
 
     return (
-        <div
-            className={clsx('d-flex h-100 w-100 align-items-center justify-content-center overflow-hidden position-relative', {
-                'bg-white': !roundedCircle,
-                border: !roundedCircle,
-                'rounded-circle': roundedCircle,
-            })}
-            ref={boxRef}
-        >
-            <img className="center-image" ref={imgRef} alt={data?.imgAlt || ''} onError={onError} onLoad={onLoad} loading="lazy" />
+        <div className="d-flex h-100 w-100 align-items-center justify-content-center">
+            <div
+                className={clsx('w-100 overflow-hidden position-relative', {
+                    'bg-white': !roundedCircle,
+                    border: !roundedCircle,
+                    'rounded-circle': roundedCircle,
+                })}
+                ref={boxRef}
+            >
+                <img className="center-image" ref={imgRef} alt={data?.imgAlt || ''} onError={onError} onLoad={onLoad} loading="lazy" />
+            </div>
         </div>
     );
 });

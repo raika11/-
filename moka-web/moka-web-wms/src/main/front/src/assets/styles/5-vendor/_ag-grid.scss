@@ -6,15 +6,23 @@
     width: 100%;
 }
 
-.pre-cell {
+.ag-center-cell {
     display: flex;
     align-items: center;
+    overflow: hidden;
+}
+
+.ag-pre-cell {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
     white-space: pre !important;
 }
 
-.pre-wrap-cell {
+.ag-prewrap-cell {
     display: flex;
     align-items: center;
+    overflow: hidden;
     white-space: pre-wrap !important;
 }
 

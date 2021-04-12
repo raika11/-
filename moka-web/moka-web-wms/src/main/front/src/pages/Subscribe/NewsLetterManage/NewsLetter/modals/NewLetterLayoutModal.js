@@ -4,9 +4,9 @@ import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaModal, MokaSearchInput, MokaTable } from '@/components';
 
 /**
- * 뉴스레터 관리 > 뉴스레터 목록 > 패키지 검색 모달
+ * 뉴스레터 관리 > 뉴스레터 목록 > 레이아웃 선택 모달
  */
-const NewsLetterPackageModal = ({ show, onHide }) => {
+const NewsLetterLayoutModal = ({ show, onHide }) => {
     const [total] = useState(0);
     const [loading] = useState(false);
     const [search] = useState({ page: 1, size: 10 });
@@ -32,7 +32,7 @@ const NewsLetterPackageModal = ({ show, onHide }) => {
             show={show}
             onHide={onHide}
             bodyClassName="d-flex flex-column"
-            title="패키지 검색"
+            title="레이아웃 선택"
             buttons={[
                 { text: '선택', variant: 'positive' },
                 { text: '취소', variant: 'negative', onClick: () => onHide() },
@@ -41,14 +41,7 @@ const NewsLetterPackageModal = ({ show, onHide }) => {
         >
             <hr className="divider" />
             <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
-                <Form.Row>
-                    <Col xs={3} clsssName="p-0 pr-2">
-                        <MokaInput as="select" disabled>
-                            <option>이슈</option>
-                        </MokaInput>
-                    </Col>
-                    <MokaSearchInput className="flex-fill" placeholder="패키지 명을 입력하세요" disabled />
-                </Form.Row>
+                <MokaSearchInput className="flex-fill" placeholder="검색어를 입력하세요" disabled />
             </Form>
             <MokaTable
                 className="overflow-hidden flex-fill"
@@ -61,26 +54,26 @@ const NewsLetterPackageModal = ({ show, onHide }) => {
                     {
                         headerName: 'NO',
                         field: 'no',
-                        width: 40,
+                        width: 65,
                     },
                     {
                         headerName: 'ID',
                         field: 'id',
-                        width: 50,
+                        width: 70,
                     },
                     {
-                        headerName: '연계 패키지',
-                        field: 'pkg',
+                        headerName: '레이아웃 명',
+                        field: 'layoutNm',
                         flex: 1,
                     },
                     {
-                        headerName: '뉴스레터 여부',
-                        field: 'letterYn',
+                        headerName: '위치 그룹',
+                        field: 'grp',
                         width: 90,
                     },
                 ]}
                 rowData={total}
-                onRowNodeId={(params) => params.noSeq}
+                onRowNodeId={(params) => params.seq}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 total={total}
@@ -92,4 +85,4 @@ const NewsLetterPackageModal = ({ show, onHide }) => {
     );
 };
 
-export default NewsLetterPackageModal;
+export default NewsLetterLayoutModal;

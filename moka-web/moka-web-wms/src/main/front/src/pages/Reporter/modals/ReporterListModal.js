@@ -138,18 +138,7 @@ const ReporterListModal = (props) => {
     }, [show, handleRowClicked]);
 
     return (
-        <MokaModal
-            show={show}
-            onHide={handleHide}
-            title="기자 검색"
-            size="xl"
-            bodyClassName="d-flex flex-column"
-            footerClassName="d-flex justify-content-center"
-            width={970}
-            height={800}
-            centered
-            draggable
-        >
+        <MokaModal show={show} onHide={handleHide} title="기자 검색" size="xl" bodyClassName="d-flex flex-column" width={970} height={800} centered draggable>
             <div className="mb-14">
                 <MokaSearchInput name="keyword" value={search.keyword} onChange={handleChange} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
             </div>

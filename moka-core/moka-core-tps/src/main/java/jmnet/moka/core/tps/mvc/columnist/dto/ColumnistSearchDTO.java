@@ -6,7 +6,6 @@ package jmnet.moka.core.tps.mvc.columnist.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -37,14 +36,12 @@ public class ColumnistSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1972229889422176779L;
 
-    @ApiModelProperty(value = "전송시작일자", required = true)
+    @ApiModelProperty(value = "전송시작일자")
     @DTODateTimeFormat
-    @NotNull(message = "{tps.search-keyword-log.error.notnull.startDt}")
     private String startDt;
 
-    @ApiModelProperty(value = "전송종료일자", required = true)
+    @ApiModelProperty(value = "전송종료일자")
     @DTODateTimeFormat
-    @NotNull(message = "{tps.search-keyword-log.error.notnull.endDt}")
     private String endDt;
 
     /**

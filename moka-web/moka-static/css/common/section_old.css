@@ -35,6 +35,11 @@
 .card.border {border:1px solid #b3b3b3}
 .card.border .card_body {padding:16px 16px;}
 
+/* meta */
+.card .meta * {margin:0;}
+.card .meta {display:flex;}
+.card .meta :nth-child(n + 2) {position:relative;margin-left:16px;padding-left:16px;}
+.card .meta :nth-child(n + 2)::before {content:'';display:block;position:absolute;top:50%;left:0;width:1px;height:12px;margin-top:-6px;background-color:#888;}
 
 
 /***************************************    general     ************************************/

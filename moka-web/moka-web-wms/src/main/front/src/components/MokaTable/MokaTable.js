@@ -7,6 +7,7 @@ import { propTypes as paginationPropTypes } from '@components/MokaPagination';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
 // cell renderer
+import LongTextRenderer from './MokaTableLongTextRenderer';
 import ImageRenderer from './MokaTableImageRenderer';
 import FullImageRenderer from './MokaTableFullImageRenderer';
 import CircleImageRenderer from './MokaTableCircleImageRenderer';
@@ -322,6 +323,7 @@ const MokaTable = forwardRef((props, ref) => {
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
                     frameworkComponents={{
+                        longTextRenderer: LongTextRenderer,
                         imageRenderer: ImageRenderer,
                         fullImageRenderer: FullImageRenderer,
                         circleImageRenderer: CircleImageRenderer,

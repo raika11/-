@@ -66,13 +66,7 @@ export default [
         width: 186,
         flex: 1,
         tooltipField: 'artTitle',
-        wrapText: true,
-        cellStyle: {
-            // ...WEBKIT_BOX(2),
-            display: 'flex',
-            alignItems: 'center',
-            lineHeight: `${GRID_LINE_HEIGHT.M}px`,
-        },
+        cellRenderer: 'longTextRenderer',
     },
     {
         headerName: '',

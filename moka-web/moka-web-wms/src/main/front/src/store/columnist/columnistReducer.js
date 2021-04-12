@@ -10,7 +10,7 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        searchType: '',
+        searchType: 'all',
         status: '',
         keyword: '',
     },

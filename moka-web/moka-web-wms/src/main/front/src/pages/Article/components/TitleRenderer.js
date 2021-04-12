@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useEffect, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import Badge from 'react-bootstrap/Badge';
 import { WEBKIT_BOX } from '@/style_constants';
 
@@ -31,7 +31,7 @@ const TitleRenderer = forwardRef((originParam, ref) => {
 
     return (
         <div className="h-100 w-100 ag-preline-cell">
-            <span style={{ ...WEBKIT_BOX(2) }}>
+            <span style={WEBKIT_BOX(2)}>
                 {titleArr && titleArr[0] && (
                     <Badge variant={titleArr[0] !== '수정' ? 'success' : 'searching'} className="mr-1">
                         {titleArr[0]}

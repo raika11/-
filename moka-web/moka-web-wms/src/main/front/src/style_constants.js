@@ -24,7 +24,9 @@ export const GRID_LINE_HEIGHT = {
 export const WEBKIT_BOX = (lineClamp) => ({
     display: '-webkit-box',
     overflow: 'hidden',
-    '-webkit-line-clamp': lineClamp,
-    '-webkit-box-orient': 'vertical',
+    // '-webkit-line-clamp': lineClamp,
+    // '-webkit-box-orient': 'vertical',
+    WebkitLineClamp: lineClamp,
+    WebkitBoxOrient: 'vertical',
     lineHeight: `${GRID_LINE_HEIGHT.M}px`,
 });

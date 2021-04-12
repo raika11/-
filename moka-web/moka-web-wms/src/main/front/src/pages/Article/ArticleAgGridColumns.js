@@ -1,7 +1,6 @@
 import { GRID_LINE_HEIGHT } from '@/style_constants';
 import ArticleActionBtn from './components/ArticleActionBtn';
 import ArticleViewBtn from './components/ArticleViewBtn';
-// import SourceRenderer from './components/SourceRenderer';
 import TitleRenderer from './components/TitleRenderer';
 
 const cellClassRules = {
@@ -26,7 +25,6 @@ export default [
         field: 'source',
         width: 123,
         cellRenderer: 'longTextRenderer',
-        // cellRendererFramework: SourceRenderer,
     },
     {
         headerName: '보기',

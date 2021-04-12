@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle, forwardRef, useRef } from 'react';
+import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { GRID_ROW_HEIGHT, GRID_LINE_HEIGHT, WEBKIT_BOX } from '@/style_constants';
 
 /**
@@ -11,7 +11,7 @@ const MokaTableLongTextRenderer = forwardRef((params, ref) => {
     const { colDef } = params;
     const [field] = useState(colDef.field);
     const [data, setData] = useState(params.node.data);
-    const text = useRef(null);
+    const [style, setStyle] = useState({});
 
     useImperativeHandle(ref, () => ({
         refresh: (params) => {
@@ -24,19 +24,12 @@ const MokaTableLongTextRenderer = forwardRef((params, ref) => {
         const rowHeight = params.node.rowHeight;
         let idx = GRID_ROW_HEIGHT.T.findIndex((f) => f === rowHeight);
         if (idx < 0) idx = GRID_ROW_HEIGHT.C.findIndex((f) => f === rowHeight);
-        if (idx > -1) {
-            const styles = WEBKIT_BOX(idx + 1);
-            Object.keys(styles).forEach((css) => {
-                text.current.style.setProperty(css, styles[css]);
-            });
-        }
+        if (idx > -1) setStyle(WEBKIT_BOX(idx + 1));
     }, [params]);
 
     return (
         <div className="h-100 w-100 ag-preline-cell">
-            <span ref={text} style={{ margin: 'auto 0', lineHeight: `${GRID_LINE_HEIGHT.M}px` }}>
-                {data?.[field]}
-            </span>
+            <span style={{ margin: 'auto 0', lineHeight: `${GRID_LINE_HEIGHT.M}px`, ...style }}>{data?.[field]}</span>
         </div>
     );
 });

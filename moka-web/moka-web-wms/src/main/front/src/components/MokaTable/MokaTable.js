@@ -55,7 +55,6 @@ const propTypes = {
     headerHeight: PropTypes.number,
     /**
      * 테이블 row의 height
-     * @default
      */
     rowHeight: PropTypes.number,
     /**
@@ -128,7 +127,6 @@ const defaultProps = {
     dragStyle: false,
     header: true,
     rowSelection: 'single',
-    headerHeight: 35,
     rowDragManaged: false,
     animateRows: false,
     suppressRefreshCellAfterUpdate: false,

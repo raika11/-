@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import { CARD_DEFAULT_HEIGHT } from '@/style_constants';
 import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
 import { Route, Switch } from 'react-router-dom';
@@ -21,14 +21,7 @@ const MemberGroup = () => {
                 <meta name="robots" content="noindex" />
             </Helmet>
             {/*리스트*/}
-            <MokaCard
-                className="mb-0 mr-10"
-                height={CARD_DEFAULT_HEIGHT}
-                headerClassName="d-flex justify-content-between align-item-center"
-                title="사용자 그룹관리"
-                titleClassName="h-100"
-                width={480}
-            >
+            <MokaCard className="mb-0 mr-10" headerClassName="d-flex justify-content-between align-item-center" title="사용자 그룹관리" titleClassName="h-100" width={480}>
                 <div className="mb-3 d-flex justify-content-end">
                     <Button variant="dark" onClick={handleAdd}>
                         추가

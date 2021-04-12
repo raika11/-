@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import produce from 'immer';
 import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIcon, MokaLoader } from '@components';
-import { CARD_DEFAULT_HEIGHT, ITEM_PG, ITEM_TP, ITEM_CT, ITEM_CP, TEMS_PREFIX } from '@/constants';
+import { ITEM_PG, ITEM_TP, ITEM_CT, ITEM_CP, TEMS_PREFIX } from '@/constants';
 import { MokaIconTabs } from '@components/MokaTabs';
 import { clearStore, deletePage, appendTag, changePageBody } from '@store/page';
 import { clearStore as clearHistoryStore } from '@store/history';
@@ -216,7 +216,6 @@ const Page = ({ match }) => {
                 className="mr-gutter"
                 title={currentMenu?.menuDisplayNm}
                 foldable
-                height={CARD_DEFAULT_HEIGHT}
                 expansion={expansionState[0]}
                 onExpansion={handleListExpansion}
                 bodyClassName="d-flex flex-column"
@@ -239,7 +238,6 @@ const Page = ({ match }) => {
                             <MokaIconTabs
                                 expansion={expansionState[2]}
                                 onExpansion={handleTabExpansion}
-                                height={CARD_DEFAULT_HEIGHT}
                                 onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                                 tabWidth={412}
                                 tabs={[

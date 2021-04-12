@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore, deleteEditForm, GET_EDIT_FORM, SAVE_EDIT_FORM, showFormXmlImportModal } from '@store/editForm';
 import toast, { messageBox } from '@utils/toastUtil';
 import EditFormImportModal from './EditFormImportModal';
@@ -60,7 +59,7 @@ const EditForm = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard className="mb-0 mr-gutter" height={CARD_DEFAULT_HEIGHT} title="편집폼 관리" bodyClassName="d-flex flex-column" width={480}>
+            <MokaCard className="mb-0 mr-gutter" title="편집폼 관리" bodyClassName="d-flex flex-column" width={480}>
                 <div className="mb-2 d-flex justify-content-end">
                     <Button variant="positive" onClick={handleAddClickEditForm}>
                         편집폼 추가
@@ -71,7 +70,7 @@ const EditForm = () => {
 
             {/* 편집폼 정보 */}
             <Switch>
-                <MokaCard title="편집폼 추가" className="flex-fill" minWidth={820} height={CARD_DEFAULT_HEIGHT} loading={loading}>
+                <MokaCard title="편집폼 추가" className="flex-fill" minWidth={820} loading={loading}>
                     <Route path={['/edit-form', '/edit-form/:formId']} exact render={() => <EditFormEdit onDelete={handleClickDelete} />} />
                 </MokaCard>
             </Switch>

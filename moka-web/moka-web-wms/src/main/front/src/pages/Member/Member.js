@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIconTabs, MokaIcon } from '@components';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import { CARD_DEFAULT_HEIGHT } from '@/style_constants';
 import { clearStore } from '@store/member';
 import MemberChildMenuAuth from '@pages/Member/relations/MemberChildMenuAuth';
 import MemberList from './MemberLIst';

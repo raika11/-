@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import { CARD_DEFAULT_HEIGHT } from '@/style_constants';
 
 const propTypes = {
     /**

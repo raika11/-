@@ -1,29 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, withRouter } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
-import toast from '@utils/toastUtil';
-import {
-    changeEditForm,
-    changeInvalidList,
-    clearEditForm,
-    duplicateCheck,
-    exportEditFormXml,
-    getEditForm,
-    saveEditForm,
-    showFormXmlImportModal,
-    showHistoryModal,
-    showPublishModal,
-} from '@store/editForm';
+import { clearEditForm, exportEditFormXml, getEditForm, showFormXmlImportModal, showHistoryModal, showPublishModal } from '@store/editForm';
 import { getApi, getLang } from '@store/codeMgt';
 import { MokaCard, MokaInputLabel } from '@components';
 import PartList from './PartList';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import { CARD_DEFAULT_HEIGHT } from '@/style_constants';
 import { Card } from 'react-bootstrap';
 import EditFormPartPublishModal from './EditFormPartPublishModal';
 import EditFormPartHistoryModal from './EditFormPartHistoryModal';
@@ -41,9 +27,9 @@ const EditFormEdit = ({ history, onDelete }) => {
     const [formName, setEditFormName] = useState('');
     const [serviceUrl, setEditFormUrl] = useState('');
     const [usedYn, setUseYn] = useState('Y');
-    const [servicePlatform, setServicePlatform] = useState('P');
-    const [lang, setLang] = useState('KR');
-    const [description, setDescription] = useState('');
+    const [, setServicePlatform] = useState('P');
+    const [, setLang] = useState('KR');
+    const [, setDescription] = useState('');
 
     // error
     const [formIdError, setFormIdError] = useState(false);
@@ -115,46 +101,46 @@ const EditFormEdit = ({ history, onDelete }) => {
      * @param editForm 편집폼 정보를 가진 객체
      * @returns {boolean} 유효성 검사 결과
      */
-    const validate = (editForm) => {
-        let isInvalid = false;
-        let errList = [];
+    // const validate = (editForm) => {
+    //     let isInvalid = false;
+    //     let errList = [];
 
-        // 편집폼아이디체크
-        if (!editForm.formId || editForm.formId === '') {
-            errList.push({
-                field: 'formId',
-                reason: '',
-            });
-            isInvalid = isInvalid | true;
-        } else if (!/^\d{4}$/.test(editForm.formId)) {
-            errList.push({
-                field: 'formId',
-                reason: '',
-            });
-            isInvalid = isInvalid | true;
-        }
+    //     // 편집폼아이디체크
+    //     if (!editForm.formId || editForm.formId === '') {
+    //         errList.push({
+    //             field: 'formId',
+    //             reason: '',
+    //         });
+    //         isInvalid = isInvalid | true;
+    //     } else if (!/^\d{4}$/.test(editForm.formId)) {
+    //         errList.push({
+    //             field: 'formId',
+    //             reason: '',
+    //         });
+    //         isInvalid = isInvalid | true;
+    //     }
 
-        // 편집폼명 체크
-        if (!/[^\s\t\n]+/.test(editForm.formName)) {
-            errList.push({
-                field: 'formName',
-                reason: '',
-            });
-            isInvalid = isInvalid | true;
-        }
+    //     // 편집폼명 체크
+    //     if (!/[^\s\t\n]+/.test(editForm.formName)) {
+    //         errList.push({
+    //             field: 'formName',
+    //             reason: '',
+    //         });
+    //         isInvalid = isInvalid | true;
+    //     }
 
-        // 편집폼url 체크
-        if (!/[^\s\t\n]+/.test(editForm.serviceUrl)) {
-            errList.push({
-                field: 'serviceUrl',
-                reason: '',
-            });
-            isInvalid = isInvalid | true;
-        }
+    //     // 편집폼url 체크
+    //     if (!/[^\s\t\n]+/.test(editForm.serviceUrl)) {
+    //         errList.push({
+    //             field: 'serviceUrl',
+    //             reason: '',
+    //         });
+    //         isInvalid = isInvalid | true;
+    //     }
 
-        dispatch(changeInvalidList(errList));
-        return !isInvalid;
-    };
+    //     dispatch(changeInvalidList(errList));
+    //     return !isInvalid;
+    // };
 
     useEffect(() => {
         dispatch(getLang());
@@ -180,7 +166,7 @@ const EditFormEdit = ({ history, onDelete }) => {
         setUseYn(editForm.usedYn || 'Y');
         setEditFormUrl(editForm.serviceUrl || '');
         setDescription(editForm.description || '');
-    }, [editForm, editFormParts]);
+    }, [editForm, editFormParts, setDescription]);
 
     const handleClickDelete = () => {
         onDelete(editForm);

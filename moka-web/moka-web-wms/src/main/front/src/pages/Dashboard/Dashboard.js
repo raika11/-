@@ -24,8 +24,6 @@ import {
     MokaCardTabs,
     NewIcon,
 } from '@components';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
-import { SourceSelector } from '@pages/commons';
 // import { changeTheme } from '@store/layout/layoutAction';
 import { options } from './data';
 import ThemeEx from './ThemeEx';
@@ -183,7 +181,6 @@ const Dashboard = () => {
                 <MokaIconTabs
                     expansion={expansionState[2]}
                     onExpansion={handleTabExpansion}
-                    height={CARD_DEFAULT_HEIGHT}
                     tabWidth={412}
                     tabs={[
                         <MokaCard titleClassName="h-100" title="Modal 예제">

@@ -26,7 +26,7 @@ const NewsLetterSearch = () => {
                         <option>전체</option>
                     </MokaInputLabel>
                 </Col>
-                <Col xs={3} className="p-0 pr-2">
+                <Col xs={3} className="p-0">
                     <MokaInputLabel as="select" label="A/B TEST 유무" disabled>
                         <option>전체</option>
                     </MokaInputLabel>
@@ -69,7 +69,7 @@ const NewsLetterSearch = () => {
             </Form.Row>
 
             <Form.Row>
-                <MokaInputLabel as="none" label="상품명" />
+                <MokaInputLabel as="none" label="뉴스레터 명" />
                 <MokaSearchInput className="flex-fill" disabled />
             </Form.Row>
         </Form>

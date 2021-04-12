@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, Switch } from 'react-router';
 import Helmet from 'react-helmet';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -28,7 +29,9 @@ const NewsLetter = ({ match, displayName }) => {
                 </Col>
 
                 <Col xs={5}>
-                    <NewsLetterEdit match={match} />
+                    <Switch>
+                        <Route path={[`${match.path}/add`, `${match.path}/:update`]} exact render={() => <NewsLetterEdit match={match} />} />
+                    </Switch>
                 </Col>
             </Row>
         </Container>

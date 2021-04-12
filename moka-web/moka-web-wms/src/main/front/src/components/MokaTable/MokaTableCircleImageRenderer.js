@@ -7,7 +7,7 @@ import MokaTableImageRenderer from './MokaTableImageRenderer';
  * @param {object} params ag grid params
  */
 const MokaTableCircleImageRenderer = forwardRef((params, ref) => {
-    return <MokaTableImageRenderer ref={ref} {...params} roundedCircle />;
+    return <MokaTableImageRenderer ref={ref} {...params} roundedCircle autoRatio={false} />;
 });
 
 export default MokaTableCircleImageRenderer;

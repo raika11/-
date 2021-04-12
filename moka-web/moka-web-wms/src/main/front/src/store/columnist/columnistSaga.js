@@ -33,11 +33,6 @@ function* saveColumnist({ payload: { columnist, callback } }) {
         callbackData = response.data;
 
         if (response.data.header.success) {
-            yield put({
-                type: act.GET_COLUMNIST_SUCCESS,
-                payload: response.data,
-            });
-
             // 목록 다시 조회
             const search = yield select(({ columnist }) => columnist.search);
             yield put({ type: act.GET_COLUMNIST_LIST, payload: { search } });

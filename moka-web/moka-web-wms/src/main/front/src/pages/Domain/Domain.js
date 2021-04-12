@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore, deleteDomain, hasRelationList, GET_DOMAIN, SAVE_DOMAIN } from '@store/domain';
 import toast, { messageBox } from '@utils/toastUtil';
 import DomainEdit from './DomainEdit';
@@ -95,7 +94,7 @@ const Domain = ({ match }) => {
 
             {/* 리스트 */}
             <Col xs={5} className="p-0 pr-gutter">
-                <MokaCard className="w-100" height={CARD_DEFAULT_HEIGHT} bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
+                <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
                     <div className="mb-14 d-flex justify-content-end">
                         <Button variant="positive" onClick={handleAddClickDomain}>
                             도메인 등록

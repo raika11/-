@@ -6,7 +6,6 @@ import { changeOrderChildren, clearStore } from '@store/menu';
 import { changeSearchOption, deleteMenu, existAuth } from '@store/menu';
 import MenuDraggableAgGrid from '@pages/Menu/component/MenuDraggableAgGrid';
 import { MokaCard } from '@components';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import MenuEditContainer from './MenuEditContainer';
@@ -176,7 +175,6 @@ const Menu = () => {
                 bodyClassName="d-flex flex-column"
                 title="대메뉴"
                 width={LIST_WIDTH}
-                height={CARD_DEFAULT_HEIGHT}
             >
                 <div className="mb-2 d-flex justify-content-end">
                     <Button depth="1" parentmenuid={rootParentMenuId} variant="positive-a" className="mr-1" onClick={handleNewMenu}>
@@ -211,7 +209,6 @@ const Menu = () => {
                 bodyClassName="d-flex flex-column"
                 title="중메뉴"
                 width={LIST_WIDTH}
-                height={CARD_DEFAULT_HEIGHT}
             >
                 <div className="mb-2 d-flex justify-content-end">
                     <Button depth="2" parentmenuid={largeMenuId} variant="positive-a" className="mr-1" onClick={handleNewMenu}>
@@ -246,7 +243,6 @@ const Menu = () => {
                 bodyClassName="d-flex flex-column"
                 title="소메뉴"
                 width={LIST_WIDTH}
-                height={CARD_DEFAULT_HEIGHT}
             >
                 <div className="mb-2 d-flex justify-content-end">
                     <Button depth="3" parentmenuid={middleMenuId} variant="positive-a" className="mr-1" onClick={handleNewMenu}>

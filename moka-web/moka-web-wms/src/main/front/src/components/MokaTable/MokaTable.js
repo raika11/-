@@ -7,7 +7,9 @@ import { propTypes as paginationPropTypes } from '@components/MokaPagination';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
 // cell renderer
+import LongTextRenderer from './MokaTableLongTextRenderer';
 import ImageRenderer from './MokaTableImageRenderer';
+import FullImageRenderer from './MokaTableFullImageRenderer';
 import CircleImageRenderer from './MokaTableCircleImageRenderer';
 import UsedYnRenderer from './MokaTableUsedYnRenderer';
 import UsedYnSecondRenderer from './MokaTableUsedYnSecondRenderer';
@@ -55,7 +57,6 @@ const propTypes = {
     headerHeight: PropTypes.number,
     /**
      * 테이블 row의 height
-     * @default
      */
     rowHeight: PropTypes.number,
     /**
@@ -128,7 +129,6 @@ const defaultProps = {
     dragStyle: false,
     header: true,
     rowSelection: 'single',
-    headerHeight: 35,
     rowDragManaged: false,
     animateRows: false,
     suppressRefreshCellAfterUpdate: false,
@@ -312,7 +312,7 @@ const MokaTable = forwardRef((props, ref) => {
                     immutableData
                     columnDefs={columnDefs}
                     rowData={rowData}
-                    headerHeight={headerHeight}
+                    headerHeight={headerHeight || rowHeight}
                     rowHeight={rowHeight}
                     getRowNodeId={onRowNodeId}
                     rowClassRules={rowClassRules}
@@ -323,7 +323,9 @@ const MokaTable = forwardRef((props, ref) => {
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
                     frameworkComponents={{
+                        longTextRenderer: LongTextRenderer,
                         imageRenderer: ImageRenderer,
+                        fullImageRenderer: FullImageRenderer,
                         circleImageRenderer: CircleImageRenderer,
                         usedYnRenderer: UsedYnRenderer,
                         usedYnSecondRenderer: UsedYnSecondRenderer,

@@ -9,7 +9,7 @@ import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import ReporterListModal from '@pages/Reporter/modals/ReporterListModal';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
-import { initialState, GET_COLUMNIST, saveColumnist, getColumnist, changeInvalidList, clearColumnist } from '@store/columnist';
+import { initialState, saveColumnist, getColumnist, changeInvalidList, clearColumnist } from '@store/columnist';
 
 /**
  * 칼럼니스트 > 등록, 수정
@@ -18,7 +18,6 @@ const ColumnistEdit = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { seqNo } = useParams();
-    const loading = useSelector(({ loading }) => loading[GET_COLUMNIST]);
     const { columnist, invalidList } = useSelector(({ columnist }) => columnist);
     const [temp, setTemp] = useState(initialState.columnist);
     const [showModal, setShowModal] = useState(false);
@@ -47,7 +46,7 @@ const ColumnistEdit = ({ match }) => {
     /**
      * 기자번호 삭제
      */
-    const handleDeleteRepSeq = () => setTemp({ ...temp, repSeq: '' });
+    const handleDeleteRepSeq = () => setTemp({ ...temp, repSeq: null });
 
     /**
      * 기자 모달 > 기자 선택
@@ -56,13 +55,11 @@ const ColumnistEdit = ({ match }) => {
     const addReporter = (reporter) => {
         try {
             // 기자 정보 설정
-            let tmpEmail = [];
-            tmpEmail = reporter.repEmail1 && reporter.repEmail1.split('@');
+            let tmpEmail = reporter.repEmail1 && reporter.repEmail1.split('@');
 
             // test case1) 선택한 기자 없음 (NULL => JPLUS_REP_DIV_DEFAULT 노출)
             // test case2) 강인춘 (jplusRepDiv === R2)
             // test case3) 서회란 (jplusRepDiv === R1)
-            // J1은 데이터가 없어서 테스트 불가능
 
             setTemp({
                 ...initialState.reporter,
@@ -74,7 +71,7 @@ const ColumnistEdit = ({ match }) => {
                 email2: tmpEmail[1],
                 position: reporter.jplusJobInfo,
                 jplusRepDiv: reporter.jplusRepDiv,
-                jplusRepDivNm: reporter.jplusRepDivNm || '',
+                jplusRepDivNm: reporter.repSeq ? (reporter.jplusRepDiv ? reporter.jplusRepDivNm : '일보기자') : '외부',
                 profile: '',
                 selectImg: '',
                 profilePhoto: reporter.repImg,
@@ -118,12 +115,14 @@ const ColumnistEdit = ({ match }) => {
      * 칼럼니스트 저장
      */
     const handleSave = () => {
-        let saveData = temp;
-        saveData.inout = saveData.repSeq ? 'I' : 'O'; // 외부/내부 필진 설정
+        let saveData = {
+            ...temp,
+            inout: temp.repSeq ? 'I' : 'O', // 외부/내부 필진 설정
+        };
 
         if (validate(saveData)) {
             // 이메일 설정
-            const tmpEmail = saveData.email1 && saveData.email2 ? `${saveData.email1}@${saveData.email2}` : ``;
+            const tmpEmail = saveData.email1 && saveData.email2 ? `${saveData.email1}@${saveData.email2}` : '';
             delete saveData.email1;
             delete saveData.email2;
             delete saveData.selectImg;
@@ -151,18 +150,6 @@ const ColumnistEdit = ({ match }) => {
     const handleClickCancelButton = () => history.push(match.path);
 
     useEffect(() => {
-        if (columnist) {
-            let tmpEmail = [];
-            tmpEmail = columnist.email !== 'undefined' && columnist.email != null && columnist.email.split('@');
-            setTemp({
-                ...columnist,
-                email1: tmpEmail[0],
-                email2: tmpEmail[1],
-            });
-        }
-    }, [columnist]);
-
-    useEffect(() => {
         setError(invalidListToError(invalidList));
         if (invalidList !== null && invalidList.length > 0) {
             messageBox.alert(invalidList[0].reason, () => {});
@@ -170,8 +157,9 @@ const ColumnistEdit = ({ match }) => {
     }, [invalidList]);
 
     useEffect(() => {
-        setError({});
+        // 칼럼니스트 조회
         if (seqNo) {
+            setError({});
             dispatch(
                 getColumnist({
                     seqNo,
@@ -188,6 +176,31 @@ const ColumnistEdit = ({ match }) => {
     }, [dispatch, seqNo]);
 
     useEffect(() => {
+        // 칼럽니스트 정보가 바뀌면 로컬 스테이트 변경
+        if (columnist) {
+            let tmpEmail = columnist.email && columnist.email.split('@');
+            let jplusRepDivNm = () => {
+                if (columnist.repSeq) {
+                    if (columnist.jplusRepDiv) {
+                        return columnist.jplusRepDivNm;
+                    } else {
+                        return '일보기자';
+                    }
+                } else {
+                    return '외부';
+                }
+            };
+            setTemp({
+                ...columnist,
+                jplusRepDivNm: jplusRepDivNm(),
+                email1: tmpEmail[0],
+                email2: tmpEmail[1],
+            });
+        }
+    }, [columnist]);
+
+    useEffect(() => {
+        // 스토어 초기화
         return () => {
             dispatch(clearColumnist());
             dispatch(changeInvalidList([]));
@@ -197,11 +210,10 @@ const ColumnistEdit = ({ match }) => {
     return (
         <MokaCard
             title={`칼럼니스트 ${temp.seqNo ? '수정' : '등록'}`}
-            className="w-100 flex-fill"
-            loading={loading}
+            className="w-100"
             footerButtons={[
                 {
-                    text: `${temp.seqNo ? '수정' : '저장'}`,
+                    text: temp.seqNo ? '수정' : '저장',
                     onClick: handleSave,
                     variant: 'positive',
                     className: 'mr-1',
@@ -214,7 +226,7 @@ const ColumnistEdit = ({ match }) => {
                 },
             ]}
         >
-            <div>
+            <Form>
                 {/* 사용여부 */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
@@ -230,7 +242,7 @@ const ColumnistEdit = ({ match }) => {
                 </Form.Row>
 
                 {/* 기자명 */}
-                <Form.Row className="mb-2">
+                <Form.Row>
                     <Col xs={7} className="p-0 d-flex">
                         <MokaInputLabel
                             label="기자명"
@@ -247,11 +259,10 @@ const ColumnistEdit = ({ match }) => {
                         <ReporterListModal show={showModal} onHide={() => setShowModal(false)} onRowClicked={addReporter} />
                     </Col>
                 </Form.Row>
-
-                <div className="mb-2 d-flex">
+                <Form.Row className="mb-2">
                     <MokaInputLabel as="none" label=" " />
-                    <p className="mb-0 text-positive">* 외부 칼럼니스트 이름을 직접 입력해 주세요.</p>
-                </div>
+                    <p className="mb-0 text-positive">* 외부 칼럼니스트는 이름을 직접 입력해 주세요.</p>
+                </Form.Row>
 
                 {/* 기자번호 */}
                 <Form.Row className="mb-2">
@@ -266,7 +277,7 @@ const ColumnistEdit = ({ match }) => {
                 {/* 타입코드 (변경불가, 기자 선택 시 자동 입력) */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <MokaInputLabel label="타입코드" value={temp.jplusRepDivNm} disabled />
+                        <MokaInputLabel label="타입코드" name="jplusRepDivNm" value={temp.jplusRepDivNm} onChange={handleChangeValue} inputProps={{ readOnly: true }} />
                     </Col>
                 </Form.Row>
 
@@ -302,7 +313,6 @@ const ColumnistEdit = ({ match }) => {
                 {/* 이미지 */}
                 <MokaInputLabel
                     as="imageFile"
-                    className="mb-2"
                     name="selectImg"
                     isInvalid={error.selectImg}
                     label={
@@ -324,7 +334,7 @@ const ColumnistEdit = ({ match }) => {
                         accept: 'image/jpeg',
                     }}
                 />
-            </div>
+            </Form>
         </MokaCard>
     );
 };

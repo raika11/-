@@ -73,7 +73,7 @@ const defaultProps = {
 const ServiceCodeSelector = (props) => {
     const { className, width, dropdownHeight, value, onChange, loading } = props;
     const serviceCodeList = useSelector(({ code }) => code.service.list);
-    const [isAllChecked, setAllChecked] = useState(true);
+    const [isAllChecked, setAllChecked] = useState(false);
     const [checkedList, setCheckedList] = useState([]); // 선택된 코드들
     const [renderList, setRenderList] = useState([]);
 

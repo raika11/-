@@ -6,16 +6,31 @@
     width: 100%;
 }
 
-.pre-cell {
+.ag-center-cell {
     display: flex;
     align-items: center;
+    overflow: hidden;
+}
+
+.ag-pre-cell {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
     white-space: pre !important;
 }
 
-.pre-wrap-cell {
+.ag-prewrap-cell {
     display: flex;
     align-items: center;
+    overflow: hidden;
     white-space: pre-wrap !important;
+}
+
+.ag-preline-cell {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: pre-line !important;
 }
 
 .ag-dnd-ghost {
@@ -40,23 +55,34 @@
     overflow: hidden;
 }
 
+.ag-cell.user-select-text {
+    div {
+        user-select: inherit;
+    }
+}
+
 // ag-theme-moka-grid (include ag-theme-aplpine)
 // 기본 테이블 + appStack 테이블 스타일
 .ag-theme-moka-grid {
     @include ag-theme-alpine(
         (
-            odd-row-background-color: $table-accent-bg,
-            row-height: 34px,
-            header-height: 36px,
+            // common
             font-family: $font-family-sans-serif,
             font-size: 13px,
-            header-column-separator: false,
-            range-selection-border-color: transparent,
-            row-hover-color: rgba(33, 150, 243, 0.1),
-            selected-row-background-color: rgba(33, 150, 243, 0.2),
             alpine-active-color: rgba($gray-600, 0.1),
+            range-selection-border-color: transparent,
             checkbox-checked-color: $gray-800,
             foreground-color: $gray-800,
+            cell-horizontal-padding: 5px,
+            // row
+            odd-row-background-color: $table-accent-bg,
+            row-height: 34px,
+            row-hover-color: rgba(33, 150, 243, 0.1),
+            selected-row-background-color: rgba(33, 150, 243, 0.2),
+            // header
+            header-height: 34px,
+            header-background-color: $white,
+            header-column-separator: false,
         )
     );
 
@@ -78,12 +104,6 @@
             border-top: solid $table-border-width;
             border-bottom: solid (2 * $table-border-width);
             border-color: $table-border-color;
-            background-color: $white;
-
-            .ag-header-cell {
-                padding-left: 6px;
-                padding-right: 6px;
-            }
         }
 
         .ag-header-cell-text {
@@ -91,9 +111,6 @@
         }
 
         .ag-cell {
-            padding-left: 5px;
-            padding-right: 5px;
-
             // usedyn-n cell
             &.usedyn-n {
                 @include disabled-font;
@@ -171,18 +188,25 @@ $row-hover-color: darken($desking-row-color, 5);
 .ag-theme-moka-dnd-grid {
     @include ag-theme-alpine(
         (
-            background-color: $desking-row-color,
-            odd-row-background-color: $desking-row-color,
+            // common
             font-family: $font-family-sans-serif,
             font-size: 13px,
-            header-column-separator: false,
-            row-hover-color: $row-hover-color,
-            selected-row-background-color: $row-hover-color,
+            background-color: $desking-row-color,
             range-selection-border-color: transparent,
-            border-color: $white,
             alpine-active-color: rgba($gray-600, 0.1),
             checkbox-checked-color: $gray-800,
             foreground-color: $gray-800,
+            cell-horizontal-padding: 5px,
+            border-color: $white,
+            // row
+            row-hover-color: $row-hover-color,
+            row-height: 38px,
+            odd-row-background-color: $desking-row-color,
+            selected-row-background-color: $row-hover-color,
+            // height
+            header-height: 34px,
+            header-column-separator: false,
+            header-background-color: $white,
         )
     );
 
@@ -213,17 +237,6 @@ $row-hover-color: darken($desking-row-color, 5);
         border-top: solid $table-border-width;
         border-bottom: solid (2 * $table-border-width);
         border-color: $table-border-color;
-        background-color: $white;
-
-        .ag-header-cell {
-            padding-left: 6px;
-            padding-right: 6px;
-        }
-    }
-
-    .ag-cell {
-        padding-left: 5px;
-        padding-right: 5px;
     }
 
     .color-positive {

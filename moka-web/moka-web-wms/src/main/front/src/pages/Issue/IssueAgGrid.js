@@ -2,16 +2,14 @@ import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@/components';
-import columnDefs, { rowData } from './IssueAgGridColumns';
+import columnDefs from './IssueAgGridColumns';
+import produce from 'immer';
 
 /**
  * 패키지 AgGrid
  */
-const IssueAgGrid = () => {
+const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, loading, selected }) => {
     const history = useHistory();
-    const [total] = useState(0);
-    const [loading] = useState(false);
-    const [search] = useState({ page: 1, size: 10 });
 
     /**
      * 패키지 생성 버튼
@@ -24,14 +22,22 @@ const IssueAgGrid = () => {
      * 테이블 검색 옵션 변경
      * @param {object} payload 변경된 값
      */
-    const handleChangeSearchOption = useCallback((search) => console.log(search), []);
+    const handleChangeSearchOptions = (option) => {
+        if (onChangeSearchOption instanceof Function) {
+            onChangeSearchOption(
+                produce(searchOptions, (draft) => {
+                    draft[option.key] = option.value;
+                }),
+            );
+        }
+    };
 
     /**
      * 목록 Row클릭
      */
     const handleRowClicked = useCallback(
         (row) => {
-            history.push(`/package/${row.seqNo}`);
+            history.push(`/package/${row.pkgSeq}`);
         },
         [history],
     );
@@ -48,13 +54,16 @@ const IssueAgGrid = () => {
                 className="flex-fill overflow-hidden"
                 columnDefs={columnDefs}
                 rowData={rowData}
-                onRowNodeId={(params) => params.containerSeq}
+                onRowNodeId={(params) => params.pkgSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}
-                page={search.page}
-                onChangeSearchOption={handleChangeSearchOption}
+                page={searchOptions.page}
+                size={searchOptions.size}
+                selected={selected}
+                onChangeSearchOption={handleChangeSearchOptions}
                 showTotalString={false}
                 pageSizes={false}
+                total={total}
                 paginationClassName="justify-content-center"
             />
         </>

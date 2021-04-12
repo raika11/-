@@ -2,6 +2,7 @@ import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from '@store/issue/issueAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
+import moment from 'moment';
 
 // 패키지 키워드 기본값
 const initialPkgKeyword = {
@@ -15,7 +16,7 @@ const initialPkgKeyword = {
     ordno: 0,
     pkgSeq: null,
     repMaster: 0,
-    schCondi: null,
+    schCondi: { title: false, keyword: false },
     seqNo: null,
 };
 
@@ -29,13 +30,14 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        startDt: null, // 시작일시
-        endDt: null, // 종료일시
-        category: null, // 카테고리
+        startDt: moment(), // 시작일시
+        endDt: moment(), // 종료일시
+        category: '', // 카테고리
         div: 'all', // 패키지 유형
         scbYn: 'all', // 구독 여부
         usedYn: null, // 노출 여부
         keyword: '',
+        sort: 'pkgSeq,desc',
     },
     contentsSearch: {
         page: 0,
@@ -51,10 +53,38 @@ export const initialState = {
     pkg: {
         pkgSeq: null,
         artCnt: 0,
-        packageKeywords: [],
+        packageKeywords: {
+            search: {
+                isUsed: false,
+            },
+            reporter: {
+                isUsed: false,
+            },
+            section: {
+                isUsed: false,
+            },
+            digitalSpecial: {
+                isUsed: false,
+            },
+            ovp: {
+                isUsed: false,
+            },
+            category: {
+                isUsed: false,
+            },
+            pkg: {
+                isUsed: false,
+            },
+        },
+        seasonOptions: {},
         reserveDt: null,
         updDt: null,
         usedYn: 'Y',
+        seasons: [
+            { checked: false, value: '' },
+            { checked: false, value: '' },
+            { checked: false, value: '' },
+        ],
     },
     invalidList: [],
     initialPkgKeyword,
@@ -69,6 +99,15 @@ export default handleActions(
         [act.CLEAR_ISSUE]: (state) => {
             return produce(state, (draft) => {
                 draft.pkg = initialState.pkg;
+            });
+        },
+        /**
+         * 검색조건 변경
+         */
+        [act.CHANGE_ISSUE_SEARCH_OPTIONS]: (state, { payload }) => {
+            console.log(payload);
+            return produce(state, (draft) => {
+                draft.search = payload;
             });
         },
         /**

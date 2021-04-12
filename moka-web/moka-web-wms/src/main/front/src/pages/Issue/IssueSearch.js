@@ -5,22 +5,15 @@ import Col from 'react-bootstrap/Col';
 import { CodeAutocomplete } from '@pages/commons';
 import { MokaInput, MokaSearchInput } from '@/components';
 import { Button } from 'react-bootstrap';
+import { initialState } from '@store/issue';
+import produce from 'immer';
 
 /**
  * 패키지 검색
  */
-const IssueSearch = () => {
-    const [search, setSearch] = useState({
-        masterCode: '',
-        type: 'all',
-        endYn: 'all',
-        subsYn: 'all',
-        expoYn: 'all',
-        period: [1, 'day'],
-        startDt: moment(),
-        endDt: moment(),
-        keyword: '',
-    });
+const IssueSearch = ({ onSearch, searchOptions }) => {
+    const [search, setSearch] = useState(initialState.search);
+    const [period, setPeriod] = useState([1, 'days']);
 
     /**
      * input value
@@ -32,7 +25,7 @@ const IssueSearch = () => {
             if (name === 'period') {
                 // 기간 설정
                 const { number, date } = e.target.selectedOptions[0].dataset;
-                setSearch({ ...search, [name]: [Number(number), date] });
+                setPeriod([Number(number), date]);
 
                 // startDay, endDay 변경
                 const nd = new Date();
@@ -49,7 +42,19 @@ const IssueSearch = () => {
     );
 
     const handleClickReset = () => {
-        setSearch({ masterCode: '', type: 'all', endYn: 'all', subsYn: 'all', expoYn: 'all', period: [1, 'day'], startDt: moment(), endDt: moment(), keyword: '' });
+        //setSearch({ masterCode: '', type: 'all', endYn: 'all', subsYn: 'all', expoYn: 'all', period: [1, 'day'], startDt: moment(), endDt: moment(), keyword: '' });
+        setSearch(initialState.search);
+        setPeriod([1, 'days']);
+    };
+
+    const handleClickSearch = () => {
+        if (onSearch instanceof Function) {
+            onSearch(
+                produce(search, (draft) => {
+                    draft['page'] = 0;
+                }),
+            );
+        }
     };
 
     return (
@@ -58,32 +63,32 @@ const IssueSearch = () => {
                 <Col xs={12} className="p-0 d-flex">
                     <div style={{ width: 355 }} className="mr-2">
                         <CodeAutocomplete
-                            name="masterCode"
+                            name="category"
                             placeholder="카테고리 선택"
-                            value={search.masterCode}
+                            value={search.category}
                             onChange={(value) => {
-                                handleChangeValue({ target: { name: 'masterCode', value: value.map((code) => code.value).join(',') } });
+                                handleChangeValue({ target: { name: 'category', value: value.map((code) => code.value).join(',') } });
                             }}
                             isMulti={true}
                         />
                     </div>
                     <div style={{ width: 120 }} className="mr-2">
-                        <MokaInput as="select" className="mr-2" name="type" value={search.type} onChange={handleChangeValue}>
+                        <MokaInput as="select" className="mr-2" name="div" value={search.div} onChange={handleChangeValue}>
                             <option value="all">유형 전체</option>
-                            <option value="topic">토픽</option>
-                            <option value="issue">이슈</option>
-                            <option value="series">시리즈</option>
+                            <option value="T">토픽</option>
+                            <option value="I">이슈</option>
+                            <option value="S">시리즈</option>
                         </MokaInput>
                     </div>
                     <div style={{ width: 120 }} className="mr-2">
-                        <MokaInput as="select" className="mr-2" name="endYn" value={search.endYn} onChange={handleChangeValue}>
+                        <MokaInput as="select" className="mr-2" name="usedYn" value={search.usedYn} onChange={handleChangeValue}>
                             <option value="all">전체</option>
                             <option value="Y">진행</option>
                             <option value="N">종료</option>
                         </MokaInput>
                     </div>
                     <div style={{ width: 120 }} className="mr-2">
-                        <MokaInput as="select" className="mr-2" name="subsYn" value={search.subsYn} onChange={handleChangeValue}>
+                        <MokaInput as="select" className="mr-2" name="scbYn" value={search.scbYn} onChange={handleChangeValue}>
                             <option value="all">전체</option>
                             <option value="Y">구독 상품</option>
                             <option value="N">비구독 상품</option>
@@ -105,17 +110,17 @@ const IssueSearch = () => {
             </Form.Row>
             <Form.Row className="mb-2">
                 <Col xs={1} className="p-0 pr-2">
-                    <MokaInput as="select" name="period" value={search.period.join('')} onChange={handleChangeValue}>
-                        <option value="day" data-number="1" data-date="days">
+                    <MokaInput as="select" name="period" value={period.join('')} onChange={handleChangeValue}>
+                        <option value="1days" data-number="0" data-date="days">
                             1일
                         </option>
-                        <option value="week" data-number="7" data-date="days">
+                        <option value="7days" data-number="7" data-date="days">
                             1주일
                         </option>
-                        <option value="month" data-number="1" data-date="months">
+                        <option value="1months" data-number="1" data-date="months">
                             1개월
                         </option>
-                        <option value="3month" data-number="3" data-date="months">
+                        <option value="3months" data-number="3" data-date="months">
                             3개월
                         </option>
                     </MokaInput>
@@ -150,7 +155,14 @@ const IssueSearch = () => {
                     />
                 </Col>
                 <Col xs={7} className="p-0">
-                    <MokaSearchInput className="w-100" name="keyword" placeholder="이슈명 또는 담당 기자명을 입력하세요" value={search.keyword} onChange={handleChangeValue} />
+                    <MokaSearchInput
+                        className="w-100"
+                        name="keyword"
+                        placeholder="이슈명 또는 담당 기자명을 입력하세요"
+                        value={search.keyword}
+                        onChange={handleChangeValue}
+                        onSearch={handleClickSearch}
+                    />
                 </Col>
             </Form.Row>
         </Form>

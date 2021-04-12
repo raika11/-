@@ -46,7 +46,7 @@ export default [
         field: 'regDt',
         width: 83,
         cellClassRules: {
-            'pre-wrap-cell': () => true,
+            'ag-prewrap-cell': () => true,
         },
         cellStyle: {
             lineHeight: '20px',

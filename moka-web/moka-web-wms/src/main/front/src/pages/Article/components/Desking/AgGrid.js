@@ -2,6 +2,7 @@ import React, { useState, useEffect, forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { DB_DATEFORMAT, ARTICLE_URL, CHANNEL_TYPE } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaTable } from '@components';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { addDeskingWorkDropzone } from '@utils/deskingUtil';
@@ -112,8 +113,7 @@ const AgGrid = forwardRef((props, ref) => {
                 ref={ref}
                 className="article-list overflow-hidden flex-fill"
                 setGridInstance={setGridInstance}
-                headerHeight={50}
-                rowHeight={48}
+                rowHeight={GRID_ROW_HEIGHT.C[1]}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(article) => article.totalId}

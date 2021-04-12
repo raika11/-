@@ -1,3 +1,5 @@
+import { GRID_LINE_HEIGHT } from '@/style_constants';
+
 export default [
     {
         headerName: 'NO',
@@ -20,29 +22,24 @@ export default [
         flex: 1,
     },
     {
-        headerName: '서비스 시작일',
+        headerName: '발송 시작일',
         field: 'startDt',
-        width: 150,
+        width: 80,
     },
     {
         headerName: '최근 발송일',
-        field: 'brodcast',
-        width: 150,
+        field: 'recentDt',
+        width: 80,
     },
     {
         headerName: '발송 주기',
-        field: 'test4',
-        width: 180,
+        field: 'priod',
+        width: 100,
     },
     {
         headerName: '구독자 수',
         field: 'subscriber',
         width: 70,
-        wrapText: true,
-        cellClassRules: {
-            'pre-cell': () => true,
-        },
-        cellStyle: { lineHeight: '16px' },
     },
     {
         headerName: '상태',
@@ -52,7 +49,7 @@ export default [
     {
         headerName: '등록일',
         field: 'regDt',
-        width: 150,
+        width: 80,
     },
     {
         headerName: '등록자',

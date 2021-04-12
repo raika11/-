@@ -45,12 +45,22 @@ const ColumnistAgGrid = ({ match }) => {
         if (jplusRepRows) {
             setRowData(
                 list.map((data) => {
-                    let jplusRepDiv = jplusRepRows.find((code) => code.dtlCd === data.jplusRepDiv);
-                    const jplusRepDivNm = jplusRepDiv?.cdNm.slice(0, 2);
+                    let setJplusRepDivNm = () => {
+                        let jplusRepDiv = jplusRepRows.find((code) => code.dtlCd === data.jplusRepDiv);
+                        if (data.repSeq) {
+                            if (jplusRepDiv) {
+                                return jplusRepDiv.cdNm.slice(0, 2);
+                            } else {
+                                return '일보';
+                            }
+                        } else {
+                            return '외부';
+                        }
+                    };
 
                     return {
                         ...data,
-                        jplusRepDivNm: jplusRepDivNm || '  -',
+                        jplusRepDivNm: setJplusRepDivNm(),
                         repSeqText: data.repSeq || '   -',
                         regMember: data.regMember ? `${data.regMember.memberNm}(${data.regMember.memberId})` : '',
                         regDt: (data.regDt || '').slice(0, -3),

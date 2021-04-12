@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiModelProperty;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.columnist.vo.ColumnistVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -34,8 +36,16 @@ public class ColumnistSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1972229889422176779L;
 
+    @ApiModelProperty(value = "전송시작일자")
+    @DTODateTimeFormat
+    private String startDt;
+
+    @ApiModelProperty(value = "전송종료일자")
+    @DTODateTimeFormat
+    private String endDt;
+
     /**
-     * char	1   ('N')	NO	상태(유효/정지)
+     * 상태(유효/정지)
      */
     @ApiModelProperty("상태(유효/정지)")
     private String status;
@@ -48,8 +58,9 @@ public class ColumnistSearchDTO extends SearchDTO {
 
     // 검색 조건의 기본값을 설정
     public ColumnistSearchDTO() {
-        super("seqNo,desc");
-        useTotal = MokaConstants.YES;
-        returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        super(ColumnistVO.class, "seqNo,desc");
+        super.setUseTotal(MokaConstants.YES);
+        super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
+        super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
     }
 }

@@ -4,7 +4,7 @@ import produce from 'immer';
 import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { CARD_DEFAULT_HEIGHT, CARD_FOLDING_WIDTH } from '@/constants';
+import { CARD_DEFAULT_HEIGHT, CARD_FOLDING_WIDTH } from '@/style_constants';
 import { MokaIcon, MokaLoader } from '@components';
 import { AuthButton } from '@pages/Auth/AuthButton';
 

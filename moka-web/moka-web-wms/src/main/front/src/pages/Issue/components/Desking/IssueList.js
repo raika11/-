@@ -154,7 +154,7 @@ const IssueList = (props) => {
             // 패키지 목록 로딩 (최초)
             if (cntRef.current === 0) {
                 getIssueList({
-                    search: {},
+                    search: { startDt: null, endDt: null },
                     getServiceCodeList: true,
                 });
                 cntRef.current += 1;
@@ -188,7 +188,7 @@ const IssueList = (props) => {
                         channelType: CHANNEL_TYPE.I.code,
                         divName: pkgDiv.find((d) => d.code === data.pkgDiv)?.name || '',
                         regDt: (data.regDt || '').slice(0, 10),
-                        onClick: () => window.open(`/issue/${data.pkgSeq}`),
+                        onClick: () => window.open(`/package/${data.pkgSeq}`),
                     };
                 }),
             );

@@ -3,6 +3,7 @@ import { getLocalItem } from '@utils/storageUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { AUTHORIZATION } from '@/constants';
 import { logout } from '@store/auth';
+import commonUtil from '@utils/commonUtil';
 
 /**
  * axios를 사용하여 api 호출 전 interceptor
@@ -49,6 +50,7 @@ export default {
         const onSuccess = (response) => {
             // const { config, data } = response;
             // const { header: resultHeader } = data;
+
             return response;
         };
 

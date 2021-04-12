@@ -1,5 +1,10 @@
 import React from 'react';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import ReporterPageButton from '../ReporterPageButton';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+};
 
 export default [
     {
@@ -10,16 +15,19 @@ export default [
         rowDragText: (params) => {
             return params.rowNode.data.repName;
         },
+        cellStyle,
     },
     {
         headerName: '번호',
         field: 'repSeq',
         width: 52,
+        cellStyle,
     },
     {
         headerName: '타입코드',
         field: 'jplusRepDivNm',
         width: 63,
+        cellStyle,
     },
     {
         headerName: '사진',
@@ -31,12 +39,14 @@ export default [
         headerName: '이름',
         field: 'repName',
         width: 100,
+        cellStyle,
     },
     {
         headerName: '아이디',
         field: 'joinsId',
         tooltipField: 'joinsId',
         width: 150,
+        cellStyle,
     },
     {
         headerName: '이메일',
@@ -44,6 +54,7 @@ export default [
         tooltipField: 'repEmail1',
         width: 220,
         flex: 1,
+        cellStyle,
     },
     {
         headerName: '노출여부',

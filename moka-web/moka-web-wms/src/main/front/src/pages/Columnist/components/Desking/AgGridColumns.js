@@ -1,3 +1,9 @@
+import { GRID_LINE_HEIGHT } from '@/style_constants';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+};
+
 export default [
     {
         headerName: '',
@@ -7,16 +13,19 @@ export default [
         rowDragText: (params) => {
             return params.rowNode.data.columnistNm;
         },
+        cellStyle,
     },
     {
         headerName: '기자번호',
         field: 'repSeqText',
         width: 65,
+        cellStyle,
     },
     {
         headerName: '타입코드',
         field: 'jplusRepDiv',
         width: 63,
+        cellStyle,
     },
     {
         headerName: '사진',
@@ -29,12 +38,14 @@ export default [
         field: 'columnistNm',
         width: 70,
         tooltipField: 'columnistNm',
+        cellStyle,
     },
     {
         headerName: '이메일',
         field: 'email',
         width: 200,
         tooltipField: 'email',
+        cellStyle,
     },
     {
         headerName: '약력정보',
@@ -42,6 +53,7 @@ export default [
         width: 300,
         flex: 1,
         tooltipField: 'profile',
+        cellStyle,
     },
     {
         headerName: '사용여부',

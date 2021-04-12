@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { JPLUS_REP_DIV_DEFAULT, CHANNEL_TYPE } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { addDeskingWorkDropzone } from '@utils/deskingUtil';
 import { MokaTable } from '@components';
 import columnDefs from './AgGridColumns';
@@ -52,6 +53,7 @@ const AgGrid = (props) => {
                 setGridInstance={setGridInstance}
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(data) => data.seqNo}
                 onRowClicked={handleRowClicked}
                 loading={loading}

@@ -16,7 +16,7 @@ const initialPkgKeyword = {
     ordno: 0,
     pkgSeq: null,
     repMaster: 0,
-    schCondi: null,
+    schCondi: { title: false, keyword: false },
     seqNo: null,
 };
 

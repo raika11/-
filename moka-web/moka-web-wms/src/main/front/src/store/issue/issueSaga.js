@@ -84,10 +84,20 @@ const getKeyword = (keywords, type) => {
     let defaultKeyword = initialState.initialPkgKeyword;
     const selectKeywords = keywords.filter((keyword) => keyword.catDiv === type);
     const isUsed = selectKeywords.length > 0;
-    let keyword = selectKeywords[0];
+    let keyword = defaultKeyword;
+    if (isUsed) {
+        keyword = selectKeywords[0];
+        keyword = {
+            ...keyword,
+            schCondi: {
+                keyword: keyword.schCondi.indexOf('K') > -1,
+                title: keyword.schCondi.indexOf('T') > -1,
+            },
+        };
+    }
 
     if (type === CATE_DIV.REPORTER) {
-        defaultKeyword = { ...defaultKeyword, reporter: { ordNo: 1, reporterId: null } };
+        //defaultKeyword = { ...defaultKeyword, reporter: { ordNo: 1, reporterId: null } };
         const reporter = selectKeywords.map((selectKeyword) => ({
             ordNo: selectKeyword.ordno,
             reporterId: selectKeyword.repMaster,
@@ -96,14 +106,24 @@ const getKeyword = (keywords, type) => {
         keyword = { ...keyword, reporter };
     }
 
+    /*if (isUsed) {
+        keyword = {
+            ...keyword,
+            schCondi: {
+                keyword: keyword.schCondi.indexOf('K') > -1,
+                title: keyword.schCondi.indexOf('T') > -1,
+            },
+        };
+    }*/
+
     return {
         isUsed,
-        keyword: isUsed ? keyword : defaultKeyword,
+        keyword,
     };
 };
 
-const toIssueData = (response) => {
-    const { pkgTitle, pkgDesc, pkgDiv, episView, packageKeywords, seasonNo } = response;
+export const toIssueData = (response) => {
+    const { pkgSeq, pkgTitle, pkgDesc, pkgDiv, episView, packageKeywords, seasonNo, catList } = response;
 
     const search = getKeyword(packageKeywords, CATE_DIV.SEARCH_KEYWORD);
     const reporter = getKeyword(packageKeywords, CATE_DIV.REPORTER);
@@ -142,12 +162,15 @@ const toIssueData = (response) => {
     console.log('categoryKeywords', categoryKeywords);*/
 
     return {
+        ...response,
+        pkgSeq,
         pkgTitle,
         pkgDesc,
         pkgDiv,
         episView,
         packageKeywords: { search, reporter, section, digitalSpecial, ovp, category, pkg },
         seasons,
+        catList,
     };
 };
 
@@ -169,6 +192,68 @@ function* getIssue({ type, payload }) {
     }
     yield put(finishLoading(type));
 }
+
+const toSaveSchCondi = (pkgSchCondi) => {
+    const schCondi = [];
+    if (pkgSchCondi.keyword) {
+        schCondi.push('K');
+    }
+    if (pkgSchCondi.title) {
+        schCondi.push('T');
+    }
+
+    return schCondi.join(',');
+};
+
+const toSavePackageKeywords = (viewKeywords) => {
+    const usedKeywords = Object.keys(viewKeywords).filter((key) => viewKeywords[key].isUsed);
+    const packageKeywords = [];
+    usedKeywords.forEach((key) => {
+        const keyword = viewKeywords[key].keyword;
+        const { schCondi: pkgSchCondi } = keyword;
+        const schCondi = toSaveSchCondi(pkgSchCondi);
+
+        if (key === 'reporter') {
+            keyword.reporter.map((data) => {
+                const copyKeyword = { ...keyword };
+                delete copyKeyword.reporter;
+                packageKeywords.push({ ...copyKeyword, ordno: data.ordNo, repMaster: data.reporterId, schCondi: schCondi });
+            });
+        } else {
+            packageKeywords.push({ ...keyword, schCondi });
+        }
+    });
+
+    return packageKeywords;
+};
+
+const toSavePackageSeason = (viewSeasons) => {
+    const seasons = viewSeasons.map((season) => season.value);
+    return seasons.join(',');
+};
+
+const toSavePackage = (pkg) => {
+    const { packageKeywords: viewKeywords, seasons: viewSeasons } = pkg;
+    const copyPkg = { ...pkg };
+    delete copyPkg.seasons;
+
+    const seasonNo = toSavePackageSeason(viewSeasons);
+    const packageKeywords = toSavePackageKeywords(viewKeywords);
+
+    return { ...copyPkg, packageKeywords, seasonNo };
+};
+
+function* saveIssue({ type, payload }) {
+    const { pkg: viewData, callback } = payload;
+
+    const pkg = toSavePackage(viewData);
+    const saveApi = pkg.pkgSeq ? api.putIssueGroupByOrdno : api.postIssueGroupByOrdno;
+    const response = yield call(saveApi, { pkg });
+    if (callback instanceof Function) {
+        callback(response);
+    }
+}
+
 /**
  * 이슈 목록 조회 (모달)
  */
@@ -222,6 +307,7 @@ const getIssueContentsListModal = createRequestSaga(act.GET_ISSUE_CONTENTS_LIST_
 export default function* saga() {
     yield takeLatest(act.GET_ISSUE_LIST, getIssueList);
     yield takeLatest(act.GET_ISSUE, getIssue);
+    yield takeLatest(act.SAVE_ISSUE, saveIssue);
     yield takeLatest(act.GET_ISSUE_LIST_MODAL, getIssueListModal);
     yield takeLatest(act.GET_ISSUE_CONTENTS_LIST_MODAL, getIssueContentsListModal);
 }

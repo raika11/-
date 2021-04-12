@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
-import { MokaTable } from '@components';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
+import { MokaTable } from '@components';
 import { columnDefs } from './ChannelListAgGridColumns';
 import { GET_CHNL_LIST, changeChnlSearchOption, getChnlList } from '@store/jpod';
 
@@ -58,7 +59,7 @@ const ChannelListAgGrid = ({ match }) => {
             className="flex-fill overflow-hidden"
             columnDefs={columnDefs}
             rowData={rowData}
-            rowHeight={44}
+            rowHeight={GRID_ROW_HEIGHT.C[1]}
             onRowNodeId={(data) => data.chnlSeq}
             onRowClicked={handleRowClicked}
             loading={loading}

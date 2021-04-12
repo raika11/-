@@ -83,19 +83,20 @@ public class ColumnistRestController extends AbstractCommonController {
     @GetMapping
     public ResponseEntity<?> getColumnistList(@Valid @SearchParam ColumnistSearchDTO search) {
 
-        ResultListDTO<ColumnistDTO> resultListMessage = new ResultListDTO<>();
+        ResultListDTO<ColumnistVO> resultListMessage = new ResultListDTO<>();
 
         // 조회
-        Page<Columnist> returnValue = columnistService.findAllColumnist(search);
+        Page<ColumnistVO> returnValue = columnistService.findAllColumnistStatList(search);
 
         // 리턴값 설정
-        List<ColumnistDTO> columnistList = modelMapper.map(returnValue.getContent(), ColumnistDTO.TYPE);
         resultListMessage.setTotalCnt(returnValue.getTotalElements());
-        resultListMessage.setList(columnistList);
+        resultListMessage.setList(returnValue.getContent());
 
-        // 결과값 셋팅
-        ResultDTO<ResultListDTO<ColumnistDTO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        ResultDTO<ResultListDTO<ColumnistVO>> resultDto = new ResultDTO<>(resultListMessage);
+
         tpsLogger.success(ActionType.SELECT);
+
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 

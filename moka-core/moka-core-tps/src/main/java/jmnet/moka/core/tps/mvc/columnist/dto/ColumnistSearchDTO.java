@@ -6,9 +6,12 @@ package jmnet.moka.core.tps.mvc.columnist.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.columnist.vo.ColumnistVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -34,11 +37,33 @@ public class ColumnistSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1972229889422176779L;
 
+    @ApiModelProperty(value = "전송시작일자", required = true)
+    @DTODateTimeFormat
+    @NotNull(message = "{tps.search-keyword-log.error.notnull.startDt}")
+    private String startDt;
+
+    @ApiModelProperty(value = "전송종료일자", required = true)
+    @DTODateTimeFormat
+    @NotNull(message = "{tps.search-keyword-log.error.notnull.endDt}")
+    private String endDt;
+
     /**
-     * char	1   ('N')	NO	상태(유효/정지)
+     * 상태(유효/정지)
      */
     @ApiModelProperty("상태(유효/정지)")
     private String status;
+
+    /**
+     * 칼럼니스트이름
+     */
+    @ApiModelProperty("칼럼니스트이름")
+
+    private String columnistNm;
+    /**
+     * 필진타입
+     */
+    @ApiModelProperty("필진타입")
+    private String jplusRepDivNm;
 
     /**
      * 검색결과 성공여부
@@ -48,8 +73,9 @@ public class ColumnistSearchDTO extends SearchDTO {
 
     // 검색 조건의 기본값을 설정
     public ColumnistSearchDTO() {
-        super("seqNo,desc");
-        useTotal = MokaConstants.YES;
-        returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        super(ColumnistVO.class, "seqNo,desc");
+        super.setUseTotal(MokaConstants.YES);
+        super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
+        super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
     }
 }

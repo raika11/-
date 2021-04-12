@@ -3,6 +3,7 @@
  */
 package jmnet.moka.core.tps.mvc.columnist.service;
 
+import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.UUIDGenerator;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,9 +47,29 @@ public class ColumnistServiceImpl implements ColumnistService {
     private ColumnistMapper columnistMapper;
 
     @Override
-    public Page<Columnist> findAllColumnist(ColumnistSearchDTO search) {
-        return columnistRepository.findAllColumnist(search);
+    public Page<ColumnistVO> findAllColumnistStatList(ColumnistSearchDTO searchDTO) {
+        String chkJplusRepDivNm = searchDTO.getJplusRepDivNm();
+        String chkColumnistNm = searchDTO.getColumnistNm();
+
+        if (chkColumnistNm == null || searchDTO
+                .getColumnistNm()
+                .isEmpty()) {
+            searchDTO.setColumnistNm(" ");
+        }
+        if (chkJplusRepDivNm == null || searchDTO
+                .getJplusRepDivNm()
+                .isEmpty()) {
+            searchDTO.setJplusRepDivNm("");
+        } else {
+            if (chkJplusRepDivNm.equals("all")) {
+                searchDTO.setJplusRepDivNm("");
+            }
+        }
+
+        List<ColumnistVO> list = columnistMapper.findAllList(searchDTO);
+        return new PageImpl<>(list, searchDTO.getPageable(), searchDTO.getTotal() == null ? 0 : searchDTO.getTotal());
     }
+
 
     @Override
     public ColumnistVO findId(Long seq) {

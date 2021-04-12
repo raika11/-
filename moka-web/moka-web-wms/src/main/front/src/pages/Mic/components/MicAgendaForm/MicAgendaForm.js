@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { MokaInput, MokaInputLabel } from '@components';
+import { MokaInput, MokaInputLabel, MokaPrependLinkInput } from '@components';
 import BackgroundImageForm from './BackgroundImageForm';
 import RelArticleTable from './RelArticleTable';
 import RelationPollModal from '@pages/Survey/Poll/modals/RelationPollModal';
@@ -198,8 +198,16 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
 
             {/* 찬반 투표 */}
             <Form.Row className="mb-2">
-                <MokaInputLabel label="찬반 투표" className="flex-fill" value={agenda.pollSeq === 0 ? '' : `ID: ${agenda.pollSeq}`} disabled />
-                <MokaInput value={agenda.pollTitle} disabled className="mr-2" />
+                <MokaInputLabel label="찬반 투표" as="none" />
+                <MokaPrependLinkInput
+                    linkText={!agenda.pollSeq || agenda.pollSeq === 0 ? 'ID' : `ID: ${agenda.pollSeq}`}
+                    inputList={{
+                        value: agenda.pollTitle,
+                        disabled: true,
+                        className: 'bg-white',
+                    }}
+                    className="mr-2"
+                />
                 <Button variant="searching" className="flex-shrink-0" onClick={() => setShow(true)}>
                     투표 찾기
                 </Button>

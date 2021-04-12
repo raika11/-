@@ -1,5 +1,3 @@
-import { GRID_LINE_HEIGHT } from '@/style_constants';
-
 const cellClassRules = {
     'ag-center-cell': () => true,
 };
@@ -15,17 +13,14 @@ export default [
     {
         headerName: 'API 경로',
         field: 'apiPath',
-        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
-        wrapText: true,
-        cellClassRules,
+        cellRenderer: 'longTextRenderer',
+        tooltipField: 'apiPath',
         width: 250,
     },
     {
         headerName: '설명',
         field: 'apiDesc',
-        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
-        wrapText: true,
-        cellClassRules,
+        cellRenderer: 'longTextRenderer',
         flex: 1,
     },
     {

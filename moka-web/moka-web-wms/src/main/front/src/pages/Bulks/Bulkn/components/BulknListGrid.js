@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ColumnDefs } from './BulknListGridColumns';
 import { useHistory } from 'react-router-dom';
-import { MokaTable } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBulkList, GET_BULK_LIST, changeSearchOption, clearBulksList, getBulkArticle } from '@store/bulks';
 import { DISPLAY_PAGE_NUM } from '@/constants';
+import { MokaTable } from '@components';
+import { getBulkList, GET_BULK_LIST, changeSearchOption, clearBulksList, getBulkArticle } from '@store/bulks';
+import { ColumnDefs } from './BulknListGridColumns';
 
 /**
  * 네이버 벌크 문구 > 목록 > AgGrid

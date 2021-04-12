@@ -1,5 +1,5 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import { GRID_LINE_HEIGHT } from '@/style_constants';
+import React, { useState, useImperativeHandle, forwardRef, useRef } from 'react';
+import { GRID_ROW_HEIGHT, GRID_LINE_HEIGHT, WEBKIT_BOX } from '@/style_constants';
 
 /**
  * ag-grid 셀에 긴 텍스트를 그리는 컴포넌트.
@@ -11,6 +11,7 @@ const MokaTableLongTextRenderer = forwardRef((params, ref) => {
     const { colDef } = params;
     const [field] = useState(colDef.field);
     const [data, setData] = useState(params.node.data);
+    const text = useRef(null);
 
     useImperativeHandle(ref, () => ({
         refresh: (params) => {
@@ -19,9 +20,23 @@ const MokaTableLongTextRenderer = forwardRef((params, ref) => {
         },
     }));
 
+    React.useEffect(() => {
+        const rowHeight = params.node.rowHeight;
+        let idx = GRID_ROW_HEIGHT.T.findIndex((f) => f === rowHeight);
+        if (idx < 0) idx = GRID_ROW_HEIGHT.C.findIndex((f) => f === rowHeight);
+        if (idx > -1) {
+            const styles = WEBKIT_BOX(idx + 1);
+            Object.keys(styles).forEach((css) => {
+                text.current.style.setProperty(css, styles[css]);
+            });
+        }
+    }, [params]);
+
     return (
         <div className="h-100 w-100 ag-prewrap-cell">
-            <span style={{ margin: 'auto 0', lineHeight: `${GRID_LINE_HEIGHT.M}px` }}>{data?.[field]}</span>
+            <span ref={text} style={{ margin: 'auto 0', lineHeight: `${GRID_LINE_HEIGHT.M}px` }}>
+                {data?.[field]}
+            </span>
         </div>
     );
 });

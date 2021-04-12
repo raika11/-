@@ -10,7 +10,7 @@ export const CARD_FOLDING_WIDTH = 32;
 // AgGrid의 rowHeight
 export const GRID_ROW_HEIGHT = {
     T: [34, 46, 46], // text
-    C: [38, 54, 54], // 복합형 (사진 or 버튼 or input)
+    C: [38, 54, 54], // 복합형 (텍스트 + 사진, 버튼, input)
 };
 
 // AgGrid의 lineHeight
@@ -24,7 +24,6 @@ export const GRID_LINE_HEIGHT = {
 export const WEBKIT_BOX = (lineClamp) => ({
     display: '-webkit-box',
     overflow: 'hidden',
-    paddingTop: '3px',
     '-webkit-line-clamp': lineClamp,
     '-webkit-box-orient': 'vertical',
     lineHeight: `${GRID_LINE_HEIGHT.M}px`,

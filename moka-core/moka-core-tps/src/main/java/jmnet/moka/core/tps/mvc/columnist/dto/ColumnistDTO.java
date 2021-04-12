@@ -12,7 +12,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.common.code.JplusRepDivCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
@@ -89,7 +88,7 @@ public class ColumnistDTO implements Serializable {
      * 필진타입 (J1:기자필진,J2:외부기자(밀리터리),J3:그룹필진,J0:필진해지,R1:일보기자(더오래),R2:외부기자(더오래))
      */
     @ApiModelProperty("필진타입(J1:기자필진,J2:외부기자(밀리터리),J3:그룹필진,J0:필진해지,R1:일보기자(더오래),R2:외부기자(더오래))")
-    private JplusRepDivCode jplusRepDiv;
+    private String jplusRepDiv;
 
     /**
      * varchar	512		YES	이메일

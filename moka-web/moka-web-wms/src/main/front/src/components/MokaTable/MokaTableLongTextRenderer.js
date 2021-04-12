@@ -33,7 +33,7 @@ const MokaTableLongTextRenderer = forwardRef((params, ref) => {
     }, [params]);
 
     return (
-        <div className="h-100 w-100 ag-prewrap-cell">
+        <div className="h-100 w-100 ag-preline-cell">
             <span ref={text} style={{ margin: 'auto 0', lineHeight: `${GRID_LINE_HEIGHT.M}px` }}>
                 {data?.[field]}
             </span>

@@ -26,6 +26,13 @@
     white-space: pre-wrap !important;
 }
 
+.ag-preline-cell {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: pre-line !important;
+}
+
 .ag-dnd-ghost {
     z-index: 1051 !important; // bootstrap Modal 보다 높게 설정
 }
@@ -46,6 +53,12 @@
 
 .ag-center-cols-viewport {
     overflow: hidden;
+}
+
+.ag-cell.user-select-text {
+    div {
+        user-select: inherit;
+    }
 }
 
 // ag-theme-moka-grid (include ag-theme-aplpine)

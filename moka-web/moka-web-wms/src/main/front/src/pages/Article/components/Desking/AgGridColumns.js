@@ -39,12 +39,9 @@ export default [
         field: 'artIdType',
         tooltipField: 'artTypeName',
         cellClassRules: {
-            'ag-pre-cell': () => true,
             'user-select-text': () => true,
         },
-        cellStyle: {
-            lineHeight: `${GRID_LINE_HEIGHT.M}px`,
-        },
+        cellRenderer: 'longTextRenderer',
     },
     {
         headerName: '사진',

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
@@ -42,10 +42,6 @@ const ColumnistSearch = ({ match }) => {
             ...search,
             page: 0,
         };
-
-        if (temp.searchType === '') {
-            delete temp.searchType;
-        }
 
         dispatch(changeSearchOption(temp));
         dispatch(getColumnistList({ search: temp }));
@@ -93,7 +89,7 @@ const ColumnistSearch = ({ match }) => {
             {/* 검색 타입 */}
             <Col xs={2} className="p-0 pr-2">
                 <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                    <option value="">전체</option>
+                    <option value="all">전체</option>
                     <option value="columnistNm">이름</option>
                     <option value="jplusRepDivNm">필진 타입</option>
                 </MokaInput>

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaInputLabel, MokaSearchInput } from '@components';
+import { MokaInput, MokaSearchInput } from '@components';
 import { messageBox } from '@utils/toastUtil';
 import { initialState, getColumnistList, changeSearchOption, clearColumnist } from '@store/columnist';
 import { AuthButton } from '@pages/Auth/AuthButton';
@@ -37,19 +37,19 @@ const ColumnistSearch = ({ match }) => {
     /**
      * 검색
      */
-    const handleSearch = useCallback(
-        ({ key, value }) => {
-            let temp = { ...search };
-            if (key) {
-                let temp = { ...search, [key]: value };
-                if (key !== 'page') temp['page'] = 0;
-            }
+    const handleSearch = () => {
+        let temp = {
+            ...search,
+            page: 0,
+        };
 
-            dispatch(changeSearchOption(temp));
-            dispatch(getColumnistList({ search: temp }));
-        },
-        [dispatch, search],
-    );
+        if (temp.searchType === '') {
+            delete temp.searchType;
+        }
+
+        dispatch(changeSearchOption(temp));
+        dispatch(getColumnistList({ search: temp }));
+    };
 
     /**
      * 등록
@@ -66,7 +66,7 @@ const ColumnistSearch = ({ match }) => {
     useEffect(() => {
         dispatch(
             getColumnistList({
-                search: initialState.search,
+                search: search,
                 callback: ({ header }) => {
                     if (!header.success) {
                         messageBox.alert(header.message);
@@ -74,29 +74,39 @@ const ColumnistSearch = ({ match }) => {
                 },
             }),
         );
-    }, [dispatch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Form.Row className="mb-14">
             {/* 상태정보 */}
             <Col xs={2} className="p-0 pr-2">
-                <MokaInputLabel as="select" name="status" value={search.status} onChange={handleChangeValue} className="mb-0">
+                <MokaInput as="select" name="status" value={search.status} onChange={handleChangeValue}>
                     {initialState.statusSearchTypeList.map((type) => (
                         <option key={type.id} value={type.id}>
                             {type.name}
                         </option>
                     ))}
-                </MokaInputLabel>
+                </MokaInput>
+            </Col>
+
+            {/* 검색 타입 */}
+            <Col xs={2} className="p-0 pr-2">
+                <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                    <option value="">전체</option>
+                    <option value="columnistNm">이름</option>
+                    <option value="jplusRepDivNm">필진 타입</option>
+                </MokaInput>
             </Col>
 
             {/* 이름 검색 */}
-            <Col xs={10} className="p-0 d-flex">
+            <Col xs={8} className="p-0 d-flex">
                 <MokaSearchInput
                     name="keyword"
-                    placeholder={'칼럼니스트 이름 검색'}
+                    placeholder="칼럼니스트 이름 검색"
                     value={search.keyword}
                     onChange={handleChangeValue}
-                    onSearch={() => handleSearch({})}
+                    onSearch={handleSearch}
                     className="flex-fill mr-1"
                 />
 

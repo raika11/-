@@ -270,7 +270,8 @@ function* getIssueListModal({ payload }) {
             const scResponse = yield call(codeApi.getMastercodeList, { search: codeInitialState.service.search });
             if (scResponse.data.header.success) {
                 yield put({ type: codeAct.GET_CODE_SERVICE_LIST_SUCCESS, payload: scResponse.data });
-                const category = scResponse.data.body.list.map((sc) => sc.masterCode).join(',');
+                // const category = scResponse.data.body.list.map((sc) => sc.masterCode).join(',');
+                const category = '';
                 search = { ...payloadSearch, category };
             } else {
                 callbackData = errorResponse(scResponse.data);

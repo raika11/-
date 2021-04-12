@@ -154,7 +154,7 @@ const IssueList = (props) => {
             // 패키지 목록 로딩 (최초)
             if (cntRef.current === 0) {
                 getIssueList({
-                    search: {},
+                    search: { startDt: null, endDt: null },
                     getServiceCodeList: true,
                 });
                 cntRef.current += 1;

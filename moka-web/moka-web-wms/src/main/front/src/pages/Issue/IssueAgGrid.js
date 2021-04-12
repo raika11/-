@@ -8,7 +8,7 @@ import produce from 'immer';
 /**
  * 패키지 AgGrid
  */
-const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, loading }) => {
+const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, loading, selected }) => {
     const history = useHistory();
 
     /**
@@ -59,6 +59,7 @@ const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, load
                 loading={loading}
                 page={searchOptions.page}
                 size={searchOptions.size}
+                selected={selected}
                 onChangeSearchOption={handleChangeSearchOptions}
                 showTotalString={false}
                 pageSizes={false}

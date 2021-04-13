@@ -58,7 +58,7 @@ const Menu = () => {
         const btnDepth = event.currentTarget.getAttribute('depth');
         const btnParentMenuId = event.currentTarget.getAttribute('parentmenuid');
 
-        if (typeof btnParentMenuId !== 'undefined' && btnParentMenuId.length > 0) {
+        if (btnParentMenuId && btnParentMenuId.length > 0) {
             setMenuSearchInfo(0, btnDepth, '', btnParentMenuId);
         } else {
             toast.warning('상위 메뉴를 선택하세요.');
@@ -174,24 +174,25 @@ const Menu = () => {
                 headerClassName="d-flex justify-content-between align-items-center"
                 bodyClassName="d-flex flex-column"
                 title="대메뉴"
+                titleButtons={[
+                    {
+                        text: '등록',
+                        depth: 1,
+                        parentmenuid: rootParentMenuId,
+                        variant: 'positive-a',
+                        className: 'mr-1',
+                        onClick: handleNewMenu,
+                    },
+                    {
+                        text: '저장',
+                        depth: 1,
+                        parentmenuid: rootParentMenuId,
+                        variant: 'positive',
+                        onClick: () => handleSaveOrder(rootParentMenuId, largeOrderList, setLargeOrderList),
+                    },
+                ]}
                 width={LIST_WIDTH}
             >
-                <div className="mb-2 d-flex justify-content-end">
-                    <Button depth="1" parentmenuid={rootParentMenuId} variant="positive-a" className="mr-1" onClick={handleNewMenu}>
-                        등록
-                    </Button>
-                    <Button
-                        depth="1"
-                        parentmenuid={rootParentMenuId}
-                        variant="positive"
-                        onClick={() => {
-                            handleSaveOrder(rootParentMenuId, largeOrderList, setLargeOrderList);
-                        }}
-                    >
-                        저장
-                    </Button>
-                </div>
-
                 <MenuDraggableAgGrid
                     onRowClicked={handleRowClicked}
                     menuId={largeMenuId}
@@ -208,24 +209,25 @@ const Menu = () => {
                 headerClassName="d-flex justify-content-between align-items-center"
                 bodyClassName="d-flex flex-column"
                 title="중메뉴"
+                titleButtons={[
+                    {
+                        text: '등록',
+                        depth: 2,
+                        parentmenuid: largeMenuId,
+                        variant: 'positive-a',
+                        className: 'mr-1',
+                        onClick: handleNewMenu,
+                    },
+                    {
+                        text: '저장',
+                        depth: 2,
+                        parentmenuid: largeMenuId,
+                        variant: 'positive',
+                        onClick: () => handleSaveOrder(largeMenuId, middleOrderList, setMiddleOrderList),
+                    },
+                ]}
                 width={LIST_WIDTH}
             >
-                <div className="mb-2 d-flex justify-content-end">
-                    <Button depth="2" parentmenuid={largeMenuId} variant="positive-a" className="mr-1" onClick={handleNewMenu}>
-                        등록
-                    </Button>
-                    <Button
-                        depth="2"
-                        parentmenuid={largeMenuId}
-                        variant="positive"
-                        onClick={() => {
-                            handleSaveOrder(largeMenuId, middleOrderList, setMiddleOrderList);
-                        }}
-                    >
-                        저장
-                    </Button>
-                </div>
-
                 <MenuDraggableAgGrid
                     onRowClicked={handleRowClicked}
                     menuId={middleMenuId}
@@ -242,24 +244,25 @@ const Menu = () => {
                 headerClassName="d-flex justify-content-between align-items-center"
                 bodyClassName="d-flex flex-column"
                 title="소메뉴"
+                titleButtons={[
+                    {
+                        text: '등록',
+                        depth: 3,
+                        parentmenuid: middleMenuId,
+                        variant: 'positive-a',
+                        className: 'mr-1',
+                        onClick: handleNewMenu,
+                    },
+                    {
+                        text: '저장',
+                        depth: 3,
+                        parentmenuid: middleMenuId,
+                        variant: 'positive',
+                        onClick: () => handleSaveOrder(middleMenuId, smallOrderList, setSmallOrderList),
+                    },
+                ]}
                 width={LIST_WIDTH}
             >
-                <div className="mb-2 d-flex justify-content-end">
-                    <Button depth="3" parentmenuid={middleMenuId} variant="positive-a" className="mr-1" onClick={handleNewMenu}>
-                        등록
-                    </Button>
-                    <Button
-                        depth="3"
-                        parentmenuid={middleMenuId}
-                        variant="positive"
-                        onClick={() => {
-                            handleSaveOrder(middleMenuId, smallOrderList, setSmallOrderList);
-                        }}
-                    >
-                        저장
-                    </Button>
-                </div>
-
                 <MenuDraggableAgGrid
                     onRowClicked={handleRowClicked}
                     menuId={smallMenuId}

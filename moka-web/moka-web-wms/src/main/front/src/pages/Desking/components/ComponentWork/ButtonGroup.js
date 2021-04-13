@@ -13,7 +13,7 @@ import ReserveComponentWork from './ReserveComponentWork';
 import StatusBadge from './StatusBadge';
 // import TemplateListModal from '@pages/Template/modals/TemplateListModal';
 // import TemplateHtmlModal from '@pages/Template/modals/TemplateHtmlModal';
-import { EditDeskingWorkModal, RegisterModal, EditListNumberModal, EditHtmlModal } from '@pages/Desking/modals';
+import { EditDeskingWorkModal, RegisterModal, EditListNumberModal, EditSnapshotModal } from '@pages/Desking/modals';
 
 /**
  * 컴포넌트 워크의 버튼 그룹 컴포넌트
@@ -283,7 +283,7 @@ const ButtonGroup = (props) => {
             </Row>
 
             {/* HTML 수동 편집 */}
-            <EditHtmlModal show={modalShow.html} onHide={() => handleModalShow('html', false)} component={component} />
+            <EditSnapshotModal show={modalShow.html} onHide={() => handleModalShow('html', false)} component={component} />
 
             {/* 템플릿(보여주지 않음) */}
             {/* <TemplateListModal

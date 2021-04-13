@@ -18,6 +18,7 @@ const ColumnistEdit = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { seqNo } = useParams();
+    const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
     const { columnist, invalidList } = useSelector(({ columnist }) => columnist);
     const [temp, setTemp] = useState(initialState.columnist);
     const [showModal, setShowModal] = useState(false);
@@ -177,14 +178,19 @@ const ColumnistEdit = ({ match }) => {
 
     useEffect(() => {
         // 칼럽니스트 정보가 바뀌면 로컬 스테이트 변경
-        if (columnist) {
+        if (columnist && jplusRepRows) {
             let tmpEmail = columnist.email && columnist.email.split('@');
             let jplusRepDivNm = () => {
                 if (columnist.repSeq) {
                     if (columnist.jplusRepDiv) {
-                        return columnist.jplusRepDivNm;
-                    } else {
-                        return '일보기자';
+                        let findJplusRepDiv = jplusRepRows.find((r) => r.dtlCd === columnist.jplusRepDiv);
+                        if (findJplusRepDiv) {
+                            return `${findJplusRepDiv.dtlCd}: ${columnist.jplusRepDivNm}`;
+                        } else {
+                            if (columnist.jplusRepDiv === 'NL') {
+                                return '일보기자';
+                            }
+                        }
                     }
                 } else {
                     return '외부';
@@ -197,7 +203,7 @@ const ColumnistEdit = ({ match }) => {
                 email2: tmpEmail[1],
             });
         }
-    }, [columnist]);
+    }, [columnist, jplusRepRows]);
 
     useEffect(() => {
         // 스토어 초기화

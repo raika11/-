@@ -63,8 +63,8 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
             const w = boxRef.current.parentElement.offsetWidth;
             let h = boxRef.current.parentElement.offsetHeight;
             if (autoRatio) {
-                // 16:9 자동 셋팅
-                h = Math.floor(((w || 0) / 16) * 9);
+                // 6:4 자동 셋팅
+                h = Math.floor(((w || 0) / 6) * 4);
             } else if (roundedCircle) {
                 // 동그라미인 경우 정사각형으로 셋팅
                 if (h > w) h = w;

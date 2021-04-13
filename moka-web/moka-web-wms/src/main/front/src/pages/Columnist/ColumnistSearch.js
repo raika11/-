@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 import { messageBox } from '@utils/toastUtil';
+import { getJplusRep } from '@/store/codeMgt';
 import { initialState, getColumnistList, changeSearchOption, clearColumnist } from '@store/columnist';
 import { AuthButton } from '@pages/Auth/AuthButton';
 
@@ -15,6 +16,7 @@ import { AuthButton } from '@pages/Auth/AuthButton';
 const ColumnistSearch = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
+    const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
     const storeSearch = useSelector(({ columnist }) => columnist.search);
     const [search, setSearch] = useState(initialState.search);
 
@@ -60,6 +62,7 @@ const ColumnistSearch = ({ match }) => {
     }, [storeSearch]);
 
     useEffect(() => {
+        dispatch(getJplusRep());
         dispatch(
             getColumnistList({
                 search: search,
@@ -88,19 +91,25 @@ const ColumnistSearch = ({ match }) => {
 
             {/* 검색 타입 */}
             <Col xs={2} className="p-0 pr-2">
-                <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                    <option value="all">전체</option>
-                    <option value="columnistNm">이름</option>
-                    <option value="jplusRepDivNm">필진 타입</option>
+                <MokaInput as="select" name="jplusRepDiv" value={search.jplusRepDiv} onChange={handleChangeValue}>
+                    <option value="">전체</option>
+                    {jplusRepRows &&
+                        jplusRepRows.map((rep) => (
+                            <option key={rep.cdOrd} value={rep.dtlCd}>
+                                {rep.cdNm}
+                            </option>
+                        ))}
+                    <option value="NL">일보기자</option>
+                    <option value="ZZ">외부</option>
                 </MokaInput>
             </Col>
 
             {/* 이름 검색 */}
             <Col xs={8} className="p-0 d-flex">
                 <MokaSearchInput
-                    name="keyword"
+                    name="columnistNm"
                     placeholder="칼럼니스트 이름 검색"
-                    value={search.keyword}
+                    value={search.columnistNm}
                     onChange={handleChangeValue}
                     onSearch={handleSearch}
                     className="flex-fill mr-1"

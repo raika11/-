@@ -32,6 +32,23 @@
     </keys>
   </api>
 
+  <!--기자 최근기사목록-->
+  <api id="reporter.latest">
+    <description>기자의 최신기사 목록조회을 조회한다.</description>
+    <parameter>
+      <id desc="기자순번" require="Y" type="number">^[0-9]{1,9}$</id>
+      <keyword desc="검색어">^.{0,1000}$</keyword>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">
+      dps.reporter.latest
+    </request>
+    <keys>
+      id
+      keyword
+      #paging
+    </keys>
+  </api>
+
   <!--컬럼니스트 목록-->
   <api id="columnist">
     <description>컬럼니스트 목록을 조회한다.</description>

@@ -17,6 +17,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * 기자관리 검색 DTO 2020. 11. 16. ssc 최초생성
@@ -49,6 +50,19 @@ public class ColumnistSearchDTO extends SearchDTO {
      */
     @ApiModelProperty("상태(유효/정지)")
     private String status;
+
+    /**
+     * nvarchar	30		NO	칼럼니스트이름
+     */
+    @ApiModelProperty("칼럼니스트이름")
+    @Length(max = 30, message = "{tps.columnist.error.length.columnistNm}")
+    private String columnistNm;
+
+    /**
+     * 필진타입 (J1:기자필진,J2:외부기자(밀리터리),J3:그룹필진,J0:필진해지,R1:일보기자(더오래),R2:외부기자(더오래))
+     */
+    @ApiModelProperty("필진타입(J1:기자필진,J2:외부기자(밀리터리),J3:그룹필진,J0:필진해지,R1:일보기자(더오래),R2:외부기자(더오래))")
+    private String jplusRepDiv;
 
     /**
      * 검색결과 성공여부

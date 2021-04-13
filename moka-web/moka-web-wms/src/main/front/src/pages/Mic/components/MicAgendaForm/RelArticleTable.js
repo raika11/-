@@ -90,7 +90,7 @@ const RelArticleTable = ({ agenda, gridInstance, setGridInstance }) => {
                 rowDragManaged
                 rowHeight={89}
                 rowData={rowData}
-                onRowNodeId={(data) => data.ordNo}
+                onRowNodeId={(data) => data.totalId}
                 columnDefs={columnDefs}
                 paging={false}
                 suppressMoveWhenRowDragging

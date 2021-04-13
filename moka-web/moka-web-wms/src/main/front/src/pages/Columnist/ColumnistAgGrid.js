@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
 import columnDefs from './ColumnistAgGridColumns';
-import { getJplusRep } from '@store/codeMgt';
 import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption } from '@store/columnist';
 
 /**
@@ -36,10 +35,6 @@ const ColumnistAgGrid = ({ match }) => {
         },
         [dispatch, search],
     );
-
-    useEffect(() => {
-        if (!jplusRepRows) dispatch(getJplusRep());
-    }, [dispatch, jplusRepRows]);
 
     useEffect(() => {
         if (jplusRepRows) {

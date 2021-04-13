@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-import { MokaInput, MokaModal, MokaSearchInput, MokaTable } from '@/components';
+import { MokaModal, MokaSearchInput, MokaTable } from '@/components';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 목록 > 레이아웃 선택 모달

@@ -2,19 +2,19 @@ import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaTable } from '@/components';
-import columnDefs from './NewsLetterAgGridColumns';
+import columnDefs from './NewsLetterSendAgGridColumns';
 
 /**
- * 뉴스레터 관리 > 뉴스레터 상품 목록
+ * 뉴스레터 관리 > 뉴스레터 발송 목록
  */
-const NewsLetterAgGrid = ({ match }) => {
+const NewsLetterSendAgGrid = ({ match }) => {
     const history = useHistory();
     const [total] = useState(0);
     const [loading] = useState(false);
     const [search] = useState({ page: 1, size: 10 });
 
     /**
-     * 상품 등록
+     * 뉴스레터 발송
      */
     const handleClickAdd = () => {
         history.push(`${match.path}/add`);
@@ -39,7 +39,10 @@ const NewsLetterAgGrid = ({ match }) => {
                 <p className="mb-0">전체 상품 {total}개</p>
                 <div className="d-flex">
                     <Button variant="positive" className="mr-1" style={{ overflow: 'visible' }} onClick={handleClickAdd}>
-                        상품 등록
+                        뉴스레터 발송
+                    </Button>
+                    <Button variant="outline-neutral" className="mr-1" style={{ overflow: 'visible' }}>
+                        아카이브 확인
                     </Button>
                     <Button variant="outline-neutral" className="mr-2" style={{ overflow: 'visible' }}>
                         Excel 다운로드
@@ -66,4 +69,4 @@ const NewsLetterAgGrid = ({ match }) => {
     );
 };
 
-export default NewsLetterAgGrid;
+export default NewsLetterSendAgGrid;

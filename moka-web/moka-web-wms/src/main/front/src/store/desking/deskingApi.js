@@ -54,10 +54,19 @@ export const putComponentWorkTemplate = ({ componentWorkSeq, templateSeq }) => {
 
 // 컴포넌트 워크 스냅샷 수정
 export const putSnapshotComponentWork = ({ componentWorkSeq, snapshotYn, snapshotBody }) => {
-    const queryString = { snapshotYn, snapshotBody };
-    return instance.put(`/api/desking/components/${componentWorkSeq}/snapshot?${qs.stringify(queryString)}`).catch((err) => {
-        throw err;
-    });
+    return instance
+        .put(
+            `/api/desking/components/${componentWorkSeq}/snapshot`,
+            { snapshotYn, snapshotBody },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        )
+        .catch((err) => {
+            throw err;
+        });
 };
 
 // 컴포넌트 워크의 편집기사 1개 수정 => 폼데이터로 전송(multipart)

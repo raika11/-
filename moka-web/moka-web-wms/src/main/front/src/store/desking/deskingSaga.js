@@ -8,6 +8,7 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import * as api from './deskingApi';
 import * as act from './deskingAction';
+import * as mergeApi from '@store/merge/mergeApi';
 import { DEFAULT_LANG, CHANNEL_TYPE } from '@/constants';
 
 moment.locale('ko');
@@ -630,6 +631,57 @@ const putDeskingWorkListSort = createDeskingRequestSaga(act.PUT_DESKING_WORK_LIS
 const postDeskingWork = createDeskingRequestSaga(act.POST_DESKING_WORK, api.postDeskingWork, 'work');
 
 /**
+ * 컴포넌트 워크 HTML 수동편집의 미리보기
+ * 1) { snapshotYn = Y, snapshot = 본문 }을 워크 저장 (다른 컨텐츠 영향 안주게끔 => COMPONENT_WORK_SUCCESS 실행X)
+ * 2) mergeAction.PREVIEW_COMPONENT 실행
+ */
+function* previewSnapshotModal({ payload }) {
+    const ACTION = act.PREVIEW_SNAPSHOT_MODAL;
+    const { snapshotYn, snapshotBody, areaSeq, componentWorkSeq, resourceYn, callback } = payload;
+
+    yield put(startLoading(ACTION));
+
+    const first = yield call(api.putSnapshotComponentWork, { snapshotYn, snapshotBody, componentWorkSeq });
+    if (first.data.header.success) {
+        const second = yield call(mergeApi.getPreviewCP, { componentWorkSeq, areaSeq, resourceYn });
+        if (second.data.header.success) {
+            yield call(callback, { ...second.data });
+        } else {
+            // 미리보기 실패
+            yield call(callback, { ...second.data });
+        }
+    } else {
+        // 워크 저장 실패 => 미리보기 실패로 통일
+        yield call(callback, { ...first.data });
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * HTML 수동편집 모달 닫기
+ */
+function* onHideSnapshotModal({ payload }) {
+    const ACTION = act.ON_HIDE_SNAPSHOT_MODAL;
+    const { snapshotYn, snapshotBody, componentWorkSeq, callback } = payload;
+    let callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(api.putSnapshotComponentWork, { snapshotYn, snapshotBody, componentWorkSeq });
+        callbackData = { ...response.data, payload };
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
  * Work컴포넌트 순번수정
  */
 // const putDeskingWorkPriority = createDeskingRequestSaga(act.PUT_DESKING_WORK_PRIORITY, api.putDeskingWorkPriority);
@@ -667,6 +719,8 @@ export default function* saga() {
     yield takeLatest(act.PUT_COMPONENT_WORK, putComponentWork);
     yield takeLatest(act.PUT_SNAPSHOT_COMPONENT_WORK, putSnapshotComponentWork);
     yield takeLatest(act.PUT_COMPONENT_WORK_TEMPLATE, putComponentWorkTemplate);
+    yield takeLatest(act.PREVIEW_SNAPSHOT_MODAL, previewSnapshotModal);
+    yield takeLatest(act.ON_HIDE_SNAPSHOT_MODAL, onHideSnapshotModal);
 
     yield takeLatest(act.POST_SAVE_COMPONENT_WORK, postSaveComponentWork);
     yield takeLatest(act.POST_PUBLISH_COMPONENT_WORK, postPublishComponentWork);

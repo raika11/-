@@ -3,7 +3,7 @@ import produce from 'immer';
 import clsx from 'clsx';
 import { useDispatch } from 'react-redux';
 import { AgGridReact } from 'ag-grid-react';
-import { MokaTableFullImageRenderer } from '@components';
+import { MokaTableImageRenderer } from '@components';
 import { columnDefs, rowClassRules, naverChannelColumnDefs } from './DeskingWorkAgGridColumns';
 import DeskingReadyGrid from '@pages/Desking/components/DeskingReadyGrid';
 import DeskingEditorRenderer from './DeskingEditorRenderer';
@@ -535,7 +535,7 @@ const DeskingWorkAgGrid = (props) => {
                 headerHeight={0}
                 rowClassRules={rowClassRules}
                 getRowHeight={getRowHeight}
-                frameworkComponents={{ fullImageRenderer: MokaTableFullImageRenderer, editor: DeskingEditorRenderer }}
+                frameworkComponents={{ imageRenderer: MokaTableImageRenderer, editor: DeskingEditorRenderer }}
             />
             {componentAgGridInstances[agGridIndex] && <DeskingReadyGrid componentAgGridInstances={componentAgGridInstances} agGridIndex={agGridIndex} component={component} />}
         </div>

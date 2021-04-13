@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { initialState, getOvpList, GET_OVP_LIST } from '@store/bright';
 import { MokaTable, MokaSearchInput } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import OvpOptionRenderer from './OvpOptionRenderer';
 import columnDefs from './OvpListColumns';
 
@@ -95,6 +96,8 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
             <MokaTable
                 loading={loading}
                 rowData={rowData}
+                headerHeight={GRID_ROW_HEIGHT.C[0]}
+                rowHeight={GRID_ROW_HEIGHT.C[2]}
                 className="overflow-hidden flex-fill"
                 onRowNodeId={(data) => data.id}
                 selected={resultVId}

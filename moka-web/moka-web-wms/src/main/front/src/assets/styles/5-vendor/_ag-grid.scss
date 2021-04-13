@@ -424,8 +424,9 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         -webkit-box-orient: vertical;
         white-space: normal;
         box-sizing: border-box;
-        line-height: 20px;
+        line-height: 18px;
         overflow: hidden;
+        margin: auto 0;
 
         &.rel {
             -webkit-line-clamp: 1;

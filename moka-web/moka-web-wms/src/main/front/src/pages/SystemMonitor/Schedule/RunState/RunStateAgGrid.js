@@ -39,10 +39,10 @@ const RunStateAgGrid = ({ show }) => {
         if (genCateRows) {
             setRowData(
                 list.map((job) => {
-                    let targetIndex = genCateRows.findIndex((c) => c.id === job.category);
+                    let findTarget = genCateRows.find((c) => c.id === job.category);
                     return {
                         ...job,
-                        category: genCateRows[targetIndex]?.name || job.category,
+                        category: findTarget?.name || job.category,
                         ab30: `${job.a30}개, ${job.b30}초`,
                         ab60: `${job.a60}개, ${job.b60}초`,
                         ab120: `${job.a120}개, ${job.b120}초`,

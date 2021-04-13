@@ -1,3 +1,7 @@
+const cellClassRules = {
+    'ag-center-cell': () => true,
+};
+
 export default [
     {
         headerName: '',
@@ -10,55 +14,27 @@ export default [
         width: 85,
         field: 'totalId',
         cellClass: 'user-select-text',
-        cellStyle: {
-            display: 'flex',
-            alignItems: 'center',
-        },
+        cellClassRules,
     },
     {
         headerName: '매체',
         width: 100,
         field: 'sourceName',
         tooltipField: 'sourceName',
-        cellStyle: {
-            boxSizing: 'border-box',
-            whiteSpace: 'normal',
-            lineHeight: '20px',
-            display: '-webkit-box',
-            paddingTop: '5px',
-            '-webkit-line-clamp': 2,
-            '-webkit-box-orient': 'vertical',
-            overflow: 'hidden',
-            cursor: 'pointer',
-        },
+        cellRenderer: 'longTextRenderer',
     },
     {
         headerName: '제목',
         field: 'unescapeTitle',
         width: 186,
         flex: 1,
-        autoHeight: true,
         tooltipField: 'unescapeTitle',
-        cellStyle: {
-            boxSizing: 'border-box',
-            whiteSpace: 'normal',
-            lineHeight: '20px',
-            height: '50px',
-            display: '-webkit-box',
-            paddingTop: '5px',
-            '-webkit-line-clamp': 2,
-            '-webkit-box-orient': 'vertical',
-            overflow: 'hidden',
-            cursor: 'pointer',
-        },
+        cellRenderer: 'longTextRenderer',
     },
     {
         headerName: '출고시간',
         width: 130,
         field: 'serviceDaytime',
-        cellStyle: {
-            display: 'flex',
-            alignItems: 'center',
-        },
+        cellClassRules,
     },
 ];

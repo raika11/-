@@ -14,7 +14,7 @@ const defaultProps = {
  * @param {object} params ag grid params
  */
 const MokaTableImageRenderer = forwardRef((params, ref) => {
-    const { colDef, roundedCircle, autoRatio, eParentOfValue } = params;
+    const { colDef, roundedCircle, autoRatio } = params;
     const [field] = useState(colDef.field);
     const [data, setData] = useState(params.node.data);
     const boxRef = useRef(null);
@@ -63,8 +63,8 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
 
     useEffect(() => {
         if (boxRef.current) {
-            const w = eParentOfValue.firstElementChild.offsetWidth;
-            let h = eParentOfValue.firstElementChild.offsetWidth;
+            const w = boxRef.current.parentElement.offsetWidth;
+            let h = boxRef.current.parentElement.offsetHeight;
 
             if (autoRatio) {
                 // 6:4 자동 셋팅
@@ -76,7 +76,7 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
             }
             boxRef.current.style.setProperty('height', `${h}px`, `important`);
         }
-    }, [autoRatio, eParentOfValue, roundedCircle]);
+    }, [autoRatio, roundedCircle]);
 
     return (
         <div className="d-flex h-100 w-100 align-items-center justify-content-center">

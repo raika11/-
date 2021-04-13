@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MokaInput, MokaModal, MokaSearchInput, MokaTable } from '@components';
 import { messageBox } from '@utils/toastUtil';
 import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { initialState, getReporterListModal, GET_REPORTER_LIST_MODAL } from '@store/reporter';
 import columnDefs from './ReporterListModalColumns';
 
@@ -159,7 +160,7 @@ const ReporterListModal = (props) => {
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
-                rowHeight={45}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(reporter) => reporter.repSeq}
                 onRowClicked={() => {}}
                 loading={loading}

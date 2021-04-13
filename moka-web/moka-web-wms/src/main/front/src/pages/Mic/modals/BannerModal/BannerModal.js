@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { invalidListToError } from '@utils/convertUtil';
@@ -203,6 +204,7 @@ const BannerModal = (props) => {
                         className="overflow-hidden flex-fill"
                         columnDefs={columnDefs}
                         rowData={rowData}
+                        headerHeight={GRID_ROW_HEIGHT.T[0]}
                         rowHeight={135}
                         onRowNodeId={(data) => data.bnnrSeq}
                         onRowClicked={handleRowClicked}

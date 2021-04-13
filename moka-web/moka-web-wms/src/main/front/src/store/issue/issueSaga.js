@@ -98,7 +98,6 @@ const getKeyword = (keywords, type) => {
 
     if (type === CAT_DIV.REPORTER) {
         //defaultKeyword = { ...defaultKeyword, reporter: { ordNo: 1, reporterId: null } };
-        console.log('selectKeywords', selectKeywords);
         const reporter = selectKeywords.map((selectKeyword) => ({
             ordNo: selectKeyword.ordno,
             reporterId: selectKeyword.repMaster,
@@ -223,7 +222,15 @@ const toSavePackageKeywords = (viewKeywords) => {
             keyword.reporter.map((data) => {
                 const copyKeyword = { ...keyword };
                 delete copyKeyword.reporter;
-                packageKeywords.push({ ...copyKeyword, ordno: data.ordNo, repMaster: data.reporterId, schCondi: schCondi, sdate, edate });
+                packageKeywords.push({
+                    ...copyKeyword,
+                    keyword: data.keyword,
+                    ordno: data.ordNo,
+                    repMaster: data.reporterId,
+                    schCondi: schCondi,
+                    sdate,
+                    edate,
+                });
             });
         } else {
             packageKeywords.push({ ...keyword, schCondi, sdate, edate, ordno: index });
@@ -255,7 +262,6 @@ function* saveIssue({ type, payload }) {
     const pkg = toSavePackage(viewData);
     let saveApi = api.postIssueGroupByOrdno;
     if (pkg.pkgSeq) {
-        console.log('put');
         saveApi = api.putIssueGroupByOrdno;
     }
     const response = yield call(saveApi, { pkg });

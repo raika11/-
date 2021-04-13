@@ -32,7 +32,6 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
     };
 
     useEffect(() => {
-        console.log('keyword', keyword);
         setEditKeyword(keyword);
         if (!commonUtil.isEmpty(keyword.edate)) {
             setUseEndDate(true);

@@ -6,14 +6,13 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInput, MokaInputLabel, MokaIcon } from '@/components';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { getIssue, getIssueList, initialState, saveIssue } from '@store/issue';
+import { clearIssue, getIssue, getIssueList, initialState, saveIssue } from '@store/issue';
 import DefaultPackageKeywordComponent from '@pages/Issue/components/DefaultPackageKeywordComponent';
 import ReporterPackageKeywordForm from '@pages/Issue/components/RepoterPackageKeywordComponent';
 import SectionPackageKeywordComponent from '@pages/Issue/components/SectionPackageKeywordComponent';
 import useDebounce from '@hooks/useDebounce';
-import ServiceCodeSelector from '@pages/Issue/components/Desking/ServiceCodeSelector';
 import { CAT_DIV } from '@store/issue/issueSaga';
-import { messageBox } from '@utils/toastUtil';
+
 import IssueCommonEdit from '@pages/Issue/components/IssueCommonEdit';
 
 const options = [
@@ -39,10 +38,8 @@ const IssueEdit = () => {
     const { pkgSeq } = useParams();
     const [edit, setEdit] = useState(initialState.pkg);
 
-    const [reporterList, setReporterList] = useState([]);
-
     const handleClickCancel = () => {
-        history.push('/package');
+        history.push('/issue');
     };
 
     /**
@@ -72,22 +69,6 @@ const IssueEdit = () => {
         setEdit(value);
     }, 500);
 
-    /**
-     * 기자 검색 조건 추가
-     */
-    const handleClickAddReporter = () => {
-        setReporterList(
-            produce(reporterList, (draft) => {
-                draft.push({
-                    reporterSearch: reporterList[0].reporterSearch,
-                    reporterStartDt: reporterList[0].reporterStartDt,
-                    reporterOptions: reporterList[0].reporterOptions,
-                    reporterEndDt: reporterList[0].reporterEndDt,
-                });
-            }),
-        );
-    };
-
     const handleClickSave = () => {
         dispatch(
             saveIssue({
@@ -102,7 +83,11 @@ const IssueEdit = () => {
     };
 
     useEffect(() => {
-        dispatch(getIssue({ pkgSeq }));
+        if (pkgSeq) {
+            dispatch(getIssue({ pkgSeq }));
+        } else {
+            dispatch(clearIssue());
+        }
     }, [pkgSeq]);
 
     useEffect(() => {
@@ -146,13 +131,23 @@ const IssueEdit = () => {
                                 handleChangeArrayObjectValue({ target: 'packageKeywords', subTarget: 'reporter', name, value: checked });
                             }}
                         />
-                        <Button variant="positive" onClick={handleClickAddReporter}>
+                        <Button
+                            variant="positive"
+                            onClick={() => {
+                                console.log('추가');
+                            }}
+                        >
                             추가
                         </Button>
                     </Col>
                 </Form.Row>
                 {edit.packageKeywords.reporter.isUsed && (
-                    <ReporterPackageKeywordForm keyword={edit.packageKeywords.reporter.keyword} />
+                    <ReporterPackageKeywordForm
+                        keyword={edit.packageKeywords.reporter.keyword}
+                        onChange={(value) => {
+                            handleChangeArrayObjectDebounceValue({ target: 'packageKeywords', subTarget: 'reporter', name: 'keyword', value });
+                        }}
+                    />
                     /*<>
                         <Form.Row className="mb-3">
                             <Col xs={3} className="p-0 d-flex align-items-center">

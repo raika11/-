@@ -47,7 +47,7 @@ const RelArticleRenderer = forwardRef((params, ref) => {
             artThumb: imageSrc,
             artThumbFile: file,
         });
-        params.api.applyTransaction({ delete: [{ ...params.node.data, artThumb: imageSrc, artThumbFile: file }] });
+        params.api.applyTransaction({ update: [{ ...params.node.data, artThumb: imageSrc, artThumbFile: file }] });
     };
 
     /**
@@ -68,7 +68,7 @@ const RelArticleRenderer = forwardRef((params, ref) => {
                                     artThumb: editImageSrc,
                                     artThumbFile: file,
                                 });
-                                params.api.applyTransaction({ delete: [{ ...params.node.data, artThumb: editImageSrc, artThumbFile: file }] });
+                                params.api.applyTransaction({ update: [{ ...params.node.data, artThumb: editImageSrc, artThumbFile: file }] });
                             });
                     })();
                 },

@@ -79,7 +79,7 @@ const ABEtcForm = (props) => {
                             id="loginYn-all"
                             name="loginYn"
                             value="all"
-                            inputProps={{ label: '전체', checked: data.loginYn === '' }}
+                            inputProps={{ label: '전체', checked: !data.loginYn || data.loginYn === 'all' }}
                             disabled={disabled}
                             onChange={handleChangeValue}
                         />

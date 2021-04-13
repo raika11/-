@@ -28,9 +28,10 @@ import org.apache.ibatis.type.Alias;
 @Builder
 public class JobStatisticVO {
 
-    private Integer serverSeq;
+    //private Integer serverSeq;    // 2021.04.13 서버에서 분류중심으로 변경
+    //private String serverNm;      // 2021.04.13 서버에서 분류중심으로 변경
 
-    private String serverNm;
+    private String category;
 
     private Integer a0;
 

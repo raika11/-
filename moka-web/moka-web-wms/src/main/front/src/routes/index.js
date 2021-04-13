@@ -678,8 +678,8 @@ const routes = [
         strict: true,
     },
     {
-        path: '/package',
-        name: 'package',
+        path: '/issue',
+        name: 'issue',
         displayName: '패키지 관리',
         component: Package,
         side: true,

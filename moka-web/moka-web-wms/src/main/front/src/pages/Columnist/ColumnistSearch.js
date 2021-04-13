@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 import { messageBox } from '@utils/toastUtil';
+import { getJplusRep } from '@/store/codeMgt';
 import { initialState, getColumnistList, changeSearchOption, clearColumnist } from '@store/columnist';
 import { AuthButton } from '@pages/Auth/AuthButton';
 
@@ -15,8 +16,11 @@ import { AuthButton } from '@pages/Auth/AuthButton';
 const ColumnistSearch = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
+    const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
     const storeSearch = useSelector(({ columnist }) => columnist.search);
     const [search, setSearch] = useState(initialState.search);
+
+    console.log(jplusRepRows);
 
     /**
      * 입력값 변경
@@ -43,10 +47,6 @@ const ColumnistSearch = ({ match }) => {
             page: 0,
         };
 
-        // if (temp.jplusRepDiv === '') {
-        //     delete temp.jplusRepDiv;
-        // }
-
         dispatch(changeSearchOption(temp));
         dispatch(getColumnistList({ search: temp }));
     };
@@ -64,6 +64,7 @@ const ColumnistSearch = ({ match }) => {
     }, [storeSearch]);
 
     useEffect(() => {
+        dispatch(getJplusRep());
         dispatch(
             getColumnistList({
                 search: search,
@@ -94,9 +95,12 @@ const ColumnistSearch = ({ match }) => {
             <Col xs={2} className="p-0 pr-2">
                 <MokaInput as="select" name="jplusRepDiv" value={search.jplusRepDiv} onChange={handleChangeValue}>
                     <option value="">전체</option>
-                    <option value="J2">외부기자(밀리터리)</option>
-                    <option value="R1">일보기자(더오래)</option>
-                    <option value="R2">외부기자(더오래)</option>
+                    {jplusRepRows &&
+                        jplusRepRows.map((rep) => (
+                            <option key={rep.cdOrd} value={rep.dtlCd}>
+                                {rep.cdNm}
+                            </option>
+                        ))}
                     <option value="NL">일보기자</option>
                     <option value="ZZ">외부</option>
                 </MokaInput>

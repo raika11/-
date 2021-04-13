@@ -12,7 +12,7 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
         jplusRepDiv: '',
         status: '',
-        keyword: '',
+        columnistNm: '',
     },
     statusSearchTypeList: [
         { name: '사용여부 전체', id: '' },

@@ -5,6 +5,7 @@ import produce from 'immer';
 import { useHistory } from 'react-router-dom';
 import PollPreviewModal from '@pages/Survey/Poll/modals/PollPreviewModal';
 import { messageBox } from '@utils/toastUtil';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 
 const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSearchOption, onDelete }) => {
     const history = useHistory();
@@ -50,11 +51,11 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
                 columnDefs={columnDefs}
                 onRowNodeId={(row) => row.id}
                 headerHeight={50}
+                rowHeight={GRID_ROW_HEIGHT.T[1]}
                 rowData={rowData}
                 page={searchOptions.page}
                 size={searchOptions.size}
                 total={total}
-                rowHeight={46}
                 loading={loading}
                 onChangeSearchOption={handleChangeSearchOptions}
                 onRowClicked={handleClickRow}

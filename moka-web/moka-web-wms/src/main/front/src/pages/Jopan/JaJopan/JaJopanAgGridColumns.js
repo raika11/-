@@ -1,5 +1,4 @@
 import React from 'react';
-import SectionRenderer from '../components/SectionRenderer';
 import ShowButtonRenderer from '../components/ShowButtonRenderer';
 
 export default [
@@ -24,12 +23,9 @@ export default [
     },
     {
         headerName: '섹션',
-        field: 'id.section',
-        cellStyle: {},
-        cellRendererFramework: (params) => {
-            return <SectionRenderer {...params} section={params.data.id.section} type="1" />;
-        },
+        field: 'sectionName',
         flex: 1,
+        tooltipField: 'sectionName',
     },
     {
         headerName: '면',

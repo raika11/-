@@ -1,4 +1,3 @@
-import React from 'react';
 import { EtcButtonRenderer } from './GridRenderer';
 
 export default [
@@ -7,13 +6,11 @@ export default [
         field: 'id',
         width: 80,
         tooltipField: 'id',
-        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '전송일시',
         field: 'sendDt',
         width: 90,
-        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '이미지',
@@ -24,34 +21,8 @@ export default [
     {
         headerName: 'SNS제목',
         field: 'title',
-        wrapText: true,
-        width: 250,
         flex: 1,
         tooltipField: 'title',
-        cellRendererFramework: ({ value }) => {
-            return (
-                <div
-                    style={{
-                        boxSizing: 'border-box',
-                        whiteSpace: 'normal',
-                        lineHeight: '20px',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                    }}
-                >
-                    {value}
-                </div>
-            );
-        },
-        cellStyle: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignContent: 'center',
-            flexDirection: 'column',
-            height: '100%',
-        },
     },
     {
         headerName: '사용',

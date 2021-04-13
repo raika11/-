@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { MokaTable } from '@components';
 import { BASIC_DATEFORMAT, DISPLAY_PAGE_NUM } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { getSetMenuBoardsList, changeSetMenuSearchOption, GET_SET_MENU_BOARD_LIST } from '@store/board';
-
 import { columnDefs } from './BoardsSetAgGridColumns';
 import ButtonRenderer from './components/ButtonRenderer';
 
@@ -65,6 +65,7 @@ const BoardsSetAgGrid = ({ match }) => {
     return (
         <MokaTable
             className="flex-fill overflow-hidden"
+            rowHeight={GRID_ROW_HEIGHT.C[0]}
             columnDefs={columnDefs}
             rowData={rowData}
             onRowNodeId={(data) => data.boardId}

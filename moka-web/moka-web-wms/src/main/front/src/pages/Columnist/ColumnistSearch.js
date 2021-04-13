@@ -43,6 +43,10 @@ const ColumnistSearch = ({ match }) => {
             page: 0,
         };
 
+        // if (temp.jplusRepDiv === '') {
+        //     delete temp.jplusRepDiv;
+        // }
+
         dispatch(changeSearchOption(temp));
         dispatch(getColumnistList({ search: temp }));
     };
@@ -88,19 +92,22 @@ const ColumnistSearch = ({ match }) => {
 
             {/* 검색 타입 */}
             <Col xs={2} className="p-0 pr-2">
-                <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                    <option value="all">전체</option>
-                    <option value="columnistNm">이름</option>
-                    <option value="jplusRepDivNm">필진 타입</option>
+                <MokaInput as="select" name="jplusRepDiv" value={search.jplusRepDiv} onChange={handleChangeValue}>
+                    <option value="">전체</option>
+                    <option value="J2">외부기자(밀리터리)</option>
+                    <option value="R1">일보기자(더오래)</option>
+                    <option value="R2">외부기자(더오래)</option>
+                    <option value="NL">일보기자</option>
+                    <option value="ZZ">외부</option>
                 </MokaInput>
             </Col>
 
             {/* 이름 검색 */}
             <Col xs={8} className="p-0 d-flex">
                 <MokaSearchInput
-                    name="keyword"
+                    name="columnistNm"
                     placeholder="칼럼니스트 이름 검색"
-                    value={search.keyword}
+                    value={search.columnistNm}
                     onChange={handleChangeValue}
                     onSearch={handleSearch}
                     className="flex-fill mr-1"

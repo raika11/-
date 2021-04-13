@@ -14,7 +14,7 @@ const defaultProps = {
  * @param {object} params ag grid params
  */
 const MokaTableImageRenderer = forwardRef((params, ref) => {
-    const { colDef, roundedCircle, autoRatio, api } = params;
+    const { colDef, roundedCircle, autoRatio, eParentOfValue } = params;
     const [field] = useState(colDef.field);
     const [data, setData] = useState(params.node.data);
     const boxRef = useRef(null);
@@ -63,24 +63,20 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
 
     useEffect(() => {
         if (boxRef.current) {
-            const w = boxRef.current.parentElement.offsetWidth;
-            let h = boxRef.current.parentElement.offsetHeight;
+            const w = eParentOfValue.firstElementChild.offsetWidth;
+            let h = eParentOfValue.firstElementChild.offsetWidth;
 
-            if (w === 0) {
-                boxRef.current.style.setProperty('height', `100%`, `important`);
-            } else {
-                if (autoRatio) {
-                    // 6:4 자동 셋팅
-                    h = Math.floor(((w || 0) / 6) * 4);
-                } else if (roundedCircle) {
-                    // 동그라미인 경우 정사각형으로 셋팅
-                    if (h > w) h = w;
-                    else if (w > h) boxRef.current.style.setProperty('width', `${h}px`, 'important');
-                }
-                boxRef.current.style.setProperty('height', `${h}px`, `important`);
+            if (autoRatio) {
+                // 6:4 자동 셋팅
+                h = Math.floor(((w || 0) / 6) * 4);
+            } else if (roundedCircle) {
+                // 동그라미인 경우 정사각형으로 셋팅
+                if (h > w) h = w;
+                else if (w > h) boxRef.current.style.setProperty('width', `${h}px`, 'important');
             }
+            boxRef.current.style.setProperty('height', `${h}px`, `important`);
         }
-    }, [autoRatio, roundedCircle]);
+    }, [autoRatio, eParentOfValue, roundedCircle]);
 
     return (
         <div className="d-flex h-100 w-100 align-items-center justify-content-center">

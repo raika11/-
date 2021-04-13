@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { MokaCard } from '@/components';
-import { clearStore } from '@/store/tour';
+import { clearStore } from '@store/tour';
 import HolidayList from './HolidayList';
 import TourSetEdit from './TourSetEdit';
 
 /**
- * 견학 기본 설정
+ * 견학 > 기본 설정
  */
 const TourSet = ({ displayName }) => {
     const dispatch = useDispatch();
@@ -29,9 +28,7 @@ const TourSet = ({ displayName }) => {
                 </Helmet>
 
                 {/* 휴일 지정 목록 */}
-                <MokaCard width={790} className="mr-gutter" bodyClassName="d-flex flex-column" title="휴일 지정(매년 반복)">
-                    <HolidayList />
-                </MokaCard>
+                <HolidayList />
 
                 {/* 견학 기본 설정 */}
                 <TourSetEdit />

@@ -213,7 +213,13 @@ const MokaCard = forwardRef((props, ref) => {
             {loading && <MokaLoader />}
 
             {header && (
-                <Card.Header className={clsx('justify-content-between', { 'd-flex': folded, 'position-relative': folded, 'pb-2': titleButtons.length > 0 }, headerClassName)}>
+                <Card.Header
+                    className={clsx(
+                        'justify-content-between',
+                        { 'd-flex': folded || titleButtons.length > 0, 'position-relative': folded, 'pb-2': titleButtons.length > 0 },
+                        headerClassName,
+                    )}
+                >
                     {/* 카드 타이틀 */}
                     {titleAs ? (
                         titleAs

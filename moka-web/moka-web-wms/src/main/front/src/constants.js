@@ -7,6 +7,8 @@ export const DB_DATEFORMAT = 'YYYY-MM-DD HH:mm:ss';
 // BASIC 날짜 포맷
 export const BASIC_DATEFORMAT = 'YYYY-MM-DD HH:mm';
 
+export const DATE_FORMAT = 'YYYY-MM-DD';
+
 // image 확장자
 export const ACCEPTED_IMAGE_TYPES = ['image/gif', 'image/jpeg', 'image/png'];
 export const UPLOAD_PATH_URL = '/moka_storage/';

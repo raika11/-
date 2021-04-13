@@ -30,8 +30,8 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        startDt: moment(), // 시작일시
-        endDt: moment(), // 종료일시
+        startDt: null, // 시작일시
+        endDt: null, // 종료일시
         category: '', // 카테고리
         div: 'all', // 패키지 유형
         scbYn: 'all', // 구독 여부
@@ -56,24 +56,42 @@ export const initialState = {
         packageKeywords: {
             search: {
                 isUsed: false,
+                keyword: initialPkgKeyword,
             },
             reporter: {
                 isUsed: false,
+                keyword: {
+                    ...initialPkgKeyword,
+                    reporter: [
+                        {
+                            ordNo: 1,
+                            reporterId: '',
+                            keyword: '',
+                            sdate: null,
+                            edate: null,
+                        },
+                    ],
+                },
             },
             section: {
                 isUsed: false,
+                keyword: initialPkgKeyword,
             },
             digitalSpecial: {
                 isUsed: false,
+                keyword: initialPkgKeyword,
             },
             ovp: {
                 isUsed: false,
+                keyword: initialPkgKeyword,
             },
             category: {
                 isUsed: false,
+                keyword: initialPkgKeyword,
             },
             pkg: {
                 isUsed: false,
+                keyword: initialPkgKeyword,
             },
         },
         seasonOptions: {},

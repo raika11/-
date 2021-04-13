@@ -10,13 +10,13 @@ import NewsLetterEdit from './NewsLetterEdit';
 import NewsLetterHistory from './NewsLetterHistoryList';
 
 /**
- * 뉴스레터 관리 > 뉴스레터 목록
+ * 뉴스레터 관리 > 뉴스레터 상품 관리
  */
 const NewsLetter = ({ match, displayName }) => {
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     return (
-        <Container>
+        <Container className="p-0">
             <Row noGutters>
                 <Helmet>
                     <title>{displayName}</title>
@@ -26,7 +26,7 @@ const NewsLetter = ({ match, displayName }) => {
 
                 {/* 리스트 */}
                 <Col xs={7} className="pr-gutter">
-                    <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="뉴스레터 상품관리">
+                    <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="뉴스레터 상품 관리">
                         <NewsLetterList match={match} />
                     </MokaCard>
                 </Col>

@@ -8,6 +8,13 @@ import { CARD_DEFAULT_HEIGHT, CARD_FOLDING_WIDTH } from '@/style_constants';
 import { MokaIcon, MokaLoader } from '@components';
 import { AuthButton } from '@pages/Auth/AuthButton';
 
+const buttonProps = PropTypes.shape({
+    variant: PropTypes.string,
+    text: PropTypes.string,
+    onClick: PropTypes.func,
+    icon: PropTypes.node,
+});
+
 const propTypes = {
     /**
      * className
@@ -62,31 +69,23 @@ const propTypes = {
      */
     footerAs: PropTypes.node,
     /**
-     * buttons
+     * title 영역에 들어가는 기능 버튼
      */
-    buttons: PropTypes.arrayOf(
-        PropTypes.shape({
-            variant: PropTypes.string,
-            icon: PropTypes.node,
-            text: PropTypes.string,
-            onClick: PropTypes.func,
-            ref: PropTypes.ref,
-        }),
-    ),
-    footerButtons: PropTypes.arrayOf(
-        PropTypes.shape({
-            variant: PropTypes.string,
-            text: PropTypes.string,
-            onClick: PropTypes.func,
-        }),
-    ),
+    titleButtons: PropTypes.arrayOf(buttonProps),
+    /**
+     * title 영역에 들어가는 버튼 (position-absolute-top)
+     */
+    titleIconButtons: PropTypes.arrayOf(buttonProps),
+    /**
+     * footer 영역에 들어가는 기능 버튼
+     */
+    footerButtons: PropTypes.arrayOf(buttonProps),
     /**
      * children
      */
     children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
     /**
-     * 컴포넌트를 접을 수 있는지 없는지 설정한다.
-     * (true | false)
+     * 컴포넌트를 접을 수 있는지 없는지 설정한다. (true | false)
      * @default
      */
     foldable: PropTypes.bool,
@@ -106,7 +105,8 @@ const defaultProps = {
     height: CARD_DEFAULT_HEIGHT,
     foldable: false,
     expansion: true,
-    buttons: [],
+    titleIconButtons: [],
+    titleButtons: [],
     footerButtons: [],
     loading: false,
     header: true,
@@ -129,20 +129,17 @@ const MokaCard = forwardRef((props, ref) => {
         height,
         title,
         titleAs,
+        titleButtons,
+        titleIconButtons,
         children,
         expansion,
         onExpansion,
-        buttons,
         footerButtons,
         footerAs,
         foldable,
         loading,
     } = props;
-    const [localExpandState, setLocalExpandState] = useState(true);
-
-    useEffect(() => {
-        setLocalExpandState(expansion);
-    }, [expansion]);
+    const [folded, setFolded] = useState(false); // 카드 확장 local변수
 
     /**
      * 카드 확장
@@ -153,24 +150,24 @@ const MokaCard = forwardRef((props, ref) => {
             e.stopPropagation();
 
             if (onExpansion) {
-                onExpansion(!localExpandState);
+                onExpansion(folded);
             } else {
-                setLocalExpandState(!localExpandState);
+                setFolded(!folded);
             }
         },
-        [localExpandState, onExpansion],
+        [folded, onExpansion],
     );
 
     /**
-     * 헤더의 버튼 생성 함수
+     * 타이틀 아이콘 버튼 생성 함수
      */
-    const createHeaderButtons = useCallback(
+    const renderTitleIconButtons = useCallback(
         (cx) => {
-            const headerButtons = produce(buttons, (draft) => {
+            const headerButtons = produce(titleIconButtons, (draft) => {
                 if (foldable) {
                     draft.push({
                         variant: 'white',
-                        icon: <MokaIcon iconName="fal-angle-double-left" rotation={localExpandState ? 0 : 180} />,
+                        icon: <MokaIcon iconName="fal-angle-double-left" rotation={folded ? 180 : 0} />,
                         onClick: handleExpansion,
                         foldIcon: true,
                     });
@@ -179,7 +176,7 @@ const MokaCard = forwardRef((props, ref) => {
 
             if (headerButtons.length > 0) {
                 return (
-                    <div className="d-flex absolute-top-right" style={{ marginTop: 17, marginRight: cx ? 4 : 20 }}>
+                    <div className="icon-btns d-flex absolute-top-right" style={{ marginTop: 17, marginRight: cx ? 4 : 20 }}>
                         {headerButtons.map((btnProps, idx) => {
                             const { ref: btnRef, variant: btnVariant, onClick: btnOnClick, text: btnText, icon: btnIcon, className: btnClassName, foldIcon, ...rest } = btnProps;
                             return (
@@ -204,29 +201,43 @@ const MokaCard = forwardRef((props, ref) => {
             }
             return null;
         },
-        [buttons, foldable, handleExpansion, localExpandState],
+        [foldable, handleExpansion, folded, titleIconButtons],
     );
 
+    useEffect(() => {
+        setFolded(foldable && !expansion);
+    }, [expansion, foldable]);
+
     return (
-        <Card
-            ref={ref}
-            className={clsx('flex-shrink-0', className, { fold: foldable && !localExpandState })}
-            style={{ width: foldable && !localExpandState ? CARD_FOLDING_WIDTH : width, height }}
-        >
+        <Card ref={ref} className={clsx('flex-shrink-0', className, { fold: folded })} style={{ width: folded ? CARD_FOLDING_WIDTH : width, height }}>
             {loading && <MokaLoader />}
+
             {header && (
-                <Card.Header className={clsx({ 'd-flex': foldable, 'position-relative': foldable }, headerClassName)}>
+                <Card.Header
+                    className={clsx(
+                        'justify-content-between',
+                        { 'd-flex': folded || titleButtons.length > 0, 'position-relative': folded, 'pb-2': titleButtons.length > 0 },
+                        headerClassName,
+                    )}
+                >
                     {/* 카드 타이틀 */}
                     {titleAs ? (
                         titleAs
                     ) : (
                         <React.Fragment>
-                            <Card.Title as="h2" className={clsx({ 'd-none': foldable && !localExpandState }, titleClassName)}>
+                            <Card.Title as="h2" className={clsx({ 'd-none': folded }, titleClassName)}>
                                 {title}
                             </Card.Title>
-                            {createHeaderButtons(foldable && !localExpandState)}
+                            {renderTitleIconButtons(folded)}
                         </React.Fragment>
                     )}
+                    <div>
+                        {titleButtons.map((btnProps, idx) => (
+                            <Button key={`title-btns-${idx}`} {...btnProps}>
+                                {btnProps.text}
+                            </Button>
+                        ))}
+                    </div>
                 </Card.Header>
             )}
 

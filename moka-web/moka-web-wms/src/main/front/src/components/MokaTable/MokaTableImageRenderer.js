@@ -46,6 +46,9 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
             setData(params.node.data);
             return true;
         },
+        getGui: () => {
+            ref.getGui();
+        },
     }));
 
     useEffect(() => {
@@ -62,6 +65,7 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
         if (boxRef.current) {
             const w = boxRef.current.parentElement.offsetWidth;
             let h = boxRef.current.parentElement.offsetHeight;
+
             if (autoRatio) {
                 // 6:4 자동 셋팅
                 h = Math.floor(((w || 0) / 6) * 4);
@@ -72,7 +76,7 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
             }
             boxRef.current.style.setProperty('height', `${h}px`, `important`);
         }
-    }, [params, colDef, autoRatio, roundedCircle]);
+    }, [autoRatio, roundedCircle]);
 
     return (
         <div className="d-flex h-100 w-100 align-items-center justify-content-center">

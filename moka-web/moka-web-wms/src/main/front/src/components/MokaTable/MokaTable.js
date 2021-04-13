@@ -9,8 +9,6 @@ import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 // cell renderer
 import LongTextRenderer from './MokaTableLongTextRenderer';
 import ImageRenderer from './MokaTableImageRenderer';
-import FullImageRenderer from './MokaTableFullImageRenderer';
-import CircleImageRenderer from './MokaTableCircleImageRenderer';
 import UsedYnRenderer from './MokaTableUsedYnRenderer';
 import UsedYnSecondRenderer from './MokaTableUsedYnSecondRenderer';
 import UsedYnThirdRenderer from './MokaTableUsedYnThirdRenderer';
@@ -132,6 +130,7 @@ const defaultProps = {
     rowDragManaged: false,
     animateRows: false,
     suppressRefreshCellAfterUpdate: false,
+    rowBuffer: 100,
 };
 
 /**
@@ -325,8 +324,6 @@ const MokaTable = forwardRef((props, ref) => {
                     frameworkComponents={{
                         longTextRenderer: LongTextRenderer,
                         imageRenderer: ImageRenderer,
-                        fullImageRenderer: FullImageRenderer,
-                        circleImageRenderer: CircleImageRenderer,
                         usedYnRenderer: UsedYnRenderer,
                         usedYnSecondRenderer: UsedYnSecondRenderer,
                         usedYnThirdRenderer: UsedYnThirdRenderer,

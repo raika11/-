@@ -13,12 +13,9 @@ import { messageBox } from '@utils/toastUtil';
  */
 const VodModal = (props) => {
     const { show, onHide, vodUrl, onSave } = props;
-
     const dispatch = useDispatch();
     const vodOptions = useSelector((store) => store.bright.vodOptions);
     const OVP_PREVIEW_URL = useSelector((store) => store.app.OVP_PREVIEW_URL);
-
-    // state
     const [activeKey, setActivekey] = useState(0);
     const [resultVId, setResultVId] = useState(null);
     const [youtubeUrl, setYoutubeUrl] = useState({ url: '', option: '' });
@@ -27,9 +24,11 @@ const VodModal = (props) => {
      * 취소, 닫기
      */
     const handleHide = useCallback(() => {
-        if (onHide) onHide();
-        dispatch(clearVodOptions());
+        setActivekey(0);
+        setResultVId(null);
         setYoutubeUrl({ url: '', option: '' });
+        dispatch(clearVodOptions());
+        if (onHide) onHide();
     }, [dispatch, onHide]);
 
     /**

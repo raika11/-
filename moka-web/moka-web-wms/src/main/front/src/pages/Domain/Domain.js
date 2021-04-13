@@ -94,13 +94,18 @@ const Domain = ({ match }) => {
 
             {/* 리스트 */}
             <Col xs={5} className="p-0 pr-gutter">
-                <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
-                    <div className="mb-14 d-flex justify-content-end">
-                        <Button variant="positive" onClick={handleAddClickDomain}>
-                            도메인 등록
-                        </Button>
-                    </div>
-
+                <MokaCard
+                    className="w-100"
+                    bodyClassName="d-flex flex-column"
+                    title={currentMenu?.menuDisplayNm}
+                    titleButtons={[
+                        {
+                            text: '도메인 등록',
+                            variant: 'positive',
+                            onClick: handleAddClickDomain,
+                        },
+                    ]}
+                >
                     <DomainList onDelete={handleClickDelete} match={match} />
                 </MokaCard>
             </Col>

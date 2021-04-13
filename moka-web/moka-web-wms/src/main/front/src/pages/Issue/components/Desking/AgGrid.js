@@ -69,6 +69,7 @@ const AgGrid = forwardRef((props, ref) => {
                 size={search.size}
                 selected={selected.pkgSeq}
                 onChangeSearchOption={onChangeSearchOption}
+                preventRowClickCell={['info']}
             />
 
             <IssueContentsModal

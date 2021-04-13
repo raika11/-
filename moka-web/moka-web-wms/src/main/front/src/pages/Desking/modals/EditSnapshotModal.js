@@ -25,7 +25,7 @@ const EditSnapshotModal = (props) => {
         ({ loading }) => loading[PREVIEW_COMPONENT_MODAL] || loading[PUT_SNAPSHOT_COMPONENT_WORK] || loading[POST_SAVE_COMPONENT_WORK] || loading[PREVIEW_SNAPSHOT_MODAL],
     );
     const area = useSelector(({ desking }) => desking.area);
-    const [defaultValue, setDefaultValue] = useState(null);
+    const [defaultValue, setDefaultValue] = useState('');
     const [body, setBody] = useState('');
     const changeFlag = useRef(false); // snapshotYn이 변경되었는지 파악
 

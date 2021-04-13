@@ -39,13 +39,19 @@ const Group = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard title="사용자 그룹관리" width={480} className="mr-gutter" bodyClassName="d-flex flex-column">
-                <div className="mb-14 d-flex justify-content-end">
-                    <Button variant="positive" onClick={handleClickAddGroup}>
-                        등록
-                    </Button>
-                </div>
-
+            <MokaCard
+                title="사용자 그룹관리"
+                width={480}
+                className="mr-gutter"
+                bodyClassName="d-flex flex-column"
+                titleButtons={[
+                    {
+                        text: '등록',
+                        variant: 'positive',
+                        onClick: handleClickAddGroup,
+                    },
+                ]}
+            >
                 <GroupList />
             </MokaCard>
 

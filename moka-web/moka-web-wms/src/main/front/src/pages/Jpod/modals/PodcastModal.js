@@ -3,6 +3,7 @@ import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Button } from 'react-bootstrap';
 import { MODAL_PAGESIZE_OPTIONS, DB_DATEFORMAT } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { messageBox } from '@utils/toastUtil';
 import { initialState, GET_PODCAST_LIST, getPodcastList, clearPodcast, changePodcastSearchOption } from '@store/jpod';
 import { MokaModal, MokaTable } from '@components';
@@ -118,6 +119,7 @@ const PodcastModal = (props) => {
                 agGridHeight={450}
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(data) => data.idx}
                 loading={loading}
                 total={total}

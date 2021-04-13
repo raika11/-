@@ -71,7 +71,8 @@ export default [
     {
         headerName: '',
         width: 64,
-        field: '정보',
+        field: 'info',
         cellRenderer: 'buttonRenderer',
+        cellRendererParams: { text: '정보', clickFunctionName: 'onClick' },
     },
 ];

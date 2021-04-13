@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { messageBox } from '@utils/toastUtil';
 import { GET_PODTY_CHNL_LIST, getPodtyChnlList, clearPodtyChnl } from '@store/jpod';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaModal, MokaTable } from '@components';
 import { columnDefs } from './PodtyChannelModalColumns';
 
@@ -77,11 +78,12 @@ const PodtyChannelModal = (props) => {
                 agGridHeight={450}
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(data) => data.castSrl}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 paging={false}
-                preventRowClickCell={['이동']}
+                preventRowClickCell={['move']}
             />
         </MokaModal>
     );

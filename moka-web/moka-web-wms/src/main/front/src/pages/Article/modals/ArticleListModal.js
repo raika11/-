@@ -8,6 +8,7 @@ import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { messageBox } from '@utils/toastUtil';
 import { CodeAutocomplete } from '@pages/commons';
 import { DB_DATEFORMAT } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaModal, MokaInput, MokaTable } from '@/components';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { GET_ARTICLE_LIST_MODAL, initialState, getArticleListModal } from '@store/article';
@@ -329,7 +330,8 @@ const ArticleListModal = (props) => {
             <MokaTable
                 className="article-list overflow-hidden flex-fill"
                 setGridInstance={setGridInstance}
-                headerHeight={50}
+                rowHeight={GRID_ROW_HEIGHT.C[1]}
+                headerHeight={GRID_ROW_HEIGHT.C[0]}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(article) => article.totalId}

@@ -16,14 +16,13 @@ export const columnDefs = [
         headerName: '번호',
         field: 'menuSeq',
         width: 50,
-        cellStyle: { lineHeight: '34px' },
     },
     {
         headerName: '메뉴명',
         field: 'menuDisplayNm',
         width: 140,
         flex: 1,
-        cellStyle: { lineHeight: '34px', cursor: 'pointer' },
+        cellStyle: { cursor: 'pointer' },
     },
     {
         headerName: '',

@@ -3,6 +3,7 @@ import Search from './IssueSearch';
 import AgGrid from './IssueAgGrid';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeIssueSearchOptions, GET_ISSUE_LIST, getIssueList } from '@store/issue/issueAction';
+import { getCodeServiceList } from '@store/code';
 
 /**
  * 패키지 목록
@@ -19,6 +20,7 @@ const IssueList = () => {
 
     useEffect(() => {
         dispatch(getIssueList({ search }));
+        dispatch(getCodeServiceList());
     }, [dispatch, search]);
 
     const handleChangeSearchOption = (options) => {

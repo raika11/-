@@ -4,14 +4,15 @@ export default [
         field: 'bnnrSeq',
         width: 40,
         flex: 1,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClassRules: {
+            'ag-center-cell': () => true,
+        },
     },
     {
         headerName: '등록일시',
         field: 'regDt',
         width: 86,
-        wrapText: true,
-        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '21px' },
+        cellRenderer: 'longTextRenderer',
     },
     {
         headerName: '이미지',

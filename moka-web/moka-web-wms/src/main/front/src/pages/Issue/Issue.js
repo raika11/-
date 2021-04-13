@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
@@ -9,12 +9,23 @@ import { MokaCard } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
 import IssueList from './IssueList';
 import IssueEdit from './IssueEdit';
+import { getReporterAllList } from '@store/reporter';
+import { useDispatch } from 'react-redux';
+import { clearStore } from '@store/issue';
 
 /**
  * 패키지 관리
  */
 const Issue = ({ match, displayName }) => {
     const matchPoints = useBreakpoint();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getReporterAllList());
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
 
     return (
         <Container className="p-0 position-relative" fluid>

@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
+import { DATE_FORMAT, DB_DATEFORMAT } from '@/constants';
 import { errorResponse, createRequestSaga } from '@store/commons/saga';
 import * as api from '@store/issue/issueApi';
 import * as act from '@store/issue/issueAction';
@@ -12,7 +12,7 @@ import commonUtil from '@utils/commonUtil';
 import produce from 'immer';
 import { initialState } from '@store/issue/issueReducer';
 
-const CATE_DIV = {
+export const CAT_DIV = {
     SEARCH_KEYWORD: 'K',
     REPORTER: 'R',
     SECTION: 'S',
@@ -96,11 +96,15 @@ const getKeyword = (keywords, type) => {
         };
     }
 
-    if (type === CATE_DIV.REPORTER) {
+    if (type === CAT_DIV.REPORTER) {
         //defaultKeyword = { ...defaultKeyword, reporter: { ordNo: 1, reporterId: null } };
+        console.log('selectKeywords', selectKeywords);
         const reporter = selectKeywords.map((selectKeyword) => ({
             ordNo: selectKeyword.ordno,
             reporterId: selectKeyword.repMaster,
+            keyword: selectKeyword.keyword,
+            sdate: selectKeyword.sdate,
+            edate: selectKeyword.edate,
         }));
 
         keyword = { ...keyword, reporter };
@@ -125,13 +129,13 @@ const getKeyword = (keywords, type) => {
 export const toIssueData = (response) => {
     const { pkgSeq, pkgTitle, pkgDesc, pkgDiv, episView, packageKeywords, seasonNo, catList } = response;
 
-    const search = getKeyword(packageKeywords, CATE_DIV.SEARCH_KEYWORD);
-    const reporter = getKeyword(packageKeywords, CATE_DIV.REPORTER);
-    const section = getKeyword(packageKeywords, CATE_DIV.SECTION);
-    const digitalSpecial = getKeyword(packageKeywords, CATE_DIV.DIGITAL_SPECIAL);
-    const ovp = getKeyword(packageKeywords, CATE_DIV.OVP);
-    const category = getKeyword(packageKeywords, CATE_DIV.CATEGORY);
-    const pkg = getKeyword(packageKeywords, CATE_DIV.PACKAGE);
+    const search = getKeyword(packageKeywords, CAT_DIV.SEARCH_KEYWORD);
+    const reporter = getKeyword(packageKeywords, CAT_DIV.REPORTER);
+    const section = getKeyword(packageKeywords, CAT_DIV.SECTION);
+    const digitalSpecial = getKeyword(packageKeywords, CAT_DIV.DIGITAL_SPECIAL);
+    const ovp = getKeyword(packageKeywords, CAT_DIV.OVP);
+    const category = getKeyword(packageKeywords, CAT_DIV.CATEGORY);
+    const pkg = getKeyword(packageKeywords, CAT_DIV.PACKAGE);
     let seasons = [
         { checked: false, value: '' },
         { checked: false, value: '' },
@@ -208,19 +212,21 @@ const toSaveSchCondi = (pkgSchCondi) => {
 const toSavePackageKeywords = (viewKeywords) => {
     const usedKeywords = Object.keys(viewKeywords).filter((key) => viewKeywords[key].isUsed);
     const packageKeywords = [];
-    usedKeywords.forEach((key) => {
+    usedKeywords.forEach((key, index) => {
         const keyword = viewKeywords[key].keyword;
         const { schCondi: pkgSchCondi } = keyword;
         const schCondi = toSaveSchCondi(pkgSchCondi);
+        const sdate = commonUtil.isEmpty(keyword.sdate) ? null : moment(keyword.sdate).format(DATE_FORMAT);
+        const edate = commonUtil.isEmpty(keyword.edate) ? null : moment(keyword.edate).format(DATE_FORMAT);
 
         if (key === 'reporter') {
             keyword.reporter.map((data) => {
                 const copyKeyword = { ...keyword };
                 delete copyKeyword.reporter;
-                packageKeywords.push({ ...copyKeyword, ordno: data.ordNo, repMaster: data.reporterId, schCondi: schCondi });
+                packageKeywords.push({ ...copyKeyword, ordno: data.ordNo, repMaster: data.reporterId, schCondi: schCondi, sdate, edate });
             });
         } else {
-            packageKeywords.push({ ...keyword, schCondi });
+            packageKeywords.push({ ...keyword, schCondi, sdate, edate, ordno: index });
         }
     });
 
@@ -247,7 +253,11 @@ function* saveIssue({ type, payload }) {
     const { pkg: viewData, callback } = payload;
 
     const pkg = toSavePackage(viewData);
-    const saveApi = pkg.pkgSeq ? api.putIssueGroupByOrdno : api.postIssueGroupByOrdno;
+    let saveApi = api.postIssueGroupByOrdno;
+    if (pkg.pkgSeq) {
+        console.log('put');
+        saveApi = api.putIssueGroupByOrdno;
+    }
     const response = yield call(saveApi, { pkg });
     if (callback instanceof Function) {
         callback(response);

@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaIcon, MokaInput, MokaInputLabel } from '@components';
 import Button from 'react-bootstrap/Button';
-import produce from 'immer';
+import { initialState } from '@store/issue';
 
 const defaultProps = {
-    list: [],
+    keyword: initialState.pkg.packageKeywords.reporter.keyword,
 };
-const ReporterPackageKeywordForm = ({ list }) => {
+const ReporterPackageKeywordForm = ({ keyword }) => {
+    const [editKeyword, setEditKeyword] = useState(keyword);
+
     return (
         <>
             <Form.Row className="mb-3">
@@ -27,7 +29,7 @@ const ReporterPackageKeywordForm = ({ list }) => {
                     </div>
                 </Col>
             </Form.Row>
-            {list.map(({ reporterSearch, reporterStartDt, reporterOptions, reporterEndDt }, idx) => (
+            {editKeyword.reporter.map(({ reporterSearch, reporterStartDt, reporterOptions, reporterEndDt }, idx) => (
                 <Form.Row className="mb-3" key={idx}>
                     <Col xs={3} className="p-0 d-flex">
                         <div style={{ width: 30 }} className="d-flex flex-column justify-content-center align-items-center">
@@ -58,14 +60,14 @@ const ReporterPackageKeywordForm = ({ list }) => {
                                 <MokaInputLabel as="dateTimePicker" label="시작" name="reporterStartDt" inputProps={{ timeFormat: null }} value={reporterStartDt} required />
                             </div>
                             <div style={{ width: 80 }} className="pr-1">
-                                <MokaInput as="checkbox" inputProps={{ label: '종료', custom: true, checked: reporterOptions['reporterEndYn'] || false }} />
+                                <MokaInput as="checkbox" inputProps={{ label: '종료', custom: true, checked: false }} />
                             </div>
                             <div style={{ width: 150 }}>
                                 <MokaInput as="dateTimePicker" value={reporterEndDt} inputProps={{ timeFormat: null }} />
                             </div>
                         </div>
                         <MokaInput as="autocomplete" name="reporterName" className="mb-3" />
-                        <MokaInput as="autocomplete" name="keywords" />
+                        <MokaInput name="keywords" value={editKeyword.keyword} />
                     </Col>
                 </Form.Row>
             ))}

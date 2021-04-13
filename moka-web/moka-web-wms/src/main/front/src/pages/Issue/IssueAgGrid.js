@@ -15,7 +15,7 @@ const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, load
      * 패키지 생성 버튼
      */
     const handleClickAdd = () => {
-        history.push('/package/add');
+        history.push('/issue/add');
     };
 
     /**
@@ -37,7 +37,7 @@ const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, load
      */
     const handleRowClicked = useCallback(
         (row) => {
-            history.push(`/package/${row.pkgSeq}`);
+            history.push(`/issue/${row.pkgSeq}`);
         },
         [history],
     );

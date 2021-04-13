@@ -231,6 +231,10 @@ $row-hover-color: darken($desking-row-color, 5);
             border-bottom: 3px solid $white;
             border-radius: 8px;
         }
+
+        .ag-cell {
+            line-height: 32px;
+        }
     }
 
     .ag-header {

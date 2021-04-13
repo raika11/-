@@ -18,7 +18,8 @@ export const columnDefs = [
         headerName: '사진',
         field: 'repImg',
         width: 50,
-        cellRenderer: 'circleImageRenderer',
+        cellRenderer: 'imageRenderer',
+        cellRendererParams: { roundedCircle: true, autoRatio: false },
         cellStyle: { padding: '3px 6px' },
     },
     {

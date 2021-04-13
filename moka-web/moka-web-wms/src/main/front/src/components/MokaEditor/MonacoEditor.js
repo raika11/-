@@ -90,7 +90,7 @@ const MonacoEditor = forwardRef((props, ref) => {
     useEffect(() => {
         // Component Did Mount (에디터 인스턴스 생성)
         const instance = monaco.editor.create(containerElement.current, {
-            value: defaultValue,
+            value: defaultValue || '',
             language,
             readOnly: false,
             theme,

@@ -14,7 +14,7 @@ const defaultProps = {
  * @param {object} params ag grid params
  */
 const MokaTableImageRenderer = forwardRef((params, ref) => {
-    const { colDef, roundedCircle, autoRatio } = params;
+    const { colDef, roundedCircle, autoRatio, api } = params;
     const [field] = useState(colDef.field);
     const [data, setData] = useState(params.node.data);
     const boxRef = useRef(null);
@@ -46,6 +46,9 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
             setData(params.node.data);
             return true;
         },
+        getGui: () => {
+            ref.getGui();
+        },
     }));
 
     useEffect(() => {
@@ -62,17 +65,22 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
         if (boxRef.current) {
             const w = boxRef.current.parentElement.offsetWidth;
             let h = boxRef.current.parentElement.offsetHeight;
-            if (autoRatio) {
-                // 6:4 자동 셋팅
-                h = Math.floor(((w || 0) / 6) * 4);
-            } else if (roundedCircle) {
-                // 동그라미인 경우 정사각형으로 셋팅
-                if (h > w) h = w;
-                else if (w > h) boxRef.current.style.setProperty('width', `${h}px`, 'important');
+
+            if (w === 0) {
+                boxRef.current.style.setProperty('height', `100%`, `important`);
+            } else {
+                if (autoRatio) {
+                    // 6:4 자동 셋팅
+                    h = Math.floor(((w || 0) / 6) * 4);
+                } else if (roundedCircle) {
+                    // 동그라미인 경우 정사각형으로 셋팅
+                    if (h > w) h = w;
+                    else if (w > h) boxRef.current.style.setProperty('width', `${h}px`, 'important');
+                }
+                boxRef.current.style.setProperty('height', `${h}px`, `important`);
             }
-            boxRef.current.style.setProperty('height', `${h}px`, `important`);
         }
-    }, [params, colDef, autoRatio, roundedCircle]);
+    }, [autoRatio, roundedCircle]);
 
     return (
         <div className="d-flex h-100 w-100 align-items-center justify-content-center">

@@ -31,7 +31,8 @@ export default [
         headerName: '사진',
         field: 'profilePhoto',
         width: 50,
-        cellRenderer: 'circleImageRenderer',
+        cellRenderer: 'imageRenderer',
+        cellRendererParams: { roundedCircle: true, autoRatio: false },
     },
     {
         headerName: '기자이름',

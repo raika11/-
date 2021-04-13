@@ -21,7 +21,8 @@ export const columnDefs = [
     {
         headerName: '이미지',
         field: 'chnlThumb',
-        cellRenderer: 'fullImageRenderer',
+        cellRenderer: 'imageRenderer',
+        cellRendererParams: { autoRatio: false },
         cellStyle: {
             paddingTop: '5px',
             paddingBottom: '5px',

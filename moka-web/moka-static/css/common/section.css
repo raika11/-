@@ -13,9 +13,9 @@
 .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2{font-size:16px;font-weight:500;line-height:1.5;letter-spacing:-0.56px;color:#111;}
 
 /* sub title 영역-필요시 */
-.title_wrap {display:flex; align-items:center; justify-content:space-between; padding:12px 0; height:60px; border-top:1px solid #000;}
+.title_wrap {display:flex; align-items:center; justify-content:space-between; padding:12px 0; height:60px; border-top:4px solid #ff3c14;}
 .title_wrap .title_area {display:flex; align-items:center; }
-.title_wrap .title {font-size:16px; font-weight:700;}
+.title_wrap .title {color:#ff3c14;font-size:16px; font-weight:700;}
 
 /** card **/
 .card {position:relative;}

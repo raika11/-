@@ -23,7 +23,7 @@ button,input{border-radius:0;border:0;-webkit-border-radius:0;}
 table{border-collapse:collapse;border-spacing:0;}
 body{direction:ltr;word-break:keep-all;word-wrap:break-word;-webkit-text-size-adjust:none;}
 body,th,td,input,select,textarea,button{font-size:100%;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",Arial,"Noto Sans KR","Malgun Gothic","맑은 고딕",Dotum,'돋움',sans-serif;line-height:1;color:#2e2a26;}
-a{color:#2e2a26;text-decoration:none;}
+a{color:inherit;font-size:inherit;line-height:inherit;text-decoration:none;}
 a:hover{text-decoration:underline;}
 a:active{background-color:transparent;}
 address,caption,cite,code,dfn,em,var{font-style:normal;font-weight:normal;}
@@ -163,6 +163,9 @@ section {width:100%;}
 /** grid **/
 .row {display:flex; flex-wrap:wrap; flex-grow:1 !important;}
 .row > * {width:100%; max-width:100%;}
+
+.row_mg {display:flex; flex-wrap:wrap; flex-grow:1 !important;}
+.row_mg > * {width:100%; max-width:100%;}
 
 /** width,height **/
 .w100p {width:100%;}
@@ -403,7 +406,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
 
 /** button **/
-.btn {display:flex; align-items:center; justify-content:space-between; text-align:center;white-space: nowrap;}
+.btn {display:flex; align-items:center; justify-content:space-between; padding:4px 8px;text-align:center;white-space: nowrap;}
 .btn.icon{padding-left:30px;background-repeat:no-repeat;}
 /* type */
 .btn_type1 {height:34px; padding:0 20px; font-size:13px; font-weight:700; color:#111;}
@@ -532,6 +535,9 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     .row {margin-left:-9px;margin-right:-9px;}
     .row > * {padding-left:9px;padding-right:9px;}
 
+    .row_mg {margin-left:-9px;margin-right:-9px;}
+    .row_mg > * {margin-left:9px;margin-right:9px;}
+
     .sm_hidden {display:none;} /* <<- .pc {display:none;} */
 
     .header {background:#fff; border-bottom:4px solid #000; color:#000;}
@@ -622,6 +628,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
     /* 그리드 */
     .row {margin-left:-10px; margin-right:-10px;}
     .row > * {padding-left:10px; padding-right:10px;}
+    .row_mg {margin-left:-10px; margin-right:-10px;}
+    .row_mg > * {margin-left:10px; margin-right:10px;}
 
     .header {height:42px;}
     .header .uh .btn_navbar .icon_navbar {background-color:#fff;}
@@ -733,6 +741,8 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 
     .row {margin-left:-18px; margin-right:-18px;}
     .row > * {padding-left:18px;padding-right:18px;}
+    .row_mg {margin-left:-18px; margin-right:-18px;}
+    .row_mg > * {margin-left:18px;margin-right:18px;}
 
     .header {height:48px; padding:0;}
     .header .uh .btn_navbar {left:25px;}

@@ -15,6 +15,7 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
         sort: 'repSeq,asc',
         searchType: 'all',
+        jplusRepDiv: '',
         keyword: '',
         usePaging: 'Y',
     },

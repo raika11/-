@@ -1,9 +1,10 @@
 export const columnDefs = [
     {
         headerName: '',
-        field: '선택',
+        field: 'choice',
         width: 58,
         cellRenderer: 'buttonRenderer',
+        cellRendererParams: { text: '선택' },
     },
     {
         headerName: '제목',

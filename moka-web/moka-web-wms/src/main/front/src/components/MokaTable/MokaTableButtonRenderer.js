@@ -3,14 +3,15 @@ import Button from 'react-bootstrap/Button';
 
 /**
  * Button Renderer
+ * 버튼명 : text가 있을 경우 text 노출, 없으면 field 노출
+ * 클릭 함수 : clickFunctionName이 있을 경우 그 명칭에 해당하는 함수 실행, 없으면 onClick 실행
  */
 const MokaTableButton = forwardRef((params, ref) => {
+    const { text, clickFunctionName } = params;
     const [field] = useState(params.colDef.field);
 
     useImperativeHandle(ref, () => ({
-        refresh: (params) => {
-            return true;
-        },
+        refresh: () => true,
     }));
 
     return (
@@ -21,13 +22,15 @@ const MokaTableButton = forwardRef((params, ref) => {
                     e.preventDefault();
                     e.stopPropagation();
 
-                    if (params.node.data.onClick) {
+                    if (clickFunctionName && params.node.data[clickFunctionName]) {
+                        Function.prototype.call(params.node.data[clickFunctionName], params.node.data);
+                    } else if (params.node.data.onClick) {
                         params.node.data.onClick(params.node.data);
                     }
                 }}
                 size="sm"
             >
-                {field === 'add' ? '등록' : field}
+                {text ? text : field === 'add' ? '등록' : field}
             </Button>
         </div>
     );

@@ -34,8 +34,9 @@ export const columnDefs = [
     },
     {
         headerName: '보기',
-        field: '이동',
+        field: 'move',
         width: 58,
         cellRenderer: 'buttonRenderer',
+        cellRendererParams: { text: '이동' },
     },
 ];

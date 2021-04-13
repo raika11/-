@@ -74,7 +74,7 @@ const PodtyEpisodeModal = (props) => {
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 paging={false}
-                preventRowClickCell={['이동']}
+                preventRowClickCell={['move']}
             />
         </MokaModal>
     );

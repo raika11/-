@@ -20,8 +20,6 @@ const ColumnistSearch = ({ match }) => {
     const storeSearch = useSelector(({ columnist }) => columnist.search);
     const [search, setSearch] = useState(initialState.search);
 
-    console.log(jplusRepRows);
-
     /**
      * 입력값 변경
      * @param {object} 이벤트

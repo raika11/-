@@ -20,7 +20,7 @@
     #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
-      <when test="status != 'all' and status != null and status != ''">
+      <when test="status != null and status != ''">
         #{status},
       </when>
       <otherwise>
@@ -29,8 +29,8 @@
     </choose>
 
     <choose>
-      <when test="searchType == 'all' and keyword != null and keyword != ''">
-        #{keyword},
+      <when test="columnistNm != null and columnistNm != ''">
+        #{columnistNm},
       </when>
       <otherwise>
         NULL,
@@ -38,17 +38,8 @@
     </choose>
 
     <choose>
-      <when test="searchType == 'columnistNm' and keyword != null and keyword != ''">
-        #{keyword},
-      </when>
-      <otherwise>
-        NULL,
-      </otherwise>
-    </choose>
-
-    <choose>
-      <when test="searchType == 'jplusRepDivNm' and keyword != null and keyword != ''">
-        #{keyword},
+      <when test="jplusRepDiv != null and jplusRepDiv != ''">
+        #{jplusRepDiv},
       </when>
       <otherwise>
         NULL,

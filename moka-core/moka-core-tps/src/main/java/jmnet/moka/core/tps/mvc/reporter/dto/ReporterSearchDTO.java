@@ -35,6 +35,12 @@ public class ReporterSearchDTO extends SearchDTO {
     private static final long serialVersionUID = 1972229889422176779L;
 
     /**
+     * 필진타입 (J1:기자필진,J2:외부기자(밀리터리),J3:그룹필진,J0:필진해지,R1:일보기자(더오래),R2:외부기자(더오래))
+     */
+    @ApiModelProperty("필진타입(J1:기자필진,J2:외부기자(밀리터리),J3:그룹필진,J0:필진해지,R1:일보기자(더오래),R2:외부기자(더오래))")
+    private String jplusRepDiv;
+
+    /**
      * 검색결과 성공여부
      */
     @ApiModelProperty(hidden = true)

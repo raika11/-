@@ -44,6 +44,7 @@ export const propTypes = {
 const defaultProps = {
     language: 'html',
     defaultValue: '',
+    value: '',
     theme: 'mokaTheme',
 };
 
@@ -120,7 +121,7 @@ const MonacoEditor = forwardRef((props, ref) => {
             editor.executeEdits('update', [
                 {
                     range: model.getFullModelRange(),
-                    text: value,
+                    text: value || '',
                     forceMoveMarkers: true,
                 },
             ]);

@@ -40,6 +40,7 @@ const SectionPackageKeywordComponent = ({ keyword, onChange, target }) => {
             setUseEndDate(false);
         }
     }, [keyword]);
+
     return (
         <Form.Row className="mb-3">
             <Col xs={3} className="p-0">

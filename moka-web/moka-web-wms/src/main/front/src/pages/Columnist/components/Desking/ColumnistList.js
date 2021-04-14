@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { messageBox } from '@utils/toastUtil';
 import { initialState, getColumnistListModal, GET_COLUMNIST_LIST_MODAL } from '@store/columnist';
+import { getJplusRep } from '@store/codeMgt';
 import Search from './Search';
 import AgGrid from './AgGrid';
 
@@ -41,6 +42,7 @@ const ColumnistList = (props) => {
     const { show, className, dropTargetAgGrid, onDragStop } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_COLUMNIST_LIST_MODAL]);
+    const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
     const [total, setTotal] = useState(0);
@@ -115,13 +117,16 @@ const ColumnistList = (props) => {
 
     useEffect(() => {
         if (show) {
+            if (!jplusRepRows) {
+                dispatch(getJplusRep());
+            }
             // 칼럼니스트 처음 로드
             if (cntRef.current === 0) {
                 getColumnistList({});
                 cntRef.current += 1;
             }
         }
-    }, [getColumnistList, show]);
+    }, [dispatch, getColumnistList, jplusRepRows, show]);
 
     return (
         <div className={clsx('d-flex flex-column h-100', className)}>

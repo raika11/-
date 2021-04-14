@@ -354,7 +354,7 @@ const PageEdit = ({ onDelete }) => {
                 {/* 페이지 URL */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label="URL" as="none" />
-                    <p className="mb-0 d-flex align-items-center cursor-pointer hover-underline ft-14" onClick={handleClickOpenService}>
+                    <p className="mb-0 d-flex align-items-center cursor-pointer hover-underline" onClick={handleClickOpenService}>
                         <span>{temp.pageUrl}</span>
                     </p>
                 </Form.Row>

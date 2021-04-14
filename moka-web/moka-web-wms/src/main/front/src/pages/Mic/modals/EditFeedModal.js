@@ -247,7 +247,7 @@ const EditFeedModal = (props) => {
                         label={
                             <React.Fragment>
                                 이미지
-                                <Button size="sm" variant="gray-700" className="mt-2" onClick={(e) => imgRef.current.rootRef.onClick(e)}>
+                                <Button size="sm" variant="gray-700" className="mt-1" onClick={(e) => imgRef.current.rootRef.onClick(e)}>
                                     신규등록
                                 </Button>
                             </React.Fragment>

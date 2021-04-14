@@ -35,11 +35,64 @@
                 <script>include.aside.menu0()</script>
                 <main class="main_guide col_sm12 col_md10 col_lg10">
                     <!-- 가이드 내용 시작 -->
+                    <h1 class="page_title">버튼</h1>
+
+                    <p>기능형은 <code>&lt;button&gt;</code>, 페이지 이동형은 <code>&lt;a&gt;</code> 태그 사용</p>
+
+
+                    <h2 class="guide_title">상태별</h2>
+                    <div class="sample_wrap">
+                        <div class="button_wrap">
+                            <button type="button" class="btn btn_default">기본</button>
+                            <button type="button" class="btn btn_primary">강조</button> 
+                        </div>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="button_wrap"&gt;
+    &lt;button type="button" class="btn_round list_more"&gt;더보기&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+                    <h2 class="guide_title">크기별</h2>
+                    <div class="sample_wrap">
+                        <div class="button_wrap">
+                            <button type="button" class="btn btn_default btn_sm">기본</button>
+                            <button type="button" class="btn btn_default">기본</button>
+                            <button type="button" class="btn btn_default btn_lg">기본</button>
+                        </div>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="button_wrap"&gt;
+    &lt;button type="button" class="btn_round list_more"&gt;더보기&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+
+
 
                     <h2 class="guide_title">중앙 - 리스트 더보기</h2>
                     <div class="sample_wrap">
                         <div class="button_wrap_wide">
-                            <button type="button" class="btn_round list_more"><i class="fa fa_plus"></i>더보기</button>
+                            <button type="button" class="btn btn_default"><i class="fa fa_plus"></i>더보기</button>
+                        </div>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="button_wrap_wide"&gt;
+    &lt;button type="button" class="btn btn_default"&gt;&lt;i class="fa fa_plus"&gt;&lt;/i&gt;더보기&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+
+                    <h2 class="guide_title">구독</h2>
+                    <div class="sample_wrap">
+                        <div class="button_wrap button_right">
+                            <button type="button" class="btn_round btn_outline_orange">구독</button>
                         </div>
                     </div>
                     <div class="code_wrap">
@@ -51,10 +104,13 @@
                     </div>
 
 
-                    <h2 class="guide_title">구독</h2>
+                    <h2 class="guide_title">sns</h2>
                     <div class="sample_wrap">
                         <div class="button_wrap button_right">
-                            <button type="button" class="btn_round btn_outline_orange">구독</button>
+                            <button type="button" class="btn btn_sns btn_katalk"><i class="fa fa_katalk"></i>카카오톡</button>
+                            <button type="button" class="btn btn_sns btn_outline_orange">구독</button>
+                            <button type="button" class="btn btn_sns btn_outline_orange">구독</button>
+                            <button type="button" class="btn btn_sns btn_outline_orange">구독</button>
                         </div>
                     </div>
                     <div class="code_wrap">

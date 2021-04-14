@@ -70,7 +70,7 @@ var include = {
             document.write('        <li class="nav_item">');
             document.write('            <a class="nav_link" href="javascript:(0);">콘텐츠</a>');
             document.write('            <ul class="nav">');
-            document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">이미지</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="image.html">이미지</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">테이블</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="figures.html">피규어</a></li>');
             document.write('            </ul>');
@@ -87,6 +87,7 @@ var include = {
             document.write('            <a class="nav_link" href="javascript:(0);">컴포넌트</a>');
             document.write('            <ul class="nav">');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Menu3</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="icon.html">아이콘</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="button.html">버튼</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="card.html">카드</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="list_group.html">리스트 그룹</a></li>');

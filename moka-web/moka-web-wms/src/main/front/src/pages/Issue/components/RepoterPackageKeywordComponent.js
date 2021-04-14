@@ -29,8 +29,7 @@ const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
     const handleClickDeleteReporter = (idx) => {
         const reporter = [...editKeyword.reporter].filter((data, index) => index !== idx);
         const pkg = { ...editKeyword, reporter };
-        console.log(reporter);
-        console.log(pkg);
+
         setEditKeyword(pkg);
         if (onChange instanceof Function) {
             onChange(pkg);

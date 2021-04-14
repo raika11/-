@@ -120,6 +120,7 @@ const ABResult = React.lazy(() => import('@pages/AB/Result')); // 테스트 결�
 const NewsLetter = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetter'));
 const NewsLetterCalendar = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterCalendar'));
 const NewsLetterSend = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterSend'));
+const NewsLetterSendArchive = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterSend/NewsLetterSendArchive'));
 const NewsLetterResult = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterResult'));
 const NewsLetterMResult = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterResult/NewsLetterMethodResult'));
 const NewsLetterTResult = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterResult/NewsLetterTypeResult'));
@@ -788,6 +789,16 @@ const routes = [
         name: 'newsLetterSend',
         displayName: '뉴스레터 발송 관리',
         component: NewsLetterSend,
+        side: true,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/news-letter-senda',
+        name: 'NewsLetterSendArchive',
+        displayName: '뉴스레터 아카이브 확인',
+        component: NewsLetterSendArchive,
         side: true,
         nonResponsive: true,
         exact: false,

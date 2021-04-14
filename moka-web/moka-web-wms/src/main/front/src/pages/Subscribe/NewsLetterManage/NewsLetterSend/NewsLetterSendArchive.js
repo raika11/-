@@ -1,17 +1,17 @@
 import React from 'react';
-import { Route, Switch } from 'react-router';
+import { Route } from 'react-router';
 import Helmet from 'react-helmet';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@/components';
-import NewsLetterSendList from './NewsLetterSendList';
-import NewsLetterSendEdit from './NewsLetterSendEdit';
+import NewsLetterSendArchiveList from './NewsLetterSendArchiveList';
+import NewsLetterSendArchiveEdit from './NewsLetterSendArchiveEdit';
 
 /**
- * 뉴스레터 관리 > 뉴스레터 발송 관리
+ * 뉴스레터 관리 > 뉴스레터 발송 관리 > 아카이브 확인(수동 발송된 뉴스레터 목록)
  */
-const NewsLetterSend = ({ match, displayName }) => {
+const NewsLetterSendArchive = ({ match, displayName }) => {
     return (
         <Container className="p-0">
             <Row noGutters>
@@ -22,20 +22,19 @@ const NewsLetterSend = ({ match, displayName }) => {
                 </Helmet>
 
                 {/* 리스트 */}
-                <Col xs={7} className="pr-gutter">
+                <Col xs={3} className="pr-gutter">
                     <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={displayName}>
-                        <NewsLetterSendList match={match} />
+                        <NewsLetterSendArchiveList match={match} />
                     </MokaCard>
                 </Col>
 
-                <Col xs={5}>
-                    <Switch>
-                        <Route path={[`${match.path}/add`, `${match.path}/:sendSeq`]} exact render={() => <NewsLetterSendEdit match={match} />} />
-                    </Switch>
+                {/* 수동 발송 아카이브 목록 */}
+                <Col xs={9}>
+                    <Route path={`${match.path}/:letterSeq`} exact render={() => <NewsLetterSendArchiveEdit match={match} />} />
                 </Col>
             </Row>
         </Container>
     );
 };
 
-export default NewsLetterSend;
+export default NewsLetterSendArchive;

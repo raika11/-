@@ -151,6 +151,7 @@ const NewsLetterResultEdit = ({ match }) => {
                 ]}
                 rowData={[
                     {
+                        no: '1',
                         sendDt: '2021-03-22 10:00',
                         sendTotal: '100',
                         successRate: '-',
@@ -158,6 +159,7 @@ const NewsLetterResultEdit = ({ match }) => {
                         clickRate: '-',
                     },
                     {
+                        no: '2',
                         sendDt: '2021-03-20 10:00',
                         sendTotal: '2500',
                         successRate: '-',

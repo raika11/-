@@ -1,44 +1,35 @@
-package jmnet.moka.core.tps.mvc.reporter.dto;
+package jmnet.moka.core.tps.mvc.reporter.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.Date;
-import java.util.List;
+import javax.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.ibatis.type.Alias;
 
-/**
- * <pre>
- * JAM 기자정보 연동 DTO
- * 2021. 04. 12.   최초생성
- * </pre>
- *
- * @author
- * @since 2021. 04. 12. 오후 4:46:30
- */
-@AllArgsConstructor
+@Alias("ReporterSaveVO")
 @NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ApiModel("기자 수정 DTO")
-public class ReporterJamSaveDTO implements Serializable {
+public class ReporterSaveVO implements Serializable {
 
-    private static final long serialVersionUID = -7979684085879328911L;
-
-    public static final Type TYPE = new TypeReference<List<ReporterJamSaveDTO>>() {
-    }.getType();
+    private static final long serialVersionUID = 4915460246745266545L;
 
     /**
-     * 사용여부(Y:사용,N:미사용)
+     * 기자 일련번호 (1001부터 시작)
+     */
+    @Column(name = "REP_SEQ")
+    private Integer repSeq;
+
+    /**
+     * 사용여부(Y:사용, N:미사용)
      */
     @ApiModelProperty("사용여부(Y:사용,N:미사용)")
     private String usedYn;
@@ -134,24 +125,6 @@ public class ReporterJamSaveDTO implements Serializable {
     private String regId;
 
     /**
-     * 등록일시
-     */
-    @ApiModelProperty("등록일시")
-    private Date regDt;
-
-    /**
-     * 수정자
-     */
-    @ApiModelProperty("수정자")
-    private String modId;
-
-    /**
-     * 수정일시
-     */
-    @ApiModelProperty("수정일시")
-    private Date modDt;
-
-    /**
      * 기자 일련번호
      */
     @ApiModelProperty("JAM 기자 일련번호")
@@ -192,12 +165,4 @@ public class ReporterJamSaveDTO implements Serializable {
      */
     @ApiModelProperty("JAM 회사 명")
     private String jamComNm;
-
-    /**
-     * 보안 MD5 (jcms기자번호 + jam기자번호+ yyyymmdd)  해쉬 값
-     */
-    @ApiModelProperty("보안 MD5 해쉬 값")
-    private String hash;
-
 }
-

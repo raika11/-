@@ -30,12 +30,18 @@ import lombok.Setter;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ApiModel("기자 수정 DTO")
-public class ReporterJamSaveDTO implements Serializable {
+public class ReporterJamUpdateDTO implements Serializable {
 
     private static final long serialVersionUID = -7979684085879328911L;
 
-    public static final Type TYPE = new TypeReference<List<ReporterJamSaveDTO>>() {
+    public static final Type TYPE = new TypeReference<List<ReporterJamUpdateDTO>>() {
     }.getType();
+
+    /**
+     * 기자일련번호
+     */
+    @ApiModelProperty("기자일련번호")
+    private Integer repSeq;
 
     /**
      * 사용여부(Y:사용,N:미사용)

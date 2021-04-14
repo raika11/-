@@ -58,4 +58,64 @@
     ]]>
 
   </select>
+
+  <insert id="insertReporters" parameterType="ReporterSaveVO"
+    statementType="CALLABLE">
+    { call UPA_15RE_REPORTER_INS(
+      #{usedYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{talkYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repName, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repEmail1, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repEmail2, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repTitle, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repPhone, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{joinsId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{jnetId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repPhoto, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repTalk, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{snsTw, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{snsFb, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{snsIn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{joinsBlog, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{regId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{jamRepSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{jamDeptSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{jamDeptNm, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{jplusRepDiv, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repField, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{jamComCd, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{jamComNm, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repSeq, mode=OUT, jdbcType=INTEGER, javaType=int}
+      )}
+  </insert>
+
+  <update id="updateReporters" parameterType="ReporterSaveVO"
+    statementType="CALLABLE">
+    { call UPA_15RE_REPORTER_UPD(
+      #{repSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{usedYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{talkYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repName, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repEmail1, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repEmail2, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repTitle, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repPhone, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{joinsId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{jnetId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repPhoto, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repTalk, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{snsTw, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{snsFb, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{snsIn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{joinsBlog, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{regId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{jamRepSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{jamDeptSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{jamDeptNm, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{jplusRepDiv, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{repField, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{jamComCd, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{jamComNm, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+      )}
+  </update>
 </mapper>

@@ -18,9 +18,9 @@ export const columnDefs = [
     },
     {
         headerName: '최종 업데이트 일시',
-        field: 'regDt',
+        field: 'modDt',
         width: 130,
-        tooltipField: 'regDt',
+        tooltipField: 'modDt',
     },
     {
         headerName: '사용',

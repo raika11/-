@@ -51,8 +51,8 @@ const BoardsSetAgGrid = ({ match }) => {
             setRowData(
                 boardslist.map((data) => ({
                     ...data,
-                    regDt: moment(data.regDt || '').format(BASIC_DATEFORMAT),
-                    modDt: moment(data.modDt || '').format(BASIC_DATEFORMAT),
+                    regDt: data.regDt ? moment(data.regDt).format(BASIC_DATEFORMAT) : '',
+                    modDt: data.modDt ? moment(data.modDt).format(BASIC_DATEFORMAT) : '',
                     buttonInfo: {
                         boardId: data.boardId,
                         boardUrl: data.boardUrl,

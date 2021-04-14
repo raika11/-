@@ -4,9 +4,9 @@ import { useHistory, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaCard, MokaInput, MokaInputLabel, MokaIcon } from '@/components';
+import { MokaCard, MokaInputLabel } from '@/components';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { CAT_DIV, clearIssue, getIssue, getIssueList, initialState, saveIssue } from '@store/issue';
+import { CAT_DIV, clearIssue, existsIssueTitle, getIssue, getIssueList, initialState, saveIssue } from '@store/issue';
 import DefaultPackageKeywordComponent from '@pages/Issue/components/DefaultPackageKeywordComponent';
 import ReporterPackageKeywordForm from '@pages/Issue/components/RepoterPackageKeywordComponent';
 import SectionPackageKeywordComponent from '@pages/Issue/components/SectionPackageKeywordComponent';
@@ -14,6 +14,7 @@ import useDebounce from '@hooks/useDebounce';
 
 import IssueCommonEdit from '@pages/Issue/components/IssueCommonEdit';
 import ReporterListModal from '@pages/Reporter/modals/ReporterListModal';
+import toast, { messageBox } from '@utils/toastUtil';
 
 /**
  * 패키지 상세 정보
@@ -22,6 +23,7 @@ const IssueEdit = ({ reporters }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [showReporterModal, setShowReporterModal] = useState(false);
+    const [isDuplicatedTitle, setIsDuplicatedTitle] = useState(false);
     const { pkg, search } = useSelector(({ issue }) => issue, shallowEqual);
 
     const { pkgSeq } = useParams();
@@ -52,6 +54,25 @@ const IssueEdit = ({ reporters }) => {
         );
     };
 
+    const handleClickDuplicateCheck = () => {
+        dispatch(
+            existsIssueTitle({
+                pkgTitle: edit.pkgTitle,
+                callback: (response) => {
+                    const { header, body } = response;
+                    if (header.success) {
+                        setIsDuplicatedTitle(body);
+                        if (body) {
+                            messageBox.alert('중복된 패키지명이 존재합니다.');
+                        } else {
+                            toast.success('패키지명 중복 검사를 완료하였습니다.');
+                        }
+                    }
+                },
+            }),
+        );
+    };
+
     const handleChangeDebounceValue = useDebounce(handleChangeValue, 500);
     const handleChangeArrayObjectDebounceValue = useDebounce(handleChangeArrayObjectValue, 500);
     const handleChangeEdit = useDebounce((value) => {
@@ -59,16 +80,19 @@ const IssueEdit = ({ reporters }) => {
     }, 500);
 
     const handleClickSave = () => {
-        dispatch(
-            saveIssue({
-                pkg: edit,
-                callback: (response) => {
-                    dispatch(getIssue({ pkgSeq }));
-                    dispatch(getIssueList({ search }));
-                },
-            }),
-        );
-        //console.log(edit);
+        if (isDuplicatedTitle) {
+            messageBox.alert('패키지명 중복 검사를 진행해주세요.');
+        } else {
+            dispatch(
+                saveIssue({
+                    pkg: edit,
+                    callback: (response) => {
+                        dispatch(getIssue({ pkgSeq }));
+                        dispatch(getIssueList({ search }));
+                    },
+                }),
+            );
+        }
     };
 
     useEffect(() => {
@@ -81,11 +105,12 @@ const IssueEdit = ({ reporters }) => {
 
     useEffect(() => {
         setEdit(pkg);
+        if (pkg.pkgSeq) {
+            setIsDuplicatedTitle(false);
+        } else {
+            setIsDuplicatedTitle(true);
+        }
     }, [pkg]);
-
-    useEffect(() => {
-        console.log(edit);
-    }, [edit]);
 
     return (
         <MokaCard
@@ -101,7 +126,13 @@ const IssueEdit = ({ reporters }) => {
         >
             <p className="mb-2">* 표시는 필수 입력 정보입니다.</p>
             <Form>
-                <IssueCommonEdit data={edit} onChange={handleChangeEdit} />
+                <IssueCommonEdit
+                    data={edit}
+                    onChange={handleChangeEdit}
+                    onDuplicateCheck={handleClickDuplicateCheck}
+                    isDuplicatedTitle={isDuplicatedTitle}
+                    setIsDuplicatedTitle={setIsDuplicatedTitle}
+                />
                 {/* 공통 검색어 */}
                 <Form.Row className="mb-3">
                     <Col xs={3} className="p-0">
@@ -227,104 +258,6 @@ const IssueEdit = ({ reporters }) => {
                             handleChangeArrayObjectDebounceValue({ target: 'packageKeywords', subTarget: 'section', name: 'keyword', value });
                         }}
                     />
-                    /*<Form.Row className="mb-3">
-                        <Col xs={3} className="p-0">
-                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
-                                <MokaInputLabel as="none" label="검색 범위" />
-                            </div>
-                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
-                                <MokaInputLabel as="none" label="검색 기간" />
-                            </div>
-                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
-                                <MokaInputLabel as="none" label="대상 섹션" />
-                            </div>
-                            <MokaInputLabel
-                                as="switch"
-                                id="package-sectionSearch-switch"
-                                name="sectionSearch"
-                                label="검색어(N개)"
-                                inputProps={{ custom: true, checked: edit.sectionSearch === 'Y' }}
-                                onChange={handleChangeSwitch}
-                            />
-                        </Col>
-                        <Col xs={9} className="p-0">
-                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
-                                <div style={{ width: 80 }} className="pr-3">
-                                    <MokaInput
-                                        as="checkbox"
-                                        id="package-sectionTitle-checkbox"
-                                        inputProps={{ label: '제목', custom: true, checked: edit.sectionOptions['title'] || false }}
-                                        onChange={(e) => setEdit({ ...edit, sectionOptions: { ...edit.sectionOptions, title: e.target.checked } })}
-                                    />
-                                </div>
-                                <div style={{ width: 80 }}>
-                                    <MokaInput
-                                        as="checkbox"
-                                        id="package-sectionTag-checkbox"
-                                        inputProps={{ label: '태그', custom: true, checked: edit.sectionOptions['tag'] }}
-                                        onChange={(e) => setEdit({ ...edit, sectionOptions: { ...edit.sectionOptions, tag: e.target.checked } })}
-                                    />
-                                </div>
-                            </div>
-                            <div className="mb-3 d-flex align-items-center">
-                                <div style={{ width: 228 }} className="pr-3 d-flex align-items-center">
-                                    <MokaInputLabel
-                                        as="dateTimePicker"
-                                        label="시작"
-                                        name="sectionStartDt"
-                                        inputProps={{ timeFormat: null }}
-                                        value={edit.sectionStartDt}
-                                        onChange={(date) => {
-                                            if (typeof date === 'object') {
-                                                setEdit({ ...edit, sectionStartDt: date });
-                                            } else if (date === '') {
-                                                setEdit({ ...edit, sectionStartDt: null });
-                                            }
-                                        }}
-                                        required
-                                    />
-                                </div>
-                                <div style={{ width: 80 }} className="pr-1">
-                                    <MokaInput
-                                        as="checkbox"
-                                        inputProps={{ label: '종료', custom: true, checked: edit.sectionOptions['sectionEndYn'] || false }}
-                                        onChange={(e) => setEdit({ ...edit, sectionOptions: { ...edit.sectionOptions, sectionEndYn: e.target.checked } })}
-                                    />
-                                </div>
-                                <div style={{ width: 150 }}>
-                                    <MokaInput
-                                        as="dateTimePicker"
-                                        name="sectionEndDt"
-                                        value={edit.sectionEndDt}
-                                        inputProps={{ timeFormat: null }}
-                                        onChange={(date) => {
-                                            if (typeof date === 'object') {
-                                                setEdit({ ...edit, sectionEndDt: date });
-                                            } else if (date === '') {
-                                                setEdit({ ...edit, sectionEndDt: null });
-                                            }
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
-                                <Button variant="outline-neutral">섹션 선택</Button>
-                            </div>
-                            <MokaInput
-                                as="autocomplete"
-                                name="keywords"
-                                value={sectionValue}
-                                inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
-                                onChange={(ct) => {
-                                    let result = [];
-                                    if (ct) {
-                                        result = ct.map((ct) => ct.value);
-                                    }
-                                    setSectionkeywordList(result);
-                                }}
-                            />
-                        </Col>
-                    </Form.Row>*/
                 )}
                 {/* 디지털 스페셜 */}
                 <Form.Row className="mb-3">

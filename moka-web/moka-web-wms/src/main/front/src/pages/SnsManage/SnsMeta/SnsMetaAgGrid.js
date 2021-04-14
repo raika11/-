@@ -5,7 +5,6 @@ import produce from 'immer';
 import { MokaTable } from '@components';
 import { changeSnsMetaSearchOptions } from '@store/snsManage/snsAction';
 import columnDefs from './SnsMetaAgGridColumns';
-import EditImageRenderer from '@pages/SnsManage/SnsMeta/component/EditImageRenderer';
 import { GRID_ROW_HEIGHT } from '@/style_constants';
 
 /**
@@ -46,6 +45,7 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={rowData}
+            headerHeight={GRID_ROW_HEIGHT.C[0]}
             rowHeight={GRID_ROW_HEIGHT.C[1]}
             onRowNodeId={(row) => row.id}
             onRowClicked={(row) => handleClickListRow(row)}
@@ -56,7 +56,6 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
             onChangeSearchOption={handleChangeSearchOption}
             selected={selected}
             preventRowClickCell={['insStatus']}
-            frameworkComponents={{ editImageRenderer: EditImageRenderer }}
             refreshCellsParams={{
                 force: true,
             }}

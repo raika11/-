@@ -21,7 +21,8 @@ export default [
     {
         headerName: '이미지',
         field: 'thumbnail',
-        cellRenderer: 'editImageRenderer',
+        // cellRenderer: 'editImageRenderer',
+        cellRenderer: 'imageRenderer',
         width: 78,
     },
     {

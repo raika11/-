@@ -4,40 +4,35 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
-import jmnet.moka.common.utils.MapBuilder;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
-import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterJamSaveDTO;
+import jmnet.moka.core.tps.mvc.reporter.dto.ReporterJamUpdateDTO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSimpleDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
 import jmnet.moka.core.tps.mvc.reporter.service.ReporterService;
+import jmnet.moka.core.tps.mvc.reporter.vo.ReporterSaveVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,14 +74,9 @@ public class ReporterRestController extends AbstractCommonController {
     @Autowired
     private RestTemplateHelper restTemplateHelper;
 
-    @Value("${jam.sender.ip}")
-    private String jamSenderIp;
-
-    @Value("${jam.create.api}")
-    private String jamCreateApi;
-
-    @Value("${jam.change.api}")
-    private String jamChangeApi;
+    @Value("http://172.29.58.95:8100")  //로컬 BO API 주소
+    //@Value("https://stg-backoffice.joongang.co.kr") //스테이징 BO API 주소
+    private String backOfficeServer;
 
     public ReporterRestController(ReporterService reporterService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger) {
         this.reporterService = reporterService;
@@ -178,7 +168,7 @@ public class ReporterRestController extends AbstractCommonController {
             dto.setR2CdNm(cd2Nm);
             dto.setR3CdNm(cd3Nm);
             dto.setR4CdNm(cd4Nm);
-            ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<ReporterSimpleDTO>(dto, msg("tps.common.success.update"));
+            ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<ReporterSimpleDTO>(dto, msg("tps.common.success.insert"));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);
@@ -201,105 +191,169 @@ public class ReporterRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "기자 생성")
     @PostMapping("/createByJam")
-    public Exception createByJam(HttpServletRequest request, @Valid ReporterJamSaveDTO reporterJamSaveDTO)
+    public ResponseEntity<?> createByJam(HttpServletRequest request, @Valid ReporterJamSaveDTO reporterJamSaveDTO)
             throws Exception {
-
+        String result = "";
         String message = "";
+        String State = "";
+
+        String serverChk = request.getHeader("MOKA_SERVER");
+        log.info("serverChk {} ", serverChk);
+
+        // 비로그인 시 BACKOFFICE 호출 시 헤더 체크
+        if (McpString.isEmpty(serverChk) || (McpString.isNotEmpty(serverChk) && !serverChk.equals("JAM"))) {
+            String errMsg = msg("tps.reporter.error.notConnect");
+            message = "State = N, ErrMsg = " + errMsg;
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+
+        // JAM 기자 일련번호 체크(필수값)
+        if (reporterJamSaveDTO.getJamRepSeq() == 0) {
+            String errMsg = msg("tps.reporter.error.error.notnull.jamRepSeq");
+            message = "State = N, ErrMsg = " + errMsg;
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+
+        //md5 hash check   MD5(jcms기자고유번호(신규:0) + jam기자고유번호+ yyyymmdd)
+        String hasedKey1 = getMD5("0" + reporterJamSaveDTO
+                .getJamRepSeq()
+                .toString() + McpDate.dateStr(McpDate.now(), "yyyyMMdd"));  //   DateTime.Now.ToString("yyyyMMdd")
+
+        String hasedKey2 = getMD5("0" + reporterJamSaveDTO
+                .getJamRepSeq()
+                .toString() + McpDate.dateStr(McpDate.todayDatePlus(1), "yyyyMMdd"));
+
+        log.info("hasedKey1 {} ", hasedKey1);
+        log.info("hasedKey2 {} ", hasedKey2);
+
+        if (!reporterJamSaveDTO
+                .getHash()
+                .equals(hasedKey1) && !reporterJamSaveDTO
+                .getHash()
+                .equals(hasedKey2)) {
+            String errMsg = msg("tps.reporter.error.notConnect");
+            message = "State = N, ErrMsg = " + errMsg;
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+
+        ReporterSaveVO reporterSaveVO = modelMapper.map(reporterJamSaveDTO, ReporterSaveVO.class);
 
         try {
+            int repSeq = reporterService.insertReporters(reporterSaveVO);
 
-            HttpServletRequest req = HttpHelper.getRequest();
-
-            String remoteAddr =
-                    req != null ? McpString.defaultValue(HttpHelper.getRemoteAddr(req), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
-            if (McpString.isNotEmpty(remoteAddr)) {
-                if (remoteAddr.equals("0:0:0:0:0:0:0:1")) {
-                    remoteAddr = "127.0.0.1";
+            if (McpString.isNotEmpty(repSeq)) {
+                if (repSeq > 0) {
+                    State = "Y";
+                    result = "State = " + State + ", JamRepSeq =" + reporterJamSaveDTO.getJamRepSeq() + ", RepSeq =" + repSeq;
+                    // 액션 로그에 성공 로그 출력
+                    tpsLogger.success(ActionType.INSERT);
+                } else {
+                    State = "N";
+                    String errMsg = msg("tps.reporter.error.duplicate.repSeq");
+                    result = "State = " + State + ", ErrMsg =" + errMsg;
                 }
             }
-
-            //ip check
-            if (jamSenderIp != null && !jamSenderIp.contains(remoteAddr)) {
-                log.debug("[{0}] Reporter/CreateByJam : {1}", remoteAddr, "허가되지 않은 IP 접근");
-
-                message = msg("올바른 접근이 아닙니다.");
-                return new Exception(message);
-            }
-
-            log.info("getRepSeq {} ", reporterJamSaveDTO
-                    .getRepSeq()
-                    .toString());
-            log.info("getJamRepSeq {} ", reporterJamSaveDTO
-                    .getJamRepSeq()
-                    .toString());
-            log.info("todayDate {} ", McpDate.dateStr(McpDate.now(), "yyyyMMdd"));
-            log.info("todayDatePlus(1) {} ", McpDate.dateStr(McpDate.todayDatePlus(1), "yyyyMMdd"));
-
-
-            //md5 hash check
-            String hasedKey1 = getMD5(reporterJamSaveDTO
-                    .getRepSeq()
-                    .toString() + reporterJamSaveDTO
-                    .getJamRepSeq()
-                    .toString() + McpDate.dateStr(McpDate.now(), "yyyyMMdd"));  //   DateTime.Now.ToString("yyyyMMdd")
-
-            String hasedKey2 = getMD5(reporterJamSaveDTO
-                    .getRepSeq()
-                    .toString() + reporterJamSaveDTO
-                    .getJamRepSeq()
-                    .toString() + McpDate.dateStr(McpDate.todayDatePlus(1), "yyyyMMdd"));
-
-            log.info("hasedKey1 {} ", hasedKey1);
-            log.info("hasedKey2 {} ", hasedKey2);
-
-            if (!reporterJamSaveDTO
-                    .getHash()
-                    .equals(hasedKey1) && !reporterJamSaveDTO
-                    .getHash()
-                    .equals(hasedKey2)) {
-                message = msg("매직키(다음날)로 한번 더 체크가 되지 않았습니다.");
-                return new Exception(message);
-            }
-            if (reporterJamSaveDTO.getJamRepSeq() == 0) {
-                message = msg("필수 항목(JAM 기자 일련번호)이 누락되었습니다.");
-                return new Exception(message);
-            }
-
-
-
-            MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-            headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
-            //headers.add(tokenHeaderKey, token.getResult());
-
-            String url = jamCreateApi;
-            try {
-                url += MapBuilder.getInstance()
-                                 //                                    .add("client_id", clientId)
-                                 //                                    .add("cast_srl", castSrl)
-                                 //                                    .add("page", String.valueOf(searchDTO.getPage() + 1))
-                                 //                                    .add("size", String.valueOf(searchDTO.getSize()))
-                                 //                                    .add("direction", searchDTO.getDirection())
-                                 .getQueryString(true, true);
-            } catch (Exception ex) {
-                log.error(ex.toString());
-            }
-
-            // ResponseEntity<String> responseEntity = restTemplateHelper.post(url, null, headers);
-
-
         } catch (Exception e) {
-            log.error("[FAIL TO CREATE REPORTER]", e);
-
-            throw new Exception(msg(message, e));
+            String errMsg = msg("tps.reporter.error.job");
+            result = "State = " + State + ", ErrMsg =" + errMsg;
         }
-        return null;
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    /**
+     * 기자 수정
+     *
+     * @param reporterJamUpdateDTO 수정할 기자 정보
+     * @return
+     */
+    @ApiOperation(value = "기자 수정")
+    @PutMapping(value = "/changeByJam")
+    public ResponseEntity<?> changeByJam(HttpServletRequest request, @Valid ReporterJamUpdateDTO reporterJamUpdateDTO)
+            throws Exception {
+        String result = "";
+        String message = "";
+        String State = "";
+
+        String serverChk = request.getHeader("MOKA_SERVER");
+        log.info("serverChk {} ", serverChk);
+
+        if (McpString.isEmpty(serverChk) || (McpString.isNotEmpty(serverChk) && !serverChk.equals("JAM"))) {
+            String errMsg = msg("tps.reporter.error.notConnect");
+            message = "State = N, ErrMsg = " + errMsg;
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+
+        // 기자 일련번호 체크(필수값)
+        if (McpString.isEmpty(reporterJamUpdateDTO.getRepSeq()) || reporterJamUpdateDTO.getRepSeq() == 0) {
+            String errMsg = msg("tps.reporter.error.error.notnull.repSeq");
+            message = "State = N, ErrMsg = " + errMsg;
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+        // JAM 기자 일련번호 체크(필수값)
+        if (McpString.isEmpty(reporterJamUpdateDTO.getJamRepSeq()) || reporterJamUpdateDTO.getJamRepSeq() == 0) {
+            String errMsg = msg("tps.reporter.error.error.notnull.jamRepSeq");
+            message = "State = N, ErrMsg = " + errMsg;
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+
+        //md5 hash check MD5(jcms기자고유번호 + jam기자고유번호+ yyyymmdd)
+        String hasedKey1 = getMD5(reporterJamUpdateDTO
+                .getRepSeq()
+                .toString() + reporterJamUpdateDTO
+                .getJamRepSeq()
+                .toString() + McpDate.dateStr(McpDate.now(), "yyyyMMdd"));  //   DateTime.Now.ToString("yyyyMMdd")
+
+        String hasedKey2 = getMD5(reporterJamUpdateDTO
+                .getRepSeq()
+                .toString() + reporterJamUpdateDTO
+                .getJamRepSeq()
+                .toString() + McpDate.dateStr(McpDate.todayDatePlus(1), "yyyyMMdd"));
+
+        log.info("hasedKey1 {} ", hasedKey1);
+        log.info("hasedKey2 {} ", hasedKey2);
+
+        if (!reporterJamUpdateDTO
+                .getHash()
+                .equals(hasedKey1) && !reporterJamUpdateDTO
+                .getHash()
+                .equals(hasedKey2)) {
+
+            String errMsg = msg("tps.reporter.error.notConnect");
+            message = "State = N, ErrMsg = " + errMsg;
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+
+        ReporterSaveVO reporterSaveVO = modelMapper.map(reporterJamUpdateDTO, ReporterSaveVO.class);
+        try {
+            int repSeqChk = reporterService.updateReporters(reporterSaveVO);
+
+            log.info("repSeqChk {} ", repSeqChk);
+
+            if (McpString.isNotEmpty(repSeqChk)) {
+                if (repSeqChk > 0) {
+                    State = "Y";
+                    result = "State = " + State + ", JamRepSeq =" + reporterJamUpdateDTO.getJamRepSeq() + ", RepSeq ="
+                            + reporterJamUpdateDTO.getRepSeq();
+                    // 액션 로그에 성공 로그 출력
+                    tpsLogger.success(ActionType.UPDATE);
+                } else {
+                    State = "N";
+                    String errMsg = msg("tps.reporter.error.update.repSeq");
+                    result = "State = " + State + ", ErrMsg =" + errMsg;
+                }
+            }
+        } catch (Exception e) {
+            String errMsg = msg("tps.reporter.error.job");
+            result = "State = " + State + ", ErrMsg =" + errMsg;
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     public static String getMD5(String str) {
 
         String rtnMD5 = "";
-        log.info("str:" + str);
-        log.info("str.getBytes():" + Arrays.toString(str.getBytes()));
 
         try {
             //MessageDigest 인스턴스 생성
@@ -308,8 +362,6 @@ public class ReporterRestController extends AbstractCommonController {
             md.update(str.getBytes());
             //해쉬값(다이제스트) 얻기
             byte byteData[] = md.digest();
-
-            log.info("byteData[]:" + Arrays.toString(byteData));
 
             StringBuffer sb = new StringBuffer();
 

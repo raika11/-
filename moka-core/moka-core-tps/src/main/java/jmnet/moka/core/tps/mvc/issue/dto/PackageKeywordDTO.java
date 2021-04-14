@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -81,7 +82,8 @@ public class PackageKeywordDTO implements Serializable {
      * 순번
      */
     @ApiModelProperty("순번")
-    private Long ordno;
+    @Min(value = 0, message = "{tps.issue.error.notnull.ordNo}")
+    private Long ordNo;
 
     /**
      * 패키지 일련번호
@@ -105,11 +107,13 @@ public class PackageKeywordDTO implements Serializable {
      * 검색 시작일
      */
     @ApiModelProperty("검색 시작일")
+    @Pattern(regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$", message = "{tps.issue.error.pattern.sDate}")
     private String sDate;
 
     /**
      * 검색 종료일
      */
     @ApiModelProperty("검색 종료일")
+    @Pattern(regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$", message = "{tps.issue.error.pattern.eDate}")
     private String eDate;
 }

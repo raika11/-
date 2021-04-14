@@ -69,18 +69,10 @@ const HolidayRegistrationModal = (props) => {
             show={show}
             onHide={handleHide}
             centered
-            buttons={
-                data
-                    ? [
-                          { text: '수정', variant: 'positive', onClick: hadleSave },
-                          { text: '취소', variant: 'negative', onClick: handleHide },
-                      ]
-                    : [
-                          { text: '등록', variant: 'positive', onClick: hadleSave },
-                          { text: '취소', variant: 'negative', onClick: handleHide },
-                      ]
-            }
-            draggable
+            buttons={[
+                { text: data ? '수정' : '등록', variant: 'positive', onClick: hadleSave },
+                { text: '취소', variant: 'negative', onClick: handleHide },
+            ]}
         >
             <Form>
                 <Form.Row className="mb-2">
@@ -104,6 +96,7 @@ const HolidayRegistrationModal = (props) => {
                             value={holiday}
                             inputProps={{ timeFormat: null }}
                             className="mb-0"
+                            inputClassName="center-fixed"
                             name="holiday"
                             onChange={(date) => {
                                 if (typeof date === 'object') {

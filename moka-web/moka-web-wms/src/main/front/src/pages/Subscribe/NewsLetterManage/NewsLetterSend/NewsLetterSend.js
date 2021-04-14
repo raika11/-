@@ -23,7 +23,7 @@ const NewsLetterSend = ({ match, displayName }) => {
 
                 {/* 리스트 */}
                 <Col xs={7} className="pr-gutter">
-                    <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="뉴스레터 발송 관리">
+                    <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={displayName}>
                         <NewsLetterSendList match={match} />
                     </MokaCard>
                 </Col>

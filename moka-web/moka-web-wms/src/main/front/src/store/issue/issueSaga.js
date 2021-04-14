@@ -43,8 +43,9 @@ const toIssueListData = (list) => {
             }
             reporterNames = reporters.join(',');
         }
-
-        return { ...data, category, categoryNames, reporter, reporterNames };
+        const expYn = data.usedYn === 'N' ? 'N' : 'Y';
+        const endYn = data.usedYn === 'E' ? 'Y' : 'N';
+        return { ...data, category, categoryNames, reporter, reporterNames, expYn, endYn };
     });
 };
 
@@ -90,7 +91,7 @@ const getKeyword = (keywords, type) => {
         //defaultKeyword = { ...defaultKeyword, reporter: { ordNo: 1, reporterId: null } };
         const reporter = selectKeywords.map((selectKeyword) => ({
             andOr: selectKeyword.andOr,
-            ordNo: selectKeyword.ordno,
+            ordNo: selectKeyword.ordNo,
             reporterId: selectKeyword.repMaster,
             keyword: selectKeyword.keyword,
             sdate: selectKeyword.sdate,
@@ -99,16 +100,6 @@ const getKeyword = (keywords, type) => {
 
         keyword = { ...keyword, reporter };
     }
-
-    /*if (isUsed) {
-        keyword = {
-            ...keyword,
-            schCondi: {
-                keyword: keyword.schCondi.indexOf('K') > -1,
-                title: keyword.schCondi.indexOf('T') > -1,
-            },
-        };
-    }*/
 
     return {
         isUsed,
@@ -160,7 +151,7 @@ export const toIssueData = (response) => {
         pkgDesc,
         pkgDiv,
         episView,
-        packageKeywords: { search, reporter, section, digitalSpecial, ovp, category, pkg },
+        packageKeywords: { search, reporter, section, digitalSpecial, ovp },
         seasons,
         catList,
     };
@@ -200,7 +191,7 @@ const toSaveSchCondi = (pkgSchCondi) => {
 const toSavePackageKeywords = (viewKeywords) => {
     const usedKeywords = Object.keys(viewKeywords).filter((key) => viewKeywords[key].isUsed);
     const packageKeywords = [];
-    let ordno = 1;
+    let ordNo = 1;
     usedKeywords.forEach((key, index) => {
         const keyword = viewKeywords[key].keyword;
         const { schCondi: pkgSchCondi } = keyword;
@@ -221,16 +212,16 @@ const toSavePackageKeywords = (viewKeywords) => {
                     schCondi: schCondi,
                     sdate,
                     edate,
-                    ordno,
+                    ordNo,
                     andOr,
                 });
-                ordno++;
+                ordNo++;
             });
         } else {
             const sdate = commonUtil.isEmpty(keyword.sdate) ? null : moment(keyword.sdate).format(DATE_FORMAT);
             const edate = commonUtil.isEmpty(keyword.edate) ? null : moment(keyword.edate).format(DATE_FORMAT);
-            packageKeywords.push({ ...keyword, schCondi, sdate, edate, ordno });
-            ordno++;
+            packageKeywords.push({ ...keyword, schCondi, sdate, edate, ordNo });
+            ordNo++;
         }
     });
 
@@ -310,6 +301,15 @@ function* getIssueListModal({ payload }) {
     yield put(finishLoading(ACTION));
 }
 
+function* existsIssueTitle({ payload }) {
+    const { pkgTitle, callback } = payload;
+
+    const response = yield call(api.existsIssueTitle, { pkgTitle });
+    if (callback instanceof Function) {
+        callback(response.data);
+    }
+}
+
 /**
  * 이슈 컨텐츠 목록 조회 (모달)
  */
@@ -324,4 +324,5 @@ export default function* saga() {
     yield takeLatest(act.SAVE_ISSUE, saveIssue);
     yield takeLatest(act.GET_ISSUE_LIST_MODAL, getIssueListModal);
     yield takeLatest(act.GET_ISSUE_CONTENTS_LIST_MODAL, getIssueContentsListModal);
+    yield takeLatest(act.EXISTS_ISSUE_TITLE, existsIssueTitle);
 }

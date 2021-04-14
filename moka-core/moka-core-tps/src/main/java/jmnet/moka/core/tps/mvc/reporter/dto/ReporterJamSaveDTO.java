@@ -8,8 +8,6 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,13 +36,6 @@ public class ReporterJamSaveDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<ReporterJamSaveDTO>>() {
     }.getType();
-
-    /**
-     * 기자 일련번호 (1001부터 시작)
-     */
-    @NotNull(message = "{tps.reporterMsg.error.notnull.repSeq}")
-    @Min(value = 0, message = "{tps.columnist.error.pattern.repSeq}")
-    private Integer repSeq;
 
     /**
      * 사용여부(Y:사용,N:미사용)
@@ -167,16 +158,40 @@ public class ReporterJamSaveDTO implements Serializable {
     private Integer jamRepSeq;
 
     /**
-     * 대표부서 일련번호 : jamDeptSeq
+     * 대표부서 일련번호 : jamPartSeq
      */
     @ApiModelProperty("JAM 대표부서 일련번호")
-    private Integer jamPartSeq;
+    private Integer jamDeptSeq;
 
     /**
-     * JAM 대표부서명 : jamDeptNm
+     * JAM 대표부서명 :     jamDepartNm
      */
     @ApiModelProperty("JAM 대표부서명")
-    private String jamDepartNm;
+    private String jamDeptNm;
+
+    /**
+     * 필진타입 (J1:기자필진,J2:외부필진,J3:그룹필진,J0:필진해지) :  typeCode
+     */
+    @ApiModelProperty("필진타입 (J1:기자필진,J2:외부필진,J3:그룹필진,J0:필진해지)")
+    private String jplusRepDiv;
+
+    /**
+     * 필진 전문 분야 : repField  typeSecs
+     */
+    @ApiModelProperty("필진 전문 분야")
+    private String repField;
+
+    /**
+     * JAM 회사 코드 : siteCd
+     */
+    @ApiModelProperty("JAM 회사 코드")
+    private String jamComCd;
+
+    /**
+     * JAM 회사 명 : siteName
+     */
+    @ApiModelProperty("JAM 회사 명")
+    private String jamComNm;
 
     /**
      * 보안 MD5 (jcms기자번호 + jam기자번호+ yyyymmdd)  해쉬 값
@@ -184,28 +199,5 @@ public class ReporterJamSaveDTO implements Serializable {
     @ApiModelProperty("보안 MD5 해쉬 값")
     private String hash;
 
-    /**
-     * 필진타입 (J1:기자필진,J2:외부필진,J3:그룹필진,J0:필진해지) : jplusRepDiv
-     */
-    @ApiModelProperty("필진타입 (J1:기자필진,J2:외부필진,J3:그룹필진,J0:필진해지)")
-    private String typeCode;
-
-    /**
-     * 필진 전문 분야 : repField
-     */
-    @ApiModelProperty("필진 전문 분야")
-    private String typeSecs;
-
-    /**
-     * JAM 회사 코드 : jamComCd
-     */
-    @ApiModelProperty("JAM 회사 코드")
-    private String siteCd;
-
-    /**
-     * JAM 회사 명 : jamComNm
-     */
-    @ApiModelProperty("JAM 회사 명")
-    private String siteName;
 }
 

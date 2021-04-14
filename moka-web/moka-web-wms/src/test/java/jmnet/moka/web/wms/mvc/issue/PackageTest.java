@@ -133,7 +133,7 @@ public class PackageTest {
                 .schCondi("T,K")
                 .keyword("테스트123,테스트2")
                 .sDate("2020-03-24")
-                .ordno(1L)
+                .ordNo(1L)
                 .pkgSeq(packageMasterDTO.getPkgSeq())
                 .build();
         PackageKeywordDTO packageKeywordDTO2 = PackageKeywordDTO
@@ -142,7 +142,7 @@ public class PackageTest {
                 //                .schCondi("T,K")
                 .keyword("테스트5,테스트4")
                 .sDate("2020-03-24")
-                .ordno(2L)
+                .ordNo(2L)
                 .pkgSeq(packageMasterDTO.getPkgSeq())
                 .build();
 
@@ -211,11 +211,11 @@ public class PackageTest {
 
         Map<Long, List<PackageKeywordDTO>> groupByOrdNo = keywords
                 .stream()
-                .collect(Collectors.groupingBy(PackageKeywordDTO::getOrdno));
+                .collect(Collectors.groupingBy(PackageKeywordDTO::getOrdNo));
 
         Object a = keywords
                 .stream()
-                .collect(Collectors.groupingBy(PackageKeywordDTO::getOrdno))
+                .collect(Collectors.groupingBy(PackageKeywordDTO::getOrdNo))
                 .values()
                 .stream()
                 .map(group -> group

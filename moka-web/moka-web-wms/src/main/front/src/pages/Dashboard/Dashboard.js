@@ -36,9 +36,6 @@ const Dashboard = () => {
     const [serror, setSerror] = useState(false);
     const [hookData, setHookData] = useState({});
 
-    // 매체 state
-    const [sourceList, setSourceList] = useState(null);
-
     // modal test
     const [showD, setShowD] = useState(false);
     const [, setShowLMS] = useState(false);

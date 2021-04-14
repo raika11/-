@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';

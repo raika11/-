@@ -10,10 +10,9 @@ import { MokaIconTabs } from '@components/MokaTabs';
 import { clearStore, deletePage, appendTag, changePageBody } from '@store/page';
 import { clearStore as clearHistoryStore } from '@store/history';
 import toast, { messageBox } from '@utils/toastUtil';
-
 import PageEditor from './PageEditor';
 import PageEdit from './PageEdit';
-const PageList = React.lazy(() => import('./PageList'));
+import PageList from './PageList';
 
 // relations
 const LookupPageList = React.lazy(() => import('@pages/Page/components/LookupPageList'));
@@ -220,9 +219,7 @@ const Page = ({ match }) => {
                 onExpansion={handleListExpansion}
                 bodyClassName="d-flex flex-column"
             >
-                <Suspense fallback={<MokaLoader />}>
-                    <PageList onDelete={handleClickDelete} match={match} findPath={findPath} />
-                </Suspense>
+                <PageList onDelete={handleClickDelete} match={match} findPath={findPath} />
             </MokaCard>
 
             <Switch>

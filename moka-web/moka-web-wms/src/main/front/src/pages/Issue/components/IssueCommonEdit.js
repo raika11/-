@@ -8,12 +8,17 @@ import Button from 'react-bootstrap/Button';
 import { initialState } from '@store/issue';
 import produce from 'immer';
 
-const IssueCommonEdit = ({ data, onChange }) => {
+const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, setIsDuplicatedTitle }) => {
     const [edit, setEdit] = useState(initialState.pkg);
 
     const handleChangeValue = ({ name, value }) => {
         const data = { ...edit, [name]: value };
         setEdit(data);
+        if (setIsDuplicatedTitle instanceof Function) {
+            if (name === 'pkgTitle') {
+                setIsDuplicatedTitle(true);
+            }
+        }
         if (onChange instanceof Function) {
             onChange(data);
         }
@@ -344,7 +349,7 @@ const IssueCommonEdit = ({ data, onChange }) => {
                             handleChangeValue(e.target);
                         }}
                     />
-                    <Button variant="outline-neutral" style={{ width: 100, height: 31 }}>
+                    <Button variant="outline-neutral" style={{ width: 100, height: 31 }} onClick={onDuplicateCheck} disabled={!isDuplicatedTitle}>
                         중복 확인
                     </Button>
                 </Col>

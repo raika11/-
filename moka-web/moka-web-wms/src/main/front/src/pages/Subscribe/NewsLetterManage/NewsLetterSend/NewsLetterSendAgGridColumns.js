@@ -1,5 +1,3 @@
-import { GRID_LINE_HEIGHT } from '@/style_constants';
-
 export default [
     {
         headerName: 'NO',
@@ -9,11 +7,19 @@ export default [
     {
         headerName: '유형',
         field: 'type',
+        sortable: true,
+        unSortIcon: true,
+        sort: null,
+        sortingOrder: ['asc', 'desc'],
         width: 100,
     },
     {
         headerName: '뉴스레터 명',
         field: 'newsLetter',
+        sortable: true,
+        unSortIcon: true,
+        sort: null,
+        sortingOrder: ['asc', 'desc'],
         width: 120,
     },
     {
@@ -24,6 +30,10 @@ export default [
     {
         headerName: '발송일',
         field: 'sendDt',
+        sortable: true,
+        unSortIcon: true,
+        sort: null,
+        sortingOrder: ['asc', 'desc'],
         width: 100,
     },
     {

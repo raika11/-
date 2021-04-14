@@ -53,3 +53,9 @@ export const saveIssue = createAction(SAVE_ISSUE, ({ pkg, callback }) => ({ pkg,
  */
 export const FINISH_ISSUE = 'issue/FINISH_ISSUE';
 export const finishIssue = createAction(FINISH_ISSUE, ({ pkgSeq, callback }) => ({ pkgSeq, callback }));
+
+/**
+ * 이슈 타이틀 중복검사
+ */
+export const EXISTS_ISSUE_TITLE = 'issue/EXISTS_ISSUE_TITLE';
+export const existsIssueTitle = createAction(EXISTS_ISSUE_TITLE);

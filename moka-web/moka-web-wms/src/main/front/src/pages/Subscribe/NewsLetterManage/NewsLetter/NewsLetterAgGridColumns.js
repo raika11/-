@@ -1,5 +1,3 @@
-import { GRID_LINE_HEIGHT } from '@/style_constants';
-
 export default [
     {
         headerName: 'NO',
@@ -9,56 +7,79 @@ export default [
     {
         headerName: '방법',
         field: 'title',
-        width: 45,
+        sortable: true,
+        unSortIcon: true,
+        sort: null,
+        sortingOrder: ['asc', 'desc'],
+        width: 60,
     },
     {
         headerName: '유형',
-        field: 'test1',
+        field: 'type',
+        sortable: true,
+        unSortIcon: true,
+        sort: null,
+        sortingOrder: ['asc', 'desc'],
         width: 60,
     },
     {
         headerName: '뉴스레터 명',
         field: 'newsLetter',
+        sortable: true,
+        unSortIcon: true,
+        sort: null,
+        sortingOrder: ['asc', 'desc'],
         flex: 1,
     },
     {
         headerName: '발송 시작일',
         field: 'startDt',
-        width: 80,
+        width: 78,
     },
     {
         headerName: '최근 발송일',
         field: 'recentDt',
-        width: 80,
+        width: 78,
     },
     {
         headerName: '발송 주기',
         field: 'priod',
-        width: 100,
+        children: [
+            { headerName: '일정/콘텐츠', field: 'ct', width: 80 },
+            { headerName: '시간', field: 'time', width: 35 },
+        ],
     },
     {
         headerName: '구독자 수',
         field: 'subscriber',
-        width: 70,
+        width: 65,
     },
     {
         headerName: '상태',
         field: 'state',
-        width: 45,
+        sortable: true,
+        unSortIcon: true,
+        sort: null,
+        sortingOrder: ['asc', 'desc'],
+        width: 60,
     },
     {
         headerName: '등록일',
         field: 'regDt',
+        sortable: true,
+        unSortIcon: true,
+        sort: null,
+        sortingOrder: ['asc', 'desc'],
         width: 80,
     },
     {
         headerName: '등록자',
         field: 'regId',
-        width: 70,
+        width: 60,
     },
     {
         headerName: 'A/B TEST',
         field: 'ab',
-        width: 70,
+        width: 65,
     },
 ];

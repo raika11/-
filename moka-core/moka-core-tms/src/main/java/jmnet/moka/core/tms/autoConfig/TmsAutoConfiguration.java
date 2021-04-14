@@ -18,6 +18,7 @@ import jmnet.moka.core.tms.mvc.DefaultMergeViewResolver;
 import jmnet.moka.core.tms.mvc.HandlerAndView;
 import jmnet.moka.core.tms.mvc.HttpParamFactory;
 import jmnet.moka.core.tms.mvc.abtest.AbTestResolver;
+import jmnet.moka.core.tms.mvc.abtest.MokaAbTestResolver;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.domain.DpsDomainResolver;
 import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
@@ -268,7 +269,7 @@ public class TmsAutoConfiguration {
      */
     @Bean(name = "abTestResolver")
     public AbTestResolver abTestResolver() {
-        return new AbTestResolver(this.appContext);
+        return new MokaAbTestResolver(this.appContext);
     }
 
     @Bean

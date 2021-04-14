@@ -27,6 +27,7 @@ import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
 import jmnet.moka.core.tms.merge.item.TemplateItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
+import jmnet.moka.core.tms.mvc.abtest.AbTest;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.domain.ReservedMap;
 import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
@@ -48,9 +49,9 @@ import org.springframework.core.env.Environment;
  */
 public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
+    protected final static MokaFunctions MOKA_FUNCTIONS = new MokaFunctions();
     private static final Logger logger = LoggerFactory.getLogger(MokaPreviewTemplateMerger.class);
     private static Pattern PATTERN_BR = Pattern.compile("<br\\/?>(\\s|&nbsp;)*?<br\\/?>", Pattern.CASE_INSENSITIVE);
-    protected final static MokaFunctions MOKA_FUNCTIONS = new MokaFunctions();
     private DomainItem domainItem;
     private DomainResolver domainResolver;
     private String regId;
@@ -142,6 +143,10 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         }
         this.setCodesAndMenus(pageItem.getString(ItemConstants.PAGE_DOMAIN_ID), pageItem, mergeContext);
         return mergeContext;
+    }
+
+    public void addAbTest(AbTest abTest) {
+        this.abTestResolver.addAbTest(abTest);
     }
 
     public StringBuilder merge(String pageItemId)

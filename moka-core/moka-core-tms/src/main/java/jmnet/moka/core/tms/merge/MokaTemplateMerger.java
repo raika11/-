@@ -12,10 +12,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+import jmnet.moka.common.JSONResult;
+import jmnet.moka.common.cache.CacheManager;
+import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.template.exception.DataLoadException;
+import jmnet.moka.common.template.exception.TemplateLoadException;
+import jmnet.moka.common.template.exception.TemplateMergeException;
+import jmnet.moka.common.template.exception.TemplateParseException;
+import jmnet.moka.common.template.loader.DataLoader;
+import jmnet.moka.common.template.merge.Evaluator;
+import jmnet.moka.common.template.merge.MergeContext;
+import jmnet.moka.common.template.merge.MergeOptions;
+import jmnet.moka.common.template.merge.TemplateMerger;
+import jmnet.moka.common.template.merge.TreeNode;
+import jmnet.moka.common.template.merge.element.ElementMerger;
+import jmnet.moka.common.template.parse.model.TemplateElement;
+import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.core.tms.exception.TmsException;
+import jmnet.moka.core.tms.merge.element.MokaAbstractElementMerger;
+import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.abtest.AbTestResolver;
+import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JxltEngine.Template;
 import org.apache.commons.jexl3.MapContext;
@@ -26,27 +45,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.Resource;
-import jmnet.moka.common.JSONResult;
-import jmnet.moka.common.cache.CacheManager;
-import jmnet.moka.common.template.Constants;
-import jmnet.moka.common.template.exception.TemplateLoadException;
-import jmnet.moka.common.template.exception.TemplateMergeException;
-import jmnet.moka.common.template.exception.TemplateParseException;
-import jmnet.moka.common.template.loader.DataLoader;
-import jmnet.moka.common.template.loader.TemplateLoader;
-import jmnet.moka.common.template.merge.Evaluator;
-import jmnet.moka.common.template.merge.MergeContext;
-import jmnet.moka.common.template.merge.MergeOptions;
-import jmnet.moka.common.template.merge.TemplateMerger;
-import jmnet.moka.common.template.merge.TreeNode;
-import jmnet.moka.common.template.merge.element.ElementMerger;
-import jmnet.moka.common.template.parse.model.TemplateElement;
-import jmnet.moka.common.template.parse.model.TemplateRoot;
-import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.core.tms.exception.TmsException;
-import jmnet.moka.core.tms.merge.element.MokaAbstractElementMerger;
-import jmnet.moka.core.tms.merge.item.MergeItem;
-import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
 
 /**
  * <pre>
@@ -54,20 +52,18 @@ import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
  * 템플릿을 포함할 경우 포함된 템플릿을 파싱하여 머지한다.
  * 2019. 9. 4. kspark 최초생성
  * </pre>
- * 
- * @since 2019. 9. 4. 오후 5:59:52
+ *
  * @author kspark
+ * @since 2019. 9. 4. 오후 5:59:52
  */
 public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
 
-    protected static final String CUSTOM_ELEMENT_MERGER_PACKAGE =
-            "jmnet.moka.core.tms.merge.element";
+    protected static final String CUSTOM_ELEMENT_MERGER_PACKAGE = "jmnet.moka.core.tms.merge.element";
+    private static final Logger logger = LoggerFactory.getLogger(MokaTemplateMerger.class);
     protected static String[] TAGS =
-            {Constants.EL_TP, Constants.EL_CP, Constants.EL_CT, Constants.EL_AD, Constants.EL_LOOP,
-                    Constants.EL_DATA, Constants.EL_PAGING, MokaConstants.EL_JSON};
+            {Constants.EL_TP, Constants.EL_CP, Constants.EL_CT, Constants.EL_AD, Constants.EL_LOOP, Constants.EL_DATA, Constants.EL_PAGING,
+             MokaConstants.EL_JSON};
     protected static List<String> CUSTOM_ELEMENT_MERGER_TAG = Arrays.asList(TAGS);
-    private TemplateEngine templateEngine =
-            new TemplateEngine(new Engine(new JexlBuilder()), false, 0, '$', '#');
     protected HashMap<String, ElementMerger> elementMergerMap;
     protected AbstractTemplateLoader templateLoader;
     protected Evaluator evaluator;
@@ -86,12 +82,10 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
     protected boolean onlyHighlight;
     protected boolean esiEnabled;
     protected boolean defaultApiHostPathUse;
+    private TemplateEngine templateEngine = new TemplateEngine(new Engine(new JexlBuilder()), false, 0, '$', '#');
 
-    private static final Logger logger = LoggerFactory.getLogger(MokaTemplateMerger.class);
-
-    public MokaTemplateMerger(GenericApplicationContext appContext, String domainId,
-                              AbstractTemplateLoader templateLoader, DataLoader dataLoader,
-                                DataLoader defaultDataLoader, boolean defaultApiHostPathUse) {
+    public MokaTemplateMerger(GenericApplicationContext appContext, String domainId, AbstractTemplateLoader templateLoader, DataLoader dataLoader,
+            DataLoader defaultDataLoader, boolean defaultApiHostPathUse) {
         this.appContext = appContext;
         try {
             this.cacheManager = this.appContext.getBean(CacheManager.class);
@@ -110,8 +104,9 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
         this.evaluator = new Evaluator();
         this.dataLoader = dataLoader;
         this.defaultDataLoader = defaultDataLoader;
-        this.esiEnabled = Boolean
-                .valueOf(appContext.getBeanFactory().resolveEmbeddedValue("${tms.esi.enable}"));
+        this.esiEnabled = Boolean.valueOf(appContext
+                .getBeanFactory()
+                .resolveEmbeddedValue("${tms.esi.enable}"));
 
         loadTemplateForPreview();
     }
@@ -120,16 +115,21 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
         this.wrapItemStart = templateEngine.createTemplate(MokaConstants.WRAP_ITEM_START);
         this.wrapItemEnd = templateEngine.createTemplate(MokaConstants.WRAP_ITEM_END);
 
-        this.highlightJsPath =
-                appContext.getBeanFactory().resolveEmbeddedValue("${tms.merge.highlight.js.path}");
-        this.highlightCssPath =
-                appContext.getBeanFactory().resolveEmbeddedValue("${tms.merge.highlight.css.path}");
-        this.onlyHighlight = Boolean.valueOf(
-                appContext.getBeanFactory().resolveEmbeddedValue("${tms.merge.highlight.only}"));
-        String highlightTemplatePath =
-                appContext.getBeanFactory().resolveEmbeddedValue("${tms.merge.highlight.template}");
-        String htmlWrapTemplatePath =
-                appContext.getBeanFactory().resolveEmbeddedValue("${tms.merge.htmlWrap.template}");
+        this.highlightJsPath = appContext
+                .getBeanFactory()
+                .resolveEmbeddedValue("${tms.merge.highlight.js.path}");
+        this.highlightCssPath = appContext
+                .getBeanFactory()
+                .resolveEmbeddedValue("${tms.merge.highlight.css.path}");
+        this.onlyHighlight = Boolean.valueOf(appContext
+                .getBeanFactory()
+                .resolveEmbeddedValue("${tms.merge.highlight.only}"));
+        String highlightTemplatePath = appContext
+                .getBeanFactory()
+                .resolveEmbeddedValue("${tms.merge.highlight.template}");
+        String htmlWrapTemplatePath = appContext
+                .getBeanFactory()
+                .resolveEmbeddedValue("${tms.merge.htmlWrap.template}");
 
 
         // highlight template 로딩
@@ -138,13 +138,12 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
             if (highlightTemplatePath.startsWith("class")) {
                 Resource resource = ResourceMapper.getResource(highlightTemplatePath);
                 if (resource.exists()) {
-                    templateContent = new BufferedReader(new InputStreamReader(
-                            resource.getInputStream(), StandardCharsets.UTF_8)).lines()
-                                    .collect(Collectors.joining(System.lineSeparator()));
+                    templateContent = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))
+                            .lines()
+                            .collect(Collectors.joining(System.lineSeparator()));
                 }
             } else {
-                templateContent = new String(
-                        Files.readAllBytes(ResourceMapper.getPath(highlightTemplatePath)), "UTF-8");
+                templateContent = new String(Files.readAllBytes(ResourceMapper.getPath(highlightTemplatePath)), "UTF-8");
             }
             this.highlightTemplate = templateEngine.createTemplate(templateContent);
         } catch (IOException e) {
@@ -157,13 +156,12 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
             if (htmlWrapTemplatePath.startsWith("class")) {
                 Resource resource = ResourceMapper.getResource(htmlWrapTemplatePath);
                 if (resource.exists()) {
-                    templateContent = new BufferedReader(new InputStreamReader(
-                            resource.getInputStream(), StandardCharsets.UTF_8)).lines()
-                                    .collect(Collectors.joining(System.lineSeparator()));
+                    templateContent = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))
+                            .lines()
+                            .collect(Collectors.joining(System.lineSeparator()));
                 }
             } else {
-                templateContent = new String(
-                        Files.readAllBytes(ResourceMapper.getPath(htmlWrapTemplatePath)), "UTF-8");
+                templateContent = new String(Files.readAllBytes(ResourceMapper.getPath(htmlWrapTemplatePath)), "UTF-8");
             }
             this.htmlWrap = templateEngine.createTemplate(templateContent);
         } catch (IOException e) {
@@ -171,7 +169,8 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
         }
     }
 
-    public void loadUri() throws TmsException {
+    public void loadUri()
+            throws TmsException {
         this.templateLoader.loadUri();
     }
 
@@ -206,7 +205,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
      * <pre>
      * 아이템 정보를 다시 로딩할 수 있도록 삭제한다.
      * </pre>
-     * 
+     *
      * @param itemType
      * @param itemId
      */
@@ -218,7 +217,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
      * <pre>
      * uri를 머징하기 위한 아이템의 key를 반환한다.
      * </pre>
-     * 
+     *
      * @param uri uri
      * @return itemKey
      */
@@ -232,13 +231,13 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
 
     protected String makeClassName(String nodeName) {
         String lower = nodeName.split(":")[1].toLowerCase();
-        String pascalPresentation = lower.substring(0, 1).toUpperCase() + lower.substring(1);
+        String pascalPresentation = lower
+                .substring(0, 1)
+                .toUpperCase() + lower.substring(1);
         if (CUSTOM_ELEMENT_MERGER_TAG.contains(nodeName)) {
-            return CUSTOM_ELEMENT_MERGER_PACKAGE + "." + pascalPresentation
-                    + Constants.ELEMENT_MERGER_POSTFIX;
+            return CUSTOM_ELEMENT_MERGER_PACKAGE + "." + pascalPresentation + Constants.ELEMENT_MERGER_POSTFIX;
         } else {
-            return Constants.ELEMENT_MERGER_PACKAGE + "." + pascalPresentation
-                    + Constants.ELEMENT_MERGER_POSTFIX;
+            return Constants.ELEMENT_MERGER_PACKAGE + "." + pascalPresentation + Constants.ELEMENT_MERGER_POSTFIX;
         }
     }
 
@@ -255,8 +254,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
                         elementMerger = (ElementMerger) constructor.newInstance(this);
                         // MspAbstractElementMerger를 상속받은 경우만 appContext와 cacheManager를 설정한다.
                         if (elementMerger instanceof MokaAbstractElementMerger) {
-                            MokaAbstractElementMerger mspElementMerger =
-                                    (MokaAbstractElementMerger) elementMerger;
+                            MokaAbstractElementMerger mspElementMerger = (MokaAbstractElementMerger) elementMerger;
                             mspElementMerger.setApplicationContext(appContext);
                             mspElementMerger.setCacheManager(cacheManager);
                             mspElementMerger.setAbTestResolver(abTestResolver);
@@ -281,17 +279,17 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
 
     @Override
     public DataLoader getDataLoader() {
-        if ( this.defaultApiHostPathUse || this.dataLoader == null) {
+        if (this.defaultApiHostPathUse || this.dataLoader == null) {
             return this.defaultDataLoader;
         } else {
             return this.dataLoader;
         }
     }
 
-//    @Override
-//    public DataLoader getDefaultDataLoader() {
-//        return this.defaultDataLoader;
-//    }
+    //    @Override
+    //    public DataLoader getDefaultDataLoader() {
+    //        return this.defaultDataLoader;
+    //    }
 
     public CacheManager getCacheManager() {
         return this.cacheManager;
@@ -318,20 +316,19 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
     @Override
     public String preprocessToken(String token, MergeContext context) {
         // cloc 함수 처리
-        if ( token.contains("cloc(")) {
+        if (token.contains("cloc(")) {
             boolean hasPage = false;
             boolean hasComponent = false;
-            if ( context.has(MokaConstants.MERGE_CONTEXT_PAGE)) {
+            if (context.has(MokaConstants.MERGE_CONTEXT_PAGE)) {
                 hasPage = true;
                 if (context.has(MokaConstants.MERGE_CONTEXT_COMPONENT)) {
                     hasComponent = true;
                 }
             }
-            int clocParamStartIndex = token.indexOf("cloc(")+5;
-            int clocParamEndIndex = token.indexOf(")",clocParamStartIndex);
-            if ( hasPage ) {
-                return token.substring(0,clocParamEndIndex) + ",page"
-                            + (hasComponent ? ",component":",null") + token.substring(clocParamEndIndex);
+            int clocParamStartIndex = token.indexOf("cloc(") + 5;
+            int clocParamEndIndex = token.indexOf(")", clocParamStartIndex);
+            if (hasPage) {
+                return token.substring(0, clocParamEndIndex) + ",page" + (hasComponent ? ",component" : ",null") + token.substring(clocParamEndIndex);
             }
         }
         return token;
@@ -342,7 +339,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
      * <pre>
      * ShowItem의 스타일을 추가한다. onlyHightlight가 없으면 시스템기본으로 처리한다.
      * </pre>
-     * 
+     *
      * @param sb
      * @param context
      * @param onlyHighlight 하이라이트할 아이템만 처리할지 여부
@@ -351,11 +348,9 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
         MergeOptions options = context.getMergeOptions();
         sb.append(System.lineSeparator());
         if (onlyHighlight == null || onlyHighlight.length == 0) {
-            sb.append(getHighlightScript(options.getShowItem(), options.getShowItemId(),
-                    this.onlyHighlight));
+            sb.append(getHighlightScript(options.getShowItem(), options.getShowItemId(), this.onlyHighlight));
         } else {
-            sb.append(getHighlightScript(options.getShowItem(), options.getShowItemId(),
-                    onlyHighlight[0]));
+            sb.append(getHighlightScript(options.getShowItem(), options.getShowItemId(), onlyHighlight[0]));
         }
     }
 
@@ -377,20 +372,22 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
         StringBuilder sb;
         try {
             TemplateRoot templateRoot = getParsedTemplate(itemType, itemId);
-            sb = new StringBuilder(templateRoot.getTemplateSize()*2);
+            sb = new StringBuilder(templateRoot.getTemplateSize() * 2);
             templateRoot.merge(this, context, sb);
-            if (context.getMergeOptions().getShowItem() != null) {
+            if (context
+                    .getMergeOptions()
+                    .getShowItem() != null) {
                 addShowItemStyle(sb, context);
             }
         } catch (Exception e) {
-            throw new TemplateMergeException("Template Merge Fail : " + itemType + ", " + itemId,
-                    e);
+            throw new TemplateMergeException("Template Merge Fail : " + itemType + ", " + itemId, e);
         }
-        return sb == null? new StringBuilder(1024) : sb;
+        return sb == null ? new StringBuilder(1024) : sb;
     }
 
     @Override
-    public boolean exists(String itemType, String itemId) throws TemplateMergeException {
+    public boolean exists(String itemType, String itemId)
+            throws TemplateMergeException {
         try {
             TemplateRoot templateRoot = getParsedTemplate(itemType, itemId);
             if (templateRoot != null) {
@@ -422,12 +419,13 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
 
     private void childTemplateTree(TreeNode parentNode, StringBuilder sb, int depth) {
         for (TreeNode treeNode : parentNode.getChildren()) {
-            for (int i = 0; i < depth; i++)
+            for (int i = 0; i < depth; i++) {
                 sb.append(Constants.TRAVERSE_INDENT);
+            }
             TemplateElement templateElement = treeNode.getTemplateElement();
-            sb.append(String.format("%s %s %s", templateElement.getNodeName(),
-                    templateElement.getAttribute(Constants.ATTR_ID),
-                    templateElement.getAttribute(Constants.ATTR_NAME)))
+            sb
+                    .append(String.format("%s %s %s", templateElement.getNodeName(), templateElement.getAttribute(Constants.ATTR_ID),
+                            templateElement.getAttribute(Constants.ATTR_NAME)))
                     .append(System.lineSeparator());
             if (treeNode.hasChild()) {
                 childTemplateTree(treeNode, sb, depth + 1);
@@ -449,20 +447,21 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
 
     /**
      * DATA MAP을 반환한다. 없을 경우 최상위 컨텍스트에 DATA MAP을 생성한다.
+     *
      * @param context 컨텍스트
      * @return 데이터 맵
      */
     private Map<String, JSONResult> getDataMap(MergeContext context) {
-        if ( context.has(MokaConstants.MERGE_DATA_MAP) ) {
-            return (Map<String, JSONResult>)context.get(MokaConstants.MERGE_DATA_MAP);
+        if (context.has(MokaConstants.MERGE_DATA_MAP)) {
+            return (Map<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
         } else {
             MergeContext parent = context;
-            while ( parent != null && parent.has(Constants.PARENT)) {
-//                if ( parent == null) break;
-                parent = (MergeContext)parent.get(Constants.PARENT);
+            while (parent != null && parent.has(Constants.PARENT)) {
+                //                if ( parent == null) break;
+                parent = (MergeContext) parent.get(Constants.PARENT);
             }
             Map<String, JSONResult> dataMap = new HashMap<String, JSONResult>(16);
-            parent.set(MokaConstants.MERGE_DATA_MAP,dataMap);
+            parent.set(MokaConstants.MERGE_DATA_MAP, dataMap);
             return dataMap;
         }
     }
@@ -471,5 +470,9 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
         return this.esiEnabled;
     }
 
-    public boolean isDefaultApiHostPathUse() { return this.defaultApiHostPathUse; };
+    public boolean isDefaultApiHostPathUse() {
+        return this.defaultApiHostPathUse;
+    }
+
+    ;
 }

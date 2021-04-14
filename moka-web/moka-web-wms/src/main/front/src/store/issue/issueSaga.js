@@ -91,7 +91,7 @@ const getKeyword = (keywords, type) => {
         //defaultKeyword = { ...defaultKeyword, reporter: { ordNo: 1, reporterId: null } };
         const reporter = selectKeywords.map((selectKeyword) => ({
             andOr: selectKeyword.andOr,
-            ordNo: selectKeyword.ordno,
+            ordNo: selectKeyword.ordNo,
             reporterId: selectKeyword.repMaster,
             keyword: selectKeyword.keyword,
             sdate: selectKeyword.sdate,
@@ -100,16 +100,6 @@ const getKeyword = (keywords, type) => {
 
         keyword = { ...keyword, reporter };
     }
-
-    /*if (isUsed) {
-        keyword = {
-            ...keyword,
-            schCondi: {
-                keyword: keyword.schCondi.indexOf('K') > -1,
-                title: keyword.schCondi.indexOf('T') > -1,
-            },
-        };
-    }*/
 
     return {
         isUsed,

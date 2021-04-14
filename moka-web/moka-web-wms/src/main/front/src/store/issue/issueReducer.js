@@ -23,7 +23,7 @@ const initialPkgKeyword = {
     keyword: '',
     kwdCnt: 0,
     kwdOrd: 0,
-    ordno: 0,
+    ordNo: 0,
     pkgSeq: null,
     repMaster: 0,
     schCondi: { title: false, keyword: false },

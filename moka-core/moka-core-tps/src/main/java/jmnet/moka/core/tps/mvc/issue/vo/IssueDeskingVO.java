@@ -2,60 +2,70 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.issue.entity;
+package jmnet.moka.core.tps.mvc.issue.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import jmnet.moka.core.tps.common.entity.RegAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.Nationalized;
 
 /**
- * 이슈확장형 편집정보
+ * 이슈확장형 편집히스토리
  */
-@AllArgsConstructor
+@Alias("IssueDeskingVO")
 @NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
 @Builder
-@Entity
-@Table(name = "TB_ISSUE_DESKING")
-public class IssueDesking extends RegAudit {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class IssueDeskingVO implements Serializable {
+
+    public static final Type TYPE = new TypeReference<List<IssueDeskingVO>>() {
+    }.getType();
+
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 일련번호
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ_NO", nullable = false)
     private Long seqNo;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "PKG_SEQ", referencedColumnName = "PKG_SEQ", nullable = false)
-    private PackageMaster packageMaster;
+    /**
+     * 패키지순번
+     */
+    @Column(name = "PKG_SEQ", nullable = false)
+    private Long pkgSeq;
 
     /**
      * 컴포넌트번호(1-7)
      */
     @Column(name = "COMP_NO", nullable = false)
     private Integer compNo;
+
+    /**
+     * 노출여부
+     */
+    @Column(name = "VIEW_YN")
+    private String viewYn;
+
+    /**
+     * 상태 SAVE(임시) / PUBLISH(전송)
+     */
+    @Column(name = "STATUS")
+    private String status;
 
     /**
      * 콘텐츠ID
@@ -142,14 +152,4 @@ public class IssueDesking extends RegAudit {
     @Nationalized
     @Column(name = "BODY_HEAD")
     private String bodyHead;
-
-    @PrePersist
-    @PreUpdate
-    public void prePersist() {
-        this.contentsOrd = this.contentsOrd == null ? 1 : this.contentsOrd;
-        this.thumbSize = this.thumbSize == null ? 0 : this.thumbSize;
-        this.thumbWidth = this.thumbWidth == null ? 0 : this.thumbWidth;
-        this.thumbHeight = this.thumbHeight == null ? 0 : this.thumbHeight;
-    }
-
 }

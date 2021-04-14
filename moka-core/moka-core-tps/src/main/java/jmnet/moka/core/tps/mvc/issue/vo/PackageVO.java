@@ -126,6 +126,18 @@ public class PackageVO implements Serializable {
     private Date updDt;
 
     /**
+     * 패키지 유형(B:기본형, E:확장형)
+     */
+    @Column(name = "PKG_TYPE")
+    private String pkgType;
+
+    /**
+     * 확장형 컴포넌트 사용여부
+     */
+    @Column(name = "COMP_YN")
+    private String compYn;
+
+    /**
      * 담당기자목록 ({id|name},)
      */
     @Column(name = "REP_LIST")

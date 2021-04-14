@@ -108,6 +108,9 @@ public class AppRestController {
     @Value("${photo.archive.url}")
     private String photoArchiveUrl;
 
+    @Value("${package.compYn}")
+    private String packageCompYn;
+
     @Autowired
     private TpsLogger tpsLogger;
 
@@ -148,6 +151,7 @@ public class AppRestController {
                 .add("IR_URL", irUrl)                                                // ir Url
                 .add("OVP_PREVIEW_URL", ovpPreviewUrl)                               // ovp 미리보기 url
                 .add("PHOTO_ARCHIVE_URL", photoArchiveUrl)                           // 포토아카이브 url
+                .add("PACKAGE_COMP_YN", packageCompYn)                               // 패키지 편집 컴포넌트 CompYn기본값
                 .getMap();
 
         result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());

@@ -12,7 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -90,6 +93,13 @@ public class PackageMaster extends BaseAudit {
     @Column(name = "UPD_DT")
     private Date updDt;
 
+    @Column(name = "PKG_TYPE")
+    @Builder.Default
+    private String pkgType = "B";
+
+    @Column(name = "COMP_YN")
+    private String compYn;
+
     @Builder.Default
     @OrderBy("ordNo, kwdOrd")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "packageMaster", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST})
@@ -97,4 +107,10 @@ public class PackageMaster extends BaseAudit {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "packageMaster")
     private Set<PackageList> packageLists = new LinkedHashSet<>();
+
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        this.pkgType = McpString.defaultValue(this.pkgType, "B");
+    }
 }

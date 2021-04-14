@@ -58,10 +58,13 @@ const Issue = ({ match, displayName }) => {
                                     foldable={false}
                                     className="w-100"
                                     //onSelectNav={(idx) => setActiveTabIdx(idx)}
-                                    tabs={[<IssueEdit match={match} reporters={allReporter} />]}
+                                    tabs={[<IssueEdit match={match} reporters={allReporter} />, <></>]}
                                     tabNavWidth={48}
                                     placement="left"
-                                    tabNavs={[{ title: '이슈 정보', text: 'Info' }]}
+                                    tabNavs={[
+                                        { title: '이슈 정보', text: 'Info' },
+                                        { title: '편집', text: '편집' },
+                                    ]}
                                 />
                             )}
                         />

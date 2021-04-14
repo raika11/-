@@ -26,6 +26,17 @@ const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
         }
     };
 
+    const handleClickDeleteReporter = (idx) => {
+        const reporter = [...editKeyword.reporter].filter((data, index) => index !== idx);
+        const pkg = { ...editKeyword, reporter };
+        console.log(reporter);
+        console.log(pkg);
+        setEditKeyword(pkg);
+        if (onChange instanceof Function) {
+            onChange(pkg);
+        }
+    };
+
     useEffect(() => {
         const usedEdate = [];
         const reporter = keyword.reporter.map((data) => {
@@ -90,7 +101,12 @@ const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
                                     <div style={{ width: 30 }} className="d-flex flex-column justify-content-center align-items-center">
                                         <p className="mb-0">{idx + 1}</p>
                                         <Button variant="white" className="px-05">
-                                            <MokaIcon iconName="fal-trash-alt" />
+                                            <MokaIcon
+                                                iconName="fal-trash-alt"
+                                                onClick={() => {
+                                                    handleClickDeleteReporter(idx);
+                                                }}
+                                            />
                                         </Button>
                                     </div>
                                     <div>

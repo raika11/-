@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { MokaInput, MokaInputLabel, MokaPrependLinkInput } from '@components';
+import { MokaInputLabel, MokaPrependLinkInput } from '@components';
 import BackgroundImageForm from './BackgroundImageForm';
 import RelArticleTable from './RelArticleTable';
 import RelationPollModal from '@pages/Survey/Poll/modals/RelationPollModal';

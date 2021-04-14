@@ -3,7 +3,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { invalidListToError } from '@utils/convertUtil';
@@ -176,11 +175,33 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
         return () => {
             dispatch(clearReserved());
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
-        <MokaCard className="w-100" title={`예약어 ${paramSeq ? '수정' : '등록'}`} loading={loading}>
+        <MokaCard
+            className="w-100"
+            title={`예약어 ${paramSeq ? '수정' : '등록'}`}
+            loading={loading}
+            footerButtons={[
+                {
+                    text: reserved.reservedSeq ? '수정' : '저장',
+                    className: 'mr-1',
+                    variant: 'positive',
+                    onClick: handleClickSave,
+                },
+                reserved.reservedSeq && {
+                    text: '삭제',
+                    className: 'mr-1',
+                    variant: 'negative',
+                    onClick: () => onDelete(temp),
+                },
+                {
+                    text: '취소',
+                    variant: 'negative',
+                    onClick: handleClickCancle,
+                },
+            ].filter(Boolean)}
+        >
             {/* 사용여부 */}
             <Form.Group className="d-flex mb-2 justify-content-between align-content-center">
                 <MokaInputLabel
@@ -192,20 +213,6 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
                     inputProps={{ label: '', checked: temp.usedYn === 'Y' }}
                     onChange={handleChangeValue}
                 />
-                {/* 버튼 그룹 */}
-                <Form.Group className="mb-0 d-flex align-items-center">
-                    <Button variant="positive" className="mr-1" onClick={handleClickSave}>
-                        {reserved.reservedSeq ? '수정' : '저장'}
-                    </Button>
-                    {reserved.reservedSeq && (
-                        <Button variant="negative" className="mr-1" onClick={() => onDelete(temp)}>
-                            삭제
-                        </Button>
-                    )}
-                    <Button variant="negative" onClick={handleClickCancle}>
-                        취소
-                    </Button>
-                </Form.Group>
             </Form.Group>
 
             {/* 예약어 */}

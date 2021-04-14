@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaTable } from '@components';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { GET_CDN_ARTICLE_LIST, getCdnArticleList, changeSearchOption } from '@store/cdnArticle';
 import columnDefs from './CdnArticleAgGridColumns';
 
@@ -42,6 +44,7 @@ const CdnArticleAgGrid = ({ match }) => {
             list.map((data) => ({
                 ...data,
                 regDt: (data.regDt || '').slice(0, -3),
+                unescapeTitle: unescapeHtmlArticle(data.title),
             })),
         );
     }, [list]);
@@ -51,7 +54,7 @@ const CdnArticleAgGrid = ({ match }) => {
             loading={loading}
             columnDefs={columnDefs}
             rowData={rowData}
-            rowHeight={50}
+            rowHeight={GRID_ROW_HEIGHT.T[2]}
             className="overflow-hidden flex-fill"
             onRowNodeId={(data) => data.totalId}
             onRowClicked={handleRowClicked}

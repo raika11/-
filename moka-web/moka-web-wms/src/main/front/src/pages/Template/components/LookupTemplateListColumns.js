@@ -1,6 +1,3 @@
-import React from 'react';
-import { MokaTableAppendButton, MokaTableLinkButton } from '@components';
-
 export default [
     {
         headerName: 'ID',
@@ -24,18 +21,14 @@ export default [
         headerName: '',
         field: 'append',
         width: 33,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableAppendButton {...row} onClick={data.handleClickAppend} />;
-        },
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { iconButton: true, iconName: 'fal-file-plus', clickFunctionName: 'handleClickAppend', overlayText: '태그삽입' },
     },
     {
         headerName: '',
         field: 'link',
         width: 33,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;
-        },
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { iconButton: true, iconName: 'fal-external-link', clickFunctionName: 'handleClickLink', overlayText: '새창열기' },
     },
 ];

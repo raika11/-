@@ -1,6 +1,3 @@
-import React from 'react';
-import { MokaTablePreviewButton } from '@components';
-
 export default [
     {
         colId: 'checkbox',
@@ -31,12 +28,10 @@ export default [
     },
     {
         headerName: '미리보기',
-        field: 'regDt',
-        width: 64,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTablePreviewButton {...row} onClick={data.handleClickPreview} />;
-        },
+        field: 'preview',
+        width: 60,
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { iconButton: true, iconName: 'fal-file-search', clickFunctionName: 'handleClickPreview' },
     },
     {
         headerName: '옵션',

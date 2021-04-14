@@ -1,6 +1,3 @@
-import React from 'react';
-import { MokaTableLinkButton } from '@components';
-
 export default [
     {
         headerName: 'ID',
@@ -20,9 +17,7 @@ export default [
         headerName: '',
         field: 'link',
         width: 33,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;
-        },
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { iconButton: true, iconName: 'fal-external-link', clickFunctionName: 'handleClickLink', overlayText: '새창열기' },
     },
 ];

@@ -2,23 +2,16 @@ import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaTable } from '@/components';
-import columnDefs from './NewsLetterAgGridColumns';
+import columnDefs from './NewsLetterPeriodResultAgGridColumns';
 
 /**
- * 뉴스레터 관리 > 뉴스레터 상품 목록
+ * 뉴스레터 관리 > 뉴스레터 발송 결과 관리 > 발송 주기별 AgGrid
  */
-const NewsLetterAgGrid = ({ match }) => {
+const NewsLetterPeriodResultAgGrid = ({ match, setDisplay }) => {
     const history = useHistory();
-    const [total] = useState(0);
+    // const [total] = useState(0);
     const [loading] = useState(false);
     const [search] = useState({ page: 1, size: 10 });
-
-    /**
-     * 상품 등록
-     */
-    const handleClickAdd = () => {
-        history.push(`${match.path}/add`);
-    };
 
     /**
      * 테이블 검색 옵션 변경
@@ -29,18 +22,25 @@ const NewsLetterAgGrid = ({ match }) => {
     /**
      * 목록 Row클릭
      */
-    const handleRowClicked = useCallback((row) => {
-        console.log(row);
-    }, []);
+    const handleRowClicked = useCallback(
+        (row) => {
+            history.push(`${match.path}/${row.no}`);
+        },
+        [history, match.path],
+    );
 
     return (
         <>
             <div className="mb-14 d-flex align-items-end justify-content-between">
-                <p className="mb-0">전체 상품 {total}개</p>
                 <div className="d-flex">
-                    <Button variant="positive" className="mr-1" style={{ overflow: 'visible' }} onClick={handleClickAdd}>
-                        상품 등록
+                    <Button variant="outline-neutral" className="mr-1" onClick={() => setDisplay('agGrid')}>
+                        도표
                     </Button>
+                    <Button variant="outline-neutral" onClick={() => setDisplay('chart')}>
+                        차트
+                    </Button>
+                </div>
+                <div className="d-flex">
                     <Button variant="outline-neutral" className="mr-2" style={{ overflow: 'visible' }}>
                         Excel 다운로드
                     </Button>
@@ -49,22 +49,23 @@ const NewsLetterAgGrid = ({ match }) => {
                     </MokaInput>
                 </div>
             </div>
-
             <MokaTable
                 suppressMultiSort // 다중 정렬 비활성
                 className="overflow-hidden flex-fill"
                 paginationClassName="justify-content-center"
                 columnDefs={columnDefs}
-                onRowNodeId={(data) => data.seq}
+                // rowData={}
+                onRowNodeId={(data) => data.no}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 page={search.page}
-                pageSizes={false}
+                // total={total}
                 showTotalString={false}
+                pageSizes={false}
                 onChangeSearchOption={handleChangeSearchOption}
             />
         </>
     );
 };
 
-export default NewsLetterAgGrid;
+export default NewsLetterPeriodResultAgGrid;

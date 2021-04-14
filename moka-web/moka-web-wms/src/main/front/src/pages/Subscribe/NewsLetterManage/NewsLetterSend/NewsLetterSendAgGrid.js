@@ -54,6 +54,7 @@ const NewsLetterSendAgGrid = ({ match }) => {
             </div>
 
             <MokaTable
+                suppressMultiSort // 다중 정렬 비활성
                 className="overflow-hidden flex-fill"
                 paginationClassName="justify-content-center"
                 columnDefs={columnDefs}

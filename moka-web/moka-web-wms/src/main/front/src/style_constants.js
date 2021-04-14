@@ -7,6 +7,9 @@ export const CARD_DEFAULT_HEIGHT = 817;
 // 카드 접혔을 때 넓이
 export const CARD_FOLDING_WIDTH = 32;
 
+// AgGrid의 headerHeight
+export const GRID_HEADER_HEIGHT = [34, 46];
+
 // AgGrid의 rowHeight
 export const GRID_ROW_HEIGHT = {
     T: [34, 46, 46], // text

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Col, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 import { AgGridReact } from 'ag-grid-react';
+import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 import { columnDefs } from './SortAgGridColumns';
 import ItemRenderer from './ItemRenderer';
 import toast, { messageBox } from '@utils/toastUtil';
 import { selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
+import { MokaTableDefaultProps } from '@components';
 
 const SortAgGrid = ({ SearchForm }) => {
     const dispatch = useDispatch();
@@ -177,7 +178,7 @@ const SortAgGrid = ({ SearchForm }) => {
                                 rowData={rowData}
                                 getRowNodeId={(params) => params.id}
                                 columnDefs={columnDefs}
-                                localeText={{ noRowsToShow: '관련 기사가 없습니다.', loadingOoo: '조회 중입니다..' }}
+                                localeText={MokaTableDefaultProps.localeText}
                                 onRowDragEnd={handleDragEnd}
                                 animateRows
                                 rowDragManaged

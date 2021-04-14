@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { deleteTourDeny, getTourDenyList, GET_TOUR_DENY_LIST } from '@store/tour';
 import toast, { messageBox } from '@utils/toastUtil';
 import { MokaTable, MokaCard } from '@components';
@@ -14,7 +15,6 @@ const HolidayAgGrid = () => {
     const dispatch = useDispatch();
     const holidayList = useSelector((store) => store.tour.holidayList);
     const loading = useSelector((store) => store.loading[GET_TOUR_DENY_LIST]);
-
     const [show, setShow] = useState(false);
     const [rowData, setRowData] = useState([]);
     const [modalData, setModalData] = useState(null);
@@ -102,6 +102,7 @@ const HolidayAgGrid = () => {
                 className="flex-fill overflow-hidden"
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(data) => data.denySeq}
                 loading={loading}
                 paging={false}

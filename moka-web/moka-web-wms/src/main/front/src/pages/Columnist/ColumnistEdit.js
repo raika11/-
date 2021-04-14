@@ -248,7 +248,7 @@ const ColumnistEdit = ({ match }) => {
                 </Form.Row>
 
                 {/* 기자명 */}
-                <Form.Row>
+                <Form.Row className="mb-1">
                     <Col xs={7} className="p-0 d-flex">
                         <MokaInputLabel
                             label="기자명"
@@ -265,7 +265,7 @@ const ColumnistEdit = ({ match }) => {
                         <ReporterListModal show={showModal} onHide={() => setShowModal(false)} onRowClicked={addReporter} />
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
+                <Form.Row>
                     <MokaInputLabel as="none" label=" " />
                     <p className="mb-0 text-positive">* 외부 칼럼니스트는 이름을 직접 입력해 주세요.</p>
                 </Form.Row>

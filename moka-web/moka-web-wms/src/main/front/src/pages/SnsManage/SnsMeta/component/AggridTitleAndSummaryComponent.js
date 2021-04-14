@@ -6,7 +6,7 @@ const AggridTitleAndSummaryComponent = (params) => {
 
     return (
         <div className="h-100 d-flex flex-column justify-content-center">
-            <p className="mb-0 flex-fill text-truncate" dangerouslySetInnerHTML={{ __html: title }} style={{ lineHeight: 'normal' }} />
+            <p className="mb-0 text-truncate" dangerouslySetInnerHTML={{ __html: title }} />
             <div className="d-flex">
                 {reservation === true && (
                     <div className="d-flex pr-2">
@@ -14,7 +14,7 @@ const AggridTitleAndSummaryComponent = (params) => {
                     </div>
                 )}
                 <div className="d-flex text-truncate">
-                    <p className="mb-0 flex-fill font-weight-bold text-truncate" dangerouslySetInnerHTML={{ __html: summary }} style={{ lineHeight: 'normal' }} />
+                    <p className="mb-0 font-weight-bold text-truncate" dangerouslySetInnerHTML={{ __html: summary }} />
                 </div>
             </div>
         </div>

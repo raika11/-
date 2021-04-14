@@ -6,33 +6,22 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInput, MokaInputLabel, MokaIcon } from '@/components';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { clearIssue, getIssue, getIssueList, initialState, saveIssue } from '@store/issue';
+import { CAT_DIV, clearIssue, getIssue, getIssueList, initialState, saveIssue } from '@store/issue';
 import DefaultPackageKeywordComponent from '@pages/Issue/components/DefaultPackageKeywordComponent';
 import ReporterPackageKeywordForm from '@pages/Issue/components/RepoterPackageKeywordComponent';
 import SectionPackageKeywordComponent from '@pages/Issue/components/SectionPackageKeywordComponent';
 import useDebounce from '@hooks/useDebounce';
-import { CAT_DIV } from '@store/issue/issueSaga';
 
 import IssueCommonEdit from '@pages/Issue/components/IssueCommonEdit';
-
-const options = [
-    { value: 'test1', label: '대통령 사면론' },
-    { value: 'test2', label: '이명박' },
-    { value: 'test3', label: '박근혜' },
-];
-
-const rnOptions = [
-    { value: 'test1', label: '김이나' },
-    { value: 'test2', label: '박수진' },
-    { value: 'test3', label: '최우영' },
-];
+import ReporterListModal from '@pages/Reporter/modals/ReporterListModal';
 
 /**
  * 패키지 상세 정보
  */
-const IssueEdit = () => {
+const IssueEdit = ({ reporters }) => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const [showReporterModal, setShowReporterModal] = useState(false);
     const { pkg, search } = useSelector(({ issue }) => issue, shallowEqual);
 
     const { pkgSeq } = useParams();
@@ -94,6 +83,10 @@ const IssueEdit = () => {
         setEdit(pkg);
     }, [pkg]);
 
+    useEffect(() => {
+        console.log(edit);
+    }, [edit]);
+
     return (
         <MokaCard
             title={pkgSeq ? '패키지 수정' : '패키지 생성'}
@@ -109,6 +102,32 @@ const IssueEdit = () => {
             <p className="mb-2">* 표시는 필수 입력 정보입니다.</p>
             <Form>
                 <IssueCommonEdit data={edit} onChange={handleChangeEdit} />
+                {/* 공통 검색어 */}
+                <Form.Row className="mb-3">
+                    <Col xs={3} className="p-0">
+                        <MokaInputLabel
+                            as="switch"
+                            name="isUsed"
+                            id="package-keywordYn-switch"
+                            label="검색어"
+                            inputProps={{ custom: true, checked: edit.packageKeywords.search.isUsed }}
+                            onChange={(e) => {
+                                const { name, checked } = e.target;
+                                let togetherHandlers = [];
+                                if (!checked) {
+                                    togetherHandlers = [{ name: 'keyword', value: initialState.pkg.packageKeywords.search.keyword }];
+                                }
+                                handleChangeArrayObjectValue({
+                                    target: 'packageKeywords',
+                                    subTarget: 'search',
+                                    name,
+                                    value: checked,
+                                    togetherHandlers,
+                                });
+                            }}
+                        />
+                    </Col>
+                </Form.Row>
                 {edit.packageKeywords.search.isUsed && (
                     <DefaultPackageKeywordComponent
                         keyword={{ ...edit.packageKeywords.search.keyword, catDiv: CAT_DIV.SEARCH_KEYWORD }}
@@ -128,157 +147,57 @@ const IssueEdit = () => {
                             inputProps={{ custom: true, checked: edit.packageKeywords.reporter.isUsed }}
                             onChange={(e) => {
                                 const { name, checked } = e.target;
-                                handleChangeArrayObjectValue({ target: 'packageKeywords', subTarget: 'reporter', name, value: checked });
+                                let togetherHandlers = [];
+                                if (!checked) {
+                                    togetherHandlers = [{ name: 'keyword', value: initialState.pkg.packageKeywords.reporter.keyword }];
+                                }
+                                handleChangeArrayObjectValue({ target: 'packageKeywords', subTarget: 'reporter', name, value: checked, togetherHandlers });
                             }}
                         />
                         <Button
                             variant="positive"
                             onClick={() => {
-                                console.log('추가');
+                                setShowReporterModal(true);
                             }}
                         >
                             추가
                         </Button>
+                        <ReporterListModal
+                            show={showReporterModal}
+                            onHide={() => setShowReporterModal(false)}
+                            onRowClicked={(data) => {
+                                const { repSeq } = data;
+                                const keyword = edit.packageKeywords.reporter.keyword;
+
+                                const reporter = [...keyword.reporter];
+                                reporter.push({
+                                    ordNo: 1,
+                                    reporterId: repSeq,
+                                    keyword: '',
+                                    sdate: null,
+                                    edate: null,
+                                    andOr: 'A',
+                                });
+
+                                handleChangeArrayObjectValue({
+                                    target: 'packageKeywords',
+                                    subTarget: 'reporter',
+                                    name: 'keyword',
+                                    value: { ...keyword, reporter },
+                                    togetherHandlers: [{ name: 'isUsed', value: true }],
+                                });
+                            }}
+                        />
                     </Col>
                 </Form.Row>
-                {edit.packageKeywords.reporter.isUsed && (
+                {edit.packageKeywords.reporter.isUsed && edit.packageKeywords.reporter.keyword.reporter.length > 0 && (
                     <ReporterPackageKeywordForm
-                        keyword={edit.packageKeywords.reporter.keyword}
+                        keyword={{ ...edit.packageKeywords.reporter.keyword, catDiv: CAT_DIV.REPORTER }}
+                        reporters={reporters}
                         onChange={(value) => {
                             handleChangeArrayObjectDebounceValue({ target: 'packageKeywords', subTarget: 'reporter', name: 'keyword', value });
                         }}
                     />
-                    /*<>
-                        <Form.Row className="mb-3">
-                            <Col xs={3} className="p-0 d-flex align-items-center">
-                                <MokaInputLabel as="none" label="검색 범위" />
-                            </Col>
-                            <Col xs={9} className="p-0 d-flex align-items-center">
-                                <p style={{ width: 130 }} className="mb-0 pr-3">
-                                    기자명(default)
-                                </p>
-                                <div style={{ width: 80 }} className="pr-3">
-                                    <MokaInput
-                                        as="checkbox"
-                                        id="package-reporterTitle-checkbox"
-                                        inputProps={{ label: '제목', custom: true, checked: edit.reporterOptions['title'] || false }}
-                                        onChange={(e) => setEdit({ ...edit, reporterOptions: { ...edit.reporterOptions, title: e.target.checked } })}
-                                    />
-                                </div>
-                                <div style={{ width: 80 }}>
-                                    <MokaInput
-                                        as="checkbox"
-                                        id="package-reporterTag-checkbox"
-                                        inputProps={{ label: '태그', custom: true, checked: edit.reporterOptions['tag'] }}
-                                        onChange={(e) => setEdit({ ...edit, reporterOptions: { ...edit.reporterOptions, tag: e.target.checked } })}
-                                    />
-                                </div>
-                            </Col>
-                        </Form.Row>
-                        {reporterList.map(({ reporterSearch, reporterStartDt, reporterOptions, reporterEndDt }, idx) => (
-                            <Form.Row className="mb-3" key={idx}>
-                                <Col xs={3} className="p-0 d-flex">
-                                    <div style={{ width: 30 }} className="d-flex flex-column justify-content-center align-items-center">
-                                        <p className="mb-0">{idx + 1}</p>
-                                        <Button variant="white" className="px-05" onClick={handleClickDeleteReporter}>
-                                            <MokaIcon iconName="fal-trash-alt" />
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
-                                            <MokaInputLabel as="none" label="검색 기간" />
-                                        </div>
-                                        <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
-                                            <MokaInputLabel as="none" label="기자명" />
-                                        </div>
-                                        <MokaInputLabel
-                                            as="switch"
-                                            id={`package-reporterSearch-switch${idx + 1}`}
-                                            name="reporterSearch"
-                                            label="검색어(N개)"
-                                            inputProps={{ custom: true, checked: reporterSearch === 'Y' }}
-                                            onChange={(e) => handleReporterList(e, idx)}
-                                        />
-                                    </div>
-                                </Col>
-                                <Col xs={9} className="p-0">
-                                    <div className="mb-3 d-flex align-items-center">
-                                        <div style={{ width: 228 }} className="pr-3 d-flex align-items-center">
-                                            <MokaInputLabel
-                                                as="dateTimePicker"
-                                                label="시작"
-                                                name="reporterStartDt"
-                                                inputProps={{ timeFormat: null }}
-                                                value={reporterStartDt}
-                                                onChange={(date) => {
-                                                    if (typeof date === 'object') {
-                                                        produce(reporterList, (draft) => {
-                                                            draft[idx].reporterStartDt = date;
-                                                        });
-                                                    } else if (date === '') {
-                                                        produce(reporterList, (draft) => {
-                                                            draft[idx].reporterStartDt = null;
-                                                        });
-                                                    }
-                                                }}
-                                                required
-                                            />
-                                        </div>
-                                        <div style={{ width: 80 }} className="pr-1">
-                                            <MokaInput
-                                                as="checkbox"
-                                                inputProps={{ label: '종료', custom: true, checked: reporterOptions['reporterEndYn'] || false }}
-                                                onChange={(e) => {
-                                                    produce(reporterList, (draft) => {
-                                                        draft[idx].reporterOptions.reporterEndYn = e.target.checked;
-                                                    });
-                                                }}
-                                            />
-                                        </div>
-                                        <div style={{ width: 150 }}>
-                                            <MokaInput
-                                                as="dateTimePicker"
-                                                value={reporterEndDt}
-                                                inputProps={{ timeFormat: null }}
-                                                onChange={(date) => {
-                                                    if (typeof date === 'object') {
-                                                        produce(reporterList, (draft) => {
-                                                            draft[idx].reporterEndDt = date;
-                                                        });
-                                                    } else if (date === '') {
-                                                        produce(reporterList, (draft) => {
-                                                            draft[idx].reporterEndDt = null;
-                                                        });
-                                                    }
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <MokaInput
-                                        as="autocomplete"
-                                        name="reporterName"
-                                        className="mb-3"
-                                        value={reporterName}
-                                        inputProps={{ options: rnOptions, isMulti: false, maxMenuHeight: 150 }}
-                                        onChange={(rn) => setReporterName(rn)}
-                                    />
-                                    <MokaInput
-                                        as="autocomplete"
-                                        name="keywords"
-                                        value={keywordValue}
-                                        inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
-                                        onChange={(ct) => {
-                                            let result = [];
-                                            if (ct) {
-                                                result = ct.map((ct) => ct.value);
-                                            }
-                                            setKeywordList(result);
-                                        }}
-                                    />
-                                </Col>
-                            </Form.Row>
-                        ))}
-                    </>*/
                 )}
                 {/* 섹션 */}
                 <Form.Row className="mb-3">
@@ -291,13 +210,23 @@ const IssueEdit = () => {
                             inputProps={{ custom: true, checked: edit.packageKeywords.section.isUsed }}
                             onChange={(e) => {
                                 const { name, checked } = e.target;
-                                handleChangeArrayObjectValue({ target: 'packageKeywords', subTarget: 'section', name, value: checked });
+                                let togetherHandlers = [];
+                                if (!checked) {
+                                    togetherHandlers = [{ name: 'keyword', value: initialState.pkg.packageKeywords.section.keyword }];
+                                }
+                                handleChangeArrayObjectValue({ target: 'packageKeywords', subTarget: 'section', name, value: checked, togetherHandlers });
                             }}
                         />
                     </Col>
                 </Form.Row>
                 {edit.packageKeywords.section.isUsed && (
-                    <SectionPackageKeywordComponent />
+                    <SectionPackageKeywordComponent
+                        keyword={{ ...edit.packageKeywords.section.keyword, catDiv: CAT_DIV.SECTION }}
+                        target="section"
+                        onChange={(value) => {
+                            handleChangeArrayObjectDebounceValue({ target: 'packageKeywords', subTarget: 'section', name: 'keyword', value });
+                        }}
+                    />
                     /*<Form.Row className="mb-3">
                         <Col xs={3} className="p-0">
                             <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
@@ -408,7 +337,11 @@ const IssueEdit = () => {
                             inputProps={{ custom: true, checked: edit.packageKeywords.digitalSpecial.isUsed }}
                             onChange={(e) => {
                                 const { name, checked } = e.target;
-                                handleChangeArrayObjectValue({ target: 'packageKeywords', subTarget: 'digitalSpecial', name, value: checked });
+                                let togetherHandlers = [];
+                                if (!checked) {
+                                    togetherHandlers = [{ name: 'keyword', value: initialState.pkg.packageKeywords.digitalSpecial.keyword }];
+                                }
+                                handleChangeArrayObjectValue({ target: 'packageKeywords', subTarget: 'digitalSpecial', name, value: checked, togetherHandlers });
                             }}
                         />
                     </Col>
@@ -433,7 +366,11 @@ const IssueEdit = () => {
                             inputProps={{ custom: true, checked: edit.packageKeywords.ovp.isUsed }}
                             onChange={(e) => {
                                 const { name, checked } = e.target;
-                                handleChangeArrayObjectValue({ target: 'packageKeywords', subTarget: 'ovp', name, value: checked });
+                                let togetherHandlers = [];
+                                if (!checked) {
+                                    togetherHandlers = [{ name: 'keyword', value: initialState.pkg.packageKeywords.ovp.keyword }];
+                                }
+                                handleChangeArrayObjectValue({ target: 'packageKeywords', subTarget: 'ovp', name, value: checked, togetherHandlers });
                             }}
                         />
                     </Col>

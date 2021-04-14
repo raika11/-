@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 const LoginNameRenderer = ({ data }) => {
     return (
-        <div className="h-100 w-100 text-truncate text-wrap py-1 d-flex align-items-start">
+        <div className="h-100 w-100 text-truncate text-wrap py-1 d-flex align-items-center">
             <span
                 className={clsx('icon', {
                     i_kk: data.loginSns === 'K',

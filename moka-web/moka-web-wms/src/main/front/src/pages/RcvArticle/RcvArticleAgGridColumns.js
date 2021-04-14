@@ -1,20 +1,25 @@
 import React from 'react';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import RcvArticleRegisterBtn from './components/RcvArticleRegisterBtn';
 import RcvArticlePreviewBtn from './components/RcvArticlePreviewBtn';
 import TitleRenderer from '@pages/Article/components/TitleRenderer';
+
+const cellClassRules = {
+    'ag-center-cell': () => true,
+};
 
 export default [
     {
         headerName: '월일',
         field: 'rcvDt',
         width: 48,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClassRules,
     },
     {
         headerName: '수신',
         field: 'rcvTime',
         width: 48,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClassRules,
     },
     {
         headerName: '구분',
@@ -39,34 +44,33 @@ export default [
         headerName: '보기',
         field: 'preview',
         width: 55,
-        cellStyle: { display: 'flex', alignItems: 'center' },
         cellRendererFramework: RcvArticlePreviewBtn,
     },
     {
         headerName: '제목',
         field: 'title',
         flex: 1,
-        width: 100,
         tooltipField: 'title',
-        wrapText: true,
-        autoHeight: true,
-        cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
         cellRendererFramework: TitleRenderer,
+        cellRendererParams: { inRcv: true },
+        cellStyle: {
+            lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+        },
     },
     {
         headerName: '입력',
         field: 'serviceTime',
         width: 48,
-        cellStyle: { display: 'flex', alignItems: 'center' },
         cellClassRules: {
             'text-positive': () => true,
+            'ag-center-cell': () => true,
         },
     },
     {
         headerName: '기능',
         field: 'register',
         width: 55,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClassRules,
         cellRendererFramework: RcvArticleRegisterBtn,
     },
 ];

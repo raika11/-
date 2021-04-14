@@ -156,6 +156,7 @@ const ArticleAgGrid = ({ match, ja }) => {
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs.map((def) => (def.field === 'view' ? { ...def, width: !ja ? 90 : def.width } : def))}
             rowData={rowData}
+            headerHeight={GRID_ROW_HEIGHT.T[0]}
             rowHeight={GRID_ROW_HEIGHT.T[1]}
             onRowNodeId={(data) => data.totalId}
             onRowClicked={handleRowClicked}

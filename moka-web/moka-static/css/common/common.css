@@ -594,7 +594,45 @@ i[class*="ico_num"] {width:36px;height:36px;}
 
 
 
+/* 공감 */
+.empathy_wrap { height: 46px; }
+.empathy_wrap,
+.empathy_area { display: flex; align-items: center; }
+.empathy_wrap > button,
+.empathy_area > button { display: flex; justify-content: center; align-items: center;}
+.empathy_wrap > button { position: relative; width: 50%; height: 100%; }
+.empathy_wrap > button:first-child::before { content: ""; position: absolute; right: 0; top: 0; width: 1px; height: 100%; background-color: #d8d8d8; }
+.empathy_wrap > button .count { position: relative; margin-left: 8px; color: #999; font-size: 16px; }
+.empathy_wrap > button.active > .ico_face_like,
+.empathy_area > button.active > .ico_face_like { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h22v22H0z'/%3E%3Cpath fill='%23FF3C14' d='M11 2.2a8.8 8.8 0 110 17.6 8.8 8.8 0 010-17.6zm0 1.1c-4.253 0-7.7 3.447-7.7 7.7s3.447 7.7 7.7 7.7 7.7-3.447 7.7-7.7-3.447-7.7-7.7-7.7z'/%3E%3Cpath fill='%23FF3C14' d='M11 16.5a5.5 5.5 0 01-5.473-4.95h1.015a4.493 4.493 0 008.916 0h1.015A5.5 5.5 0 0111 16.5z'/%3E%3Ccircle cx='8.25' cy='8.25' r='1.1' fill='%23FF3C14'/%3E%3Ccircle cx='13.75' cy='8.25' r='1.1' fill='%23FF3C14'/%3E%3Cpath fill='%23FF3C14' d='M11 3.3h6.875l.825-.825V2.2H11z'/%3E%3C/g%3E%3C/svg%3E"); }
+.empathy_wrap > button.active > .count,
+.empathy_area > button.active > .count { color: #ff3c14; }
+.empathy_wrap [class^="ico_face_"] { width: 30px; height: 30px; }
+.empathy_area [class^="ico_face_"] { width: 22px; height: 22px; }
+.empathy_area > button:nth-child(2) { margin-left: 15px; }
+.empathy_area > button .count { margin-left: 5px; color: #999; font-size: 14px; }
 
+[class^="ico_face_"] { display: inline-block; background-repeat: no-repeat; background-position: center; background-size: 100%; }
+.ico_face_like { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h22v22H0z'/%3E%3Cpath fill='%23999' d='M11 2.2a8.8 8.8 0 110 17.6 8.8 8.8 0 010-17.6zm0 1.1c-4.253 0-7.7 3.447-7.7 7.7s3.447 7.7 7.7 7.7 7.7-3.447 7.7-7.7-3.447-7.7-7.7-7.7z'/%3E%3Cpath fill='%23999' d='M11 16.5a5.5 5.5 0 01-5.473-4.95h1.015a4.493 4.493 0 008.916 0h1.015A5.5 5.5 0 0111 16.5z'/%3E%3Ccircle cx='8.25' cy='8.25' r='1.1' fill='%23999'/%3E%3Ccircle cx='13.75' cy='8.25' r='1.1' fill='%23999'/%3E%3Cpath fill='%23999' d='M11 3.3h6.875l.825-.825V2.2H11z'/%3E%3C/g%3E%3C/svg%3E"); }
+.ico_face_hate { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h22v22H0z'/%3E%3Cpath fill='%23999' d='M11 2.2a8.8 8.8 0 110 17.6 8.8 8.8 0 010-17.6zm0 1.1c-4.253 0-7.7 3.447-7.7 7.7s3.447 7.7 7.7 7.7 7.7-3.447 7.7-7.7-3.447-7.7-7.7-7.7z'/%3E%3Cpath fill='%23999' d='M11 10.816a5.502 5.502 0 00-5.302 4.033h1.055a4.494 4.494 0 018.494.001h1.055A5.503 5.503 0 0011 10.816z'/%3E%3Ccircle cx='8.25' cy='8.25' r='1.1' fill='%23999'/%3E%3Ccircle cx='13.75' cy='8.25' r='1.1' fill='%23999'/%3E%3Cpath fill='%23999' d='M11 3.3h6.875l.825-.825V2.2H11z'/%3E%3C/g%3E%3C/svg%3E"); }
+
+
+/* 댓글 */
+.comment { padding: 16px 0; }
+.comment_header { display: flex; position: relative; }
+.comment_header .comment_userid { color: #000; font-size: 15px; line-height: 22px; font-weight: 700; }
+.comment_header .comment_date { margin-left: 12px; color: #999; font-size: 14px; line-height: 22px; }
+.comment_header .btn_more { position: absolute; right: -8px; top: -2px; width: 20px; height: 20px;  }
+.comment_content { margin-top: 10px; color: #111; font-size: 14px; line-height: 20px; }
+.comment_footer { margin-top: 12px; }
+.comment_footer::after { display: block; content: ''; clear: both; }
+.comment_footer .btn_reply { float: left; color: #999; font-size: 14px; line-height: 22px; }
+.comment_footer .empathy_area { float: right; }
+
+.comment_list { border-top: 2px solid #ff4620; }
+.comment_list li:nth-child(n+2) { border-top: 1px solid #e2e2e2; }
+/* icon */
+.fa_more { width: 3px; height: 17px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='3' height='17'%3E%3Cpath d='M1.5 14a1.5 1.5 0 11-.001 3.001A1.5 1.5 0 011.5 14zm0-7a1.5 1.5 0 11-.001 3.001A1.5 1.5 0 011.5 7zm0-7a1.5 1.5 0 11-.001 3.001A1.5 1.5 0 011.5 0z' fill='%23CCC' fill-rule='evenodd'/%3E%3C/svg%3E"); }
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {

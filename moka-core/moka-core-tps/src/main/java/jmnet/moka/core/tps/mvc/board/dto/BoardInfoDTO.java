@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -277,11 +278,6 @@ public class BoardInfoDTO {
     @Size(max = 100, message = "{tps.board-info.error.size.allowItem}")
     private String allowItem;
 
-    @ApiModelProperty(value = "등록일", hidden = true)
-    @DTODateTimeFormat
-    private Date regDt;
-
-
     /**
      * 게시판 URL
      */
@@ -319,4 +315,27 @@ public class BoardInfoDTO {
     @ApiModelProperty("footer content")
     @Size(min = 0, max = 4000, message = "{tps.board-info.error.size.footerContent}")
     private String footerContent;
+
+    @ApiModelProperty(value = "등록일", hidden = true)
+    @DTODateTimeFormat
+    private Date regDt;
+
+    /**
+     * 생성자
+     */
+    @Column(name = "REG_ID")
+    private String regId;
+
+    /**
+     * 수정일시
+     */
+    @ApiModelProperty(value = "수정일", hidden = true)
+    @DTODateTimeFormat
+    private Date modDt;
+
+    /**
+     * 수정자
+     */
+    @Column(name = "MOD_ID")
+    private String modId;
 }

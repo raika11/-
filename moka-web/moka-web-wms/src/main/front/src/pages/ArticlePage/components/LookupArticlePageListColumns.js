@@ -1,6 +1,3 @@
-import React from 'react';
-import { MokaTableLoadButton, MokaTablePreviewButton } from '@components';
-
 export const columnDefs = [
     {
         headerName: 'ID',
@@ -17,19 +14,15 @@ export const columnDefs = [
         headerName: '',
         field: 'load',
         width: 33,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;
-        },
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { iconButton: true, iconName: 'fal-file-import', clickFunctionName: 'handleClickLoad', overlayText: '불러오기' },
     },
     {
         headerName: '',
         field: 'preview',
         width: 33,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTablePreviewButton {...row} onClick={data.handleClickPreview} />;
-        },
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { iconButton: true, iconName: 'fal-file-search', clickFunctionName: 'handleClickPreview', overlayText: '미리보기' },
     },
 ];
 

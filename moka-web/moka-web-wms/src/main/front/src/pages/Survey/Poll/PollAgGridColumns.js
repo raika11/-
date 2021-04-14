@@ -1,61 +1,43 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import MultiRowColumnComponent from '@pages/Survey/Poll/components/MultiRowColumnComponent';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { MokaIcon, MokaTableDeleteButton } from '@components';
 import { messageBox } from '@utils/toastUtil';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 
 export const columnDefs = [
     {
         headerName: 'ID',
         field: 'id',
         width: 50,
-        cellStyle: { diplay: 'flex', alignItems: 'center' },
     },
     {
         headerName: '그룹',
         field: 'group',
         width: 80,
-        cellStyle: { diplay: 'flex', alignItems: 'center' },
     },
     {
         headerName: '투표 제목',
         field: 'title',
+        wrapText: true,
+        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
         flex: 1,
-        cellStyle: { diplay: 'flex', alignItems: 'center' },
-        cellClass: 'ag-grid-cell-left',
+        cellRenderer: 'longTextRenderer',
         tooltipField: 'title',
     },
     {
         headerName: '상태',
         field: 'status',
         width: 70,
-        cellStyle: { diplay: 'flex', alignItems: 'center' },
         cellRenderer: 'usedYnRenderer',
     },
-    /*{
-        headerName: '시작일',
-        field: 'startDt',
-        width: 130,
-        cellStyle: { diplay: 'flex', alignItems: 'center' },
-        children: [
-            {
-                headerName: '종료일',
-                field: 'modDt',
-                width: 130,
-                cellStyle: { lineHeight: '18px' },
-                cellRendererFramework: (param) => {
-                    return <MultiRowColumnComponent values={[param.data.startDt, param.value]} />;
-                },
-            },
-        ],
-    },*/
     {
         headerName: '시작일\n종료일',
         field: 'endDt',
         width: 130,
-        cellStyle: { lineHeight: '18px' },
+        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
         cellRendererFramework: (param) => {
             return <MultiRowColumnComponent values={[param.data.startDt, param.value]} />;
         },
@@ -64,7 +46,6 @@ export const columnDefs = [
         headerName: '보기',
         field: 'preview',
         width: 50,
-        cellStyle: { diplay: 'flex', alignItems: 'center' },
         cellRendererFramework: (param) => {
             return (
                 <div className="w-100 h-100 d-flex align-items-center justify-content-center">
@@ -110,7 +91,7 @@ export const columnDefs = [
         headerName: '등록자\n등록일시',
         field: 'regDt',
         width: 130,
-        cellStyle: { lineHeight: '18px' },
+        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
         cellRendererFramework: (param) => {
             const regMember = param.data.regMember;
             let regMemberIdNm = '';
@@ -124,7 +105,7 @@ export const columnDefs = [
         headerName: '수정자\n수정일시',
         field: 'modDt',
         width: 130,
-        cellStyle: { lineHeight: '18px' },
+        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
         cellRendererFramework: (param) => {
             const modMember = param.data.modMember;
 
@@ -163,7 +144,6 @@ export const columnDefs = [
         headerName: '',
         field: 'delete',
         width: 50,
-        cellStyle: { diplay: 'flex', alignItems: 'center' },
         cellRendererFramework: (param) => {
             return (
                 param.data.isDelete && (
@@ -171,7 +151,6 @@ export const columnDefs = [
                         {...param}
                         onClick={() => {
                             messageBox.confirm(`<b>(${param.data.id})'${param.data.title}'</b>을(를)\n <em style="color:red">정말 삭제하시겠습니까?</em>`, () => {
-                                //console.log(param);
                                 param.data.onDelete(param.data.id);
                             });
                         }}

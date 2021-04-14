@@ -23,7 +23,7 @@ export default [
     },
     {
         headerName: '타입코드',
-        field: 'jplusRepDiv',
+        field: 'jplusRepDivNm',
         width: 63,
         cellStyle,
     },

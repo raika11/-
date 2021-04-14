@@ -4,6 +4,7 @@ import CommentAgGrid from '@pages/CommentManage/CommentAgGrid';
 import { columnDefs } from '@pages/CommentManage/CommentAgGrid/CommentAgGridColumns';
 import { GET_COMMENT_LIST, changeSearchOption, getCommentList } from '@store/commentManage';
 import commonUtil from '@utils/commonUtil';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 
 let clickState = null;
 
@@ -230,6 +231,7 @@ const CommentListBox = ({ setSelectBannedItem }) => {
         <CommentAgGrid
             suppressRowClickSelection
             loading={loading}
+            rowHeight={GRID_ROW_HEIGHT.C[0]}
             columnDefs={columnDefs}
             total={total}
             page={search.page}
@@ -239,7 +241,6 @@ const CommentListBox = ({ setSelectBannedItem }) => {
             onRowSelected={handleGridRowSelected}
             onColumnResized={onColumnResized}
             onColumnVisible={onColumnVisible}
-            rowHeight={49}
             //onCellClicked={handleOnCellClicked}
             //onRowDoubleClicked={handleDoubleClickListRow}
             onGridReady={onGridReady}

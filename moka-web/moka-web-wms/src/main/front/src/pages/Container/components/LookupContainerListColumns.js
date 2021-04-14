@@ -1,6 +1,3 @@
-import React from 'react';
-import { MokaTableAppendButton, MokaTableLinkButton, MokaTableLoadButton } from '@components';
-
 const columnDefs = [
     {
         headerName: 'ID',
@@ -18,19 +15,15 @@ const columnDefs = [
         headerName: '',
         field: 'append',
         width: 33,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableAppendButton {...row} onClick={data.handleClickAppend} />;
-        },
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { iconButton: true, iconName: 'fal-file-plus', clickFunctionName: 'handleClickAppend', overlayText: '태그삽입' },
     },
     {
         headerName: '',
         field: 'link',
         width: 33,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;
-        },
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { iconButton: true, iconName: 'fal-external-link', clickFunctionName: 'handleClickLink', overlayText: '새창열기' },
     },
 ];
 
@@ -50,19 +43,15 @@ export const ctColumnDefs = [
         headerName: '',
         field: 'load',
         width: 33,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;
-        },
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { iconButton: true, iconName: 'fal-file-import', clickFunctionName: 'handleClickLoad', overlayText: '불러오기' },
     },
     {
         headerName: '',
         field: 'link',
         width: 33,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;
-        },
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { iconButton: true, iconName: 'fal-external-link', clickFunctionName: 'handleClickLink', overlayText: '새창열기' },
     },
 ];
 

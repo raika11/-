@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Form, Col } from 'react-bootstrap';
-import { MokaModal, MokaTable, MokaInput, MokaSearchInput } from '@components';
-import { columnDefs } from './QuizSearchModalGridColumns';
 import { useSelector, useDispatch } from 'react-redux';
 import { DISPLAY_PAGE_NUM } from '@/constants';
-
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { initialState, GET_QUIZ_SEARCH_MODAL_LIST, clearQuizmodalsearch, getQuizSearchModalList, changeQuizListSearchOption } from '@store/survey/quiz';
+import { MokaModal, MokaTable, MokaInput, MokaSearchInput } from '@components';
+import { columnDefs } from './QuizSearchModalGridColumns';
+
 /**
  * 검색 모달.
  */
@@ -136,6 +137,7 @@ const QuizSearchModal = (props) => {
                 onRowClicked={(e) => handleOnRowClicked(e)}
                 agGridHeight={600}
                 rowData={rowData}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 page={search.page}
                 size={search.size}
                 total={total}

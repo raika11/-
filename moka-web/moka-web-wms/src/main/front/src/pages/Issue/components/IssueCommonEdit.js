@@ -36,7 +36,6 @@ const IssueCommonEdit = ({ data, onChange }) => {
     };
 
     useEffect(() => {
-        console.log('hh');
         setEdit(data);
     }, [data]);
 
@@ -373,22 +372,6 @@ const IssueCommonEdit = ({ data, onChange }) => {
                 <Col xs={9} className="p-0 d-flex">
                     <MokaInput className="mr-2" inputProps={{ readOnly: true }} />
                     <Button variant="outline-neutral">추천 이슈 선택</Button>
-                </Col>
-            </Form.Row>
-            {/* 공통 검색어 */}
-            <Form.Row className="mb-3">
-                <Col xs={3} className="p-0">
-                    <MokaInputLabel
-                        as="switch"
-                        name="isUsed"
-                        id="package-keywordYn-switch"
-                        label="검색어"
-                        inputProps={{ custom: true, checked: edit.packageKeywords.search.isUsed }}
-                        onChange={(e) => {
-                            const { name, checked } = e.target;
-                            handleChangeArrayObjectValue({ target: 'packageKeywords', subTarget: 'search', name, value: checked });
-                        }}
-                    />
                 </Col>
             </Form.Row>
         </>

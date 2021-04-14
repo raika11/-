@@ -73,7 +73,6 @@ const NoticeListAgGrid = ({ match }) => {
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={rowData}
-            rowHeight={40}
             onRowNodeId={(row) => row.boardSeq}
             onRowClicked={handleClickRow}
             loading={loading}

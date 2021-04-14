@@ -1,5 +1,3 @@
-import React from 'react';
-import { MokaTableLoadButton } from '@components';
 import { DESK_HIST_PUBLISH } from '@/constants';
 
 export default [
@@ -28,9 +26,7 @@ export default [
         headerName: '불러오기',
         field: 'load',
         width: 65,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;
-        },
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { iconButton: true, iconName: 'fal-file-import', clickFunctionName: 'handleClickLoad' },
     },
 ];

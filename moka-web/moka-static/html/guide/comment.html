@@ -34,40 +34,84 @@
             <section class="row">
                 <script>include.aside.menu0()</script>
                 <main class="main_guide col_sm12 col_md10 col_lg10">
+                    <h2 class="guide_title">공감</h2>
                     <!-- 가이드 내용 시작 -->
-
-                    <h2 class="guide_title">항목이름</h2>
                     <div class="sample_wrap">
+                        <!-- 클래스명 변경 가능 -->
+                        <div class="" style="margin: 0 auto; max-width: 580px;">
+                            <div class="empathy_wrap">
+                                <button type="button" class="active">
+                                    <i class="ico_face_like"></i>
+                                    <span class="visually_hidden">좋아요</span>
+                                    <span class="count">526</span>
+                                </button>
+                                <button type="button">
+                                    <i class="ico_face_hate"></i>
+                                    <span class="visually_hidden">싫어요</span>
+                                    <span class="count">3</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="empathy_area"&gt;
+    &lt;button type="button" class="active"&gt;
+        &lt;i class="ico_face_like"&gt; &lt;/i&gt;
+        &lt;span class="visually_hidden"&gt;좋아요&lt;/span&gt;
+        &lt;span class="count"&gt;526&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;button type="button"&gt;
+        &lt;i class="ico_face_hate"&gt; &lt;/i&gt;
+        &lt;span class="visually_hidden"&gt;싫어요&lt;/span&gt;
+        &lt;span class="count"&gt;3&lt;/span&gt;
+    &lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+
+                    <!-- //가이드 내용 -->
+                    <h2 class="guide_title">댓글</h2>
+                    <!-- 가이드 내용 시작 -->
+                    <div class="sample_wrap">
+                        <!-- 댓글 디자인 확인 후 추가 작업 -->
                         <!-- Comment -->
                         <div class="comment">
                             <div class="comment_header">
-                                <span class="comment_userid">Author</span>
-                                <span class="comment_date">1 days ago</span>
+                                <span class="comment_userid">good****</span>
+                                <span class="comment_date">2021.03.09 12:30</span>
+                                <button type="button" class="btn_more" ><i class="fa fa_more"></i></button>
                             </div>
                             <div class="comment_content">
-                                <p class="comment_text">Lorem ipsum dolor sit amet, ...</p>
+                                <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
                             </div>
                             <div class="comment_footer">
-                                <div class="button_wrap">
-                                    <button type="button" class="btn">Reply</button>
-                                </div>
-                                <div class="like_wrap">
-                                    <button type="button" class="btn">Like</button>
-                                    <button type="button" class="btn">Report</button>
+                                <button type="button" class="btn_reply">답글<span class="count">2</span></button>
+                                <div class="empathy_area">
+                                    <button type="button" class="active">
+                                        <i class="ico_face_like"></i>
+                                        <span class="visually_hidden">좋아요</span>
+                                        <span class="count">536</span>
+                                    </button>
+                                    <button type="button">
+                                        <i class="ico_face_hate"></i>
+                                        <span class="visually_hidden">화나요</span>
+                                        <span class="count">3</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                         <!-- //Comment -->
                         <!-- Comment Input Area -->
-                        <div class="comment_form">
+                        <!-- <div class="comment_form">
                             <form>
                                 <textarea class="form_control"></textarea>
                                 <button type="button" class="btn">Cancel</button>
                                 <button type="button" class="btn">Submit</button>
                             </form>
-                        </div>
+                        </div> -->
                         <!-- //Comment Input Area -->
-
                     </div>
                     <div class="code_wrap">
 <pre><code class="html">
@@ -79,9 +123,138 @@
 &lt;/div&gt;
 </code></pre>
                     </div>
+                    <!-- //가이드 내용 -->
 
-
-
+                    <h2 class="guide_title">댓글리스트</h2>
+                    <!-- 가이드 내용 시작 -->
+                    <div class="sample_wrap">
+                        <ul class="comment_list">
+                            <li>
+                                <!-- Comment -->
+                                <div class="comment">
+                                    <div class="comment_header">
+                                        <span class="comment_userid">good****</span>
+                                        <span class="comment_date">2021.03.09 12:30</span>
+                                        <button type="button" class="btn_more" ><i class="fa fa_more"></i></button>
+                                    </div>
+                                    <div class="comment_content">
+                                        <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                    </div>
+                                    <div class="comment_footer">
+                                        <button type="button" class="btn_reply">답글<span class="count">2</span></button>
+                                        <div class="empathy_area">
+                                            <button type="button" class="active">
+                                                <i class="ico_face_like"></i>
+                                                <span class="visually_hidden">좋아요</span>
+                                                <span class="count">536</span>
+                                            </button>
+                                            <button type="button">
+                                                <i class="ico_face_hate"></i>
+                                                <span class="visually_hidden">화나요</span>
+                                                <span class="count">3</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- //Comment -->
+                                <!-- Comment Input Area -->
+                                <!-- <div class="comment_form">
+                                    <form>
+                                        <textarea class="form_control"></textarea>
+                                        <button type="button" class="btn">Cancel</button>
+                                        <button type="button" class="btn">Submit</button>
+                                    </form>
+                                </div> -->
+                                <!-- //Comment Input Area -->
+                            </li>
+                            <li>
+                                <!-- Comment -->
+                                <div class="comment">
+                                    <div class="comment_header">
+                                        <span class="comment_userid">good****</span>
+                                        <span class="comment_date">2021.03.09 12:30</span>
+                                        <button type="button" class="btn_more" ><i class="fa fa_more"></i></button>
+                                    </div>
+                                    <div class="comment_content">
+                                        <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                    </div>
+                                    <div class="comment_footer">
+                                        <button type="button" class="btn_reply">답글<span class="count">2</span></button>
+                                        <div class="empathy_area">
+                                            <button type="button" class="active">
+                                                <i class="ico_face_like"></i>
+                                                <span class="visually_hidden">좋아요</span>
+                                                <span class="count">536</span>
+                                            </button>
+                                            <button type="button">
+                                                <i class="ico_face_hate"></i>
+                                                <span class="visually_hidden">화나요</span>
+                                                <span class="count">3</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- //Comment -->
+                                <!-- Comment Input Area -->
+                                <!-- <div class="comment_form">
+                                    <form>
+                                        <textarea class="form_control"></textarea>
+                                        <button type="button" class="btn">Cancel</button>
+                                        <button type="button" class="btn">Submit</button>
+                                    </form>
+                                </div> -->
+                                <!-- //Comment Input Area -->
+                            </li>
+                            <li>
+                                <!-- Comment -->
+                                <div class="comment">
+                                    <div class="comment_header">
+                                        <span class="comment_userid">good****</span>
+                                        <span class="comment_date">2021.03.09 12:30</span>
+                                        <button type="button" class="btn_more" ><i class="fa fa_more"></i></button>
+                                    </div>
+                                    <div class="comment_content">
+                                        <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                    </div>
+                                    <div class="comment_footer">
+                                        <button type="button" class="btn_reply">답글<span class="count">2</span></button>
+                                        <div class="empathy_area">
+                                            <button type="button" class="active">
+                                                <i class="ico_face_like"></i>
+                                                <span class="visually_hidden">좋아요</span>
+                                                <span class="count">536</span>
+                                            </button>
+                                            <button type="button">
+                                                <i class="ico_face_hate"></i>
+                                                <span class="visually_hidden">화나요</span>
+                                                <span class="count">3</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- //Comment -->
+                                <!-- Comment Input Area -->
+                                <!-- <div class="comment_form">
+                                    <form>
+                                        <textarea class="form_control"></textarea>
+                                        <button type="button" class="btn">Cancel</button>
+                                        <button type="button" class="btn">Submit</button>
+                                    </form>
+                                </div> -->
+                                <!-- //Comment Input Area -->
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="row"&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
                     <!-- //가이드 내용 -->
                 </main>
             </section>

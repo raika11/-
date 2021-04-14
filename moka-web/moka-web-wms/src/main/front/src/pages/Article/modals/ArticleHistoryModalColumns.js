@@ -1,6 +1,13 @@
+import { GRID_LINE_HEIGHT } from '@/style_constants';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.M}px`,
+};
+
 const cellClassRules = {
     'custom-scroll': () => true,
     'user-select-text': () => true,
+    'ag-center-cell': () => true,
     'ag-prewrap-cell': () => true,
 };
 
@@ -10,21 +17,20 @@ export default [
         field: 'regData',
         width: 115,
         cellClassRules,
-        cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
+        cellStyle,
     },
     {
         headerName: '분류',
         field: 'masterCodeText',
         width: 130,
         cellClassRules,
-        cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
+        cellStyle,
     },
     {
         headerName: '제목\n부제목',
         field: 'artTitle',
         width: 560,
         cellRenderer: 'titleRenderer',
-        cellStyle: { padding: '6px 0px' },
     },
     {
         headerName: '기자',
@@ -33,7 +39,7 @@ export default [
         wrapText: true,
         cellClassRules,
         tooltipField: 'artReporter',
-        cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
+        cellStyle,
     },
     {
         headerName: '태그',
@@ -42,6 +48,6 @@ export default [
         width: 90,
         wrapText: true,
         cellClassRules,
-        cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
+        cellStyle,
     },
 ];

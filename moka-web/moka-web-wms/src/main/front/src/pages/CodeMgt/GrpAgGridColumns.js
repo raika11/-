@@ -42,10 +42,10 @@ export default [
         field: 'workInfo',
         width: 125,
         wrapText: true,
+        tooltipField: 'worker',
         cellClassRules: {
             'ag-pre-cell': () => true,
         },
-        tooltipField: 'worker',
         cellStyle: {
             lineHeight: `${GRID_LINE_HEIGHT.M}px`,
         },

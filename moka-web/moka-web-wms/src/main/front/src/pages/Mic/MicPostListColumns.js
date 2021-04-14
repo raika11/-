@@ -1,19 +1,31 @@
+import { GRID_LINE_HEIGHT, GRID_ROW_HEIGHT } from '@/style_constants';
 import PostSelectRenderer from './components/PostSelectRenderer';
 import LoginNameRenderer from './components/LoginNameRenderer';
+
+const cellClassRules = {
+    'ag-center-cell': () => true,
+};
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.M}px`,
+    paddingTop: '4px',
+    paddingBottom: '4px',
+};
 
 export default [
     {
         headerName: '번호',
         field: 'answSeq',
         width: 60,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClassRules,
     },
     {
         headerName: '포스트',
         field: 'answMemo',
-        cellStyle: { minHeight: '46px', display: 'flex', alignItems: 'center', lineHeight: '21px', paddingTop: '3px', paddingBottom: '3px' },
-        autoHeight: true,
+        cellClassRules,
+        cellStyle: { ...cellStyle, minHeight: `${GRID_ROW_HEIGHT.T[1]}px` },
         wrapText: true,
+        autoHeight: true,
         flex: 1,
     },
     {
@@ -22,27 +34,28 @@ export default [
         width: 200,
         tooltipField: 'loginName',
         cellRendererFramework: LoginNameRenderer,
-        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '22px' },
+        cellClassRules,
+        cellStyle,
     },
     {
         headerName: '공감수',
         field: 'goodCnt',
         width: 50,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClassRules,
     },
     {
         headerName: '상태',
         field: 'answDiv',
         width: 95,
-        cellStyle: { display: 'flex', alignItems: 'center' },
         cellRendererFramework: PostSelectRenderer,
+        cellClassRules,
     },
     {
         headerName: '등록일',
         field: 'regDt',
         width: 88,
-        wrapText: true,
         tooltipField: 'regDt',
-        cellStyle: { whiteSpace: 'pre', display: 'flex', alignItems: 'center', lineHeight: '21px' },
+        cellClass: 'ag-pre-cell',
+        cellStyle,
     },
 ];

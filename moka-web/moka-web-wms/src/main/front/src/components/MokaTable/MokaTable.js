@@ -111,7 +111,7 @@ const propTypes = {
     }),
 };
 
-const defaultProps = {
+export const defaultProps = {
     // paging default
     paging: true,
     total: 0,
@@ -157,8 +157,6 @@ const MokaTable = forwardRef((props, ref) => {
         rowSelection,
         selected,
         header,
-        headerHeight,
-        rowHeight,
         frameworkComponents,
         setGridInstance: setParentGridInstance,
         suppressRefreshCellAfterUpdate,
@@ -311,8 +309,6 @@ const MokaTable = forwardRef((props, ref) => {
                     immutableData
                     columnDefs={columnDefs}
                     rowData={rowData}
-                    headerHeight={headerHeight || rowHeight}
-                    rowHeight={rowHeight}
                     getRowNodeId={onRowNodeId}
                     rowClassRules={rowClassRules}
                     onCellClicked={handleCellClicked}

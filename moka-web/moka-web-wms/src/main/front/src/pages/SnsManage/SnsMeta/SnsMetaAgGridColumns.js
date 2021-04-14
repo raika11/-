@@ -1,39 +1,39 @@
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import { ListTitleRenderer, ButtonStatusRenderer, SendStatusRenderer } from './component';
+
+const cellClassRules = {
+    'ag-center-cell': () => true,
+};
 
 export default [
     {
         headerName: 'ID',
         field: 'id',
+        cellClassRules,
         width: 70,
-        cellStyle: { lineHeight: '23px' },
-        headerClass: 'ag-grid-sns-meta-header',
     },
     {
         headerName: '출고일',
-        headerClass: 'ag-grid-sns-meta-header',
         field: 'forwardDate',
+        cellClassRules,
         width: 90,
-        cellStyle: { lineHeight: '23px' },
     },
     {
         headerName: '이미지',
         field: 'thumbnail',
-        headerClass: 'ag-grid-sns-meta-header',
-        cellRenderer: 'editImageRenderer',
-        cellStyle: { lineHeight: '0px' },
+        // cellRenderer: 'editImageRenderer',
+        cellRenderer: 'imageRenderer',
         width: 78,
     },
     {
         headerName: '기사제목',
-        headerClass: 'ag-grid-sns-meta-header',
         width: 135,
         children: [
             {
                 headerName: 'SNS제목',
                 field: 'listTitle',
                 flex: 1,
-                headerClass: 'ag-grid-sns-meta-header',
-                cellStyle: { paddingTop: '1px', paddingBottom: '1px' },
+                cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
                 cellRendererFramework: ListTitleRenderer,
             },
         ],
@@ -43,32 +43,28 @@ export default [
         field: 'sendType',
         width: 85,
         cellRendererFramework: SendStatusRenderer,
-        headerClass: 'ag-grid-sns-meta-header',
     },
     {
         headerName: 'FB InstantArticle',
-        headerClass: 'ag-grid-sns-meta-header',
         children: [
             {
                 headerName: '상태',
                 field: 'status',
+                cellClassRules,
                 width: 60,
                 // cellRenderer: 'usedYnRenderer',
-                headerClass: 'ag-grid-sns-meta-header',
             },
             {
                 headerName: '전송일',
                 field: 'sendDt',
+                cellClassRules,
                 width: 100,
-                cellStyle: { lineHeight: '23px' },
-                headerClass: 'ag-grid-sns-meta-header',
             },
             {
                 headerName: '전송',
                 field: 'insStatus',
                 width: 57,
                 cellRendererFramework: ButtonStatusRenderer,
-                headerClass: 'ag-grid-sns-meta-header',
             },
         ],
     },

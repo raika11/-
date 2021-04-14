@@ -83,7 +83,7 @@ public class PackageKeywordDTO implements Serializable {
      */
     @ApiModelProperty("순번")
     @Min(value = 0, message = "{tps.issue.error.notnull.ordNo}")
-    private Long ordno;
+    private Long ordNo;
 
     /**
      * 패키지 일련번호

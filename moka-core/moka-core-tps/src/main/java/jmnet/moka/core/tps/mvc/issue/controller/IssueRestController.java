@@ -363,7 +363,10 @@ public class IssueRestController extends AbstractCommonController {
                 .filter(keyword -> !keyword
                         .getCatDiv()
                         .contains("C"))
-                .collect(Collectors.groupingBy(PackageKeywordDTO::getOrdno))
+                .filter(keyword -> !keyword
+                        .getCatDiv()
+                        .contains("P"))
+                .collect(Collectors.groupingBy(PackageKeywordDTO::getOrdNo))
                 .values()
                 .stream()
                 .map(group -> group
@@ -409,9 +412,19 @@ public class IssueRestController extends AbstractCommonController {
                 .sorted(Comparator.comparingLong(PackageKeywordDTO::getKwdOrd))
                 .map(keyword -> String.valueOf(keyword.getRepMaster()))
                 .collect(Collectors.joining(",")));
+        // 추천패키지
+        dataDto.setRecommPkg(dataDto
+                .getPackageKeywords()
+                .stream()
+                .filter(keyword -> keyword
+                        .getCatDiv()
+                        .contains("P"))
+                .sorted(Comparator.comparingLong(PackageKeywordDTO::getKwdOrd))
+                .map(keyword -> String.valueOf(keyword.getRepMaster()))
+                .collect(Collectors.joining(",")));
         dataDto.setPackageKeywords(keywords
                 .stream()
-                .sorted(Comparator.comparing(PackageKeywordDTO::getOrdno))
+                .sorted(Comparator.comparing(PackageKeywordDTO::getOrdNo))
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
         return dataDto;
     }
@@ -424,27 +437,6 @@ public class IssueRestController extends AbstractCommonController {
      */
     public PackageMasterDTO transformViewToDto(PackageMasterDTO viewDto) {
         Set<PackageKeywordDTO> keywords = new LinkedHashSet<>();
-        //        Integer categoryOrderNumber = viewDto
-        //                .getPackageKeywords()
-        //                .size();
-        //        viewDto
-        //                .getPackageKeywords()
-        //                .stream()
-        //                .forEach(keyword -> {
-        //                    AtomicLong kwdOrd = new AtomicLong();
-        //                    Arrays
-        //                            .stream(keyword
-        //                                    .getKeyword()
-        //                                    .split(","))
-        //                            .forEach(kwd -> {
-        //                                keywords.add(keyword
-        //                                        .toBuilder()
-        //                                        .schCondi(null)
-        //                                        .keyword(kwd)
-        //                                        .kwdOrd(kwdOrd.incrementAndGet())
-        //                                        .build());
-        //                            });
-        //                });
         // 검색 조건있는경우 (하나는 있어야 된다고함)
         viewDto
                 .getPackageKeywords()
@@ -469,24 +461,49 @@ public class IssueRestController extends AbstractCommonController {
                                             .kwdOrd(kwdOrd.incrementAndGet())
                                             .build()));
                         }));
-        // 카테고리
-        if (viewDto.getCatList() != null && viewDto
-                .getCatList()
-                .length() > 0) {
-            AtomicLong kwdOrd = new AtomicLong();
-            Arrays
-                    .stream(viewDto
+        keywords
+                .stream()
+                .max(Comparator.comparingLong(PackageKeywordDTO::getOrdNo))
+                .ifPresent(maxOrdNoDto -> {
+                    AtomicLong ord = new AtomicLong();
+                    // 카테고리
+                    if (viewDto.getCatList() != null && viewDto
                             .getCatList()
-                            .split(","))
-                    .forEach((category) -> keywords.add(PackageKeywordDTO
-                            .builder()
-                            .catDiv("C")
-                            //                                .keyword(category)
-                            .repMaster(Long.parseLong(category))
-                            .kwdOrd(kwdOrd.incrementAndGet())
-                            .ordno(0L)
-                            .build()));
-        }
+                            .length() > 0) {
+                        AtomicLong kwdOrd = new AtomicLong();
+                        final Long plus = ord.incrementAndGet();
+                        Arrays
+                                .stream(viewDto
+                                        .getCatList()
+                                        .split(","))
+                                .forEach((category) -> keywords.add(PackageKeywordDTO
+                                        .builder()
+                                        .catDiv("C")
+                                        .repMaster(Long.parseLong(category))
+                                        .kwdOrd(kwdOrd.incrementAndGet())
+                                        .ordNo(maxOrdNoDto.getOrdNo() + plus)
+                                        .build()));
+                    }
+                    // 추천패키지
+                    if (viewDto.getRecommPkg() != null && viewDto
+                            .getRecommPkg()
+                            .length() > 0) {
+                        AtomicLong kwdOrd = new AtomicLong();
+                        final Long plus = ord.incrementAndGet();
+                        Arrays
+                                .stream(viewDto
+                                        .getRecommPkg()
+                                        .split(","))
+                                .forEach((recommPkg) -> keywords.add(PackageKeywordDTO
+                                        .builder()
+                                        .catDiv("P")
+                                        .repMaster(Long.parseLong(recommPkg))
+                                        .kwdOrd(kwdOrd.incrementAndGet())
+                                        .ordNo(maxOrdNoDto.getOrdNo() + plus)
+                                        .build()));
+                    }
+                });
+
         return viewDto
                 .toBuilder()
                 .catList(viewDto

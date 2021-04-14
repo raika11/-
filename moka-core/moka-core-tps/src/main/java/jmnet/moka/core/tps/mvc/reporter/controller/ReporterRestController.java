@@ -200,13 +200,17 @@ public class ReporterRestController extends AbstractCommonController {
         String serverChk = request.getHeader("MOKA_SERVER");
         log.info("serverChk {} ", serverChk);
 
-        //        if (McpString.isEmpty(serverChk) || (McpString.isNotEmpty(serverChk) && !serverChk.equals("JAM"))) {
-        //            message = "State = \"N\", ErrMsg = \"올바른 접근이 아닙니다.\"";
-        //            return new ResponseEntity<>(message, HttpStatus.OK);
-        //        }
+        // 비로그인 시 BACKOFFICE 호출 시 헤더 체크
+        if (McpString.isEmpty(serverChk) || (McpString.isNotEmpty(serverChk) && !serverChk.equals("JAM"))) {
+            String errMsg = msg("tps.reporter.error.notConnect");
+            message = "State = N, ErrMsg = " + errMsg;
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
 
+        // JAM 기자 일련번호 체크(필수값)
         if (reporterJamSaveDTO.getJamRepSeq() == 0) {
-            message = "State = \"N\", ErrMsg = \"필수 항목(JAM 기자 일련번호)이 누락되었습니다.\"";
+            String errMsg = msg("tps.reporter.error.error.notnull.jamRepSeq");
+            message = "State = N, ErrMsg = " + errMsg;
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
 
@@ -227,7 +231,8 @@ public class ReporterRestController extends AbstractCommonController {
                 .equals(hasedKey1) && !reporterJamSaveDTO
                 .getHash()
                 .equals(hasedKey2)) {
-            message = "State = \"N\", ErrMsg = \"올바른 접근이 아닙니다.\"";
+            String errMsg = msg("tps.reporter.error.notConnect");
+            message = "State = N, ErrMsg = " + errMsg;
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
 
@@ -244,12 +249,12 @@ public class ReporterRestController extends AbstractCommonController {
                     tpsLogger.success(ActionType.INSERT);
                 } else {
                     State = "N";
-                    String errMsg = "중복된 기자입니다.";
+                    String errMsg = msg("tps.reporter.error.duplicate.repSeq");
                     result = "State = " + State + ", ErrMsg =" + errMsg;
                 }
             }
         } catch (Exception e) {
-            String errMsg = "작업이 실패하였습니다.";
+            String errMsg = msg("tps.reporter.error.job");
             result = "State = " + State + ", ErrMsg =" + errMsg;
         }
 
@@ -273,17 +278,22 @@ public class ReporterRestController extends AbstractCommonController {
         String serverChk = request.getHeader("MOKA_SERVER");
         log.info("serverChk {} ", serverChk);
 
-        //        if (McpString.isEmpty(serverChk) || (McpString.isNotEmpty(serverChk) && !serverChk.equals("JAM"))) {
-        //            message = "State = \"N\", ErrMsg = \"올바른 접근이 아닙니다.\"";
-        //            return new ResponseEntity<>(message, HttpStatus.OK);
-        //        }
-
-        if (McpString.isEmpty(reporterJamUpdateDTO.getRepSeq()) || reporterJamUpdateDTO.getRepSeq() == 0) {
-            message = "State = \"N\", ErrMsg = \"필수 항목(JCMS 기자 일련번호)이 누락되었습니다.\"";
+        if (McpString.isEmpty(serverChk) || (McpString.isNotEmpty(serverChk) && !serverChk.equals("JAM"))) {
+            String errMsg = msg("tps.reporter.error.notConnect");
+            message = "State = N, ErrMsg = " + errMsg;
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
+
+        // 기자 일련번호 체크(필수값)
+        if (McpString.isEmpty(reporterJamUpdateDTO.getRepSeq()) || reporterJamUpdateDTO.getRepSeq() == 0) {
+            String errMsg = msg("tps.reporter.error.error.notnull.repSeq");
+            message = "State = N, ErrMsg = " + errMsg;
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+        // JAM 기자 일련번호 체크(필수값)
         if (McpString.isEmpty(reporterJamUpdateDTO.getJamRepSeq()) || reporterJamUpdateDTO.getJamRepSeq() == 0) {
-            message = "State = \"N\", ErrMsg = \"필수 항목(JAM 기자 일련번호)이 누락되었습니다.\"";
+            String errMsg = msg("tps.reporter.error.error.notnull.jamRepSeq");
+            message = "State = N, ErrMsg = " + errMsg;
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
 
@@ -308,7 +318,9 @@ public class ReporterRestController extends AbstractCommonController {
                 .equals(hasedKey1) && !reporterJamUpdateDTO
                 .getHash()
                 .equals(hasedKey2)) {
-            message = "State = \"N\", ErrMsg = \"올바른 접근이 아닙니다.\"";
+
+            String errMsg = msg("tps.reporter.error.notConnect");
+            message = "State = N, ErrMsg = " + errMsg;
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
 
@@ -327,12 +339,12 @@ public class ReporterRestController extends AbstractCommonController {
                     tpsLogger.success(ActionType.UPDATE);
                 } else {
                     State = "N";
-                    String errMsg = "수정된 항목이 없습니다.";
+                    String errMsg = msg("tps.reporter.error.update.repSeq");
                     result = "State = " + State + ", ErrMsg =" + errMsg;
                 }
             }
         } catch (Exception e) {
-            String errMsg = "작업이 실패하였습니다.";
+            String errMsg = msg("tps.reporter.error.job");
             result = "State = " + State + ", ErrMsg =" + errMsg;
         }
 

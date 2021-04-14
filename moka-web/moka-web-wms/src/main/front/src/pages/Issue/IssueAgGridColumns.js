@@ -56,19 +56,19 @@ export default [
     },
     {
         headerName: '종료',
-        field: 'usedYn',
+        field: 'endYn',
         width: 40,
         cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '구독',
-        field: 'subsYn',
+        field: 'scbYn',
         width: 40,
         cellRenderer: 'usedYnSecondRenderer',
     },
     {
         headerName: '노출',
-        field: 'expoYn',
+        field: 'expYn',
         width: 40,
         cellRenderer: 'usedYnThirdRenderer',
     },

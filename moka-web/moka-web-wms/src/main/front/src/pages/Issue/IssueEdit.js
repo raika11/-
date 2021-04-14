@@ -220,7 +220,13 @@ const IssueEdit = ({ reporters }) => {
                     </Col>
                 </Form.Row>
                 {edit.packageKeywords.section.isUsed && (
-                    <SectionPackageKeywordComponent />
+                    <SectionPackageKeywordComponent
+                        keyword={{ ...edit.packageKeywords.section.keyword, catDiv: CAT_DIV.SECTION }}
+                        target="section"
+                        onChange={(value) => {
+                            handleChangeArrayObjectDebounceValue({ target: 'packageKeywords', subTarget: 'section', name: 'keyword', value });
+                        }}
+                    />
                     /*<Form.Row className="mb-3">
                         <Col xs={3} className="p-0">
                             <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">

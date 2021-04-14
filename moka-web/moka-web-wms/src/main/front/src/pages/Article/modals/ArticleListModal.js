@@ -331,7 +331,6 @@ const ArticleListModal = (props) => {
                 className="article-list overflow-hidden flex-fill"
                 setGridInstance={setGridInstance}
                 rowHeight={GRID_ROW_HEIGHT.C[1]}
-                headerHeight={GRID_ROW_HEIGHT.C[0]}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(article) => article.totalId}

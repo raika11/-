@@ -1,63 +1,65 @@
-import React from 'react';
-import ShowButtonRenderer from '../components/ShowButtonRenderer';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+};
 
 export default [
     {
         headerName: '번호',
         field: 'seq',
         width: 40,
-        cellStyle: {},
+        cellStyle,
     },
     {
         headerName: '조판날짜',
         field: 'pressDate',
         width: 85,
-        cellStyle: {},
+        cellStyle,
     },
     {
         headerName: '호',
         field: 'id.ho',
         width: 50,
-        cellStyle: {},
         tooltipField: 'ho',
+        cellStyle,
     },
     {
         headerName: '섹션',
         field: 'sectionName',
-        cellStyle: {},
         flex: 1,
         tooltipField: 'sectionName',
+        cellStyle,
     },
     {
         headerName: '면',
         field: 'id.myun',
         width: 35,
-        cellStyle: {},
+        cellStyle,
     },
     {
         headerName: '판',
         field: 'id.pan',
         width: 35,
-        cellStyle: {},
+        cellStyle,
     },
     {
         headerName: '버전',
         field: 'id.revision',
         width: 40,
-        cellStyle: {},
+        cellStyle,
     },
     {
         headerName: '생성일',
         field: 'regDt',
         width: 135,
-        cellStyle: {},
+        cellStyle,
     },
     {
         headerName: '보기',
         field: 'show',
         width: 55,
-        cellRendererFramework: (params) => {
-            return <ShowButtonRenderer {...params} onClick={() => params.data.onClick(params.data)} />;
-        },
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: { text: '보기' },
     },
 ];

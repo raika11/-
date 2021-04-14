@@ -59,6 +59,7 @@ const ChannelListAgGrid = ({ match }) => {
             className="flex-fill overflow-hidden"
             columnDefs={columnDefs}
             rowData={rowData}
+            headerHeight={GRID_ROW_HEIGHT.T[0]}
             rowHeight={GRID_ROW_HEIGHT.C[1]}
             onRowNodeId={(data) => data.chnlSeq}
             onRowClicked={handleRowClicked}

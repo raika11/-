@@ -81,7 +81,6 @@ const BoardsContentsListAgGrid = ({ match }) => {
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
-            headerHeight={50}
             rowHeight={50}
             columnDefs={boardColumnDefs(selectBoard)}
             rowData={rowData}

@@ -311,7 +311,7 @@ const MokaTable = forwardRef((props, ref) => {
                     immutableData
                     columnDefs={columnDefs}
                     rowData={rowData}
-                    headerHeight={headerHeight || rowHeight}
+                    headerHeight={headerHeight}
                     rowHeight={rowHeight}
                     getRowNodeId={onRowNodeId}
                     rowClassRules={rowClassRules}

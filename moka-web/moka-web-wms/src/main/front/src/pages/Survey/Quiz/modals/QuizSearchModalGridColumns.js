@@ -1,43 +1,45 @@
 import React from 'react';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import { QuizSearchAddButtonRenderer } from './ModalGridRenderer';
 
-export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+};
+
 export const columnDefs = [
     {
         headerName: '',
         colId: 'button',
-        width: 100,
+        width: 60,
         field: 'quizInfo',
         cellRendererFramework: ({ value }) => <QuizSearchAddButtonRenderer quizInfo={value} />,
-        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: 'ID',
         field: 'quizSeq',
-        width: 10,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        width: 50,
+        cellStyle,
     },
     {
         headerName: '퀴즈제목',
         field: 'title',
-        width: 250,
         flex: 1,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         tooltipField: 'title',
+        cellStyle,
     },
     {
         headerName: '작업자',
         field: 'regMemberInfo',
-        width: 100,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        width: 130,
         tooltipField: 'regMemberInfo',
+        cellStyle,
     },
     {
         headerName: '상태',
         field: 'quzStsText',
-        width: 100,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        width: 80,
         tooltipField: 'quzStsText',
+        cellStyle,
     },
 ];
 

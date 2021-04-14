@@ -21,7 +21,7 @@ import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 import ArticleEtc from './ArticleEtc';
 
 /**
- * 등록기사 수정폼
+ * 등록기사 > 수정
  */
 const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl = '/article' }) => {
     const dispatch = useDispatch();
@@ -146,41 +146,41 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
      * Cdn 등록
      */
     const handleClickCdn = () => {
-        if (temp.totalId) {
-            // 1. 중복 체크
-            dispatch(
-                checkExists({
-                    totalId: temp.totalId,
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            if (!body) {
-                                // 2. cdn 등록
-                                dispatch(
-                                    saveCdnArticle({
-                                        cdnArticle: {
-                                            usedYn: 'Y',
-                                            totalId: temp.totalId,
-                                            title: temp.artTitle,
-                                        },
-                                        callback: ({ header }) => {
-                                            if (header.success) {
-                                                toast.success(header.message);
-                                            } else {
-                                                toast.fail(header.message);
-                                            }
-                                        },
-                                    }),
-                                );
-                            } else {
-                                messageBox.alert('이미 등록된 기사입니다');
-                            }
+        if (!temp.totalId) return;
+
+        // 1. 중복 체크
+        dispatch(
+            checkExists({
+                totalId: temp.totalId,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        if (!body) {
+                            // 2. cdn 등록
+                            dispatch(
+                                saveCdnArticle({
+                                    cdnArticle: {
+                                        usedYn: 'Y',
+                                        totalId: temp.totalId,
+                                        title: temp.artTitle,
+                                    },
+                                    callback: ({ header }) => {
+                                        if (header.success) {
+                                            toast.success(header.message);
+                                        } else {
+                                            toast.fail(header.message);
+                                        }
+                                    },
+                                }),
+                            );
                         } else {
-                            toast.fail(header.message);
+                            messageBox.alert('이미 등록된 기사입니다');
                         }
-                    },
-                }),
-            );
-        }
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
     };
 
     /**

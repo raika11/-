@@ -35,7 +35,6 @@ export const columnDefs = [
     {
         headerName: '에피소드명',
         field: 'epsdNm',
-        width: 120,
         flex: 1,
         cellRenderer: 'longTextRenderer',
         tooltipField: 'epsdNm',

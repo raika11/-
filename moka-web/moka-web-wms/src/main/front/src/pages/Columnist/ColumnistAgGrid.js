@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaTable } from '@components';
 import columnDefs from './ColumnistAgGridColumns';
 import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption } from '@store/columnist';
@@ -71,7 +72,7 @@ const ColumnistAgGrid = ({ match }) => {
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
-                rowHeight={45}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(data) => data.seqNo}
                 onRowClicked={handleRowClicked}
                 loading={loading}

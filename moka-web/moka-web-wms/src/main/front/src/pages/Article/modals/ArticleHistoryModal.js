@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaModal, MokaTable } from '@components';
 import { getArticleHistoryList, clearHistory, GET_ARTICLE_HISTORY_LIST } from '@store/article';
 import { getMasterCodeList } from '@store/code';
@@ -7,7 +8,7 @@ import columnDefs from './ArticleHistoryModalColumns';
 import HistoryTitleRenderer from '@pages/Article/components/HistoryTitleRenderer';
 
 /**
- * 기사 작업정보 모달
+ * 등록기사 > 기사 작업정보 모달
  */
 const ArticleHistoryModal = (props) => {
     const { show, onHide, totalId } = props;
@@ -69,8 +70,8 @@ const ArticleHistoryModal = (props) => {
     return (
         <MokaModal size="xl" width={1200} height={650} show={show} onHide={handleHide} title="작업정보" bodyClassName="overflow-y-hidden h-100" centered>
             <MokaTable
-                headerHeight={50}
-                rowHeight={127}
+                headerHeight={GRID_ROW_HEIGHT.T[1]}
+                rowHeight={120}
                 loading={loading}
                 rowData={rowData}
                 columnDefs={columnDefs}

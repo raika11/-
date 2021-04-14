@@ -34,7 +34,7 @@ const TitleRenderer = forwardRef((originParam, ref) => {
 
     return (
         <div className="h-100 w-100 ag-preline-cell">
-            <span style={WEBKIT_BOX(2)}>
+            <span style={!params.inRcv ? WEBKIT_BOX(2) : undefined}>
                 {titleArr && titleArr[0] && (
                     <Badge variant={titleArr[0] !== '수정' ? 'success' : 'searching'} className="mr-1">
                         {titleArr[0]}

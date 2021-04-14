@@ -1,4 +1,5 @@
 import React from 'react';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import RcvArticleRegisterBtn from './components/RcvArticleRegisterBtn';
 import RcvArticlePreviewBtn from './components/RcvArticlePreviewBtn';
 import TitleRenderer from '@pages/Article/components/TitleRenderer';
@@ -51,6 +52,10 @@ export default [
         flex: 1,
         tooltipField: 'title',
         cellRendererFramework: TitleRenderer,
+        cellRendererParams: { inRcv: true },
+        cellStyle: {
+            lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+        },
     },
     {
         headerName: '입력',

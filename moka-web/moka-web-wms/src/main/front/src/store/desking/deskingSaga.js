@@ -8,7 +8,6 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import * as api from './deskingApi';
 import * as act from './deskingAction';
-import * as mergeApi from '@store/merge/mergeApi';
 import { DEFAULT_LANG, CHANNEL_TYPE } from '@/constants';
 
 moment.locale('ko');
@@ -633,27 +632,28 @@ const postDeskingWork = createDeskingRequestSaga(act.POST_DESKING_WORK, api.post
 /**
  * 컴포넌트 워크 HTML 수동편집의 미리보기
  * 1) { snapshotYn = Y, snapshot = 본문 }을 워크 저장 (다른 컨텐츠 영향 안주게끔 => COMPONENT_WORK_SUCCESS 실행X)
- * 2) mergeAction.PREVIEW_COMPONENT 실행
+ * 2) mergeAction.PREVIEW_COMPONENT 실행 =====> window.open으로 변경
  */
 function* previewSnapshotModal({ payload }) {
     const ACTION = act.PREVIEW_SNAPSHOT_MODAL;
-    const { snapshotYn, snapshotBody, areaSeq, componentWorkSeq, resourceYn, callback } = payload;
+    const { snapshotYn, snapshotBody, componentWorkSeq, callback } = payload;
 
     yield put(startLoading(ACTION));
 
     const first = yield call(api.putSnapshotComponentWork, { snapshotYn, snapshotBody, componentWorkSeq });
-    if (first.data.header.success) {
-        const second = yield call(mergeApi.getPreviewCP, { componentWorkSeq, areaSeq, resourceYn });
-        if (second.data.header.success) {
-            yield call(callback, { ...second.data });
-        } else {
-            // 미리보기 실패
-            yield call(callback, { ...second.data });
-        }
-    } else {
-        // 워크 저장 실패 => 미리보기 실패로 통일
-        yield call(callback, { ...first.data });
-    }
+    // if (first.data.header.success) {
+    //     const second = yield call(mergeApi.getPreviewCP, { componentWorkSeq, areaSeq, resourceYn });
+    //     if (second.data.header.success) {
+    //         yield call(callback, { ...second.data });
+    //     } else {
+    //         // 미리보기 실패
+    //         yield call(callback, { ...second.data });
+    //     }
+    // } else {
+    //     // 워크 저장 실패 => 미리보기 실패로 통일
+    //     yield call(callback, { ...first.data });
+    // }
+    yield call(callback, { ...first.data });
 
     yield put(finishLoading(ACTION));
 }

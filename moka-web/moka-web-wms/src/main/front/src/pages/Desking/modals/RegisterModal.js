@@ -7,7 +7,7 @@ import { getAllRowData } from '@utils/agGridUtil';
 import { messageBox } from '@utils/toastUtil';
 
 /**
- * 기사 이동 모달 컴포넌트
+ * 홈 섹션편집 > 기사 이동 모달
  */
 const RegisterModal = (props) => {
     const { show, onHide, component, agGridIndex, componentAgGridInstances } = props;
@@ -99,7 +99,7 @@ const RegisterModal = (props) => {
             <ListGroup variant="flush" className="border custom-scroll" style={{ maxHeight: '100%' }}>
                 {filterList.length < 1 && (
                     <div className="d-flex align-items-center justify-content-center h-100 v-100 p-2">
-                        <p className="h5">이동할 컴포넌트가 존재하지 않습니다.</p>
+                        <p className="h5 mb-0">이동할 컴포넌트가 존재하지 않습니다.</p>
                     </div>
                 )}
                 {filterList.length > 0 &&

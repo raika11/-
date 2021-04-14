@@ -517,7 +517,7 @@ const DeskingWorkAgGrid = (props) => {
                 rowData={rowData}
                 getRowNodeId={(params) => params.contentId}
                 columnDefs={isNaverChannel ? naverChannelColumnDefs : columnDefs}
-                localeText={{ noRowsToShow: '편집기사가 없습니다.', loadingOoo: '조회 중입니다.' }}
+                localeText={{ noRowsToShow: '편집기사가 없습니다', loadingOoo: '조회 중입니다' }}
                 onRowDragEnter={handleRowDragEnter}
                 onRowDragEnd={handleRowDragEnd}
                 onRowDragMove={handleDragMove}

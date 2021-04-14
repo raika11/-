@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MokaInputLabel, MokaModal } from '@components';
-import { MokaLoader } from '@components';
-import MokaEditor from '@/components/MokaEditor/MokaEditorCore';
+import { API_BASE_URL } from '@/constants';
+import { MokaInputLabel, MokaModal, MokaLoader } from '@components';
+import MokaEditor from '@components/MokaEditor/MokaEditorCore';
 import {
     putSnapshotComponentWork,
     postSaveComponentWork,
@@ -83,10 +83,11 @@ const EditSnapshotModal = (props) => {
                 componentWorkSeq: component.seq,
                 snapshotYn: 'Y',
                 snapshotBody: body,
-                callback: ({ header, body }) => {
-                    if (header.success) {
-                        let win = window.open('', '스냅샷 미리보기');
-                        win.document.body.innerHTML = body;
+                callback: ({ header }) => {
+                    if (header.success && area.areaSeq) {
+                        // let win = window.open('', '스냅샷 미리보기');
+                        // win.document.body.innerHTML = body;
+                        window.open(`${API_BASE_URL}/preview/desking/area?areaSeq=${area.areaSeq}`, '미리보기');
                     } else {
                         toast.fail(header.message);
                     }

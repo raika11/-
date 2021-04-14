@@ -1,4 +1,9 @@
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import { EtcButtonRenderer } from './GridRenderer';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+};
 
 export default [
     {
@@ -6,11 +11,13 @@ export default [
         field: 'id',
         width: 80,
         tooltipField: 'id',
+        cellStyle,
     },
     {
         headerName: '전송일시',
         field: 'sendDt',
         width: 90,
+        cellStyle,
     },
     {
         headerName: '이미지',
@@ -23,6 +30,7 @@ export default [
         field: 'title',
         flex: 1,
         tooltipField: 'title',
+        cellStyle,
     },
     {
         headerName: '사용',

@@ -13,7 +13,7 @@ import ReserveComponentWork from './ReserveComponentWork';
 import StatusBadge from './StatusBadge';
 // import TemplateListModal from '@pages/Template/modals/TemplateListModal';
 // import TemplateHtmlModal from '@pages/Template/modals/TemplateHtmlModal';
-import { EditDeskingWorkModal, RegisterModal, EditListNumberModal, EditSnapshotModal } from '@pages/Desking/modals';
+import { EditDeskingWorkModal, RegisterModal, EditListNumberModal } from '@pages/Desking/modals';
 
 /**
  * 컴포넌트 워크의 버튼 그룹 컴포넌트
@@ -24,7 +24,6 @@ const ButtonGroup = (props) => {
     // const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [viewN, setViewN] = useState(false);
     const [iconButton, setIconButton] = useState([]);
-    // modal state
     const [modalShow, setModalShow] = useState({
         html: false,
         template: false,
@@ -119,7 +118,9 @@ const ButtonGroup = (props) => {
      * 기사이동
      */
     const handleOpenRegister = useCallback(() => {
-        if (componentAgGridInstances[agGridIndex]) {
+        if (componentAgGridInstances.length < 2) {
+            messageBox.alert('이동할 컴포넌트가 없습니다.');
+        } else if (componentAgGridInstances[agGridIndex]) {
             const api = componentAgGridInstances[agGridIndex].api;
             api.getSelectedRows().length < 1 ? messageBox.alert('기사를 선택해주세요') : handleModalShow('register', true);
         } else {
@@ -207,7 +208,7 @@ const ButtonGroup = (props) => {
      */
     const createDropdownItem = useCallback(() => {
         const items = [
-            { text: 'HTML 수동편집', viewN: false, onClick: () => handleModalShow('html', true) },
+            // { text: 'HTML 수동편집', viewN: false, onClick: () => handleModalShow('html', true) },
             { text: '공백 기사 추가', viewN: false, onClick: handleOpenAddSpace },
             { text: '전체 삭제', viewN: false, onClick: handleClickDelete },
             { text: '기사 이동', viewN: false, onClick: handleOpenRegister },
@@ -227,7 +228,7 @@ const ButtonGroup = (props) => {
                     ))}
             </React.Fragment>
         );
-    }, [handleClickDelete, handleClickViewYn, handleModalShow, handleOpenAddSpace, handleOpenListNumber, handleOpenRegister, viewN]);
+    }, [handleClickDelete, handleClickViewYn, handleOpenAddSpace, handleOpenListNumber, handleOpenRegister, viewN]);
 
     useEffect(() => {
         setViewN(component.viewYn === 'N');
@@ -282,10 +283,10 @@ const ButtonGroup = (props) => {
                 </Col>
             </Row>
 
-            {/* HTML 수동 편집 */}
-            <EditSnapshotModal show={modalShow.html} onHide={() => handleModalShow('html', false)} component={component} />
+            {/* HTML 수동 편집 (기능 제거) */}
+            {/* <EditSnapshotModal show={modalShow.html} onHide={() => handleModalShow('html', false)} component={component} /> */}
 
-            {/* 템플릿(보여주지 않음) */}
+            {/* 템플릿(기능 제거) */}
             {/* <TemplateListModal
                 show={modalShow.template}
                 onHide={() => handleModalShow('template', false)}
@@ -316,7 +317,7 @@ const ButtonGroup = (props) => {
                 }
             /> */}
 
-            {/* 템플릿 소스보기 (보여주지 않음) */}
+            {/* 템플릿 소스보기 (기능 제거) */}
             {/* <TemplateHtmlModal show={modalShow.tems} onHide={() => handleModalShow('tems', false)} templateSeq={selectedTemplate} editable={false} /> */}
 
             {/* 공백기사 추가 */}

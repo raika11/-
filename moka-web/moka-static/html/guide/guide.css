@@ -104,4 +104,4 @@ code{unicode-bidi: bidi-override;color:#ff3c14;font-size:inherit}
 
 /* icon */
 .guide .icon_wrap p{margin-bottom:15px;padding-bottom:5px;border-bottom:1px dashed #efefef;}
-.guide .icon_wrap .fa {margin-right:16px;border:1px solid #ccc;}
+.guide .icon_wrap [class*="ico"] {margin-right:16px;border:1px solid #ccc;}

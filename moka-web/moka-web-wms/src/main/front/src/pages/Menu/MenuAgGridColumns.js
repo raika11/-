@@ -1,7 +1,3 @@
-import MokaTableUsedYnRenderer from '@components/MokaTable/MokaTableUsedYnRenderer';
-
-export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
-
 export const columnDefs = [
     {
         rowDrag: true,
@@ -28,6 +24,6 @@ export const columnDefs = [
         headerName: '',
         field: 'usedYn',
         width: 38,
-        cellRendererFramework: MokaTableUsedYnRenderer,
+        cellRenderer: 'usedYnRenderer',
     },
 ];

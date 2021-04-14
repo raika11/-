@@ -3,12 +3,12 @@ import { AgGridReact } from 'ag-grid-react';
 import { columnDefs } from '@pages/Menu/MenuAgGridColumns';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { changeSearchOption, getMenuList } from '@store/menu';
-import { MokaLoader } from '@components';
+import { MokaLoader, MokaTableDefaultProps } from '@components';
 import { getDisplayedRows } from '@utils/agGridUtil';
 import commonUtil from '@utils/commonUtil';
 
 const MenuDraggableAgGrid = ({ onRowClicked, depth, menuId, parentMenuId, onChange, list }) => {
-    const [instance, setInstance] = useState(null);
+    const [, setInstance] = useState(null);
     const dispatch = useDispatch();
     const { loading } = useSelector(
         (store) => ({
@@ -66,7 +66,7 @@ const MenuDraggableAgGrid = ({ onRowClicked, depth, menuId, parentMenuId, onChan
                 rowData={list}
                 getRowNodeId={(params) => params.menuId}
                 columnDefs={columnDefs}
-                localeText={{ noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' }}
+                localeText={MokaTableDefaultProps.localeText}
                 animateRows
                 rowDragManaged
                 onRowClicked={(data) => {

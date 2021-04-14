@@ -6,8 +6,6 @@ import EditRecoveryButton from './EditRecoveryButton';
 import EditExportButton from './EditExportButton';
 import toast from '@utils/toastUtil';
 
-export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
-
 /**
  * 편집폼 Part 이력 조회 AgGrid 목록
  */

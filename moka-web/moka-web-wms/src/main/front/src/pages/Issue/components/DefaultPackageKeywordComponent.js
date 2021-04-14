@@ -9,7 +9,6 @@ import produce from 'immer';
 const defaultProps = { keyword: initialState.initialPkgKeyword };
 const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
     const [editKeyword, setEditKeyword] = useState(initialState.initialPkgKeyword);
-    const [useSearchKeyword, setUseSearchKeyword] = useState(false);
     const [useEndDate, setUseEndDate] = useState(false);
 
     const handleChangeValue = ({ name, value }) => {
@@ -38,12 +37,6 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
         } else {
             setUseEndDate(false);
         }
-
-        if (!commonUtil.isEmpty(keyword.keyword) && keyword.keyword !== '') {
-            setUseSearchKeyword(true);
-        } else {
-            setUseSearchKeyword(false);
-        }
     }, [keyword]);
 
     return (
@@ -59,13 +52,16 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
                     as="switch"
                     id={`package-useSearchKeyword-switch-${target}`}
                     label="검색어(N개)"
-                    name="kwSearch"
-                    inputProps={{ custom: true, checked: useSearchKeyword }}
-                    onChange={() => {
-                        setUseSearchKeyword(!useSearchKeyword);
-                        if (useSearchKeyword) {
-                            handleChangeValue({ name: 'keyword', value: '' });
+                    name="andOr"
+                    inputProps={{ custom: true, checked: editKeyword.andOr === 'A' }}
+                    onChange={(e) => {
+                        const { name, checked } = e.target;
+                        let value = 'A';
+                        if (editKeyword.andOr === 'A') {
+                            value = 'O';
                         }
+
+                        handleChangeValue({ name, value });
                     }}
                 />
             </Col>
@@ -142,7 +138,6 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
                     onChange={(e) => {
                         handleChangeValue(e.target);
                     }}
-                    disabled={!useSearchKeyword}
                 />
             </Col>
         </Form.Row>

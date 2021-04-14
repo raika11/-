@@ -16,7 +16,7 @@ export default [
         headerName: '이미지',
         field: 'imgUrl',
         cellRenderer: 'imageRenderer',
-        width: 78,
+        width: 60,
     },
     {
         headerName: 'SNS제목',

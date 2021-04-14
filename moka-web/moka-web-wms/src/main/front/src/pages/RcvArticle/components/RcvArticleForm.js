@@ -172,15 +172,15 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                 <div className="mb-2 d-flex">
                     <Col className="p-0 d-flex align-items-center" xs={4}>
                         <MokaInputLabel label="매체" as="none" />
-                        <span className="ft-14 user-select-text">{article.articleSource?.sourceName}</span>
+                        <span className="user-select-text">{article.articleSource?.sourceName}</span>
                     </Col>
                     <Col className="p-0 d-flex align-items-center" xs={4}>
                         <MokaInputLabel label="발행일" as="none" />
-                        <span className="ft-14 user-select-text">{pressDt}</span>
+                        <span className="user-select-text">{pressDt}</span>
                     </Col>
                     <Col className="p-0 d-flex align-items-center" xs={4}>
                         <MokaInputLabel label="수신ID" as="none" />
-                        <span className="ft-14 user-select-text">{article.rid}</span>
+                        <span className="user-select-text">{article.rid}</span>
                     </Col>
                 </div>
 

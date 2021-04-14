@@ -183,7 +183,7 @@ const NewsLetterSendArticleAgGrid = () => {
                 rowData={rowData}
                 getRowNodeId={(params) => params.dataIndex}
                 columnDefs={columnDefs}
-                localeText={{ noRowsToShow: '편집기사가 없습니다.', loadingOoo: '조회 중입니다..' }}
+                localeText={{ noRowsToShow: '편집기사가 없습니다.', loadingOoo: '조회 중입니다.' }}
                 onRowDragEnter={onRowDragEnter}
                 onRowDragEnd={onRowDragEnd}
                 onRowDragMove={onRowDragMove}

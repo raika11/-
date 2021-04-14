@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import moment from 'moment';
 import { DATE_FORMAT, DB_DATEFORMAT } from '@/constants';
 import { errorResponse, createRequestSaga } from '@store/commons/saga';
@@ -10,17 +10,7 @@ import { initialState as codeInitialState } from '@store/code';
 import { finishLoading, startLoading } from '@store/loading';
 import commonUtil from '@utils/commonUtil';
 import produce from 'immer';
-import { initialState } from '@store/issue/issueReducer';
-
-export const CAT_DIV = {
-    SEARCH_KEYWORD: 'K',
-    REPORTER: 'R',
-    SECTION: 'S',
-    DIGITAL_SPECIAL: 'D',
-    OVP: 'O',
-    CATEGORY: 'C',
-    PACKAGE: 'P',
-};
+import { CAT_DIV, initialState } from '@store/issue/issueReducer';
 
 /**
  * 이슈 목록 조회
@@ -99,6 +89,7 @@ const getKeyword = (keywords, type) => {
     if (type === CAT_DIV.REPORTER) {
         //defaultKeyword = { ...defaultKeyword, reporter: { ordNo: 1, reporterId: null } };
         const reporter = selectKeywords.map((selectKeyword) => ({
+            andOr: selectKeyword.andOr,
             ordNo: selectKeyword.ordno,
             reporterId: selectKeyword.repMaster,
             keyword: selectKeyword.keyword,
@@ -155,8 +146,6 @@ export const toIssueData = (response) => {
         });
     }
 
-    console.log(seasons);
-
     /*console.log('searchKeywords', searchKeywords);
     console.log('reporterKeywords', reporterKeywords);
     console.log('sectionKeywords', sectionKeywords);
@@ -212,28 +201,35 @@ const toSavePackageKeywords = (viewKeywords) => {
     const usedKeywords = Object.keys(viewKeywords).filter((key) => viewKeywords[key].isUsed);
     const packageKeywords = [];
     usedKeywords.forEach((key, index) => {
+        let ordno = index + 1;
         const keyword = viewKeywords[key].keyword;
         const { schCondi: pkgSchCondi } = keyword;
         const schCondi = toSaveSchCondi(pkgSchCondi);
-        const sdate = commonUtil.isEmpty(keyword.sdate) ? null : moment(keyword.sdate).format(DATE_FORMAT);
-        const edate = commonUtil.isEmpty(keyword.edate) ? null : moment(keyword.edate).format(DATE_FORMAT);
 
         if (key === 'reporter') {
             keyword.reporter.map((data) => {
                 const copyKeyword = { ...keyword };
+                const sdate = commonUtil.isEmpty(data.sdate) ? null : moment(data.sdate).format(DATE_FORMAT);
+                const edate = commonUtil.isEmpty(data.edate) ? null : moment(data.edate).format(DATE_FORMAT);
+                const andOr = data.andOr;
                 delete copyKeyword.reporter;
+
                 packageKeywords.push({
                     ...copyKeyword,
                     keyword: data.keyword,
-                    ordno: data.ordNo,
                     repMaster: data.reporterId,
                     schCondi: schCondi,
                     sdate,
                     edate,
+                    ordno,
+                    andOr,
                 });
+                ordno++;
             });
         } else {
-            packageKeywords.push({ ...keyword, schCondi, sdate, edate, ordno: index });
+            const sdate = commonUtil.isEmpty(keyword.sdate) ? null : moment(keyword.sdate).format(DATE_FORMAT);
+            const edate = commonUtil.isEmpty(keyword.edate) ? null : moment(keyword.edate).format(DATE_FORMAT);
+            packageKeywords.push({ ...keyword, schCondi, sdate, edate, ordno });
         }
     });
 

@@ -1,17 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaCard } from '@components';
+import { MokaCard, MokaLoader } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
 import IssueList from './IssueList';
 import IssueEdit from './IssueEdit';
-import { getReporterAllList } from '@store/reporter';
-import { useDispatch } from 'react-redux';
+
+import { useDispatch, useSelector } from 'react-redux';
 import { clearStore } from '@store/issue';
+import { getReporterAllList } from '@store/reporter';
 
 /**
  * 패키지 관리
@@ -19,6 +20,7 @@ import { clearStore } from '@store/issue';
 const Issue = ({ match, displayName }) => {
     const matchPoints = useBreakpoint();
     const dispatch = useDispatch();
+    const allReporter = useSelector(({ reporter }) => reporter.allReporter);
 
     useEffect(() => {
         dispatch(getReporterAllList());
@@ -46,7 +48,7 @@ const Issue = ({ match, displayName }) => {
                 {/* 패키지 등록, 수정 */}
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
-                        <Route path={[`${match.path}/add`, `${match.path}/:pkgSeq`]} exact render={() => <IssueEdit match={match} />} />
+                        <Route path={[`${match.path}/add`, `${match.path}/:pkgSeq`]} exact render={() => <IssueEdit match={match} reporters={allReporter} />} />
                     </Col>
                 )}
 
@@ -56,7 +58,7 @@ const Issue = ({ match, displayName }) => {
                         exact
                         render={() => (
                             <div className="absolute-top-right h-100 overlay-shadow" style={{ width: 640, zIndex: 2 }}>
-                                <IssueEdit match={match} />
+                                <IssueEdit match={match} reporters={allReporter} />
                             </div>
                         )}
                     />

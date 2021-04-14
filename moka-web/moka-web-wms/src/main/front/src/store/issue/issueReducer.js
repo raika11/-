@@ -4,9 +4,19 @@ import * as act from '@store/issue/issueAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 import moment from 'moment';
 
+export const CAT_DIV = {
+    SEARCH_KEYWORD: 'K',
+    REPORTER: 'R',
+    SECTION: 'S',
+    DIGITAL_SPECIAL: 'D',
+    OVP: 'O',
+    CATEGORY: 'C',
+    PACKAGE: 'P',
+};
+
 // 패키지 키워드 기본값
 const initialPkgKeyword = {
-    andOr: '',
+    andOr: 'A',
     catDiv: '',
     sdate: null,
     edate: null,
@@ -56,42 +66,35 @@ export const initialState = {
         packageKeywords: {
             search: {
                 isUsed: false,
-                keyword: initialPkgKeyword,
+                keyword: { ...initialPkgKeyword, catDiv: CAT_DIV.SEARCH_KEYWORD },
             },
             reporter: {
                 isUsed: false,
                 keyword: {
                     ...initialPkgKeyword,
-                    reporter: [
-                        {
-                            ordNo: 1,
-                            reporterId: '',
-                            keyword: '',
-                            sdate: null,
-                            edate: null,
-                        },
-                    ],
+                    catDiv: CAT_DIV.REPORTER,
+                    reporter: [],
                 },
             },
             section: {
                 isUsed: false,
-                keyword: initialPkgKeyword,
+                keyword: { ...initialPkgKeyword, catDiv: CAT_DIV.SECTION },
             },
             digitalSpecial: {
                 isUsed: false,
-                keyword: initialPkgKeyword,
+                keyword: { ...initialPkgKeyword, catDiv: CAT_DIV.DIGITAL_SPECIAL },
             },
             ovp: {
                 isUsed: false,
-                keyword: initialPkgKeyword,
+                keyword: { ...initialPkgKeyword, catDiv: CAT_DIV.OVP },
             },
             category: {
                 isUsed: false,
-                keyword: initialPkgKeyword,
+                keyword: { ...initialPkgKeyword, catDiv: CAT_DIV.CATEGORY },
             },
             pkg: {
                 isUsed: false,
-                keyword: initialPkgKeyword,
+                keyword: { ...initialPkgKeyword, catDiv: CAT_DIV.PACKAGE },
             },
         },
         seasonOptions: {},

@@ -79,10 +79,10 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
 
     return (
         <div className="d-flex flex-column overflow-hidden h-100">
-            <div className="mb-2 d-flex">
+            <div className="mb-14 d-flex">
                 <MokaSearchInput
                     placeholder="검색어를 입력하세요"
-                    className="flex-fill mr-2"
+                    className="flex-fill mr-1"
                     name="keyword"
                     value={search.keyword}
                     onChange={handleChangeValue}

@@ -1,7 +1,3 @@
-const cellClassRules = {
-    // 'user-select-text': () => true,
-};
-
 export default [
     {
         headerName: '순위',
@@ -19,7 +15,6 @@ export default [
         headerName: '전체',
         field: 'totalCnt',
         width: 130,
-        cellClassRules,
         sortable: true,
         comparator: () => 0,
     },
@@ -27,7 +22,6 @@ export default [
         headerName: 'PC',
         field: 'pcCnt',
         width: 130,
-        cellClassRules,
         sortable: true,
         comparator: () => 0,
     },
@@ -35,7 +29,6 @@ export default [
         headerName: 'Mobile',
         field: 'mobileCnt',
         width: 130,
-        cellClassRules,
         sortable: true,
         comparator: () => 0,
     },
@@ -43,7 +36,6 @@ export default [
         headerName: 'Tablet',
         field: 'tabletCnt',
         width: 130,
-        cellClassRules,
         sortable: true,
         comparator: () => 0,
     },

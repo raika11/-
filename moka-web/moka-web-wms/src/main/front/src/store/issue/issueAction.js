@@ -17,6 +17,9 @@ export const getIssueList = createAction(GET_ISSUE_LIST, ({ search, callback }) 
 export const [GET_ISSUE_LIST_GROUP_BY_ORDNO] = createRequestActionTypes('issue/GET_ISSUE_LIST_GROUP_BY_ORDNO');
 export const getIssueListGroupByOrdno = createAction(GET_ISSUE_LIST_GROUP_BY_ORDNO, ({ search, callback }) => ({ search, callback }));
 
+export const CHANGE_ISSUE_SEARCH_OPTIONS = 'issue/CHANGE_SEARCH_OPTIONS';
+export const changeIssueSearchOptions = createAction(CHANGE_ISSUE_SEARCH_OPTIONS);
+
 /**
  * 이슈 목록 조회 (Modal)
  * @desc getServiceCodeList === true이면 서비스코드 목록 조회 => 서비스 코드 검색조건 (모든 코드)에 포함
@@ -50,3 +53,9 @@ export const saveIssue = createAction(SAVE_ISSUE, ({ pkg, callback }) => ({ pkg,
  */
 export const FINISH_ISSUE = 'issue/FINISH_ISSUE';
 export const finishIssue = createAction(FINISH_ISSUE, ({ pkgSeq, callback }) => ({ pkgSeq, callback }));
+
+/**
+ * 이슈 타이틀 중복검사
+ */
+export const EXISTS_ISSUE_TITLE = 'issue/EXISTS_ISSUE_TITLE';
+export const existsIssueTitle = createAction(EXISTS_ISSUE_TITLE);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { MokaIconTabs } from '@components';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import { CARD_DEFAULT_HEIGHT } from '@/style_constants';
 import MenuEditContainerEdit from './MenuEditContainerEdit';
 
 const MenuEditContainer = (props) => {

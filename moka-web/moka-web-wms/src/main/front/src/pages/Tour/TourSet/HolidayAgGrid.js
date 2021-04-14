@@ -1,21 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import Button from 'react-bootstrap/Button';
-import { MokaTable } from '@/components';
-import columnDefs from './HolidayAgGridColumns';
-import { deleteTourDeny, getTourDenyList, GET_TOUR_DENY_LIST } from '@/store/tour';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
+import { deleteTourDeny, getTourDenyList, GET_TOUR_DENY_LIST } from '@store/tour';
+import toast, { messageBox } from '@utils/toastUtil';
+import { MokaTable, MokaCard } from '@components';
 import HolidayRegistrationModal from './modals/HolidayRegistrationModal';
-import toast, { messageBox } from '@/utils/toastUtil';
+import columnDefs from './HolidayAgGridColumns';
 
 /**
- * 견학 기본 설정 휴일 AgGrid
+ * 견학 > 기본 설정 > 휴일 목록 > AgGrid
  */
 const HolidayAgGrid = () => {
     const dispatch = useDispatch();
     const holidayList = useSelector((store) => store.tour.holidayList);
     const loading = useSelector((store) => store.loading[GET_TOUR_DENY_LIST]);
-
     const [show, setShow] = useState(false);
     const [rowData, setRowData] = useState([]);
     const [modalData, setModalData] = useState(null);
@@ -86,16 +85,24 @@ const HolidayAgGrid = () => {
     }, [holidayList, handleClickModify, handleClickDelete]);
 
     return (
-        <>
-            <div className="mb-14 d-flex justify-content-end">
-                <Button variant="positive" onClick={handleClickAdd}>
-                    휴일 등록
-                </Button>
-            </div>
+        <MokaCard
+            width={790}
+            className="mr-gutter"
+            bodyClassName="d-flex flex-column"
+            title="휴일 지정(매년 반복)"
+            titleButtons={[
+                {
+                    text: '휴일 등록',
+                    variant: 'positive',
+                    onClick: handleClickAdd,
+                },
+            ]}
+        >
             <MokaTable
                 className="flex-fill overflow-hidden"
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(data) => data.denySeq}
                 loading={loading}
                 paging={false}
@@ -107,7 +114,7 @@ const HolidayAgGrid = () => {
                 }}
             />
             <HolidayRegistrationModal show={show} onHide={() => setShow(false)} data={modalData} />
-        </>
+        </MokaCard>
     );
 };
 

@@ -7,11 +7,36 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dps.reporter">
 
-  <!--reporter-->
-  <select id="reporter" parameterType="hashmap" resultType="hashmap"
+  <resultMap id="reporterMap" type="hashmap"/>
+
+  <!--list-->
+  <select id="list" parameterType="hashmap" resultType="hashmap"
     statementType="CALLABLE">
     {call UPU_15RE_REPORTER_LIST_SEL(
-      #{name, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{order, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!--info-->
+  <select id="info" parameterType="hashmap"
+    resultMap="reporterMap,reporterMap,reporterMap,reporterMap"
+    statementType="CALLABLE">
+    {call UPU_15RE_REPORTER_SEL(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{_START_DAY, mode=OUT, jdbcType=VARCHAR, javaType=string}
+      ) }
+  </select>
+
+  <!--latest-->
+  <select id="latest" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_15RE_REPORTER_ARTICLE_LIST_SEL(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       'Y',

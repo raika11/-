@@ -4,6 +4,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { MokaTable } from '@components';
 import { columnDefs } from './ReporterAgGridColumns';
 import { BASIC_DATEFORMAT, JPLUS_REP_DIV_DEFAULT } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { changeSearchOption, GET_REPORTER_LIST, getReporterList } from '@store/reporter';
 import moment from 'moment';
 
@@ -65,7 +66,7 @@ const ReporterMgrAgGrid = ({ match }) => {
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={reporterRows}
-            rowHeight={45}
+            rowHeight={GRID_ROW_HEIGHT.C[0]}
             onRowNodeId={(reporter) => reporter.repSeq}
             onRowClicked={handleRowClicked}
             loading={loading}

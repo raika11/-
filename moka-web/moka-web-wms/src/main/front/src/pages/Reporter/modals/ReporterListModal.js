@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { MokaModal, MokaSearchInput, MokaTable } from '@components';
+import { MokaInput, MokaModal, MokaSearchInput, MokaTable } from '@components';
 import { messageBox } from '@utils/toastUtil';
 import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { initialState, getReporterListModal, GET_REPORTER_LIST_MODAL } from '@store/reporter';
 import columnDefs from './ReporterListModalColumns';
 
@@ -23,6 +24,7 @@ const defaultProps = {};
 const ReporterListModal = (props) => {
     const { show, onHide, onRowClicked } = props;
     const dispatch = useDispatch();
+    const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
     const loading = useSelector(({ loading }) => loading[GET_REPORTER_LIST_MODAL]);
     const [setGridInstance] = useState(null);
     const [search, setSearch] = useState(initialState.search);
@@ -138,26 +140,27 @@ const ReporterListModal = (props) => {
     }, [show, handleRowClicked]);
 
     return (
-        <MokaModal
-            show={show}
-            onHide={handleHide}
-            title="기자 검색"
-            size="xl"
-            bodyClassName="d-flex flex-column"
-            footerClassName="d-flex justify-content-center"
-            width={970}
-            height={800}
-            centered
-            draggable
-        >
-            <div className="mb-14">
-                <MokaSearchInput name="keyword" value={search.keyword} onChange={handleChange} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
+        <MokaModal show={show} onHide={handleHide} title="기자 검색" size="xl" bodyClassName="d-flex flex-column" width={970} height={800} centered draggable>
+            <div className="mb-14 d-flex">
+                <div style={{ width: 180 }} className="mr-2">
+                    <MokaInput as="select" name="jplusRepDiv" value={search.jplusRepDiv} onChange={handleChange}>
+                        <option value="">전체</option>
+                        {jplusRepRows &&
+                            jplusRepRows.map((rep) => (
+                                <option key={rep.cdOrd} value={rep.dtlCd}>
+                                    {rep.cdNm}
+                                </option>
+                            ))}
+                        <option value="NL">일보기자</option>
+                    </MokaInput>
+                </div>
+                <MokaSearchInput name="keyword" className="flex-fill" value={search.keyword} onChange={handleChange} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
             </div>
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
-                rowHeight={45}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(reporter) => reporter.repSeq}
                 onRowClicked={() => {}}
                 loading={loading}

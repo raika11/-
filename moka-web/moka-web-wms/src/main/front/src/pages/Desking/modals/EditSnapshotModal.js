@@ -1,24 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MokaInputLabel, MokaModal } from '@components';
-import { MokaLoader } from '@components';
-import MokaEditor from '@/components/MokaEditor/MokaEditorCore';
-import { putSnapshotComponentWork, postSaveComponentWork, PUT_SNAPSHOT_COMPONENT_WORK, POST_SAVE_COMPONENT_WORK } from '@store/desking';
+import { API_BASE_URL } from '@/constants';
+import { MokaInputLabel, MokaModal, MokaLoader } from '@components';
+import MokaEditor from '@components/MokaEditor/MokaEditorCore';
+import {
+    putSnapshotComponentWork,
+    postSaveComponentWork,
+    PUT_SNAPSHOT_COMPONENT_WORK,
+    POST_SAVE_COMPONENT_WORK,
+    PREVIEW_SNAPSHOT_MODAL,
+    previewSnapshotModal,
+    onHideSnapshotModal,
+} from '@store/desking';
 import { previewComponentModal, PREVIEW_COMPONENT_MODAL } from '@store/merge';
 import toast, { messageBox } from '@utils/toastUtil';
 
 /**
- * Html 수동 편집 모달
+ * Html 수동 편집(스냅샷) 모달
  */
-const EditHtmlModal = (props) => {
+const EditSnapshotModal = (props) => {
     const { show, onHide, component } = props;
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[PREVIEW_COMPONENT_MODAL] || store.loading[PUT_SNAPSHOT_COMPONENT_WORK] || store.loading[POST_SAVE_COMPONENT_WORK]);
-    const area = useSelector((store) => store.desking.area);
-
-    // state
-    const [defaultValue, setDefaultValue] = useState(null);
+    const loading = useSelector(
+        ({ loading }) => loading[PREVIEW_COMPONENT_MODAL] || loading[PUT_SNAPSHOT_COMPONENT_WORK] || loading[POST_SAVE_COMPONENT_WORK] || loading[PREVIEW_SNAPSHOT_MODAL],
+    );
+    const area = useSelector(({ desking }) => desking.area);
+    const [defaultValue, setDefaultValue] = useState('');
     const [body, setBody] = useState('');
+    const changeFlag = useRef(false); // snapshotYn이 변경되었는지 파악
 
     /**
      * 임시저장 콜백
@@ -69,17 +78,20 @@ const EditHtmlModal = (props) => {
      */
     const handleClickPreview = () => {
         dispatch(
-            previewComponentModal({
+            previewSnapshotModal({
                 areaSeq: area.areaSeq,
                 componentWorkSeq: component.seq,
-                resourceYn: 'Y',
-                callback: ({ header, body }) => {
-                    if (header.success) {
-                        let win = window.open('', '스냅샷 미리보기');
-                        win.document.body.innerHTML = body;
+                snapshotYn: 'Y',
+                snapshotBody: body,
+                callback: ({ header }) => {
+                    if (header.success && area.areaSeq) {
+                        // let win = window.open('', '스냅샷 미리보기');
+                        // win.document.body.innerHTML = body;
+                        window.open(`${API_BASE_URL}/preview/desking/area?areaSeq=${area.areaSeq}`, '미리보기');
                     } else {
                         toast.fail(header.message);
                     }
+                    changeFlag.current = true;
                 },
             }),
         );
@@ -87,11 +99,32 @@ const EditHtmlModal = (props) => {
 
     /**
      * 닫기 버튼
+     * @desc
+     * component.snapshotYn === 'N' && changeFlag.current 이면 워크의 snapshotYn = 'N'으로 변경한다
      */
     const handleClickClose = () => {
-        setBody('');
-        setDefaultValue(null);
-        onHide();
+        if (component.snapshotYn === 'N' && changeFlag.current) {
+            dispatch(
+                onHideSnapshotModal({
+                    componentWorkSeq: component.seq,
+                    snapshotYn: 'N',
+                    snapshotBody: null,
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            setBody('');
+                            setDefaultValue(null);
+                            onHide();
+                        } else {
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
+        } else {
+            setBody('');
+            setDefaultValue(null);
+            onHide();
+        }
     };
 
     useEffect(() => {
@@ -144,4 +177,4 @@ const EditHtmlModal = (props) => {
     );
 };
 
-export default EditHtmlModal;
+export default EditSnapshotModal;

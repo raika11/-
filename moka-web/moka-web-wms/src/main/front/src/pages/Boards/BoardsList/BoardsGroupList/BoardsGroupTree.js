@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import clsx from 'clsx';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import { GET_BOARD_GROUP_LIST, getBoardGroupList, getListMenuSelectBoard } from '@store/board';
 import { MokaLoader } from '@components';
 import TreeCategory from './BoardsGroupTreeCategory';
@@ -63,7 +65,7 @@ const BoardsGroupTree = (props) => {
     }, [dispatch, boardId]);
 
     return (
-        <div className="custom-scroll treeview h-100">
+        <PerfectScrollbar className="treeview h-100" options={{ handlers: ['drag-thumb', 'keyboard', 'wheel', 'touch'], wheelSpeed: 0.05 }}>
             <ul className="list-unstyled tree-list">
                 {loading && <MokaLoader />}
                 {treeData.map((e, index) => (
@@ -95,7 +97,7 @@ const BoardsGroupTree = (props) => {
                     </TreeCategory>
                 ))}
             </ul>
-        </div>
+        </PerfectScrollbar>
     );
 };
 

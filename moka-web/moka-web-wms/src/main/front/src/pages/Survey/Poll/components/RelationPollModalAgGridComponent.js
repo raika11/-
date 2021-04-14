@@ -1,4 +1,5 @@
 import React from 'react';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaTable } from '@components';
 import { columnDefs } from '@pages/Survey/Poll/components/RelationPollAgGridColumns';
 
@@ -11,7 +12,7 @@ const RelationPollModalAgGridComponent = ({ rowData, total, searchOptions, onRow
             total={total}
             onRowNodeId={(row) => row.id}
             rowData={rowData}
-            rowHeight={65}
+            rowHeight={GRID_ROW_HEIGHT.C[0]}
             agGridHeight={600}
             onRowClicked={onRowClicked}
             onChangeSearchOption={onChangeSearch}

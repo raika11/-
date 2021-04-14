@@ -1,7 +1,7 @@
 export default [
     {
         headerName: 'No',
-        field: 'seqNo',
+        field: 'pkgSeq',
         width: 45,
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
@@ -10,7 +10,7 @@ export default [
         field: 'category',
         width: 70,
         cellStyle: { display: 'flex', alignItems: 'center' },
-        tooltipField: 'category',
+        tooltipField: 'categoryNames',
     },
     {
         headerName: '유형',
@@ -20,7 +20,7 @@ export default [
     },
     {
         headerName: '패키지명',
-        field: 'title',
+        field: 'pkgTitle',
         wrapText: true,
         autoHeight: true,
         cellStyle: { display: 'flex', alignItems: 'center' },
@@ -34,7 +34,7 @@ export default [
         width: 80,
         cellStyle: { display: 'flex', alignItems: 'center' },
         // cellRendererFramework: (row) => < {...row} />,
-        tooltipField: 'reporter',
+        tooltipField: 'reporterNames',
     },
     {
         headerName: '기사 수',
@@ -44,7 +44,7 @@ export default [
     },
     {
         headerName: '생성일',
-        field: 'createDt',
+        field: 'regDt',
         width: 70,
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
@@ -56,7 +56,7 @@ export default [
     },
     {
         headerName: '종료',
-        field: 'endYn',
+        field: 'usedYn',
         width: 40,
         cellRenderer: 'usedYnRenderer',
     },

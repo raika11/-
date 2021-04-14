@@ -22,10 +22,10 @@ public interface ColumnistService {
     /**
      * 칼럼리스트목록 조회
      *
-     * @param search 검색조건
+     * @param searchDTO 검색조건
      * @return 칼럼리스트 목록조회
      */
-    Page<Columnist> findAllColumnist(ColumnistSearchDTO search);
+    Page<ColumnistVO> findAllColumnistStatList(ColumnistSearchDTO searchDTO);
 
     /**
      * 칼럼리스트 조회

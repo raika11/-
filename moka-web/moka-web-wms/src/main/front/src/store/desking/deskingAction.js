@@ -137,6 +137,30 @@ export const postSavePublishComponentWork = createAction(POST_SAVE_PUBLISH_COMPO
 }));
 
 /**
+ * 컴포넌트 워크 HTML 수동편집의 미리보기
+ */
+export const PREVIEW_SNAPSHOT_MODAL = 'desking/PREVIEW_SNAPSHOT_MODAL';
+export const previewSnapshotModal = createAction(PREVIEW_SNAPSHOT_MODAL, ({ snapshotYn, snapshotBody, areaSeq, componentWorkSeq, callback }) => ({
+    snapshotYn,
+    snapshotBody,
+    areaSeq,
+    componentWorkSeq,
+    resourceYn: 'Y',
+    callback,
+}));
+
+/**
+ * HTML 수동편집 모달 닫기
+ */
+export const ON_HIDE_SNAPSHOT_MODAL = 'desking/ON_HIDE_SNAPSHOT_MODAL';
+export const onHideSnapshotModal = createAction(ON_HIDE_SNAPSHOT_MODAL, ({ snapshotYn, snapshotBody, componentWorkSeq, callback }) => ({
+    snapshotYn,
+    snapshotBody,
+    componentWorkSeq,
+    callback,
+}));
+
+/**
  * 컴포넌트 워크 순번수정
  */
 // export const PUT_DESKING_WORK_PRIORITY = 'desking/PUT_DESKING_WORK_PRIORITY';

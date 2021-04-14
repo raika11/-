@@ -18,14 +18,14 @@ export const getIssueContentsList = ({ search }) => {
 };
 
 // 이슈 조회
-export const getIssue = ({ pkgSeq }) => {
+export const getIssue = (pkgSeq) => {
     return instance.get(`/api/issue/${pkgSeq}`).catch((err) => {
         throw err;
     });
 };
 
 // 이슈 조회 (화면 기준)
-export const getIssueGroupByOrdno = ({ pkgSeq }) => {
+export const getIssueGroupByOrdNo = (pkgSeq) => {
     return instance.get(`/api/issue/${pkgSeq}/group-by-ordno`).catch((err) => {
         throw err;
     });

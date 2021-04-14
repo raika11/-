@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { MokaTable } from '@components';
 import { BASIC_DATEFORMAT, DISPLAY_PAGE_NUM } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { getSetMenuBoardsList, changeSetMenuSearchOption, GET_SET_MENU_BOARD_LIST } from '@store/board';
-
 import { columnDefs } from './BoardsSetAgGridColumns';
 import ButtonRenderer from './components/ButtonRenderer';
 
@@ -15,14 +15,8 @@ import ButtonRenderer from './components/ButtonRenderer';
 const BoardsSetAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-
-    const total = useSelector((store) => store.board.setMenu.total);
-    const boardslist = useSelector((store) => store.board.setMenu.list);
-    const search = useSelector((store) => store.board.setMenu.search);
-    const boardInfo = useSelector((store) => store.board.setMenu.boardInfo);
-    const loading = useSelector((store) => store.loading[GET_SET_MENU_BOARD_LIST]);
-
-    // 그리드 리스트 데이터
+    const { total, list: boardslist, search, boardInfo } = useSelector(({ board }) => board.setMenu);
+    const loading = useSelector(({ loading }) => loading[GET_SET_MENU_BOARD_LIST]);
     const [rowData, setRowData] = useState([]);
 
     /**
@@ -51,8 +45,8 @@ const BoardsSetAgGrid = ({ match }) => {
             setRowData(
                 boardslist.map((data) => ({
                     ...data,
-                    regDt: moment(data.regDt || '').format(BASIC_DATEFORMAT),
-                    modDt: moment(data.modDt || '').format(BASIC_DATEFORMAT),
+                    regDt: data.regDt ? moment(data.regDt).format(BASIC_DATEFORMAT) : '',
+                    modDt: data.modDt ? moment(data.modDt).format(BASIC_DATEFORMAT) : '',
                     buttonInfo: {
                         boardId: data.boardId,
                         boardUrl: data.boardUrl,
@@ -65,6 +59,7 @@ const BoardsSetAgGrid = ({ match }) => {
     return (
         <MokaTable
             className="flex-fill overflow-hidden"
+            rowHeight={GRID_ROW_HEIGHT.C[0]}
             columnDefs={columnDefs}
             rowData={rowData}
             onRowNodeId={(data) => data.boardId}

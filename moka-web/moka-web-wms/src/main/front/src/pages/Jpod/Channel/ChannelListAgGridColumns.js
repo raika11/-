@@ -1,21 +1,32 @@
+import { GRID_LINE_HEIGHT } from '@/style_constants';
+
+const cellClassRules = {
+    'ag-center-cell': () => true,
+};
+
 export const columnDefs = [
     {
         headerName: 'ID',
         field: 'chnlSeq',
         width: 50,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClassRules,
     },
     {
         headerName: '개설일',
         field: 'chnlSdt',
         width: 90,
-        cellStyle: { display: 'flex', alignItems: 'center' },
         tooltipField: 'chnlSdt',
+        cellClassRules,
     },
     {
         headerName: '이미지',
         field: 'chnlThumb',
         cellRenderer: 'imageRenderer',
+        cellRendererParams: { autoRatio: false },
+        cellStyle: {
+            paddingTop: '5px',
+            paddingBottom: '5px',
+        },
         width: 56,
     },
     {
@@ -23,7 +34,7 @@ export const columnDefs = [
         field: 'chnlNm',
         width: 150,
         flex: 1,
-        cellStyle: { alignItems: 'center', lineHeight: '44px' },
+        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.C[1]}px` },
         tooltipField: 'chnlNm',
     },
     {
@@ -32,17 +43,7 @@ export const columnDefs = [
         width: 130,
         flex: 1,
         tooltipField: 'chnlMemo',
-        cellStyle: {
-            boxSizing: 'border-box',
-            whiteSpace: 'normal',
-            lineHeight: '20px',
-            display: '-webkit-box',
-            paddingTop: '1px',
-            '-webkit-line-clamp': 2,
-            '-webkit-box-orient': 'vertical',
-            overflow: 'hidden',
-            cursor: 'pointer',
-        },
+        cellRenderer: 'longTextRenderer',
     },
     {
         headerName: '사용',
@@ -54,14 +55,14 @@ export const columnDefs = [
         headerName: '회차',
         field: 'roundinfo',
         width: 42,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClassRules,
         tooltipField: 'roundinfo',
     },
     {
         headerName: '구독',
         field: 'subscribe',
         width: 42,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClassRules,
         tooltipField: 'subscribe',
     },
 ];

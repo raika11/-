@@ -148,10 +148,7 @@ const SnsMetaEdit = () => {
                 }),
             );
         }
-        //snsMetaSave('all');
     };
-
-    // const snsMetaSave = (type) => {};
 
     const validSaveData = (data, type) => {
         for (const item of data) {

@@ -6,6 +6,7 @@ import RcvProgsModal from './modals/RcvProgsModal';
 import RcvProgsBulkLogModal from './modals/RcvProgsBulkLogModal';
 import { unescapeHtml } from '@utils/convertUtil';
 import { changeBmSearchOption, getBulkStatList, GET_BULK_STAT_LIST } from '@/store/bulks';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 
 /**
  * 벌크 모니터링 목록
@@ -62,6 +63,7 @@ const BulkMonitorRcvProgsAgGrid = () => {
         <>
             <MokaTable
                 className="overflow-hidden flex-fill ag-grid-align-center"
+                rowHeight={GRID_ROW_HEIGHT.C[1]}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(params) => params.logSeq}
@@ -71,7 +73,6 @@ const BulkMonitorRcvProgsAgGrid = () => {
                 total={total}
                 preventRowClickCell={['status', 'naverStatus', 'daumStatus', 'nateStatus', 'zoomStatus', 'kpfStatus', 'bulkLogBtn']}
                 onChangeSearchOption={handleChangeSearchOption}
-                /*paging={false}*/
             />
             <RcvProgsModal show={showRcvProgsModal} onHide={() => setShowRcvProgsModal(false)} data={modalData} />
             <RcvProgsBulkLogModal show={showBulkLogModal} onHide={() => setShowBulkLogModal(false)} data={modalData} />

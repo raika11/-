@@ -243,7 +243,7 @@ const EditPostModal = (props) => {
             {/* 단문(수정불가) */}
             <Form.Row className="mb-2">
                 <MokaInputLabel label="단문" as="none" />
-                <div style={{ maxHeight: 150 }} className="custom-scroll w-100 p-2 input-border pre-wrap user-select-text ft-14">
+                <div style={{ maxHeight: 150 }} className="custom-scroll w-100 p-2 input-border pre-wrap user-select-text">
                     {post.answMemo}
                 </div>
             </Form.Row>
@@ -251,7 +251,7 @@ const EditPostModal = (props) => {
             {/* 장문(수정불가) */}
             <Form.Row className="mb-2">
                 <MokaInputLabel label="장문" as="none" />
-                <div style={{ maxHeight: 140 }} className="custom-scroll pr-2 pre-wrap user-select-text d-flex align-items-center ft-14">
+                <div style={{ maxHeight: 140 }} className="custom-scroll pr-2 pre-wrap user-select-text d-flex align-items-center">
                     {post.answMemoLong}
                 </div>
             </Form.Row>
@@ -264,7 +264,7 @@ const EditPostModal = (props) => {
                     label={
                         <React.Fragment>
                             이미지
-                            <Button size="sm" variant="gray-700" className="mt-2" onClick={(e) => imgRef.current.rootRef.onClick(e)}>
+                            <Button size="sm" variant="gray-700" className="mt-1" onClick={(e) => imgRef.current.rootRef.onClick(e)}>
                                 신규등록
                             </Button>
                         </React.Fragment>

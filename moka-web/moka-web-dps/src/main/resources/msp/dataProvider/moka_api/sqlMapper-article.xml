@@ -199,7 +199,9 @@
       #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{_SUCCESS, mode=OUT, jdbcType=BOOLEAN, javaType=java.lang.Boolean},
+      #{_MESSAGE, mode=OUT, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 
@@ -210,7 +212,8 @@
       #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{_SUCCESS, mode=OUT, jdbcType=BOOLEAN, javaType=java.lang.Boolean}
       )}
   </select>
 
@@ -249,23 +252,27 @@
   <select id="shareInsert" parameterType="map" resultType="map"
     statementType="CALLABLE">
     {call UPU_15RE_ARTICLE_SHARE_ONLY_INS(
-      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{div, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{cid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{site, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{dev, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{loginDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{member_memberSeq, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{_SUCCESS, mode=OUT, jdbcType=BOOLEAN, javaType=java.lang.Boolean},
+      #{_MESSAGE, mode=OUT, jdbcType=VARCHAR, javaType=string}
       ) }
   </select>
 
   <!-- 내가 좋아요/싫어요한 기사목록 -->
-  <select id="shareListMy" parameterType="map" resultType="map"
+  <select id="likeMy" parameterType="map" resultType="map"
     statementType="CALLABLE">
     {call UPU_15RE_ARTICLE_SHARE_LIST_SEL_BY_MEM(
-      #{member_memberSeq, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       'Y',

@@ -41,4 +41,22 @@
       ) }
   </select>
 
+  <!-- 에피소드 공유, 좋아요/싫어요 등록 -->
+  <!--  <select id="shareInsert" parameterType="map" resultType="map"-->
+  <!--    statementType="CALLABLE">-->
+  <!--    {call UPU_15RE_ARTICLE_SHARE_ONLY_INS(-->
+  <!--      #{cid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},-->
+  <!--      #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},-->
+  <!--      #{site, mode=IN, jdbcType=VARCHAR, javaType=string},-->
+  <!--      #{dev, mode=IN, jdbcType=VARCHAR, javaType=string},-->
+  <!--      #{loginDiv, mode=IN, jdbcType=VARCHAR, javaType=string},-->
+  <!--      #{member_memberSeq, mode=IN, jdbcType=VARCHAR, javaType=string},-->
+  <!--      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},-->
+  <!--      #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},-->
+  <!--      #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string},-->
+  <!--      #{_SUCCESS, mode=OUT, jdbcType=BOOLEAN, javaType=java.lang.Boolean},-->
+  <!--      #{_MESSAGE, mode=OUT, jdbcType=VARCHAR, javaType=string}-->
+  <!--      ) }-->
+  <!--  </select>-->
+
 </mapper>

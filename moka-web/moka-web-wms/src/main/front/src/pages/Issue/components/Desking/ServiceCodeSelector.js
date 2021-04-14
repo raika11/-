@@ -59,10 +59,22 @@ const propTypes = {
      * onChange (필수)
      */
     onChange: PropTypes.func.isRequired,
+
+    /**
+     * label에 code를 보여줌
+     */
+    showCodeLabel: PropTypes.bool,
+
+    /**
+     * 전체 선택 checkbox 여부
+     */
+    showAllSelector: PropTypes.bool,
 };
 const defaultProps = {
     dropdownHeight: 200,
     value: '',
+    showCodeLabel: false,
+    showAllSelector: true,
 };
 
 /**
@@ -71,9 +83,9 @@ const defaultProps = {
  * 구조적으로 문제있음.. 차후 방법을 찾아서 수정
  */
 const ServiceCodeSelector = (props) => {
-    const { className, width, dropdownHeight, value, onChange, loading } = props;
+    const { className, width, dropdownHeight, value, onChange, loading, showCodeLabel, showAllSelector } = props;
     const serviceCodeList = useSelector(({ code }) => code.service.list);
-    const [isAllChecked, setAllChecked] = useState(true);
+    const [isAllChecked, setAllChecked] = useState(false);
     const [checkedList, setCheckedList] = useState([]); // 선택된 코드들
     const [renderList, setRenderList] = useState([]);
 
@@ -135,7 +147,17 @@ const ServiceCodeSelector = (props) => {
     );
 
     useEffect(() => {
-        setRenderList(serviceCodeList.filter((code) => code.usedYn === 'Y'));
+        setRenderList(
+            serviceCodeList
+                .filter((code) => code.usedYn === 'Y')
+                .map((render) => {
+                    let label = render.serviceKorname;
+                    if (showCodeLabel) {
+                        label = `${render.masterCode}:${render.serviceKorname}`;
+                    }
+                    return { ...render, label };
+                }),
+        );
     }, [serviceCodeList]);
 
     useEffect(() => {
@@ -143,7 +165,16 @@ const ServiceCodeSelector = (props) => {
             const codes = (value || '')
                 .split(',')
                 .filter((v) => v !== '')
-                .map((val) => renderList.find((s) => s.masterCode === val))
+                .map((val) => {
+                    const code = renderList.find((s) => s.masterCode === val);
+                    if (code) {
+                        let label = code.serviceKorname;
+                        if (showCodeLabel) {
+                            label = `${code.masterCode}:${code.serviceKorname}`;
+                        }
+                        return { ...code, label };
+                    }
+                })
                 .filter(Boolean);
             setCheckedList(codes);
 
@@ -168,7 +199,7 @@ const ServiceCodeSelector = (props) => {
                         ) : (
                             checkedList.map((c) => (
                                 <Badge key={c.masterCode} className="mr-1" variant="searching">
-                                    {c.serviceKorname}
+                                    {c.label}
                                     {/* <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => {}} /> */}
                                 </Badge>
                             ))
@@ -178,15 +209,16 @@ const ServiceCodeSelector = (props) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll pb-0 w-100">
-                {renderCode({
-                    label: '카테고리 전체',
-                    custom: true,
-                    id: 'all',
-                    checked: isAllChecked,
-                })}
+                {showAllSelector &&
+                    renderCode({
+                        label: '카테고리 전체',
+                        custom: true,
+                        id: 'all',
+                        checked: isAllChecked,
+                    })}
                 {renderList.map((cd, idx) =>
                     renderCode({
-                        label: cd.serviceKorname,
+                        label: cd.label,
                         id: cd.masterCode,
                         checked: checkedList.findIndex((l) => l.masterCode === cd.masterCode) > -1,
                     }),

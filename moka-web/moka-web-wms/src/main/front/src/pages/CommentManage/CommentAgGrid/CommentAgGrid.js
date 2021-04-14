@@ -1,7 +1,7 @@
 import React from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import clsx from 'clsx';
-import { MokaPagination, MokaLoader } from '@components';
+import { MokaPagination, MokaLoader, MokaTableDefaultProps } from '@components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 import { DeleteButtonRenderer, DateItemRenderer, UserInfoRenderer, BanneButtonRenderer, HistoryButtonRenderer } from './CommentGridRenderer';
 
@@ -60,7 +60,7 @@ const CommentAgGrid = (props) => {
                     rowHeight={rowHeight}
                     getRowNodeId={getRowNodeId}
                     columnDefs={columnDefs}
-                    localeText={{ noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' }}
+                    localeText={MokaTableDefaultProps.localeText}
                     rowSelection="multiple"
                     onRowDoubleClicked={onRowDoubleClicked}
                     onRowClicked={onRowClicked}

@@ -21,7 +21,7 @@ import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 import ArticleEtc from './ArticleEtc';
 
 /**
- * 등록기사 수정폼
+ * 등록기사 > 수정
  */
 const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl = '/article' }) => {
     const dispatch = useDispatch();
@@ -146,41 +146,41 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
      * Cdn 등록
      */
     const handleClickCdn = () => {
-        if (temp.totalId) {
-            // 1. 중복 체크
-            dispatch(
-                checkExists({
-                    totalId: temp.totalId,
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            if (!body) {
-                                // 2. cdn 등록
-                                dispatch(
-                                    saveCdnArticle({
-                                        cdnArticle: {
-                                            usedYn: 'Y',
-                                            totalId: temp.totalId,
-                                            title: temp.artTitle,
-                                        },
-                                        callback: ({ header }) => {
-                                            if (header.success) {
-                                                toast.success(header.message);
-                                            } else {
-                                                toast.fail(header.message);
-                                            }
-                                        },
-                                    }),
-                                );
-                            } else {
-                                messageBox.alert('이미 등록된 기사입니다');
-                            }
+        if (!temp.totalId) return;
+
+        // 1. 중복 체크
+        dispatch(
+            checkExists({
+                totalId: temp.totalId,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        if (!body) {
+                            // 2. cdn 등록
+                            dispatch(
+                                saveCdnArticle({
+                                    cdnArticle: {
+                                        usedYn: 'Y',
+                                        totalId: temp.totalId,
+                                        title: temp.artTitle,
+                                    },
+                                    callback: ({ header }) => {
+                                        if (header.success) {
+                                            toast.success(header.message);
+                                        } else {
+                                            toast.fail(header.message);
+                                        }
+                                    },
+                                }),
+                            );
                         } else {
-                            toast.fail(header.message);
+                            messageBox.alert('이미 등록된 기사입니다');
                         }
-                    },
-                }),
-            );
-        }
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
     };
 
     /**
@@ -329,12 +329,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 <div className="mb-2 d-flex">
                     <Col className="p-0 pr-2 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="매체" as="none" />
-                        <span className="ft-14 user-select-text">{temp?.articleSource?.sourceName}</span>
+                        <span className="user-select-text">{temp?.articleSource?.sourceName}</span>
                     </Col>
                     <Col className="p-0 align-items-center justify-content-between d-flex" xs={6}>
                         <div className="d-flex align-items-center">
                             <MokaInputLabel label="발행일" as="none" />
-                            <span className="ft-14 user-select-text">{temp.pressDateText}</span>
+                            <span className="user-select-text">{temp.pressDateText}</span>
                         </div>
 
                         <Button variant="outline-neutral flex-shrink-0" onClick={() => setHistoryModalShow(true)}>
@@ -349,12 +349,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 <div className="mb-2 d-flex">
                     <Col className="p-0 pr-2 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="기사ID" as="none" />
-                        <span className="ft-14 user-select-text">{temp.totalId}</span>
+                        <span className="user-select-text">{temp.totalId}</span>
                     </Col>
 
                     <Col className="p-0 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="수신ID" as="none" />
-                        <span className="ft-14 user-select-text">{temp.rid}</span>
+                        <span className="user-select-text">{temp.rid}</span>
                     </Col>
                 </div>
 

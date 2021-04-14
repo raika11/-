@@ -118,6 +118,7 @@ const ABEdit = React.lazy(() => import('@pages/AB/Edit')); // 대안입력
 const ABJam = React.lazy(() => import('@pages/AB/Jam')); // JAM 설계
 const ABResult = React.lazy(() => import('@pages/AB/Result')); // 테스트 결과
 const NewsLetter = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetter'));
+const NewsLetterSend = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterSend'));
 
 const routes = [
     {
@@ -678,8 +679,8 @@ const routes = [
         strict: true,
     },
     {
-        path: '/package',
-        name: 'package',
+        path: '/issue',
+        name: 'issue',
         displayName: '패키지 관리',
         component: Package,
         side: true,
@@ -760,7 +761,18 @@ const routes = [
     {
         path: '/news-letter',
         name: 'newsLetter',
+        displayName: '뉴스레터 상품 관리',
         component: NewsLetter,
+        side: true,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/news-letter-send',
+        name: 'newsLetterSend',
+        displayName: '뉴스레터 발송 관리',
+        component: NewsLetterSend,
         side: true,
         nonResponsive: true,
         exact: false,

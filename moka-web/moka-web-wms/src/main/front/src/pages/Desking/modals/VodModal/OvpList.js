@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { initialState, getOvpList, GET_OVP_LIST } from '@store/bright';
 import { MokaTable, MokaSearchInput } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
+import { GRID_ROW_HEIGHT, GRID_HEADER_HEIGHT } from '@/style_constants';
 import OvpOptionRenderer from './OvpOptionRenderer';
 import columnDefs from './OvpListColumns';
 
@@ -15,10 +16,8 @@ moment.locale('ko');
  */
 const OvpList = ({ show, resultVId, setResultVId }) => {
     const dispatch = useDispatch();
-
-    const ovpList = useSelector((store) => store.bright.ovp.list);
-    const loading = useSelector((store) => store.loading[GET_OVP_LIST]);
-    // state
+    const ovpList = useSelector(({ bright }) => bright.ovp.list);
+    const loading = useSelector(({ loading }) => loading[GET_OVP_LIST]);
     const [search, setSearch] = useState(initialState.ovp.search);
     const [rowData, setRowData] = useState([]);
     const [, setGridInstance] = useState(null);
@@ -68,20 +67,22 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
 
     useEffect(() => {
         setRowData(
-            ovpList.map((ovp) => ({
-                ...ovp,
-                stateText: ovp.state === 'ACTIVE' ? '정상' : '대기',
-                regDt: moment(ovp.regDt, DB_DATEFORMAT).format('YYYY-MM-DD\nLTS'),
-            })),
+            show
+                ? ovpList.map((ovp) => ({
+                      ...ovp,
+                      stateText: ovp.state === 'ACTIVE' ? '정상' : '대기',
+                      regDt: moment(ovp.regDt, DB_DATEFORMAT).format('YYYY-MM-DD\nLTS'),
+                  }))
+                : [],
         );
-    }, [ovpList]);
+    }, [ovpList, show]);
 
     return (
         <div className="d-flex flex-column overflow-hidden h-100">
-            <div className="mb-2 d-flex">
+            <div className="mb-14 d-flex">
                 <MokaSearchInput
                     placeholder="검색어를 입력하세요"
-                    className="flex-fill mr-2"
+                    className="flex-fill mr-1"
                     name="keyword"
                     value={search.keyword}
                     onChange={handleChangeValue}
@@ -95,6 +96,7 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
             <MokaTable
                 loading={loading}
                 rowData={rowData}
+                rowHeight={GRID_ROW_HEIGHT.C[2]}
                 className="overflow-hidden flex-fill"
                 onRowNodeId={(data) => data.id}
                 selected={resultVId}

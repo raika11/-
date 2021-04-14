@@ -97,5 +97,4 @@ public class PackageMaster extends BaseAudit {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "packageMaster")
     private Set<PackageList> packageLists = new LinkedHashSet<>();
-
 }

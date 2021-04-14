@@ -9,6 +9,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -445,13 +446,17 @@ public class DeskingRestController extends AbstractCommonController {
      * @throws Exception 예외
      */
     @ApiOperation(value = "컴포넌트워크 snapshot 수정")
-    @PutMapping("/components/{componentWorkSeq}/snapshot")
+    @PutMapping(value = "/components/{componentWorkSeq}/snapshot", headers = {
+            "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putSnapshotComponentWork(@ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq")
-    @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq, @ApiParam("HTML편집 여부") String snapshotYn,
-            @ApiParam("편집된 HTML") String snapshotBody, @ApiParam(hidden = true) Principal principal)
+    @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("HTML편집 여부") @RequestBody @Valid Map<String, String> snapshot, @ApiParam(hidden = true) Principal principal)
             throws Exception {
 
         try {
+            String snapshotYn = snapshot.get("snapshotYn");
+            String snapshotBody = snapshot.get("snapshotBody");
+
             // 스냅샷 수정
             deskingService.updateComponentWorkSnapshot(componentWorkSeq, snapshotYn, snapshotBody, principal.getName());
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { messageBox } from '@utils/toastUtil';
 import { GET_PODTY_EPSD_LIST, getPodtyEpsdList, clearPodtyEpsd } from '@store/jpod';
 import { MokaModal, MokaTable } from '@components';
@@ -70,11 +71,13 @@ const PodtyEpisodeModal = (props) => {
                 agGridHeight={450}
                 columnDefs={columnDefs}
                 rowData={rowData}
+                headerHeight={GRID_ROW_HEIGHT.T[0]}
+                rowHeight={GRID_ROW_HEIGHT.C[1]}
                 onRowNodeId={(data) => data.episodeSrl}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 paging={false}
-                preventRowClickCell={['이동']}
+                preventRowClickCell={['move']}
             />
         </MokaModal>
     );

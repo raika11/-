@@ -1,15 +1,16 @@
+import { GRID_LINE_HEIGHT } from '@/style_constants';
+
 export default [
     {
         colId: 'checkbox',
         width: 30,
-        minWidth: 30,
+        maxWidth: 30,
         checkboxSelection: true,
         suppressMenu: true,
     },
     {
         headerName: '이미지',
         width: 60,
-        cellStyle: { paddingTop: '14px', paddingBottom: '14px' },
         field: 'thumbFileName',
         cellRenderer: 'imageRenderer',
     },
@@ -18,17 +19,9 @@ export default [
         field: 'name',
         width: 186,
         flex: 1,
-        autoHeight: true,
         tooltipField: 'name',
+        cellRenderer: 'longTextRenderer',
         cellStyle: {
-            boxSizing: 'border-box',
-            whiteSpace: 'normal',
-            lineHeight: '22px',
-            height: '66px',
-            display: '-webkit-box',
-            '-webkit-line-clamp': 3,
-            '-webkit-box-orient': 'vertical',
-            overflow: 'hidden',
             cursor: 'pointer',
         },
     },
@@ -36,21 +29,15 @@ export default [
         headerName: '상태',
         field: 'stateText',
         width: 40,
-        cellStyle: {
-            display: 'flex',
-            alignItems: 'center',
+        cellClassRules: {
+            'ag-center-cell': () => true,
         },
     },
     {
         headerName: '등록일',
         field: 'regDt',
         width: 83,
-        cellClassRules: {
-            'pre-wrap-cell': () => true,
-        },
-        cellStyle: {
-            lineHeight: '20px',
-        },
+        cellRenderer: 'longTextRenderer',
     },
     {
         headerName: '옵션',
@@ -58,7 +45,7 @@ export default [
         width: 83,
         cellRenderer: 'optionRenderer',
         cellStyle: {
-            lineHeight: '20px',
+            lineHeight: `${GRID_LINE_HEIGHT.M}px`,
         },
         // valueGetter: (params) => {
         //     debugger;

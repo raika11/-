@@ -26,7 +26,7 @@ const NewsLetterSearch = () => {
                         <option>전체</option>
                     </MokaInputLabel>
                 </Col>
-                <Col xs={3} className="p-0 pr-2">
+                <Col xs={3} className="p-0">
                     <MokaInputLabel as="select" label="A/B TEST 유무" disabled>
                         <option>전체</option>
                     </MokaInputLabel>
@@ -41,26 +41,37 @@ const NewsLetterSearch = () => {
                     <MokaInput as="dateTimePicker" className="ml-1" inputProps={{ timeFormat: null, timeDefault: 'end' }} />
                 </Col>
 
-                {/* <Col xs={6} className="p-0 d-flex"> */}
-
-                <Button size="sm" variant="outline-neutral" className="mr-1">
-                    1주
-                </Button>
-                <Button size="sm" variant="outline-neutral" className="mr-1">
-                    1개월
-                </Button>
-                <Button size="sm" variant="outline-neutral" className="mr-1">
-                    3개월
-                </Button>
-                <Button size="sm" variant="outline-neutral" className="mr-1">
-                    6개월
-                </Button>
-                <Button size="sm" variant="outline-neutral">
-                    1년
-                </Button>
-                {/* </Col> */}
+                <div style={{ width: 50 }} className="mr-1">
+                    <Button size="sm" variant="outline-neutral" className="w-100 h-100">
+                        1주
+                    </Button>
+                </div>
+                <div style={{ width: 50 }} className="mr-1">
+                    <Button size="sm" variant="outline-neutral" className="w-100 h-100">
+                        1개월
+                    </Button>
+                </div>
+                <div style={{ width: 50 }} className="mr-1">
+                    <Button size="sm" variant="outline-neutral" className="w-100 h-100">
+                        3개월
+                    </Button>
+                </div>
+                <div style={{ width: 50 }} className="mr-1">
+                    <Button size="sm" variant="outline-neutral" className="w-100 h-100">
+                        6개월
+                    </Button>
+                </div>
+                <div style={{ width: 50 }}>
+                    <Button size="sm" variant="outline-neutral" className="w-100 h-100">
+                        1년
+                    </Button>
+                </div>
             </Form.Row>
-            <MokaSearchInput disabled />
+
+            <Form.Row>
+                <MokaInputLabel as="none" label="뉴스레터 명" />
+                <MokaSearchInput className="flex-fill" disabled />
+            </Form.Row>
         </Form>
     );
 };

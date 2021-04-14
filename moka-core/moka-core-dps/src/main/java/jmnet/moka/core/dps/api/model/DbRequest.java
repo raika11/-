@@ -39,7 +39,10 @@ public class DbRequest extends AbstractRequest {
             this.dmlType = DML_TYPE_SELECT;
         }
         if (McpString.isNotEmpty(outParam)) {
-            this.outParamList = Arrays.stream(outParam.split(",")).map(param->param.trim()).collect(Collectors.toList());
+            this.outParamList = Arrays
+                    .stream(outParam.split(","))
+                    .map(param -> param.trim())
+                    .collect(Collectors.toList());
         }
     }
 
@@ -66,6 +69,7 @@ public class DbRequest extends AbstractRequest {
         return this.total;
     }
 
+    @Override
     public List<String> getOutParamList() {
         return this.outParamList;
     }

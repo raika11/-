@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="utf-8">
     <script src="include.js"></script>
@@ -11,11 +11,7 @@
     <title>퍼블 가이드 - 중앙일보</title>
     <meta property="og:image" content="https://static.joins.com/joongang_15re/profile_joongang_200.png">
     <script>include.head()</script>
-    <link rel="canonical" href="">
-
     <link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">
-    
-
 
     <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,67 +19,116 @@
     <meta name="author" content="">
     <title>퍼블 가이드 - 중앙일보</title>
     <meta property="og:image" content="https://static.joins.com/joongang_15re/profile_joongang_200.png">
-    <!-- <link rel="canonical" href="">
-    <link href="https://getbootstrap.com/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://static.joins.com/html/guide/guide.css" rel="stylesheet"> -->
+    <link href="https://static.joins.com/html/guide/guide.css" rel="stylesheet">
     <link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">
     <link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">
-
-    <link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">
-    <link href="//stg-static.joongang.co.kr/css/common/section.css" rel="stylesheet">
-
-    <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
-    
-    <link rel="stylesheet" href="guide.css">
-    <script src="guide.js"></script>
-
-
 </head>
 <body class="guide">
-    <header class="navbar">
-        <nav class="container flex_wrap flex-md-nowrap">
-            <div class="collapse navbar-collapse" id="bdNavbar">
-                <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
-                    <li class="nav_item col-6 col-md-auto">
-                        <a class="nav_link p-2 active" href="https://static.joins.com/html/guide/">중앙일보 퍼블가이드</a>
-                    </li>
-                    <li class="nav_item col-6 col-md-auto">
-                        <a class="nav_link p-2" href="https://static.joins.com/html/guide/html.html">Html</a>
-                    </li>
-                    <li class="nav_item col-6 col-md-auto">
-                        <a class="nav_link p-2" href="https://static.joins.com/html/guide/css.html">Css</a>
-                    </li>
-                    <li class="nav_item col-6 col-md-auto">
-                        <a class="nav_link p-2" href="https://static.joins.com/html/guide/font.html">Font</a>
-                    </li>
-                    <li class="nav_item col-6 col-md-auto">
-                        <a class="nav_link p-2" href="https://static.joins.com/html/guide/image.html">Image</a>
-                    </li>
-                    <li class="nav_item col-6 col-md-auto">
-                        <a class="nav_link p-2" href="https://static.joins.com/html/guide/accessibility.html">웹접근성</a>
-                    </li>
-                    <li class="nav_item col-6 col-md-auto">
-                        <a class="nav_link p-2" href="https://static.joins.com/html/guide/seo.html">SEO</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+<div id="wrapper">
+    <!-- header -->
+    <script>include.header()</script>
+    <!-- // header -->
 
-    <div class="container_guide row">
-        <script>include.aside.menu0()</script>
+    <div class="container ">
+        <section class="contents">
+            <section class="row">
+                <script>include.aside.menu0()</script>
+                <main class="main_guide col_sm12 col_md10 col_lg10">
+                    <!-- 가이드 내용 시작 -->
+                    <h1 class="page_title">버튼</h1>
 
-            
+                    <p>기능형은 <code>&lt;button&gt;</code>, 페이지 이동형은 <code>&lt;a&gt;</code> 태그 사용</p>
 
-        <main class="main_guide col_lg10">
-sdfsdfs
-        </main>
+
+                    <h2 class="guide_title">상태별</h2>
+                    <div class="sample_wrap">
+                        <div class="button_wrap">
+                            <button type="button" class="btn btn_default">기본</button>
+                            <button type="button" class="btn btn_primary">강조</button> 
+                        </div>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="button_wrap"&gt;
+    &lt;button type="button" class="btn_round list_more"&gt;더보기&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+                    <h2 class="guide_title">크기별</h2>
+                    <div class="sample_wrap">
+                        <div class="button_wrap">
+                            <button type="button" class="btn btn_default btn_sm">기본</button>
+                            <button type="button" class="btn btn_default">기본</button>
+                            <button type="button" class="btn btn_default btn_lg">기본</button>
+                        </div>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="button_wrap"&gt;
+    &lt;button type="button" class="btn_round list_more"&gt;더보기&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+
+
+
+                    <h2 class="guide_title">중앙 - 리스트 더보기</h2>
+                    <div class="sample_wrap">
+                        <div class="button_wrap_wide">
+                            <button type="button" class="btn btn_default"><i class="fa fa_plus"></i>더보기</button>
+                        </div>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="button_wrap_wide"&gt;
+    &lt;button type="button" class="btn btn_default"&gt;&lt;i class="fa fa_plus"&gt;&lt;/i&gt;더보기&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+
+                    <h2 class="guide_title">구독</h2>
+                    <div class="sample_wrap">
+                        <div class="button_wrap button_right">
+                            <button type="button" class="btn_round btn_outline_orange">구독</button>
+                        </div>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="button_wrap_wide"&gt;
+    &lt;button type="button" class="btn_round list_more"&gt;&lt;i class="fa fa_plus"&gt;&lt;/i&gt;더보기&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+
+                    <h2 class="guide_title">sns</h2>
+                    <div class="sample_wrap">
+                        <div class="button_wrap button_right">
+                            <button type="button" class="btn btn_sns btn_katalk"><i class="fa fa_katalk"></i>카카오톡</button>
+                            <button type="button" class="btn btn_sns btn_outline_orange">구독</button>
+                            <button type="button" class="btn btn_sns btn_outline_orange">구독</button>
+                            <button type="button" class="btn btn_sns btn_outline_orange">구독</button>
+                        </div>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="button_wrap_wide"&gt;
+    &lt;button type="button" class="btn_round list_more"&gt;&lt;i class="fa fa_plus"&gt;&lt;/i&gt;더보기&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+
+
+                    <!-- //가이드 내용 -->
+                </main>
+            </section>
+        </section>
     </div>
-
-    <footer class="footer_guide p-3 p-md-5 mt-5 bg-light text-center text-sm-start">
-        <div class="container">
-            <p class="mb-0">Copyright by <a href="https://joongang.joins.com/" target="_blank">JoongAng Ilbo</a> Co., Ltd. All Rights Reserved</p>
-        </div>
-    </footer>
+    <script>include.footer()</script>
+</div>
 </body>
 </html>

@@ -154,26 +154,40 @@ public class CommentRestController extends AbstractCommonController {
             }
         }
 
-        //차단된 사용자 ID 체크
+        //차단된 사용자 ID 체크(T:차단, N:차단테이블에 사용중으로 있음, Y:차단테이블에 차단으로 있음, M:차단테이블에 없음)
         String blockChk = "";
+        Long seqNo = null;
 
         if (McpString.isNotEmpty(comment)) {
             if (statusType.equals(CommentStatusType.N)) {
 
                 Optional<CommentBanned> oldCommentBanned =
-                        commentBannedService.findAllCommentBannedByTagValue(CommentBannedType.U, comment.getMemId());
+                        commentBannedService.findAllCommentBannedByTagValueOrderbySeqNoDesc(CommentBannedType.U, comment.getMemId());
+                //commentBannedService.findAllCommentBannedByTagValue(CommentBannedType.U, comment.getMemId());
                 if (oldCommentBanned.isPresent()) {
                     CommentBanned commentBanned = oldCommentBanned.get();
-                    blockChk = "true";
+                    if (commentBanned
+                            .getUsedYn()
+                            .equals("N")) {
+                        blockChk = "N";
+                        seqNo = commentBanned.getSeqNo();
+                    } else if (commentBanned
+                            .getUsedYn()
+                            .equals("Y")) {
+                        blockChk = "Y";
+                    }
+                } else {
+                    blockChk = "M";
                 }
             }
         }
 
-        long result = commentService.updateCommentStatus(comment, statusType, deleteType);
+        long result = 0L;
+        result = commentService.updateCommentStatus(comment, statusType, deleteType, blockChk, seqNo, cmtSeq);
         String msg = "";
         if (result > 0) {
 
-            /**         deleteType
+            /**   deleteType
              CMT("DTCO", "이 댓글만 삭제"),
              ALL("UDC", "해당 사용자의 과거 댓글 전체 삭제"),
              BNC("BNC", "해당 사용자 ID 차단 및 해당 댓글 삭제"),
@@ -182,14 +196,14 @@ public class CommentRestController extends AbstractCommonController {
             if (statusType.equals(CommentStatusType.N)) {
                 switch (deleteType) {
                     case BNA:
-                        if (blockChk.equals("true")) {
+                        if (blockChk.equals("T") || blockChk.equals("Y")) {
                             msg = msg("tps.comment-banned.id.comment.success.del");
                         } else {
                             msg = msg("tps.comment-banned.id.comment.success.block.del");
                         }
                         break;
                     case BNC:
-                        if (blockChk.equals("true")) {
+                        if (blockChk.equals("T") || blockChk.equals("Y")) {
                             msg = msg("tps.comment-banned.id.success.del");
                         } else {
                             msg = msg("tps.comment-banned.id.success.block.del");

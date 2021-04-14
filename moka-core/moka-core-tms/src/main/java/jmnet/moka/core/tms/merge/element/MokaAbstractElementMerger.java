@@ -1,10 +1,6 @@
 package jmnet.moka.core.tms.merge.element;
 
 import java.io.IOException;
-
-import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tms.merge.MokaTemplateMerger;
-import org.springframework.context.support.GenericApplicationContext;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.template.exception.TemplateLoadException;
@@ -14,17 +10,22 @@ import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.merge.element.AbstractElementMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
+import jmnet.moka.core.tms.mvc.abtest.AbTestResolver;
 import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
+import org.springframework.context.support.GenericApplicationContext;
 
 /**
  * <pre>
  * Element(커스텀 태그)를 머지한다.
  * 2019. 9. 4. kspark 최초생성
  * </pre>
- * @since 2019. 9. 4. 오후 4:17:48
+ *
  * @author kspark
+ * @since 2019. 9. 4. 오후 4:17:48
  */
 public abstract class MokaAbstractElementMerger extends AbstractElementMerger {
 
@@ -32,11 +33,13 @@ public abstract class MokaAbstractElementMerger extends AbstractElementMerger {
     protected CacheManager cacheManager;
     protected boolean cacheable = false;
     protected GenericApplicationContext appContext;
+    protected AbTestResolver abTestResolver;
 
-	public MokaAbstractElementMerger(TemplateMerger<MergeItem> templateMerger) throws IOException {
-		super(templateMerger);
-	}
-	
+    public MokaAbstractElementMerger(TemplateMerger<MergeItem> templateMerger)
+            throws IOException {
+        super(templateMerger);
+    }
+
     public void setApplicationContext(GenericApplicationContext appContext) {
         this.appContext = appContext;
     }
@@ -50,8 +53,12 @@ public abstract class MokaAbstractElementMerger extends AbstractElementMerger {
         }
     }
 
-    public abstract String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot,
-            MergeContext context);
+    public void setAbTestResolver(AbTestResolver abTestResolver) {
+        this.abTestResolver = abTestResolver;
+    }
+
+
+    public abstract String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot, MergeContext context);
 
     public boolean appendCached(String cacheType, String cacheKey, StringBuilder sb) {
         if (this.cacheable) {
@@ -70,42 +77,40 @@ public abstract class MokaAbstractElementMerger extends AbstractElementMerger {
         }
     }
 
-	public void startWrapItem(TemplateElement element, String indent, StringBuilder sb) {
-		sb.append(indent)
-                .append(this.templateMerger.getWrapItemStart(
-                        Constants.name2ItemMap.get(element.getNodeName()),
+    public void startWrapItem(TemplateElement element, String indent, StringBuilder sb) {
+        sb
+                .append(indent)
+                .append(this.templateMerger.getWrapItemStart(Constants.name2ItemMap.get(element.getNodeName()),
                         element.getAttribute(Constants.ATTR_ID)))
-		.append(System.lineSeparator());
-	}
-	
-	public void endWrapItem(TemplateElement element, String indent, StringBuilder sb) {
-		sb.append(indent)
-                .append(this.templateMerger.getWrapItemEnd(
-                        Constants.name2ItemMap.get(element.getNodeName()),
+                .append(System.lineSeparator());
+    }
+
+    public void endWrapItem(TemplateElement element, String indent, StringBuilder sb) {
+        sb
+                .append(indent)
+                .append(this.templateMerger.getWrapItemEnd(Constants.name2ItemMap.get(element.getNodeName()),
                         element.getAttribute(Constants.ATTR_ID)))
-		.append(System.lineSeparator());
-	}
-	
+                .append(System.lineSeparator());
+    }
+
     public MergeItem getItem(TemplateElement element)
             throws TemplateParseException, TemplateLoadException {
         String itemType = Constants.name2ItemMap.get(element.getNodeName());
         String itemId = element.getAttribute(Constants.ATTR_ID);
         return (MergeItem) this.templateMerger.getItem(itemType, itemId);
-	}
+    }
 
 
-    public boolean addEsi(TemplateMerger<?> merger, TemplateRoot templateRoot,
-            TemplateElement element, MergeContext context,
-            StringBuilder sb) {
+    public boolean addEsi(TemplateMerger<?> merger, TemplateRoot templateRoot, TemplateElement element, MergeContext context, StringBuilder sb) {
         boolean isEsiEnabled = ((MokaTemplateMerger) merger).isEsiEnabled();
         String mergePath = (String) context.get(MokaConstants.MERGE_PATH);
         if (mergePath.startsWith("/_")) {
             return false;
         } else {
             if (isEsiEnabled) {
-                HttpParamMap paramMap =
-                        (HttpParamMap) context.get(MokaConstants.MERGE_CONTEXT_PARAM);
-                sb.append("<esi:include src=\"/")
+                HttpParamMap paramMap = (HttpParamMap) context.get(MokaConstants.MERGE_CONTEXT_PARAM);
+                sb
+                        .append("<esi:include src=\"/")
                         .append(paramMap.getMergeUrl(templateRoot, element, context))
                         .append("\"/>");
             }

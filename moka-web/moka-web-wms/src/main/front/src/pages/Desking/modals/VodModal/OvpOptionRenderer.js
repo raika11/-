@@ -6,9 +6,8 @@ import { changeVodOptions } from '@store/bright';
 const OvpOptionRenderer = forwardRef((props, ref) => {
     const { data } = props;
     const dispatch = useDispatch();
-
-    const { vodOptions } = useSelector((store) => ({
-        vodOptions: store.bright.vodOptions,
+    const { vodOptions } = useSelector(({ bright }) => ({
+        vodOptions: bright.vodOptions,
     }));
 
     useImperativeHandle(
@@ -35,7 +34,7 @@ const OvpOptionRenderer = forwardRef((props, ref) => {
     );
 
     return (
-        <div className="d-flex flex-column">
+        <div className="w-100 h-100 d-flex flex-column">
             <MokaInput
                 as="checkbox"
                 name="autoplay"

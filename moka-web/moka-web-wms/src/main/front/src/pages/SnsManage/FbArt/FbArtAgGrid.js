@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import columnDefs from './FbArtAgGridColumns';
 import { changeSnsSendArticleSearchOptions } from '@store/snsManage';
 import { MokaTable } from '@components';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 
 const FbArtAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const FbArtAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
             className="flex-fill overflow-hidden"
             columnDefs={columnDefs}
             rowData={rows}
-            rowHeight={46}
+            rowHeight={GRID_ROW_HEIGHT.C[0]}
             onRowNodeId={(row) => row.id}
             onRowClicked={handleClickListRow}
             loading={loading}

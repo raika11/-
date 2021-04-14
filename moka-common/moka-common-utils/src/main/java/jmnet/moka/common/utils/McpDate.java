@@ -136,6 +136,28 @@ public class McpDate {
 
     /**
      * <pre>
+     * 오늘 날짜에 인자값만큼 더한 후 java.util.Date형을 반환한다. 반환시 시간, 분, 초, MILLISECOND는 0으로 초기화 된값이다.
+     * </pre>
+     *
+     * @param plus 더할 월수
+     * @return Date
+     */
+    public static java.util.Date todayMonthPlus(int plus) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, plus);
+
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        return new Date(cal
+                .getTime()
+                .getTime());
+    }
+
+    /**
+     * <pre>
      * 특정날짜에 plus만큼 연산을 한다.
      * </pre>
      *

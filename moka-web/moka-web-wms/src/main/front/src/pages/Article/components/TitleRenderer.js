@@ -1,8 +1,12 @@
 import React, { useState, forwardRef, useEffect, useImperativeHandle } from 'react';
 import Badge from 'react-bootstrap/Badge';
+import { WEBKIT_BOX } from '@/style_constants';
 
 const titleReg = /[\[\(]+(속보|긴급|1보|종합1보|2보|종합2보|종합|수정)[\]\)]+/;
 
+/**
+ * 등록기사 AgGrid의 제목 렌더러
+ */
 const TitleRenderer = forwardRef((originParam, ref) => {
     const [params, setParams] = useState(originParam);
     const [titleArr, setTitleArr] = useState([]);
@@ -29,14 +33,16 @@ const TitleRenderer = forwardRef((originParam, ref) => {
     }, [params]);
 
     return (
-        <p className="mb-0">
-            {titleArr && titleArr[0] && (
-                <Badge variant={titleArr[0] !== '수정' ? 'success' : 'searching'} className="mr-1">
-                    {titleArr[0]}
-                </Badge>
-            )}
-            {titleArr && titleArr[1]}
-        </p>
+        <div className="h-100 w-100 ag-preline-cell">
+            <span style={!params.inRcv ? WEBKIT_BOX(2) : undefined}>
+                {titleArr && titleArr[0] && (
+                    <Badge variant={titleArr[0] !== '수정' ? 'success' : 'searching'} className="mr-1">
+                        {titleArr[0]}
+                    </Badge>
+                )}
+                {titleArr && titleArr[1]}
+            </span>
+        </div>
     );
 });
 

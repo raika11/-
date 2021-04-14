@@ -1,26 +1,27 @@
+const cellClassRules = {
+    'ag-center-cell': () => true,
+};
+
 export default [
     {
         headerName: 'API명',
         field: 'apiName',
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClassRules,
         width: 120,
         tooltipField: 'apiName',
     },
     {
         headerName: 'API 경로',
         field: 'apiPath',
-        cellStyle: { lineHeight: '21px' },
-        wrapText: true,
-        autoHeight: true,
+        cellRenderer: 'longTextRenderer',
+        tooltipField: 'apiPath',
         width: 250,
     },
     {
         headerName: '설명',
         field: 'apiDesc',
-        cellStyle: { lineHeight: '21px' },
+        cellRenderer: 'longTextRenderer',
         flex: 1,
-        autoHeight: true,
-        wrapText: true,
     },
     {
         headerName: '사용',
@@ -31,7 +32,7 @@ export default [
     {
         headerName: 'API 방식',
         field: 'apiMethod',
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClassRules,
         width: 80,
     },
 ];

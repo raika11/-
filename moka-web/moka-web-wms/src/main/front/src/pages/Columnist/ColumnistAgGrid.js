@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaTable } from '@components';
 import columnDefs from './ColumnistAgGridColumns';
-import { getJplusRep } from '@store/codeMgt';
 import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption } from '@store/columnist';
 
 /**
@@ -38,19 +38,25 @@ const ColumnistAgGrid = ({ match }) => {
     );
 
     useEffect(() => {
-        if (!jplusRepRows) dispatch(getJplusRep());
-    }, [dispatch, jplusRepRows]);
-
-    useEffect(() => {
         if (jplusRepRows) {
             setRowData(
                 list.map((data) => {
-                    let jplusRepDiv = jplusRepRows.find((code) => code.dtlCd === data.jplusRepDiv);
-                    const jplusRepDivNm = jplusRepDiv?.cdNm.slice(0, 2);
+                    let setJplusRepDivNm = () => {
+                        let jplusRepDiv = jplusRepRows.find((code) => code.dtlCd === data.jplusRepDiv);
+                        if (data.repSeq) {
+                            if (jplusRepDiv) {
+                                return jplusRepDiv.cdNm.slice(0, 2);
+                            } else {
+                                return '일보';
+                            }
+                        } else {
+                            return '외부';
+                        }
+                    };
 
                     return {
                         ...data,
-                        jplusRepDivNm: jplusRepDivNm || '  -',
+                        jplusRepDivNm: setJplusRepDivNm(),
                         repSeqText: data.repSeq || '   -',
                         regMember: data.regMember ? `${data.regMember.memberNm}(${data.regMember.memberId})` : '',
                         regDt: (data.regDt || '').slice(0, -3),
@@ -66,7 +72,7 @@ const ColumnistAgGrid = ({ match }) => {
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
-                rowHeight={45}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(data) => data.seqNo}
                 onRowClicked={handleRowClicked}
                 loading={loading}

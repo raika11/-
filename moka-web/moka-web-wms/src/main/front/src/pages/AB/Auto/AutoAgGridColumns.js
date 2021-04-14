@@ -1,3 +1,5 @@
+import { GRID_LINE_HEIGHT } from '@/style_constants';
+
 export default [
     {
         headerName: '상태',
@@ -18,9 +20,9 @@ export default [
         width: 150,
         wrapText: true,
         cellClassRules: {
-            'pre-cell': () => true,
+            'ag-pre-cell': () => true,
         },
-        cellStyle: { lineHeight: '16px' },
+        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
     },
     {
         headerName: '페이지\n영역',
@@ -28,9 +30,9 @@ export default [
         width: 150,
         wrapText: true,
         cellClassRules: {
-            'pre-cell': () => true,
+            'ag-pre-cell': () => true,
         },
-        cellStyle: { lineHeight: '16px' },
+        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
     },
     {
         headerName: '시작일시\n종료일시',
@@ -38,9 +40,9 @@ export default [
         width: 170,
         wrapText: true,
         cellClassRules: {
-            'pre-cell': () => true,
+            'ag-pre-cell': () => true,
         },
-        cellStyle: { lineHeight: '16px' },
+        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
     },
     {
         headerName: '작성자\n작성일시',
@@ -48,8 +50,8 @@ export default [
         width: 170,
         wrapText: true,
         cellClassRules: {
-            'pre-cell': () => true,
+            'ag-pre-cell': () => true,
         },
-        cellStyle: { lineHeight: '16px' },
+        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
     },
 ];

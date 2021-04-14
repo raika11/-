@@ -4,6 +4,7 @@ import CommentAgGrid from '@pages/CommentManage/CommentAgGrid';
 import { GET_COMMENTS_BLOCKS } from '@store/commentManage';
 import { BannedColumnDefs } from '@pages/CommentManage/CommentAgGrid/CommentAgGridColumns';
 import { changeBannedsSearchOption, getCommentsBlocks } from '@store/commentManage';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 
 /**
  * 댓글 관리 > 차단 목록 AgGrid
@@ -192,12 +193,12 @@ const BannedListBox = () => {
     return (
         <CommentAgGrid
             loading={loading}
+            rowHeight={GRID_ROW_HEIGHT.C[0]}
             columnDefs={BannedColumnDefs[pageGubunMemo]}
             total={total}
             page={search.page}
             size={search.size}
             rowData={rowData}
-            rowHeight={50}
             getRowNodeId={(params) => params.seqNo}
             onRowSelected={(e) => handleGridRowSelected(e)}
             onColumnResized={(e) => onColumnResized(e)}

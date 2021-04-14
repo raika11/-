@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.mvc.abtest.AbTestResolver;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JxltEngine.Template;
 import org.apache.commons.jexl3.MapContext;
@@ -73,6 +74,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
     protected DataLoader dataLoader;
     protected DataLoader defaultDataLoader;
     protected CacheManager cacheManager;
+    protected AbTestResolver abTestResolver;
     protected Template wrapItemStart;
     protected Template wrapItemEnd;
     protected Template htmlWrap;
@@ -95,6 +97,11 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
             this.cacheManager = this.appContext.getBean(CacheManager.class);
         } catch (BeansException e) {
             logger.warn("CacheManager load fail or not set");
+        }
+        try {
+            this.abTestResolver = this.appContext.getBean(AbTestResolver.class);
+        } catch (BeansException e) {
+            logger.warn("AbTestResolver load fail");
         }
         this.domainId = domainId;
         this.templateLoader = templateLoader;
@@ -252,6 +259,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
                                     (MokaAbstractElementMerger) elementMerger;
                             mspElementMerger.setApplicationContext(appContext);
                             mspElementMerger.setCacheManager(cacheManager);
+                            mspElementMerger.setAbTestResolver(abTestResolver);
                         }
                         this.elementMergerMap.put(nodeName, elementMerger);
                     } catch (Exception e) {

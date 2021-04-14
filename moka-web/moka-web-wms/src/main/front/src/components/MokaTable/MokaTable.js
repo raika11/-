@@ -7,8 +7,8 @@ import { propTypes as paginationPropTypes } from '@components/MokaPagination';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
 // cell renderer
+import LongTextRenderer from './MokaTableLongTextRenderer';
 import ImageRenderer from './MokaTableImageRenderer';
-import CircleImageRenderer from './MokaTableCircleImageRenderer';
 import UsedYnRenderer from './MokaTableUsedYnRenderer';
 import UsedYnSecondRenderer from './MokaTableUsedYnSecondRenderer';
 import UsedYnThirdRenderer from './MokaTableUsedYnThirdRenderer';
@@ -55,7 +55,6 @@ const propTypes = {
     headerHeight: PropTypes.number,
     /**
      * 테이블 row의 height
-     * @default
      */
     rowHeight: PropTypes.number,
     /**
@@ -112,7 +111,7 @@ const propTypes = {
     }),
 };
 
-const defaultProps = {
+export const defaultProps = {
     // paging default
     paging: true,
     total: 0,
@@ -128,10 +127,10 @@ const defaultProps = {
     dragStyle: false,
     header: true,
     rowSelection: 'single',
-    headerHeight: 35,
     rowDragManaged: false,
     animateRows: false,
     suppressRefreshCellAfterUpdate: false,
+    rowBuffer: 100,
 };
 
 /**
@@ -158,8 +157,6 @@ const MokaTable = forwardRef((props, ref) => {
         rowSelection,
         selected,
         header,
-        headerHeight,
-        rowHeight,
         frameworkComponents,
         setGridInstance: setParentGridInstance,
         suppressRefreshCellAfterUpdate,
@@ -312,8 +309,6 @@ const MokaTable = forwardRef((props, ref) => {
                     immutableData
                     columnDefs={columnDefs}
                     rowData={rowData}
-                    headerHeight={headerHeight}
-                    rowHeight={rowHeight}
                     getRowNodeId={onRowNodeId}
                     rowClassRules={rowClassRules}
                     onCellClicked={handleCellClicked}
@@ -323,8 +318,8 @@ const MokaTable = forwardRef((props, ref) => {
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
                     frameworkComponents={{
+                        longTextRenderer: LongTextRenderer,
                         imageRenderer: ImageRenderer,
-                        circleImageRenderer: CircleImageRenderer,
                         usedYnRenderer: UsedYnRenderer,
                         usedYnSecondRenderer: UsedYnSecondRenderer,
                         usedYnThirdRenderer: UsedYnThirdRenderer,

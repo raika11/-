@@ -1,6 +1,11 @@
 import React from 'react';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import { MokaIcon } from '@components';
 import CodeMgtEditButton from './components/CodeMgtEditButton';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.T[1]}px`,
+};
 
 export default [
     {
@@ -8,7 +13,7 @@ export default [
         field: 'grpCd',
         width: 120,
         tooltipField: 'grpCd',
-        cellStyle: { lineHeight: '40px' },
+        cellStyle,
     },
     {
         headerName: '그룹명',
@@ -16,7 +21,7 @@ export default [
         width: 130,
         flex: 1,
         tooltipField: 'cdNm',
-        cellStyle: { lineHeight: '40px' },
+        cellStyle,
         cellRendererFramework: (row) => {
             return (
                 <div className="w-100 text-truncate">
@@ -37,11 +42,13 @@ export default [
         field: 'workInfo',
         width: 125,
         wrapText: true,
-        cellClassRules: {
-            'pre-cell': () => true,
-        },
         tooltipField: 'worker',
-        cellStyle: { lineHeight: '16px' },
+        cellClassRules: {
+            'ag-pre-cell': () => true,
+        },
+        cellStyle: {
+            lineHeight: `${GRID_LINE_HEIGHT.M}px`,
+        },
     },
     {
         headerName: '',

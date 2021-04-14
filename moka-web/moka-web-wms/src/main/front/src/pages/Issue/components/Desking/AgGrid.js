@@ -1,5 +1,6 @@
 import React, { useState, forwardRef, useEffect } from 'react';
 import { addDeskingWorkDropzone } from '@utils/deskingUtil';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaTable } from '@components';
 import columnDefs from './AgGridColumns';
 import IssueContentsModal from './IssueContentsModal';
@@ -59,6 +60,7 @@ const AgGrid = forwardRef((props, ref) => {
                 setGridInstance={setGridInstance}
                 columnDefs={columnDefs}
                 rowData={list}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(pkg) => pkg.pkgSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}
@@ -67,6 +69,7 @@ const AgGrid = forwardRef((props, ref) => {
                 size={search.size}
                 selected={selected.pkgSeq}
                 onChangeSearchOption={onChangeSearchOption}
+                preventRowClickCell={['info']}
             />
 
             <IssueContentsModal

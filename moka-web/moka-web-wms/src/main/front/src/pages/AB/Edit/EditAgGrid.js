@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';
+import { GRID_HEADER_HEIGHT } from '@/style_constants';
 import columnDefs from './EditAgGridColumns';
 import { StatusRenderer, StatusBar } from '../components';
 
@@ -22,8 +23,7 @@ const EditAgGrid = ({ match }) => {
             </Row>
 
             <MokaTable
-                headerHeight={45}
-                rowHeight={43}
+                headerHeight={GRID_HEADER_HEIGHT[1]}
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 onRowNodeId={(data) => data.seq}

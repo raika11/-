@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaTable } from '@/components';
 import columnDefs from './SundayJopanAgGridColumns';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { GET_JOPAN_LIST, changeJopanSearchOption, getJopanList, changeJopan } from '@/store/rcvArticle';
 
 /**
@@ -9,6 +10,7 @@ import { GET_JOPAN_LIST, changeJopanSearchOption, getJopanList, changeJopan } fr
  */
 const SundayJopanAgGrid = ({ match, setView }) => {
     const dispatch = useDispatch();
+    const pressCate61Rows = useSelector((store) => store.codeMgt.pressCate61Rows);
     const total = useSelector((store) => store.rcvArticle.jopanTotal);
     const list = useSelector((store) => store.rcvArticle.jopanList);
     const search = useSelector((store) => store.rcvArticle.jopanSearch);
@@ -49,19 +51,33 @@ const SundayJopanAgGrid = ({ match, setView }) => {
     );
 
     useEffect(() => {
-        setRowdata(
-            list.map((l, idx) => ({
-                ...l,
-                seq: search.size * search.page + idx + 1,
-                onClick: handleClickShow,
-            })),
-        );
+        if (pressCate61Rows) {
+            setRowdata(
+                list.map((l, idx) => {
+                    let sectionName;
+                    let findSectionIndex = pressCate61Rows.findIndex((s) => s.cdNmEtc1 === l.id.section);
+                    if (findSectionIndex > -1) {
+                        sectionName = pressCate61Rows[findSectionIndex].name;
+                    } else {
+                        sectionName = '';
+                    }
+
+                    return {
+                        ...l,
+                        seq: search.size * search.page + idx + 1,
+                        sectionName: sectionName,
+                        onClick: handleClickShow,
+                    };
+                }),
+            );
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [list, search.page, search.size]);
+    }, [pressCate61Rows, list, search.page, search.size]);
 
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
+            rowHeight={GRID_ROW_HEIGHT.C[0]}
             columnDefs={columnDefs}
             rowData={rowData}
             onRowNodeId={(data) => data.seq}

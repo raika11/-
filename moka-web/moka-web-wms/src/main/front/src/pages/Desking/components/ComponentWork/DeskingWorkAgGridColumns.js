@@ -63,7 +63,7 @@ export const columnDefs = [
         field: 'irThumbFileName',
         cellRenderer: 'imageRenderer',
         cellClassRules: cellClassRules,
-        cellStyle: { paddingTop: '3px', paddingBottom: '3px' },
+        cellStyle: { paddingTop: '4px', paddingBottom: '4px' },
     },
     {
         width: 200,

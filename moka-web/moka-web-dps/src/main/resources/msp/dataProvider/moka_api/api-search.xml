@@ -2,7 +2,7 @@
 <apiConfig>
 
   <api id="search" method="get" expire="5s">
-    <description>검색엔진에서 최신기사를 반환한다.</description>
+    <description>검색엔진에서 최신기사를 검색한다.</description>
     <parameter>
       <category desc="카테고리" require="Y">^.{1,20}$</category>
     </parameter>
@@ -11,6 +11,21 @@
     </request>
     <keys>
       category
+      #paging
+    </keys>
+  </api>
+
+  <!-- 최신 사진 검색-->
+  <api id="photo" method="get" expire="5s">
+    <description>검색엔진에서 최신사진를 검색한다.</description>
+    <parameter>
+      <keyword desc="검색어" default="서소문사진관|포토사오정|눕터뷰|권혁재 핸드폰사진관">^.{0,1000}$</keyword>
+    </parameter>
+    <request type="module" methodName="getLatestPhoto">
+      jmnet.moka.web.dps.module.SearchEngineModule
+    </request>
+    <keys>
+      keyword
       #paging
     </keys>
   </api>

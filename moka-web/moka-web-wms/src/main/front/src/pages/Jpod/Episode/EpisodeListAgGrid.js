@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaTable } from '@components';
 import { columnDefs } from './EpisodeListAgGridColumns';
 import { GET_EPSD_LIST, changeEpsdSearchOption, getEpsdList } from '@store/jpod';
@@ -48,6 +49,8 @@ const EpisodeListAgGrid = ({ match }) => {
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={rowData}
+            headerHeight={GRID_ROW_HEIGHT.T[0]}
+            rowHeight={GRID_ROW_HEIGHT.T[1]}
             onRowNodeId={(data) => data.epsdSeq}
             onRowClicked={handleRowClicked}
             loading={loading}

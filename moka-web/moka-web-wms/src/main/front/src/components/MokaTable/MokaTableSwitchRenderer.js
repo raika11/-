@@ -48,6 +48,7 @@ const MokaTableSwitchRenderer = forwardRef((params, ref) => {
                     custom: true,
                     checked: value === 'Y',
                 }}
+                className="mt-2"
                 onChange={handleChangeValue}
             />
         </div>

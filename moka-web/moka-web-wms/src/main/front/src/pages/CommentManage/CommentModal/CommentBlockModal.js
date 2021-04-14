@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import { MokaModal, MokaInputLabel, MokaInput } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
-import { saveBlocks, blocksUsed, getCommentList } from '@store/commentManage';
+import { saveBlocks, blocksUsed, getCommentList, getCommentsBlocks } from '@store/commentManage';
 import { BannedConfirmModal } from '@pages/CommentManage/CommentModal';
 
 /**
@@ -111,10 +111,12 @@ const CommentBlockModal = (props) => {
                 seqNo: '',
                 blockFormData: formData,
                 callback: ({ header, body }) => {
-                    const { success, message, resultType } = header;
+                    const { success, message } = header;
 
-                    if (!success) {
-                        if (resultType === 400) {
+                    if (success) {
+                        messageBox.alert(message, () => {});
+                    } else {
+                        if (message.indexOf('복원된') > -1) {
                             messageBox.confirm(
                                 message,
                                 () => {
@@ -125,6 +127,7 @@ const CommentBlockModal = (props) => {
                                             callback: ({ header: { success, message }, body }) => {
                                                 if (success === true) {
                                                     toast.success(message);
+                                                    dispatch(getCommentsBlocks());
                                                 } else {
                                                     const { totalCnt, list } = body;
                                                     if (totalCnt > 0 && Array.isArray(list)) {
@@ -145,11 +148,10 @@ const CommentBlockModal = (props) => {
                             );
                         } else {
                             messageBox.alert(message, () => {});
-                            return;
                         }
                     }
 
-                    if (success === true && body) {
+                    if (success && body) {
                         toast.success(message);
                         dispatch(getCommentList());
                     }

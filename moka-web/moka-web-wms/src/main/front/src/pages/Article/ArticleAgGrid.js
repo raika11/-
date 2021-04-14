@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import columnDefs from './ArticleAgGridColumns';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaTable } from '@components';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -48,24 +49,24 @@ const ArticleAgGrid = ({ match, ja }) => {
     );
 
     /**
-     * ag-grid queue empty 시점에서 실행
+     * ag-grid queue empty 시점에서 실행 => 고정 2줄로 변경되어 사용하지 않음. 참고용으로 주석처리
      * https://www.ag-grid.com/documentation/javascript/grid-events/
      */
-    const handleRowRendered = useCallback((params) => {
-        setTimeout(function () {
-            params.api.forEachNode((rowNode) => {
-                // autoHeight 셀 = 매체, 제목
-                const cells = params.api.getCellRendererInstances({ columns: ['source', 'artTitle'], rowNodes: [rowNode] });
-                if (cells.length === 2) {
-                    const height = cells[0].getGui().offsetHeight > cells[1].getGui().offsetHeight ? cells[0].getGui().offsetHeight : cells[1].getGui().offsetHeight;
-                    if (height + 8 > rowNode.rowHeight) {
-                        rowNode.setRowHeight(height + 8);
-                    }
-                }
-            });
-            params.api.onRowHeightChanged();
-        });
-    }, []);
+    // const handleRowRendered = useCallback((params) => {
+    //     setTimeout(function () {
+    //         params.api.forEachNode((rowNode) => {
+    //             // autoHeight 셀 = 매체, 제목
+    //             const cells = params.api.getCellRendererInstances({ columns: ['source', 'artTitle'], rowNodes: [rowNode] });
+    //             if (cells.length === 2) {
+    //                 const height = cells[0].getGui().offsetHeight > cells[1].getGui().offsetHeight ? cells[0].getGui().offsetHeight : cells[1].getGui().offsetHeight;
+    //                 if (height + 8 > rowNode.rowHeight) {
+    //                     rowNode.setRowHeight(height + 8);
+    //                 }
+    //             }
+    //         });
+    //         params.api.onRowHeightChanged();
+    //     });
+    // }, []);
 
     /**
      * 삭제
@@ -130,8 +131,12 @@ const ArticleAgGrid = ({ match, ja }) => {
                 let myunPan = '';
                 myunPan = `${data.pressMyun || ''}/${data.pressPan || ''}`;
 
+                let source = '';
+                source = `${data.sourceName}\n${data.contentKorname}`;
+
                 return {
                     ...data,
+                    source,
                     artTitle: unescapeHtmlArticle(data.artTitle),
                     artUrl: `${ARTICLE_URL}${data.totalId}`,
                     regDt: moment(data.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm'),
@@ -151,6 +156,8 @@ const ArticleAgGrid = ({ match, ja }) => {
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs.map((def) => (def.field === 'view' ? { ...def, width: !ja ? 90 : def.width } : def))}
             rowData={rowData}
+            headerHeight={GRID_ROW_HEIGHT.T[0]}
+            rowHeight={GRID_ROW_HEIGHT.T[1]}
             onRowNodeId={(data) => data.totalId}
             onRowClicked={handleRowClicked}
             loading={loading}
@@ -164,7 +171,7 @@ const ArticleAgGrid = ({ match, ja }) => {
                 columns: ['register'],
             }}
             selected={article.totalId}
-            onAnimationQueueEmpty={handleRowRendered}
+            // onAnimationQueueEmpty={handleRowRendered}
         />
     );
 };

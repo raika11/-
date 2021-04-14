@@ -62,6 +62,11 @@ public class CommentBannedServiceImpl implements CommentBannedService {
     }
 
     @Override
+    public Optional<CommentBanned> findAllCommentBannedByTagValueOrderbySeqNoDesc(CommentBannedType tagType, String tagValue) {
+        return commentBannedRepository.findCommentBannedOrderbySeqNoDesc(tagType, tagValue);
+    }
+
+    @Override
     @Transactional
     public CommentBanned insertCommentBanned(CommentBanned commentBanned) {
         return saveCommentBanned(commentBanned);

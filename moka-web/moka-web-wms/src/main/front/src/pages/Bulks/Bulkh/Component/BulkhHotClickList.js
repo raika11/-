@@ -166,7 +166,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                             <p className={clsx('mb-0', topTitleItem.isWait && 'text-danger')}>{topTitleItem.wait}</p>
                         </div>
                         <div className="ml-2 flex-shrink-0">
-                            <Button variant="outline-secondary" className="w-auto h-auto" onClick={handleClickHistoryModalButton}>
+                            <Button variant="outline-neutral" className="w-auto h-auto" onClick={handleClickHistoryModalButton}>
                                 편집정보
                             </Button>
                         </div>
@@ -178,7 +178,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
             footerButtons={[
                 { text: '재전송', variant: 'outline-neutral', onClick: () => handleClickResendButton(), className: 'mr-1' },
                 { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton('publish'), className: 'mr-1' },
-                { text: '임시저장', variant: 'secondary', onClick: () => handleClickSaveButton('save'), className: 'mr-1' },
+                { text: '임시저장', variant: 'neutral', onClick: () => handleClickSaveButton('save'), className: 'mr-1' },
             ]}
         >
             <div

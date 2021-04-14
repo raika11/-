@@ -125,7 +125,7 @@ const MyPageEdit = () => {
         }
 
         if (confirm === '') {
-            messageBox.alert('변경할 비밀번호 확인을 입력해주세요.');
+            messageBox.alert('입력하신 비밀번호와 비밀번호 확인이 일치하지 않습니다.\n다시 입력해주세요.');
             return false;
         }
 

@@ -12,14 +12,13 @@ const columnDefs = [
         width: 130,
         flex: 1,
         tooltipField: 'areaNm',
-        cellStyle: { lineHeight: '34px', cursor: 'pointer' },
+        cellStyle: { cursor: 'pointer' },
     },
     {
         headerName: '사용',
         field: 'usedYn',
         width: 40,
         cellRenderer: 'usedYnRenderer',
-        cellStyle: { lineHeight: '34px' },
     },
 ];
 

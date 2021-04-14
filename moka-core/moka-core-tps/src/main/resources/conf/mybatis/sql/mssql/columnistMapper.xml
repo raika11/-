@@ -10,4 +10,46 @@
     ]]>
 
   </select>
+
+  <!-- 컬럼니스트 목록 조회 -->
+  <select id="findAllList" parameterType="ColumnistSearchDTO" resultType="ColumnistVO"
+    statementType="CALLABLE">
+    {call UPA_COLUMNIST_LIST_SEL(
+
+    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+
+    <choose>
+      <when test="status != null and status != ''">
+        #{status},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="columnistNm != null and columnistNm != ''">
+        #{columnistNm},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="jplusRepDiv != null and jplusRepDiv != ''">
+        #{jplusRepDiv},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
 </mapper>

@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { JPLUS_REP_DIV_DEFAULT, CHANNEL_TYPE } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { addDeskingWorkDropzone } from '@utils/deskingUtil';
 import { MokaTable } from '@components';
 import columnDefs from './AgGridColumns';
@@ -9,6 +11,7 @@ import columnDefs from './AgGridColumns';
  */
 const AgGrid = (props) => {
     const { search, list, total, loading, onChangeSearchOption, onDragStop, dropTargetAgGrid } = props;
+    const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
     const [rowData, setRowData] = useState([]);
     const [gridInstance, setGridInstance] = useState(null);
 
@@ -19,14 +22,18 @@ const AgGrid = (props) => {
 
     useEffect(() => {
         setRowData(
-            list.map((l) => ({
-                ...l,
-                channelType: CHANNEL_TYPE.C.code,
-                repSeqText: l.repSeq || '   -',
-                jplusRepDiv: l.repSeq ? (l.jplusRepDiv || JPLUS_REP_DIV_DEFAULT).slice(0, 2) : '   -',
-            })),
+            list.map((l) => {
+                const jplusRepDivNm = l.repSeq ? ((jplusRepRows || []).find((code) => code.dtlCd === l.jplusRepDiv)?.cdNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2) : '외부';
+
+                return {
+                    ...l,
+                    channelType: CHANNEL_TYPE.C.code,
+                    repSeqText: l.repSeq || '   -',
+                    jplusRepDivNm,
+                };
+            }),
         );
-    }, [list]);
+    }, [list, jplusRepRows]);
 
     useEffect(() => {
         // 드롭 타겟 ag-grid에 drop-zone 설정
@@ -51,8 +58,8 @@ const AgGrid = (props) => {
                 className="overflow-hidden flex-fill"
                 setGridInstance={setGridInstance}
                 columnDefs={columnDefs}
-                rowHeight={45}
                 rowData={rowData}
+                rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(data) => data.seqNo}
                 onRowClicked={handleRowClicked}
                 loading={loading}

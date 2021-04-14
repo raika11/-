@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { MokaTable } from '@/components';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
+import { MokaTable } from '@components';
 import { changeSearchOption, getInternalApiList, GET_INTERNAL_API_LIST } from '@store/internalApi';
 import columnDefs from './InternalApiAgGridColumns';
 
@@ -44,6 +45,7 @@ const InternalApiAgGrid = ({ match }) => {
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={rowData}
+            rowHeight={GRID_ROW_HEIGHT.T[1]}
             onRowNodeId={(row) => row.seqNo}
             onRowClicked={handleRowClicked}
             loading={loading}

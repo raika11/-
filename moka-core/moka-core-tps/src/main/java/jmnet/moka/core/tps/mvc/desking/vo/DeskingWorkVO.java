@@ -163,6 +163,10 @@ public class DeskingWorkVO implements Serializable {
     @Builder.Default
     private Integer thumbHeight = 0;
 
+    @ApiModelProperty("배경색상")
+    @Column(name = "BG_COLOR")
+    private String bgColor;
+
     @ApiModelProperty("생성일시")
     @DTODateTimeFormat
     @Column(name = "REG_DT")

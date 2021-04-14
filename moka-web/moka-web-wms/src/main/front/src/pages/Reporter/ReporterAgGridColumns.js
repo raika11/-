@@ -1,4 +1,9 @@
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import ReporterPageButton from './components/ReporterPageButton';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+};
 
 export const columnDefs = [
     {
@@ -6,33 +11,33 @@ export const columnDefs = [
         field: 'repSeq',
         tooltipField: 'repSeq',
         width: 55,
-        cellStyle: { lineHeight: '43px' },
+        cellStyle,
     },
     {
         headerName: '타입코드',
         field: 'jplusRepDivNm',
         width: 63,
-        cellStyle: { lineHeight: '43px' },
+        cellStyle,
     },
     {
         headerName: '사진',
         field: 'repImg',
         width: 50,
-        cellRenderer: 'circleImageRenderer',
-        cellStyle: { padding: '3px 6px' },
+        cellRenderer: 'imageRenderer',
+        cellRendererParams: { roundedCircle: true, autoRatio: false },
     },
     {
         headerName: '이름',
         field: 'repName',
         width: 80,
-        cellStyle: { lineHeight: '43px' },
+        cellStyle,
     },
     {
         headerName: '아이디',
         field: 'joinsId',
         tooltipField: 'joinsId',
         width: 100,
-        cellStyle: { lineHeight: '43px' },
+        cellStyle,
     },
     {
         headerName: '이메일',
@@ -40,13 +45,13 @@ export const columnDefs = [
         tooltipField: 'repEmail1',
         width: 180,
         flex: 1,
-        cellStyle: { lineHeight: '43px' },
+        cellStyle,
     },
     {
         headerName: '수정일시',
         field: 'modDt',
         width: 130,
-        cellStyle: { lineHeight: '43px' },
+        cellStyle,
     },
     {
         headerName: '노출여부',

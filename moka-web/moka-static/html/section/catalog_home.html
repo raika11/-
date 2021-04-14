@@ -143,7 +143,7 @@
                     </header>
                     <!-- //타이틀 -->
 
-                    <ul class="card_group row  ">
+                    <ul class="row photo_list">
                         <!-- loopSet1 -->
                         <li class="card col_sm12 col_md3 col_lg3">
                             <div class="row flex_row_reverse">
@@ -183,7 +183,7 @@
                     </header>
                     <!-- //타이틀 -->
                     
-                    <ul class="card_group row  ">
+                    <ul class="row photo_list">
                         <!-- loopSet1 -->
                         <li class="card col_sm12 col_md3 col_lg3">
                             <div class="row flex_row_reverse">
@@ -242,38 +242,10 @@
                                 <i class="fa fa_mark_exclam">!</i>
                             </header>
 
-                            <ul class="card_group rank2 hide">
-                                <!-- rank 1set -->
-                                <li class="card ">
-                                    <div class="lank_count ico_num_1">1</div><!-- 기사 순서에 맞춰 1~5 순차 카운트 처리 필요 -->
-                                    <div class="card_body">
-                                        <div class="headline fs_sm14 fs_md14 fs_lg16"><a  href="javascript:void(null);">‘美 미술 레지던시 작가 선정’ 신예 작가 오승경, 국내서 개인전 개최</a></div>
-                                        <p class="date">2020.1.26 11:40</p>
-                                    </div>
-                                    <div class="card_image">
-                                        <a href="javascript:void(null);">
-                                        <img
-                                            srcset="//via.placeholder.com/86x86 1x,
-                                                    //via.placeholder.com/172x172 2x,
-                                                    //via.placeholder.com/258x258 3x"
-                                            width="86"
-                                            src="//via.placeholder.com/86x86"
-                                            alt="...">
-                                    </div>
-                                </li>
-                                <!-- //rank 1set -->
-
-                                <!-- 반복영역 -->
-                                <li class="card "><div class="lank_count ico_num_2">2</div> <div class="card_body"><div class="headline fs_sm14 fs_md14 fs_lg16"><a  href="javascript:void(null);">‘美 미술 레지던시 작가 선정’ 신예 작가 오승경, 국내서 개인전 개최</a></div><p class="date">2020.1.26 11:40</p></div><div class="card_image"><img srcset="//via.placeholder.com/86x86 1x, //via.placeholder.com/172x172 2x, //via.placeholder.com/258x258 3x" width="86" src="//via.placeholder.com/86x86" alt="..."> </div></li></li>
-                                <li class="card "><div class="lank_count ico_num_3">3</div> <div class="card_body"><div class="headline fs_sm14 fs_md14 fs_lg16"><a  href="javascript:void(null);">‘美 미술 레지던시 작가 선정’ 신예 작가 오승경, 국내서 개인전 개최</a></div><p class="date">2020.1.26 11:40</p></div><div class="card_image"><img srcset="//via.placeholder.com/86x86 1x, //via.placeholder.com/172x172 2x, //via.placeholder.com/258x258 3x" width="86" src="//via.placeholder.com/86x86" alt="..."> </div></li></li>
-                                <li class="card "><div class="lank_count ico_num_4">4</div> <div class="card_body"><div class="headline fs_sm14 fs_md14 fs_lg16"><a  href="javascript:void(null);">‘美 미술 레지던시 작가 선정’ 신예 작가 오승경, 국내서 개인전 개최</a></div><p class="date">2020.1.26 11:40</p></div><div class="card_image"><img srcset="//via.placeholder.com/86x86 1x, //via.placeholder.com/172x172 2x, //via.placeholder.com/258x258 3x" width="86" src="//via.placeholder.com/86x86" alt="..."> </div></li></li>
-                                <li class="card "><div class="lank_count ico_num_5">5</div> <div class="card_body"><div class="headline fs_sm14 fs_md14 fs_lg16"><a  href="javascript:void(null);">‘美 미술 레지던시 작가 선정’ 신예 작가 오승경, 국내서 개인전 개최</a></div><p class="date">2020.1.26 11:40</p></div><div class="card_image"><img srcset="//via.placeholder.com/86x86 1x, //via.placeholder.com/172x172 2x, //via.placeholder.com/258x258 3x" width="86" src="//via.placeholder.com/86x86" alt="..."> </div></li></li>
-
-                                <!-- //반복영역 -->
-                            </ul>
-                            <ul class="card_group rank">
+                            <ul class="rank_group">
                                 <!-- rank 1set -->
                                 <li class="card row">
+                                    <!-- rank num에 사용할 svg 이미지 주세요. -->
                                     <div class="lank_count col_sm1 col_md2 col_lg1 ico_num_1">1</div><!-- 기사 순서에 맞춰 1~5 순차 카운트 처리 필요 -->
                                     <div class="card_body col_sm7 col_md10 col_lg8">
                                         <div class="headline fs_sm14 fs_md14 fs_lg16 "><a  href="javascript:void(null);">‘美 미술 레지던시 작가 선정’ 신예 작가 오승경, 국내서 개인전 개최</a></div>
@@ -310,13 +282,41 @@
                     </div>
     
                     <div class="col_lg8 col_md8">
-                        <section class="chain_wrap latest">
+                        <section class="chain_wrap">
                             <header class="title_wrap bdr_width3">
                                 <div class="title_area">
                                     <h2 class="title">최신 기사</h2>
                                 </div>
                             </header>
-                            <ul class="card_group row  catalog_card">
+
+                            <ul class="photo_list row hide">
+                                <li class="card col_md6 col_lg6">
+                                    <div class="row flex_row_reverse">
+                                        <div class="card_image thum_wrap col_sm4">
+                                            <a href="#" class="img_thumbnail">
+                                                <img srcset="https://via.placeholder.com/273x153 1x, https://via.placeholder.com/546x306 2x, https://via.placeholder.com/819x459 3x" width="273" height="153" src="https://via.placeholder.com/273x153" alt="..." > 
+                                                <i class="fa_rect_w"></i>
+                                            </a>
+                                        </div>
+                                        <div class="card_body col_sm8 ">
+                                            <h2 class="headline"><a href="#">유사시 한반도 겨눈 中북해함대, 항모에 핵추진 잠수함도 4척</a></h2>
+                                            <p class="date">2020.1.26 11:40</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="card col_md6 col_lg6"><div class="row flex_row_reverse"><div class="card_image thum_wrap col_sm4"><a href="#" class="img_thumbnail"><img srcset="https://via.placeholder.com/273x153 1x, https://via.placeholder.com/546x306 2x, https://via.placeholder.com/819x459 3x" width="273" height="153" src="https://via.placeholder.com/273x153" alt="..."><i class="fa_rect_w"></i></a></div><div class="card_body col_sm8 "><h2 class="headline"><a href="#">유사시 한반도 겨눈 中북해함대, 항모에 핵추진 잠수함도 4척</a></h2><p class="date">2020.1.26 11:40</p></div></div></li></li>
+                                <li class="card col_md6 col_lg6"><div class="row flex_row_reverse"><div class="card_image thum_wrap col_sm4"><a href="#" class="img_thumbnail"><img srcset="https://via.placeholder.com/273x153 1x, https://via.placeholder.com/546x306 2x, https://via.placeholder.com/819x459 3x" width="273" height="153" src="https://via.placeholder.com/273x153" alt="..."><i class="fa_rect_w"></i></a></div><div class="card_body col_sm8 "><h2 class="headline"><a href="#">유사시 한반도 겨눈 中북해함대, 항모에 핵추진 잠수함도 4척</a></h2><p class="date">2020.1.26 11:40</p></div></div></li></li>
+                                <li class="card col_md6 col_lg6"><div class="row flex_row_reverse"><div class="card_image thum_wrap col_sm4"><a href="#" class="img_thumbnail"><img srcset="https://via.placeholder.com/273x153 1x, https://via.placeholder.com/546x306 2x, https://via.placeholder.com/819x459 3x" width="273" height="153" src="https://via.placeholder.com/273x153" alt="..."><i class="fa_rect_w"></i></a></div><div class="card_body col_sm8 "><h2 class="headline"><a href="#">유사시 한반도 겨눈 中북해함대, 항모에 핵추진 잠수함도 4척</a></h2><p class="date">2020.1.26 11:40</p></div></div></li></li>
+                                <li class="card col_md6 col_lg6"><div class="row flex_row_reverse"><div class="card_image thum_wrap col_sm4"><a href="#" class="img_thumbnail"><img srcset="https://via.placeholder.com/273x153 1x, https://via.placeholder.com/546x306 2x, https://via.placeholder.com/819x459 3x" width="273" height="153" src="https://via.placeholder.com/273x153" alt="..."><i class="fa_rect_w"></i></a></div><div class="card_body col_sm8 "><h2 class="headline"><a href="#">유사시 한반도 겨눈 中북해함대, 항모에 핵추진 잠수함도 4척</a></h2><p class="date">2020.1.26 11:40</p></div></div></li></li>
+                                <li class="card col_md6 col_lg6"><div class="row flex_row_reverse"><div class="card_image thum_wrap col_sm4"><a href="#" class="img_thumbnail"><img srcset="https://via.placeholder.com/273x153 1x, https://via.placeholder.com/546x306 2x, https://via.placeholder.com/819x459 3x" width="273" height="153" src="https://via.placeholder.com/273x153" alt="..."><i class="fa_rect_w"></i></a></div><div class="card_body col_sm8 "><h2 class="headline"><a href="#">유사시 한반도 겨눈 中북해함대, 항모에 핵추진 잠수함도 4척</a></h2><p class="date">2020.1.26 11:40</p></div></div></li></li>
+                                <li class="card col_md6 col_lg6"><div class="row flex_row_reverse"><div class="card_image thum_wrap col_sm4"><a href="#" class="img_thumbnail"><img srcset="https://via.placeholder.com/273x153 1x, https://via.placeholder.com/546x306 2x, https://via.placeholder.com/819x459 3x" width="273" height="153" src="https://via.placeholder.com/273x153" alt="..."><i class="fa_rect_w"></i></a></div><div class="card_body col_sm8 "><h2 class="headline"><a href="#">유사시 한반도 겨눈 中북해함대, 항모에 핵추진 잠수함도 4척</a></h2><p class="date">2020.1.26 11:40</p></div></div></li></li>
+                                <li class="card col_md6 col_lg6"><div class="row flex_row_reverse"><div class="card_image thum_wrap col_sm4"><a href="#" class="img_thumbnail"><img srcset="https://via.placeholder.com/273x153 1x, https://via.placeholder.com/546x306 2x, https://via.placeholder.com/819x459 3x" width="273" height="153" src="https://via.placeholder.com/273x153" alt="..."><i class="fa_rect_w"></i></a></div><div class="card_body col_sm8 "><h2 class="headline"><a href="#">유사시 한반도 겨눈 中북해함대, 항모에 핵추진 잠수함도 4척</a></h2><p class="date">2020.1.26 11:40</p></div></div></li></li>
+                                <li class="card col_md6 col_lg6"><div class="row flex_row_reverse"><div class="card_image thum_wrap col_sm4"><a href="#" class="img_thumbnail"><img srcset="https://via.placeholder.com/273x153 1x, https://via.placeholder.com/546x306 2x, https://via.placeholder.com/819x459 3x" width="273" height="153" src="https://via.placeholder.com/273x153" alt="..."><i class="fa_rect_w"></i></a></div><div class="card_body col_sm8 "><h2 class="headline"><a href="#">유사시 한반도 겨눈 中북해함대, 항모에 핵추진 잠수함도 4척</a></h2><p class="date">2020.1.26 11:40</p></div></div></li></li>
+                                <li class="card col_md6 col_lg6"><div class="row flex_row_reverse"><div class="card_image thum_wrap col_sm4"><a href="#" class="img_thumbnail"><img srcset="https://via.placeholder.com/273x153 1x, https://via.placeholder.com/546x306 2x, https://via.placeholder.com/819x459 3x" width="273" height="153" src="https://via.placeholder.com/273x153" alt="..."><i class="fa_rect_w"></i></a></div><div class="card_body col_sm8 "><h2 class="headline"><a href="#">유사시 한반도 겨눈 中북해함대, 항모에 핵추진 잠수함도 4척</a></h2><p class="date">2020.1.26 11:40</p></div></div></li></li>
+
+                            </ul>
+
+                            <ul class="card_group row  catalog_card ">
                                 <!-- loopSet1 -->
                                 <li class="card col_sm6 col_md6 col_lg6">
                                     <div class="card_image">

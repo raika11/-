@@ -1,3 +1,9 @@
+import { GRID_LINE_HEIGHT } from '@/style_constants';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+};
+
 export default [
     {
         headerName: '',
@@ -7,39 +13,40 @@ export default [
         rowDragText: (params) => {
             return params.rowNode.data.columnistNm;
         },
+        cellStyle,
     },
     {
         headerName: '기자번호',
         field: 'repSeqText',
         width: 65,
-        cellStyle: { lineHeight: '43px', whiteSpace: 'pre-wrap' },
+        cellStyle,
     },
     {
         headerName: '타입코드',
-        field: 'jplusRepDiv',
+        field: 'jplusRepDivNm',
         width: 63,
-        cellStyle: { lineHeight: '43px', whiteSpace: 'pre-wrap' },
+        cellStyle,
     },
     {
         headerName: '사진',
         field: 'profilePhoto',
         width: 50,
-        cellRenderer: 'circleImageRenderer',
-        cellStyle: { padding: '3px 6px' },
+        cellRenderer: 'imageRenderer',
+        cellRendererParams: { roundedCircle: true, autoRatio: false },
     },
     {
         headerName: '기자이름',
         field: 'columnistNm',
         width: 70,
         tooltipField: 'columnistNm',
-        cellStyle: { lineHeight: '43px' },
+        cellStyle,
     },
     {
         headerName: '이메일',
         field: 'email',
         width: 200,
         tooltipField: 'email',
-        cellStyle: { lineHeight: '43px' },
+        cellStyle,
     },
     {
         headerName: '약력정보',
@@ -47,7 +54,7 @@ export default [
         width: 300,
         flex: 1,
         tooltipField: 'profile',
-        cellStyle: { lineHeight: '43px' },
+        cellStyle,
     },
     {
         headerName: '사용여부',
@@ -60,6 +67,5 @@ export default [
         field: 'regDt',
         width: 140,
         tooltipField: 'regDt',
-        cellStyle: { lineHeight: '43px' },
     },
 ];

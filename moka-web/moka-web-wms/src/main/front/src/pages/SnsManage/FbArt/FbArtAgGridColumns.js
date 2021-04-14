@@ -1,5 +1,9 @@
-import React from 'react';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import { EtcButtonRenderer } from './GridRenderer';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+};
 
 export default [
     {
@@ -7,51 +11,26 @@ export default [
         field: 'id',
         width: 80,
         tooltipField: 'id',
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellStyle,
     },
     {
         headerName: '전송일시',
         field: 'sendDt',
         width: 90,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellStyle,
     },
     {
         headerName: '이미지',
         field: 'imgUrl',
         cellRenderer: 'imageRenderer',
-        width: 78,
+        width: 60,
     },
     {
         headerName: 'SNS제목',
         field: 'title',
-        wrapText: true,
-        width: 250,
         flex: 1,
         tooltipField: 'title',
-        cellRendererFramework: ({ value }) => {
-            return (
-                <div
-                    style={{
-                        boxSizing: 'border-box',
-                        whiteSpace: 'normal',
-                        lineHeight: '20px',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                    }}
-                >
-                    {value}
-                </div>
-            );
-        },
-        cellStyle: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignContent: 'center',
-            flexDirection: 'column',
-            height: '100%',
-        },
+        cellStyle,
     },
     {
         headerName: '사용',

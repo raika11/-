@@ -44,4 +44,15 @@ public interface CommentBannedRepositorySupport {
      * @return 댓글 차단 정보
      */
     Optional<CommentBanned> findCommentBanned(CommentBannedType tagType, String tagValue);
+
+    /**
+     * 댓글 차단 상세 조회
+     *
+     * @param tagType  금지유형
+     * @param tagValue 태그
+     * @return 댓글 차단 정보
+     */
+    Optional<CommentBanned> findCommentBannedOrderbySeqNoDesc(CommentBannedType tagType, String tagValue);
+    
+    long updateUseYnBySeqNo(Long seqNo, String useYn);
 }

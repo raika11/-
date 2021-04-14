@@ -109,6 +109,7 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                             <div style={{ width: 150 }}>
                                 <MokaInput
                                     as="dateTimePicker"
+                                    className="right"
                                     name="expoResrvTm"
                                     inputProps={{ dateFormat: null }}
                                     onChange={(date) => {

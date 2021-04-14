@@ -97,10 +97,24 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                     {edit.usedYn === 'R' && (
                         <>
                             <div style={{ width: 150 }} className="pr-1">
-                                <MokaInput as="dateTimePicker" name="expoResrvDT" inputProps={{ timeFormat: null }} />
+                                <MokaInput
+                                    as="dateTimePicker"
+                                    name="expoResrvDT"
+                                    inputProps={{ timeFormat: null }}
+                                    onChange={(date) => {
+                                        console.log(date);
+                                    }}
+                                />
                             </div>
                             <div style={{ width: 150 }}>
-                                <MokaInput as="dateTimePicker" name="expoResrvTm" inputProps={{ dateFormat: null }} />
+                                <MokaInput
+                                    as="dateTimePicker"
+                                    name="expoResrvTm"
+                                    inputProps={{ dateFormat: null }}
+                                    onChange={(date) => {
+                                        console.log(date);
+                                    }}
+                                />
                             </div>
                         </>
                     )}

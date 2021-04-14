@@ -310,6 +310,15 @@ function* existsIssueTitle({ payload }) {
     }
 }
 
+function* updateFinishIssue({ payload }) {
+    const { pkgSeq, callback } = payload;
+
+    const response = yield call(api.finishIssue, { pkgSeq });
+    if (callback instanceof Function) {
+        callback(response);
+    }
+}
+
 /**
  * 이슈 컨텐츠 목록 조회 (모달)
  */
@@ -322,6 +331,7 @@ export default function* saga() {
     yield takeLatest(act.GET_ISSUE_LIST, getIssueList);
     yield takeLatest(act.GET_ISSUE, getIssue);
     yield takeLatest(act.SAVE_ISSUE, saveIssue);
+    yield takeLatest(act.FINISH_ISSUE, updateFinishIssue);
     yield takeLatest(act.GET_ISSUE_LIST_MODAL, getIssueListModal);
     yield takeLatest(act.GET_ISSUE_CONTENTS_LIST_MODAL, getIssueContentsListModal);
     yield takeLatest(act.EXISTS_ISSUE_TITLE, existsIssueTitle);

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
 import { getPreviewTotalId } from '@store/articlePage';
@@ -43,8 +42,6 @@ const RelationInArticlePageList = (props) => {
     const loading = useSelector(({ loading }) => loading[GET_RELATION_LIST]);
     const { domainList, latestDomainId } = useSelector(({ auth }) => auth);
     const { search: storeSearch, list, total, error } = useSelector(({ relation }) => relation);
-
-    // state
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
 
@@ -144,7 +141,17 @@ const RelationInArticlePageList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard title="관련 아티클페이지" bodyClassName="d-flex flex-column">
+        <MokaCard
+            title="관련 아티클페이지"
+            titleButtons={[
+                {
+                    text: '아티클페이지 등록',
+                    variant: 'positive',
+                    onClick: () => window.open('/article-page/add'),
+                },
+            ]}
+            bodyClassName="d-flex flex-column"
+        >
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-14">
@@ -157,13 +164,6 @@ const RelationInArticlePageList = (props) => {
                     </MokaInput>
                 </Form.Row>
             )}
-
-            {/* 버튼 */}
-            <div className="d-flex justify-content-end mb-14">
-                <Button variant="positive" onClick={() => window.open('/article-page/add')}>
-                    아티클페이지 등록
-                </Button>
-            </div>
 
             {/* 테이블 */}
             <MokaTable

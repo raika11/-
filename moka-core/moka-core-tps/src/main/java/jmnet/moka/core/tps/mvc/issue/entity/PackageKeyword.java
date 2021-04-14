@@ -57,7 +57,7 @@ public class PackageKeyword implements Serializable {
     private Long kwdCnt;
 
     @Column(name = "ORD_NO")
-    private Long ordno;
+    private Long ordNo;
 
     @Column(name = "REP_MASTER")
     private Long repMaster;

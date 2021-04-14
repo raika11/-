@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
 import columnDefs from './RelationInPageListColums';
@@ -116,7 +115,17 @@ const RelationInPageList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard title="관련 페이지" bodyClassName="d-flex flex-column">
+        <MokaCard
+            title="관련 페이지"
+            titleButtons={[
+                {
+                    text: '페이지 등록',
+                    variant: 'positive',
+                    onClick: () => window.open('/page/add'),
+                },
+            ]}
+            bodyClassName="d-flex flex-column"
+        >
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-14">
@@ -129,13 +138,6 @@ const RelationInPageList = (props) => {
                     </MokaInput>
                 </Form.Row>
             )}
-
-            {/* 버튼 */}
-            <div className="d-flex justify-content-end mb-14">
-                <Button variant="positive" onClick={() => window.open('/page/add')}>
-                    페이지 등록
-                </Button>
-            </div>
 
             {/* 테이블 */}
             <MokaTable

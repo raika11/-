@@ -329,12 +329,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 <div className="mb-2 d-flex">
                     <Col className="p-0 pr-2 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="매체" as="none" />
-                        <span className="ft-14 user-select-text">{temp?.articleSource?.sourceName}</span>
+                        <span className="user-select-text">{temp?.articleSource?.sourceName}</span>
                     </Col>
                     <Col className="p-0 align-items-center justify-content-between d-flex" xs={6}>
                         <div className="d-flex align-items-center">
                             <MokaInputLabel label="발행일" as="none" />
-                            <span className="ft-14 user-select-text">{temp.pressDateText}</span>
+                            <span className="user-select-text">{temp.pressDateText}</span>
                         </div>
 
                         <Button variant="outline-neutral flex-shrink-0" onClick={() => setHistoryModalShow(true)}>
@@ -349,12 +349,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 <div className="mb-2 d-flex">
                     <Col className="p-0 pr-2 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="기사ID" as="none" />
-                        <span className="ft-14 user-select-text">{temp.totalId}</span>
+                        <span className="user-select-text">{temp.totalId}</span>
                     </Col>
 
                     <Col className="p-0 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="수신ID" as="none" />
-                        <span className="ft-14 user-select-text">{temp.rid}</span>
+                        <span className="user-select-text">{temp.rid}</span>
                     </Col>
                 </div>
 

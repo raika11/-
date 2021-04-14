@@ -15,14 +15,8 @@ import ButtonRenderer from './components/ButtonRenderer';
 const BoardsSetAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-
-    const total = useSelector((store) => store.board.setMenu.total);
-    const boardslist = useSelector((store) => store.board.setMenu.list);
-    const search = useSelector((store) => store.board.setMenu.search);
-    const boardInfo = useSelector((store) => store.board.setMenu.boardInfo);
-    const loading = useSelector((store) => store.loading[GET_SET_MENU_BOARD_LIST]);
-
-    // 그리드 리스트 데이터
+    const { total, list: boardslist, search, boardInfo } = useSelector(({ board }) => board.setMenu);
+    const loading = useSelector(({ loading }) => loading[GET_SET_MENU_BOARD_LIST]);
     const [rowData, setRowData] = useState([]);
 
     /**

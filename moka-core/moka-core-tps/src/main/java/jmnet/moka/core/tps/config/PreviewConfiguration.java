@@ -14,6 +14,8 @@ import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.MokaPreviewTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
+import jmnet.moka.core.tms.mvc.abtest.AbTestResolver;
+import jmnet.moka.core.tms.mvc.abtest.PreviewAbTestResolver;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.domain.DpsDomainResolver;
 import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
@@ -37,6 +39,7 @@ public class PreviewConfiguration {
 
     public static final String PREVIEW_WORK_TEMPLATE_MERGER = "previewWorkTemplateMerger";
     public static final String PREVIEW_TEMPLATE_MERGER = "previewTemplateMerger";
+    public static final String PREVIEW_ABTEST_RESOLVER = "previewAbTestResolver";
     public static final String TEMPLATE_LOADER = "templateLoader";
     public static final String WORK_TEMPLATE_LOADER = "workTemplateLoader";
     public final transient Logger logger = LoggerFactory.getLogger(getClass());
@@ -148,6 +151,12 @@ public class PreviewConfiguration {
                 new MokaPreviewTemplateMerger(this.appContext, domainItem, domainResolver, templateLoader, domainDataLoader, defaultDataLoader(),
                         this.defaultApiHostUse, regId);
         return ptm;
+    }
+
+    @Bean(name = PREVIEW_ABTEST_RESOLVER)
+    @Scope("prototype")
+    public AbTestResolver previewAbTestResolver() {
+        return new PreviewAbTestResolver(this.appContext);
     }
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
+import jmnet.moka.core.tps.mvc.reporter.vo.ReporterSaveVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 
 /**
@@ -50,4 +51,19 @@ public interface ReporterService {
      */
     public Reporter updateReporter(Reporter reporter);
 
+    /**
+     * 기자 등록
+     *
+     * @param reporterSaveVO 정보
+     * @return 작업
+     */
+    int insertReporters(ReporterSaveVO reporterSaveVO);
+
+    /**
+     * 기자 수정
+     *
+     * @param reporterSaveVO 정보
+     * @return 작업
+     */
+    int updateReporters(ReporterSaveVO reporterSaveVO);
 }

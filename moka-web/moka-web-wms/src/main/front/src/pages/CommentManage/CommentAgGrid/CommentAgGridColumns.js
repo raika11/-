@@ -33,14 +33,12 @@ export const columnDefs = [
     {
         headerName: '댓글내용',
         field: 'cont',
-        wrapText: true,
         flex: 1,
         cellStyle: {
-            display: '-webkit-box',
-            overflow: 'hidden',
-            '-webkit-line-clamp': '2',
-            '-webkit-box-orient': 'vertical',
+            whiteSpace: 'normal',
             lineHeight: `${GRID_LINE_HEIGHT.M}px`,
+            paddingTop: '8px',
+            paddingBottom: '10px',
             cursor: 'pointer',
         },
         cellRendererFramework: (param) => {

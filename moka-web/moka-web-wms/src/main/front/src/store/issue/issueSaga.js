@@ -43,8 +43,9 @@ const toIssueListData = (list) => {
             }
             reporterNames = reporters.join(',');
         }
-
-        return { ...data, category, categoryNames, reporter, reporterNames };
+        const expYn = data.usedYn === 'N' ? 'N' : 'Y';
+        const endYn = data.usedYn === 'E' ? 'Y' : 'N';
+        return { ...data, category, categoryNames, reporter, reporterNames, expYn, endYn };
     });
 };
 

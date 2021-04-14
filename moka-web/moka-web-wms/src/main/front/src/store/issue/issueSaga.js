@@ -160,7 +160,7 @@ export const toIssueData = (response) => {
         pkgDesc,
         pkgDiv,
         episView,
-        packageKeywords: { search, reporter, section, digitalSpecial, ovp, category, pkg },
+        packageKeywords: { search, reporter, section, digitalSpecial, ovp },
         seasons,
         catList,
     };
@@ -200,7 +200,7 @@ const toSaveSchCondi = (pkgSchCondi) => {
 const toSavePackageKeywords = (viewKeywords) => {
     const usedKeywords = Object.keys(viewKeywords).filter((key) => viewKeywords[key].isUsed);
     const packageKeywords = [];
-    let ordno = 1;
+    let ordNo = 1;
     usedKeywords.forEach((key, index) => {
         const keyword = viewKeywords[key].keyword;
         const { schCondi: pkgSchCondi } = keyword;
@@ -221,16 +221,16 @@ const toSavePackageKeywords = (viewKeywords) => {
                     schCondi: schCondi,
                     sdate,
                     edate,
-                    ordno,
+                    ordNo,
                     andOr,
                 });
-                ordno++;
+                ordNo++;
             });
         } else {
             const sdate = commonUtil.isEmpty(keyword.sdate) ? null : moment(keyword.sdate).format(DATE_FORMAT);
             const edate = commonUtil.isEmpty(keyword.edate) ? null : moment(keyword.edate).format(DATE_FORMAT);
-            packageKeywords.push({ ...keyword, schCondi, sdate, edate, ordno });
-            ordno++;
+            packageKeywords.push({ ...keyword, schCondi, sdate, edate, ordNo });
+            ordNo++;
         }
     });
 

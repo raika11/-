@@ -14,6 +14,7 @@ var include = {
         
         document.write('<link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/common/section.css" rel="stylesheet">');
+        document.write('<link href="//stg-static.joongang.co.kr/css/common/article.css" rel="stylesheet">');
 
         document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/utils/scroll.js"></script>');

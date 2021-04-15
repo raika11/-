@@ -100,6 +100,8 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
                 }
             }
 
+            scheduleResult.setSendResult(0l);
+            scheduleResult.setSendExecTime(0l);
             //AbstractScheduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력
             setFinish(success, info);
 

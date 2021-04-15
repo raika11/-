@@ -23,9 +23,9 @@ public class GenStatusServiceImpl implements GenStatusService {
         genStatus.setJobSeq(jobSeq);
         genStatus.setGenResult(StatusResultType.BEFORE_EXECUTE.getCode());
         genStatus.setErrMgs(StatusResultType.BEFORE_EXECUTE.getName());
-        genStatus.setGenExecTime(-1L);
-        genStatus.setSendResult(-1L);
-        genStatus.setSendExecTime(-1L);
+        genStatus.setGenExecTime(0L);           // 기존에 왜 -1L로 되어있는지?
+        genStatus.setSendResult(0L);            //-1L
+        genStatus.setSendExecTime(0L);          //-1L
         genStatus.setLastExecDt(new Date());
 
         return genStatusRepository.save(genStatus);

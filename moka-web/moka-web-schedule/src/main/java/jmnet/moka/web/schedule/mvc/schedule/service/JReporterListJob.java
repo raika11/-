@@ -1,5 +1,6 @@
 package jmnet.moka.web.schedule.mvc.schedule.service;
 
+import java.util.Date;
 import java.util.List;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
@@ -105,6 +106,7 @@ public class JReporterListJob extends AbstractScheduleJob {
                 stringBuffer.append(System.lineSeparator());
 
                 //log.debug("string : {}", stringBuffer);
+                scheduleResult.setSendExecTime((new Date()).getTime());
 
                 //success = stringFileUpload(stringBuffer.toString());
                 FileUpload fileUpload = new FileUpload(scheduleInfo, mokaCrypt);
@@ -113,6 +115,12 @@ public class JReporterListJob extends AbstractScheduleJob {
                 //업로드 성공 시 GenStatus.content에 파일생성에 사용된 String 저장
                 if (success) {
                     scheduleResult.setContent(stringBuffer.toString());
+                    scheduleResult.setSendResult(StatusResultType.SUCCESS.getCode());
+                    scheduleResult.setSendExecTime(((new Date()).getTime() - scheduleResult.getSendExecTime()) / 1000);
+                }
+                else {
+                    scheduleResult.setSendResult(StatusResultType.FAILED.getCode());
+                    scheduleResult.setSendExecTime(0l);
                 }
             }
 

@@ -1,5 +1,6 @@
 package jmnet.moka.web.schedule.mvc.reserve.service;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpDate;
@@ -15,11 +16,13 @@ import jmnet.moka.web.schedule.mvc.common.entity.CommonCode;
 import jmnet.moka.web.schedule.mvc.common.repository.repository.CommonCodeRepository;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.mvc.gen.repository.GenContentHistoryRepository;
 import jmnet.moka.web.schedule.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.web.schedule.mvc.sns.entity.ArticleSnsSharePK;
 import jmnet.moka.web.schedule.mvc.sns.repository.ArticleSnsShareRepository;
 import jmnet.moka.web.schedule.support.StatusFlagType;
+import jmnet.moka.web.schedule.support.StatusResultType;
 import jmnet.moka.web.schedule.support.reserve.AbstractReserveJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,14 +72,19 @@ public class SnsShareReserveJob extends AbstractReserveJob {
          */
         try {
             GenContent genContent = history.getGenContent();
-
+            GenStatus reservedResult = genContent.getGenStatus();
             /**
              * todo 2. 작업 테이블의 파라미터 정보를 Map 형태로 전환하여, procedure 또는 업무별 service 객체 호출
              * - 각 업무 담당자가 해당 영역 코딩은 구현할 예정
              */
+            reservedResult.setSendExecTime((new Date()).getTime());
+
             ArticleSnsShare ArticleSnsShare = genContent
                     .getJobCd()
                     .equals("SNS_PUBLISH") ? publishSnsArticleSnsShare(history) : deleteSnsArticleSnsShare(history);
+
+            reservedResult.setSendResult(StatusResultType.SUCCESS.getCode());
+            reservedResult.setSendExecTime(((new Date()).getTime() - reservedResult.getSendExecTime()) / 1000);
 
         } catch (NoDataException ex) {
             log.error("[GEN STATUS HISTORY ERROR]", ex.toString());

@@ -67,7 +67,7 @@ const PackageKeywordReporterComponent = ({ keyword, onChange, reporters }) => {
                             <p style={{ width: 130 }} className="mb-0 pr-3">
                                 기자명(default)
                             </p>
-                            <div style={{ width: 80 }} className="pr-3">
+                            <div style={{ width: 100 }} className="pr-3">
                                 <MokaInput
                                     as="checkbox"
                                     name="title"
@@ -79,7 +79,7 @@ const PackageKeywordReporterComponent = ({ keyword, onChange, reporters }) => {
                                     }}
                                 />
                             </div>
-                            <div style={{ width: 80 }}>
+                            <div style={{ width: 100 }}>
                                 <MokaInput
                                     as="checkbox"
                                     name="keyword"

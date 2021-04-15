@@ -83,7 +83,7 @@ const PackageKeywordSectionComponent = ({ keyword, onChange, target }) => {
             </Col>
             <Col xs={9} className="p-0">
                 <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
-                    <div style={{ width: 80 }} className="pr-3">
+                    <div style={{ width: 100 }} className="pr-3">
                         <MokaInput
                             as="checkbox"
                             name="title"
@@ -95,7 +95,7 @@ const PackageKeywordSectionComponent = ({ keyword, onChange, target }) => {
                             }}
                         />
                     </div>
-                    <div style={{ width: 80 }}>
+                    <div style={{ width: 100 }}>
                         <MokaInput
                             as="checkbox"
                             name="keyword"

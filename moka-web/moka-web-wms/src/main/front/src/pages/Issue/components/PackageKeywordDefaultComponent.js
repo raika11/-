@@ -7,7 +7,7 @@ import { initialState } from '@store/issue';
 import produce from 'immer';
 
 const defaultProps = { keyword: initialState.initialPkgKeyword };
-const PackageKeywordDefaultComponent = ({ keyword, onChange, target }) => {
+const PackageKeywordDefaultComponent = ({ keyword, onChange, target, labelTitle = '제목', labelKeyword = '태그' }) => {
     const [editKeyword, setEditKeyword] = useState(initialState.initialPkgKeyword);
     const [useEndDate, setUseEndDate] = useState(false);
 
@@ -80,24 +80,24 @@ const PackageKeywordDefaultComponent = ({ keyword, onChange, target }) => {
             </Col>
             <Col xs={9} className="p-0">
                 <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
-                    <div style={{ width: 80 }} className="pr-3">
+                    <div style={{ width: 100 }} className="pr-3">
                         <MokaInput
                             as="checkbox"
                             name="title"
                             id={`package-title-checkbox-${target}`}
-                            inputProps={{ label: '제목', custom: true, checked: editKeyword.schCondi.title }}
+                            inputProps={{ label: labelTitle, custom: true, checked: editKeyword.schCondi.title }}
                             onChange={(e) => {
                                 const { name, checked } = e.target;
                                 handleChangeArrayObjectValue({ target: 'schCondi', subTarget: name, value: checked });
                             }}
                         />
                     </div>
-                    <div style={{ width: 80 }}>
+                    <div style={{ width: 100 }}>
                         <MokaInput
                             as="checkbox"
                             name="keyword"
                             id={`package-keyword-checkbox-${target}`}
-                            inputProps={{ label: '태그', custom: true, checked: editKeyword.schCondi.keyword }}
+                            inputProps={{ label: labelKeyword, custom: true, checked: editKeyword.schCondi.keyword }}
                             onChange={(e) => {
                                 const { name, checked } = e.target;
                                 handleChangeArrayObjectValue({ target: 'schCondi', subTarget: name, value: checked });

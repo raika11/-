@@ -15,10 +15,10 @@ export default [
     {
         headerName: '',
         field: 'bulkflag',
-        width: 22,
-        maxWidth: 22,
+        width: 30,
+        maxWidth: 30,
         cellRenderer: 'usedYnRenderer',
-        cellStyle: { ...cellStyle, paddingRight: 0 },
+        cellStyle: { ...cellStyle, paddingRight: '4px', paddingLeft: '8px' },
     },
     {
         headerName: '매체/분류',

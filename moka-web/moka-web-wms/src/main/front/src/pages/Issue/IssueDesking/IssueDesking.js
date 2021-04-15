@@ -45,20 +45,22 @@ const IssueDesking = () => {
                         onChange={(e) => setOpen({ ...open, art: e.target.checked })}
                     />
                 </Col>
-                <Col xs={4}>
-                    <Button variant="searching" className="mr-1" onClick={() => setModal({ ...modal, art: true })}>
+                <Col xs={4} className="d-flex align-items-center">
+                    <Button variant="searching" size="sm" className="mr-1" onClick={() => setModal({ ...modal, art: true })}>
                         기사검색
                     </Button>
                     <ArticleTabModal show={modal.art} onHide={() => setModal({ ...modal, art: false })} onRowClicked={selectArticle} />
                 </Col>
-                <Col xs={5} className="d-flex justify-content-end">
-                    <Button variant="outline-neutral" className="mr-1">
+                <Col xs={5} className="d-flex justify-content-end align-items-center">
+                    <Button variant="outline-neutral" size="sm" className="mr-1">
                         미리보기
                     </Button>
-                    <Button variant="positive-a" className="mr-1">
+                    <Button variant="positive-a" size="sm" className="mr-1">
                         임시저장
                     </Button>
-                    <Button variant="positive">전송</Button>
+                    <Button variant="positive" size="sm">
+                        전송
+                    </Button>
                 </Col>
             </Row>
             <Collapse in={open.art}>

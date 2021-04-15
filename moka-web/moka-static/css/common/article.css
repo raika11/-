@@ -2,3 +2,4 @@
 /* Small devices (portrait phones, landscape phones, less than 767px) */
 /* No media query this is the default */
 
+.article_body {width:100%;max-width:560px;margin:0 auto;}

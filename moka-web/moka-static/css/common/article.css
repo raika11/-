@@ -16,7 +16,6 @@
 /****************************************************************************************************/
 
 .ab_photo {padding:40px 0;}
-.ab_photo.photo_center {margin:0 auto;text-align:center;}
 .ab_photo.photo_left {float:left;margin:0 40px 0 0;} /* margin:20px 20px 20px 0;*/
 .ab_photo.photo_right {float:right;margin:0 0 0 40px;}
 .ab_photo .image {position:relative;display:inline-block;width:auto;}
@@ -33,12 +32,10 @@
 /* Medium devices (tablet + pc, 768px and up) */
 @media (min-width:768px) {
 
-    .article_body {width:720px;padding:0 70px}
-    .ab_photo.photo_center {position:relative;max-width:100% !important;background:#ccc}
-    
-    /* .ab_photo.photo_center {margin-left:-70px;} */
+    .article_body {width:720px;padding:0 70px;}
+    .ab_photo.photo_center {position:relative;max-width:720px !important;left:50%;transform:translateX(-50%);}
     .ab_photo.photo_center .image {max-width:720px;}
-    .ab_photo.photo_center .image img{max-width:100%;}
+    .ab_photo.photo_center .image img {max-width:100%;}
 }
 
 

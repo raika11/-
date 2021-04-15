@@ -195,20 +195,8 @@ const CommentListBox = ({ setSelectBannedItem }) => {
                             memNm: element.memNm,
                             memId: element.memId,
                         },
-                        onClickTitle: (params) => {
-                            const { api: gridApi, rowIndex, reactContainer } = params;
-                            const row = gridApi.getDisplayedRowAtIndex(rowIndex);
-                            const contHeight = reactContainer.querySelector('span').clientHeight + 26;
-                            if (row.rowHeight < contHeight) {
-                                row.setRowHeight(contHeight);
-                            } else {
-                                gridApi.resetRowHeights();
-                            }
-
-                            gridApi.onRowHeightChanged();
-                        },
-                        onPreview: (params) => {
-                            const { commentUrl, contentId } = params.data;
+                        onPreview: (data) => {
+                            const { commentUrl, contentId } = data;
                             let url = commentUrl;
                             if (url !== null) {
                                 window.open(url);

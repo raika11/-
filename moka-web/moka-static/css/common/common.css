@@ -316,12 +316,7 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 /* image 비율 */
 .thum_wrap {position:relative;width:auto;height:fit-content;}
 .thum_wrap .img_thumbnail img {width:100%;height:auto;}
-/* .thum_wrap .img_thumbnail {position:relative;padding-bottom:calc(100% * 9 / 16);background:#eee;}
-.thum_wrap .img_thumbnail  img {position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;}
-.img_thumbnail.ratio_1_1 {padding-bottom:calc(100% * 1 / 1);}
-.img_thumbnail.ratio_4_3 {padding-bottom:calc(100% * 3 / 4);}
-.img_thumbnail.ratio_9_6 {padding-bottom:calc(100% * 6 / 9);}
-.img_thumbnail.ratio_9_5 {padding-bottom:calc(100% * 5 / 9);} */
+
 
 /** caption **/
 .caption {margin-top:10px;color:#b3b3b3;font-size:12px;text-align:left;line-height:16px;word-break:break-all;font-weight:normal;}
@@ -449,7 +444,7 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 
 
 /** 기본 **/
-.btn {display:flex;align-items:center;justify-content:space-between;width:auto;padding:8px 20px;border:1px solid transparent;background-color:transparent;color:#111;font-size:14px;line-height:1;text-align:center;white-space:nowrap;}
+.btn {display:flex;align-items:center;justify-content:space-between;width:auto;padding:3px 14px;border-radius:50px;border:1px solid transparent;background-color:transparent;color:#111;font-size:14px;line-height:1.69;text-align:center;white-space:nowrap;}
 .btn + .btn {margin-left:4px;}
 
 /* 상태 */

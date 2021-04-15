@@ -11,7 +11,6 @@ const OverlayWrapper = ({ children, overlayText }) => (
 );
 
 const defaultProps = {
-    variant: 'outline-table-btn',
     iconButton: false,
 };
 
@@ -25,7 +24,7 @@ const MokaTableButton = forwardRef((params, ref) => {
 
     const render = () => (
         <Button
-            variant={variant}
+            variant={variant ? variant : iconButton ? 'white' : 'outline-table-btn'}
             onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

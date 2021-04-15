@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@/components';
 import columnDefs from './IssueAgGridColumns';
 import produce from 'immer';
+import { GRID_HEADER_HEIGHT, GRID_ROW_HEIGHT } from '@/style_constants';
 
 /**
  * 패키지 AgGrid
@@ -44,10 +45,9 @@ const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, load
 
     return (
         <>
-            <div className="mb-2 d-flex align-items-center justify-content-between">
-                <p className="mb-0">총 {total}건</p>
+            <div className="mb-2 d-flex align-items-center justify-content-end">
                 <Button variant="positive" onClick={handleClickAdd}>
-                    패키지 생성
+                    등록
                 </Button>
             </div>
             <MokaTable
@@ -60,11 +60,10 @@ const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, load
                 page={searchOptions.page}
                 size={searchOptions.size}
                 selected={selected}
+                headerHeight={GRID_HEADER_HEIGHT[1]}
+                rowHeight={GRID_ROW_HEIGHT.T[1]}
                 onChangeSearchOption={handleChangeSearchOptions}
-                showTotalString={false}
-                pageSizes={false}
                 total={total}
-                paginationClassName="justify-content-center"
             />
         </>
     );

@@ -12,9 +12,9 @@ const RelationPollAddBtn = forwardRef((params, ref) => {
                 variant="outline-table-btn"
                 onClick={() => {
                     const data = params.node.data;
-                    if (data.onClick instanceof Function) {
-                        const { onClick, ...rest } = data;
-                        onClick(rest);
+                    if (data.onAdd instanceof Function) {
+                        const { onAdd, ...rest } = data;
+                        onAdd(rest);
                     }
                 }}
                 size="sm"

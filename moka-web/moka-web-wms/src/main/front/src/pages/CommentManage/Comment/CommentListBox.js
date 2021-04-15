@@ -90,25 +90,25 @@ const CommentListBox = ({ setSelectBannedItem }) => {
     /**
      * 한번만 클릭 했을 경우.
      */
-    const handleOnCellClicked = (params) => {
-        clearTimeout(clickState); // 더블 클릭과 동시에 한번 선택한것으로 간주하기 떄문에 timeout 으로 더블 클릭인지 기다림.
-        if (params.colDef.field === 'cont') {
-            // 클릭한 cell이 내용이면 URL 이동처리.
-            clickState = setTimeout(function () {
-                const { commentUrl, contentId } = params.data;
-                let url = commentUrl;
-                if (url !== null) {
-                    window.open(url);
-                } else {
-                    url = 'https://news.joins.com';
-                    if (!commonUtil.isEmpty(contentId)) {
-                        url = `${url}/article/${contentId}`;
-                    }
-                    window.open(url);
-                }
-            }, 200);
-        }
-    };
+    // const handleOnCellClicked = (params) => {
+    //     clearTimeout(clickState); // 더블 클릭과 동시에 한번 선택한것으로 간주하기 떄문에 timeout 으로 더블 클릭인지 기다림.
+    //     if (params.colDef.field === 'cont') {
+    //         // 클릭한 cell이 내용이면 URL 이동처리.
+    //         clickState = setTimeout(function () {
+    //             const { commentUrl, contentId } = params.data;
+    //             let url = commentUrl;
+    //             if (url !== null) {
+    //                 window.open(url);
+    //             } else {
+    //                 url = 'https://news.joins.com';
+    //                 if (!commonUtil.isEmpty(contentId)) {
+    //                     url = `${url}/article/${contentId}`;
+    //                 }
+    //                 window.open(url);
+    //             }
+    //         }, 200);
+    //     }
+    // };
 
     /**
      * 더블 클릭 처리

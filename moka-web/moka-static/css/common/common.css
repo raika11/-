@@ -346,6 +346,10 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 .description {color:#777;font-size:15px;line-height:1.5;word-break:break-all;}
 .byline {color:#aaa;font-size:13px;line-height:1.5;}
 .date { color:#aaa;font-size:12px;line-height:1.5;}
+dl.date { display: flex; }
+dl.date > div { display: flex; }
+dl.date > div:nth-child(n+2) { margin-left: 10px; }
+dl.date dd { margin-left: 6px; }
 .play_count {color:#aaa;font-size:12px;line-height:1.5;}
 
 
@@ -508,8 +512,8 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 /* meta */
 .meta * {margin:0;padding:0;}
 .meta {display:flex;}
-.meta :nth-child(n + 2) {position:relative;margin-left:16px;padding-left:16px;}
-.meta :nth-child(n + 2)::before {content:'';display:block;position:absolute;top:50%;left:0;width:1px;height:12px;background-color:#888;transform:translateY(-50%);}
+.meta > :nth-child(n + 2) {position:relative;margin-left:16px;padding-left:16px;}
+.meta > :nth-child(n + 2)::before {content:'';display:block;position:absolute;top:50%;left:0;width:1px;height:12px;background-color:#888;transform:translateY(-50%);}
 .meta .play_count {padding-top:0;}
 
 

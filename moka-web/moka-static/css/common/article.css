@@ -2,3 +2,12 @@
 /* Small devices (portrait phones, landscape phones, less than 767px) */
 /* No media query this is the default */
 
+
+/* article */
+.article { padding: 40px 0 60px; }
+.article_header {  }
+
+
+
+
+

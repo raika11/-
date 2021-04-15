@@ -135,7 +135,7 @@ const IssueEdit = ({ reporters }) => {
             footer
             footerButtons={[
                 pkgSeq && { text: '종료', variant: 'negative', className: 'mr-1', onClick: handleClickFinishIssue },
-                { text: pkgSeq ? '수정' : '생성', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
+                { text: pkgSeq ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleClickCancel },
             ].filter((a) => a)}
             loading={loading}

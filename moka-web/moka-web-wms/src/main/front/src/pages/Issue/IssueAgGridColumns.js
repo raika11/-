@@ -45,13 +45,17 @@ export default [
     },
     {
         headerName: '생성일',
+        sortable: true,
         field: 'regDt',
         width: 90,
+        comparator: () => 0,
     },
     {
         headerName: '최신기사\n업데이트',
         field: 'updDt',
+        sortable: true,
         width: 90,
+        comparator: () => 0,
     },
     {
         headerName: '종료',

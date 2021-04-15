@@ -126,8 +126,9 @@ const getKeyword = (keywords, type) => {
 };
 
 export const toIssueData = (response) => {
-    const { pkgSeq, pkgTitle, pkgDesc, pkgDiv, episView, packageKeywords, seasonNo, catList } = response;
+    const { pkgSeq, pkgTitle, pkgDesc, pkgDiv, episView, packageKeywords, seasonNo, catList, reservDt } = response;
 
+    const viewReservDt = moment(reservDt);
     const search = getKeyword(packageKeywords, CAT_DIV.SEARCH_KEYWORD);
     const reporter = getKeyword(packageKeywords, CAT_DIV.REPORTER);
     const section = getKeyword(packageKeywords, CAT_DIV.SECTION);
@@ -172,6 +173,7 @@ export const toIssueData = (response) => {
         packageKeywords: { search, reporter, section, digitalSpecial, ovp },
         seasons,
         catList,
+        reservDt: viewReservDt,
     };
 };
 
@@ -252,14 +254,15 @@ const toSavePackageSeason = (viewSeasons) => {
 };
 
 const toSavePackage = (pkg) => {
-    const { packageKeywords: viewKeywords, seasons: viewSeasons } = pkg;
+    const { packageKeywords: viewKeywords, seasons: viewSeasons, reservDt: viewReservDt } = pkg;
+    const reservDt = commonUtil.isEmpty(viewReservDt) ? null : moment(viewReservDt).format(DB_DATEFORMAT);
     const copyPkg = { ...pkg };
     delete copyPkg.seasons;
 
     const seasonNo = toSavePackageSeason(viewSeasons);
     const packageKeywords = toSavePackageKeywords(viewKeywords);
 
-    return { ...copyPkg, packageKeywords, seasonNo };
+    return { ...copyPkg, packageKeywords, seasonNo, reservDt };
 };
 
 function* saveIssue({ type, payload }) {

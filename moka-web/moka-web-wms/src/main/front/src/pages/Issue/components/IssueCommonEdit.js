@@ -10,6 +10,7 @@ import produce from 'immer';
 import RecommendIssueListModal from '@pages/Issue/modal/RecommendIssueListModal';
 import commonUtil from '@utils/commonUtil';
 import Badge from 'react-bootstrap/Badge';
+import moment from 'moment';
 
 const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, setIsDuplicatedTitle }) => {
     const [edit, setEdit] = useState(initialState.pkg);
@@ -18,16 +19,24 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
     const [recommendPkgSeq, setRecommendPkgSeq] = useState('');
     const [useRecommendIssuePackage, setUseRecommendIssuePackage] = useState(false);
 
-    const handleChangeValue = ({ name, value }) => {
-        const data = { ...edit, [name]: value };
-        setEdit(data);
+    const handleChangeValue = ({ name, value, togetherHandlers }) => {
+        const changeData = produce(edit, (draft) => {
+            draft[name] = value;
+            if (togetherHandlers instanceof Array) {
+                togetherHandlers.forEach((handler) => {
+                    draft[handler.name] = handler.value;
+                });
+            }
+        });
+
+        setEdit(changeData);
         if (setIsDuplicatedTitle instanceof Function) {
             if (name === 'pkgTitle') {
                 setIsDuplicatedTitle(true);
             }
         }
         if (onChange instanceof Function) {
-            onChange(data);
+            onChange(changeData);
         }
     };
 
@@ -93,7 +102,7 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                                 usedYn = 'N';
                             }
 
-                            handleChangeValue({ name, value: usedYn });
+                            handleChangeValue({ name, value: usedYn, togetherHandlers: [{ name: 'reservDt', value: null }] });
                         }}
                         required
                     />
@@ -107,7 +116,8 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                             value="Y"
                             inputProps={{ label: '즉시', custom: true, checked: edit.usedYn === 'Y' }}
                             onChange={(e) => {
-                                handleChangeValue(e.target);
+                                const { name, value } = e.target;
+                                handleChangeValue({ name, value, togetherHandlers: [{ name: 'reservDt', value: null }] });
                             }}
                         />
                     </div>
@@ -119,30 +129,21 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                             value="R"
                             inputProps={{ label: '예약', custom: true, checked: edit.usedYn === 'R' }}
                             onChange={(e) => {
-                                handleChangeValue(e.target);
+                                const { name, value } = e.target;
+                                handleChangeValue({ name, value, togetherHandlers: [{ name: 'reservDt', value: moment() }] });
                             }}
                         />
                     </div>
                     {edit.usedYn === 'R' && (
                         <>
-                            <div style={{ width: 150 }} className="pr-1">
+                            <div style={{ width: 230 }} className="pr-1">
                                 <MokaInput
                                     as="dateTimePicker"
-                                    name="expoResrvDT"
-                                    inputProps={{ timeFormat: null }}
+                                    name="reservDt"
+                                    value={edit.reservDt}
+                                    inputProps={{ closeOnSelect: false }}
                                     onChange={(date) => {
-                                        console.log(date);
-                                    }}
-                                />
-                            </div>
-                            <div style={{ width: 150 }}>
-                                <MokaInput
-                                    as="dateTimePicker"
-                                    className="right"
-                                    name="expoResrvTm"
-                                    inputProps={{ dateFormat: null }}
-                                    onChange={(date) => {
-                                        console.log(date);
+                                        handleChangeValue({ name: 'reservDt', value: date });
                                     }}
                                 />
                             </div>

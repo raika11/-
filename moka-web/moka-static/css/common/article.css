@@ -3,3 +3,20 @@
 /* No media query this is the default */
 
 .article_body {width:100%;max-width:560px;margin:0 auto;}
+
+.fs1 {font-size:14px;line-height:1.93;letter-spacing:normal;}
+.fs2 {font-size:16px;line-height:1.81;letter-spacing:normal;}
+.fs3 {font-size:18px;line-height:1.72;letter-spacing:-0.5px;}
+.fs4 {font-size:20px;line-height:1.8;letter-spacing:-0.5px;}
+.fs5 {font-size:22px;line-height:1.73;letter-spacing:-0.52px;}
+
+
+/****************************************************************************************************/
+/***                                            image                                             ***/
+/****************************************************************************************************/
+
+.ab_photo {padding:40px 0;}
+.ab_photo.photo_center {margin:0 auto;}
+.ab_photo.photo_left {float:left;margin:0 40px 0 0;} /* margin:20px 20px 20px 0;*/
+.ab_photo.photo_right {float:right;margin:0 0 0 40px;}
+.ab_photo .image {position:relative;}

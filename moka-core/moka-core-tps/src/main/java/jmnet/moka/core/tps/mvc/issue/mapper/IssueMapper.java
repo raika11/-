@@ -26,4 +26,11 @@ public interface IssueMapper extends BaseMapper<PackageVO, PackageSearchDTO> {
      * @return
      */
     List<IssueDeskingVO> findAllIssueDesking(Map<String, Object> param);
+
+    /**
+     * 패키지 입력/수정 시 기사 묶기 위한 프호시저
+     *
+     * @param pkgSeq 패키지 일련번호.
+     */
+    void updatePackageTotalId(Long pkgSeq);
 }

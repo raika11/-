@@ -77,4 +77,11 @@ public interface PackageService {
      * @return 기사목록
      */
     Page<PackageList> findAllPackageList(PackageListSearchDTO search);
+
+    /**
+     * 패키지 입력/수정 시 기사 묶기
+     *
+     * @param pkgSeq 패키지 일련번호
+     */
+    void updatePackageTotalId(Long pkgSeq);
 }

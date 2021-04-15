@@ -11,8 +11,7 @@ import { messageBox } from '@utils/toastUtil';
 /**
  * vod url 검색&입력 모달
  */
-const VodModal = (props) => {
-    const { show, onHide, vodUrl, onSave } = props;
+const VodModal = ({ show, onHide, vodUrl, onSave }) => {
     const dispatch = useDispatch();
     const vodOptions = useSelector((store) => store.bright.vodOptions);
     const OVP_PREVIEW_URL = useSelector((store) => store.app.OVP_PREVIEW_URL);

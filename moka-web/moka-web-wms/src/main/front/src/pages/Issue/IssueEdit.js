@@ -328,6 +328,7 @@ const IssueEdit = ({ reporters }) => {
                     <PackageKeywordDefaultComponent
                         keyword={{ ...edit.packageKeywords.ovp.keyword, catDiv: CAT_DIV.OVP }}
                         target="ovp"
+                        labelTitle="연관 이슈"
                         onChange={(value) => {
                             handleChangeArrayObjectDebounceValue({ target: 'packageKeywords', subTarget: 'ovp', name: 'keyword', value });
                         }}

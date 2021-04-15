@@ -128,7 +128,7 @@ const getKeyword = (keywords, type) => {
 export const toIssueData = (response) => {
     const { pkgSeq, pkgTitle, pkgDesc, pkgDiv, episView, packageKeywords, seasonNo, catList, reservDt } = response;
 
-    const viewReservDt = moment(reservDt);
+    const viewReservDt = commonUtil.isEmpty(reservDt) ? reservDt : moment(reservDt);
     const search = getKeyword(packageKeywords, CAT_DIV.SEARCH_KEYWORD);
     const reporter = getKeyword(packageKeywords, CAT_DIV.REPORTER);
     const section = getKeyword(packageKeywords, CAT_DIV.SECTION);

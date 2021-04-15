@@ -288,7 +288,8 @@ public class IssueRestController extends AbstractCommonController {
         PackageMaster packageMaster = packageService
                 .findByPkgSeq(pkgSeq)
                 .orElseThrow(() -> new NoDataException(msg("")));
-        packageMaster.setUsedYn("N");
+        // 종료 플레그 E
+        packageMaster.setUsedYn("E");
         // 수정
         PackageMaster returnValue = packageService.updatePackageMaster(packageMaster);
 
@@ -514,6 +515,6 @@ public class IssueRestController extends AbstractCommonController {
                 .packageKeywords(keywords)
                 .build();
     }
-    
+
 
 }

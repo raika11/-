@@ -525,4 +525,54 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         return articleInfo;
     }
 
+    /**
+     * 이슈패키지 미리보기
+     *
+     * @param issuePageItem 이슈홈 페이지정보
+     * @param pkgSeq        이슈패키지순번
+     * @param deskingList   이슈패키지 편집정보
+     * @return
+     * @throws TemplateMergeException
+     * @throws DataLoadException
+     * @throws TemplateParseException
+     */
+    public StringBuilder mergeIssue(PageItem issuePageItem, Long pkgSeq, String compYn, List<Map<String, Object>> deskingList)
+            throws TemplateMergeException, DataLoadException, TemplateParseException {
+        MergeContext mergeContext = createMergeContext(true);
+
+        HttpParamMap httpParamMap = new HttpParamMap();
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, httpParamMap);
+
+        DataLoader loader = this.getDataLoader();
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("id", pkgSeq.toString());
+        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.PACKAGE, paramMap, true);
+
+        // 기사정보 변경
+        Map<String, Object> packageInfo = rebuildInfoIssue(jsonResult, compYn, deskingList);
+
+        mergeContext.set("package", packageInfo);
+        //mergeContext.set(MokaConstants.MERGE_PATH, "/issue/" + pkgSeq.toString());
+
+        String itemType = issuePageItem.getItemType();
+        String itemId = issuePageItem.getItemId();
+
+        // PageItem 설정
+        this.setItem(itemType, itemId, issuePageItem);
+
+        StringBuilder sb = super.merge(itemType, itemId, mergeContext);
+
+        // base 태그 처리
+        setBaseTag(itemType, mergeContext, sb);
+        return sb;
+    }
+
+    private Map<String, Object> rebuildInfoIssue(JSONResult jsonResult, String compYn, List<Map<String, Object>> deskingList) {
+        Map<String, Object> packageInfo = (Map<String, Object>) jsonResult.get("package");
+        Map<String, Object> info = (Map<String, Object>) packageInfo.get("info");
+        info.put("COMP_YN", compYn);   // compYn설정 수정해야됨
+        packageInfo.put("info", info);
+        packageInfo.put("desking", deskingList);
+        return packageInfo;
+    }
 }

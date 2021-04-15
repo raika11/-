@@ -77,8 +77,14 @@ export default [
     },
     {
         headerName: '바로가기',
-        field: 'shortcut',
+        field: 'directLink',
         width: 70,
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: {
+            text: '보기',
+            overlayText: '보기',
+            clickFunctionName: 'onClickDirectLink',
+        },
         // cellRendererFramework: (row) => < {...row} />,
     },
 ];

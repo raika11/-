@@ -30,7 +30,7 @@ const AgGrid = forwardRef((props, ref) => {
 
     useEffect(() => {
         // 드롭 타겟 ag-grid에 drop-zone 설정
-        if (gridInstance) {
+        if (gridInstance && dropTargetAgGrid) {
             if (Array.isArray(dropTargetAgGrid)) {
                 // 타겟이 리스트인 경우
                 dropTargetAgGrid.forEach((targetGrid, agGridIndex) => {

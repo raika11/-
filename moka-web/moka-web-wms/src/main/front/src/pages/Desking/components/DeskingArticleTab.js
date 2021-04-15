@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaCardTabs } from '@components';
-import { ArticleList } from '@pages/Article/components/Desking';
+import ArticleList from '@pages/Article/components/Desking';
 import IssueList from '@pages/Issue/components/Desking';
 import ReporterList from '@pages/Reporter/components/Desking/ReporterList';
 import ColumnistList from '@pages/Columnist/components/Desking/ColumnistList';

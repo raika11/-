@@ -1,20 +1,20 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaCard, MokaIconTabs, MokaLoader } from '@components';
+import { MokaCard, MokaIconTabs } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
 import IssueList from './IssueList';
 import IssueEdit from './IssueEdit';
-
-import { useDispatch, useSelector } from 'react-redux';
+import IssueDesking from './IssueDesking';
 import { clearStore } from '@store/issue';
 import { getReporterAllList } from '@store/reporter';
-import PollEdit from '@pages/Survey/Poll/PollEdit';
-import PollChildRelation from '@pages/Survey/Poll/relations/PollChildRelationInfo';
+// import PollEdit from '@pages/Survey/Poll/PollEdit';
+// import PollChildRelation from '@pages/Survey/Poll/relations/PollChildRelationInfo';
 
 /**
  * 패키지 관리
@@ -57,8 +57,8 @@ const Issue = ({ match, displayName }) => {
                                 <MokaIconTabs
                                     foldable={false}
                                     className="w-100"
-                                    //onSelectNav={(idx) => setActiveTabIdx(idx)}
-                                    tabs={[<IssueEdit match={match} reporters={allReporter} />, <></>]}
+                                    // activeKey={1}
+                                    tabs={[<IssueEdit match={match} reporters={allReporter} />, <IssueDesking match={match} />]}
                                     tabNavWidth={48}
                                     placement="left"
                                     tabNavs={[

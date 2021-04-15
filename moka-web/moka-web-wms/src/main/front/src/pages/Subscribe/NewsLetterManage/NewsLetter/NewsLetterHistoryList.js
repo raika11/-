@@ -39,7 +39,6 @@ const NewsLetterHistory = () => {
 
             <MokaTable
                 className="overflow-hidden flex-fill"
-                paginationClassName="justify-content-center"
                 columnDefs={[
                     {
                         headerName: 'NO',
@@ -62,6 +61,7 @@ const NewsLetterHistory = () => {
                 page={search.page}
                 size={search.size}
                 total={total}
+                onRowClicked={handleRowClicked}
                 onChangeSearchOption={handleChangeSearchOption}
             />
         </MokaCard>

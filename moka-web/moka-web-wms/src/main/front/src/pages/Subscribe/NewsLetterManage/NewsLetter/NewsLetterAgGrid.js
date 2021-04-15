@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router';
+import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@/components';
 import columnDefs from './NewsLetterAgGridColumns';
 
@@ -21,55 +22,66 @@ const NewsLetterAgGrid = ({ match }) => {
     /**
      * 목록 Row클릭
      */
-    const handleRowClicked = useCallback((row) => {
-        history.push(`${match.path}/${row.no}`);
-    }, []);
+    const handleRowClicked = useCallback(
+        (row) => {
+            history.push(`${match.path}/${row.no}`);
+        },
+        [history, match.path],
+    );
 
     return (
-        <MokaTable
-            suppressMultiSort // 다중 정렬 비활성
-            className="overflow-hidden flex-fill"
-            columnDefs={columnDefs}
-            rowData={[
-                {
-                    no: '1',
-                    sendType: '자동',
-                    type: '오리지널',
-                    newsLetter: '정치 언박싱',
-                    startDt: '2021-03-01',
-                    recentDt: '2021-03-04',
-                    ct: '월/화/수/목',
-                    time: '14:00',
-                    subscriber: '1301',
-                    state: '활성',
-                    regDt: '2021-02-14',
-                    regMember: '정준영(SSC08)',
-                    abYn: 'N',
-                },
-                {
-                    no: '2',
-                    sendType: '수동',
-                    type: '알림',
-                    newsLetter: '폴인 인사이트',
-                    startDt: '2021-03-02',
-                    recentDt: '2021-03-04',
-                    ct: '1개',
-                    time: '08:00',
-                    subscriber: '548',
-                    state: '종료',
-                    regDt: '2021-02-16',
-                    regMember: '정준영(SSC08)',
-                    abYn: 'Y',
-                },
-            ]}
-            onRowNodeId={(data) => data.no}
-            onRowClicked={handleRowClicked}
-            loading={loading}
-            page={search.page}
-            size={search.size}
-            total={total}
-            onChangeSearchOption={handleChangeSearchOption}
-        />
+        <>
+            <div className="mb-14 d-flex justify-content-end">
+                <Button variant="positive" className="mr-1" onClick={() => history.push(`${match.path}/add`)}>
+                    상품 등록
+                </Button>
+                <Button variant="outline-neutral">Excel 다운로드</Button>
+            </div>
+            <MokaTable
+                suppressMultiSort // 다중 정렬 비활성
+                className="overflow-hidden flex-fill"
+                columnDefs={columnDefs}
+                rowData={[
+                    {
+                        no: '1',
+                        sendType: '자동',
+                        type: '오리지널',
+                        newsLetter: '정치 언박싱',
+                        startDt: '2021-03-01',
+                        recentDt: '2021-03-04',
+                        ct: '월/화/수/목',
+                        time: '14:00',
+                        subscriber: '1301',
+                        state: '활성',
+                        regDt: '2021-02-14',
+                        regMember: '정준영(SSC08)',
+                        abYn: 'N',
+                    },
+                    {
+                        no: '2',
+                        sendType: '수동',
+                        type: '알림',
+                        newsLetter: '폴인 인사이트',
+                        startDt: '2021-03-02',
+                        recentDt: '2021-03-04',
+                        ct: '1개',
+                        time: '08:00',
+                        subscriber: '548',
+                        state: '종료',
+                        regDt: '2021-02-16',
+                        regMember: '정준영(SSC08)',
+                        abYn: 'Y',
+                    },
+                ]}
+                onRowNodeId={(data) => data.no}
+                onRowClicked={handleRowClicked}
+                loading={loading}
+                page={search.page}
+                size={search.size}
+                total={total}
+                onChangeSearchOption={handleChangeSearchOption}
+            />
+        </>
     );
 };
 

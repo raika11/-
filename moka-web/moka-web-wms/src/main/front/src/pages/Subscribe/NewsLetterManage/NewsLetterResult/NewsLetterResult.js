@@ -29,7 +29,7 @@ const NewsLetterResult = ({ match, displayName }) => {
                 </Col>
 
                 <Col xs={5}>
-                    <Route path={`${match.path}/:letterSeq`} exact render={() => <NewsLetterResultEdit />} />
+                    <Route path={`${match.path}/:letterSeq`} exact render={() => <NewsLetterResultEdit match={match} />} />
                 </Col>
             </Row>
         </Container>

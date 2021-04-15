@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+// import { useHistory } from 'react-router';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
@@ -10,8 +10,8 @@ import { MokaInput } from '@/components';
 /**
  * 뉴스레터 관리 > 뉴스레터 상품 검색
  */
-const NewsLetterSearch = ({ match }) => {
-    const history = useHistory();
+const NewsLetterSearch = () => {
+    // const history = useHistory();
     const [search, setSearch] = useState({
         type: '',
         state: '',
@@ -72,7 +72,7 @@ const NewsLetterSearch = ({ match }) => {
                 <Button
                     variant="negative"
                     style={{ overflow: 'visible' }}
-                    onClick={() => setSearch({ type: '', state: '', sendType: '', abYn: '', period: '', startDt: null, endDt: null, keyword: '' })}
+                    onClick={() => setSearch({ type: '', state: '', sendType: '', abYn: '', period: '', startDt: null, endDt: null, newsLetterNm: '' })}
                 >
                     초기화
                 </Button>
@@ -144,12 +144,6 @@ const NewsLetterSearch = ({ match }) => {
                     }}
                 />
                 <Button variant="searching">검색</Button>
-            </Form.Row>
-            <Form.Row className="justify-content-end">
-                <Button variant="positive" className="mr-1" onClick={() => history.push(`${match.path}/add`)}>
-                    상품 등록
-                </Button>
-                <Button variant="outline-neutral">Excel 다운로드</Button>
             </Form.Row>
         </Form>
     );

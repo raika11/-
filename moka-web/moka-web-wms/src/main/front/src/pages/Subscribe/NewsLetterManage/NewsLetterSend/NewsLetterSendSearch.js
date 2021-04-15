@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+// import { useHistory } from 'react-router';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
@@ -9,8 +9,7 @@ import { MokaInput } from '@/components';
 /**
  * 뉴스레터 관리 > 뉴스레터 발송 검색
  */
-const NewsLetterSendSearch = ({ match }) => {
-    const history = useHistory();
+const NewsLetterSendSearch = () => {
     const [search, setSearch] = useState({
         startDt: null,
         endDt: null,
@@ -39,11 +38,9 @@ const NewsLetterSendSearch = ({ match }) => {
     };
 
     /**
-     * 뉴스레터 발송
+     * 초기화
      */
-    const handleClickAdd = () => {
-        history.push(`${match.path}/add`);
-    };
+    const handleClickReset = () => [setSearch({ ...search, startDt: null, endDt: null, newsLetterNm: '' })];
 
     return (
         <Form className="mb-14">
@@ -113,17 +110,12 @@ const NewsLetterSendSearch = ({ match }) => {
                         setSearch({ ...search, newsLetterNm: value?.value });
                     }}
                 />
-                <Button variant="searching">검색</Button>
-            </Form.Row>
-
-            <Form.Row className="justify-content-end">
-                <Button variant="positive" className="mr-1" onClick={handleClickAdd}>
-                    뉴스레터 발송
+                <Button variant="searching" className="mr-1">
+                    검색
                 </Button>
-                <Button variant="outline-neutral" className="mr-1">
-                    아카이브 확인
+                <Button variant="negative" onClick={handleClickReset}>
+                    초기화
                 </Button>
-                <Button variant="outline-neutral">Excel 다운로드</Button>
             </Form.Row>
         </Form>
     );

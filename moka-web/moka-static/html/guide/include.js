@@ -60,7 +60,7 @@ var include = {
             document.write('        <li class="nav_item ">');
             document.write('            <a class="nav_link " aria-current="page" href="javascript:(0);">레이아웃</a>');
             document.write('            <ul class="nav">');
-            // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Breakpoints</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="breakpoints.html">Breakpoints</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Container</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Grid</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Section</a></li>');

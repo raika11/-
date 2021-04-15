@@ -3,13 +3,15 @@ import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaCard, MokaInputLabel } from '@components';
+import { MokaCard, MokaInputLabel, MokaTable } from '@components';
 import { ArticleTabModal } from '@pages/Article/modals';
+import { artColumnDefs } from './IssueDeskingColumns';
 
 /**
  * 패키지 관리 > 관련 데이터 편집
  */
 const IssueDesking = () => {
+    const [artInstance, setArtInstance] = useState(null);
     const [open, setOpen] = useState({
         art: false,
     });
@@ -18,6 +20,17 @@ const IssueDesking = () => {
     });
     const controls = {
         art: 'collapse-art',
+    };
+
+    /**
+     * 기사 선택
+     * @param {string} type type
+     * @param {object} data data
+     */
+    const selectArticle = (type, data) => {
+        artInstance.api.applyTransaction({
+            add: [data],
+        });
     };
 
     return (
@@ -29,16 +42,14 @@ const IssueDesking = () => {
                         label="메인기사"
                         id="art-switch"
                         inputProps={{ checked: open.art, 'aria-controls': controls.art, 'aria-expanded': open.art, 'data-toggle': 'collapse' }}
-                        onChange={(e) => {
-                            setOpen({ ...open, art: e.target.checked });
-                        }}
+                        onChange={(e) => setOpen({ ...open, art: e.target.checked })}
                     />
                 </Col>
                 <Col xs={4}>
                     <Button variant="searching" className="mr-1" onClick={() => setModal({ ...modal, art: true })}>
                         기사검색
                     </Button>
-                    <ArticleTabModal show={modal.art} onHide={() => setModal({ ...modal, art: false })} />
+                    <ArticleTabModal show={modal.art} onHide={() => setModal({ ...modal, art: false })} onRowClicked={selectArticle} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end">
                     <Button variant="outline-neutral" className="mr-1">
@@ -51,8 +62,16 @@ const IssueDesking = () => {
                 </Col>
             </Row>
             <Collapse in={open.art}>
-                <div id={controls.art} className="mt-3">
-                    숨겨진 컨텐츠
+                <div id={controls.art} className="mt-2">
+                    <MokaTable
+                        rowHeight={210}
+                        header={false}
+                        paging={false}
+                        columnDefs={artColumnDefs}
+                        onRowNodeId={(data) => data.totalId}
+                        setGridInstance={setArtInstance}
+                        dragStyle
+                    />
                 </div>
             </Collapse>
         </MokaCard>

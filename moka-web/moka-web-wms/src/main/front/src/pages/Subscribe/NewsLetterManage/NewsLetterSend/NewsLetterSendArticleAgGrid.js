@@ -195,7 +195,7 @@ const NewsLetterSendArticleAgGrid = () => {
                 suppressMoveWhenRowDragging
                 suppressHorizontalScroll
                 // onRowDataUpdated={handleRowDataUpdated}
-                headerHeight={0}
+                header={false}
                 rowHeight={84}
             />
         </div>

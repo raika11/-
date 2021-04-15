@@ -102,6 +102,7 @@ const SectionPackageKeywordComponent = ({ keyword, onChange, target }) => {
                         <MokaInputLabel
                             as="dateTimePicker"
                             label="시작"
+                            labelWidth={50}
                             name="sdate"
                             inputProps={{ timeFormat: null }}
                             value={editKeyword.sdate}

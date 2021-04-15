@@ -143,6 +143,7 @@ const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
                                                 as="dateTimePicker"
                                                 label="시작"
                                                 name="sdate"
+                                                labelWidth={50}
                                                 inputProps={{ timeFormat: null }}
                                                 value={reporter.sdate}
                                                 required

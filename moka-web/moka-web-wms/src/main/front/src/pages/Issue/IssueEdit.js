@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import produce from 'immer';
 import { useHistory, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel } from '@/components';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { CAT_DIV, clearIssue, existsIssueTitle, getIssue, getIssueList, initialState, saveIssue } from '@store/issue';
+import { CAT_DIV, clearIssue, existsIssueTitle, getIssue, getIssueList, initialState, SAVE_ISSUE, saveIssue, GET_ISSUE, finishIssue } from '@store/issue';
 import DefaultPackageKeywordComponent from '@pages/Issue/components/DefaultPackageKeywordComponent';
 import ReporterPackageKeywordForm from '@pages/Issue/components/RepoterPackageKeywordComponent';
 import SectionPackageKeywordComponent from '@pages/Issue/components/SectionPackageKeywordComponent';
@@ -25,6 +25,7 @@ const IssueEdit = ({ reporters }) => {
     const [showReporterModal, setShowReporterModal] = useState(false);
     const [isDuplicatedTitle, setIsDuplicatedTitle] = useState(false);
     const { pkg, search } = useSelector(({ issue }) => issue, shallowEqual);
+    const loading = useSelector(({ loading }) => loading[GET_ISSUE] || loading[SAVE_ISSUE]);
 
     const { pkgSeq } = useParams();
     const [edit, setEdit] = useState(initialState.pkg);
@@ -87,12 +88,26 @@ const IssueEdit = ({ reporters }) => {
                 saveIssue({
                     pkg: edit,
                     callback: (response) => {
+                        toast.result(response.data);
                         dispatch(getIssue({ pkgSeq }));
                         dispatch(getIssueList({ search }));
                     },
                 }),
             );
         }
+    };
+
+    const handleClickFinishIssue = () => {
+        dispatch(
+            finishIssue({
+                pkgSeq: edit.pkgSeq,
+                callback: (response) => {
+                    toast.result(response.data);
+                    dispatch(getIssue({ pkgSeq }));
+                    dispatch(getIssueList({ search }));
+                },
+            }),
+        );
     };
 
     useEffect(() => {
@@ -119,10 +134,11 @@ const IssueEdit = ({ reporters }) => {
             footerClassName="justify-content-center"
             footer
             footerButtons={[
-                { text: '종료', variant: 'negative', className: 'mr-1' },
+                pkgSeq && { text: '종료', variant: 'negative', className: 'mr-1', onClick: handleClickFinishIssue },
                 { text: pkgSeq ? '수정' : '생성', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleClickCancel },
-            ]}
+            ].filter((a) => a)}
+            loading={loading}
         >
             <p className="mb-2">* 표시는 필수 입력 정보입니다.</p>
             <Form>

@@ -44,10 +44,13 @@ public class IssueDeskingHistDTO implements Serializable {
     private Long pkgSeq;
 
     @ApiModelProperty("컴포넌트번호(1-7)")
-    private Long compNo;
+    private Integer compNo;
+
+    @ApiModelProperty("노출여부")
+    private String viewYn;
 
     @ApiModelProperty("상태 SAVE(임시) / PUBLISH(전송)")
-    private String STATUS;
+    private String status;
 
     @ApiModelProperty("콘텐츠ID")
     private String contentsId;
@@ -87,7 +90,7 @@ public class IssueDeskingHistDTO implements Serializable {
     private String bgColor;
 
     @ApiModelProperty("재생시간")
-    private String DURATION;
+    private String duration;
 
     @ApiModelProperty("발췌문")
     private String bodyHead;

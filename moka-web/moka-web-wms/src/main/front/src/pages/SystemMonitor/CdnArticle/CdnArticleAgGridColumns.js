@@ -1,29 +1,35 @@
 import React from 'react';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import TitleRenderer from './components/TitleRenderer';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.M}px`,
+    wordBreak: 'break-word',
+};
 
 export default [
     {
         headerName: '기사ID',
         field: 'totalId',
         width: 80,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellClass: 'ag-center-cell',
     },
     {
         headerName: '제목 / URL',
         field: 'titleUrl',
         width: 430,
         flex: 1,
-        autoHeight: true,
-        cellStyle: { lineHeight: '18px', height: '60px' },
-        tooltipField: 'title',
+        tooltipField: 'unescapeTitle',
         cellRendererFramework: (row) => <TitleRenderer {...row} />,
+        cellStyle: { ...cellStyle, paddingTop: '4px', paddingBottom: '4px' },
     },
     {
         headerName: '등록일',
         field: 'regDt',
         width: 89,
         wrapText: true,
-        cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
+        cellClass: 'ag-prewrap-cell',
+        cellStyle,
     },
     {
         headerName: '사용',

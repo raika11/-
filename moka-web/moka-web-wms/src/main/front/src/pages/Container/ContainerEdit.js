@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel, MokaInputGroup, MokaCopyTextButton } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
@@ -165,24 +163,30 @@ const ContainerEdit = ({ onDelete, match }) => {
     }, [invalidList]);
 
     return (
-        <MokaCard titleClassName="h-100" title={`컨테이너 ${container.containerSeq ? '수정' : '등록'}`} loading={loading}>
-            {/* 버튼 그룹 */}
-            <Form.Group className="mb-3 d-flex justify-content-end">
-                <div className="d-flex">
-                    <Button variant="positive" className="mr-1" onClick={handleClickSave}>
-                        {container.containerSeq ? '수정' : '저장'}
-                    </Button>
-                    {container.containerSeq && (
-                        <Button variant="negative" className="mr-1" disabled={btnDisabled} onClick={handleClickDelete}>
-                            삭제
-                        </Button>
-                    )}
-                    <Button variant="negative" onClick={handleClickCancle}>
-                        취소
-                    </Button>
-                </div>
-            </Form.Group>
-
+        <MokaCard
+            titleClassName="h-100"
+            title={`컨테이너 ${container.containerSeq ? '수정' : '등록'}`}
+            loading={loading}
+            titleButtons={[
+                {
+                    text: container.containerSeq ? '수정' : '저장',
+                    variant: 'positive',
+                    onClick: handleClickSave,
+                    className: 'mr-1',
+                },
+                container.containerSeq && {
+                    text: '삭제',
+                    variant: 'negative',
+                    onClick: handleClickDelete,
+                    className: 'mr-1',
+                },
+                {
+                    text: '취소',
+                    variant: 'negative',
+                    onClick: handleClickCancle,
+                },
+            ].filter(Boolean)}
+        >
             {/* 컨테이너ID */}
             <MokaInputLabel className="mb-2" label="컨테이너ID" name="containerSeq" value={containerSeq} inputProps={{ plaintext: true, readOnly: true }} />
 

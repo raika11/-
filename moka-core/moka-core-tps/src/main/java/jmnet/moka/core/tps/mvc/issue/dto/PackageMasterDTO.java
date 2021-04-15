@@ -143,6 +143,18 @@ public class PackageMasterDTO implements Serializable {
     private Date updDt;
 
     /**
+     * 패키지 유형(B:기본형, E:확장형)
+     */
+    @ApiModelProperty("패키지 유형(B:기본형, E:확장형)")
+    private String pkgType;
+
+    /**
+     * 확장형 컴포넌트 사용여부
+     */
+    @ApiModelProperty("확장형 컴포넌트 사용여부")
+    private String compYn;
+
+    /**
      * 키워드 목록
      */
     @Builder.Default

@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaCard, MokaLoader } from '@components';
+import { MokaCard, MokaIconTabs, MokaLoader } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
 import IssueList from './IssueList';
 import IssueEdit from './IssueEdit';
@@ -13,6 +13,8 @@ import IssueEdit from './IssueEdit';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearStore } from '@store/issue';
 import { getReporterAllList } from '@store/reporter';
+import PollEdit from '@pages/Survey/Poll/PollEdit';
+import PollChildRelation from '@pages/Survey/Poll/relations/PollChildRelationInfo';
 
 /**
  * 패키지 관리
@@ -48,7 +50,24 @@ const Issue = ({ match, displayName }) => {
                 {/* 패키지 등록, 수정 */}
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
-                        <Route path={[`${match.path}/add`, `${match.path}/:pkgSeq`]} exact render={() => <IssueEdit match={match} reporters={allReporter} />} />
+                        <Route
+                            path={[`${match.path}/add`, `${match.path}/:pkgSeq`]}
+                            exact
+                            render={() => (
+                                <MokaIconTabs
+                                    foldable={false}
+                                    className="w-100"
+                                    //onSelectNav={(idx) => setActiveTabIdx(idx)}
+                                    tabs={[<IssueEdit match={match} reporters={allReporter} />, <></>]}
+                                    tabNavWidth={48}
+                                    placement="left"
+                                    tabNavs={[
+                                        { title: '이슈 정보', text: 'Info' },
+                                        { title: '편집', text: '편집' },
+                                    ]}
+                                />
+                            )}
+                        />
                     </Col>
                 )}
 

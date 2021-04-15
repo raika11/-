@@ -20,6 +20,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -142,7 +143,7 @@ public class CommandController {
                 ApiOperation apiOperation = commandMethod.getAnnotation(ApiOperation.class);
                 if (apiOperation != null) {
                     RequestMapping requestMapping = commandMethod.getAnnotation(RequestMapping.class);
-                    commandMap.put(methodName, Arrays.asList(new String[] {apiOperation.value(), requestMapping.path()[0]}));
+                    commandMap.put(methodName, Arrays.asList(apiOperation.value(), requestMapping.path()[0]));
                 }
             }
             return new ResponseEntity<>(new ResultDTO<HashMap<String, Object>>(commandMap), HttpStatus.OK);
@@ -159,7 +160,7 @@ public class CommandController {
     public ResponseEntity<?> _domain(HttpServletRequest request, HttpServletResponse response) {
         try {
             String load = request.getParameter("load");
-            boolean isLoad = (load == null || load.equalsIgnoreCase("N")) ? false : true;
+            boolean isLoad = load != null && !load.equalsIgnoreCase("N");
             if (isLoad) {
                 this.domainResolver.loadDomain();
             }
@@ -181,7 +182,7 @@ public class CommandController {
         try {
             String domainId = request.getParameter("domainId");
             String load = request.getParameter("load");
-            boolean isLoad = (load == null || load.equals("true") == false) ? false : true;
+            boolean isLoad = load != null && load.equals("true") != false;
             if (isLoad) {
                 this.domainTemplateMerger.loadUri(domainId);
             }
@@ -394,7 +395,7 @@ public class CommandController {
                             domainDir.mkdirs();
                         }
                         File pageFile = new File(pagePath);
-                        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pageFile), "UTF-8"));
+                        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pageFile), StandardCharsets.UTF_8));
                         writer.write(html);
                         writer.close();
                     } catch (IOException e) {
@@ -433,15 +434,16 @@ public class CommandController {
         }
     }
 
-    @ApiOperation(value = "AB테스트 정보 추가", nickname = "abTestAdd", notes="예제)url=/abtest,domain=2000,component=128,template=677,dataset=76")
+    @ApiOperation(value = "AB테스트 정보 추가", nickname = "abTestAdd", notes = "예제)url=/abtest,domain=2000,component=128,template=677,dataset=76")
     @RequestMapping(method = RequestMethod.GET, path = "/command/abTestAdd", produces = "application/json")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "테스트 Id", required = true, dataType = "string", paramType = "query", defaultValue = ""),
             @ApiImplicitParam(name = "domainId", value = "도메인 Id", required = true, dataType = "string", paramType = "query", defaultValue = ""),
             @ApiImplicitParam(name = "componentId", value = "컴포넌트 Id", required = true, dataType = "string", paramType = "query", defaultValue = ""),
             @ApiImplicitParam(name = "templateId", value = "템플릿 Id", required = false, dataType = "string", paramType = "query", defaultValue = ""),
-            @ApiImplicitParam(name = "datasetId", value = "데이터셋 Id", required = false, dataType = "string", paramType = "query", defaultValue = "")
-    })
+            @ApiImplicitParam(name = "datasetId", value = "데이터셋 Id", required = false, dataType = "string", paramType = "query", defaultValue = ""),
+            @ApiImplicitParam(name = "start", value = "테스트 시작", required = true, dataType = "string", paramType = "query", defaultValue = ""),
+            @ApiImplicitParam(name = "end", value = "테스트 종료", required = true, dataType = "string", paramType = "query", defaultValue = "")})
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = String.class), @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> _abTestAdd(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -450,14 +452,20 @@ public class CommandController {
             String componentId = request.getParameter("componentId");
             String templateId = request.getParameter("templateId");
             String datasetId = request.getParameter("datasetId");
+            String start = request.getParameter("start");
+            String end = request.getParameter("end");
+            LocalDateTime startDt = LocalDateTime.parse(start, MokaConstants.dtf);
+            LocalDateTime endDt = LocalDateTime.parse(end, MokaConstants.dtf);
             AbTest abTest = new AbTest();
             abTest.setId(id);
             abTest.setDomainId(domainId);
             abTest.setComponentId(componentId);
             abTest.setTemplateId(templateId);
             abTest.setDatasetId(datasetId);
+            abTest.setStart(startDt);
+            abTest.setEnd(endDt);
             this.abTestResolver.addAbTest(abTest);
-            return new ResponseEntity<>(new ResultDTO<Map<String,AbTest>>(abTestResolver.getTestMap()), HttpStatus.OK);
+            return new ResponseEntity<>(new ResultDTO<Map<String, AbTest>>(abTestResolver.getTestMap()), HttpStatus.OK);
         } catch (Exception e) {
             return responseException(e);
         }

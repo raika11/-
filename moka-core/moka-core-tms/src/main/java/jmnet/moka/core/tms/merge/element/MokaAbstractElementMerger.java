@@ -15,6 +15,7 @@ import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
 import jmnet.moka.core.tms.mvc.abtest.AbTestResolver;
+import jmnet.moka.core.tms.mvc.abtest.MokaAbTestResolver;
 import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 import org.springframework.context.support.GenericApplicationContext;
 

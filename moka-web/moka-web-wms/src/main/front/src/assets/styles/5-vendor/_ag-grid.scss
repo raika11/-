@@ -503,3 +503,10 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         }
     }
 }
+
+// ag-grid 다중 열 정렬 순서 번호 숨기기
+.ag-header-cell-label {
+    .ag-header-icon.ag-sort-order {
+        display: none;
+    }
+}

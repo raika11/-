@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import clsx from 'clsx';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PerfectScrollbar from 'react-perfect-scrollbar';

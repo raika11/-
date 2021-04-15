@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
 import columnDefs from './RelationInContainerListColumns';
@@ -35,24 +34,11 @@ const defaultProps = {
 const RelationInContainerList = (props) => {
     const { show, relSeqType, relSeq } = props;
     const dispatch = useDispatch();
-
-    const { search: storeSearch, list, total, error, loading, latestDomainId, domainList } = useSelector((store) => ({
-        search: store.relation.search,
-        list: store.relation.list,
-        total: store.relation.total,
-        error: store.relation.error,
-        loading: store.loading[GET_RELATION_LIST],
-        latestDomainId: store.auth.latestDomainId,
-        domainList: store.auth.domainList,
-    }));
-
-    // state
+    const { search: storeSearch, list, total, error } = useSelector(({ relation }) => relation);
+    const loading = useSelector(({ loading }) => loading[GET_RELATION_LIST]);
+    const { latestDomainId, domainList } = useSelector(({ auth }) => auth);
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
-
-    useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
 
     /**
      * 테이블 검색옵션 변경
@@ -72,6 +58,10 @@ const RelationInContainerList = (props) => {
     const handleClickLink = (data) => {
         window.open(`/container/${data.containerSeq}`);
     };
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     useEffect(() => {
         setRowData(
@@ -107,7 +97,17 @@ const RelationInContainerList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard title="관련 컨테이너" bodyClassName="d-flex flex-column">
+        <MokaCard
+            title="관련 컨테이너"
+            titleButtons={[
+                {
+                    text: '컨테이너 등록',
+                    variant: 'positive',
+                    onClick: () => window.open('/container/add'),
+                },
+            ]}
+            bodyClassName="d-flex flex-column"
+        >
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-14">
@@ -120,13 +120,6 @@ const RelationInContainerList = (props) => {
                     </MokaInput>
                 </Form.Row>
             )}
-
-            {/* 버튼 */}
-            <div className="d-flex justify-content-end mb-14">
-                <Button variant="positive" onClick={() => window.open('/container/add')}>
-                    컨테이너 등록
-                </Button>
-            </div>
 
             {/* 테이블 */}
             <MokaTable

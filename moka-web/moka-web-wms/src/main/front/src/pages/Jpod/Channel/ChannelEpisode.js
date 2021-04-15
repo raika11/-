@@ -45,7 +45,7 @@ const ChannelEpisode = () => {
     return (
         <MokaCard className="w-100 flex-fill" bodyClassName="d-flex flex-column" title={`${episodeTitle} 에피소드 목록`}>
             <Form.Row className="d-flex justify-content-between mb-14">
-                <Col xs={6} className="pl-0 d-flex align-items-center">
+                <Col xs={6} className="pl-0 d-flex align-items-end">
                     <Form.Label className="mb-0">{`등록된 에피소드: 사용(${episodeStat.usedCnt}) 중지(${episodeStat.unusedCnt})`}</Form.Label>
                 </Col>
                 <Col xs={6} className="d-flex justify-content-end pr-0">

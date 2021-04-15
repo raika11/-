@@ -77,7 +77,7 @@ const GrpSearch = () => {
                 <MokaSearchInput className="flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
             </div>
 
-            <div className="d-flex align-items-start justify-content-between">
+            <div className="d-flex align-items-end justify-content-between">
                 <MokaInput
                     as="checkbox"
                     id="secret-check"

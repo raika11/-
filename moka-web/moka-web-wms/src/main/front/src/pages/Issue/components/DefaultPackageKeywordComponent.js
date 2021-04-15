@@ -123,6 +123,7 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
                         <MokaInput
                             as="dateTimePicker"
                             name="edate"
+                            className="right"
                             inputProps={{ timeFormat: null }}
                             value={keyword.edate}
                             disabled={!useEndDate}

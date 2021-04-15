@@ -55,7 +55,7 @@ public class IssueDesking extends RegAudit {
      * 컴포넌트번호(1-7)
      */
     @Column(name = "COMP_NO", nullable = false)
-    private Long compNo;
+    private Integer compNo;
 
     /**
      * 콘텐츠ID
@@ -134,7 +134,7 @@ public class IssueDesking extends RegAudit {
      * 재생시간
      */
     @Column(name = "DURATION")
-    private String DURATION;
+    private String duration;
 
     /**
      * 발췌문

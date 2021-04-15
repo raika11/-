@@ -40,7 +40,6 @@ const IssueSearch = ({ onSearch, searchOptions }) => {
     );
 
     const handleClickReset = () => {
-        //setSearch({ masterCode: '', type: 'all', endYn: 'all', subsYn: 'all', expoYn: 'all', period: [1, 'day'], startDt: moment(), endDt: moment(), keyword: '' });
         setSearch(initialState.search);
         setPeriod([1, 'days']);
     };
@@ -60,15 +59,6 @@ const IssueSearch = ({ onSearch, searchOptions }) => {
             <Form.Row className="mb-2">
                 <Col xs={12} className="p-0 d-flex">
                     <div style={{ width: 430 }} className="mr-2">
-                        {/*<CodeAutocomplete
-                            name="category"
-                            placeholder="카테고리 선택"
-                            value={search.category}
-                            onChange={(value) => {
-                                handleChangeValue({ target: { name: 'category', value: value.map((code) => code.value).join(',') } });
-                            }}
-                            isMulti={true}
-                        />*/}
                         <ServiceCodeSelector
                             value={search.category}
                             onChange={(data) => {
@@ -103,9 +93,9 @@ const IssueSearch = ({ onSearch, searchOptions }) => {
                             }}
                         >
                             <option value="all">전체</option>
-                            <option value="Y">노출</option>
+                            <option value="Y,R">노출</option>
                             <option value="N">비노출</option>
-                            <option value="N">종료</option>
+                            <option value="E">종료</option>
                         </MokaInput>
                     </div>
                     <div style={{ width: 120 }} className="mr-2">

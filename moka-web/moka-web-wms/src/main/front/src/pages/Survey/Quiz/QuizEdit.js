@@ -571,34 +571,11 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
 
     return (
         <MokaCard
-            // titleAs={
-            //     <div className="w-100 d-flex">
-            //         <p className="m-0 h5 font-weight-bold">{`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}</p>
-            //         {/* <p className="m-0 pl-2 ft-12 text-positive">* 필수 입력항목</p> */}
-            //     </div>
-            // }
             title={`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}
-            // titleAs={
-            //     <>
-            //         <Row>
-            //             <Col className="justify-content-start" xs={3}>
-            //                 <Card.Title as="h2" className={clsx({ 'd-none': false }, 'mb-0')}>
-            //                     {`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}
-            //                 </Card.Title>
-            //             </Col>
-            //             <Col xs={9} className="'mb-0 p-0 text-right">
-            //                 <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={handleClickQuizStatusButton}>
-            //                     퀴즈 현황
-            //                 </Button>
-            //             </Col>
-            //         </Row>
-            //     </>
-            // }
             className="w-100"
-            // buttons={[{ text: '퀴즈현황', variant: 'outline-neutral', onClick: handleClickSaveButton, className: 'mr-1' }]}
+            titleButtons={[{ text: '퀴즈현황', variant: 'outline-neutral', onClick: handleClickQuizStatusButton }]}
             footer
             loading={save_loading}
-            footerClassName="justify-content-center"
             footerButtons={[
                 { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-1' },
                 { text: '미리보기', variant: 'outline-neutral', onClick: () => messageBox.alert('서비스 준비중입니다.', () => {}), className: 'mr-1' },
@@ -607,21 +584,13 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
             width={750}
         >
             <Form>
-                {/* <Form.Row className="mb-2">
-                    <Col xs={12} className="p-0 text-right">
-                        <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={handleClickQuizStatusButton}>
-                            퀴즈 현황
-                        </Button>
-                    </Col>
-                </Form.Row> */}
-
-                <Form.Row>
+                {/* <Form.Row>
                     <Col xs={12} className="mb-14 d-flex justify-content-end">
                         <Button variant="outline-neutral" onClick={handleClickQuizStatusButton}>
                             퀴즈 현황
                         </Button>
                     </Col>
-                </Form.Row>
+                </Form.Row> */}
                 <Form.Row>
                     <div className="p-0 flex-fill">
                         <Form.Row className="mb-2">

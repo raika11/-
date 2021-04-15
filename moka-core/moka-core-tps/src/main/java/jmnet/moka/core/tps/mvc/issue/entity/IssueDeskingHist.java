@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import jmnet.moka.core.tps.common.entity.BaseAudit;
+import jmnet.moka.core.tps.common.entity.RegAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,7 +34,7 @@ import org.hibernate.annotations.Nationalized;
 @Builder
 @Entity
 @Table(name = "TB_ISSUE_DESKING_HIST")
-public class IssueDeskingHist extends BaseAudit {
+public class IssueDeskingHist extends RegAudit {
 
     private static final long serialVersionUID = 1L;
 
@@ -55,13 +55,19 @@ public class IssueDeskingHist extends BaseAudit {
      * 컴포넌트번호(1-7)
      */
     @Column(name = "COMP_NO", nullable = false)
-    private Long compNo;
+    private Integer compNo;
+
+    /**
+     * 노출여부
+     */
+    @Column(name = "VIEW_YN")
+    private String viewYn;
 
     /**
      * 상태 SAVE(임시) / PUBLISH(전송)
      */
     @Column(name = "STATUS")
-    private String STATUS;
+    private String status;
 
     /**
      * 콘텐츠ID
@@ -140,7 +146,7 @@ public class IssueDeskingHist extends BaseAudit {
      * 재생시간
      */
     @Column(name = "DURATION")
-    private String DURATION;
+    private String duration;
 
     /**
      * 발췌문

@@ -27,6 +27,9 @@ export const changeIssueSearchOptions = createAction(CHANGE_ISSUE_SEARCH_OPTIONS
 export const GET_ISSUE_LIST_MODAL = 'issue/GET_ISSUE_LIST_MODAL';
 export const getIssueListModal = createAction(GET_ISSUE_LIST_MODAL, ({ search, callback, getServiceCodeList }) => ({ search, callback, getServiceCodeList }));
 
+export const GET_RECOMMEND_ISSUE_MODAL_LIST = 'issue/GET_RECOMMEND_ISSUE_MODAL_LIST';
+export const getRecommendIssueModalList = createAction(GET_RECOMMEND_ISSUE_MODAL_LIST, ({ search, callback }) => ({ search, callback }));
+
 /**
  * 이슈의 컨텐츠 목록 조회 (Modal)
  * 이슈의 최신 기사 (자동 기사)

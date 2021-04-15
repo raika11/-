@@ -15,8 +15,21 @@ import { CAT_DIV, initialState } from '@store/issue/issueReducer';
 /**
  * 이슈 목록 조회
  */
-const toIssueListData = (list) => {
+export const toIssueListData = (list) => {
     return list.map((data) => {
+        const expYn = data.usedYn === 'N' ? 'N' : 'Y';
+        const endYn = data.usedYn === 'E' ? 'Y' : 'N';
+        const regDt = commonUtil.isEmpty(data.regDt) ? data.regDt : moment(data.regDt).format(DATE_FORMAT);
+        const updDt = commonUtil.isEmpty(data.updDt) ? data.updDt : moment(data.updDt).format(DATE_FORMAT);
+        let pkgDivName = '';
+        if (data.pkgDiv === 'I') {
+            pkgDivName = '이슈';
+        } else if (data.pkgDiv === 'S') {
+            pkgDivName = '시리즈';
+        } else if (data.pkgDiv === 'T') {
+            pkgDivName = '토픽';
+        }
+
         const { catList, repList } = data;
         let category = '';
         let categoryNames = '';
@@ -43,9 +56,8 @@ const toIssueListData = (list) => {
             }
             reporterNames = reporters.join(',');
         }
-        const expYn = data.usedYn === 'N' ? 'N' : 'Y';
-        const endYn = data.usedYn === 'E' ? 'Y' : 'N';
-        return { ...data, category, categoryNames, reporter, reporterNames, expYn, endYn };
+
+        return { ...data, regDt, updDt, category, pkgDivName, categoryNames, reporter, reporterNames, expYn, endYn };
     });
 };
 
@@ -62,8 +74,14 @@ function* getIssueList({ type, payload }) {
             const list = toIssueListData(response.data.body.list);
 
             yield put({ type: `${type}_SUCCESS`, payload: { ...response.data, body: { ...response.data.body, list } } });
+            if (payload.callback instanceof Function) {
+                payload.callback(response);
+            }
         } else {
             yield put({ type: `${type}_FAILURE`, payload: response.data });
+            if (payload.callback instanceof Function) {
+                payload.callback(response);
+            }
         }
     } catch (e) {
         yield put({ type: `${type}_FAILURE`, payload: errorResponse(e) });
@@ -301,7 +319,7 @@ function* getIssueListModal({ payload }) {
     yield put(finishLoading(ACTION));
 }
 
-function* existsIssueTitle({ payload }) {
+function* existsIssueTitle({ type, payload }) {
     const { pkgTitle, callback } = payload;
 
     const response = yield call(api.existsIssueTitle, { pkgTitle });
@@ -310,7 +328,7 @@ function* existsIssueTitle({ payload }) {
     }
 }
 
-function* updateFinishIssue({ payload }) {
+function* updateFinishIssue({ type, payload }) {
     const { pkgSeq, callback } = payload;
 
     const response = yield call(api.finishIssue, { pkgSeq });
@@ -329,6 +347,7 @@ const getIssueContentsListModal = createRequestSaga(act.GET_ISSUE_CONTENTS_LIST_
  */
 export default function* saga() {
     yield takeLatest(act.GET_ISSUE_LIST, getIssueList);
+    yield takeLatest(act.GET_RECOMMEND_ISSUE_MODAL_LIST, getIssueList);
     yield takeLatest(act.GET_ISSUE, getIssue);
     yield takeLatest(act.SAVE_ISSUE, saveIssue);
     yield takeLatest(act.FINISH_ISSUE, updateFinishIssue);

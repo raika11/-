@@ -59,7 +59,7 @@ const RelationPollModal = ({ title, show, onHide, onAdd, onRowClicked, codes }) 
                                     title: unescapeHtmlArticle(row.title),
                                     group: commonUtil.toKorFromCode(row.pollGroup, codes.pollGroup),
                                     status: row.status === 'S' ? '진행' : '종료',
-                                    onClick: handleClickAdd,
+                                    onAdd: handleClickAdd,
                                 })),
                             );
                             setTotal(response.body.totalCnt);
@@ -71,7 +71,7 @@ const RelationPollModal = ({ title, show, onHide, onAdd, onRowClicked, codes }) 
                 }),
             );
         },
-        [codes.pollCategory, dispatch, handleClickAdd],
+        [codes.pollGroup, dispatch, handleClickAdd],
     );
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaInputLabel } from '@components';
@@ -7,9 +7,14 @@ import { messageBox } from '@utils/toastUtil';
 import Button from 'react-bootstrap/Button';
 import { initialState } from '@store/issue';
 import produce from 'immer';
+import RecommendIssueListModal from '@pages/Issue/modal/RecommendIssueListModal';
+import commonUtil from '@utils/commonUtil';
 
 const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, setIsDuplicatedTitle }) => {
     const [edit, setEdit] = useState(initialState.pkg);
+    const [showRecommendIssueListModal, setShowRecommendIssueListModal] = useState(false);
+    const [recommendPackages, setRecommendPackages] = useState([]);
+    const [recommendPkgSeq, setRecommendPkgSeq] = useState('');
 
     const handleChangeValue = ({ name, value }) => {
         const data = { ...edit, [name]: value };
@@ -40,9 +45,29 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
         }
     };
 
+    const handleClickRecommendPackageAdd = useCallback(
+        (pkgSeq) => {
+            setRecommendPkgSeq(pkgSeq);
+        },
+        [recommendPackages],
+    );
+
     useEffect(() => {
         setEdit(data);
+        if (!commonUtil.isEmpty(data.recommPkg)) {
+            setRecommendPackages(data.recommPkg.split(','));
+        } else {
+            setRecommendPackages([]);
+        }
     }, [data]);
+
+    useEffect(() => {
+        if (recommendPkgSeq !== '') {
+            const pkgSeqs = [...recommendPackages, `${recommendPkgSeq}`];
+            setRecommendPackages(pkgSeqs);
+            handleChangeValue({ name: 'recommPkg', value: pkgSeqs.join(',') });
+        }
+    }, [recommendPkgSeq]);
 
     return (
         <>
@@ -387,11 +412,32 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
 
             <Form.Row className="mb-3">
                 <Col xs={3} className="p-0">
-                    <MokaInputLabel as="switch" id="package-recomPkgYn-switch" name="recomPkgYn" label="추천 패키지(N개)" inputProps={{ custom: true }} />
+                    <MokaInputLabel
+                        as="switch"
+                        id="package-recomPkgYn-switch"
+                        name="recomPkgYn"
+                        label="추천 패키지(N개)"
+                        inputProps={{ custom: true, checked: recommendPackages.length > 0 }}
+                        disabled={true}
+                    />
                 </Col>
                 <Col xs={9} className="p-0 d-flex">
-                    <MokaInput className="mr-2" inputProps={{ readOnly: true }} />
-                    <Button variant="outline-neutral">추천 이슈 선택</Button>
+                    <MokaInput className="mr-2" inputProps={{ readOnly: true }} value={edit.recommPkg} />
+                    <Button
+                        variant="outline-neutral"
+                        onClick={() => {
+                            setShowRecommendIssueListModal(true);
+                        }}
+                    >
+                        추천 이슈 선택
+                    </Button>
+                    <RecommendIssueListModal
+                        show={showRecommendIssueListModal}
+                        onHide={() => {
+                            setShowRecommendIssueListModal(false);
+                        }}
+                        onAdd={handleClickRecommendPackageAdd}
+                    />
                 </Col>
             </Form.Row>
         </>

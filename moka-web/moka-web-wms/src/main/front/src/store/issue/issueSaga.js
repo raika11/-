@@ -75,7 +75,7 @@ function* getIssueList({ type, payload }) {
 
             yield put({ type: `${type}_SUCCESS`, payload: { ...response.data, body: { ...response.data.body, list } } });
             if (payload.callback instanceof Function) {
-                payload.callback(response);
+                payload.callback(response.data);
             }
         } else {
             yield put({ type: `${type}_FAILURE`, payload: response.data });

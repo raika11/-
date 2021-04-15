@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router';
-import Button from 'react-bootstrap/Button';
-import { MokaInput, MokaTable } from '@/components';
+import { MokaTable } from '@/components';
 import columnDefs from './NewsLetterAgGridColumns';
 
 /**
@@ -14,13 +13,6 @@ const NewsLetterAgGrid = ({ match }) => {
     const [search] = useState({ page: 1, size: 10 });
 
     /**
-     * 상품 등록
-     */
-    const handleClickAdd = () => {
-        history.push(`${match.path}/add`);
-    };
-
-    /**
      * 테이블 검색 옵션 변경
      * @param {object} payload 변경된 값
      */
@@ -30,40 +22,54 @@ const NewsLetterAgGrid = ({ match }) => {
      * 목록 Row클릭
      */
     const handleRowClicked = useCallback((row) => {
-        console.log(row);
+        history.push(`${match.path}/${row.no}`);
     }, []);
 
     return (
-        <>
-            <div className="mb-14 d-flex align-items-end justify-content-between">
-                <p className="mb-0">전체 상품 {total}개</p>
-                <div className="d-flex">
-                    <Button variant="positive" className="mr-1" style={{ overflow: 'visible' }} onClick={handleClickAdd}>
-                        상품 등록
-                    </Button>
-                    <Button variant="outline-neutral" className="mr-2" style={{ overflow: 'visible' }}>
-                        Excel 다운로드
-                    </Button>
-                    <MokaInput as="select" disabled>
-                        <option value="">20개 보기</option>
-                    </MokaInput>
-                </div>
-            </div>
-
-            <MokaTable
-                suppressMultiSort // 다중 정렬 비활성
-                className="overflow-hidden flex-fill"
-                paginationClassName="justify-content-center"
-                columnDefs={columnDefs}
-                onRowNodeId={(data) => data.seq}
-                onRowClicked={handleRowClicked}
-                loading={loading}
-                page={search.page}
-                pageSizes={false}
-                showTotalString={false}
-                onChangeSearchOption={handleChangeSearchOption}
-            />
-        </>
+        <MokaTable
+            suppressMultiSort // 다중 정렬 비활성
+            className="overflow-hidden flex-fill"
+            columnDefs={columnDefs}
+            rowData={[
+                {
+                    no: '1',
+                    sendType: '자동',
+                    type: '오리지널',
+                    newsLetter: '정치 언박싱',
+                    startDt: '2021-03-01',
+                    recentDt: '2021-03-04',
+                    ct: '월/화/수/목',
+                    time: '14:00',
+                    subscriber: '1301',
+                    state: '활성',
+                    regDt: '2021-02-14',
+                    regMember: '정준영(SSC08)',
+                    abYn: 'N',
+                },
+                {
+                    no: '2',
+                    sendType: '수동',
+                    type: '알림',
+                    newsLetter: '폴인 인사이트',
+                    startDt: '2021-03-02',
+                    recentDt: '2021-03-04',
+                    ct: '1개',
+                    time: '08:00',
+                    subscriber: '548',
+                    state: '종료',
+                    regDt: '2021-02-16',
+                    regMember: '정준영(SSC08)',
+                    abYn: 'Y',
+                },
+            ]}
+            onRowNodeId={(data) => data.no}
+            onRowClicked={handleRowClicked}
+            loading={loading}
+            page={search.page}
+            size={search.size}
+            total={total}
+            onChangeSearchOption={handleChangeSearchOption}
+        />
     );
 };
 

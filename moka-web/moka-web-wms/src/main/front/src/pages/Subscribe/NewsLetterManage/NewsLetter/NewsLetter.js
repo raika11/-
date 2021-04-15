@@ -24,13 +24,14 @@ const NewsLetter = ({ match, displayName }) => {
                     <meta name="robots" content="noindex" />
                 </Helmet>
 
-                {/* 리스트 */}
+                {/* 뉴스레터 상품 목록 */}
                 <Col xs={7} className="pr-gutter">
                     <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={displayName}>
                         <NewsLetterList match={match} />
                     </MokaCard>
                 </Col>
 
+                {/* 뉴스레터 상품 편집 */}
                 <Col xs={5}>
                     <Switch>
                         <Route
@@ -38,7 +39,6 @@ const NewsLetter = ({ match, displayName }) => {
                             exact
                             render={({ match: subMatch }) => {
                                 const isAddPage = subMatch.url === `${match.path}/add`;
-                                // <NewsLetterEdit match={match} />
                                 return (
                                     <MokaIconTabs
                                         className="w-100"

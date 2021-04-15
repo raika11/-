@@ -126,7 +126,6 @@ export default handleActions(
          * 검색조건 변경
          */
         [act.CHANGE_ISSUE_SEARCH_OPTIONS]: (state, { payload }) => {
-            console.log(payload);
             return produce(state, (draft) => {
                 draft.search = payload;
             });

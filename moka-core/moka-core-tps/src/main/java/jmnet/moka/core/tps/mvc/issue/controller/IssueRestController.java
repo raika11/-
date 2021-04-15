@@ -147,7 +147,7 @@ public class IssueRestController extends AbstractCommonController {
         // 조회
         PackageMaster packageMaster = packageService
                 .findByPkgSeq(pkgSeq)
-                .orElseThrow(() -> new NoDataException("no-data"));
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
         PackageMasterDTO packageMasterDTO = modelMapper.map(packageMaster, PackageMasterDTO.class);
 
@@ -173,7 +173,7 @@ public class IssueRestController extends AbstractCommonController {
         // 조회
         PackageMaster packageMaster = packageService
                 .findByPkgSeq(pkgSeq)
-                .orElseThrow(() -> new NoDataException("no-data"));
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
         PackageMasterDTO packageMasterDTO = modelMapper.map(packageMaster, PackageMasterDTO.class);
 
@@ -294,7 +294,7 @@ public class IssueRestController extends AbstractCommonController {
 
         PackageMaster packageMaster = packageService
                 .findByPkgSeq(pkgSeq)
-                .orElseThrow(() -> new NoDataException(msg("")));
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
         // 종료 플레그 E
         packageMaster.setUsedYn("E");
         // 수정

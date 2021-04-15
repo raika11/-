@@ -35,50 +35,22 @@ export const columnDefs = [
         field: 'cont',
         flex: 1,
         cellStyle: {
-            whiteSpace: 'normal',
             lineHeight: `${GRID_LINE_HEIGHT.M}px`,
-            paddingTop: '8px',
-            paddingBottom: '10px',
             cursor: 'pointer',
         },
-        cellRendererFramework: (param) => {
-            return (
-                <span
-                    onClick={() => {
-                        if (param.data.onClickTitle instanceof Function) {
-                            param.data.onClickTitle(param);
-                        }
-                    }}
-                    className="d-flex flex-fill"
-                >
-                    {param.value}
-                </span>
-            );
-        },
+        cellRenderer: 'commentBodyRenderer',
     },
     {
         headerName: '보기',
         field: 'preview',
-        width: 50,
+        width: 40,
         cellClassRules,
-        cellRendererFramework: (param) => {
-            return (
-                <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-                    <OverlayTrigger overlay={<Tooltip id="tooltip-table-preview-button">미리보기</Tooltip>}>
-                        <Button
-                            variant="white"
-                            className="border-0 p-0 bg-transparent shadow-none"
-                            onClick={() => {
-                                if (param.data.onPreview instanceof Function) {
-                                    param.data.onPreview(param);
-                                }
-                            }}
-                        >
-                            <MokaIcon iconName="fal-file-search" style={{ fontSize: '18px' }} />
-                        </Button>
-                    </OverlayTrigger>
-                </div>
-            );
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: {
+            iconButton: true,
+            iconName: 'fal-file-search',
+            overlayText: '미리보기',
+            clickFunctionName: 'onPreview',
         },
     },
     {
@@ -92,7 +64,7 @@ export const columnDefs = [
         headerName: '등록IP',
         field: 'memIp',
         cellClassRules,
-        width: 130,
+        width: 120,
         // tooltipField: 'memIp',
     },
     {
@@ -105,9 +77,9 @@ export const columnDefs = [
         headerName: '등록일시',
         field: 'regDt',
         tooltipField: 'regDt',
-        width: 120,
+        width: 160,
         cellRenderer: 'dateItemRenderer',
-        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
+        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.C[0]}px` },
     },
     {
         headerName: '상태',
@@ -125,7 +97,7 @@ export const columnDefs = [
     {
         headerName: '기능',
         field: 'action',
-        width: 70,
+        width: 60,
         cellRenderer: 'deleteButtonRenderer',
         cellStyle: { overflow: 'visible' },
     },

@@ -1,12 +1,11 @@
-import React, { useCallback, useState, forwardRef } from 'react';
-import { Row, Col } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
+import React, { useCallback, useState, forwardRef, useImperativeHandle, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { Row, Col, Button, Dropdown } from 'react-bootstrap';
+import { GRID_ROW_HEIGHT, WEBKIT_BOX } from '@/style_constants';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
-import Dropdown from 'react-bootstrap/Dropdown';
 import toast, { messageBox } from '@utils/toastUtil';
 import { CommentActionModal, BannedHistoryModal } from '@pages/CommentManage/CommentModal';
-import { getCommentsBlocks, blocksUsed, clearBlocksList } from '@store/commentManage';
-import { useDispatch } from 'react-redux';
+import { getCommentsBlocks, blocksUsed } from '@store/commentManage';
 
 /**
  * 이름 / ID
@@ -30,8 +29,7 @@ export const DateItemRenderer = (props) => {
     const thirdTime = value && value.length > 10 ? value.substr(10, 6) : value;
     return (
         <div className="h-100 d-flex flex-column justify-content-center">
-            <p className="mb-0">{firstTime}</p>
-            <p className="mb-0">{thirdTime}</p>
+            {firstTime} {thirdTime}
         </div>
     );
 };
@@ -227,3 +225,60 @@ export const HistoryButtonRenderer = ({ value }) => {
         </div>
     );
 };
+
+/**
+ * 댓글 내용
+ */
+export const CommentBodyRenderer = forwardRef((params, ref) => {
+    const { api, value, node } = params;
+    const [open, setOpen] = useState(false);
+    const textRef = useRef(null);
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            refresh: () => true,
+        }),
+        [],
+    );
+
+    // 기존 onClickTitle
+    // const { api: gridApi, rowIndex, reactContainer } = params;
+    // const row = gridApi.getDisplayedRowAtIndex(rowIndex);
+    // const contHeight = reactContainer.querySelector('span').clientHeight + 26;
+    // if (row.rowHeight < contHeight) {
+    //     row.setRowHeight(contHeight);
+    // } else {
+    //     gridApi.resetRowHeights();
+    // }
+
+    // gridApi.onRowHeightChanged();
+
+    return (
+        <div
+            className="h-100 w-100 ag-preline-cell"
+            onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                // api.resetRowHeights();
+
+                if (open) {
+                    setOpen(false);
+                    node.setRowHeight(GRID_ROW_HEIGHT.C[0]);
+                    api.onRowHeightChanged();
+                } else {
+                    const h = textRef.current.offsetHeight + 16;
+                    if (h > node.rowHeight) {
+                        node.setRowHeight(h);
+                        api.onRowHeightChanged();
+                        setOpen(true);
+                    }
+                }
+            }}
+        >
+            <span style={!open ? { ...WEBKIT_BOX(1), margin: 'auto 0' } : { margin: 'auto 0' }}>
+                <span ref={textRef}>{value}</span>
+            </span>
+        </div>
+    );
+});

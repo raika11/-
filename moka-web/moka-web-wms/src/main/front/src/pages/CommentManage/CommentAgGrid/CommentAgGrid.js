@@ -1,9 +1,9 @@
 import React from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import clsx from 'clsx';
-import { MokaPagination, MokaLoader, MokaTableDefaultProps } from '@components';
+import { MokaPagination, MokaLoader, MokaTableDefaultProps, MokaTableButtonRenderer } from '@components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
-import { DeleteButtonRenderer, DateItemRenderer, UserInfoRenderer, BanneButtonRenderer, HistoryButtonRenderer } from './CommentGridRenderer';
+import { DeleteButtonRenderer, DateItemRenderer, UserInfoRenderer, BanneButtonRenderer, HistoryButtonRenderer, CommentBodyRenderer } from './CommentGridRenderer';
 
 /**
  * 댓글 관리 > 댓글 목록 AgGrid
@@ -69,7 +69,10 @@ const CommentAgGrid = (props) => {
                     onColumnVisible={onColumnVisible}
                     onRowSelected={onRowSelected}
                     getRowHeight={getRowHeight}
+                    rowBuffer={100}
                     frameworkComponents={{
+                        buttonRenderer: MokaTableButtonRenderer,
+                        commentBodyRenderer: CommentBodyRenderer,
                         deleteButtonRenderer: DeleteButtonRenderer,
                         dateItemRenderer: DateItemRenderer,
                         userInfoRenderer: UserInfoRenderer,

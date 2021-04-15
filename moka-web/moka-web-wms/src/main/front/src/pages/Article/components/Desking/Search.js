@@ -11,7 +11,7 @@ import SourceSelector from './SourceSelector';
  * 페이지편집 > 기사 목록 > 기사 검색
  */
 const Search = (props) => {
-    const { onChangeSearchOption, search, period, isNaverChannel, error, onSearch, onReset, onChangeGroupNumber, movie, sourceList } = props;
+    const { onChangeSearchOption, search, period, error, onSearch, onReset, onChangeGroupNumber, sourceList, suppressChangeArtGroup } = props;
     const [modalShow, setModalShow] = useState(false);
 
     /**
@@ -144,7 +144,7 @@ const Search = (props) => {
                     </div>
                 </div>
 
-                {!isNaverChannel && !movie && (
+                {!suppressChangeArtGroup && (
                     <React.Fragment>
                         <Button variant="outline-neutral" className="flex-shrink-0" onClick={() => setModalShow(true)}>
                             그룹지정

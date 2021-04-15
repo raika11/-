@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaCardTabs } from '@components';
 import { changeHotClickList } from '@store/bulks';
-import { ArticleList } from '@pages/Article/components/Desking';
+import ArticleList from '@pages/Article/components/Desking';
 import ReporterList from '@pages/Reporter/components/Desking/ReporterList';
 import ColumnistList from '@pages/Columnist/components/Desking/ColumnistList';
 import { messageBox } from '@utils/toastUtil';

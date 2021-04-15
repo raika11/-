@@ -53,18 +53,29 @@ const PackageKeywordSectionComponent = ({ keyword, onChange, target }) => {
                 <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
                     <MokaInputLabel as="none" label="대상 섹션" />
                 </div>
-                <MokaInputLabel
-                    as="switch"
-                    id={`package-useSearchKeyword-switch-${target}`}
-                    label="검색어(N개)"
-                    name="andOr"
-                    inputProps={{ custom: true, checked: editKeyword.andOr === 'A' }}
+                <div style={{ height: 31 }} className="d-flex align-items-center">
+                    <MokaInputLabel as="none" label="검색어(N개)" />
+                </div>
+                <MokaInput
+                    as="radio"
+                    id={`${target}-keyword-and-radio`}
+                    name={`${target}-keyword-andOr`}
+                    inputProps={{ label: 'AND', custom: true, checked: editKeyword.andOr === 'A' }}
                     onChange={(e) => {
-                        const { name } = e.target;
-                        let value = 'A';
-                        if (editKeyword.andOr === 'A') {
-                            value = 'O';
-                        }
+                        const { value } = e.target;
+                        const name = 'andOr';
+
+                        handleChangeValue({ name, value });
+                    }}
+                />
+                <MokaInput
+                    as="radio"
+                    id={`${target}-keyword-or-radio`}
+                    name={`${target}-keyword-andOr`}
+                    inputProps={{ label: 'OR', custom: true, checked: editKeyword.andOr === 'O' }}
+                    onChange={(e) => {
+                        const { value } = e.target;
+                        const name = 'andOr';
 
                         handleChangeValue({ name, value });
                     }}
@@ -72,7 +83,7 @@ const PackageKeywordSectionComponent = ({ keyword, onChange, target }) => {
             </Col>
             <Col xs={9} className="p-0">
                 <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
-                    <div style={{ width: 80 }} className="pr-3">
+                    <div style={{ width: 100 }} className="pr-3">
                         <MokaInput
                             as="checkbox"
                             name="title"
@@ -84,7 +95,7 @@ const PackageKeywordSectionComponent = ({ keyword, onChange, target }) => {
                             }}
                         />
                     </div>
-                    <div style={{ width: 80 }}>
+                    <div style={{ width: 100 }}>
                         <MokaInput
                             as="checkbox"
                             name="keyword"

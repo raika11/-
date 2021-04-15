@@ -14,9 +14,9 @@ moment.locale('ko');
 
 const propTypes = {
     /**
-     * className
+     * 영상 기사만 조회
      */
-    className: PropTypes.string,
+    movie: PropTypes.bool,
     /**
      * 선택한 컴포넌트의 데이터
      * @default
@@ -27,30 +27,45 @@ const propTypes = {
      */
     dropTargetAgGrid: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     /**
-     * row를 drop하였을 때 실행하는 함수
+     * row drop시 실행
      */
     onDragStop: PropTypes.func,
     /**
-     * show 일 때만 데이터를 로드한다
-     * @default
-     */
-    show: PropTypes.bool,
-    /**
-     * 네이버채널일 경우 기사매체 & 기사리스트 api를 별도로 사용한다
+     * 네이버채널 유무 (기사매체 & 기사리스트 별도 api 사용)
      * @default
      */
     isNaverChannel: PropTypes.bool,
     /**
-     * 영상 기사만 조회하는지
+     * 편집그룹 변경 기능 막기 (네이버채널, 영상탭일 경우 막음)
+     * @default
      */
-    movie: PropTypes.bool,
+    suppressChangeArtGroup: PropTypes.bool,
+    /**
+     * 제목 수정 기능 막기
+     * @default
+     */
+    suppressChangeArtTitle: PropTypes.bool,
+    /**
+     * columnDefs 추가
+     */
+    addColumnDefs: PropTypes.arrayOf(
+        PropTypes.shape({
+            /**
+             * 추가할 위치
+             */
+            index: PropTypes.number,
+        }),
+    ),
 };
 
 const defaultProps = {
-    selectedComponent: {},
-    isNaverChannel: false,
     show: true,
     movie: false,
+    selectedComponent: {},
+    dropTargetAgGrid: null,
+    isNaverChannel: false,
+    suppressChangeArtGroup: false,
+    suppressChangeArtTitle: false,
 };
 
 /**
@@ -58,8 +73,18 @@ const defaultProps = {
  * @desc 네이버 채널 => 벌크기사 리스트 조회
  * @desc 네이버 채널X => 서비스기사 리스트 조회
  */
-const ArticleList = (props) => {
-    const { className, selectedComponent, dropTargetAgGrid, onDragStop, isNaverChannel, show, movie } = props;
+const ArticleList = ({
+    className,
+    selectedComponent,
+    dropTargetAgGrid,
+    onDragStop,
+    isNaverChannel,
+    show,
+    movie,
+    suppressChangeArtGroup,
+    suppressChangeArtTitle,
+    addColumnDefs,
+}) => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_ARTICLE_LIST_MODAL]);
 
@@ -214,11 +239,12 @@ const ArticleList = (props) => {
                 onChangeSearchOption={handleSearchOption}
                 onSearch={handleSearch}
                 onReset={handleReset}
-                isNaverChannel={isNaverChannel}
                 // 그룹넘버 변경 후 실행함수
                 onChangeGroupNumber={handleSearch}
-                movie={movie}
+                // 매체 목록
                 sourceList={sourceList}
+                // 편집그룹 변경 막기
+                suppressChangeArtGroup={suppressChangeArtGroup || isNaverChannel || movie}
             />
 
             <AgGrid
@@ -232,6 +258,8 @@ const ArticleList = (props) => {
                 onChangeSearchOption={changeTableSearchOption}
                 getArticleList={() => getArticleList({ type, search })}
                 movie={movie}
+                suppressChangeArtTitle={suppressChangeArtTitle}
+                addColumnDefs={addColumnDefs}
             />
         </div>
     );

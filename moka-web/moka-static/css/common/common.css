@@ -449,7 +449,7 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 
 
 /** 기본 **/
-.btn {display:flex;align-items:center;justify-content:space-between;width:auto;padding:8px 20px;border-radius:50px;border:1px solid transparent;background-color:transparent;color:#111;font-size:14px;line-height:1;text-align:center;white-space:nowrap;}
+.btn {display:flex;align-items:center;justify-content:space-between;width:auto;padding:8px 20px;border:1px solid transparent;background-color:transparent;color:#111;font-size:14px;line-height:1;text-align:center;white-space:nowrap;}
 .btn + .btn {margin-left:4px;}
 
 /* 상태 */
@@ -625,7 +625,10 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 .comment_header { display: flex; position: relative; }
 .comment_header .comment_userid { color: #000; font-size: 15px; line-height: 22px; font-weight: 700; }
 .comment_header .comment_date { margin-left: 12px; color: #999; font-size: 14px; line-height: 22px; }
-.comment_header .btn_more { position: absolute; right: -8px; top: -2px; width: 20px; height: 20px;  }
+.comment_header .more_option_area { position: absolute; right: 0; top: -2px; text-align: right; }
+.comment_header .more_option_area .btn_more { position: relative; right: -8px; width: 20px; height: 20px;  }
+.comment_header .more_option_area .btn_outline_gray { display: none; position: absolute; right: 0; top: 30px; width: 58px; height: 30px; }
+.comment_header .more_option_area.open .btn_outline_gray { display: block; }
 .comment_content { margin-top: 10px; color: #111; font-size: 14px; line-height: 20px; }
 .comment_footer { margin-top: 12px; }
 .comment_footer::after { display: block; content: ''; clear: both; }
@@ -635,7 +638,8 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 .comment_list { border-top: 2px solid #ff4620; }
 .comment_list li:nth-child(n+2) { border-top: 1px solid #e2e2e2; }
 /* icon */
-.fa_more { width: 3px; height: 17px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='3' height='17'%3E%3Cpath d='M1.5 14a1.5 1.5 0 11-.001 3.001A1.5 1.5 0 011.5 14zm0-7a1.5 1.5 0 11-.001 3.001A1.5 1.5 0 011.5 7zm0-7a1.5 1.5 0 11-.001 3.001A1.5 1.5 0 011.5 0z' fill='%23CCC' fill-rule='evenodd'/%3E%3C/svg%3E"); }
+.ico_more_option { width: 3px; height: 17px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='3' height='17'%3E%3Cpath d='M1.5 14a1.5 1.5 0 11-.001 3.001A1.5 1.5 0 011.5 14zm0-7a1.5 1.5 0 11-.001 3.001A1.5 1.5 0 011.5 7zm0-7a1.5 1.5 0 11-.001 3.001A1.5 1.5 0 011.5 0z' fill='%23CCC' fill-rule='evenodd'/%3E%3C/svg%3E"); }
+
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {

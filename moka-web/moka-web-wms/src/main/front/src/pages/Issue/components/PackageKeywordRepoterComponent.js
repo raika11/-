@@ -11,7 +11,7 @@ const defaultProps = {
     keyword: initialState.pkg.packageKeywords.reporter.keyword,
     reporters: [],
 };
-const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
+const PackageKeywordReporterComponent = ({ keyword, onChange, reporters }) => {
     const [editKeyword, setEditKeyword] = useState(keyword);
     const [useEndDate, setUseEndDate] = useState(keyword.reporter.map((data) => !commonUtil.isEmpty(data.edate) && data.edate !== ''));
 
@@ -217,5 +217,5 @@ const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
     );
 };
 
-ReporterPackageKeywordForm.defaultProps = defaultProps;
-export default ReporterPackageKeywordForm;
+PackageKeywordReporterComponent.defaultProps = defaultProps;
+export default PackageKeywordReporterComponent;

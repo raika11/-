@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { MokaInput, MokaInputLabel } from '@components';
+import { MokaIcon, MokaInput, MokaInputLabel } from '@components';
 import ServiceCodeSelector from '@pages/Issue/components/Desking/ServiceCodeSelector';
 import { messageBox } from '@utils/toastUtil';
 import Button from 'react-bootstrap/Button';
@@ -9,12 +9,14 @@ import { initialState } from '@store/issue';
 import produce from 'immer';
 import RecommendIssueListModal from '@pages/Issue/modal/RecommendIssueListModal';
 import commonUtil from '@utils/commonUtil';
+import Badge from 'react-bootstrap/Badge';
 
 const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, setIsDuplicatedTitle }) => {
     const [edit, setEdit] = useState(initialState.pkg);
     const [showRecommendIssueListModal, setShowRecommendIssueListModal] = useState(false);
     const [recommendPackages, setRecommendPackages] = useState([]);
     const [recommendPkgSeq, setRecommendPkgSeq] = useState('');
+    const [useRecommendIssuePackage, setUseRecommendIssuePackage] = useState(false);
 
     const handleChangeValue = ({ name, value }) => {
         const data = { ...edit, [name]: value };
@@ -54,10 +56,12 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
 
     useEffect(() => {
         setEdit(data);
-        if (!commonUtil.isEmpty(data.recommPkg)) {
+        if (!commonUtil.isEmpty(data.recommPkg) && data.recommPkg !== '') {
             setRecommendPackages(data.recommPkg.split(','));
+            setUseRecommendIssuePackage(true);
         } else {
             setRecommendPackages([]);
+            setUseRecommendIssuePackage(false);
         }
     }, [data]);
 
@@ -417,12 +421,34 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                         id="package-recomPkgYn-switch"
                         name="recomPkgYn"
                         label="추천 패키지(N개)"
-                        inputProps={{ custom: true, checked: recommendPackages.length > 0 }}
-                        disabled={true}
+                        inputProps={{ custom: true, checked: useRecommendIssuePackage }}
+                        onChange={() => {
+                            setUseRecommendIssuePackage(!useRecommendIssuePackage);
+                            if (!useRecommendIssuePackage === false) {
+                                handleChangeValue({ name: 'recommPkg', value: '' });
+                            }
+                        }}
                     />
                 </Col>
                 <Col xs={9} className="p-0 d-flex">
-                    <MokaInput className="mr-2" inputProps={{ readOnly: true }} value={edit.recommPkg} />
+                    {/*<MokaInput className="mr-2" inputProps={{ readOnly: true }} value={edit.recommPkg} />*/}
+                    <div className="flex-fill mr-2">
+                        <div className="input-border pl-1 pr-1 pt-1 h-100">
+                            {recommendPackages.map((s) => (
+                                <Badge key={s} className="mr-1 mb-1 pt-1 user-select-text" variant="searching">
+                                    {s}
+                                    <MokaIcon
+                                        iconName="fas-times"
+                                        className="ml-1 cursor-pointer"
+                                        onClick={() => {
+                                            const removePackages = recommendPackages.filter((pkgSeq) => pkgSeq !== s).join(',');
+                                            handleChangeValue({ name: 'recommPkg', value: removePackages });
+                                        }}
+                                    />
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
                     <Button
                         variant="outline-neutral"
                         onClick={() => {

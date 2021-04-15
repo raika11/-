@@ -46,7 +46,6 @@ const RecommendIssueListModal = ({ show, onHide, onAdd }) => {
 
     const handleClickAdd = useCallback(
         (row) => {
-            console.log(row);
             if (onAdd instanceof Function) {
                 onAdd(row.pkgSeq);
             }

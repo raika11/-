@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@/components';
@@ -34,6 +34,17 @@ const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, load
     };
 
     /**
+     * 테이블 sort 변경
+     * @param {object} params instance
+     */
+    const handleSortChange = (params) => {
+        const sortModel = params.api.getSortModel();
+        const sort = sortModel[0] ? `${sortModel[0].colId},${sortModel[0].sort}` : searchOptions.sort;
+        const search = { ...searchOptions, sort, page: 0 };
+        onChangeSearchOption(search);
+    };
+
+    /**
      * 목록 Row클릭
      */
     const handleRowClicked = useCallback(
@@ -63,6 +74,7 @@ const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, load
                 headerHeight={GRID_HEADER_HEIGHT[1]}
                 rowHeight={GRID_ROW_HEIGHT.T[1]}
                 onChangeSearchOption={handleChangeSearchOptions}
+                onSortChanged={handleSortChange}
                 total={total}
             />
         </>

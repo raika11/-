@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaInputLabel } from '@components';
+import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import commonUtil from '@utils/commonUtil';
 import { initialState } from '@store/issue';
 import produce from 'immer';
+import commonUtil from '@utils/commonUtil';
+import { CodeListModal } from '@pages/commons';
 
-const defaultProps = { keyword: initialState.initialPkgKeyword };
-const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
+const PackageKeywordSectionComponent = ({ keyword, onChange, target }) => {
     const [editKeyword, setEditKeyword] = useState(initialState.initialPkgKeyword);
     const [useEndDate, setUseEndDate] = useState(false);
+    const [codeModalShow, setCodeModalShow] = useState(false);
 
     const handleChangeValue = ({ name, value }) => {
         const pkg = { ...editKeyword, [name]: value };
@@ -48,6 +50,9 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
                 <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
                     <MokaInputLabel as="none" label="검색 기간" />
                 </div>
+                <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                    <MokaInputLabel as="none" label="대상 섹션" />
+                </div>
                 <MokaInputLabel
                     as="switch"
                     id={`package-useSearchKeyword-switch-${target}`}
@@ -55,7 +60,7 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
                     name="andOr"
                     inputProps={{ custom: true, checked: editKeyword.andOr === 'A' }}
                     onChange={(e) => {
-                        const { name, checked } = e.target;
+                        const { name } = e.target;
                         let value = 'A';
                         if (editKeyword.andOr === 'A') {
                             value = 'O';
@@ -134,6 +139,32 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
                         />
                     </div>
                 </div>
+                <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                    <Button
+                        variant="outline-neutral"
+                        onClick={() => {
+                            setCodeModalShow(true);
+                        }}
+                    >
+                        섹션 선택
+                    </Button>
+                    <CodeListModal
+                        max={4}
+                        show={codeModalShow}
+                        onHide={() => setCodeModalShow(false)}
+                        value={`${editKeyword.repMaster}`}
+                        selection="single"
+                        onSave={(data) => {
+                            let value = null;
+                            if (!commonUtil.isEmpty(data)) {
+                                value = data.masterCode;
+                            }
+
+                            handleChangeValue({ name: 'repMaster', value });
+                        }}
+                        selectable={['content']}
+                    />
+                </div>
                 <MokaInput
                     name="keyword"
                     value={editKeyword.keyword}
@@ -146,5 +177,4 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
     );
 };
 
-DefaultPackageKeywordComponent.defaultProps = defaultProps;
-export default DefaultPackageKeywordComponent;
+export default PackageKeywordSectionComponent;

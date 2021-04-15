@@ -66,7 +66,7 @@ const RecommendIssueListModal = ({ show, onHide, onAdd }) => {
                         if (header.success) {
                             const list = toIssueListData(
                                 body.list.map((row) => {
-                                    return { ...row, onAdd: handleClickAdd };
+                                    return { ...row, onAdd: handleClickAdd, onClick: () => window.open(`/issue/${row.pkgSeq}`) };
                                 }),
                             );
                             setRowData(list);

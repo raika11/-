@@ -106,9 +106,9 @@ public class OvpSetJpotMetaJob extends AbstractScheduleJob {
             setFinish(success, info);
 
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.toString());
-            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), info);
+            scheduleResult.setSendExecTime(0l);
+            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), scheduleInfo);
         }
     }
 }

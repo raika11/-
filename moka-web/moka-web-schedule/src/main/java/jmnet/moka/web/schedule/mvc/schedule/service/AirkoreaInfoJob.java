@@ -45,7 +45,7 @@ public class AirkoreaInfoJob extends AbstractScheduleJob {
     @Override
     @Transactional
     public void invoke(GenContent info) {
-
+        GenContent scheduleInfo         = info;
         GenStatus scheduleResult        = info.getGenStatus();
         final String apiServerKey       = "05QdZ02zxM1OXkG3pcdamlAAs2QORORH5JVNzDNbkO4TwPMMT5T9e0rxLT47ol55KzBelXU22E4qutZxEUm1dw%3D%3D";
         final String apiItemCode[]      = {"PM10", "PM25", "O3", "SO2", "CO", "NO2"};
@@ -108,7 +108,10 @@ public class AirkoreaInfoJob extends AbstractScheduleJob {
             setFinish(true, info);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            log.error(e.toString());
+            scheduleResult.setSendExecTime(0l);
+            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), scheduleInfo);
         }
     }
 

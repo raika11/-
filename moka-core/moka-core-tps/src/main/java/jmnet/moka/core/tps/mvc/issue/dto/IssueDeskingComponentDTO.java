@@ -9,10 +9,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,6 +54,32 @@ public class IssueDeskingComponentDTO implements Serializable {
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.issue.error.pattern.compYn}")
     @Builder.Default
     private String viewYn = MokaConstants.NO;
+
+    @ApiModelProperty("임시저장 최종일시")
+    @DTODateTimeFormat
+    @Column(name = "LAST_SAVE_DT")
+    private Date lastSaveDt;
+
+    @ApiModelProperty("임시저장 최종작업자")
+    @Column(name = "LAST_SAVE_ID")
+    private String lastSaveId;
+
+    @ApiModelProperty("임시저장 최종작업자명")
+    @Column(name = "LAST_SAVE_NM")
+    private String lastSaveNm;
+
+    @ApiModelProperty("전송 최종일시")
+    @DTODateTimeFormat
+    @Column(name = "LAST_PUBLISH_DT")
+    private Date lastPublishDt;
+
+    @ApiModelProperty("전송 최종작업자")
+    @Column(name = "LAST_PUBLISH_ID")
+    private String lastPublishId;
+
+    @ApiModelProperty("전송 최종작업자명")
+    @Column(name = "LAST_PUBLISH_NM")
+    private String lastPublishNm;
 
     @ApiModelProperty("편집정보")
     @Builder.Default

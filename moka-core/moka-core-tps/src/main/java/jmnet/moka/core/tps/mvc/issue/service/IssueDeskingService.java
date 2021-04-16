@@ -6,6 +6,7 @@ package jmnet.moka.core.tps.mvc.issue.service;
 
 import java.util.List;
 import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
+import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistDTO;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 
 /**
@@ -51,4 +52,18 @@ public interface IssueDeskingService {
      * @return
      */
     IssueDeskingComponentDTO publish(PackageMaster packageMaster, IssueDeskingComponentDTO issueDeskingComponentDTO, String regId);
+
+    /**
+     * 자동컴포넌트의 편집기사 저장
+     *
+     * @param packageMaster 패키지
+     */
+    void insertAutoComponentDeskingHist(PackageMaster packageMaster);
+
+    /**
+     * escape
+     *
+     * @param dto
+     */
+    void escapeHtml(IssueDeskingHistDTO dto);
 }

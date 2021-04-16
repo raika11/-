@@ -351,6 +351,32 @@ function* updateFinishIssue({ type, payload }) {
 const getIssueContentsListModal = createRequestSaga(act.GET_ISSUE_CONTENTS_LIST_MODAL, api.getIssueContentsList);
 
 /**
+ * 이슈 데스킹 임시저장
+ */
+function* saveIssueDesking({ payload }) {
+    const ACTION = act.SAVE_ISSUE_DESKING;
+    const { callback, ...rest } = payload;
+    let callbackData;
+
+    try {
+        const response = yield call(api.saveIssueDesking, rest);
+        if (response.data.header.success) {
+            // yield put({ type: `${ACTION}_SUCCESS`, payload: data });
+        } else {
+            // yield put({ type: `${ACTION}_FAILURE`, payload: response.data });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
  * saga
  */
 export default function* saga() {
@@ -362,4 +388,5 @@ export default function* saga() {
     yield takeLatest(act.GET_ISSUE_LIST_MODAL, getIssueListModal);
     yield takeLatest(act.GET_ISSUE_CONTENTS_LIST_MODAL, getIssueContentsListModal);
     yield takeLatest(act.EXISTS_ISSUE_TITLE, existsIssueTitle);
+    yield takeLatest(act.SAVE_ISSUE_DESKING, saveIssueDesking);
 }

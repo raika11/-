@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -6,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import { CHANNEL_TYPE, ISSUE_CHANNEL_TYPE, ARTICLE_URL, ISSUE_URL } from '@/constants';
 import { MokaInputLabel, MokaTable } from '@components';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
-import { initialState } from '@store/issue';
+import { initialState, saveIssueDesking } from '@store/issue';
 import { ArticleTabModal } from '@pages/Article/modals';
 import { artColumnDefs } from './IssueDeskingColumns';
 
@@ -14,6 +15,7 @@ import { artColumnDefs } from './IssueDeskingColumns';
  * 패키지관리 > 관련 데이터 편집 > 기사 (편집)
  */
 const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
+    const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
     const controls = 'collapse-art';
@@ -102,6 +104,20 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
         params.api.applyTransaction({ update: ordered });
     };
 
+    /**
+     * 임시저장
+     */
+    const saveDesking = () => {
+        const displayedRows = getDisplayedRows(gridInstance.api);
+        dispatch(
+            saveIssueDesking({
+                compNo,
+                pkgSeq,
+                issueDeskingList: displayedRows,
+            }),
+        );
+    };
+
     return (
         <>
             <Row className="py-2 d-flex border-bottom" noGutters>
@@ -124,7 +140,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
                     <Button variant="outline-neutral" size="sm" className="mr-1">
                         미리보기
                     </Button>
-                    <Button variant="positive-a" size="sm" className="mr-1">
+                    <Button variant="positive-a" size="sm" className="mr-1" onClick={saveDesking}>
                         임시저장
                     </Button>
                     <Button variant="positive" size="sm">

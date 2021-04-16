@@ -208,6 +208,10 @@ public class IssueRestController extends AbstractCommonController {
 
         // 등록
         PackageMaster returnValue = packageService.insertPackage(packageMaster);
+
+        // 확장형일경우, 자동컴포넌트에 편집정보추가
+        issueDeskingService.insertAutoComponentDeskingHist(returnValue);
+
         // 등록후 패키지 기사 묶기
         packageService.updatePackageTotalId(returnValue.getPkgSeq());
 
@@ -242,6 +246,10 @@ public class IssueRestController extends AbstractCommonController {
 
         // 등록
         PackageMaster returnValue = packageService.insertPackage(packageMaster);
+
+        // 확장형일경우, 자동컴포넌트에 편집정보추가
+        issueDeskingService.insertAutoComponentDeskingHist(returnValue);
+
         // 등록후 패키지 기사 묶기
         packageService.updatePackageTotalId(returnValue.getPkgSeq());
 
@@ -274,6 +282,10 @@ public class IssueRestController extends AbstractCommonController {
         PackageMaster packageMaster = modelMapper.map(packageMasterDTO, PackageMaster.class);
         // 수정
         PackageMaster returnValue = packageService.updatePackage(packageMaster);
+
+        // 확장형일경우, 자동컴포넌트에 편집정보추가
+        issueDeskingService.insertAutoComponentDeskingHist(returnValue);
+
         // 수정후 패키지 기사 묶기
         packageService.updatePackageTotalId(returnValue.getPkgSeq());
 
@@ -339,9 +351,13 @@ public class IssueRestController extends AbstractCommonController {
         PackageMaster packageMaster = modelMapper.map(packageMasterDTO, PackageMaster.class);
         // 수정
         PackageMaster returnValue = packageService.updatePackage(packageMaster);
+
+        // 확장형일경우, 자동컴포넌트에 편집정보추가
+        issueDeskingService.insertAutoComponentDeskingHist(returnValue);
+
         // 수정후 패키지 기사 묶기
         packageService.updatePackageTotalId(returnValue.getPkgSeq());
-        
+
         // 결과리턴
         PackageMasterDTO dto = modelMapper.map(returnValue, PackageMasterDTO.class);
         ResultDTO<PackageMasterDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.update"));
@@ -543,7 +559,7 @@ public class IssueRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "패키지의 편집목록조회")
     @GetMapping("/{pkgSeq}/desking")
-    public ResponseEntity<?> getDeskingList(@ApiParam("패키지 일련번호") @PathVariable("pkgSeq") Long pkgSeq)
+    public ResponseEntity<?> getDeskingList(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq)
             throws Exception {
         PackageMaster packageMaster = packageService
                 .findByPkgSeq(pkgSeq)
@@ -567,35 +583,35 @@ public class IssueRestController extends AbstractCommonController {
         }
     }
 
-    /**
-     * 컴포넌트의 편집목록조회
-     *
-     * @param pkgSeq 패키지순번
-     * @param compNo 컴포넌트순번
-     * @return
-     * @throws Exception
-     */
-    @ApiOperation(value = "컴포넌트의 편집목록조회")
-    @GetMapping("/{pkgSeq}/desking/{compNo}")
-    public ResponseEntity<?> getDeskingComponentList(@ApiParam("패키지 일련번호") @PathVariable("pkgSeq") Long pkgSeq,
-            @ApiParam("컴포넌트번호") @PathVariable("compNo") Integer compNo)
-            throws Exception {
-        PackageMaster packageMaster = packageService
-                .findByPkgSeq(pkgSeq)
-                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
-
-        try {
-            IssueDeskingComponentDTO returnValue = issueDeskingService.findIssueDeskingComponent(packageMaster, compNo);
-
-            ResultDTO<IssueDeskingComponentDTO> resultDto = new ResultDTO<>(returnValue);
-            tpsLogger.success(ActionType.SELECT);
-            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("[FAIL TO LOAD PACKAGE DESKING LIST]", e);
-            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD PACKAGE DESKING LIST]", e, true);
-            throw new Exception(msg("tps.common.error.select"), e);
-        }
-    }
+    //    /**
+    //     * 컴포넌트의 편집목록조회
+    //     *
+    //     * @param pkgSeq 패키지순번
+    //     * @param compNo 컴포넌트순번
+    //     * @return
+    //     * @throws Exception
+    //     */
+    //    @ApiOperation(value = "컴포넌트의 편집목록조회")
+    //    @GetMapping("/{pkgSeq}/desking/{compNo}")
+    //    public ResponseEntity<?> getDeskingComponentList(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
+    //            @ApiParam(value = "컴포넌트번호", required = true) @PathVariable("compNo") Integer compNo)
+    //            throws Exception {
+    //        PackageMaster packageMaster = packageService
+    //                .findByPkgSeq(pkgSeq)
+    //                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+    //
+    //        try {
+    //            IssueDeskingComponentDTO returnValue = issueDeskingService.findIssueDeskingComponent(packageMaster, compNo);
+    //
+    //            ResultDTO<IssueDeskingComponentDTO> resultDto = new ResultDTO<>(returnValue);
+    //            tpsLogger.success(ActionType.SELECT);
+    //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    //        } catch (Exception e) {
+    //            log.error("[FAIL TO LOAD PACKAGE DESKING LIST]", e);
+    //            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD PACKAGE DESKING LIST]", e, true);
+    //            throw new Exception(msg("tps.common.error.select"), e);
+    //        }
+    //    }
 
     @ApiOperation(value = "편집기사 임시저장")
     @PostMapping(value = "/{pkgSeq}/desking/{compNo}/save", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -606,6 +622,12 @@ public class IssueRestController extends AbstractCommonController {
                 .findByPkgSeq(issueDeskingComponentDTO.getPkgSeq())
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
         try {
+            // escape
+            issueDeskingComponentDTO
+                    .getIssueDeskings()
+                    .stream()
+                    .forEach((dto -> issueDeskingService.escapeHtml(dto)));
+
             // 등록
             IssueDeskingComponentDTO returnValue = issueDeskingService.save(packageMaster, issueDeskingComponentDTO, principal.getName());
 
@@ -632,6 +654,12 @@ public class IssueRestController extends AbstractCommonController {
                 .findByPkgSeq(issueDeskingComponentDTO.getPkgSeq())
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
         try {
+            // escape
+            issueDeskingComponentDTO
+                    .getIssueDeskings()
+                    .stream()
+                    .forEach((dto -> issueDeskingService.escapeHtml(dto)));
+
             // 등록
             IssueDeskingComponentDTO returnValue = issueDeskingService.publish(packageMaster, issueDeskingComponentDTO, principal.getName());
 

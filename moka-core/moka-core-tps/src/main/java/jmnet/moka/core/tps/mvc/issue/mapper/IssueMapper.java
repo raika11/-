@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageSearchDTO;
-import jmnet.moka.core.tps.mvc.issue.vo.IssueDeskingVO;
 import jmnet.moka.core.tps.mvc.issue.vo.PackageVO;
 
 /**
@@ -25,7 +24,7 @@ public interface IssueMapper extends BaseMapper<PackageVO, PackageSearchDTO> {
      * @param param pkgSeq 패키지순번, compNo 컴포넌트순번, status 상태(SAVE/PUBLISH)
      * @return
      */
-    List<IssueDeskingVO> findAllIssueDesking(Map<String, Object> param);
+    List<List<Object>> findAllIssueDesking(Map<String, Object> param);
 
     /**
      * 패키지 입력/수정 시 기사 묶기 위한 프호시저

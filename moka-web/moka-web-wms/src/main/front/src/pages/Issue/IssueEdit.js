@@ -7,9 +7,9 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel } from '@/components';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { CAT_DIV, clearIssue, existsIssueTitle, getIssue, getIssueList, initialState, SAVE_ISSUE, saveIssue, GET_ISSUE, finishIssue } from '@store/issue';
-import DefaultPackageKeywordComponent from '@pages/Issue/components/DefaultPackageKeywordComponent';
-import ReporterPackageKeywordForm from '@pages/Issue/components/RepoterPackageKeywordComponent';
-import SectionPackageKeywordComponent from '@pages/Issue/components/SectionPackageKeywordComponent';
+import PackageKeywordDefaultComponent from '@pages/Issue/components/PackageKeywordDefaultComponent';
+import PackageKeywordReporterComponent from '@pages/Issue/components/PackageKeywordRepoterComponent';
+import PackageKeywordSectionComponent from '@pages/Issue/components/PackageKeywordSectionComponent';
 import useDebounce from '@hooks/useDebounce';
 
 import IssueCommonEdit from '@pages/Issue/components/IssueCommonEdit';
@@ -135,7 +135,7 @@ const IssueEdit = ({ reporters }) => {
             footer
             footerButtons={[
                 pkgSeq && { text: '종료', variant: 'negative', className: 'mr-1', onClick: handleClickFinishIssue },
-                { text: pkgSeq ? '수정' : '생성', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
+                { text: pkgSeq ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleClickCancel },
             ].filter((a) => a)}
             loading={loading}
@@ -176,7 +176,7 @@ const IssueEdit = ({ reporters }) => {
                     </Col>
                 </Form.Row>
                 {edit.packageKeywords.search.isUsed && (
-                    <DefaultPackageKeywordComponent
+                    <PackageKeywordDefaultComponent
                         keyword={{ ...edit.packageKeywords.search.keyword, catDiv: CAT_DIV.SEARCH_KEYWORD }}
                         target="search"
                         onChange={(value) => {
@@ -238,7 +238,7 @@ const IssueEdit = ({ reporters }) => {
                     </Col>
                 </Form.Row>
                 {edit.packageKeywords.reporter.isUsed && edit.packageKeywords.reporter.keyword.reporter.length > 0 && (
-                    <ReporterPackageKeywordForm
+                    <PackageKeywordReporterComponent
                         keyword={{ ...edit.packageKeywords.reporter.keyword, catDiv: CAT_DIV.REPORTER }}
                         reporters={reporters}
                         onChange={(value) => {
@@ -267,7 +267,7 @@ const IssueEdit = ({ reporters }) => {
                     </Col>
                 </Form.Row>
                 {edit.packageKeywords.section.isUsed && (
-                    <SectionPackageKeywordComponent
+                    <PackageKeywordSectionComponent
                         keyword={{ ...edit.packageKeywords.section.keyword, catDiv: CAT_DIV.SECTION }}
                         target="section"
                         onChange={(value) => {
@@ -296,7 +296,7 @@ const IssueEdit = ({ reporters }) => {
                     </Col>
                 </Form.Row>
                 {edit.packageKeywords.digitalSpecial.isUsed && (
-                    <DefaultPackageKeywordComponent
+                    <PackageKeywordDefaultComponent
                         keyword={{ ...edit.packageKeywords.digitalSpecial.keyword, catDiv: CAT_DIV.DIGITAL_SPECIAL }}
                         target="digitalSpecial"
                         onChange={(value) => {
@@ -325,9 +325,10 @@ const IssueEdit = ({ reporters }) => {
                     </Col>
                 </Form.Row>
                 {edit.packageKeywords.ovp.isUsed && (
-                    <DefaultPackageKeywordComponent
+                    <PackageKeywordDefaultComponent
                         keyword={{ ...edit.packageKeywords.ovp.keyword, catDiv: CAT_DIV.OVP }}
                         target="ovp"
+                        labelTitle="연관 이슈"
                         onChange={(value) => {
                             handleChangeArrayObjectDebounceValue({ target: 'packageKeywords', subTarget: 'ovp', name: 'keyword', value });
                         }}

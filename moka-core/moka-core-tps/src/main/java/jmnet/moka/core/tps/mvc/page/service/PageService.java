@@ -130,4 +130,5 @@ public interface PageService {
      */
     void updateViewComponent(Page page)
             throws Exception;
+
 }

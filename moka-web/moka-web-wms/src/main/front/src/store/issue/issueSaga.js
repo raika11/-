@@ -11,12 +11,26 @@ import { finishLoading, startLoading } from '@store/loading';
 import commonUtil from '@utils/commonUtil';
 import produce from 'immer';
 import { CAT_DIV, initialState } from '@store/issue/issueReducer';
+import { messageBox } from '@utils/toastUtil';
 
 /**
  * 이슈 목록 조회
  */
-const toIssueListData = (list) => {
+export const toIssueListData = (list) => {
     return list.map((data) => {
+        const expYn = data.usedYn === 'N' ? 'N' : 'Y';
+        const endYn = data.usedYn === 'E' ? 'Y' : 'N';
+        const regDt = commonUtil.isEmpty(data.regDt) ? data.regDt : moment(data.regDt).format(DATE_FORMAT);
+        const updDt = commonUtil.isEmpty(data.updDt) ? data.updDt : moment(data.updDt).format(DATE_FORMAT);
+        let pkgDivName = '';
+        if (data.pkgDiv === 'I') {
+            pkgDivName = '이슈';
+        } else if (data.pkgDiv === 'S') {
+            pkgDivName = '시리즈';
+        } else if (data.pkgDiv === 'T') {
+            pkgDivName = '토픽';
+        }
+
         const { catList, repList } = data;
         let category = '';
         let categoryNames = '';
@@ -43,9 +57,12 @@ const toIssueListData = (list) => {
             }
             reporterNames = reporters.join(',');
         }
-        const expYn = data.usedYn === 'N' ? 'N' : 'Y';
-        const endYn = data.usedYn === 'E' ? 'Y' : 'N';
-        return { ...data, category, categoryNames, reporter, reporterNames, expYn, endYn };
+
+        const onClickDirectLink = () => {
+            messageBox.alert('바로가기 기능은 준비중 입니다.');
+        };
+
+        return { ...data, regDt, updDt, category, pkgDivName, categoryNames, reporter, reporterNames, expYn, endYn, onClickDirectLink };
     });
 };
 
@@ -62,8 +79,14 @@ function* getIssueList({ type, payload }) {
             const list = toIssueListData(response.data.body.list);
 
             yield put({ type: `${type}_SUCCESS`, payload: { ...response.data, body: { ...response.data.body, list } } });
+            if (payload.callback instanceof Function) {
+                payload.callback(response.data);
+            }
         } else {
             yield put({ type: `${type}_FAILURE`, payload: response.data });
+            if (payload.callback instanceof Function) {
+                payload.callback(response);
+            }
         }
     } catch (e) {
         yield put({ type: `${type}_FAILURE`, payload: errorResponse(e) });
@@ -108,8 +131,9 @@ const getKeyword = (keywords, type) => {
 };
 
 export const toIssueData = (response) => {
-    const { pkgSeq, pkgTitle, pkgDesc, pkgDiv, episView, packageKeywords, seasonNo, catList } = response;
+    const { pkgSeq, pkgTitle, pkgDesc, pkgDiv, episView, packageKeywords, seasonNo, catList, reservDt } = response;
 
+    const viewReservDt = commonUtil.isEmpty(reservDt) ? reservDt : moment(reservDt);
     const search = getKeyword(packageKeywords, CAT_DIV.SEARCH_KEYWORD);
     const reporter = getKeyword(packageKeywords, CAT_DIV.REPORTER);
     const section = getKeyword(packageKeywords, CAT_DIV.SECTION);
@@ -154,6 +178,7 @@ export const toIssueData = (response) => {
         packageKeywords: { search, reporter, section, digitalSpecial, ovp },
         seasons,
         catList,
+        reservDt: viewReservDt,
     };
 };
 
@@ -234,14 +259,15 @@ const toSavePackageSeason = (viewSeasons) => {
 };
 
 const toSavePackage = (pkg) => {
-    const { packageKeywords: viewKeywords, seasons: viewSeasons } = pkg;
+    const { packageKeywords: viewKeywords, seasons: viewSeasons, reservDt: viewReservDt } = pkg;
+    const reservDt = commonUtil.isEmpty(viewReservDt) ? null : moment(viewReservDt).format(DB_DATEFORMAT);
     const copyPkg = { ...pkg };
     delete copyPkg.seasons;
 
     const seasonNo = toSavePackageSeason(viewSeasons);
     const packageKeywords = toSavePackageKeywords(viewKeywords);
 
-    return { ...copyPkg, packageKeywords, seasonNo };
+    return { ...copyPkg, packageKeywords, seasonNo, reservDt };
 };
 
 function* saveIssue({ type, payload }) {
@@ -301,7 +327,7 @@ function* getIssueListModal({ payload }) {
     yield put(finishLoading(ACTION));
 }
 
-function* existsIssueTitle({ payload }) {
+function* existsIssueTitle({ type, payload }) {
     const { pkgTitle, callback } = payload;
 
     const response = yield call(api.existsIssueTitle, { pkgTitle });
@@ -310,7 +336,7 @@ function* existsIssueTitle({ payload }) {
     }
 }
 
-function* updateFinishIssue({ payload }) {
+function* updateFinishIssue({ type, payload }) {
     const { pkgSeq, callback } = payload;
 
     const response = yield call(api.finishIssue, { pkgSeq });
@@ -329,6 +355,7 @@ const getIssueContentsListModal = createRequestSaga(act.GET_ISSUE_CONTENTS_LIST_
  */
 export default function* saga() {
     yield takeLatest(act.GET_ISSUE_LIST, getIssueList);
+    yield takeLatest(act.GET_RECOMMEND_ISSUE_MODAL_LIST, getIssueList);
     yield takeLatest(act.GET_ISSUE, getIssue);
     yield takeLatest(act.SAVE_ISSUE, saveIssue);
     yield takeLatest(act.FINISH_ISSUE, updateFinishIssue);

@@ -228,7 +228,6 @@
     .story_list > .card::before {left:16px;width:calc(100% - 36px);}
 
     /***************************************    general     ************************************/
-    .showcase_general .card_group::before { content:'';position:absolute;top:0;left:18px;display:block;width:calc(100% - 36px);height:1px;background:#e2e2e2; }
     .showcase_general .card_group .card {padding-top:20px; padding-bottom:20px;}
     .showcase_general .card_body:first-child:nth-last-child(2) { padding-right: 16px; }
     .showcase_general .card_body + .card_image { padding-left: 0; }

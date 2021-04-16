@@ -11,7 +11,7 @@ const defaultProps = {
     keyword: initialState.pkg.packageKeywords.reporter.keyword,
     reporters: [],
 };
-const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
+const PackageKeywordReporterComponent = ({ keyword, onChange, reporters }) => {
     const [editKeyword, setEditKeyword] = useState(keyword);
     const [useEndDate, setUseEndDate] = useState(keyword.reporter.map((data) => !commonUtil.isEmpty(data.edate) && data.edate !== ''));
 
@@ -67,7 +67,7 @@ const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
                             <p style={{ width: 130 }} className="mb-0 pr-3">
                                 기자명(default)
                             </p>
-                            <div style={{ width: 80 }} className="pr-3">
+                            <div style={{ width: 100 }} className="pr-3">
                                 <MokaInput
                                     as="checkbox"
                                     name="title"
@@ -79,7 +79,7 @@ const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
                                     }}
                                 />
                             </div>
-                            <div style={{ width: 80 }}>
+                            <div style={{ width: 100 }}>
                                 <MokaInput
                                     as="checkbox"
                                     name="keyword"
@@ -115,18 +115,36 @@ const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
                                         <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
                                             <MokaInputLabel as="none" label="기자명" />
                                         </div>
-                                        <MokaInputLabel
-                                            as="switch"
-                                            id={`package-reporterSearch-switch-${idx + 1}`}
-                                            name="andOr"
-                                            label="검색어(N개)"
-                                            inputProps={{ custom: true, checked: reporter.andOr === 'A' }}
+                                        <div style={{ height: 31 }} className="d-flex align-items-center">
+                                            <MokaInputLabel as="none" label="검색어(N개)" />
+                                        </div>
+                                        <MokaInput
+                                            as="radio"
+                                            id={`reporter-keyword-and-radio-${idx + 1}`}
+                                            name={`reporter-keyword-andOr-${idx + 1}`}
+                                            value="A"
+                                            inputProps={{ label: 'AND', custom: true, checked: reporter.andOr === 'A' }}
                                             onChange={(e) => {
-                                                const { name } = e.target;
-                                                let value = 'A';
-                                                if (reporter.andOr === 'A') {
-                                                    value = 'O';
-                                                }
+                                                const { value } = e.target;
+                                                const name = 'andOr';
+
+                                                const editReporter = produce(reporter, (draft) => {
+                                                    draft[name] = value;
+                                                });
+
+                                                handleChangeArrayObjectValue({ target: 'reporter', subTarget: idx, value: editReporter });
+                                            }}
+                                        />
+                                        <MokaInput
+                                            as="radio"
+                                            id={`reporter-keyword-or-radio-${idx + 1}`}
+                                            name={`reporter-keyword-andOr-${idx + 1}`}
+                                            value="O"
+                                            inputProps={{ label: 'OR', custom: true, checked: reporter.andOr === 'O' }}
+                                            onChange={(e) => {
+                                                const { value } = e.target;
+                                                const name = 'andOr';
+
                                                 const editReporter = produce(reporter, (draft) => {
                                                     draft[name] = value;
                                                 });
@@ -143,6 +161,7 @@ const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
                                                 as="dateTimePicker"
                                                 label="시작"
                                                 name="sdate"
+                                                labelWidth={50}
                                                 inputProps={{ timeFormat: null }}
                                                 value={reporter.sdate}
                                                 required
@@ -216,5 +235,5 @@ const ReporterPackageKeywordForm = ({ keyword, onChange, reporters }) => {
     );
 };
 
-ReporterPackageKeywordForm.defaultProps = defaultProps;
-export default ReporterPackageKeywordForm;
+PackageKeywordReporterComponent.defaultProps = defaultProps;
+export default PackageKeywordReporterComponent;

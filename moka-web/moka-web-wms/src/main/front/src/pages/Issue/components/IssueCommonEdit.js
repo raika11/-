@@ -1,26 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { MokaInput, MokaInputLabel } from '@components';
+import { MokaIcon, MokaInput, MokaInputLabel } from '@components';
 import ServiceCodeSelector from '@pages/Issue/components/Desking/ServiceCodeSelector';
 import { messageBox } from '@utils/toastUtil';
 import Button from 'react-bootstrap/Button';
 import { initialState } from '@store/issue';
 import produce from 'immer';
+import RecommendIssueListModal from '@pages/Issue/modal/RecommendIssueListModal';
+import commonUtil from '@utils/commonUtil';
+import Badge from 'react-bootstrap/Badge';
+import moment from 'moment';
 
 const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, setIsDuplicatedTitle }) => {
     const [edit, setEdit] = useState(initialState.pkg);
+    const [showRecommendIssueListModal, setShowRecommendIssueListModal] = useState(false);
+    const [recommendPackages, setRecommendPackages] = useState([]);
+    const [recommendPkgSeq, setRecommendPkgSeq] = useState('');
+    const [useRecommendIssuePackage, setUseRecommendIssuePackage] = useState(false);
 
-    const handleChangeValue = ({ name, value }) => {
-        const data = { ...edit, [name]: value };
-        setEdit(data);
+    const handleChangeValue = ({ name, value, togetherHandlers }) => {
+        const changeData = produce(edit, (draft) => {
+            draft[name] = value;
+            if (togetherHandlers instanceof Array) {
+                togetherHandlers.forEach((handler) => {
+                    draft[handler.name] = handler.value;
+                });
+            }
+        });
+
+        setEdit(changeData);
         if (setIsDuplicatedTitle instanceof Function) {
             if (name === 'pkgTitle') {
                 setIsDuplicatedTitle(true);
             }
         }
         if (onChange instanceof Function) {
-            onChange(data);
+            onChange(changeData);
         }
     };
 
@@ -40,9 +56,31 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
         }
     };
 
+    const handleClickRecommendPackageAdd = useCallback(
+        (pkgSeq) => {
+            setRecommendPkgSeq(pkgSeq);
+        },
+        [recommendPackages],
+    );
+
     useEffect(() => {
         setEdit(data);
+        if (!commonUtil.isEmpty(data.recommPkg) && data.recommPkg !== '') {
+            setRecommendPackages(data.recommPkg.split(','));
+            setUseRecommendIssuePackage(true);
+        } else {
+            setRecommendPackages([]);
+            setUseRecommendIssuePackage(false);
+        }
     }, [data]);
+
+    useEffect(() => {
+        if (recommendPkgSeq !== '') {
+            const pkgSeqs = [...recommendPackages, `${recommendPkgSeq}`];
+            setRecommendPackages(pkgSeqs);
+            handleChangeValue({ name: 'recommPkg', value: pkgSeqs.join(',') });
+        }
+    }, [recommendPkgSeq]);
 
     return (
         <>
@@ -64,7 +102,7 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                                 usedYn = 'N';
                             }
 
-                            handleChangeValue({ name, value: usedYn });
+                            handleChangeValue({ name, value: usedYn, togetherHandlers: [{ name: 'reservDt', value: null }] });
                         }}
                         required
                     />
@@ -78,7 +116,8 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                             value="Y"
                             inputProps={{ label: '즉시', custom: true, checked: edit.usedYn === 'Y' }}
                             onChange={(e) => {
-                                handleChangeValue(e.target);
+                                const { name, value } = e.target;
+                                handleChangeValue({ name, value, togetherHandlers: [{ name: 'reservDt', value: null }] });
                             }}
                         />
                     </div>
@@ -90,30 +129,21 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                             value="R"
                             inputProps={{ label: '예약', custom: true, checked: edit.usedYn === 'R' }}
                             onChange={(e) => {
-                                handleChangeValue(e.target);
+                                const { name, value } = e.target;
+                                handleChangeValue({ name, value, togetherHandlers: [{ name: 'reservDt', value: moment() }] });
                             }}
                         />
                     </div>
                     {edit.usedYn === 'R' && (
                         <>
-                            <div style={{ width: 150 }} className="pr-1">
+                            <div style={{ width: 230 }} className="pr-1">
                                 <MokaInput
                                     as="dateTimePicker"
-                                    name="expoResrvDT"
-                                    inputProps={{ timeFormat: null }}
+                                    name="reservDt"
+                                    value={edit.reservDt}
+                                    inputProps={{ closeOnSelect: false }}
                                     onChange={(date) => {
-                                        console.log(date);
-                                    }}
-                                />
-                            </div>
-                            <div style={{ width: 150 }}>
-                                <MokaInput
-                                    as="dateTimePicker"
-                                    className="right"
-                                    name="expoResrvTm"
-                                    inputProps={{ dateFormat: null }}
-                                    onChange={(date) => {
-                                        console.log(date);
+                                        handleChangeValue({ name: 'reservDt', value: date });
                                     }}
                                 />
                             </div>
@@ -387,11 +417,54 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
 
             <Form.Row className="mb-3">
                 <Col xs={3} className="p-0">
-                    <MokaInputLabel as="switch" id="package-recomPkgYn-switch" name="recomPkgYn" label="추천 패키지(N개)" inputProps={{ custom: true }} />
+                    <MokaInputLabel
+                        as="switch"
+                        id="package-recomPkgYn-switch"
+                        name="recomPkgYn"
+                        label="추천 패키지(N개)"
+                        inputProps={{ custom: true, checked: useRecommendIssuePackage }}
+                        onChange={() => {
+                            setUseRecommendIssuePackage(!useRecommendIssuePackage);
+                            if (!useRecommendIssuePackage === false) {
+                                handleChangeValue({ name: 'recommPkg', value: '' });
+                            }
+                        }}
+                    />
                 </Col>
                 <Col xs={9} className="p-0 d-flex">
-                    <MokaInput className="mr-2" inputProps={{ readOnly: true }} />
-                    <Button variant="outline-neutral">추천 이슈 선택</Button>
+                    {/*<MokaInput className="mr-2" inputProps={{ readOnly: true }} value={edit.recommPkg} />*/}
+                    <div className="flex-fill mr-2">
+                        <div className="input-border pl-1 pr-1 pt-1 h-100">
+                            {recommendPackages.map((s) => (
+                                <Badge key={s} className="mr-1 mb-1 pt-1 user-select-text" variant="searching">
+                                    {s}
+                                    <MokaIcon
+                                        iconName="fas-times"
+                                        className="ml-1 cursor-pointer"
+                                        onClick={() => {
+                                            const removePackages = recommendPackages.filter((pkgSeq) => pkgSeq !== s).join(',');
+                                            handleChangeValue({ name: 'recommPkg', value: removePackages });
+                                        }}
+                                    />
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
+                    <Button
+                        variant="outline-neutral"
+                        onClick={() => {
+                            setShowRecommendIssueListModal(true);
+                        }}
+                    >
+                        추천 이슈 선택
+                    </Button>
+                    <RecommendIssueListModal
+                        show={showRecommendIssueListModal}
+                        onHide={() => {
+                            setShowRecommendIssueListModal(false);
+                        }}
+                        onAdd={handleClickRecommendPackageAdd}
+                    />
                 </Col>
             </Form.Row>
         </>

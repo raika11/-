@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaInputLabel } from '@components';
+import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import commonUtil from '@utils/commonUtil';
 import { initialState } from '@store/issue';
 import produce from 'immer';
+import commonUtil from '@utils/commonUtil';
+import { CodeListModal } from '@pages/commons';
 
-const defaultProps = { keyword: initialState.initialPkgKeyword };
-const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
+const PackageKeywordSectionComponent = ({ keyword, onChange, target }) => {
     const [editKeyword, setEditKeyword] = useState(initialState.initialPkgKeyword);
     const [useEndDate, setUseEndDate] = useState(false);
+    const [codeModalShow, setCodeModalShow] = useState(false);
 
     const handleChangeValue = ({ name, value }) => {
         const pkg = { ...editKeyword, [name]: value };
@@ -48,18 +50,32 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
                 <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
                     <MokaInputLabel as="none" label="검색 기간" />
                 </div>
-                <MokaInputLabel
-                    as="switch"
-                    id={`package-useSearchKeyword-switch-${target}`}
-                    label="검색어(N개)"
-                    name="andOr"
-                    inputProps={{ custom: true, checked: editKeyword.andOr === 'A' }}
+                <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                    <MokaInputLabel as="none" label="대상 섹션" />
+                </div>
+                <div style={{ height: 31 }} className="d-flex align-items-center">
+                    <MokaInputLabel as="none" label="검색어(N개)" />
+                </div>
+                <MokaInput
+                    as="radio"
+                    id={`${target}-keyword-and-radio`}
+                    name={`${target}-keyword-andOr`}
+                    inputProps={{ label: 'AND', custom: true, checked: editKeyword.andOr === 'A' }}
                     onChange={(e) => {
-                        const { name, checked } = e.target;
-                        let value = 'A';
-                        if (editKeyword.andOr === 'A') {
-                            value = 'O';
-                        }
+                        const { value } = e.target;
+                        const name = 'andOr';
+
+                        handleChangeValue({ name, value });
+                    }}
+                />
+                <MokaInput
+                    as="radio"
+                    id={`${target}-keyword-or-radio`}
+                    name={`${target}-keyword-andOr`}
+                    inputProps={{ label: 'OR', custom: true, checked: editKeyword.andOr === 'O' }}
+                    onChange={(e) => {
+                        const { value } = e.target;
+                        const name = 'andOr';
 
                         handleChangeValue({ name, value });
                     }}
@@ -67,7 +83,7 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
             </Col>
             <Col xs={9} className="p-0">
                 <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
-                    <div style={{ width: 80 }} className="pr-3">
+                    <div style={{ width: 100 }} className="pr-3">
                         <MokaInput
                             as="checkbox"
                             name="title"
@@ -79,7 +95,7 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
                             }}
                         />
                     </div>
-                    <div style={{ width: 80 }}>
+                    <div style={{ width: 100 }}>
                         <MokaInput
                             as="checkbox"
                             name="keyword"
@@ -97,6 +113,7 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
                         <MokaInputLabel
                             as="dateTimePicker"
                             label="시작"
+                            labelWidth={50}
                             name="sdate"
                             inputProps={{ timeFormat: null }}
                             value={editKeyword.sdate}
@@ -133,6 +150,32 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
                         />
                     </div>
                 </div>
+                <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                    <Button
+                        variant="outline-neutral"
+                        onClick={() => {
+                            setCodeModalShow(true);
+                        }}
+                    >
+                        섹션 선택
+                    </Button>
+                    <CodeListModal
+                        max={4}
+                        show={codeModalShow}
+                        onHide={() => setCodeModalShow(false)}
+                        value={`${editKeyword.repMaster}`}
+                        selection="single"
+                        onSave={(data) => {
+                            let value = null;
+                            if (!commonUtil.isEmpty(data)) {
+                                value = data.masterCode;
+                            }
+
+                            handleChangeValue({ name: 'repMaster', value });
+                        }}
+                        selectable={['content']}
+                    />
+                </div>
                 <MokaInput
                     name="keyword"
                     value={editKeyword.keyword}
@@ -145,5 +188,4 @@ const DefaultPackageKeywordComponent = ({ keyword, onChange, target }) => {
     );
 };
 
-DefaultPackageKeywordComponent.defaultProps = defaultProps;
-export default DefaultPackageKeywordComponent;
+export default PackageKeywordSectionComponent;

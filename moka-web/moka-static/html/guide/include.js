@@ -14,6 +14,7 @@ var include = {
         
         document.write('<link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/common/section.css" rel="stylesheet">');
+        document.write('<link href="//stg-static.joongang.co.kr/css/common/article.css" rel="stylesheet">');
 
         document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/utils/scroll.js"></script>');
@@ -60,7 +61,7 @@ var include = {
             document.write('        <li class="nav_item ">');
             document.write('            <a class="nav_link " aria-current="page" href="javascript:(0);">레이아웃</a>');
             document.write('            <ul class="nav">');
-            // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Breakpoints</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="breakpoints.html">Breakpoints</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Container</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Grid</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Section</a></li>');

@@ -42,17 +42,13 @@ span {display:inline-block;}
 #wrapper {width:100%;}
 
 /** header **/
-.header {position:relative;display:block;width:100%;height:54px;padding:0 20px;background:#000;color:#fff;z-index:100;}
-.header .uh {width:100%;height:inherit;margin:0 auto;text-align:center;}
-.header .uh h2 {display:inline-block;}
-.header .uh h2.logo {width:116px;height:24px;background-image:url("data:image/svg+xml,%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' x='0' y='0' viewBox='0 0 282.48 57.02' xml:space='preserve'%3E%3Cstyle%3E.st0%7Bfill:%23fff%7D%3C/style%3E%3Cpath class='st0' d='M29.32 15.93c-.43-1.54-1.01-3.12-1.54-3.98-.77-1.3-1.25-1.63-3.89-1.63h-4.8V33.7c0 3.74.38 4.27 4.94 4.56v1.34H10.07v-1.34c4.46-.29 4.85-.77 4.85-4.56V10.32h-4.37c-2.64 0-3.41.29-4.22 1.73-.58.96-.96 2.11-1.58 3.89H3.3c.29-2.93.58-5.95.72-8.64h1.1c.72 1.15 1.25 1.1 2.59 1.1h19.01c1.34 0 1.73-.19 2.45-1.1h1.15c0 2.26.19 5.71.43 8.5l-1.43.13zM47.13 39.6v-1.34c2.78-.29 3.17-.53 3.17-3.7v-7.87c0-3.98-1.54-6-4.75-5.95-1.82 0-3.74.91-5.09 2.5v11.33c0 3.12.38 3.41 3.26 3.7v1.34H33.26v-1.34c2.78-.24 3.41-.48 3.41-3.7V11.42c0-2.54-.14-3.17-3.36-3.46V6.72c2.54-.24 5.42-.96 7.15-1.63v16.37c1.73-1.73 4.37-3.5 6.96-3.5 3.94 0 6.67 2.45 6.67 8.21v8.45c0 3.17.38 3.41 3.17 3.65v1.34H47.13zM76.41 35.52c-3.07 3.84-6.43 4.66-7.97 4.66-5.86 0-9.41-4.8-9.41-10.32 0-3.26 1.15-6.29 3.12-8.4 2.02-2.26 4.66-3.5 7.15-3.5 4.18 0 7.34 3.6 7.34 7.44-.05.96-.19 1.39-.96 1.58-.96.19-7.1.62-12.82.82-.14 6.43 3.79 9.07 7.2 9.07 1.97 0 3.79-.82 5.57-2.45l.78 1.1zm-8.26-15.75c-2.21 0-4.37 2.06-5.04 5.95 2.69 0 5.38 0 8.21-.14.86 0 1.15-.24 1.15-.96.05-2.54-1.63-4.85-4.32-4.85zM103.91 9.74c-3.74.43-4.13.72-4.13 4.75v17.76c0 6.34-1.01 9.65-4.22 12.53-1.58 1.44-3.17 2.21-4.46 2.78l-.77-1.44c2.74-1.34 4.27-3.55 4.8-6.34.43-2.3.48-5.09.48-9.12V14.49c0-4.03-.43-4.37-4.37-4.75V8.4h12.67v1.34zM116.33 17.95c6 0 10.46 4.56 10.46 10.75 0 7.78-5.76 11.47-10.46 11.47-6.62 0-10.66-5.33-10.66-10.71.01-7.81 6.1-11.51 10.66-11.51zm-.57 1.63c-2.93 0-5.57 2.83-5.57 8.4 0 6.1 2.69 10.51 6.62 10.51 2.98 0 5.47-2.16 5.47-8.74.01-5.61-2.3-10.17-6.52-10.17zM140.6 17.95c6 0 10.46 4.56 10.46 10.75 0 7.78-5.76 11.47-10.46 11.47-6.62 0-10.66-5.33-10.66-10.71.01-7.81 6.1-11.51 10.66-11.51zm-.57 1.63c-2.93 0-5.57 2.83-5.57 8.4 0 6.1 2.69 10.51 6.62 10.51 2.98 0 5.47-2.16 5.47-8.74.01-5.61-2.3-10.17-6.52-10.17zM167.02 39.6v-1.34c2.78-.29 3.07-.62 3.07-3.89v-7.92c0-3.36-1.2-5.62-4.37-5.62-1.97 0-3.84 1.15-5.33 2.5v11.23c0 3.31.29 3.41 3.12 3.7v1.34h-10.37v-1.34c3.17-.34 3.46-.53 3.46-3.7v-9.89c0-3.12-.34-3.26-2.93-3.7v-1.25c2.35-.38 4.7-1.01 6.72-1.92v3.79c.96-.67 2.02-1.39 3.26-2.21 1.34-.86 2.59-1.44 3.98-1.44 3.84 0 6.24 2.83 6.24 7.49v9.12c0 3.26.29 3.41 3.07 3.7v1.34h-9.92zM185.7 32.59c-1.15.91-1.58 1.82-1.58 2.4 0 .86.82 1.82 2.98 1.82 1.78 0 3.79-.05 5.38-.05 3.07 0 7.01 1.01 7.01 5.76 0 4.99-5.9 9.7-12.29 9.7-5.42 0-8.35-3.17-8.45-6 0-1.06.43-1.97 1.2-2.74.96-1.01 2.83-2.59 3.94-3.46-1.73-.48-2.98-1.58-3.6-2.59-.43-.72-.58-1.58-.58-2.06 1.82-.67 3.46-2.02 4.42-3.31l1.57.53zm2.31.48c-4.46 0-8.16-2.74-8.16-7.25 0-5.47 4.9-8.02 8.64-8.02 1.58 0 3.17.43 4.61 1.2 2.21 0 5.09-.38 6.43-.72l.29.43c-.29.77-1.06 2.11-1.78 2.54-.72 0-2.3-.19-2.98-.24.82 1.1 1.39 2.64 1.39 4.37.01 5.24-4.31 7.69-8.44 7.69zm1.1 7.11c-2.35 0-3.41.29-4.27 1.01-1.34 1.1-2.3 2.54-2.3 3.94 0 2.64 2.74 4.61 6.43 4.61 4.56 0 7.15-2.35 7.15-5.42 0-1.63-.77-2.93-2.11-3.5-1.2-.55-2.88-.64-4.9-.64zm-1.1-20.84c-2.16 0-4.08 1.97-4.08 5.76s1.92 6.43 4.56 6.43c2.11-.1 3.98-1.87 3.98-5.76 0-3.74-1.77-6.43-4.46-6.43zM220.16 39.6v-1.34c3.12-.38 3.5-.86 2.83-2.69-.62-1.87-1.58-4.27-2.59-7.3h-10.37c-.77 2.16-1.49 4.03-2.16 6-1.06 3.12-.38 3.5 3.55 3.98v1.34h-11.09v-1.34c3.02-.38 3.79-.72 5.47-5.04l9.94-25.2 1.54-.29c3.02 8.21 6.34 17.28 9.36 25.59 1.54 4.18 1.97 4.56 5.38 4.94v1.34h-11.86zm-4.8-25.59c-1.54 4.13-3.17 8.5-4.61 12.29h8.98l-4.37-12.29zM247.77 39.6v-1.34c2.78-.29 3.07-.62 3.07-3.89v-7.92c0-3.36-1.2-5.62-4.37-5.62-1.97 0-3.84 1.15-5.33 2.5v11.23c0 3.31.29 3.41 3.12 3.7v1.34H233.9v-1.34c3.17-.34 3.46-.53 3.46-3.7v-9.89c0-3.12-.34-3.26-2.93-3.7v-1.25c2.35-.38 4.7-1.01 6.72-1.92v3.79c.96-.67 2.02-1.39 3.26-2.21 1.34-.86 2.59-1.44 3.98-1.44 3.84 0 6.24 2.83 6.24 7.49v9.12c0 3.26.29 3.41 3.07 3.7v1.34h-9.93zM266.46 32.59c-1.15.91-1.58 1.82-1.58 2.4 0 .86.82 1.82 2.98 1.82 1.78 0 3.79-.05 5.38-.05 3.07 0 7.01 1.01 7.01 5.76 0 4.99-5.9 9.7-12.29 9.7-5.43 0-8.35-3.17-8.45-6 0-1.06.43-1.97 1.2-2.74.96-1.01 2.83-2.59 3.94-3.46-1.73-.48-2.98-1.58-3.6-2.59-.43-.72-.58-1.58-.58-2.06 1.82-.67 3.46-2.02 4.42-3.31l1.57.53zm2.3.48c-4.47 0-8.16-2.74-8.16-7.25 0-5.47 4.9-8.02 8.64-8.02 1.58 0 3.17.43 4.61 1.2 2.21 0 5.09-.38 6.43-.72l.29.43c-.29.77-1.06 2.11-1.78 2.54-.72 0-2.3-.19-2.98-.24.82 1.1 1.39 2.64 1.39 4.37.01 5.24-4.31 7.69-8.44 7.69zm1.11 7.11c-2.35 0-3.41.29-4.27 1.01-1.34 1.1-2.3 2.54-2.3 3.94 0 2.64 2.74 4.61 6.43 4.61 4.56 0 7.15-2.35 7.15-5.42 0-1.63-.77-2.93-2.11-3.5-1.21-.55-2.89-.64-4.9-.64zm-1.11-20.84c-2.16 0-4.08 1.97-4.08 5.76s1.92 6.43 4.56 6.43c2.11-.1 3.98-1.87 3.98-5.76.01-3.74-1.77-6.43-4.46-6.43z'/%3E%3C/svg%3E");overflow:hidden;font-size:0;}
-.header .uh .btn_navbar {position:absolute;top:50%;left:20px;transform:translateY(-50%);width:22px;height:22px;}
-.header .uh .btn_navbar .icon_navbar {display:block;position:absolute;left:0;top:2px;width:22px;height:2px;text-shadow:none;background-color:transparent;border:0;background-color:#222;color:transparent;font-size:0;}
-.header .uh .btn_navbar .icon_navbar:after, .header .uh .btn_navbar .icon_navbar:before {content:'';position:absolute;left:0;width:22px;height:2px;background-color:#222;}
-.header .uh .btn_navbar .icon_navbar:before {top:8px;}
-.header .uh .btn_navbar .icon_navbar:after {top:16px;}
-.header .uh .right_area {position:absolute;top:50%;right:20px;transform:translateY(-50%);}
-/* .header .uh .right_area .btn_myinfo {margin-right:10px;} */
+.header {position:relative;width:100%;border-bottom: 1px solid #e2e2e2;background:#fff;z-index:100;}
+.header .uh { display: flex; align-items: center; position: relative; height: 100%; margin: 0 auto; }
+.header .logo { display: block; width:178px;height:30px;background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 282.48 57.02'%3E%3Cpath d='M29.32 15.93c-.43-1.54-1.01-3.12-1.54-3.98-.77-1.3-1.25-1.63-3.89-1.63h-4.8V33.7c0 3.74.38 4.27 4.94 4.56v1.34H10.07v-1.34c4.46-.29 4.85-.77 4.85-4.56V10.32h-4.37c-2.64 0-3.41.29-4.22 1.73-.58.96-.96 2.11-1.58 3.89H3.3c.29-2.93.58-5.95.72-8.64h1.1c.72 1.15 1.25 1.1 2.59 1.1h19.01c1.34 0 1.73-.19 2.45-1.1h1.15c0 2.26.19 5.71.43 8.5l-1.43.13zM47.13 39.6v-1.34c2.78-.29 3.17-.53 3.17-3.7v-7.87c0-3.98-1.54-6-4.75-5.95-1.82 0-3.74.91-5.09 2.5v11.33c0 3.12.38 3.41 3.26 3.7v1.34H33.26v-1.34c2.78-.24 3.41-.48 3.41-3.7V11.42c0-2.54-.14-3.17-3.36-3.46V6.72c2.54-.24 5.42-.96 7.15-1.63v16.37c1.73-1.73 4.37-3.5 6.96-3.5 3.94 0 6.67 2.45 6.67 8.21v8.45c0 3.17.38 3.41 3.17 3.65v1.34H47.13zM76.41 35.52c-3.07 3.84-6.43 4.66-7.97 4.66-5.86 0-9.41-4.8-9.41-10.32 0-3.26 1.15-6.29 3.12-8.4 2.02-2.26 4.66-3.5 7.15-3.5 4.18 0 7.34 3.6 7.34 7.44-.05.96-.19 1.39-.96 1.58-.96.19-7.1.62-12.82.82-.14 6.43 3.79 9.07 7.2 9.07 1.97 0 3.79-.82 5.57-2.45l.78 1.1zm-8.26-15.75c-2.21 0-4.37 2.06-5.04 5.95 2.69 0 5.38 0 8.21-.14.86 0 1.15-.24 1.15-.96.05-2.54-1.63-4.85-4.32-4.85zM103.91 9.74c-3.74.43-4.13.72-4.13 4.75v17.76c0 6.34-1.01 9.65-4.22 12.53-1.58 1.44-3.17 2.21-4.46 2.78l-.77-1.44c2.74-1.34 4.27-3.55 4.8-6.34.43-2.3.48-5.09.48-9.12V14.49c0-4.03-.43-4.37-4.37-4.75V8.4h12.67v1.34zM116.33 17.95c6 0 10.46 4.56 10.46 10.75 0 7.78-5.76 11.47-10.46 11.47-6.62 0-10.66-5.33-10.66-10.71.01-7.81 6.1-11.51 10.66-11.51zm-.57 1.63c-2.93 0-5.57 2.83-5.57 8.4 0 6.1 2.69 10.51 6.62 10.51 2.98 0 5.47-2.16 5.47-8.74.01-5.61-2.3-10.17-6.52-10.17zM140.6 17.95c6 0 10.46 4.56 10.46 10.75 0 7.78-5.76 11.47-10.46 11.47-6.62 0-10.66-5.33-10.66-10.71.01-7.81 6.1-11.51 10.66-11.51zm-.57 1.63c-2.93 0-5.57 2.83-5.57 8.4 0 6.1 2.69 10.51 6.62 10.51 2.98 0 5.47-2.16 5.47-8.74.01-5.61-2.3-10.17-6.52-10.17zM167.02 39.6v-1.34c2.78-.29 3.07-.62 3.07-3.89v-7.92c0-3.36-1.2-5.62-4.37-5.62-1.97 0-3.84 1.15-5.33 2.5v11.23c0 3.31.29 3.41 3.12 3.7v1.34h-10.37v-1.34c3.17-.34 3.46-.53 3.46-3.7v-9.89c0-3.12-.34-3.26-2.93-3.7v-1.25c2.35-.38 4.7-1.01 6.72-1.92v3.79c.96-.67 2.02-1.39 3.26-2.21 1.34-.86 2.59-1.44 3.98-1.44 3.84 0 6.24 2.83 6.24 7.49v9.12c0 3.26.29 3.41 3.07 3.7v1.34h-9.92zM185.7 32.59c-1.15.91-1.58 1.82-1.58 2.4 0 .86.82 1.82 2.98 1.82 1.78 0 3.79-.05 5.38-.05 3.07 0 7.01 1.01 7.01 5.76 0 4.99-5.9 9.7-12.29 9.7-5.42 0-8.35-3.17-8.45-6 0-1.06.43-1.97 1.2-2.74.96-1.01 2.83-2.59 3.94-3.46-1.73-.48-2.98-1.58-3.6-2.59-.43-.72-.58-1.58-.58-2.06 1.82-.67 3.46-2.02 4.42-3.31l1.57.53zm2.31.48c-4.46 0-8.16-2.74-8.16-7.25 0-5.47 4.9-8.02 8.64-8.02 1.58 0 3.17.43 4.61 1.2 2.21 0 5.09-.38 6.43-.72l.29.43c-.29.77-1.06 2.11-1.78 2.54-.72 0-2.3-.19-2.98-.24.82 1.1 1.39 2.64 1.39 4.37.01 5.24-4.31 7.69-8.44 7.69zm1.1 7.11c-2.35 0-3.41.29-4.27 1.01-1.34 1.1-2.3 2.54-2.3 3.94 0 2.64 2.74 4.61 6.43 4.61 4.56 0 7.15-2.35 7.15-5.42 0-1.63-.77-2.93-2.11-3.5-1.2-.55-2.88-.64-4.9-.64zm-1.1-20.84c-2.16 0-4.08 1.97-4.08 5.76s1.92 6.43 4.56 6.43c2.11-.1 3.98-1.87 3.98-5.76 0-3.74-1.77-6.43-4.46-6.43zM220.16 39.6v-1.34c3.12-.38 3.5-.86 2.83-2.69-.62-1.87-1.58-4.27-2.59-7.3h-10.37c-.77 2.16-1.49 4.03-2.16 6-1.06 3.12-.38 3.5 3.55 3.98v1.34h-11.09v-1.34c3.02-.38 3.79-.72 5.47-5.04l9.94-25.2 1.54-.29c3.02 8.21 6.34 17.28 9.36 25.59 1.54 4.18 1.97 4.56 5.38 4.94v1.34h-11.86zm-4.8-25.59c-1.54 4.13-3.17 8.5-4.61 12.29h8.98l-4.37-12.29zM247.77 39.6v-1.34c2.78-.29 3.07-.62 3.07-3.89v-7.92c0-3.36-1.2-5.62-4.37-5.62-1.97 0-3.84 1.15-5.33 2.5v11.23c0 3.31.29 3.41 3.12 3.7v1.34H233.9v-1.34c3.17-.34 3.46-.53 3.46-3.7v-9.89c0-3.12-.34-3.26-2.93-3.7v-1.25c2.35-.38 4.7-1.01 6.72-1.92v3.79c.96-.67 2.02-1.39 3.26-2.21 1.34-.86 2.59-1.44 3.98-1.44 3.84 0 6.24 2.83 6.24 7.49v9.12c0 3.26.29 3.41 3.07 3.7v1.34h-9.93zM266.46 32.59c-1.15.91-1.58 1.82-1.58 2.4 0 .86.82 1.82 2.98 1.82 1.78 0 3.79-.05 5.38-.05 3.07 0 7.01 1.01 7.01 5.76 0 4.99-5.9 9.7-12.29 9.7-5.43 0-8.35-3.17-8.45-6 0-1.06.43-1.97 1.2-2.74.96-1.01 2.83-2.59 3.94-3.46-1.73-.48-2.98-1.58-3.6-2.59-.43-.72-.58-1.58-.58-2.06 1.82-.67 3.46-2.02 4.42-3.31l1.57.53zm2.3.48c-4.47 0-8.16-2.74-8.16-7.25 0-5.47 4.9-8.02 8.64-8.02 1.58 0 3.17.43 4.61 1.2 2.21 0 5.09-.38 6.43-.72l.29.43c-.29.77-1.06 2.11-1.78 2.54-.72 0-2.3-.19-2.98-.24.82 1.1 1.39 2.64 1.39 4.37.01 5.24-4.31 7.69-8.44 7.69zm1.11 7.11c-2.35 0-3.41.29-4.27 1.01-1.34 1.1-2.3 2.54-2.3 3.94 0 2.64 2.74 4.61 6.43 4.61 4.56 0 7.15-2.35 7.15-5.42 0-1.63-.77-2.93-2.11-3.5-1.21-.55-2.89-.64-4.9-.64zm-1.11-20.84c-2.16 0-4.08 1.97-4.08 5.76s1.92 6.43 4.56 6.43c2.11-.1 3.98-1.87 3.98-5.76.01-3.74-1.77-6.43-4.46-6.43z'/%3E%3C/svg%3E") no-repeat center center / 100%; font-size:0;}
+.header .header_option_area { display: flex; align-items: center; margin: 0 -11px; }
+.header .header_option_area > button { margin: 0 11px; }
+.header .uh .header_right_area {position:absolute;top:50%;right:20px;transform:translateY(-50%);}
+
 .header.sticky_top {
     top:0;
     opacity:1;
@@ -90,10 +86,6 @@ section {width:100%;}
 .contents {position:relative;width:100%;margin:0 auto;padding-left:20px;padding-right:20px;}
 
 /** nav **/
-/* header nav */
-/* .header_nav {width:100%;} */
-/* .header_nav .nav {width:100%;}
-.header_nav .nav .nav_item .nav_link:hover {text-decoration:underline;} */
 
 /* side nav */
 .side_nav {width:100%;margin-top:16px;}
@@ -316,12 +308,7 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 /* image 비율 */
 .thum_wrap {position:relative;width:auto;height:fit-content;}
 .thum_wrap .img_thumbnail img {width:100%;height:auto;}
-/* .thum_wrap .img_thumbnail {position:relative;padding-bottom:calc(100% * 9 / 16);background:#eee;}
-.thum_wrap .img_thumbnail  img {position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;}
-.img_thumbnail.ratio_1_1 {padding-bottom:calc(100% * 1 / 1);}
-.img_thumbnail.ratio_4_3 {padding-bottom:calc(100% * 3 / 4);}
-.img_thumbnail.ratio_9_6 {padding-bottom:calc(100% * 6 / 9);}
-.img_thumbnail.ratio_9_5 {padding-bottom:calc(100% * 5 / 9);} */
+
 
 /** caption **/
 .caption {margin-top:10px;color:#b3b3b3;font-size:12px;text-align:left;line-height:16px;word-break:break-all;font-weight:normal;}
@@ -379,7 +366,7 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 /***                                             icon                                             ***/
 /****************************************************************************************************/
 .fa {display:inline-block;font-style:normal;width:16px;height:16px;background-position:50% 50%;background-repeat:no-repeat;background-size:100% auto;}
-[class*="ico_"] {display:inline-block;font-style:normal;width:36px;height:36px;background-position:50% 50%;background-repeat:no-repeat;background-size:auto;}
+[class*="ico_"] {display:inline-block;font-style:normal;background-position:50% 50%;background-repeat:no-repeat;background-size:auto;}
 
 /* 이미지 */
 .ico_arrow_right {vertical-align:bottom;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h14v14H0z'/%3E%3Cpath stroke='%23999' d='M5 1l6 6-6 6'/%3E%3C/g%3E%3C/svg%3E");}
@@ -388,7 +375,7 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 .ico_search {background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='21'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Ccircle cx='9.3' cy='9.3' r='6.5' fill='%23FFF' stroke='%23000' stroke-width='2'/%3E%3Cpath fill='%23D8D8D8' stroke='%23000' stroke-width='2' d='M13.846 13.846L19 19'/%3E%3Cpath d='M0 0h21v21H0z'/%3E%3C/g%3E%3C/svg%3E");}
 .ico_crown {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='17' height='11'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 1.000000 0 0 0 0 0.235294 0 0 0 0 0.078431 0 0 0 1.000000 0'/%3E%3C/filter%3E%3Cpath id='b' d='M.174.047h1.645v1.645H.174z'/%3E%3C/defs%3E%3Cg filter='url(%23a)' fill='none' fill-rule='evenodd'%3E%3Cpath fill='%233F3A3A' d='M14.816 4.928a.275.275 0 00-.229-.022h-.006l-3.016 1.096c-.006.002-.01.006-.015.009l-.894.325-2.05-3.504c-.099-.17-.377-.17-.475 0l-.747 1.29L6.113 6.29l-2.748-.945-1.21-.44h-.007a.274.274 0 00-.228.023.275.275 0 00-.124.305l1.646 5.484a.274.274 0 00.334.195h9.183a.274.274 0 00.335-.195l1.645-5.484a.275.275 0 00-.123-.305M1.645 3.554a.822.822 0 11-1.644 0 .822.822 0 011.644 0'/%3E%3Cg transform='translate(7.403 .228)'%3E%3Cmask id='c' fill='%23fff'%3E%3Cuse xlink:href='%23b'/%3E%3C/mask%3E%3Cpath fill='%233F3A3A' d='M1.819.87a.823.823 0 110-.001' mask='url(%23c)'/%3E%3C/g%3E%3Cpath fill='%233F3A3A' d='M16.73 3.569a.823.823 0 11-1.648 0 .823.823 0 011.649 0'/%3E%3C/g%3E%3C/svg%3E");}
 .ico_plus {background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13'%3E%3Cg fill='%23333' fill-rule='evenodd'%3E%3Cpath d='M0 6h13v1H0z'/%3E%3Cpath d='M6 0h1v13H6z'/%3E%3C/g%3E%3C/svg%3E");}
-.ico_plus_orange {background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' id='Layer_1' x='0' y='0' viewBox='0 0 10 10' xml:space='preserve'%3E%3Cstyle%3E.st0%7Bfill:%23e84326%7D%3C/style%3E%3Cpath class='st0' d='M4 0h2v10H4z'/%3E%3Cpath transform='rotate(-90 5 5)' class='st0' d='M4 0h2v10H4z'/%3E%3C/svg%3E");}
+.ico_plus_orange {width:10px;height:10px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' id='Layer_1' x='0' y='0' viewBox='0 0 10 10' xml:space='preserve'%3E%3Cstyle%3E.st0%7Bfill:%23e84326%7D%3C/style%3E%3Cpath class='st0' d='M4 0h2v10H4z'/%3E%3Cpath transform='rotate(-90 5 5)' class='st0' d='M4 0h2v10H4z'/%3E%3C/svg%3E");}
 
 .ico_more {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 14V0h14v14z'/%3E%3Cpath fill='%231D1D1D' d='M4.9 11.868l-.495-.495L8.778 7 4.404 2.627l.495-.495 4.868 4.867-4.868 4.868z'/%3E%3C/g%3E%3C/svg%3E");}
 .ico_arrow_down {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='16'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 .5h15v15H0z'/%3E%3Cpath fill='%231D1D1D' d='M2.284 5.75l.53-.53 4.688 4.684 4.682-4.684.53.53L7.5 10.964 2.285 5.75z'/%3E%3C/g%3E%3C/svg%3E");}
@@ -397,8 +384,10 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 .ico_info {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h22v22H0z'/%3E%3Cpath fill='%23999' d='M11 2.2a8.8 8.8 0 110 17.6 8.8 8.8 0 010-17.6zm0 1.1c-4.253 0-7.7 3.447-7.7 7.7s3.447 7.7 7.7 7.7 7.7-3.447 7.7-7.7-3.447-7.7-7.7-7.7z'/%3E%3Cpath fill='%23999' d='M10.45 9.808h1.1v5.5h-1.1z'/%3E%3Ccircle cx='11' cy='7.608' r='1' fill='%23999'/%3E%3C/g%3E%3C/svg%3E");}
 .ico_calendar {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath fill='%23111' d='M2.727 9.783h1.364V8.478H2.727zm2.728 0h1.363V8.478H5.455zm2.727 0h1.363V8.478H8.182zm2.727 0h1.364V8.478h-1.364zM5.455 7.174h1.363V5.87H5.455zm2.727 0h1.363V5.87H8.182zm2.727 0h1.364V5.87h-1.364zm-8.182 5.217h1.364v-1.304H2.727zm2.728 0h1.363v-1.304H5.455zm2.727 0h1.363v-1.304H8.182zm2.727 0h1.364v-1.304h-1.364z'/%3E%3Cpath fill='%23111' d='M13.636 5.217v8.479H1.363V5.217H0V15h15V5.217z'/%3E%3Cpath fill='%23FF3C14' d='M11.591 0v2.609h-.682V1.305H4.091V0H2.727v2.609h-.681V1.305H0v3.26h14.999v-3.26h-2.044V0z'/%3E%3C/g%3E%3C/svg%3E");}
 .ico_face_like {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h30v30H0z'/%3E%3Cpath fill='%231D1D1D' d='M15 3c6.627 0 12 5.373 12 12s-5.373 12-12 12S3 21.627 3 15 8.373 3 15 3zm0 1.5C9.201 4.5 4.5 9.201 4.5 15S9.201 25.5 15 25.5 25.5 20.799 25.5 15 20.799 4.5 15 4.5z'/%3E%3Cpath fill='%231D1D1D' d='M15 22.5a7.5 7.5 0 01-7.463-6.75H8.92a6.127 6.127 0 0012.16 0h1.383A7.5 7.5 0 0115 22.5z'/%3E%3Ccircle cx='11.25' cy='11.25' r='1.5' fill='%231D1D1D'/%3E%3Ccircle cx='18.75' cy='11.25' r='1.5' fill='%231D1D1D'/%3E%3Cpath fill='%231D1D1D' d='M15 4.5h9.375L25.5 3.375V3H15z'/%3E%3C/g%3E%3C/svg%3E");}
+.ico_face_hate { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h22v22H0z'/%3E%3Cpath fill='%23999' d='M11 2.2a8.8 8.8 0 110 17.6 8.8 8.8 0 010-17.6zm0 1.1c-4.253 0-7.7 3.447-7.7 7.7s3.447 7.7 7.7 7.7 7.7-3.447 7.7-7.7-3.447-7.7-7.7-7.7z'/%3E%3Cpath fill='%23999' d='M11 10.816a5.502 5.502 0 00-5.302 4.033h1.055a4.494 4.494 0 018.494.001h1.055A5.503 5.503 0 0011 10.816z'/%3E%3Ccircle cx='8.25' cy='8.25' r='1.1' fill='%23999'/%3E%3Ccircle cx='13.75' cy='8.25' r='1.1' fill='%23999'/%3E%3Cpath fill='%23999' d='M11 3.3h6.875l.825-.825V2.2H11z'/%3E%3C/g%3E%3C/svg%3E"); }
 .ico_comment {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h26v26H0z'/%3E%3Cpath fill='%231D1D1D' d='M3.25 23.183l-.867.867H1.95V4.806c0-.555.468-.906.906-.906h20.288c.534 0 .906.37.906.906V19.76c0 .471-.378.932-.906.932H5.85v-1.279h16.9V5.2H3.25v17.983z'/%3E%3Ccircle cx='8.667' cy='12.242' r='1.3' fill='%231D1D1D'/%3E%3Ccircle cx='13' cy='12.242' r='1.3' fill='%231D1D1D'/%3E%3Ccircle cx='17.333' cy='12.242' r='1.3' fill='%231D1D1D'/%3E%3C/g%3E%3C/svg%3E");}
 
+.ico_ham { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='21'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath fill='%23000' d='M21 3H0v2h21z'/%3E%3Cpath d='M21 0H0v21h21z'/%3E%3Cpath fill='%23000' d='M21 9H4v2h17zm0 6H0v2h21z'/%3E%3C/g%3E%3C/svg%3E"); }
 
 /* 방향 */
 .ico_pre {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M15 0v15H0V0z'/%3E%3Cpath fill='%231D1D1D' d='M9.75 2.284l.53.53-4.684 4.687 4.683 4.683-.53.53L4.534 7.5 9.75 2.285z'/%3E%3C/g%3E%3C/svg%3E");}
@@ -421,6 +410,18 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 .ico_num8 {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 29'%3E%3Cpath d='M13 19.9c0 3.7-2.2 7.1-6.5 7.1S0 23.6 0 19.9c0-2.6 1.1-4.8 3.2-5.9C1.5 12.9.6 11 .6 8.7.6 5.3 2.6 2 6.5 2s5.9 3.2 5.9 6.7c0 2.2-.9 4.1-2.6 5.3 2.1 1.1 3.2 3.3 3.2 5.9zm-2.4-.1c0-2.7-1.7-4.6-4.1-4.6-2.4 0-4.1 1.9-4.1 4.6 0 2.7 1.7 4.7 4.1 4.7s4.1-2 4.1-4.7zm-.5-11c0-2.6-1.7-4.2-3.6-4.2S2.9 6.1 2.9 8.8c0 2.4 1.6 4.1 3.6 4.1s3.6-1.7 3.6-4.1z' fill='%23ff3c14'/%3E%3C/svg%3E");}
 .ico_num9 {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 28'%3E%3Cpath d='M3.4 25l4.3-7.7c-.5.2-1.1.3-1.7.3-3.5.1-6-3.4-6-7.8C0 5 2.7 1.5 6.5 1.5c4.4 0 6.5 4.4 6.5 8.2 0 .9-.1 3-1.6 5.5L5 26.5 3.4 25zM2.1 9.7c0 3.2 1.9 5.5 4.4 5.5 2.6 0 4.4-2.4 4.4-5.5C10.9 6.5 9.1 4 6.5 4 3.9 4 2.1 6.4 2.1 9.7z' fill='%23ff3c14'/%3E%3C/svg%3E");}
 .ico_num10 {background-image: url("data:image/svg+xml,%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' x='0' y='0' viewBox='0 0 24 29' xml:space='preserve'%3E%3Cstyle%3E.st1%7Bfill:%23ff3c14%7D%3C/style%3E%3Cpath class='st1' d='M3.2 5H0l1.1-2.5h4.2v24H3.2V5zM12.2 23.3c-1.3-2.3-1.9-5.4-1.9-8.8 0-3.4.7-6.5 1.9-8.8 1.5-2.7 3.4-3.6 4.9-3.6 1.5 0 3.4.9 4.9 3.6 1.3 2.3 2 5.4 2 8.8 0 3.4-.7 6.5-1.9 8.8-1.5 2.7-3.4 3.6-4.9 3.6-1.6 0-3.5-.9-5-3.6zm1.7-16.1c-1 2.1-1.4 4.8-1.4 7.3s.4 5.3 1.4 7.3c1 2 2.3 2.7 3.3 2.7s2.3-.6 3.3-2.7 1.4-4.8 1.4-7.3-.4-5.3-1.4-7.3c-1-2-2.3-2.7-3.3-2.7s-2.3.7-3.3 2.7z'/%3E%3C/svg%3E");}
+
+
+/* sns */
+[class*="ico_sns_"] {font-size:0;}
+.ico_sns_ktalk {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 208 191.94'%3E%3Cpath class='cls-1' d='M76.01 89.49h11.98L82 72.47l-5.99 17.02z'/%3E%3Cpath class='cls-1' d='M104 0C46.56 0 0 36.71 0 82c0 29.28 19.47 55 48.75 69.48-1.59 5.49-10.24 35.34-10.58 37.69 0 0-.21 1.76.93 2.43a3.14 3.14 0 002.48.15c3.28-.46 38-24.81 44-29A131.56 131.56 0 00104 164c57.44 0 104-36.71 104-82S161.44 0 104 0zM52.53 69.27c-.13 11.6.1 23.8-.09 35.22-.06 3.65-2.16 4.74-5 5.78a1.88 1.88 0 01-1 .07c-3.25-.64-5.84-1.8-5.92-5.84-.23-11.41.07-23.63-.09-35.23-2.75-.11-6.67.11-9.22 0-3.54-.23-6-2.48-5.85-5.83s1.94-5.76 5.91-5.82c9.38-.14 21-.14 30.38 0 4 .06 5.78 2.48 5.9 5.82s-2.3 5.6-5.83 5.83c-2.52.11-6.43-.11-9.19 0zm50.4 40.45a9.24 9.24 0 01-3.82.83c-2.5 0-4.41-1-5-2.65l-3-7.78H72.85l-3 7.78c-.58 1.63-2.49 2.65-5 2.65a9.16 9.16 0 01-3.81-.83c-1.66-.76-3.25-2.86-1.43-8.52L74 63.42a9 9 0 018-5.92 9.07 9.07 0 018 5.93l14.34 37.76c1.83 5.67.24 7.81-1.41 8.53zm30.32 0H114a5.64 5.64 0 01-5.75-5.5V63.5a6.13 6.13 0 0112.25 0v35.25h12.75a5.51 5.51 0 110 11zm47-4.52a6 6 0 01-10.76 2.8l-14.07-18.63-2.08 2.08v13.09a6 6 0 01-12 0v-41a6 6 0 0112 0V76.4l16.74-16.74a4.64 4.64 0 013.33-1.34 6.08 6.08 0 015.9 5.58 4.7 4.7 0 01-1.31 3.65l-13.7 13.67 14.77 19.57a6 6 0 011.15 4.44z'/%3E%3C/svg%3E");}
+.ico_sns_face {}
+.ico_sns_ktory {}
+.ico_sns_twt {}
+.ico_sns_mail {}
+.ico_sns_pinter {}
+.ico_sns_band {}
+.ico_sns_url {}
 
 
 
@@ -449,8 +450,11 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 
 
 /** 기본 **/
-.btn {display:flex;align-items:center;justify-content:space-between;width:auto;padding:8px 20px;border:1px solid transparent;background-color:transparent;color:#111;font-size:14px;line-height:1;text-align:center;white-space:nowrap;}
+.btn {display:flex;align-items:center;justify-content:space-between;width:auto;padding:3px 14px;border-radius:50px;border:1px solid transparent;background-color:transparent;color:#111;font-size:14px;line-height:1.69;text-align:center;white-space:nowrap;}
 .btn + .btn {margin-left:4px;}
+
+.btn [class*="ico_"] {margin-right:2px;}
+
 
 /* 상태 */
 .btn_default {border-color:#cacaca;}
@@ -458,14 +462,7 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 
 
 
-/* .btn.icon {padding-left:30px;background-repeat:no-repeat;} */
 /* type */
-/* .btn_type1 {height:34px;padding:0 20px;font-size:13px;font-weight:700;color:#111;}
-.btn_type2 {height:38px;padding:0 20px;font-size:14px;font-weight:700;color:#000;}
-.btn_type3 {height:38px;padding:7px 16px 9px;color:#111;font-size:14px;font-weight:700;}
-.btn_type4 {height:40px;padding:10px 28px;color:#fff;background-color:#111;font-size:14px;font-weight:500;}
-.btn_type5 {height:40px;padding:10px 28px;color:#111;background-color:#fff;font-size:14px;font-weight:500;} */
-
 .btn_round {width:auto;padding:8px 20px;border:1px solid #cacaca;border-radius:50px;color:#111;font-size:14px;line-height:20px;}
 .btn_square {border-radius:0px;}
 
@@ -477,14 +474,11 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 /* background */
 
 /* radius */
-.btn_radius1 {border-radius:17px;}
-.btn_radius2 {border-radius:19px;}
-.btn_radius3 {border-radius:20px;}
 
-.btn_search {position:relative;width:32px;height:32px;font-size:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='21'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Ccircle cx='9.3' cy='9.3' r='6.5' fill='%23FFF' stroke='%23000' stroke-width='2'/%3E%3Cpath fill='%23D8D8D8' stroke='%23000' stroke-width='2' d='M13.846 13.846L19 19'/%3E%3Cpath d='M0 0h21v21H0z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center center;}
-.btn_myinfo {position:relative;width:32px;height:32px;padding:6px;font-size:0;background:url("//stg-img.joongang.co.kr/svcimg/customercenter/img_cutomer_m_02_2x.png") no-repeat center;background-size:20px;} /*임시*/
-
-.ico_subscribe {background-size:10px 10px;background-position:14px 50%;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' id='Layer_1' x='0' y='0' viewBox='0 0 10 10' xml:space='preserve'%3E%3Cstyle%3E.st0%7Bfill:%23e84326%7D%3C/style%3E%3Cpath class='st0' d='M4 0h2v10H4z'/%3E%3Cpath transform='rotate(-90 5 5)' class='st0' d='M4 0h2v10H4z'/%3E%3C/svg%3E");}
+.btn_search {position:relative;width:22px;height:22px;}
+.btn_search .ico_search { width: 100%; height: 100%; }
+.btn_navbar {position:relative;width:22px;height:22px;}
+.btn_navbar .ico_ham { width: 100%; height: 100%; }
 
 
 
@@ -501,11 +495,6 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 .figure_caption {margin-top:10px;color:#b3b3b3;font-size:0.75rem;text-align:left;line-height:1rem;word-break:break-all;font-weight:normal;}
 
 
-/* particle */
-.ab_photo.photo_center {margin:0 auto;}
-.ab_photo.photo_left {float:left;margin:0 40px 0 0;} /* margin:20px 20px 20px 0;*/
-.ab_photo.photo_right {float:right;margin:0 0 0 40px;}
-.ab_photo .image {position: relative;}
 
 /****************************************************************************************************/
 /***                                             card                                             ***/
@@ -570,6 +559,18 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 
 
 
+
+/****************************************************************************************************/
+/***                                            layout                                            ***/
+/****************************************************************************************************/
+
+.chain_wrap {border-top:4px solid #ff4620;}
+
+
+
+
+
+
 /****************************************************************************************************/
 /***                                           reporter                                           ***/
 /****************************************************************************************************/
@@ -606,7 +607,6 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 .empathy_wrap > button { position: relative; width: 50%; height: 100%; }
 .empathy_wrap > button:first-child::before { content: ""; position: absolute; right: 0; top: 0; width: 1px; height: 100%; background-color: #d8d8d8; }
 .empathy_wrap > button .count { position: relative; margin-left: 8px; color: #999; font-size: 16px; }
-.empathy_wrap > button.active > .ico_face_like,
 .empathy_area > button.active > .ico_face_like { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h22v22H0z'/%3E%3Cpath fill='%23FF3C14' d='M11 2.2a8.8 8.8 0 110 17.6 8.8 8.8 0 010-17.6zm0 1.1c-4.253 0-7.7 3.447-7.7 7.7s3.447 7.7 7.7 7.7 7.7-3.447 7.7-7.7-3.447-7.7-7.7-7.7z'/%3E%3Cpath fill='%23FF3C14' d='M11 16.5a5.5 5.5 0 01-5.473-4.95h1.015a4.493 4.493 0 008.916 0h1.015A5.5 5.5 0 0111 16.5z'/%3E%3Ccircle cx='8.25' cy='8.25' r='1.1' fill='%23FF3C14'/%3E%3Ccircle cx='13.75' cy='8.25' r='1.1' fill='%23FF3C14'/%3E%3Cpath fill='%23FF3C14' d='M11 3.3h6.875l.825-.825V2.2H11z'/%3E%3C/g%3E%3C/svg%3E"); }
 .empathy_wrap > button.active > .count,
 .empathy_area > button.active > .count { color: #ff3c14; }
@@ -616,8 +616,6 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 .empathy_area > button .count { margin-left: 5px; color: #999; font-size: 14px; }
 
 [class^="ico_face_"] { display: inline-block; background-repeat: no-repeat; background-position: center; background-size: 100%; }
-.ico_face_like { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h22v22H0z'/%3E%3Cpath fill='%23999' d='M11 2.2a8.8 8.8 0 110 17.6 8.8 8.8 0 010-17.6zm0 1.1c-4.253 0-7.7 3.447-7.7 7.7s3.447 7.7 7.7 7.7 7.7-3.447 7.7-7.7-3.447-7.7-7.7-7.7z'/%3E%3Cpath fill='%23999' d='M11 16.5a5.5 5.5 0 01-5.473-4.95h1.015a4.493 4.493 0 008.916 0h1.015A5.5 5.5 0 0111 16.5z'/%3E%3Ccircle cx='8.25' cy='8.25' r='1.1' fill='%23999'/%3E%3Ccircle cx='13.75' cy='8.25' r='1.1' fill='%23999'/%3E%3Cpath fill='%23999' d='M11 3.3h6.875l.825-.825V2.2H11z'/%3E%3C/g%3E%3C/svg%3E"); }
-.ico_face_hate { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h22v22H0z'/%3E%3Cpath fill='%23999' d='M11 2.2a8.8 8.8 0 110 17.6 8.8 8.8 0 010-17.6zm0 1.1c-4.253 0-7.7 3.447-7.7 7.7s3.447 7.7 7.7 7.7 7.7-3.447 7.7-7.7-3.447-7.7-7.7-7.7z'/%3E%3Cpath fill='%23999' d='M11 10.816a5.502 5.502 0 00-5.302 4.033h1.055a4.494 4.494 0 018.494.001h1.055A5.503 5.503 0 0011 10.816z'/%3E%3Ccircle cx='8.25' cy='8.25' r='1.1' fill='%23999'/%3E%3Ccircle cx='13.75' cy='8.25' r='1.1' fill='%23999'/%3E%3Cpath fill='%23999' d='M11 3.3h6.875l.825-.825V2.2H11z'/%3E%3C/g%3E%3C/svg%3E"); }
 
 
 /* 댓글 */
@@ -628,7 +626,7 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 .comment_header .more_option_area { position: absolute; right: 0; top: -2px; text-align: right; }
 .comment_header .more_option_area .btn_more { position: relative; right: -8px; width: 20px; height: 20px;  }
 .comment_header .more_option_area .btn_outline_gray { display: none; position: absolute; right: 0; top: 30px; width: 58px; height: 30px; }
-.comment_header .more_option_area.open .btn_outline_gray { display: block; }
+.comment_header .more_option_area.open { display: block; }
 .comment_content { margin-top: 10px; color: #111; font-size: 14px; line-height: 20px; }
 .comment_footer { margin-top: 12px; }
 .comment_footer::after { display: block; content: ''; clear: both; }
@@ -643,6 +641,9 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
+    /* header */
+    .header { height: 58px; }
+    .header .uh { padding: 0 20px; }
     img {width:100%;}
 
     .flex_row_reverse_sm {flex-wrap:wrap-reverse;}
@@ -654,8 +655,6 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 
     .sm_hidden {display:none;} /* <<- .pc {display:none;} */
 
-    .header {background:#fff;border-bottom:4px solid #000;color:#000;}
-    .header .uh h2.logo {background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 282.48 57.02'%3E%3Cpath d='M29.32 15.93c-.43-1.54-1.01-3.12-1.54-3.98-.77-1.3-1.25-1.63-3.89-1.63h-4.8V33.7c0 3.74.38 4.27 4.94 4.56v1.34H10.07v-1.34c4.46-.29 4.85-.77 4.85-4.56V10.32h-4.37c-2.64 0-3.41.29-4.22 1.73-.58.96-.96 2.11-1.58 3.89H3.3c.29-2.93.58-5.95.72-8.64h1.1c.72 1.15 1.25 1.1 2.59 1.1h19.01c1.34 0 1.73-.19 2.45-1.1h1.15c0 2.26.19 5.71.43 8.5l-1.43.13zM47.13 39.6v-1.34c2.78-.29 3.17-.53 3.17-3.7v-7.87c0-3.98-1.54-6-4.75-5.95-1.82 0-3.74.91-5.09 2.5v11.33c0 3.12.38 3.41 3.26 3.7v1.34H33.26v-1.34c2.78-.24 3.41-.48 3.41-3.7V11.42c0-2.54-.14-3.17-3.36-3.46V6.72c2.54-.24 5.42-.96 7.15-1.63v16.37c1.73-1.73 4.37-3.5 6.96-3.5 3.94 0 6.67 2.45 6.67 8.21v8.45c0 3.17.38 3.41 3.17 3.65v1.34H47.13zM76.41 35.52c-3.07 3.84-6.43 4.66-7.97 4.66-5.86 0-9.41-4.8-9.41-10.32 0-3.26 1.15-6.29 3.12-8.4 2.02-2.26 4.66-3.5 7.15-3.5 4.18 0 7.34 3.6 7.34 7.44-.05.96-.19 1.39-.96 1.58-.96.19-7.1.62-12.82.82-.14 6.43 3.79 9.07 7.2 9.07 1.97 0 3.79-.82 5.57-2.45l.78 1.1zm-8.26-15.75c-2.21 0-4.37 2.06-5.04 5.95 2.69 0 5.38 0 8.21-.14.86 0 1.15-.24 1.15-.96.05-2.54-1.63-4.85-4.32-4.85zM103.91 9.74c-3.74.43-4.13.72-4.13 4.75v17.76c0 6.34-1.01 9.65-4.22 12.53-1.58 1.44-3.17 2.21-4.46 2.78l-.77-1.44c2.74-1.34 4.27-3.55 4.8-6.34.43-2.3.48-5.09.48-9.12V14.49c0-4.03-.43-4.37-4.37-4.75V8.4h12.67v1.34zM116.33 17.95c6 0 10.46 4.56 10.46 10.75 0 7.78-5.76 11.47-10.46 11.47-6.62 0-10.66-5.33-10.66-10.71.01-7.81 6.1-11.51 10.66-11.51zm-.57 1.63c-2.93 0-5.57 2.83-5.57 8.4 0 6.1 2.69 10.51 6.62 10.51 2.98 0 5.47-2.16 5.47-8.74.01-5.61-2.3-10.17-6.52-10.17zM140.6 17.95c6 0 10.46 4.56 10.46 10.75 0 7.78-5.76 11.47-10.46 11.47-6.62 0-10.66-5.33-10.66-10.71.01-7.81 6.1-11.51 10.66-11.51zm-.57 1.63c-2.93 0-5.57 2.83-5.57 8.4 0 6.1 2.69 10.51 6.62 10.51 2.98 0 5.47-2.16 5.47-8.74.01-5.61-2.3-10.17-6.52-10.17zM167.02 39.6v-1.34c2.78-.29 3.07-.62 3.07-3.89v-7.92c0-3.36-1.2-5.62-4.37-5.62-1.97 0-3.84 1.15-5.33 2.5v11.23c0 3.31.29 3.41 3.12 3.7v1.34h-10.37v-1.34c3.17-.34 3.46-.53 3.46-3.7v-9.89c0-3.12-.34-3.26-2.93-3.7v-1.25c2.35-.38 4.7-1.01 6.72-1.92v3.79c.96-.67 2.02-1.39 3.26-2.21 1.34-.86 2.59-1.44 3.98-1.44 3.84 0 6.24 2.83 6.24 7.49v9.12c0 3.26.29 3.41 3.07 3.7v1.34h-9.92zM185.7 32.59c-1.15.91-1.58 1.82-1.58 2.4 0 .86.82 1.82 2.98 1.82 1.78 0 3.79-.05 5.38-.05 3.07 0 7.01 1.01 7.01 5.76 0 4.99-5.9 9.7-12.29 9.7-5.42 0-8.35-3.17-8.45-6 0-1.06.43-1.97 1.2-2.74.96-1.01 2.83-2.59 3.94-3.46-1.73-.48-2.98-1.58-3.6-2.59-.43-.72-.58-1.58-.58-2.06 1.82-.67 3.46-2.02 4.42-3.31l1.57.53zm2.31.48c-4.46 0-8.16-2.74-8.16-7.25 0-5.47 4.9-8.02 8.64-8.02 1.58 0 3.17.43 4.61 1.2 2.21 0 5.09-.38 6.43-.72l.29.43c-.29.77-1.06 2.11-1.78 2.54-.72 0-2.3-.19-2.98-.24.82 1.1 1.39 2.64 1.39 4.37.01 5.24-4.31 7.69-8.44 7.69zm1.1 7.11c-2.35 0-3.41.29-4.27 1.01-1.34 1.1-2.3 2.54-2.3 3.94 0 2.64 2.74 4.61 6.43 4.61 4.56 0 7.15-2.35 7.15-5.42 0-1.63-.77-2.93-2.11-3.5-1.2-.55-2.88-.64-4.9-.64zm-1.1-20.84c-2.16 0-4.08 1.97-4.08 5.76s1.92 6.43 4.56 6.43c2.11-.1 3.98-1.87 3.98-5.76 0-3.74-1.77-6.43-4.46-6.43zM220.16 39.6v-1.34c3.12-.38 3.5-.86 2.83-2.69-.62-1.87-1.58-4.27-2.59-7.3h-10.37c-.77 2.16-1.49 4.03-2.16 6-1.06 3.12-.38 3.5 3.55 3.98v1.34h-11.09v-1.34c3.02-.38 3.79-.72 5.47-5.04l9.94-25.2 1.54-.29c3.02 8.21 6.34 17.28 9.36 25.59 1.54 4.18 1.97 4.56 5.38 4.94v1.34h-11.86zm-4.8-25.59c-1.54 4.13-3.17 8.5-4.61 12.29h8.98l-4.37-12.29zM247.77 39.6v-1.34c2.78-.29 3.07-.62 3.07-3.89v-7.92c0-3.36-1.2-5.62-4.37-5.62-1.97 0-3.84 1.15-5.33 2.5v11.23c0 3.31.29 3.41 3.12 3.7v1.34H233.9v-1.34c3.17-.34 3.46-.53 3.46-3.7v-9.89c0-3.12-.34-3.26-2.93-3.7v-1.25c2.35-.38 4.7-1.01 6.72-1.92v3.79c.96-.67 2.02-1.39 3.26-2.21 1.34-.86 2.59-1.44 3.98-1.44 3.84 0 6.24 2.83 6.24 7.49v9.12c0 3.26.29 3.41 3.07 3.7v1.34h-9.93zM266.46 32.59c-1.15.91-1.58 1.82-1.58 2.4 0 .86.82 1.82 2.98 1.82 1.78 0 3.79-.05 5.38-.05 3.07 0 7.01 1.01 7.01 5.76 0 4.99-5.9 9.7-12.29 9.7-5.43 0-8.35-3.17-8.45-6 0-1.06.43-1.97 1.2-2.74.96-1.01 2.83-2.59 3.94-3.46-1.73-.48-2.98-1.58-3.6-2.59-.43-.72-.58-1.58-.58-2.06 1.82-.67 3.46-2.02 4.42-3.31l1.57.53zm2.3.48c-4.47 0-8.16-2.74-8.16-7.25 0-5.47 4.9-8.02 8.64-8.02 1.58 0 3.17.43 4.61 1.2 2.21 0 5.09-.38 6.43-.72l.29.43c-.29.77-1.06 2.11-1.78 2.54-.72 0-2.3-.19-2.98-.24.82 1.1 1.39 2.64 1.39 4.37.01 5.24-4.31 7.69-8.44 7.69zm1.11 7.11c-2.35 0-3.41.29-4.27 1.01-1.34 1.1-2.3 2.54-2.3 3.94 0 2.64 2.74 4.61 6.43 4.61 4.56 0 7.15-2.35 7.15-5.42 0-1.63-.77-2.93-2.11-3.5-1.21-.55-2.89-.64-4.9-.64zm-1.11-20.84c-2.16 0-4.08 1.97-4.08 5.76s1.92 6.43 4.56 6.43c2.11-.1 3.98-1.87 3.98-5.76.01-3.74-1.77-6.43-4.46-6.43z'/%3E%3C/svg%3E");}
 
     .side_nav_mobile {width:100%;}
     .side_nav_mobile .form_select {padding-left:0;border:none;font-size:24px;font-weight:900;}
@@ -736,6 +735,9 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
 
 /* Medium devices (tablet + pc, 768px and up) */
 @media (min-width:768px) {
+    /* header */
+    .header {height:64px;}
+    .header .header_option_area { flex-flow: row-reverse; }
     .md_hidden {display:none;}
     .md_only_hidden {display:none;} /* <<- .tb {display:none;} */
 
@@ -745,9 +747,8 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
     .row_mg {margin-left:-10px;margin-right:-10px;}
     .row_mg > * {margin-left:10px;margin-right:10px;}
 
-    .header {height:42px;}
-    .header .uh .btn_navbar .icon_navbar {background-color:#fff;}
-    .header .uh .btn_navbar .icon_navbar:after, .header .uh .btn_navbar .icon_navbar:before {background-color:#fff;}
+
+
 
     .contents {padding-left:34px;padding-right:34px;}
 
@@ -853,15 +854,15 @@ input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padd
     .md_only_hidden {display:block;}
     .lg_hidden {display:none;}
 
+    .flex_row_reverse_lg {flex-wrap:wrap-reverse;}
+
+
     .row {margin-left:-18px;margin-right:-18px;}
     .row > * {padding-left:18px;padding-right:18px;}
     .row_mg {margin-left:-18px;margin-right:-18px;}
     .row_mg > * {margin-left:18px;margin-right:18px;}
     .row_mg > div[class*="col_"]{border:1px solid red;width:calc()}
 
-    .header {height:48px;padding:0;}
-    .header .uh .btn_navbar {left:25px;}
-    .header .uh .right_area {right:25px;}
 
     /* padding */
     .pr_lg12 {padding-right:12px;}

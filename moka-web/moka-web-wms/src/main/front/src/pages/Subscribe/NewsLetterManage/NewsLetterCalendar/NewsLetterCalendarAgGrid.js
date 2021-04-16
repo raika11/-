@@ -20,7 +20,7 @@ const NewsLetterCalendarAgGrid = () => {
             {/* 상품 목록 */}
             <MokaTable
                 className="overflow-hidden flex-fill"
-                headerHeight={0}
+                header={false}
                 // columnDefs={columnDefs}
                 paginationClassName="justify-content-center"
                 onRowNodeId={(data) => data.seq}

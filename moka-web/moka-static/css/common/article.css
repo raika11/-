@@ -1,0 +1,63 @@
+@charset "utf-8";
+/* Small devices (portrait phones, landscape phones, less than 767px) */
+/* No media query this is the default */
+
+.article_body {width:100%;margin:40px auto 0;padding:30px 0 40px;border-top:4px solid #ff4620;border-bottom:1px solid #e2e2e2;}
+
+.fs1 {font-size:14px;line-height:1.93;letter-spacing:normal;}
+.fs2 {font-size:16px;line-height:1.81;letter-spacing:normal;}
+.fs3 {font-size:18px;line-height:1.72;letter-spacing:-0.5px;}
+.fs4 {font-size:20px;line-height:1.8;letter-spacing:-0.5px;}
+.fs5 {font-size:22px;line-height:1.73;letter-spacing:-0.52px;}
+
+
+/****************************************************************************************************/
+/***                                            image                                             ***/
+/****************************************************************************************************/
+
+.ab_photo {padding:40px 0;}
+.ab_photo.photo_left {float:left;margin:0 40px 0 0;} /* margin:20px 20px 20px 0;*/
+.ab_photo.photo_right {float:right;margin:0 0 0 40px;}
+.ab_photo .image {position:relative;display:inline-block;width:auto;}
+.ab_photo img{max-width:100%;}
+
+
+.pp_letter_wrap {width:100%;margin:40px 0;background:#f3f3f3;}
+
+/* Mobile devices (mobile, 767px and down) */
+@media (max-width:767px) {
+
+    .ab_photo.photo_center {max-width:100vw !important;margin-left:-20px;}
+    .ab_photo.photo_center .image {max-width:100vw;}
+    .ab_photo.photo_center .caption {max-width:100vw;}
+    .ab_photo.photo_center .image img {max-width:100%;}
+
+}
+
+
+/* Medium devices (tablet + pc, 768px and up) */
+@media (min-width:768px) {
+
+    .article_body {max-width:580px;}
+    .ab_photo.photo_center {position:relative;max-width:720px !important;left:50%;transform:translateX(-50%);}
+    .ab_photo.photo_center .image {max-width:720px;}
+    .ab_photo.photo_center .image img {max-width:100%;}
+}
+
+
+/* Medium devices (only tablet, 768px and 1023px) */
+@media (min-width:768px) and (max-width:1023px) {
+    
+}
+
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width:1024px) {
+
+}
+
+
+/* Unique devices (large desktops, 1280px and up) */
+@media (min-width:1280px) {
+
+}

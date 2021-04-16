@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { initialState, getOvpList, GET_OVP_LIST } from '@store/bright';
 import { MokaTable, MokaSearchInput } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
-import { GRID_ROW_HEIGHT, GRID_HEADER_HEIGHT } from '@/style_constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import OvpOptionRenderer from './OvpOptionRenderer';
 import columnDefs from './OvpListColumns';
 

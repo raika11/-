@@ -736,10 +736,6 @@ dl.date dd { margin-left: 6px; }
     /* 그리드 */
     .row {margin-left:-10px;margin-right:-10px;}
     .row > * {padding-left:10px;padding-right:10px;}
-    .row_mg {margin-left:-10px;margin-right:-10px;}
-    .row_mg > * {margin-left:10px;margin-right:10px;}
-
-
 
 
     .contents {padding-left:34px;padding-right:34px;}

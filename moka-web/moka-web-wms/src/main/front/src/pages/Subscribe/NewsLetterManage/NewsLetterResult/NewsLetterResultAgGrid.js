@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router';
 import Button from 'react-bootstrap/Button';
-import { MokaInput, MokaTable } from '@/components';
+import { MokaTable } from '@/components';
 import columnDefs from './NewsLetterResultAgGridColumns';
 import { GRID_HEADER_HEIGHT } from '@/style_constants';
 
@@ -34,23 +34,15 @@ const NewsLetterResultAgGrid = ({ match }) => {
         <>
             <div className="mb-14 d-flex align-items-end justify-content-between">
                 <p className="mb-0">
-                    전체 발송 건수 {total}건 / 발송 성공 건수 {total}건(00%) / 오픈 건수 {total}건(00%) / 클릭 건수 {total}건(00%)
+                    발송 성공 건수 {total}건(00%) / 오픈 건수 {total}건(00%) / 클릭 건수 {total}건(00%)
                 </p>
-                <div className="d-flex">
-                    <Button variant="outline-neutral" className="mr-2" style={{ overflow: 'visible' }}>
-                        Excel 다운로드
-                    </Button>
-                    <MokaInput as="select" disabled>
-                        <option value="">20개 보기</option>
-                    </MokaInput>
-                </div>
+                <Button variant="outline-neutral">Excel 다운로드</Button>
             </div>
 
             <MokaTable
                 suppressMultiSort // 다중 정렬 비활성
                 headerHeight={GRID_HEADER_HEIGHT[1]}
                 className="overflow-hidden flex-fill"
-                paginationClassName="justify-content-center"
                 columnDefs={columnDefs}
                 rowData={[
                     {
@@ -84,8 +76,8 @@ const NewsLetterResultAgGrid = ({ match }) => {
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 page={search.page}
-                pageSizes={false}
-                showTotalString={false}
+                size={search.size}
+                total={total}
                 onChangeSearchOption={handleChangeSearchOption}
             />
         </>

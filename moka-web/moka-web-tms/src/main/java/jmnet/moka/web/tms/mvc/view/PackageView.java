@@ -1,11 +1,7 @@
 package jmnet.moka.web.tms.mvc.view;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,9 +20,9 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
-import jmnet.moka.web.tms.mvc.handler.SitemapHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +109,14 @@ public class PackageView extends AbstractView {
         MergeItem item = this.domainTemplateMerger.getItem(domainId, itemType, itemId);
 
         // 이슈, 시리즈, 토픽에 필요한 데이터를 설정한다.
+        MokaTemplateMerger templateMerger = this.domainTemplateMerger.getTemplateMerger(domainId);
+        DataLoader loader = templateMerger.getDataLoader();
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("id", packageId);
+        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.PACKAGE, paramMap, true);
+        Map<String, Object> pacakgeInfo = (Map<String, Object>) jsonResult.get("package");
+
+        mergeContext.set("package", pacakgeInfo);
 
         response.setContentType("text/html; charset=UTF-8");
 

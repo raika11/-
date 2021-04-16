@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInput, MokaInputLabel } from '@/components';
-import NewsLetterSendArticleAgGrid from './NewsLetterSendArticleAgGrid';
-import ArticleListModal from '@/pages/Article/modals/ArticleListModal';
+import NewsLetterSendRelArticleAgGrid from './components/NewsLetterSendRelArticleAgGrid';
+// import ArticleListModal from '@/pages/Article/modals/ArticleListModal';
 import NewsLetterSendEditor from './NewsLetterSendEditor';
+import { EditThumbModal } from '@/pages/Desking/modals';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 발송 편집
  */
 const NewsLetterSendEdit = ({ match }) => {
+    const history = useHistory();
     const { sendSeq } = useParams();
     const [temp, setTemp] = useState({
         form: 'L',
@@ -19,7 +21,30 @@ const NewsLetterSendEdit = ({ match }) => {
         abTest: '',
         editor: '',
     });
+    const [imgModal, setImgModal] = useState(false);
+    const [gridInstance, setGridInstance] = useState(null); // 기사 ag-grid instance
     const [articleModal, setArticleModal] = useState(false);
+
+    /**
+     * 파일 변경
+     * @param {any} data 파일데이터
+     */
+    const handleFileValue = (data) => {
+        if (data) {
+            setTemp({ ...temp, thumbnailFile: data });
+        } else {
+            setTemp({ ...temp, imgUrl: null, thumbnailFile: data });
+        }
+    };
+
+    /**
+     * 이미지 신규등록
+     * @param {string} imageSrc 이미지 src
+     * @param {*} file 파일데이터
+     */
+    const handleThumbFileApply = (imageSrc, file) => {
+        setTemp({ ...temp, imgUrl: imageSrc, thumbnailFile: file });
+    };
 
     /**
      * 입력값 변경
@@ -29,15 +54,27 @@ const NewsLetterSendEdit = ({ match }) => {
         setTemp({ ...temp, [name]: value });
     };
 
+    /**
+     * 취소
+     */
+    const handleClickCancel = () => {
+        history.push(match.path);
+    };
+
     return (
         <MokaCard
             className="w-100"
             title={`뉴스레터 상품 ${sendSeq ? '수정' : '등록'}`}
             footer
             footerButtons={[
-                {
+                sendSeq && {
                     text: '미리보기',
                     variant: 'outline-neutral',
+                    className: 'mr-1',
+                },
+                {
+                    text: '테스트 발송',
+                    variant: 'positive-a',
                     className: 'mr-1',
                 },
                 {
@@ -48,6 +85,7 @@ const NewsLetterSendEdit = ({ match }) => {
                 {
                     text: '취소',
                     variant: 'negative',
+                    onClick: handleClickCancel,
                 },
             ].filter(Boolean)}
         >
@@ -198,50 +236,38 @@ const NewsLetterSendEdit = ({ match }) => {
                 {/* 제목 */}
                 <MokaInputLabel label={temp.abTest === 'title' ? '제목(A)' : '제목'} className="mb-2" disabled />
                 {temp.abTest === 'title' && <MokaInputLabel label="제목(B)" className="mb-2" disabled />}
+
+                {/* 이미지 등록 */}
                 <Form.Row className="mb-2 align-items-center">
-                    <MokaInputLabel as="none" label="상단 이미지 선택\n(xxx * xxx px)" />
-                    <div className="flex-fill">
-                        <div className="d-flex align-items-center">
-                            <Button variant="searching" size="sm" className="mr-2" style={{ overflow: 'visible', maxHeight: 31 }}>
-                                찾아보기
-                            </Button>
-                            <MokaInput disabled />
-                        </div>
-                        <p className="mb-0 color-primary">※ 변경하지 않을 경우 기본 이미지가 적용됩니다.</p>
-                    </div>
+                    <MokaInputLabel
+                        as="imageFile"
+                        className="mr-2"
+                        label={
+                            <React.Fragment>
+                                상단 이미지 선택
+                                <br />
+                                <Button variant="gray-700" size="sm" className="mt-2" onClick={() => setImgModal(true)}>
+                                    신규등록
+                                </Button>
+                            </React.Fragment>
+                        }
+                        inputProps={{ img: temp.imgUrl, setFileValue: handleFileValue, width: 190, deleteButton: true, accept: 'image/jpeg, image/png, image/gif' }}
+                    />
+
+                    {/* 포토 아카이브 모달 */}
+                    <EditThumbModal show={imgModal} cropWidth={290} cropHeight={180} onHide={() => setImgModal(false)} thumbFileName={temp.imgUrl} apply={handleThumbFileApply} />
+                    <p className="mb-0 color-primary">※ 변경하지 않을 경우 기본 이미지가 적용됩니다.</p>
                 </Form.Row>
 
                 {/* 기사 검색 */}
-                <Form.Row className="mb-2 input-border align-items-center">
-                    <Col xs={2} clsssName="p-0">
-                        <Button variant="searching" size="sm" onClick={() => setArticleModal(true)}>
-                            기사 검색
-                        </Button>
-                        <ArticleListModal show={articleModal} onHide={() => setArticleModal(false)} />
-                    </Col>
-                    <Col xs={10} className="p-0">
-                        <div className="component-work component-hot-click border-top pt-0" id="agGrid-0">
-                            <NewsLetterSendArticleAgGrid />
-                        </div>
-                    </Col>
-                </Form.Row>
+                <NewsLetterSendRelArticleAgGrid articles={[]} gridInstance={gridInstance} setGridInstance={setGridInstance} />
 
                 {/* 에디터 */}
                 <NewsLetterSendEditor />
 
                 {/* 테스트 발송 */}
                 <Form.Row className="align-items-end">
-                    <MokaInputLabel
-                        as="textarea"
-                        label="테스트 발송"
-                        className="mr-2 flex-fill"
-                        placeholder="테스트 발송 할 이메일을 입력하세요"
-                        inputProps={{ rows: 5 }}
-                        disabled
-                    />
-                    <Button variant="positive-a" style={{ overflow: 'visible' }}>
-                        발송
-                    </Button>
+                    <MokaInputLabel as="textarea" label="테스트 발송" className="flex-fill" placeholder="테스트 발송 할 이메일을 입력하세요" inputProps={{ rows: 2 }} disabled />
                 </Form.Row>
             </Form>
         </MokaCard>

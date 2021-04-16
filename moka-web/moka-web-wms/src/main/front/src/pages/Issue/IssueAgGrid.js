@@ -76,6 +76,7 @@ const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, load
                 onChangeSearchOption={handleChangeSearchOptions}
                 onSortChanged={handleSortChange}
                 total={total}
+                preventRowClickCell={['directLink']}
             />
         </>
     );

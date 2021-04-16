@@ -1,6 +1,8 @@
 .react-select-container {
     .react-select__control {
         min-height: 31px;
+        border-radius: $border-radius;
+        border-color: $gray-400;
 
         &--is-focused,
         &--is-menu-open,

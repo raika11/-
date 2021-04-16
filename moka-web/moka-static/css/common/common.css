@@ -499,11 +499,6 @@ dl.date dd { margin-left: 6px; }
 .figure_caption {margin-top:10px;color:#b3b3b3;font-size:0.75rem;text-align:left;line-height:1rem;word-break:break-all;font-weight:normal;}
 
 
-/* particle */
-.ab_photo.photo_center {margin:0 auto;}
-.ab_photo.photo_left {float:left;margin:0 40px 0 0;} /* margin:20px 20px 20px 0;*/
-.ab_photo.photo_right {float:right;margin:0 0 0 40px;}
-.ab_photo .image {position: relative;}
 
 /****************************************************************************************************/
 /***                                             card                                             ***/
@@ -564,6 +559,18 @@ dl.date dd { margin-left: 6px; }
 .list .list_item .list_image img {width:auto;}
 .list .list_item .list_body .headline {font-size:20px;font-weight:700;line-height:1.45;letter-spacing:-0.31px;color:#000;}
 .list .list_item .list_body .description {font-size:14px;line-height:1.57;letter-spacing:-0.37px;color:#444;}
+
+
+
+
+
+/****************************************************************************************************/
+/***                                            layout                                            ***/
+/****************************************************************************************************/
+
+.chain_wrap {border-top:4px solid #ff4620;}
+
+
 
 
 

@@ -21,8 +21,8 @@ const CollapseArticleAuto = () => {
                     <span>조회수가 가장 높은 기사가 자동으로 노출됩니다</span>
                 </Col>
                 <Col xs={3} className="d-flex justify-content-end align-items-center">
-                    <Button variant="outline-neutral" size="sm" className="mr-1">
-                        미리보기
+                    <Button variant="positive-a" size="sm" className="mr-1">
+                        임시저장
                     </Button>
                     <Button variant="positive" size="sm">
                         전송

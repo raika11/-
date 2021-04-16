@@ -43,7 +43,7 @@ const DetailSchForm = (props) => {
                         <MokaInputLabel label="검색조건" as="none" className="mb-0" />
                         {/* 코드타입 */}
                         <div style={{ width: 300 }}>
-                            <CodeAutocomplete className="mb-0" value={component.schCodeId} onChange={handleChangeValue} maxMenuHeight={150} />
+                            <CodeAutocomplete className="mb-0" value={component.schCodeId} onChange={handleChangeValue} maxMenuHeight={120} />
                         </div>
                     </Col>
                 </Form.Row>

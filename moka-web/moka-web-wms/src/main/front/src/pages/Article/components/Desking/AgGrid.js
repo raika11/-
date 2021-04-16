@@ -90,6 +90,8 @@ const AgGrid = forwardRef(
                     return {
                         ...art,
                         artTitle: unescapeHtmlArticle(art.artTitle),
+                        artSubTitle: unescapeHtmlArticle(art.artSubTitle),
+                        artSummary: unescapeHtmlArticle(art.artSummary),
                         artUrl: `${ARTICLE_URL}${art.totalId}`,
                         artIdType,
                         myunPan,

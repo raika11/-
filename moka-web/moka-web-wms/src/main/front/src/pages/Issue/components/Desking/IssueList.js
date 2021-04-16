@@ -13,10 +13,6 @@ moment.locale('ko');
 
 const propTypes = {
     /**
-     * className
-     */
-    className: PropTypes.string,
-    /**
      * drag&drop 타겟 ag-grid
      */
     dropTargetAgGrid: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
@@ -25,10 +21,16 @@ const propTypes = {
      */
     onDragStop: PropTypes.func,
     /**
-     * show 일 때만 데이터를 로드한다
-     * @default
+     * columnDefs 추가
      */
-    show: PropTypes.bool,
+    addColumnDefs: PropTypes.arrayOf(
+        PropTypes.shape({
+            /**
+             * 추가할 위치
+             */
+            index: PropTypes.number,
+        }),
+    ),
 };
 const defaultProps = {
     show: false,
@@ -38,8 +40,7 @@ const defaultPeriod = [''];
 /**
  * 홈 섹션편집 > 패키지 목록
  */
-const IssueList = (props) => {
-    const { className, dropTargetAgGrid, onDragStop, show } = props;
+const IssueList = ({ className, dropTargetAgGrid, onDragStop, show, addColumnDefs }) => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_ISSUE_LIST_MODAL]);
     const serviceCodeList = useSelector(({ code }) => code.service.list);
@@ -207,6 +208,7 @@ const IssueList = (props) => {
                 dropTargetAgGrid={dropTargetAgGrid}
                 onDragStop={onDragStop}
                 onChangeSearchOption={changeTableSearchOption}
+                addColumnDefs={addColumnDefs}
             />
         </div>
     );

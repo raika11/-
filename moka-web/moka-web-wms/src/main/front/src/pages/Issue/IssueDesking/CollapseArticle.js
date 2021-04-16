@@ -3,28 +3,68 @@ import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { CHANNEL_TYPE, ISSUE_CHANNEL_TYPE, ARTICLE_URL } from '@/constants';
 import { MokaInputLabel, MokaTable } from '@components';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
+import { initialState } from '@store/issue';
 import { ArticleTabModal } from '@pages/Article/modals';
 import { artColumnDefs } from './IssueDeskingColumns';
 
 /**
  * 패키지관리 > 관련 데이터 편집 > 기사 (편집)
  */
-const CollapseArticle = ({ gridInstance, setGridInstance }) => {
+const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
     const controls = 'collapse-art';
 
     /**
      * 기사 선택
-     * @param {string} type type
+     * @param {string} channelType channelType (A|M|P|G)
      * @param {object} data data
      */
-    const selectArticle = (type, data) => {
-        gridInstance.api.applyTransaction({
-            add: [data],
-        });
+    const selectArticle = (channelType, data) => {
+        const cnt = gridInstance.api.getDisplayedRowCount();
+
+        if (channelType === CHANNEL_TYPE.A.code) {
+            gridInstance.api.applyTransaction({
+                add: [
+                    {
+                        ...initialState.initialDesking,
+                        pkgSeq,
+                        compNo,
+                        contentsOrd: cnt + 1,
+                        contentsId: data.totalId,
+                        thumbFileName: data.artThumb,
+                        title: data.artTitle,
+                        bodyHead: data.artSummary,
+                        linkUrl: `${ARTICLE_URL}${data.totalId}`,
+                        duration: data.duration,
+                        channelType: ISSUE_CHANNEL_TYPE.A.code,
+                    },
+                ],
+            });
+        } else if (channelType === CHANNEL_TYPE.M.code) {
+            gridInstance.api.applyTransaction({
+                add: [
+                    {
+                        ...initialState.initialDesking,
+                        pkgSeq,
+                        compNo,
+                        contentsOrd: cnt + 1,
+                        contentsId: data.totalId,
+                        thumbFileName: data.ovpThumb,
+                        title: data.artTitle,
+                        bodyHead: data.artSummary,
+                        linkUrl: `${ARTICLE_URL}${data.totalId}`,
+                        duration: data.duration,
+                        channelType: ISSUE_CHANNEL_TYPE.M.code,
+                    },
+                ],
+            });
+        } else if (channelType === CHANNEL_TYPE.I.code) {
+        } else if (channelType === CHANNEL_TYPE.G.code) {
+        }
     };
 
     /**
@@ -85,7 +125,7 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
                         header={false}
                         paging={false}
                         columnDefs={artColumnDefs}
-                        onRowNodeId={(data) => data.totalId}
+                        onRowNodeId={(data) => data.contentsId}
                         setGridInstance={setGridInstance}
                         animateRows
                         rowDragManaged

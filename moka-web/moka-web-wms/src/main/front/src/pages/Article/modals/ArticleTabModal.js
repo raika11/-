@@ -60,7 +60,20 @@ const ArticleTabModal = ({ show, onHide, onRowClicked }) => {
                         movie
                         suppressChangeArtTitle
                     />,
-                    <IssueList show={navIdx === 2 && show} />,
+                    // 패키지
+                    <IssueList
+                        show={navIdx === 2 && show}
+                        addColumnDefs={[
+                            {
+                                index: 0,
+                                headerName: '',
+                                field: 'add',
+                                width: 60,
+                                cellRenderer: 'buttonRenderer',
+                                cellRendererParams: { onClick: (data) => onRowClicked(CHANNEL_TYPE.I.code, data) },
+                            },
+                        ]}
+                    />,
                 ]}
                 tabNavs={tabNavs}
             />

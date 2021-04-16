@@ -159,7 +159,7 @@ const FbArtEdit = () => {
                 </Col>
             </div>
 
-            <hr className="my-24" />
+            <hr />
 
             {/* 페이스북 메타 정보 */}
             <div>

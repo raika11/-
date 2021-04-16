@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useEffect } from 'react';
+import React, { useState, forwardRef, useEffect, useCallback } from 'react';
 import { addDeskingWorkDropzone } from '@utils/deskingUtil';
 import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaTable } from '@components';
@@ -8,10 +8,7 @@ import IssueContentsModal from './IssueContentsModal';
 /**
  * 홈 섹션편집 > 패키지 목록 > AgGrid
  */
-const AgGrid = forwardRef((props, ref) => {
-    const { search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption } = props;
-
-    // state
+const AgGrid = forwardRef(({ search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption, addColumnDefs }, ref) => {
     const [gridInstance, setGridInstance] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const [selected, setSelected] = useState({});
@@ -27,6 +24,23 @@ const AgGrid = forwardRef((props, ref) => {
             setModalShow(true);
         }
     };
+
+    /**
+     * 컬럼 명세
+     * @returns {array} columnDefs
+     */
+    const makeDefs = useCallback(() => {
+        let newDefs = [...columnDefs];
+        if (!dropTargetAgGrid) newDefs.splice(0, 2);
+        if (addColumnDefs) {
+            addColumnDefs.forEach((nd) => {
+                var copy = Object.assign({}, nd);
+                delete copy.index;
+                newDefs.splice(nd.index, 0, copy);
+            });
+        }
+        return newDefs;
+    }, [addColumnDefs, dropTargetAgGrid]);
 
     useEffect(() => {
         // 드롭 타겟 ag-grid에 drop-zone 설정
@@ -58,7 +72,7 @@ const AgGrid = forwardRef((props, ref) => {
                 ref={ref}
                 className="overflow-hidden flex-fill"
                 setGridInstance={setGridInstance}
-                columnDefs={columnDefs}
+                columnDefs={makeDefs()}
                 rowData={list}
                 rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(pkg) => pkg.pkgSeq}
@@ -70,6 +84,7 @@ const AgGrid = forwardRef((props, ref) => {
                 selected={selected.pkgSeq}
                 onChangeSearchOption={onChangeSearchOption}
                 preventRowClickCell={['info']}
+                applyColumnDefOrder
             />
 
             <IssueContentsModal

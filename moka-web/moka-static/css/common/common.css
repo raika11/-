@@ -631,6 +631,7 @@ dl.date dd { margin-left: 6px; }
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
+    .pc {display:none;}
     /* header */
     .header { height: 58px; }
     .header .uh { padding: 0 20px; }
@@ -725,6 +726,7 @@ dl.date dd { margin-left: 6px; }
 
 /* Medium devices (tablet + pc, 768px and up) */
 @media (min-width:768px) {
+    .mo{display:none}
     /* header */
     .header {height:64px;}
     .header .header_option_area { flex-flow: row-reverse; }

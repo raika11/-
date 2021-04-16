@@ -30,7 +30,22 @@
 .tag_wrap .tag {display: inline-flex;flex: 0 0 auto;width:auto;padding: 3px 12px 4px;margin-bottom:7px;background:#fff4f1;border:1px solid #f6330a;color:#f6330a;font-size: 13px;font-weight: bold;line-height:normal;}
 
 
+/****************************************************************************************************/
+/***                                            구독                                              ***/
+/****************************************************************************************************/
+.subscription_wrap {padding:0 20px;background-color: #fff6e2;}
+/* .subscription_wrap .title_wrap{padding:0;margin-bottom:17px;height:28px;} */
+.subscription_wrap .title {font-size: 16px;font-weight: 700;line-height: 1.5;letter-spacing: -0.4px;color:#f6330a;}
+.subscription_info {padding:7px 0 30px;color:#f6330a;font-size: 14px;line-height: 1.5;letter-spacing: normal;word-break: break-all;text-align: justify;}
+
+
+/****************************************************************************************************/
+/***                                          팩플레터                                             ***/
+/****************************************************************************************************/
 .pp_letter_wrap {width:100%;margin:40px 0;background:#f3f3f3;}
+
+
+
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
@@ -56,6 +71,13 @@
     /***                                             tag                                              ***/
     /****************************************************************************************************/
     .tag_wrap .tag {padding: 2px 12px 4px;font-size: 12px;}
+
+    /****************************************************************************************************/
+    /***                                            구독                                              ***/
+    /****************************************************************************************************/
+    /* .subscription_wrap {padding:12px 20px 30px;} */
+    /* .subscription_wrap .title_wrap{margin-bottom:24px;} */
+    .subscription_info {line-height:normal;}
 
 }
 

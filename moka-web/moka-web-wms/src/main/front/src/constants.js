@@ -246,8 +246,8 @@ export const ISSUE_CHANNEL_TYPE = {
     A: { code: 'A', name: '기사' },
     M: { code: 'M', name: '영상' },
     I: { code: 'I', name: '패키지' },
-    P: { code: 'P', name: '포토' },
     L: { code: 'L', name: '라이브' },
     K: { code: 'K', name: '키워드' },
-    G: { code: 'G', name: '그래프' },
+    G: { code: 'G', name: '차트' },
+    B: { code: 'B', name: '배너' },
 };

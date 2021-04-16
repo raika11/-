@@ -50,6 +50,7 @@ import quiz from '@store/survey/quiz/quizReducer';
 import mic from '@store/mic/micReducer';
 import schedule from '@store/schedule/scheduleReducer';
 import issue from '@store/issue/issueReducer';
+import newsLetter from '@store/newsLetter/newsLetterReducer';
 
 export default combineReducers({
     toastr,
@@ -102,4 +103,5 @@ export default combineReducers({
     quiz,
     schedule,
     issue,
+    newsLetter,
 });

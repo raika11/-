@@ -8,7 +8,7 @@ import AgGrid from './NewsLetterAgGrid';
 const NewsLetterList = ({ match }) => {
     return (
         <>
-            <Search match={match} />
+            <Search />
             <AgGrid match={match} />
         </>
     );

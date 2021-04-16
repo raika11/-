@@ -3,9 +3,11 @@ import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import util from '@utils/commonUtil';
+import { CHANNEL_TYPE, ISSUE_CHANNEL_TYPE } from '@/constants';
 import { MokaInputLabel, MokaTable } from '@components';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
+import { messageBox } from '@utils/toastUtil';
+import { initialState } from '@store/issue';
 import { ArticleTabModal } from '@pages/Article/modals';
 import { VodModal } from '@pages/Desking/modals';
 import { moviePhotoColumnDefs } from './IssueDeskingColumns';
@@ -13,7 +15,7 @@ import { moviePhotoColumnDefs } from './IssueDeskingColumns';
 /**
  * 패키지관리 > 관련 데이터 편집 > 영상/포토
  */
-const CollapseMoviePhoto = ({ gridInstance, setGridInstance }) => {
+const CollapseMoviePhoto = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
     const [vodShow, setVodShow] = useState(false);
@@ -21,13 +23,68 @@ const CollapseMoviePhoto = ({ gridInstance, setGridInstance }) => {
 
     /**
      * 기사 등록
-     * @param {string} type type
+     * @param {string} channelType channelType
      * @param {object} data data
      */
-    const addArticle = (type, data) => {
-        const id = `${type}${util.getUniqueKey()}`;
+    const addArticle = (channelType, data) => {
+        const cnt = gridInstance.api.getDisplayedRowCount();
+
+        if (channelType === CHANNEL_TYPE.A.code) {
+            gridInstance.api.applyTransaction({
+                add: [
+                    {
+                        ...initialState.initialDesking,
+                        pkgSeq,
+                        compNo,
+                        contentsOrd: cnt + 1,
+                        contentsId: data.totalId,
+                        thumbFileName: data.artThumb,
+                        title: data.artTitle,
+                        channelType: ISSUE_CHANNEL_TYPE.A.code,
+                    },
+                ],
+            });
+        } else if (channelType === CHANNEL_TYPE.M.code) {
+            gridInstance.api.applyTransaction({
+                add: [
+                    {
+                        ...initialState.initialDesking,
+                        pkgSeq,
+                        compNo,
+                        contentsOrd: cnt + 1,
+                        contentsId: data.totalId,
+                        thumbFileName: data.ovpThumb,
+                        title: data.artTitle,
+                        channelType: ISSUE_CHANNEL_TYPE.A.code,
+                    },
+                ],
+            });
+        } else {
+            messageBox.alert('기사, 영상탭에서 선택해주세요.');
+        }
+    };
+
+    /**
+     * 영상 등록 ===> 영상 링크 등록할 필드가 없음~~~
+     * @param {string} url url path
+     * @param {object} data ovp 데이터 (유투브일 경우 null)
+     */
+    const addMovie = (url, data) => {
+        const cnt = gridInstance.api.getDisplayedRowCount();
+
         gridInstance.api.applyTransaction({
-            add: [{ ...data, id }],
+            add: [
+                {
+                    ...initialState.initialDesking,
+                    pkgSeq,
+                    compNo,
+                    contentsOrd: cnt + 1,
+                    contentsId: data.id,
+                    thumbFileName: data.thumbFileName,
+                    title: data.name,
+                    channelType: ISSUE_CHANNEL_TYPE.M.code,
+                },
+            ],
         });
     };
 
@@ -73,7 +130,7 @@ const CollapseMoviePhoto = ({ gridInstance, setGridInstance }) => {
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setVodShow(true)}>
                         영상검색
                     </Button>
-                    <VodModal show={vodShow} onHide={() => setVodShow(false)} />
+                    <VodModal show={vodShow} onHide={() => setVodShow(false)} onSave={addMovie} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <Button variant="positive-a" size="sm" className="mr-1">
@@ -91,7 +148,7 @@ const CollapseMoviePhoto = ({ gridInstance, setGridInstance }) => {
                         header={false}
                         paging={false}
                         columnDefs={moviePhotoColumnDefs}
-                        onRowNodeId={(data) => data.id}
+                        onRowNodeId={(data) => data.contentsId}
                         setGridInstance={setGridInstance}
                         animateRows
                         rowDragManaged

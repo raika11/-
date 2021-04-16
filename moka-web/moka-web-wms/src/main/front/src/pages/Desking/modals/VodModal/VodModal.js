@@ -49,7 +49,7 @@ const VodModal = ({ show, onHide, vodUrl, onSave }) => {
                 url = `${OVP_PREVIEW_URL}?videoId=${selected.id}&${qs.stringify({ options: op }, { encode: false })}`;
             }
         }
-        if (onSave) onSave(url, selected || {});
+        if (onSave) onSave(url, selected || null);
         handleHide();
     };
 

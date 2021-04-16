@@ -70,9 +70,9 @@ public class SnsShareReserveJob extends AbstractReserveJob {
          * todo 1. 작업 테이블에서 조회하여 이미 완료 되었거나, 삭제 된 작업이 아닌 경우 진행 시작
          * - AbstractReserveJob에 공통 메소드 생성하여 사용할 수 있도록 조치 필요
          */
+        GenContent genContent = history.getGenContent();
+        GenStatus reservedResult = genContent.getGenStatus();
         try {
-            GenContent genContent = history.getGenContent();
-            GenStatus reservedResult = genContent.getGenStatus();
             /**
              * todo 2. 작업 테이블의 파라미터 정보를 Map 형태로 전환하여, procedure 또는 업무별 service 객체 호출
              * - 각 업무 담당자가 해당 영역 코딩은 구현할 예정
@@ -89,6 +89,7 @@ public class SnsShareReserveJob extends AbstractReserveJob {
         } catch (NoDataException ex) {
             log.error("[GEN STATUS HISTORY ERROR]", ex.toString());
             history.setStatus(StatusFlagType.DELETE_TASK);
+            reservedResult.setSendExecTime(0l);
             history
                     .getGenContent()
                     .getGenStatus()
@@ -96,6 +97,7 @@ public class SnsShareReserveJob extends AbstractReserveJob {
         } catch (Exception ex) {
             log.error("[GEN STATUS HISTORY ERROR]: {}", ex.toString());
             history.setStatus(StatusFlagType.FAILED_TASK);
+            reservedResult.setSendExecTime(0l);
             history
                     .getGenContent()
                     .getGenStatus()

@@ -2,7 +2,6 @@ import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from '@store/issue/issueAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
-import moment from 'moment';
 
 export const CAT_DIV = {
     SEARCH_KEYWORD: 'K',
@@ -28,6 +27,26 @@ const initialPkgKeyword = {
     repMaster: 0,
     schCondi: { title: false, keyword: false },
     seqNo: null,
+};
+
+// 패키지 데스킹 기본값
+const initialDesking = {
+    seqNo: null,
+    pkgSeq: null,
+    compNo: null,
+    viewYn: 'N',
+    status: null, // SAVE(임시) | PUBLISH(전송)
+    contentsId: null,
+    contentsOrd: 1,
+    channelType: null,
+    title: '',
+    linkUrl: null,
+    linkTarget: '_self',
+    thumbFileName: null,
+    thumbFile: null,
+    bgColor: null,
+    duration: null,
+    bodyHead: null,
 };
 
 /**
@@ -107,8 +126,10 @@ export const initialState = {
             { checked: false, value: '' },
         ],
     },
+    desking: [],
     invalidList: [],
     initialPkgKeyword,
+    initialDesking,
 };
 
 export default handleActions(

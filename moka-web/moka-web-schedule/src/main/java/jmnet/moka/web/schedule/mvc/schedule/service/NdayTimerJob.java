@@ -111,7 +111,8 @@ public class NdayTimerJob extends AbstractScheduleJob {
         } catch (Exception e) {
             //e.printStackTrace();
             log.error(e.toString());
-            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), info);
+            scheduleResult.setSendExecTime(0l);
+            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), scheduleInfo);
         }
 
     }

@@ -76,9 +76,6 @@ const CollapseMoviePhoto = ({ gridInstance, setGridInstance }) => {
                     <VodModal show={vodShow} onHide={() => setVodShow(false)} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
-                    <Button variant="outline-neutral" size="sm" className="mr-1">
-                        미리보기
-                    </Button>
                     <Button variant="positive-a" size="sm" className="mr-1">
                         임시저장
                     </Button>

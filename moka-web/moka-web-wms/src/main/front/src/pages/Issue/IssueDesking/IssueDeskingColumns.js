@@ -6,7 +6,7 @@ const artColumnDefs = [
         width: 24,
         maxWidth: 24,
         suppressMenu: true,
-        rowDragText: (params) => params.rowNode.data.artTitle,
+        rowDragText: (params) => params.rowNode.data.title,
     },
     {
         field: 'title',
@@ -29,7 +29,7 @@ const packetColumnDefs = [
         width: 24,
         maxWidth: 24,
         suppressMenu: true,
-        rowDragText: (params) => params.rowNode.data.artTitle,
+        rowDragText: (params) => params.rowNode.data.title,
     },
     {
         field: 'title',
@@ -44,7 +44,7 @@ const moviePhotoColumnDefs = [
         width: 24,
         maxWidth: 24,
         suppressMenu: true,
-        rowDragText: (params) => params.rowNode.data.artTitle,
+        rowDragText: (params) => params.rowNode.data.title,
     },
     {
         field: 'title',

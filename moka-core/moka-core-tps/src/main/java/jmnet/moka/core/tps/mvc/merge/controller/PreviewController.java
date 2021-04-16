@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -17,23 +16,20 @@ import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.common.dto.ValidList;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
-import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import jmnet.moka.core.tps.mvc.issue.service.PackageService;
+import jmnet.moka.core.tps.mvc.merge.dto.IssueDeskingPreviewDTO;
 import jmnet.moka.core.tps.mvc.merge.service.MergeService;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 import jmnet.moka.core.tps.mvc.rcvarticle.dto.RcvArticleBasicUpdateDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /*
@@ -314,20 +310,17 @@ public class PreviewController extends AbstractCommonController {
         }
     }
 
-    @PostMapping(value = "/issue/{pkgSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/issue/{pkgSeq}")
     public void postIssue(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
             @ApiParam(value = "패키지순번", required = true) @PathVariable("pkgSeq") Long pkgSeq,
-            @ApiParam(value = "도메인ID", required = true) String domainId,
-            @ApiParam("편집정보") @RequestBody @Valid ValidList<IssueDeskingComponentDTO> validList)
+            @ApiParam("편집정보") @Valid IssueDeskingPreviewDTO issueDeskings)
             throws IOException, NoDataException {
-
-        List<IssueDeskingComponentDTO> deskingDTOList = validList.getList();
 
         PackageMaster packageMaster = packageService
                 .findByPkgSeq(pkgSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
         try {
-            String html = mergeService.getMergeIssue(domainId, packageMaster, deskingDTOList);
+            String html = mergeService.getMergeIssue(issueDeskings.getDomainId(), packageMaster, issueDeskings.getIssueDeskgs());
             writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] pkgSeq: {} {}", pkgSeq, e);

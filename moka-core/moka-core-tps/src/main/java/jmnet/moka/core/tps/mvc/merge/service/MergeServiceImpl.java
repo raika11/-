@@ -4,7 +4,6 @@
 
 package jmnet.moka.core.tps.mvc.merge.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.merge.MokaPreviewTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ArticlePageItem;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
@@ -51,6 +51,7 @@ import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
 import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
+import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistDTO;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
@@ -829,8 +830,7 @@ public class MergeServiceImpl implements MergeService {
             if (dto.getIssueDeskings() != null && dto
                     .getIssueDeskings()
                     .size() > 0) {
-                List<Map<String, Object>> list = modelMapper.map(dto.getIssueDeskings(), new TypeReference<List<Map<String, Object>>>() {
-                }.getType());
+                List<Map<String, Object>> list = toListMap(dto.getIssueDeskings());
                 deskingList.addAll(list);
             }
             compYn = compYn + dto.getViewYn();
@@ -847,6 +847,17 @@ public class MergeServiceImpl implements MergeService {
         String content = sb.toString();
 
         return content;
+    }
+
+    private List<Map<String, Object>> toListMap(List<IssueDeskingHistDTO> issueDeskings) {
+        List<Map<String, Object>> returnList = new ArrayList<>();
+        for (IssueDeskingHistDTO dto : issueDeskings) {
+            Map<String, Object> map = ResourceMapper
+                    .getDefaultObjectMapper()
+                    .convertValue(dto, Map.class);
+            returnList.add(map);
+        }
+        return returnList;
     }
 
 

@@ -409,7 +409,9 @@ const WorkEdit = ({ match }) => {
                 </Form.Row>
                 <MokaInputLabel label="작업명" className="mb-2" name="jobNm" value={data.jobNm} onChange={handleChangeValue} isInvalid={error.jobNm} />
                 <MokaInputLabel label="옵션 파라미터" className="mb-2" name="pkgOpt" value={data.pkgOpt} onChange={handleChangeValue} />
+                {data.jobType === 'S' && <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} onChange={handleChangeValue} />}
                 <MokaInputLabel label="배포 경로" className="mb-2" name="targetPath" value={data.targetPath} onChange={handleChangeValue} />
+                <MokaInputLabel label="파일명" className="mb-2" name="targetFileName" value={data.targetFileName} onChange={handleChangeValue} />
                 <MokaInputLabel label="패키지명" className="mb-2" name="pkgNm" value={data.pkgNm} onChange={handleChangeValue} isInvalid={error.pkgNm} required />
                 <MokaInputLabel
                     as="textarea"

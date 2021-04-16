@@ -41,16 +41,17 @@ const RunStateSearchAgGrid = () => {
     );
 
     useEffect(() => {
+        // if ()
         setRowData(
             list.map((job) => {
-                let targetIndex = SCHEDULE_PERIOD.findIndex((p) => p.period === job.period);
-                let cateIndex = genCateRows.findIndex((c) => c.id === job.category);
+                let findCate = genCateRows.find((c) => c.id === job.category);
+                let findPeriod = SCHEDULE_PERIOD.find((p) => p.period === job.period);
 
                 return {
                     ...job,
-                    category: genCateRows[cateIndex]?.name || job.category,
+                    category: findCate?.name || job.category,
                     serverNm: job.distributeServerSimple?.serverNm,
-                    periodNm: SCHEDULE_PERIOD[targetIndex].periodNm || '',
+                    periodNm: findPeriod?.periodNm || job.period,
                 };
             }),
         );

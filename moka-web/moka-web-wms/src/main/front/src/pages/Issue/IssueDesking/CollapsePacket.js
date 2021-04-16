@@ -67,9 +67,6 @@ const CollapsePacket = ({ gridInstance, setGridInstance }) => {
                     <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={selectArticle} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
-                    <Button variant="outline-neutral" size="sm" className="mr-1">
-                        미리보기
-                    </Button>
                     <Button variant="positive-a" size="sm" className="mr-1">
                         임시저장
                     </Button>

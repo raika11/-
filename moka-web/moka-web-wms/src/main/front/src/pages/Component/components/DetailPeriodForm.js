@@ -95,6 +95,7 @@ const DetailPeriodForm = (props) => {
                                     onChange={handleStartDt}
                                     isInvalid={error.periodStartDt}
                                     className="mb-0"
+                                    inputClassName="center-fixed"
                                     inputProps={{ width: 200 }}
                                 />
                             </div>
@@ -105,6 +106,7 @@ const DetailPeriodForm = (props) => {
                                     value={component.periodEndDt}
                                     onChange={handleEndDt}
                                     isInvalid={error.periodEndDt}
+                                    className="center-fixed"
                                     inputProps={{ width: 200 }}
                                 />
                             </div>

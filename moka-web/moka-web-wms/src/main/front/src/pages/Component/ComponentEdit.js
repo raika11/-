@@ -245,8 +245,8 @@ const ComponentEdit = ({ onDelete, match }) => {
                 error={error}
                 setError={setError}
             />
-            <hr className="divider mb-0" />
-            <div className="custom-scroll component-padding-box py-3" style={{ height: 615 }}>
+            <hr className="divider" />
+            <div className="custom-scroll component-padding-box py-0" style={{ height: 615 }}>
                 <DetailRelationForm addMode={addMode} component={temp} setComponent={setTemp} inputTag={inputTag} error={error} setError={setError} />
                 <hr className="divider" />
                 <DetailPeriodForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} error={error} setError={setError} />

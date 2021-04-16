@@ -14,6 +14,7 @@ var include = {
         
         document.write('<link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/common/section.css" rel="stylesheet">');
+        document.write('<link href="//stg-static.joongang.co.kr/css/common/article.css" rel="stylesheet">');
 
         document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/utils/scroll.js"></script>');
@@ -60,7 +61,7 @@ var include = {
             document.write('        <li class="nav_item ">');
             document.write('            <a class="nav_link " aria-current="page" href="javascript:(0);">레이아웃</a>');
             document.write('            <ul class="nav">');
-            // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Breakpoints</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="breakpoints.html">Breakpoints</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Container</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Grid</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Section</a></li>');
@@ -68,11 +69,15 @@ var include = {
             document.write('            </ul>');
             document.write('        </li>');
             document.write('        <li class="nav_item">');
-            document.write('            <a class="nav_link" href="javascript:(0);">콘텐츠</a>');
+            document.write('            <a class="nav_link" href="javascript:(0);">아티클</a>');
             document.write('            <ul class="nav">');
-            document.write('                <li class="nav_item"><a class="nav_link" href="image.html">이미지</a></li>');
-            document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">테이블</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="article_layout.html">레이아웃</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="particle.html">파티클</a></li>');
+            // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">테이블</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="figures.html">피규어</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="article_tag.html">태그</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="article_subscription.html">구독</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="comment.html">댓글</a></li>');
             document.write('            </ul>');
             document.write('        </li>');
             document.write('        <li class="nav_item">');

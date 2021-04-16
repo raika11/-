@@ -132,6 +132,7 @@ const ArticleSourceModal = (props) => {
                 { text: '확인', variant: 'positive', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleClickCancle },
             ]}
+            headerStyle={{ zIndex: 1 }}
             bodyClassName="overflow-hidden"
             loading={loading}
             centered

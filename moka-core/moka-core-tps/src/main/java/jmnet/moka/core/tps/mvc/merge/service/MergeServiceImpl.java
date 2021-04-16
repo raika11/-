@@ -4,10 +4,12 @@
 
 package jmnet.moka.core.tps.mvc.merge.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.common.template.exception.DataLoadException;
@@ -26,6 +28,7 @@ import jmnet.moka.core.tms.merge.item.ContainerItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.PackageDivCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.config.PreviewConfiguration;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
@@ -47,6 +50,8 @@ import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
+import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
+import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
@@ -55,6 +60,7 @@ import jmnet.moka.core.tps.mvc.rcvarticle.vo.RcvArticleReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -102,6 +108,15 @@ public class MergeServiceImpl implements MergeService {
 
     @Autowired
     private ArticleService articleService;
+
+    @Value("${package.issue.home.url}")
+    private String issueHomeUrl;
+    @Value("${package.series.home.url}")
+    private String seriesHomeUrl;
+    @Value("${package.topic.home.url}")
+    private String topicHomeUrl;
+    @Value("${package.compYn}")
+    private String packageCompYn;
 
     @Override
     public String getMergePage(PageDTO pageDto)
@@ -759,6 +774,75 @@ public class MergeServiceImpl implements MergeService {
 
         // 랜더링
         StringBuilder sb = dtm.merge(articlePageItem, totalId);
+
+        String content = sb.toString();
+
+        return content;
+    }
+
+    @Override
+    public String getMergeIssue(String domainId, PackageMaster packageMaster, List<IssueDeskingComponentDTO> deskingDTOList)
+            throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
+        // 도메인Id조회
+        Domain domainInfo = domainService
+                .findDomainById(domainId)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
+        DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
+        DomainItem domainItem = domainDto.toDomainItem();
+
+        // pageItem 조회
+        String homeUrl = this.issueHomeUrl;
+        if (packageMaster
+                .getPkgDiv()
+                .equals(PackageDivCode.SERIES.getCode())) {
+            homeUrl = this.seriesHomeUrl;
+        } else if (packageMaster
+                .getPkgDiv()
+                .equals(PackageDivCode.TOPIC.getCode())) {
+            homeUrl = topicHomeUrl;
+        }
+        Page pageInfo = pageService
+                .findPageByPageUrl(homeUrl, domainId)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
+
+        PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
+        PageItem pageItem = pageDto.toPageItem();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
+        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime
+                .now()
+                .format(df));
+
+        // 편집정보 변환
+        String compYn = "";
+        List<Map<String, Object>> deskingList = new LinkedList<>();
+        for (IssueDeskingComponentDTO dto : deskingDTOList) {
+            if (dto.getIssueDeskings() != null && dto
+                    .getIssueDeskings()
+                    .size() > 0) {
+                List<Map<String, Object>> list = modelMapper.map(dto.getIssueDeskings(), new TypeReference<List<Map<String, Object>>>() {
+                }.getType());
+                deskingList.addAll(list);
+            }
+            compYn = compYn + dto.getViewYn();
+        }
+        if (compYn.length() == 0) {
+            compYn = packageCompYn;
+        }
+
+        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_TEMPLATE_MERGER, domainItem);
+
+        // 랜더링
+        StringBuilder sb = dtm.mergeIssue(pageItem, packageMaster.getPkgSeq(), compYn, deskingList);
 
         String content = sb.toString();
 

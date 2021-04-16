@@ -11,6 +11,7 @@ import { finishLoading, startLoading } from '@store/loading';
 import commonUtil from '@utils/commonUtil';
 import produce from 'immer';
 import { CAT_DIV, initialState } from '@store/issue/issueReducer';
+import { messageBox } from '@utils/toastUtil';
 
 /**
  * 이슈 목록 조회
@@ -57,7 +58,11 @@ export const toIssueListData = (list) => {
             reporterNames = reporters.join(',');
         }
 
-        return { ...data, regDt, updDt, category, pkgDivName, categoryNames, reporter, reporterNames, expYn, endYn };
+        const onClickDirectLink = () => {
+            messageBox.alert('바로가기 기능은 준비중 입니다.');
+        };
+
+        return { ...data, regDt, updDt, category, pkgDivName, categoryNames, reporter, reporterNames, expYn, endYn, onClickDirectLink };
     });
 };
 

@@ -70,4 +70,10 @@ public class DpsApiConstants {
      * 디지털스페셜 관련 API
      **/
     public static final String DIGITAL_SPECIAL_INFO = "digitalSpecial.info";
+
+    /**
+     * 패키지 관련 API
+     **/
+    public static final String PACKAGE = "package.info";
+
 }

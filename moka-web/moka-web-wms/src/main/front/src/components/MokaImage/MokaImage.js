@@ -34,18 +34,24 @@ const propTypes = {
      * @default
      */
     inputBorder: PropTypes.bool,
+    /**
+     * 사진 비율 (기본 [16, 9])
+     * @default
+     */
+    ratio: PropTypes.array,
 };
 const defaultProps = {
     width: 171,
     alt: '',
     inputBorder: true,
+    ratio: [16, 9],
 };
 
 /**
  * 이미지 컴포넌트(Figure)
  */
 const MokaImage = (props) => {
-    const { width, height, img, className, alt, imgClassName, inputBorder } = props;
+    const { width, height, img, className, alt, imgClassName, inputBorder, ratio } = props;
     const wrapRef = useRef(null);
     const imgRef = useRef(null);
     const [src, setImgSrc] = useState(null);
@@ -76,7 +82,7 @@ const MokaImage = (props) => {
     return (
         <div
             className={clsx('d-inline-flex align-items-center justify-content-center position-relative bg-white', className, { 'input-border': inputBorder })}
-            style={{ width, height: height || (width * 9) / 16 }}
+            style={{ width, height: height || (width * ratio[1]) / ratio[0] }}
             ref={wrapRef}
         >
             {/* 이미지 미리보기 */}

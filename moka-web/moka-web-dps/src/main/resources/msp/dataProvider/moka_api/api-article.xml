@@ -276,4 +276,13 @@
     </keys>
   </api>
 
+  <!--최신영상목록조회-->
+  <api id="video">
+    <description>최신영상목록을 조회한다.</description>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.article.video</request>
+    <keys>
+      #paging
+    </keys>
+  </api>
+
 </apiConfig>

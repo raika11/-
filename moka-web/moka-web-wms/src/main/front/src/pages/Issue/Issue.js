@@ -10,7 +10,7 @@ import { MokaCard, MokaIconTabs } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
 import IssueList from './IssueList';
 import IssueEdit from './IssueEdit';
-import IssueDesking from './IssueDesking';
+import IssueDesking from './IssueDesking/index';
 import { clearStore } from '@store/issue';
 import { getReporterAllList } from '@store/reporter';
 // import PollEdit from '@pages/Survey/Poll/PollEdit';

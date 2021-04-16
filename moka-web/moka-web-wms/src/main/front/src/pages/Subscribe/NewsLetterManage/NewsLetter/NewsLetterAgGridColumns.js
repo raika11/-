@@ -6,7 +6,7 @@ export default [
     },
     {
         headerName: '방법',
-        field: 'title',
+        field: 'sendType',
         sortable: true,
         unSortIcon: true,
         sort: null,
@@ -74,12 +74,12 @@ export default [
     },
     {
         headerName: '등록자',
-        field: 'regId',
+        field: 'regMember',
         width: 60,
     },
     {
         headerName: 'A/B TEST',
-        field: 'ab',
+        field: 'abYn',
         width: 65,
     },
 ];

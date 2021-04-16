@@ -4,7 +4,12 @@ import { MokaModal, MokaCardTabs } from '@components';
 import ArticleList from '@pages/Article/components/Desking';
 import IssueList from '@pages/Issue/components/Desking';
 
-const propTypes = {};
+const propTypes = {
+    /**
+     * 기사 선택
+     */
+    onRowClicked: PropTypes.func.isRequired,
+};
 const defaultProps = {
     show: false,
 };
@@ -12,8 +17,7 @@ const defaultProps = {
 /**
  * 기사탭 모달 (기사 / 영상 / 패키지 / 그래프)
  */
-const ArticleTabModal = (props) => {
-    const { show, onHide } = props;
+const ArticleTabModal = ({ show, onHide, onRowClicked }) => {
     const [tabNavs] = useState(['기사', '영상', '패키지', '그래프']);
     const [navIdx, setNavIdx] = useState(0);
 
@@ -33,7 +37,7 @@ const ArticleTabModal = (props) => {
                                 field: 'add',
                                 width: 60,
                                 cellRenderer: 'buttonRenderer',
-                                cellRendererParams: { onClick: () => console.log('test') },
+                                cellRendererParams: { onClick: (data) => onRowClicked('article', data) },
                             },
                         ]}
                         suppressChangeArtGroup
@@ -49,7 +53,7 @@ const ArticleTabModal = (props) => {
                                 field: 'add',
                                 width: 60,
                                 cellRenderer: 'buttonRenderer',
-                                cellRendererParams: { onClick: () => console.log('test') },
+                                cellRendererParams: { onClick: (data) => onRowClicked('movie', data) },
                             },
                         ]}
                         movie

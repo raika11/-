@@ -4,6 +4,7 @@
 
 package jmnet.moka.core.tps.mvc.issue.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.ibatis.type.Alias;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 이슈확장형 편집히스토리
@@ -94,4 +96,8 @@ public class IssueDeskingHistDTO implements Serializable {
 
     @ApiModelProperty("발췌문")
     private String bodyHead;
+
+    @ApiModelProperty("이미지파일")
+    @JsonIgnore
+    private MultipartFile thumbFile;
 }

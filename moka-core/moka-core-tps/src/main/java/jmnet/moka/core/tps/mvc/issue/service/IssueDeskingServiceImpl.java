@@ -96,7 +96,7 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
     }
 
     /**
-     * 컴포넌트별로 compYn,compNo,pkgSeq를 패키지정보에서 읽어와 초기화
+     * 컴포넌트별로 compYn,compNo,pkgSeq를 패키지정보에서 읽어와서 없는 컴포넌트 추가
      *
      * @param issueDeskings 컴포넌트목록
      * @param packageMaster 패키지정보

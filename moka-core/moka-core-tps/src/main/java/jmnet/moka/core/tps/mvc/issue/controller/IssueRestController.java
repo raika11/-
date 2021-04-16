@@ -8,6 +8,7 @@ import com.twelvemonkeys.util.LinkedSet;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -20,14 +21,20 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpFile;
+import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.exception.NoDataException;
+import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
+import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageKeywordDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageListDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageListSearchDTO;
@@ -39,6 +46,7 @@ import jmnet.moka.core.tps.mvc.issue.service.IssueDeskingService;
 import jmnet.moka.core.tps.mvc.issue.service.PackageService;
 import jmnet.moka.core.tps.mvc.issue.vo.PackageVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,6 +59,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 이슈 API
@@ -66,9 +75,23 @@ public class IssueRestController extends AbstractCommonController {
 
     private final IssueDeskingService issueDeskingService;
 
-    public IssueRestController(PackageService packageService, IssueDeskingService issueDeskingService) {
+    private final FtpHelper ftpHelper;
+
+    private final UploadFileHelper uploadFileHelper;
+
+    @Value("${package.image.save.filepath}")
+    private String packageSaveFilepath;
+
+    @Value("${pds.url}")
+    private String pdsUrl;
+
+
+    public IssueRestController(PackageService packageService, IssueDeskingService issueDeskingService, FtpHelper ftpHelper,
+            UploadFileHelper uploadFileHelper) {
         this.packageService = packageService;
         this.issueDeskingService = issueDeskingService;
+        this.ftpHelper = ftpHelper;
+        this.uploadFileHelper = uploadFileHelper;
     }
 
     /**
@@ -614,8 +637,9 @@ public class IssueRestController extends AbstractCommonController {
     //    }
 
     @ApiOperation(value = "편집기사 임시저장")
-    @PostMapping(value = "/{pkgSeq}/desking/{compNo}/save", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> postSaveIssueDesking(@RequestBody @Valid IssueDeskingComponentDTO issueDeskingComponentDTO,
+    //    @PostMapping(value = "/{pkgSeq}/desking/{compNo}/save", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{pkgSeq}/desking/{compNo}/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> postSaveIssueDesking(@Valid IssueDeskingComponentDTO issueDeskingComponentDTO,
             @ApiParam(hidden = true) Principal principal)
             throws InvalidDataException, Exception {
         PackageMaster packageMaster = packageService
@@ -627,6 +651,9 @@ public class IssueRestController extends AbstractCommonController {
                     .getIssueDeskings()
                     .stream()
                     .forEach((dto -> issueDeskingService.escapeHtml(dto)));
+
+            // 썸네일 파일 저장
+            uploadThumbfile(issueDeskingComponentDTO.getIssueDeskings());
 
             // 등록
             IssueDeskingComponentDTO returnValue = issueDeskingService.save(packageMaster, issueDeskingComponentDTO, principal.getName());
@@ -644,10 +671,48 @@ public class IssueRestController extends AbstractCommonController {
         }
     }
 
+    private void uploadThumbfile(List<IssueDeskingHistDTO> issueDeskings)
+            throws InvalidDataException, IOException {
+        for (IssueDeskingHistDTO dto : issueDeskings) {
+            if (dto.getThumbFile() != null) {
+                MultipartFile mfile = dto.getThumbFile();
+                int[] imgInfo = uploadFileHelper.getImgFileSize(mfile);
+
+                // 썸네일 정보 셋팅
+                dto.setThumbFileName(uploadImage(mfile));
+                dto.setThumbSize((int) mfile.getSize());
+                dto.setThumbWidth(imgInfo[0]);
+                dto.setThumbHeight(imgInfo[1]);
+            }
+        }
+    }
+
+    public String uploadImage(MultipartFile imgFile)
+            throws InvalidDataException, IOException {
+
+        String ext = McpFile.getExtension(imgFile.getOriginalFilename());
+        String filename = UUIDGenerator.uuid() + "." + ext;
+        String yearMonth = McpDate.dateStr(McpDate.now(), "yyyyMM/dd");
+        String saveFilePath = String.format(packageSaveFilepath, yearMonth);
+        String imageUrl = pdsUrl;
+        String message = "";
+        if (ftpHelper.upload(FtpHelper.PDS, filename, imgFile.getInputStream(), saveFilePath)) {
+            imageUrl = pdsUrl + saveFilePath + "/" + filename;
+        } else {
+            message = msg("tps.issue.error.insert.image-upload");
+        }
+
+        // 액션 로그에 성공 로그 출력
+        tpsLogger.success(ActionType.UPLOAD, message);
+
+        return imageUrl;
+    }
+
     @ApiOperation(value = "편집기사 전송")
-    @PostMapping(value = "/{pkgSeq}/desking/{compNo}/publish", headers = {
-            "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> postPublishIssueDesking(@RequestBody @Valid IssueDeskingComponentDTO issueDeskingComponentDTO,
+    //    @PostMapping(value = "/{pkgSeq}/desking/{compNo}/publish", headers = {
+    //            "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{pkgSeq}/desking/{compNo}/publish", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> postPublishIssueDesking(@Valid IssueDeskingComponentDTO issueDeskingComponentDTO,
             @ApiParam(hidden = true) Principal principal)
             throws InvalidDataException, Exception {
         PackageMaster packageMaster = packageService
@@ -659,6 +724,9 @@ public class IssueRestController extends AbstractCommonController {
                     .getIssueDeskings()
                     .stream()
                     .forEach((dto -> issueDeskingService.escapeHtml(dto)));
+
+            // 썸네일 파일 저장
+            uploadThumbfile(issueDeskingComponentDTO.getIssueDeskings());
 
             // 등록
             IssueDeskingComponentDTO returnValue = issueDeskingService.publish(packageMaster, issueDeskingComponentDTO, principal.getName());

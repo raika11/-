@@ -66,4 +66,5 @@ public interface IssueDeskingService {
      * @param dto
      */
     void escapeHtml(IssueDeskingHistDTO dto);
+
 }

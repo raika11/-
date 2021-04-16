@@ -12,11 +12,7 @@
 .header_nav_wrap .header_nav_area .header_nav .nav .nav_item {display:inline-block;padding-right:26px;}
 .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2{font-size:16px;font-weight:500;line-height:1.5;letter-spacing:-0.56px;color:#111;}
 
-/* sub title 영역-필요시 */
-.title_wrap {display:flex; align-items:center; justify-content:space-between; padding:12px 0; height:60px;}
-.title_wrap .title_area {display:flex; align-items:center; }
-.title_wrap .title {color:#ff3c14;font-size:16px; font-weight:700;}
-.title_wrap .title [class*="ico_"] {margin-left: 6px;}
+
 
 /** card **/
 .card {position:relative;}
@@ -212,8 +208,7 @@
     .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2{color:#000;font-size:14px;font-weight:500;line-height:normal;letter-spacing:-0.18px;}
     .header_nav_wrap .header_nav_area .btn_area {position:absolute; right:16px; bottom:16px; width:auto;}
     
-    /* sub title 영역 */
-    .title_wrap .exp { flex: 0 0 auto; font-size:13px; color:#888; margin-left:16px;}
+    
 
     /* 컴포넌트 */
     .chain_wrap {margin-bottom:30px;}
@@ -308,11 +303,7 @@
     .header_nav_wrap .header_nav_area .page_title {padding-top:10px;font-size:40px;letter-spacing:-0.5px;}
     .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2 {font-size:16px;letter-spacing:-0.2px;}
     
-    /* sub title 영역 */
-    .title_wrap .title {font-size:18px;}
-    .title_wrap .title .fa_arrow_right_b { margin-left: 4px; }
-    .title_wrap .title [class*="ico_"] { margin-left: 6px; }
-    .title_wrap .exp {font-size:14px;}
+    
 
     /* 컴포넌트 */
     .chain_wrap {margin-bottom:50px;}

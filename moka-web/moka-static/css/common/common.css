@@ -574,8 +574,14 @@ dl.date dd { margin-left: 6px; }
 .chain_wrap {border-top:4px solid #ff4620;}
 
 
-
-
+/****************************************************************************************************/
+/***                                            title                                             ***/
+/****************************************************************************************************/
+/* sub title 영역-필요시 */
+.title_wrap {display:flex; align-items:center; justify-content:space-between; padding:12px 0; height:60px;}
+.title_wrap .title_area {display:flex; align-items:center; }
+.title_wrap .title {color:#ff3c14;font-size:16px; font-weight:700;}
+.title_wrap .title [class*="ico_"] {margin-left: 6px;}
 
 
 /****************************************************************************************************/
@@ -843,6 +849,12 @@ dl.date dd { margin-left: 6px; }
     .btn {padding:3px 14px;font-size:14px;line-height:1.69;}
     .btn + .btn {margin-left:4px;}
 
+    /****************************************************************************************************/
+    /***                                            title                                             ***/
+    /****************************************************************************************************/
+    /* sub title 영역 */
+    .title_wrap .exp { flex: 0 0 auto; font-size:13px; color:#888; margin-left:16px;}
+
 }
 
 /* Large devices (desktops, 1024px and up) */
@@ -938,6 +950,18 @@ dl.date dd { margin-left: 6px; }
     /***                                             card                                             ***/
     /****************************************************************************************************/
     /* .card {padding-top:20px;padding-bottom:20px;} */
+
+
+
+
+    
+    /****************************************************************************************************/
+    /***                                            title                                             ***/
+    /****************************************************************************************************/
+    /* sub title 영역 */
+    .title_wrap .title {font-size:18px;}
+    .title_wrap .title [class*="ico_"] { margin-left: 6px; }
+    .title_wrap .exp {font-size:14px;}
 }
 
 /* X-Large devices (large desktops, 1200px and up) */

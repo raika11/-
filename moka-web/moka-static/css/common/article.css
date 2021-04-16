@@ -101,6 +101,8 @@ font-*,color,text-align,vertical-align, ...
 .subscription_wrap .title {font-size: 16px;font-weight: 700;line-height: 1.5;letter-spacing: -0.4px;color:#f6330a;}
 .subscription_info {padding:7px 0 30px;color:#f6330a;font-size: 14px;line-height: 1.5;letter-spacing: normal;word-break: break-all;text-align: justify;}
 
+.subscription_wrap.pp_letter {padding:0 20px;background-color: #f3f3f3;}
+
 
 /****************************************************************************************************/
 /***                                          팩플레터                                             ***/

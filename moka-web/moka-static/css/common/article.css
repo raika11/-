@@ -15,7 +15,7 @@ font-*,color,text-align,vertical-align, ...
 .article_body,
 .article_footer {width:100%;margin:0 auto;}
 .article_header .reader_area {display:flex;font-size:14px;}
-.article_header .reader_area .badge {margin-right:5px;color:#f6330a;}
+.article_header .reader_area .badge {margin-right:5px;padding:0;font-size:14px;color:#f6330a;}
 .article_header .headline {margin-top:15px;font-size:24px;line-height:34px;font-weight:700;}
 .article_header .info_area {display:flex;}
 .article_header .datetime {display:flex;position:relative;margin-top:26px;padding-bottom:15px;border-bottom:1px solid #d8d8d8;}

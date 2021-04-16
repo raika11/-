@@ -165,7 +165,9 @@ const DeleteWorkEdit = ({ match }) => {
                 </Form.Row>
                 <MokaInputLabel label="작업명" className="mb-2" name="jobNm" value={data.jobNm} inputProps={{ readOnly: true }} />
                 <MokaInputLabel label="옵션 파라미터" className="mb-2" name="pkgOpt" value={data.pkgOpt} inputProps={{ readOnly: true }} />
+                {data.jobType === 'S' && <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} inputProps={{ readOnly: true }} />}
                 <MokaInputLabel label="배포 경로" className="mb-2" name="targetPath" value={data.targetPath} inputProps={{ readOnly: true }} />
+                <MokaInputLabel label="파일명" className="mb-2" name="targetFileName" value={data.targetFileName} inputProps={{ readOnly: true }} />
                 <MokaInputLabel label="패키지명" className="mb-2" name="pkgNm" value={data.pkgNm} inputProps={{ readOnly: true }} />
                 <MokaInputLabel label="설명" className="mb-2" name="jobDesc" value={data.jobDesc} inputProps={{ readOnly: true }} />
                 <MokaInputLabel

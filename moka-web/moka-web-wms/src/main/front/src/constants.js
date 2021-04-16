@@ -235,4 +235,14 @@ export const CHANNEL_TYPE = {
     I: { code: 'I', name: '패키지' },
     R: { code: 'R', name: '기자' },
     C: { code: 'C', name: '칼럼니스트' },
+    G: { code: 'G', name: '그래프' },
+};
+
+// 패키지의 채널 타입
+export const ISSUE_CHANNEL_TYPE = {
+    A: { code: 'A', name: '기사' },
+    M: { code: 'M', name: '영상' },
+    P: { code: 'P', name: '포토' },
+    K: { code: 'K', name: '키워드' },
+    G: { code: 'G', name: '그래프' },
 };

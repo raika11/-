@@ -4,7 +4,9 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.support.StatusFlagType;
+import jmnet.moka.web.schedule.support.StatusResultType;
 import jmnet.moka.web.schedule.support.reserve.AbstractReserveJob;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -16,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import java.util.Date;
 
 @Slf4j
 @Component
@@ -58,6 +62,9 @@ public class DeskingReserveJob extends AbstractReserveJob {
             //api 필수 파라미터 입력
             params.add("componentSeq", historyParam.get("componentSeq"));
 
+            GenStatus desingResult = history.getGenContent().getGenStatus();
+            desingResult.setSendExecTime((new Date()).getTime());
+
             //api 실행
             ResponseEntity<String> responseEntity = restTemplateHelper.post(url, params, headers);
 
@@ -67,11 +74,14 @@ public class DeskingReserveJob extends AbstractReserveJob {
             log.debug("DeskingReserveJob response : {}", header.get("resultCode"));
             log.debug("DeskingReserveJob response : {}", header.get("message"));
 
+
+            desingResult.setSendResult(StatusResultType.SUCCESS.getCode());
+            desingResult.setSendExecTime(((new Date()).getTime() - desingResult.getSendExecTime()) / 1000);
+
             //실행결과 false 인 경우 실패처리
             if (!(boolean) header.get("success")) {
                 throw new MokaException("API 실행이 실패했습니다.");
             }
-
         } catch (Exception ex) {
             log.error("[GEN STATUS HISTORY ERROR] : {}", ex.getMessage());
             history.setStatus(StatusFlagType.FAILED_TASK);

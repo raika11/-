@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaInputLabel, MokaModal, MokaTable } from '@/components';
 import { DB_DATEFORMAT } from '@/constants';
@@ -74,45 +76,43 @@ const RcvProgsBulkLogModal = (props) => {
     }, [bulkSendListInfo]);
 
     return (
-        <MokaModal size="xl" width={rcvProgs === false ? 700 : 1120} height={850} show={show} onHide={handleHide} draggable>
-            <div className="d-flex justify-content-between">
-                <div style={{ width: 700 }}>
+        <MokaModal size="xl" title="상세 정보" bodyClassName="d-flex flex-column" width={rcvProgs ? 1120 : 700} height={850} show={show} onHide={handleHide} draggable>
+            <Row className="h-100 flex-nowrap" noGutters>
+                <Col xs={rcvProgs ? 7 : 12} className={rcvProgs ? 'pr-gutter d-flex flex-column' : 'p-0 d-flex flex-column'}>
                     <Form className="mb-14">
                         <MokaInputLabel className="mb-2" label="기사 ID" value={data.contentId} inputProps={{ readOnly: true, plaintext: true }} />
-                        <MokaInputLabel className="mb-2" label="제목" value={data.title} inputProps={{ readOnly: true, plaintext: true }} />
+                        <MokaInputLabel className="mb-2 text-truncate" label="제목" value={data.title} inputProps={{ readOnly: true, plaintext: true }} />
                         <Form.Row className="d-flex justify-content-between mb-2">
                             <MokaInputLabel label="매체" value={data.orgSourceName} inputProps={{ readOnly: true, plaintext: true }} />
                         </Form.Row>
-                        <div className="d-flex align-items-center">
+                        <Form.Row>
                             <MokaInputLabel as="none" label="상태" />
                             <MokaInput className="cursor-pointer" value={data.status} onClick={handleClickStatus} readOnly plaintext />
-                        </div>
+                        </Form.Row>
                     </Form>
-                    <div className="d-flex flex-column">
-                        <MokaTable
-                            agGridHeight={577}
-                            columnDefs={columnDefs}
-                            rowData={rowData}
-                            loading={loading}
-                            onRowNodeId={(params) => params.seq}
-                            onRowClicked={handleRowClicked}
-                            paging={false}
-                        />
-                    </div>
-                </div>
-                {rcvProgs === true && (
-                    <div className="ml-gutter d-flex flex-column" style={{ width: 420 }}>
+                    <MokaTable
+                        className="flex-fill overflow-hidden"
+                        columnDefs={columnDefs}
+                        rowData={rowData}
+                        loading={loading}
+                        onRowNodeId={(params) => params.seq}
+                        onRowClicked={handleRowClicked}
+                        paging={false}
+                    />
+                </Col>
+                {rcvProgs && (
+                    <Col xs={5} className="p-0 d-flex flex-column">
                         {type !== 'btn' && (
                             <>
                                 <p className="mb-2">생성 XML</p>
-                                <MokaInput as="textarea" value={bulkContent} className="mb-2 custom-scroll resize-none" readOnly inputProps={{ rows: 15 }} />
+                                <MokaInput as="textarea" value={bulkContent} className="mb-2 custom-scroll resize-none" readOnly inputProps={{ rows: 17 }} />
                             </>
                         )}
                         <p className="mb-2">메세지</p>
-                        <MokaInput as="textarea" value={type === 'btn' ? data.msg : bulkMsg} className="custom-scroll resize-none" readOnly inputProps={{ rows: 16 }} />
-                    </div>
+                        <MokaInput as="textarea" value={type === 'btn' ? data.msg : bulkMsg} className="w-100 flex-fill custom-scroll resize-none" readOnly />
+                    </Col>
                 )}
-            </div>
+            </Row>
         </MokaModal>
     );
 };

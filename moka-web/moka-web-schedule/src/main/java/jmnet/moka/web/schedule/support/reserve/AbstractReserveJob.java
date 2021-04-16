@@ -84,6 +84,7 @@ public abstract class AbstractReserveJob implements ReserveJob {
         }
 
         //실행 완료 시 GenStatus 저장
+        scheduleResult.setGenExecTime(((new Date()).getTime() - scheduleResult.getLastExecDt().getTime()) / 1000);
         scheduleResult.setLastExecDt(new Date());
         scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
 

@@ -55,7 +55,7 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
                     <MokaInputLabel
                         as="switch"
                         label="메인기사"
-                        id="art-switch"
+                        id={controls}
                         inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
                         onChange={(e) => setOpen(e.target.checked)}
                     />

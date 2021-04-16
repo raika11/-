@@ -224,7 +224,7 @@ const ChannelForm = (props) => {
             {/* 태그 */}
             <MokaInputLabel label="태그" className="mb-2" id="keywordText" name="keywordText" placeholder="" value={keywordText} onChange={onChange} />
 
-            <hr />
+            <hr className="divider" />
 
             {/* 진행자 검색(모달) */}
             <Form.Row className="mb-14">
@@ -250,7 +250,7 @@ const ChannelForm = (props) => {
                 </div>
             ))}
 
-            <hr />
+            <hr className="divider" />
 
             {/* 첨부파일 (커버이미지, 모바일용, 썸네일) */}
             <MokaInputLabel className="mb-2" as="none" label="첨부파일" />

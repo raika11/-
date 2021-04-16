@@ -128,12 +128,20 @@ public class MoneyRealtimeNewsJob extends AbstractScheduleJob {
             stringBuffer.append("]");
             log.debug("string : {}", stringBuffer);
 
+            scheduleResult.setSendExecTime((new Date()).getTime());
+
             FileUpload fileUpload = new FileUpload(scheduleInfo, mokaCrypt);
             boolean success = fileUpload.stringFileUpload(stringBuffer.toString(), "");
 
             //업로드 성공 시 GenStatus.content에 파일생성에 사용된 String 저장
             if (success) {
                 scheduleResult.setContent(stringBuffer.toString());
+                scheduleResult.setSendResult(StatusResultType.SUCCESS.getCode());
+                scheduleResult.setSendExecTime(((new Date()).getTime() - scheduleResult.getSendExecTime()) / 1000);
+            }
+            else {
+                scheduleResult.setSendResult(StatusResultType.FAILED.getCode());
+                scheduleResult.setSendExecTime(0l);
             }
 
             //AbstractScheduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력

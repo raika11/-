@@ -5,6 +5,7 @@ import { MokaTable } from '@/components';
 import columnDefs from './IssueAgGridColumns';
 import produce from 'immer';
 import { GRID_HEADER_HEIGHT, GRID_ROW_HEIGHT } from '@/style_constants';
+import commonUtil from '@utils/commonUtil';
 
 /**
  * 패키지 AgGrid
@@ -38,8 +39,8 @@ const IssueAgGrid = ({ searchOptions, rowData, total, onChangeSearchOption, load
      * @param {object} params instance
      */
     const handleSortChange = (params) => {
-        const sortModel = params.api.getSortModel();
-        const sort = sortModel[0] ? `${sortModel[0].colId},${sortModel[0].sort}` : searchOptions.sort;
+        const sortColumn = params.columnApi.getColumnState().filter((state) => !commonUtil.isEmpty(state.sort))[0];
+        const sort = !commonUtil.isEmpty(sortColumn) ? `${sortColumn.colId},${sortColumn.sort}` : 'pkgSeq,desc';
         const search = { ...searchOptions, sort, page: 0 };
         onChangeSearchOption(search);
     };

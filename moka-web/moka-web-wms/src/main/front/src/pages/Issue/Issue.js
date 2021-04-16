@@ -77,7 +77,18 @@ const Issue = ({ match, displayName }) => {
                         exact
                         render={() => (
                             <div className="absolute-top-right h-100 overlay-shadow" style={{ width: 640, zIndex: 2 }}>
-                                <IssueEdit match={match} reporters={allReporter} />
+                                <MokaIconTabs
+                                    foldable={false}
+                                    className="w-100"
+                                    // activeKey={1}
+                                    tabs={[<IssueEdit match={match} reporters={allReporter} />, <IssueDesking match={match} />]}
+                                    tabNavWidth={48}
+                                    placement="left"
+                                    tabNavs={[
+                                        { title: '이슈 정보', text: 'Info' },
+                                        { title: '편집', text: '편집' },
+                                    ]}
+                                />
                             </div>
                         )}
                     />

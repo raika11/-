@@ -147,7 +147,7 @@ const EpisodeSearchBox = (props) => {
             <Form.Row>
                 <MokaSearchInput
                     id="keyword"
-                    className="mr-2 flex-fill"
+                    className="mr-1 flex-fill"
                     name="keyword"
                     placeholder="에피소드명 / 태그를 입력해 주세요"
                     value={searchData.keyword}

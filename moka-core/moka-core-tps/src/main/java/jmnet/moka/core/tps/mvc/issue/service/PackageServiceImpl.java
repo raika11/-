@@ -92,4 +92,9 @@ public class PackageServiceImpl implements PackageService {
     public Page<PackageList> findAllPackageList(PackageListSearchDTO search) {
         return packageListRepository.findAll(search);
     }
+
+    @Override
+    public void updatePackageTotalId(Long pkgSeq) {
+        issueMapper.updatePackageTotalId(pkgSeq);
+    }
 }

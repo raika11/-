@@ -73,4 +73,11 @@
       ) }
   </select>
 
+  <!-- 패키지 입력/수정 시 기사 묶기 위한 프호시저 -->
+  <select id="updatePackageTotalId" parameterType="java.lang.Long"
+    statementType="CALLABLE">
+    { call UPA_MOKA_PACKAGE_PROC(
+      #{pkgSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
+  </select>
 </mapper>

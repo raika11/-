@@ -49,26 +49,16 @@ const WorkAgGrid = ({ match }) => {
     useEffect(() => {
         // 스케줄 작업 카테고리를 가져와서 categoryNm 조회
         if (genCateRows) {
-            let findIndex = (code) => genCateRows.findIndex((c) => c.dtlCd === code);
-            let findPeriodIndex = (period) => SCHEDULE_PERIOD.findIndex((c) => c.period === period);
-
             setRowData(
                 list.map((job) => {
-                    let targetIndex = findIndex(job.category);
-                    let periodIndex = findPeriodIndex(job.period);
-                    if (targetIndex > -1) {
-                        return {
-                            ...job,
-                            categoryNm: genCateRows[targetIndex].cdNm,
-                            periodNm: SCHEDULE_PERIOD[periodIndex].periodNm,
-                        };
-                    } else {
-                        return {
-                            ...job,
-                            categoryNm: job.category,
-                            periodNm: SCHEDULE_PERIOD[periodIndex].periodNm,
-                        };
-                    }
+                    let findCate = genCateRows.find((c) => c.dtlCd === job.category);
+                    let findPeriod = SCHEDULE_PERIOD.find((p) => p.period === job.period);
+
+                    return {
+                        ...job,
+                        categoryNm: findCate?.cdNm || job.category,
+                        periodNm: findPeriod?.periodNm || job.period,
+                    };
                 }),
             );
         }

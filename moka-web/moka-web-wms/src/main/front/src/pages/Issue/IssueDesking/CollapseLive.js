@@ -24,7 +24,7 @@ const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
      * @param {object} data data
      */
     const addArticle = (channelType, data) => {
-        if (channelType === CHANNEL_TYPE.A.code) {
+        if (channelType === CHANNEL_TYPE.A.code || channelType === CHANNEL_TYPE.M.code) {
             const cnt = gridInstance.api.getDisplayedRowCount();
             const ndata = {
                 ...initialState,
@@ -48,7 +48,7 @@ const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
                 );
             }
         } else {
-            messageBox.alert('기사를 선택해주세요.');
+            messageBox.alert('기사, 영상탭에서 선택해주세요.');
         }
     };
 

@@ -63,8 +63,12 @@
     ) }
   </select>
 
+  <resultMap id="issueComponentMap" type="IssueDeskingComponentDTO"/>
+  <resultMap id="issueDeskingMap" type="IssueDeskingVO"/>
+
   <!-- 편집기사목록 조회-->
-  <select id="findAllIssueDesking" parameterType="hashMap" resultType="IssueDeskingVO"
+  <select id="findAllIssueDesking" parameterType="hashMap"
+    resultMap="issueComponentMap,issueDeskingMap"
     statementType="CALLABLE">
     { call UPA_ISSUE_DESKING_HIST_LIST_SEL(
       #{pkgSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},

@@ -5,7 +5,7 @@ import { MokaTable, MokaCloseButton } from '@components';
 import columnDefs from './LiveListColumns';
 import OptionRenderer from './LiveOptionRenderer';
 
-const LiveList = ({ show, resultVId, setResultVId, OVP_PREVIEW_URL }) => {
+const LiveList = ({ show, selected, setSelected, OVP_PREVIEW_URL }) => {
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_LIVE_LIST]);
     const liveList = useSelector((store) => store.bright.live.list);
@@ -30,10 +30,9 @@ const LiveList = ({ show, resultVId, setResultVId, OVP_PREVIEW_URL }) => {
     const handleSelectionChanged = useCallback(
         (params) => {
             if (params.length < 1 || !params[0].data) return;
-            const { id } = params[0].data;
-            setResultVId(id);
+            setSelected(params[0].data);
         },
-        [setResultVId],
+        [setSelected],
     );
 
     useEffect(() => {
@@ -62,7 +61,7 @@ const LiveList = ({ show, resultVId, setResultVId, OVP_PREVIEW_URL }) => {
                 rowData={rowData}
                 onRowNodeId={(data) => data.id}
                 paging={false}
-                selected={resultVId}
+                selected={selected.id}
                 frameworkComponents={{ optionRenderer: OptionRenderer }}
                 onSelectionChanged={handleSelectionChanged}
                 className="mb-3"

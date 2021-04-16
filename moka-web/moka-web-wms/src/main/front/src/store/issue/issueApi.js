@@ -1,5 +1,6 @@
 import qs from 'qs';
 import instance from '@store/commons/axios';
+import { objectToFormData } from '@utils/convertUtil';
 
 // 이슈 목록 조회
 export const getIssueList = ({ search }) => {
@@ -95,4 +96,17 @@ export const finishIssue = ({ pkgSeq }) => {
     return instance.put(`/api/issue/${pkgSeq}/finish`).catch((err) => {
         throw err;
     });
+};
+
+// 이슈 데스킹 임시저장(폼데이터)
+export const saveIssueDesking = ({ pkgSeq, compNo, issueDeskingList }) => {
+    return instance
+        .post(`/api/issue/${pkgSeq}/desking/${compNo}/save`, objectToFormData(issueDeskingList), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };

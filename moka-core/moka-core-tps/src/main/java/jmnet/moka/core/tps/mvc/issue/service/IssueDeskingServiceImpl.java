@@ -4,7 +4,6 @@
 
 package jmnet.moka.core.tps.mvc.issue.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +12,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
 import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistDTO;
 import jmnet.moka.core.tps.mvc.issue.entity.IssueDesking;
@@ -52,6 +52,8 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
     @Value("${package.compYn}")
     private String packageCompYn;
 
+    private final int AUTO_COMPONENT_NO = 2;
+
     public IssueDeskingServiceImpl(IssueMapper issueMapper, IssueDeskingRepository issueDeskingRepository,
             IssueDeskingHistRepository issueDeskingHistRepository, ModelMapper modelMapper, PackageRepository packageRepository) {
         this.issueMapper = issueMapper;
@@ -67,48 +69,62 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
         param.put("pkgSeq", packageMaster.getPkgSeq());
         param.put("compNo", null);
         param.put("status", EditStatusCode.SAVE.getCode());
-        List<IssueDeskingVO> issueDeskingList = issueMapper.findAllIssueDesking(param);
-        List<IssueDeskingComponentDTO> returnList = getInitComponentList(packageMaster);
+        List<List<Object>> listMap = issueMapper.findAllIssueDesking(param);
 
-        for (IssueDeskingVO desking : issueDeskingList) {
-            //1. 컴포넌트 찾기
-            IssueDeskingComponentDTO componentDTO = returnList
-                    .stream()
-                    .filter(c -> c.getCompNo() == desking.getCompNo())
-                    .findFirst()
-                    .orElse(new IssueDeskingComponentDTO());
+        List<IssueDeskingComponentDTO> returnList = null;
+        if (listMap.get(0) != null) {
+            returnList = modelMapper.map(listMap.get(0), IssueDeskingComponentDTO.TYPE);
+        }
+        resetComponentList(returnList, packageMaster);
 
-            //2. 컴포넌트에 편집정보 추가
-            componentDTO.appendDesking(modelMapper.map(desking, IssueDeskingHistDTO.class));
+        if (listMap.get(1) != null) {
+            List<IssueDeskingVO> deskingList = modelMapper.map(listMap.get(1), IssueDeskingVO.TYPE);
+            for (IssueDeskingVO desking : deskingList) {
+                //1. 컴포넌트 찾기
+                IssueDeskingComponentDTO componentDTO = returnList
+                        .stream()
+                        .filter(c -> c.getCompNo() == desking.getCompNo())
+                        .findFirst()
+                        .orElse(new IssueDeskingComponentDTO());
+
+                //2. 컴포넌트에 편집정보 추가
+                componentDTO.appendDesking(modelMapper.map(desking, IssueDeskingHistDTO.class));
+            }
         }
 
         return returnList;
     }
 
     /**
-     * 컴포넌트별로 compYn,compNo,pkgSeq를 패키지정보에서 읽어와 초기화
+     * 컴포넌트별로 compYn,compNo,pkgSeq를 패키지정보에서 읽어와서 없는 컴포넌트 추가
      *
+     * @param issueDeskings 컴포넌트목록
      * @param packageMaster 패키지정보
-     * @return 컴포넌트목록
      */
-    private List<IssueDeskingComponentDTO> getInitComponentList(PackageMaster packageMaster) {
-        List<IssueDeskingComponentDTO> returnList = new ArrayList<>();
+    private void resetComponentList(List<IssueDeskingComponentDTO> issueDeskings, PackageMaster packageMaster) {
+
         String pakcageCompYn = McpString.defaultValue(packageMaster.getCompYn(), packageCompYn);
 
         if (McpString.isNotEmpty(pakcageCompYn)) {
             for (int i = 0; i < pakcageCompYn.length(); i++) {
                 String yn = String.valueOf(pakcageCompYn.charAt(i));
+                int compNo = i + 1;
                 IssueDeskingComponentDTO dto = IssueDeskingComponentDTO
                         .builder()
                         .viewYn(yn)
-                        .compNo(i + 1)
+                        .compNo(compNo)
                         .pkgSeq(packageMaster.getPkgSeq())
                         .build();
-                returnList.add(dto);
+                boolean isFind = issueDeskings
+                        .stream()
+                        .filter(d -> d.getCompNo() == (compNo))
+                        .findFirst()
+                        .isPresent();
+                if (!isFind) {
+                    issueDeskings.add(dto);
+                }
             }
-
         }
-        return returnList;
     }
 
     @Override
@@ -124,13 +140,21 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
         param.put("pkgSeq", packageMaster.getPkgSeq());
         param.put("compNo", compNo);
         param.put("status", EditStatusCode.SAVE.getCode());
-        List<IssueDeskingVO> issueDeskingList = issueMapper.findAllIssueDesking(param);
-        if (issueDeskingList.size() > 0) {
-            dto.setViewYn(issueDeskingList
+        List<List<Object>> listMap = issueMapper.findAllIssueDesking(param);
+
+        //컴포넌트
+        if (listMap.get(0) != null && listMap
+                .get(0)
+                .size() > 0) {
+            dto = modelMapper.map(listMap
                     .get(0)
-                    .getViewYn());
+                    .get(0), IssueDeskingComponentDTO.class);
         }
-        dto.setIssueDeskings(modelMapper.map(issueDeskingList, IssueDeskingHistDTO.TYPE));
+
+        //편집정보
+        if (listMap.get(1) != null) {
+            dto.setIssueDeskings(modelMapper.map(listMap.get(1), IssueDeskingHistDTO.TYPE));
+        }
 
         return dto;
     }
@@ -179,6 +203,33 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
         return this.findIssueDeskingComponent(packageMaster, issueDeskingComponentDTO.getCompNo());
     }
 
+    @Override
+    public void insertAutoComponentDeskingHist(PackageMaster packageMaster) {
+        // 기존데이타삭제
+        issueDeskingHistRepository.deleteByPackageMaster_PkgSeqAndCompNo(packageMaster.getPkgSeq(), AUTO_COMPONENT_NO);
+
+        // 히스토리등록
+        String viewYn = getCompYn(AUTO_COMPONENT_NO, packageMaster.getCompYn());
+        IssueDeskingComponentDTO issueDeskingComponentDTO = IssueDeskingComponentDTO
+                .builder()
+                .compNo(AUTO_COMPONENT_NO)
+                .viewYn(viewYn)
+                .build();
+        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, null, EditStatusCode.SAVE);
+        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, null, EditStatusCode.PUBLISH);
+    }
+
+    @Override
+    public void escapeHtml(IssueDeskingHistDTO dto) {
+        if (McpString.isNotEmpty(dto.getTitle())) {
+            dto.setTitle(ArticleEscapeUtil.htmlEscape(dto.getTitle()));
+        }
+
+        if (McpString.isNotEmpty(dto.getBodyHead())) {
+            dto.setBodyHead(ArticleEscapeUtil.htmlEscape(dto.getBodyHead()));
+        }
+    }
+
     private void insertDesking(PackageMaster packageMaster, IssueDeskingComponentDTO issueDeskingComponentDTO) {
         // 기존 편집기사 삭제
         issueDeskingRepository.deleteByPackageMaster_PkgSeqAndCompNo(issueDeskingComponentDTO.getPkgSeq(), issueDeskingComponentDTO.getCompNo());
@@ -217,7 +268,9 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
             hist.setSeqNo(null);
             hist.setPackageMaster(packageMaster);
             hist.setStatus(status.getCode());
-            hist.setRegId(regId);
+            if (regId != null) {
+                hist.setRegId(regId);
+            }
             hist.setRegDt(today);
             issueDeskingHistRepository.save(hist);
         }

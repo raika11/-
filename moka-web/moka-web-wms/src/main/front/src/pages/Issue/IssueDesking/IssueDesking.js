@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { ISSUE_CHANNEL_TYPE } from '@/constants';
 import { initialState } from '@store/issue';
 import { MokaCard } from '@components';
 import CollapseArticle from './CollapseArticle';
@@ -14,7 +15,7 @@ import CollapseKeyword from './CollapseKeyword';
  * 패키지 관리 > 관련 데이터 편집
  */
 const IssueDesking = () => {
-    const { pkgSeq } = useParams;
+    const { pkgSeq } = useParams();
     const [artInstance, setArtInstance] = useState(null);
     const [liveInstance, setLiveInstance] = useState(null);
     const [packetInstance, setPacketInstance] = useState(null);
@@ -39,11 +40,11 @@ const IssueDesking = () => {
     }, [moviePhotoInstance]);
 
     React.useEffect(() => {
-        if (bannerInstance) bannerInstance.api.setRowData([{ ...initialState.initialDesking, pkgSeq, compNo: 7, id: 'banner-1' }]);
+        if (bannerInstance) bannerInstance.api.setRowData([{ ...initialState.initialDesking, pkgSeq, compNo: 7, channelType: ISSUE_CHANNEL_TYPE.B.code, id: 'banner-1' }]);
     }, [bannerInstance, pkgSeq]);
 
     React.useEffect(() => {
-        if (keywordInstance) keywordInstance.api.setRowData([{ ...initialState.initialDesking, pkgSeq, compNo: 9, id: 'keyword-1' }]);
+        if (keywordInstance) keywordInstance.api.setRowData([{ ...initialState.initialDesking, pkgSeq, compNo: 9, channelType: ISSUE_CHANNEL_TYPE.K.code, id: 'keyword-1' }]);
     }, [keywordInstance, pkgSeq]);
 
     return (

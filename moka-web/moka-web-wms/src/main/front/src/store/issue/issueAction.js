@@ -62,3 +62,9 @@ export const finishIssue = createAction(FINISH_ISSUE, ({ pkgSeq, callback }) => 
  */
 export const EXISTS_ISSUE_TITLE = 'issue/EXISTS_ISSUE_TITLE';
 export const existsIssueTitle = createAction(EXISTS_ISSUE_TITLE);
+
+/**
+ * 이슈 데스킹 임시저장
+ */
+export const [SAVE_ISSUE_DESKING, SAVE_ISSUE_DESKING_SUCCESS] = createRequestActionTypes('issue/SAVE_ISSUE_DESKING');
+export const saveIssueDesking = createAction(SAVE_ISSUE_DESKING, ({ pkgSeq, compNo, issueDeskingList, callback }) => ({ pkgSeq, compNo, issueDeskingList, callback }));

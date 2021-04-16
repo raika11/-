@@ -14,7 +14,7 @@ moment.locale('ko');
 /**
  * ovp 리스트
  */
-const OvpList = ({ show, resultVId, setResultVId }) => {
+const OvpList = ({ show, selected, setSelected }) => {
     const dispatch = useDispatch();
     const ovpList = useSelector(({ bright }) => bright.ovp.list);
     const loading = useSelector(({ loading }) => loading[GET_OVP_LIST]);
@@ -52,10 +52,9 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
     const handleSelectionChanged = useCallback(
         (params) => {
             if (params.length < 1 || !params[0].data) return;
-            const { id } = params[0].data;
-            setResultVId(id);
+            setSelected(params[0].data);
         },
-        [setResultVId],
+        [setSelected],
     );
 
     useEffect(() => {
@@ -99,7 +98,7 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
                 rowHeight={GRID_ROW_HEIGHT.C[2]}
                 className="overflow-hidden flex-fill"
                 onRowNodeId={(data) => data.id}
-                selected={resultVId}
+                selected={selected.id}
                 columnDefs={columnDefs}
                 paging={false}
                 frameworkComponents={{ optionRenderer: OvpOptionRenderer }}

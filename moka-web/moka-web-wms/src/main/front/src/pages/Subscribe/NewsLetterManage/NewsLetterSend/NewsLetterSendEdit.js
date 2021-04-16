@@ -3,11 +3,11 @@ import { useHistory, useParams } from 'react-router';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaCard, MokaInput, MokaInputLabel } from '@/components';
+import { MokaCard, MokaInput, MokaInputLabel, MokaSearchInput } from '@/components';
 import NewsLetterSendRelArticleAgGrid from './components/NewsLetterSendRelArticleAgGrid';
-// import ArticleListModal from '@/pages/Article/modals/ArticleListModal';
 import NewsLetterSendEditor from './NewsLetterSendEditor';
 import { EditThumbModal } from '@/pages/Desking/modals';
+import NewsLetterLayoutModal from '../NewsLetter/modals/NewLetterLayoutModal';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 발송 편집
@@ -23,7 +23,7 @@ const NewsLetterSendEdit = ({ match }) => {
     });
     const [imgModal, setImgModal] = useState(false);
     const [gridInstance, setGridInstance] = useState(null); // 기사 ag-grid instance
-    const [articleModal, setArticleModal] = useState(false);
+    const [layoutModal, setLayoutModal] = useState(false);
 
     /**
      * 파일 변경
@@ -211,25 +211,16 @@ const NewsLetterSendEdit = ({ match }) => {
                 {/* 레이아웃 */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel as="none" label={temp.abTest === 'layout' ? '레이아웃(A)' : '레이아웃'} />
-                    <div className="flex-fill">
-                        <div className="d-flex align-items-center">
-                            {!temp.abTest === 'layout' && (
-                                <Button variant="searching" size="sm" className="mr-2" style={{ overflow: 'visible' }}>
-                                    찾아보기
-                                </Button>
-                            )}
-                            <MokaInput placeholder="레이아웃을 검색해 주세요" className="flex-fill" disabled />
-                        </div>
-                        {!temp.abTest === 'layout' && <p className="mb-0 color-primary">※ 레이아웃이 미정인 경우 상품은 자동 임시 저장 상태 값으로 지정됩니다.</p>}
+                    <div>
+                        <MokaSearchInput placeholder="레이아웃을 검색해 주세요" className="flex-fill" onSearch={() => setLayoutModal(true)} />
+                        {temp.abTest !== 'layout' && <p className="mb-0 color-primary">※ 레이아웃이 미정인 경우 상품은 자동 임시 저장 상태 값으로 지정됩니다.</p>}
                     </div>
+                    <NewsLetterLayoutModal show={layoutModal} onHide={() => setLayoutModal(false)} />
                 </Form.Row>
                 {temp.abTest === 'layout' && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel as="none" label="레이아웃(B)" />
-                        <Button variant="searching" size="sm" className="mr-2" style={{ overflow: 'visible' }}>
-                            찾아보기
-                        </Button>
-                        <MokaInput placeholder="레이아웃을 검색해 주세요" className="flex-fill" disabled />
+                        <MokaSearchInput placeholder="레이아웃을 검색해 주세요" className="flex-fill" disabled />
                     </Form.Row>
                 )}
 

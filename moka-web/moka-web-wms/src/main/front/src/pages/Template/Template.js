@@ -1,12 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Route } from 'react-router-dom';
 import produce from 'immer';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { MokaCard, MokaIcon } from '@components';
-import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_TP } from '@/constants';
+import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import { clearStore, deleteTemplate, hasRelationList, changeTemplateBody } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
 import TemplateEditor from './TemplateEditor';
@@ -28,8 +26,6 @@ const Template = ({ match }) => {
     const dispatch = useDispatch();
     const template = useSelector(({ template }) => template.template);
     const currentMenu = useSelector(({ auth }) => auth.currentMenu);
-
-    // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 

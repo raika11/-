@@ -6,15 +6,15 @@ import Col from 'react-bootstrap/Col';
 import { MokaInputLabel, MokaTable } from '@components';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
 import { ArticleTabModal } from '@pages/Article/modals';
-import { artColumnDefs } from './IssueDeskingColumns';
+import { packetColumnDefs } from './IssueDeskingColumns';
 
 /**
- * 패키지관리 > 관련 데이터 편집 > 기사 (편집)
+ * 패키지관리 > 관련 데이터 편집 > 관련기사 꾸러미
  */
-const CollapseArticle = ({ gridInstance, setGridInstance }) => {
+const CollapsePacket = ({ gridInstance, setGridInstance }) => {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
-    const controls = 'collapse-art';
+    const controls = 'collapse-packet';
 
     /**
      * 기사 선택
@@ -50,11 +50,11 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
 
     return (
         <>
-            <Row className="py-2 d-flex border-bottom" noGutters>
+            <Row className="py-2 mt-2 d-flex border-bottom" noGutters>
                 <Col xs={3}>
                     <MokaInputLabel
                         as="switch"
-                        label="메인기사"
+                        label="관련기사 꾸러미"
                         id={controls}
                         inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
                         onChange={(e) => setOpen(e.target.checked)}
@@ -81,10 +81,10 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
             <Collapse in={open}>
                 <div id={controls} className="mt-2">
                     <MokaTable
-                        rowHeight={210}
+                        rowHeight={90}
                         header={false}
                         paging={false}
-                        columnDefs={artColumnDefs}
+                        columnDefs={packetColumnDefs}
                         onRowNodeId={(data) => data.totalId}
                         setGridInstance={setGridInstance}
                         animateRows
@@ -100,4 +100,4 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
     );
 };
 
-export default CollapseArticle;
+export default CollapsePacket;

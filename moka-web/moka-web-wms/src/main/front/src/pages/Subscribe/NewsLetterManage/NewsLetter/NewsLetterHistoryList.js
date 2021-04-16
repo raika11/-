@@ -1,7 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { MokaCard, MokaInput, MokaTable } from '@/components';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
+import { MokaCard, MokaTable } from '@/components';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 수정 > 히스토리
@@ -26,17 +24,6 @@ const NewsLetterHistory = () => {
 
     return (
         <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="뉴스레터 상품 수정 히스토리">
-            <Form className="mb-14">
-                <Form.Row className="align-items-end justify-content-between">
-                    <p className="mb-0">전체 {total}건</p>
-                    <Col xs={2} className="p-0">
-                        <MokaInput as="select" value={search.size} disabled>
-                            <option value="20">20개 보기</option>
-                        </MokaInput>
-                    </Col>
-                </Form.Row>
-            </Form>
-
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={[

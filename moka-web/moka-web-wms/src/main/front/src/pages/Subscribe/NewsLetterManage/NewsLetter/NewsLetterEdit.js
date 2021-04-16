@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
@@ -13,34 +14,41 @@ import ReporterListModal from '@/pages/Reporter/modals/ReporterListModal';
 import NewsLetterLayoutModal from './modals/NewLetterLayoutModal';
 import NewsLetterEditFormModal from './modals/NewsLetterEditFormModal';
 import { EditThumbModal } from '@/pages/Desking/modals';
+import { initialState } from '@store/newsLetter';
 import toast from '@/utils/toastUtil';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 상품 편집
  */
 const NewsLetterEdit = ({ match }) => {
+    const dispatch = useDispatch();
     const history = useHistory();
     const { letterSeq } = useParams();
-    const [temp, setTemp] = useState({
-        state: 'T',
-        sendType: 'A',
-        type: '',
-        contents: '',
-        pkg: '',
-        service: '',
-        reporter: '',
-        jpod: '',
-        sendCycle: 'S',
-        sendCycleType: 'week',
-        week: [],
-        day: 1,
-        sendDt: null,
-        sendTime: null,
-        item: '',
-        imgUrl: '',
-        thumbnailFile: null,
-        manualType: 'L',
-    });
+
+    const storeLetter = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterInfo);
+    // const [temp, setTemp] = useState({
+    //     state: 'T',
+    //     sendType: 'A',
+    //     type: '',
+    //     contents: '',
+    //     pkg: '',
+    //     service: '',
+    //     reporter: '',
+    //     jpod: '',
+    //     sendPeriod: 'S',
+    //     sendPeriodType: 'week',
+    //     week: [],
+    //     day: 1,
+    //     sendDt: null,
+    //     sendTime: null,
+    //     item: '',
+    //     imgUrl: '',
+    //     thumbnailFile: null,
+    //     editLetterType: 'L',
+    // });
+    const [temp, setTemp] = useState(initialState.newsLetter.letterInfo);
+    const [weekArr, setWeekArr] = useState([]);
+    const [sn, setSn] = useState('root');
     const [pkgModal, setPkgModal] = useState(false);
     const [reporterModal, setReporterModal] = useState(false);
     const [layoutModal, setLayoutModal] = useState(false);
@@ -51,8 +59,12 @@ const NewsLetterEdit = ({ match }) => {
      * 입력값 변경
      */
     const handleChangeValue = (e) => {
-        const { name, value } = e.target;
-        setTemp({ ...temp, [name]: value });
+        const { type, name, value, checked } = e.target;
+        if (name === 'sn') {
+            setSn(value);
+        } else {
+            setTemp({ ...temp, [name]: value });
+        }
     };
 
     /**
@@ -89,9 +101,22 @@ const NewsLetterEdit = ({ match }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        setTemp(storeLetter);
+    }, [storeLetter]);
+
+    useEffect(() => {
+        if (sn === 'root') {
+            setTemp({ ...temp, senderName: '중앙일보', senderEmail: 'root@joongang.co.kr' });
+        } else {
+            setTemp({ ...temp, senderName: '', senderEmail: '' });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sn]);
+
     return (
         <MokaCard
-            className="w-100 overflow-hidden"
+            className="w-100"
             title={`뉴스레터 상품 ${letterSeq ? '수정' : '등록'}`}
             footer
             footerButtons={[
@@ -168,6 +193,7 @@ const NewsLetterEdit = ({ match }) => {
                 )}
                 {/* 기본정보 설정 */}
                 <p className="mb-2">※ 기본정보 설정</p>
+
                 <Form.Row className="mb-2 align-items-center">
                     <MokaInputLabel as="none" label="발송 방법" />
                     <Col xs={2} className="p-0 pr-2">
@@ -175,18 +201,18 @@ const NewsLetterEdit = ({ match }) => {
                             as="radio"
                             value="A"
                             name="sendType"
-                            id="auto"
-                            inputProps={{ label: '자동', custom: true, checked: temp.sendType === 'A' ? true : false }}
+                            id="letter-sendType-a"
+                            inputProps={{ label: '자동', custom: true, checked: temp.sendType === 'A' }}
                             onChange={handleChangeValue}
                         />
                     </Col>
                     <Col xs={2} className="p-0">
                         <MokaInput
                             as="radio"
-                            value="M"
+                            value="E"
                             name="sendType"
-                            id="manual"
-                            inputProps={{ label: '수동', custom: true, checked: temp.sendType === 'M' ? true : false }}
+                            id="letter-sendType-e"
+                            inputProps={{ label: '수동', custom: true, checked: temp.sendType === 'E' }}
                             onChange={handleChangeValue}
                         />
                     </Col>
@@ -194,47 +220,105 @@ const NewsLetterEdit = ({ match }) => {
                 <Form.Row className="mb-2 align-items-center">
                     <MokaInputLabel as="none" label="유형" />
                     <Col xs={2} className="p-0 pr-2">
-                        <MokaInput as="radio" name="type" value="O" id="org" inputProps={{ label: '오리지널', custom: true }} onChange={handleChangeValue} />
+                        <MokaInput
+                            as="radio"
+                            name="letterType"
+                            value="O"
+                            id="letter-type-org"
+                            inputProps={{ label: '오리지널', custom: true, checked: temp.letterType === 'O' }}
+                            onChange={handleChangeValue}
+                        />
                     </Col>
                     <Col xs={2} className="p-0 pr-2">
-                        <MokaInput as="radio" name="type" value="B" id="brief" inputProps={{ label: '브리핑', custom: true }} onChange={handleChangeValue} />
+                        <MokaInput
+                            as="radio"
+                            name="letterType"
+                            value="B"
+                            id="letter-type-briefing"
+                            inputProps={{ label: '브리핑', custom: true, checked: temp.letterType === 'B' }}
+                            onChange={handleChangeValue}
+                        />
                     </Col>
                     <Col xs={2} className={temp.sendType === 'M' ? 'p-0 pr-2' : 'p-0'}>
-                        <MokaInput as="radio" name="type" value="N" id="notice" inputProps={{ label: '알림', custom: true }} onChange={handleChangeValue} />
+                        <MokaInput
+                            as="radio"
+                            name="letterType"
+                            value="N"
+                            id="letter-type-notice"
+                            inputProps={{ label: '알림', custom: true, checked: temp.letterType === 'N' }}
+                            onChange={handleChangeValue}
+                        />
                     </Col>
-                    {temp.sendType === 'M' && (
+                    {temp.sendType === 'E' && (
                         <Col xs={2} className="p-0">
-                            <MokaInput as="radio" name="type" value="E" id="etc" inputProps={{ label: '기타', custom: true }} onChange={handleChangeValue} />
+                            <MokaInput
+                                as="radio"
+                                name="letterType"
+                                value="E"
+                                id="letter-type-etc"
+                                inputProps={{ label: '기타', custom: true, checked: temp.letterType === 'E' }}
+                                onChange={handleChangeValue}
+                            />
                         </Col>
                     )}
                 </Form.Row>
+
                 {temp.sendType === 'A' && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel as="none" label="발송 콘텐츠 선택" />
                         <div className="flex-fill">
                             <div className="mb-1 d-flex align-items-center" style={{ height: 31 }}>
                                 <Col xs={2} className="p-0 pr-2">
-                                    <MokaInput as="radio" value="I" id="issue" inputProps={{ label: '이슈', custom: true }} disabled />
+                                    <MokaInput
+                                        as="radio"
+                                        name="channelType"
+                                        value="ISSUE"
+                                        id="letter-channelType-article-issue"
+                                        inputProps={{ label: '이슈', custom: true, checked: temp.channelType === 'ISSUE' }}
+                                        onChange={handleChangeValue}
+                                    />
                                 </Col>
                                 <Col xs={2} className="p-0 pr-2">
-                                    <MokaInput as="radio" value="T" id="topic" inputProps={{ label: '토픽', custom: true }} disabled />
+                                    <MokaInput
+                                        as="radio"
+                                        name="channelType"
+                                        value="TOPIC"
+                                        id="letter-channelType-article-topic"
+                                        inputProps={{ label: '토픽', custom: true, checked: temp.channelType === 'TOPIC' }}
+                                        onChange={handleChangeValue}
+                                    />
                                 </Col>
                                 <Col xs={2} className="p-0 pr-2">
-                                    <MokaInput as="radio" value="S" id="series" inputProps={{ label: '연재', custom: true }} disabled />
+                                    <MokaInput
+                                        as="radio"
+                                        name="channelType"
+                                        value="SERIES"
+                                        id="letter-channelType-article-series"
+                                        inputProps={{ label: '연재', custom: true, checked: temp.channelType === 'SERIES' }}
+                                        onChange={handleChangeValue}
+                                    />
                                 </Col>
                                 <Col xs={3} className="p-0">
-                                    <MokaInput as="radio" value="P" id="pkg" inputProps={{ label: '기사 패키지', custom: true }} disabled />
+                                    <MokaInput
+                                        as="radio"
+                                        name="channelType"
+                                        value="ARTICLE"
+                                        id="letter-channelType-article-pkg"
+                                        inputProps={{ label: '기사 패키지', custom: true, checked: temp.channelType === 'ARTICLE' }}
+                                        onChange={handleChangeValue}
+                                    />
                                 </Col>
                             </div>
                             <div className="mb-1 d-flex align-items-center">
                                 <MokaInputLabel as="none" label="연결 이슈 선택" labelWidth={80} />
                                 <MokaSearchInput
                                     className="flex-fill"
-                                    value={temp.pkg}
+                                    value={temp.channelId}
                                     placeholder="연계 패키지를 검색하세요"
                                     onSearch={() => setPkgModal(true)}
                                     onChange={handleChangeValue}
-                                    inputProps={{ readOnly: temp.contents === 'N' ? true : false }}
+                                    inputProps={{ readOnly: true }}
+                                    disabled={temp.channelType === '' ? true : false}
                                 />
                                 <NewsLetterPackageModal show={pkgModal} onHide={() => setPkgModal(false)} />
                             </div>
@@ -243,20 +327,20 @@ const NewsLetterEdit = ({ match }) => {
                                     <div className="mr-2" style={{ width: 80 }}>
                                         <MokaInput
                                             as="radio"
-                                            value="R"
-                                            name="service"
-                                            id="reporter"
-                                            inputProps={{ label: '기자', custom: true }}
-                                            disabled={temp.contents === 'N' ? true : false}
+                                            value="REPORTER"
+                                            name="channelType"
+                                            id="letter-channelType-reporter"
+                                            inputProps={{ label: '기자', custom: true, checked: temp.channelType === 'REPORTER' }}
                                             onChange={handleChangeValue}
                                         />
                                     </div>
                                     <MokaSearchInput
                                         placeholder=""
-                                        value={temp.reporter}
+                                        value={temp.channelDataId}
                                         onSearch={() => setReporterModal(true)}
                                         onChange={handleChangeValue}
-                                        disabled={temp.contents === 'N' ? true : false}
+                                        inputProps={{ readOnly: true }}
+                                        disabled={temp.channelType === '' ? true : false}
                                     />
                                     <ReporterListModal show={reporterModal} onHide={() => setReporterModal(false)} />
                                 </Col>
@@ -264,30 +348,50 @@ const NewsLetterEdit = ({ match }) => {
                                     <div className="mr-2" style={{ width: 80 }}>
                                         <MokaInput
                                             as="radio"
-                                            value="J"
-                                            name="service"
-                                            id="jpod"
-                                            inputProps={{ label: 'J팟', custom: true }}
-                                            disabled={temp.contents === 'N' ? true : false}
+                                            value="JPOD"
+                                            name="channelType"
+                                            id="letter-channelType-jpod"
+                                            inputProps={{ label: 'J팟', custom: true, checked: temp.channelType === 'JPOD' }}
                                             onChange={handleChangeValue}
                                         />
                                     </div>
-                                    <MokaSearchInput placeholder="" value={temp.jpod} disabled={temp.contents === 'N' ? true : false} onChange={handleChangeValue} />
+                                    <MokaSearchInput
+                                        placeholder=""
+                                        value={temp.channelDataId}
+                                        inputProps={{ readOnly: true }}
+                                        disabled={temp.channelType === '' ? true : false}
+                                        onChange={handleChangeValue}
+                                    />
                                 </Col>
                             </div>
                             <div className="d-flex align-items-center" style={{ height: 31 }}>
                                 <Col xs={3} className="p-0 pr-2">
-                                    <MokaInput as="radio" value="T" name="contents" id="trend" inputProps={{ label: '트렌드 뉴스', custom: true }} onChange={handleChangeValue} />
+                                    <MokaInput
+                                        as="radio"
+                                        value="TREND"
+                                        name="channelType"
+                                        id="letter-channelType-trend"
+                                        inputProps={{ label: '트렌드 뉴스', custom: true, checked: temp.channelType === 'TREND' }}
+                                        onChange={handleChangeValue}
+                                    />
                                 </Col>
                                 <Col xs={3} className="p-0">
-                                    <MokaInput as="radio" value="N" name="contents" id="na" inputProps={{ label: '해당 없음', custom: true }} onChange={handleChangeValue} />
+                                    <MokaInput
+                                        as="radio"
+                                        value=""
+                                        name="channelType"
+                                        id="letter-channelType-null"
+                                        inputProps={{ label: '해당 없음', custom: true, checked: temp.channelType === '' }}
+                                        onChange={handleChangeValue}
+                                    />
                                 </Col>
                             </div>
                         </div>
                     </Form.Row>
                 )}
-                <MokaInputLabel label="뉴스레터 명" className="mb-2" inputProps={{ disabled: true }} />
-                <MokaInputLabel as="textarea" label="뉴스레터 설명" inputClassName="resize-none" inputProps={{ rows: 3 }} disabled />
+                <MokaInputLabel label="뉴스레터 명" className="mb-2" value={temp.letterName} onChange={handleChangeValue} />
+                <MokaInputLabel as="textarea" label="뉴스레터 설명" value={temp.letterDesc} inputClassName="resize-none" inputProps={{ rows: 3 }} onChange={handleChangeValue} />
+
                 <hr className="divider" />
 
                 {/* 발송정보 설정 */}
@@ -300,59 +404,79 @@ const NewsLetterEdit = ({ match }) => {
                                 <MokaInput
                                     as="radio"
                                     value="S"
-                                    name="sendCycle"
-                                    id="schedule"
+                                    name="sendPeriod"
+                                    id="letter-sendPeriod-s"
                                     className="mr-2"
-                                    inputProps={{ label: '일정', custom: true, checked: temp.sendCycle === 'S' ? true : false }}
+                                    inputProps={{ label: '일정', custom: true, checked: temp.sendPeriod === 'S' }}
                                     onChange={handleChangeValue}
                                 />
                             </Col>
                             <Col xs={2} className="p-0 pr-2">
-                                <MokaInput as="select" name="sendCycleType" value={temp.sendCycleType} onChange={handleChangeValue} disabled={temp.sendCycle !== 'S'}>
-                                    <option value="week">요일별</option>
-                                    <option value="month">월</option>
+                                <MokaInput as="select" name="sendPeriodType" value={temp.sendPeriodType} onChange={handleChangeValue} disabled={temp.sendPeriod !== 'S'}>
+                                    <option value="W">요일별</option>
+                                    <option value="M">월</option>
                                 </MokaInput>
                             </Col>
-                            {temp.sendCycleType === 'week' && (
+                            {temp.sendPeriodType === 'W' && (
                                 <>
                                     <ToggleButtonGroup
                                         type="checkbox"
                                         size="sm"
-                                        name="week"
                                         className="mr-2"
-                                        value={temp.week}
-                                        onChange={(value) => setTemp({ ...temp, week: value })}
+                                        value={weekArr}
+                                        onChange={(value) => {
+                                            setWeekArr(value);
+                                            if (weekArr.length > 0) {
+                                                let sd = value.join('');
+                                                setTemp({ ...temp, sendDay: sd });
+                                            } else {
+                                                setTemp({ ...temp, sendDay: '' });
+                                            }
+                                        }}
                                     >
-                                        <ToggleButton variant="outline-table-btn" value="mon" disabled={temp.sendCycle !== 'S'}>
+                                        <ToggleButton variant="outline-table-btn" value="1" disabled={temp.sendPeriod !== 'S'}>
                                             월
                                         </ToggleButton>
-                                        <ToggleButton variant="outline-table-btn" value="tues" disabled={temp.sendCycle !== 'S'}>
+                                        <ToggleButton variant="outline-table-btn" value="2" disabled={temp.sendPeriod !== 'S'}>
                                             화
                                         </ToggleButton>
-                                        <ToggleButton variant="outline-table-btn" value="wednes" disabled={temp.sendCycle !== 'S'}>
+                                        <ToggleButton variant="outline-table-btn" value="3" disabled={temp.sendPeriod !== 'S'}>
                                             수
                                         </ToggleButton>
-                                        <ToggleButton variant="outline-table-btn" value="thur" disabled={temp.sendCycle !== 'S'}>
+                                        <ToggleButton variant="outline-table-btn" value="4" disabled={temp.sendPeriod !== 'S'}>
                                             목
                                         </ToggleButton>
-                                        <ToggleButton variant="outline-table-btn" value="fri" disabled={temp.sendCycle !== 'S'}>
+                                        <ToggleButton variant="outline-table-btn" value="5" disabled={temp.sendPeriod !== 'S'}>
                                             금
                                         </ToggleButton>
-                                        <ToggleButton variant="outline-table-btn" value="satur" disabled={temp.sendCycle !== 'S'}>
+                                        <ToggleButton variant="outline-table-btn" value="6" disabled={temp.sendPeriod !== 'S'}>
                                             토
                                         </ToggleButton>
-                                        <ToggleButton variant="outline-table-btn" value="sun" disabled={temp.sendCycle !== 'S'}>
+                                        <ToggleButton variant="outline-table-btn" value="0" disabled={temp.sendPeriod !== 'S'}>
                                             일
                                         </ToggleButton>
                                     </ToggleButtonGroup>
-                                    <MokaInput as="dateTimePicker" inputProps={{ dateFormat: null }} disabled={temp.sendCycle !== 'S'} />
+                                    <MokaInput
+                                        as="dateTimePicker"
+                                        className="right"
+                                        value={temp.sendTime}
+                                        inputProps={{ dateFormat: null }}
+                                        disabled={temp.sendPeriod !== 'S'}
+                                        onChange={(date) => {
+                                            if (typeof date === 'object') {
+                                                setTemp({ ...temp, sendTime: date });
+                                            } else {
+                                                setTemp({ ...temp, sendTime: null });
+                                            }
+                                        }}
+                                    />
                                 </>
                             )}
-                            {temp.sendCycleType === 'month' && (
+                            {temp.sendPeriodType === 'M' && (
                                 <>
                                     <p className="mb-0 pr-2">매 월</p>
                                     <Col xs={2} className="p-0 pr-2">
-                                        <MokaInput as="select" name="day" value={temp.day} onChange={handleChangeValue} disabled={temp.sendCycle !== 'S'}>
+                                        <MokaInput as="select" name="day" value={temp.day} onChange={handleChangeValue} disabled={temp.sendPeriod !== 'S'}>
                                             {[...Array(30)].map((d, idx) => {
                                                 return (
                                                     <option key={idx} value={idx + 1}>
@@ -364,7 +488,7 @@ const NewsLetterEdit = ({ match }) => {
                                     </Col>
                                     <p className="mb-0 pr-2">일</p>
                                     <Col xs={3} className="p-0">
-                                        <MokaInput as="dateTimePicker" inputProps={{ dateFormat: null }} disabled={temp.sendCycle !== 'S'} />
+                                        <MokaInput as="dateTimePicker" inputProps={{ dateFormat: null }} disabled={temp.sendPeriod !== 'S'} />
                                     </Col>
                                 </>
                             )}
@@ -377,7 +501,7 @@ const NewsLetterEdit = ({ match }) => {
                                         className="flex-fill"
                                         value={temp.item}
                                         label="신규 콘텐츠"
-                                        disabled={temp.sendCycle !== 'S'}
+                                        disabled={temp.sendPeriod !== 'S'}
                                         onChange={handleChangeValue}
                                     >
                                         <option>1</option>
@@ -392,10 +516,10 @@ const NewsLetterEdit = ({ match }) => {
                                     <Col xs={2} className="p-0 pr-2">
                                         <MokaInput
                                             as="radio"
-                                            name="sendCycle"
+                                            name="sendPeriod"
                                             value="C"
                                             id="contents"
-                                            inputProps={{ label: '콘텐츠', custom: true, checked: temp.sendCycle === 'C' ? true : false }}
+                                            inputProps={{ label: '콘텐츠', custom: true, checked: temp.sendPeriod === 'C' ? true : false }}
                                             onChange={handleChangeValue}
                                         />
                                     </Col>
@@ -405,7 +529,7 @@ const NewsLetterEdit = ({ match }) => {
                                             label="신규 콘텐츠"
                                             className="flex-fill"
                                             value={temp.item}
-                                            disabled={temp.sendCycle !== 'C'}
+                                            disabled={temp.sendPeriod !== 'C'}
                                             onChange={handleChangeValue}
                                         >
                                             <option>1</option>
@@ -440,15 +564,15 @@ const NewsLetterEdit = ({ match }) => {
                 <Form.Row className="mb-2">
                     <MokaInputLabel as="none" label="발송자 명" />
                     <Col xs={2} className="p-0 pr-2">
-                        <MokaInput as="select" disabled>
-                            <option>중앙일보</option>
-                            <option>직접 입력</option>
+                        <MokaInput as="select" name="sn" value={sn} onChange={handleChangeValue}>
+                            <option value="root">중앙일보</option>
+                            <option value="">직접 입력</option>
                         </MokaInput>
                     </Col>
                     <Col xs={2} className="p-0 pr-2">
-                        <MokaInput disabled />
+                        <MokaInput name="senderName" value={temp.senderName} onChange={handleChangeValue} readOnly={sn === 'root' ? true : false} />
                     </Col>
-                    <MokaInput placeholder="root@joongang.co.kr" disabled />
+                    <MokaInput name="senderEmail" value={temp.senderEmail} onChange={handleChangeValue} readOnly={sn === 'root' ? true : false} />
                 </Form.Row>
                 <Form.Row className="align-items-center">
                     {temp.sendType === 'A' && (
@@ -457,7 +581,7 @@ const NewsLetterEdit = ({ match }) => {
                             <Col xs={4} className="p-0 pr-2">
                                 <MokaInput
                                     as="dateTimePicker"
-                                    value={temp.sendDt}
+                                    value={temp.sendStartDt}
                                     inputProps={{ timeFormat: null }}
                                     onChange={(date) => {
                                         if (typeof date === 'object') {
@@ -467,7 +591,7 @@ const NewsLetterEdit = ({ match }) => {
                                                 toast.warning('현재 기준 과거 날짜는 선택할 수 없습니다.');
                                                 return;
                                             } else {
-                                                setTemp({ ...temp, sendDt: date });
+                                                setTemp({ ...temp, sendStartDt: date });
                                             }
                                         } else {
                                             setTemp({ ...temp, sendDt: null });
@@ -491,7 +615,7 @@ const NewsLetterEdit = ({ match }) => {
                             </Col>
                         </>
                     )}
-                    {temp.sendType === 'M' && (
+                    {temp.sendType === 'E' && (
                         <>
                             <MokaInputLabel as="none" label="받는이" />
                             <div className="flex-fill">
@@ -545,26 +669,26 @@ const NewsLetterEdit = ({ match }) => {
                             <p className="mb-0 color-primary">※ 변경하지 않을 경우 기본 이미지가 적용됩니다.</p>
                         </>
                     )}
-                    {temp.sendType === 'M' && (
+                    {temp.sendType === 'E' && (
                         <>
                             <MokaInputLabel as="none" label="형식 구분" />
                             <Col xs={3} className="p-0 pr-2">
                                 <MokaInput
                                     as="radio"
-                                    name="manualType"
+                                    name="editLetterType"
                                     value="L"
-                                    id="layout-m"
-                                    inputProps={{ label: '레이아웃 선택', custom: true, checked: temp.manualType === 'L' ? true : false }}
+                                    id="letter-editLetterType-l"
+                                    inputProps={{ label: '레이아웃 선택', custom: true, checked: temp.editLetterType === 'L' }}
                                     onChange={handleChangeValue}
                                 />
                             </Col>
                             <Col xs={3} className="p-0 pr-2">
                                 <MokaInput
                                     as="radio"
-                                    name="manualType"
-                                    value="D"
-                                    id="direct-m"
-                                    inputProps={{ label: '직접 등록', custom: true, checked: temp.manualType === 'D' ? true : false }}
+                                    name="editLetterType"
+                                    value="F"
+                                    id="letter-editLetterType-f"
+                                    inputProps={{ label: '직접 등록', custom: true, checked: temp.editLetterType === 'F' }}
                                     onChange={handleChangeValue}
                                 />
                             </Col>
@@ -572,7 +696,7 @@ const NewsLetterEdit = ({ match }) => {
                     )}
                 </Form.Row>
                 <Form.Row className="mb-2 align-items-center">
-                    {temp.manualType !== 'D' && (
+                    {temp.editLetterType !== 'D' && (
                         <>
                             <MokaInputLabel as="none" label="레이아웃 선택" />
                             <div className="flex-fill">
@@ -589,7 +713,7 @@ const NewsLetterEdit = ({ match }) => {
                             </div>
                         </>
                     )}
-                    {temp.sendType === 'M' && temp.manualType === 'D' && (
+                    {temp.sendType === 'E' && temp.editLetterType === 'D' && (
                         <>
                             <MokaInputLabel
                                 as="imageFile"
@@ -619,7 +743,7 @@ const NewsLetterEdit = ({ match }) => {
                         </>
                     )}
                 </Form.Row>
-                {temp.sendType === 'M' && temp.manualType === 'L' && (
+                {temp.sendType === 'E' && temp.editLetterType === 'L' && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel as="none" label="편집 폼 선택" />
                         <MokaSearchInput placeholder="편집 폼을 검색해 주세요" className="flex-fill" onSearch={() => setEditFormModal(true)} inputProps={{ readOnly: true }} />
@@ -631,16 +755,48 @@ const NewsLetterEdit = ({ match }) => {
                     {temp.sendType === 'A' && (
                         <>
                             <Col xs={3} className="p-0 pr-2">
-                                <MokaInput disabled />
+                                <MokaInput name="letterTitle" value={temp.letterTitle} onChange={handleChangeValue} disabled={temp.titleType !== 'E'} />
                             </Col>
-                            <MokaInput as="radio" className="mr-2" value="ad" id="issue" inputProps={{ label: '광고', custom: true }} disabled />
-                            <MokaInput as="radio" className="mr-2" value="newsLetter" id="issue" inputProps={{ label: '뉴스레터 명', custom: true }} disabled />
-                            <MokaInput as="radio" className="mr-2" value="" id="issue" inputProps={{ label: '직접 입력', custom: true }} disabled />
+                            <MokaInput
+                                as="radio"
+                                className="mr-2"
+                                name="titleType"
+                                value="A"
+                                id="letter-titleType-a"
+                                inputProps={{ label: '광고', custom: true, checked: temp.titleType === 'A' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                className="mr-2"
+                                name="titleType"
+                                value="N"
+                                id="letter-titleType-n"
+                                inputProps={{ label: '뉴스레터 명', custom: true, checked: temp.titleType === 'N' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                className="mr-2"
+                                name="titleType"
+                                value="E"
+                                id="letter-titleType-e"
+                                inputProps={{ label: '직접 입력', custom: true, checked: temp.titleType === 'E' }}
+                                onChange={handleChangeValue}
+                            />
                             {/* <hr className="vertical-divider" /> */}
-                            <MokaInput as="checkbox" value="title" id="title" inputProps={{ label: '기사 제목', custom: true }} disabled />
+                            <MokaInput
+                                as="checkbox"
+                                name="titleType"
+                                value="T"
+                                id="letter-titleType-t"
+                                inputProps={{ label: '기사 제목', custom: true, checked: temp.titleType === 'E' ? true : false }}
+                                onChange={handleChangeValue}
+                                disabled
+                            />
                         </>
                     )}
-                    {temp.sendType === 'M' && <MokaInput className="flex-fill" disabled />}
+                    {temp.sendType === 'E' && <MokaInput className="flex-fill" disabled />}
                 </Form.Row>
             </Form>
         </MokaCard>

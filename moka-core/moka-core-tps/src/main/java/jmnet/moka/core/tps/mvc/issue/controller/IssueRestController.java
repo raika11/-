@@ -208,6 +208,8 @@ public class IssueRestController extends AbstractCommonController {
 
         // 등록
         PackageMaster returnValue = packageService.insertPackage(packageMaster);
+        // 등록후 패키지 기사 묶기
+        packageService.updatePackageTotalId(returnValue.getPkgSeq());
 
         // 결과리턴
         PackageMasterDTO dto = modelMapper.map(returnValue, PackageMasterDTO.class);
@@ -240,6 +242,8 @@ public class IssueRestController extends AbstractCommonController {
 
         // 등록
         PackageMaster returnValue = packageService.insertPackage(packageMaster);
+        // 등록후 패키지 기사 묶기
+        packageService.updatePackageTotalId(returnValue.getPkgSeq());
 
         // 결과리턴
         PackageMasterDTO dto = modelMapper.map(returnValue, PackageMasterDTO.class);
@@ -270,6 +274,8 @@ public class IssueRestController extends AbstractCommonController {
         PackageMaster packageMaster = modelMapper.map(packageMasterDTO, PackageMaster.class);
         // 수정
         PackageMaster returnValue = packageService.updatePackage(packageMaster);
+        // 수정후 패키지 기사 묶기
+        packageService.updatePackageTotalId(returnValue.getPkgSeq());
 
         // 결과리턴
         PackageMasterDTO dto = modelMapper.map(returnValue, PackageMasterDTO.class);
@@ -299,6 +305,8 @@ public class IssueRestController extends AbstractCommonController {
         packageMaster.setUsedYn("E");
         // 수정
         PackageMaster returnValue = packageService.updatePackageMaster(packageMaster);
+        // 수정후 패키지 기사 묶기
+        packageService.updatePackageTotalId(returnValue.getPkgSeq());
 
         // 결과리턴
         PackageMasterDTO dto = modelMapper.map(returnValue, PackageMasterDTO.class);
@@ -331,7 +339,9 @@ public class IssueRestController extends AbstractCommonController {
         PackageMaster packageMaster = modelMapper.map(packageMasterDTO, PackageMaster.class);
         // 수정
         PackageMaster returnValue = packageService.updatePackage(packageMaster);
-
+        // 수정후 패키지 기사 묶기
+        packageService.updatePackageTotalId(returnValue.getPkgSeq());
+        
         // 결과리턴
         PackageMasterDTO dto = modelMapper.map(returnValue, PackageMasterDTO.class);
         ResultDTO<PackageMasterDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.update"));

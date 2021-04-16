@@ -186,8 +186,16 @@ const MokaModal = (props) => {
             dialogClassName={dialogClassName}
             {...rest}
         >
-            {/* 타이틀 */}
-            <Modal.Header className={headerClassName} style={headerStyle} id="draggable-modal-title" data-drag-on={draggable} closeButton>
+            {/* 헤더 */}
+            <Modal.Header
+                className={clsx(headerClassName, {
+                    'pt-0': !titleAs && !title, // 타이틀이 없을 경우 상하 패딩 중복하지 않게 하나만 노출
+                })}
+                style={headerStyle}
+                id="draggable-modal-title"
+                data-drag-on={draggable}
+                closeButton
+            >
                 {draggable && <div id={`draggable-handle-${id}`} data-drag-handle="true" />}
                 {titleAs ? (
                     titleAs
@@ -198,7 +206,7 @@ const MokaModal = (props) => {
                 )}
             </Modal.Header>
 
-            {/* 컨텐츠 */}
+            {/* 바디 */}
             <Modal.Body className={bodyClassName} style={bodyStyle}>
                 {children}
                 {loading && <MokaLoader />}

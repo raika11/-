@@ -158,7 +158,7 @@ const ServiceCodeSelector = (props) => {
                     return { ...render, label };
                 }),
         );
-    }, [serviceCodeList]);
+    }, [serviceCodeList, showCodeLabel]);
 
     useEffect(() => {
         if (renderList.length > 0) {
@@ -173,6 +173,8 @@ const ServiceCodeSelector = (props) => {
                             label = `${code.masterCode}:${code.serviceKorname}`;
                         }
                         return { ...code, label };
+                    } else {
+                        return null;
                     }
                 })
                 .filter(Boolean);
@@ -186,12 +188,12 @@ const ServiceCodeSelector = (props) => {
         } else {
             setCheckedList([]);
         }
-    }, [value, renderList]);
+    }, [value, renderList, showCodeLabel]);
 
     return (
         <Dropdown style={{ width }} className={className}>
             <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-                {loading && <MokaLoader />}
+                {loading && <MokaLoader size={4} />}
                 <PerfectScrollbar options={{ suppressScrollY: true, wheelPropagation: true }}>
                     <div className="d-flex flex-nowrap align-items-center h-100" style={{ width: 0 }}>
                         {isAllChecked ? (

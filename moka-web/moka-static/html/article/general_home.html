@@ -47,7 +47,7 @@
                 <article class="article">
                     <header class="article_header">
                         <div class="reader_area">
-                            <strong class="font_orange">NOW</strong>14 함께 읽음</span>
+                            <strong class="badge">NOW</strong>14 함께 읽음</span>
                         </div>
                         <h1 class="headline">백신 3종 이상 확보한 나라 벌써 12개국… <br>한국은 1종</h1>
 
@@ -74,8 +74,10 @@
                         <div class="datetime">
                             <span class="source">중앙일보</span>
                             <div class="time_bx">
-                                <button type="button" class="date">수정 2021.04.15 00:02 <i class=" ico_arrow_down"></i></button>
-                                <div class="layer_popup layer_datetime" style="display:block;" id=""><!-- 여기에 개별 클래스 추가 -->
+                                <p class="date">입력 2021.01.25 15:00</p>
+                                <p class="date">수정 2021.01.25 15:00</p>
+                                <button type="button" class="btn_datetime"><i class="ico_arrow_down"></i></button>
+                                <div class="layer_popup layer_datetime" style="display:none;" id=""><!-- 여기에 개별 클래스 추가 -->
                                     <div class="layer_body">
                                         <p class="date">입력 2021.01.25 15:00</p>
                                         <p class="date">수정 2021.01.25 15:00</p>
@@ -94,7 +96,7 @@
                             <a href="#">김유미 기자</a>
                             <div class="byline_bx">
                                 <button type="button" class="byline">외 3명</button>
-                                <div class="layer_popup layer_byline" style="display:block;" id=""><!-- 여기에 개별 클래스 추가 -->
+                                <div class="layer_popup layer_byline" style="display:none;" id=""><!-- 여기에 개별 클래스 추가 -->
                                     <div class="layer_header">
                                         <strong class="layer_title">작성한 기자</strong>
                                     </div>
@@ -323,16 +325,23 @@
                                     <!-- //Comment Input Area -->
                                 </li>
                             </ul>
+                            <!-- <button type="button" class="btn_gray">댓글 작성하기 <i class="ico_arrow_right"></i></button> -->
+                            <button type="button" class="btn_gray">댓글 <span class="font_orange">2,346</span>개 보기 <i class="ico_arrow_right"></i></button>
                         </div>
                         <!-- //댓글 컴포넌트 -->
                     </div>
                 </article>
-
-
             </section>
             <!-- // contents -->
         </main>
         <!-- // container -->
+
+        <!-- 댓글 임시 -->
+        <div class="layer_popup layer_comment" style="display:block;" id=""><!-- 여기에 개별 클래스 추가 -->
+
+            <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+        </div>
+        <!-- //댓글 임시 -->
 
         <!-- footer -->
         <footer id="footer" class="footer">

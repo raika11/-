@@ -166,13 +166,13 @@ const ReporterEdit = ({ match }) => {
                             </Button>
                         </div>
                     </div>
-                    <div className="text-right">최종 수정일: {temp.modDt}</div>
 
                     {/* 최종 수정일 */}
+                    <div className="text-right">최종 수정일: {temp.modDt}</div>
                 </div>
             </div>
 
-            <hr />
+            <hr className="divider" />
 
             <Form>
                 <Form.Row className="mb-2">

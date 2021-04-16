@@ -226,6 +226,8 @@ const ArticleList = ({
                 previous.current.type = type;
                 previous.current.schCodeId = masterCode;
             }
+        } else {
+            previous.current = { schCodeId: null, type: null };
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show, isNaverChannel, selectedComponent.schCodeId]);

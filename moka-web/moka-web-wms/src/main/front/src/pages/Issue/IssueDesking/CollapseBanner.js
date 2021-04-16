@@ -9,7 +9,7 @@ import { bannerColumnDefs } from './IssueDeskingColumns';
 /**
  * 패키지관리 > 관련 데이터 편집 > 배너
  */
-const CollapseBanner = ({ gridInstance, setGridInstance }) => {
+const CollapseBanner = ({ setGridInstance }) => {
     const controls = 'collapse-banner';
     const [open, setOpen] = useState(false);
 

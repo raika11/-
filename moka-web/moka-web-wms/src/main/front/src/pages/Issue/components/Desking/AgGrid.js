@@ -1,6 +1,7 @@
 import React, { useState, forwardRef, useEffect, useCallback } from 'react';
-import { addDeskingWorkDropzone } from '@utils/deskingUtil';
 import { GRID_ROW_HEIGHT } from '@/style_constants';
+import { addDeskingWorkDropzone } from '@utils/deskingUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { MokaTable } from '@components';
 import columnDefs from './AgGridColumns';
 import IssueContentsModal from './IssueContentsModal';
@@ -9,6 +10,7 @@ import IssueContentsModal from './IssueContentsModal';
  * 홈 섹션편집 > 패키지 목록 > AgGrid
  */
 const AgGrid = forwardRef(({ search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption, addColumnDefs }, ref) => {
+    const [rowData, setRowData] = useState([]);
     const [gridInstance, setGridInstance] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const [selected, setSelected] = useState({});
@@ -60,6 +62,15 @@ const AgGrid = forwardRef(({ search, list, total, loading, onDragStop, dropTarge
     }, [dropTargetAgGrid, gridInstance, onDragStop]);
 
     useEffect(() => {
+        setRowData(
+            list.map((data) => ({
+                ...data,
+                pkgTitle: unescapeHtmlArticle(data.pkgTitle || ''),
+            })),
+        );
+    }, [list]);
+
+    useEffect(() => {
         return () => {
             setSelected({});
             setModalShow(false);
@@ -73,7 +84,7 @@ const AgGrid = forwardRef(({ search, list, total, loading, onDragStop, dropTarge
                 className="overflow-hidden flex-fill"
                 setGridInstance={setGridInstance}
                 columnDefs={makeDefs()}
-                rowData={list}
+                rowData={rowData}
                 rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(pkg) => pkg.pkgSeq}
                 onRowClicked={handleRowClicked}

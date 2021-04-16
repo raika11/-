@@ -3,7 +3,9 @@ import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { CHANNEL_TYPE, ISSUE_CHANNEL_TYPE, ARTICLE_URL, ISSUE_URL } from '@/constants';
 import { MokaInputLabel, MokaTable } from '@components';
+import { initialState } from '@store/issue';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
 import { ArticleTabModal } from '@pages/Article/modals';
 import { packetColumnDefs } from './IssueDeskingColumns';
@@ -11,20 +13,66 @@ import { packetColumnDefs } from './IssueDeskingColumns';
 /**
  * 패키지관리 > 관련 데이터 편집 > 관련기사 꾸러미
  */
-const CollapsePacket = ({ gridInstance, setGridInstance }) => {
+const CollapsePacket = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
     const controls = 'collapse-packet';
 
     /**
      * 기사 선택
-     * @param {string} type type
+     * @param {string} channelType channelType
      * @param {object} data data
      */
-    const selectArticle = (type, data) => {
-        gridInstance.api.applyTransaction({
-            add: [data],
-        });
+    const selectArticle = (channelType, data) => {
+        const cnt = gridInstance.api.getDisplayedRowCount();
+
+        if (channelType === CHANNEL_TYPE.A.code) {
+            gridInstance.api.applyTransaction({
+                add: [
+                    {
+                        ...initialState.initialDesking,
+                        pkgSeq,
+                        compNo,
+                        contentsOrd: cnt + 1,
+                        contentsId: data.totalId,
+                        title: data.artTitle,
+                        linkUrl: `${ARTICLE_URL}${data.totalId}`,
+                        channelType: ISSUE_CHANNEL_TYPE.A.code,
+                    },
+                ],
+            });
+        } else if (channelType === CHANNEL_TYPE.M.code) {
+            gridInstance.api.applyTransaction({
+                add: [
+                    {
+                        ...initialState.initialDesking,
+                        pkgSeq,
+                        compNo,
+                        contentsOrd: cnt + 1,
+                        contentsId: data.totalId,
+                        title: data.artTitle,
+                        linkUrl: `${ARTICLE_URL}${data.totalId}`,
+                        channelType: ISSUE_CHANNEL_TYPE.M.code,
+                    },
+                ],
+            });
+        } else if (channelType === CHANNEL_TYPE.I.code) {
+            gridInstance.api.applyTransaction({
+                add: [
+                    {
+                        ...initialState.initialDesking,
+                        pkgSeq,
+                        compNo,
+                        contentsOrd: cnt + 1,
+                        contentsId: data.pkgSeq,
+                        title: data.pkgTitle,
+                        linkUrl: `${ISSUE_URL}${data.pkgSeq}`,
+                        channelType: ISSUE_CHANNEL_TYPE.I.code,
+                    },
+                ],
+            });
+        } else if (channelType === CHANNEL_TYPE.G.code) {
+        }
     };
 
     /**
@@ -36,14 +84,14 @@ const CollapsePacket = ({ gridInstance, setGridInstance }) => {
     }, []);
 
     /**
-     * 드래그 후 ordNo 정렬
+     * 드래그 후 contentsOrd 정렬
      * @param {object} params grid instance
      */
     const handleRowDragEnd = (params) => {
         const displayedRows = getDisplayedRows(params.api);
         const ordered = displayedRows.map((data, idx) => ({
             ...data,
-            ordNo: idx + 1,
+            contentsOrd: idx + 1,
         }));
         params.api.applyTransaction({ update: ordered });
     };
@@ -82,7 +130,7 @@ const CollapsePacket = ({ gridInstance, setGridInstance }) => {
                         header={false}
                         paging={false}
                         columnDefs={packetColumnDefs}
-                        onRowNodeId={(data) => data.totalId}
+                        onRowNodeId={(data) => data.contentsId}
                         setGridInstance={setGridInstance}
                         animateRows
                         rowDragManaged

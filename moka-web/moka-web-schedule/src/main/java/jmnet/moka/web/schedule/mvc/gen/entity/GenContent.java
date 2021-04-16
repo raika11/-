@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -139,6 +141,12 @@ public class GenContent {
      */
     @Column(name = "JOB_CD")
     private String jobCd;
+
+    /**
+     * CALL_URL
+     */
+    @Column(name = "CALL_URL")
+    private String callUrl;
 
     /**
      * PKG_OPT

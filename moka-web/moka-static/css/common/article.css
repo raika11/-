@@ -43,15 +43,17 @@ font-*,color,text-align,vertical-align, ...
 .empathy_wrap > button { position: relative; width: 50%; height: 100%; }
 .empathy_wrap > button:first-child::before { content: ""; position: absolute; right: 0; top: 0; width: 1px; height: 100%; background-color: #d8d8d8; }
 .empathy_wrap > button .count { position: relative; margin-left: 8px; color: #999; font-size: 16px; }
+.empathy_wrap > button.active > .ico_face_like,
 .empathy_area > button.active > .ico_face_like { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h22v22H0z'/%3E%3Cpath fill='%23FF3C14' d='M11 2.2a8.8 8.8 0 110 17.6 8.8 8.8 0 010-17.6zm0 1.1c-4.253 0-7.7 3.447-7.7 7.7s3.447 7.7 7.7 7.7 7.7-3.447 7.7-7.7-3.447-7.7-7.7-7.7z'/%3E%3Cpath fill='%23FF3C14' d='M11 16.5a5.5 5.5 0 01-5.473-4.95h1.015a4.493 4.493 0 008.916 0h1.015A5.5 5.5 0 0111 16.5z'/%3E%3Ccircle cx='8.25' cy='8.25' r='1.1' fill='%23FF3C14'/%3E%3Ccircle cx='13.75' cy='8.25' r='1.1' fill='%23FF3C14'/%3E%3Cpath fill='%23FF3C14' d='M11 3.3h6.875l.825-.825V2.2H11z'/%3E%3C/g%3E%3C/svg%3E"); }
+.empathy_wrap > button.active > .ico_face_hate,
+.empathy_area > button.active > .ico_face_hate { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h22v22H0z'/%3E%3Cpath fill='%23FF3C14' d='M11 2.2a8.8 8.8 0 110 17.6 8.8 8.8 0 010-17.6zm0 1.1c-4.253 0-7.7 3.447-7.7 7.7s3.447 7.7 7.7 7.7 7.7-3.447 7.7-7.7-3.447-7.7-7.7-7.7z'/%3E%3Cpath fill='%23FF3C14' d='M11 16.5a5.5 5.5 0 01-5.473-4.95h1.015a4.493 4.493 0 008.916 0h1.015A5.5 5.5 0 0111 16.5z'/%3E%3Ccircle cx='8.25' cy='8.25' r='1.1' fill='%23FF3C14'/%3E%3Ccircle cx='13.75' cy='8.25' r='1.1' fill='%23FF3C14'/%3E%3Cpath fill='%23FF3C14' d='M11 3.3h6.875l.825-.825V2.2H11z'/%3E%3C/g%3E%3C/svg%3E"); }
 .empathy_wrap > button.active > .count,
 .empathy_area > button.active > .count { color: #ff3c14; }
-.empathy_wrap [class^="ico_face_"] { width: 30px; height: 30px; }
-.empathy_area [class^="ico_face_"] { width: 22px; height: 22px; }
+.empathy_wrap [class^="ico_face_"] { width: 30px; height: 30px; background-size: 100%; }
+.empathy_area [class^="ico_face_"] { width: 22px; height: 22px; background-size: 100%; }
 .empathy_area > button:nth-child(2) { margin-left: 15px; }
 .empathy_area > button .count { margin-left: 5px; color: #999; font-size: 14px; }
 
-[class^="ico_face_"] { display: inline-block; background-repeat: no-repeat; background-position: center; background-size: 100%; }
 
 
 /* 댓글 */

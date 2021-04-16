@@ -134,7 +134,8 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
 
         } catch (Exception ex) {
             log.error(ex.toString());
-            setFinish(StatusResultType.FAILED_JOB, ex.getMessage(), info);
+            scheduleResult.setSendExecTime(0l);
+            setFinish(StatusResultType.FAILED_JOB, ex.getMessage(), scheduleInfo);
         }
     }
 

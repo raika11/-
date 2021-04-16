@@ -126,7 +126,8 @@ public class TodayJoongangPdfJob extends AbstractScheduleJob {
 
         } catch (Exception e) {
             log.error(e.toString());
-            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), info);
+            scheduleResult.setSendExecTime(0l);
+            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), scheduleInfo);
         }
     }
 

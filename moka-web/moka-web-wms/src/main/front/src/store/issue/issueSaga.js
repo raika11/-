@@ -21,7 +21,7 @@ export const toIssueListData = (list) => {
         const expYn = data.usedYn === 'N' ? 'N' : 'Y';
         const endYn = data.usedYn === 'E' ? 'Y' : 'N';
         const regDt = commonUtil.isEmpty(data.regDt) ? data.regDt : moment(data.regDt).format(DATE_FORMAT);
-        const updDt = commonUtil.isEmpty(data.updDt) ? data.updDt : moment(data.updDt).format(DATE_FORMAT);
+        const lastArticleUpdateDate = commonUtil.isEmpty(data.lastArticleUpdateDate) ? data.lastArticleUpdateDate : moment(data.lastArticleUpdateDate).format(DATE_FORMAT);
         let pkgDivName = '';
         if (data.pkgDiv === 'I') {
             pkgDivName = '이슈';
@@ -62,7 +62,7 @@ export const toIssueListData = (list) => {
             messageBox.alert('바로가기 기능은 준비중 입니다.');
         };
 
-        return { ...data, regDt, updDt, category, pkgDivName, categoryNames, reporter, reporterNames, expYn, endYn, onClickDirectLink };
+        return { ...data, regDt, lastArticleUpdateDate, category, pkgDivName, categoryNames, reporter, reporterNames, expYn, endYn, onClickDirectLink };
     });
 };
 

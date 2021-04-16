@@ -60,7 +60,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
                         bodyHead: data.artSummary,
                         linkUrl: `${ARTICLE_URL}${data.totalId}`,
                         duration: data.duration,
-                        channelType: ISSUE_CHANNEL_TYPE.M.code,
+                        channelType: ISSUE_CHANNEL_TYPE.A.code,
                     },
                 ],
             });

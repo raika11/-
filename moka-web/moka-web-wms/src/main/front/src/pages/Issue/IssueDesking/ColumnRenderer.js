@@ -217,8 +217,15 @@ const MPRenderer = forwardRef((params, ref) => {
     /**
      * 컨텐츠 삭제
      */
-    const handleDelete = () => {
-        params.api.applyTransaction({ remove: [{ ...params.node.data }] });
+    const handleDelete = () => params.api.applyTransaction({ remove: [{ ...params.node.data }] });
+
+    /**
+     * 컨텐츠 변경
+     * @param {object} e 이벤트
+     */
+    const handleChangeValue = (e) => {
+        setContent({ ...content, [e.target.name]: e.target.value });
+        params.api.applyTransaction({ update: [{ ...params.node.data, [e.target.name]: e.target.value }] });
     };
 
     useImperativeHandle(
@@ -235,7 +242,7 @@ const MPRenderer = forwardRef((params, ref) => {
     return (
         <div className="w-100 h-100 d-flex align-items-center">
             <div className="flex-fill d-flex flex-column pl-2">
-                <MokaInputLabel label="라벨명" labelWidth={labelWidth} value={content.title} disabled />
+                <MokaInputLabel label="라벨명" name="title" labelWidth={labelWidth} value={content.title} onChange={handleChangeValue} />
             </div>
             <div className="pl-2 pr-1 flex-shrink-0 d-flex align-items-center">
                 <Button variant="white" className="border-0 p-0 bg-transparent" onClick={handleDelete}>

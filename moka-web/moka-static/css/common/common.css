@@ -478,6 +478,7 @@ dl.date dd { margin-left: 6px; }
 .btn_outline_orange {border:1px solid #f0320a !important;color:#f0320a;}
 
 /* background */
+.btn_gray { background-color:#f5f5f5; }
 
 /* radius */
 
@@ -618,7 +619,7 @@ dl.date dd { margin-left: 6px; }
 .layer_popup .layer_header .layer_title { font-size: 14px; line-height: 20px; color:#333; }
 .layer_popup .btn_close { position: absolute; }
 .layer_popup .btn_close .ico_close { width: 20px; height: 20px; }
-.layer_datetime { right: 0; width: 188px; padding: 30px; }
+.layer_datetime { right: 0; top: 22px; width: 188px; padding: 30px; }
 .layer_datetime .date { line-height: 20px; }
 .layer_datetime .date:nth-child(n+2) { margin-top: 6px; }
 .layer_datetime .btn_close { top: 10px; right: 10px; }
@@ -628,6 +629,9 @@ dl.date dd { margin-left: 6px; }
 .layer_byline .layer_body a { display: flex; justify-content: space-between; align-items: center; height: 42px; }
 .layer_byline .layer_body .ico_arrow_right { width: 20px; height: 20px; }
 .layer_byline .btn_close { top: 14px; right: 18px; }
+
+.layer_comment { position: fixed; right: 0; top: 0; height: 100%; background-color: #fff; }
+
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
@@ -730,6 +734,8 @@ dl.date dd { margin-left: 6px; }
     .header .header_option_area { flex-flow: row-reverse; }
     .md_hidden {display:none;}
     .md_only_hidden {display:none;} /* <<- .tb {display:none;} */
+    
+    .layer_datetime { display: none !important; }
 
     /* 그리드 */
     .row {margin-left:-10px;margin-right:-10px;}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { initialState } from '@store/issue';
 import { MokaCard } from '@components';
 import CollapseArticle from './CollapseArticle';
 import CollapseArticleAuto from './CollapseArticleAuto';
@@ -38,12 +39,12 @@ const IssueDesking = () => {
     }, [moviePhotoInstance]);
 
     React.useEffect(() => {
-        if (bannerInstance) bannerInstance.api.setRowData([{ id: 'banner-1' }]);
-    }, [bannerInstance]);
+        if (bannerInstance) bannerInstance.api.setRowData([{ ...initialState.initialDesking, pkgSeq, compNo: 7, id: 'banner-1' }]);
+    }, [bannerInstance, pkgSeq]);
 
     React.useEffect(() => {
-        if (keywordInstance) keywordInstance.api.setRowData([{ id: 'keyword-1' }]);
-    }, [keywordInstance]);
+        if (keywordInstance) keywordInstance.api.setRowData([{ ...initialState.initialDesking, pkgSeq, compNo: 9, id: 'keyword-1' }]);
+    }, [keywordInstance, pkgSeq]);
 
     return (
         <MokaCard header={false} className="w-100 d-flex flex-column" bodyClassName="scrollable">

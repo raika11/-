@@ -150,6 +150,9 @@ export const DIGITAL_SPECIAL_URL = 'https://stg-news.joongang.co.kr/DigitalSpeci
 export const ARTICLE_URL = 'https://stg-news.joongang.co.kr/article/';
 export const MOBILE_ARTICLE_URL = 'https://mnews.joins.com/article/';
 
+// 이슈페이지 링크
+export const ISSUE_URL = 'https://stg-news.joongang.co.kr/issue/';
+
 // 페이스북 디버그 툴 링크 (모바일URL)
 export const FB_DEBUGGER_LINK = 'https://developers.facebook.com/tools/debug/echo/?q=https://mnews.joins.com/article/';
 
@@ -242,7 +245,9 @@ export const CHANNEL_TYPE = {
 export const ISSUE_CHANNEL_TYPE = {
     A: { code: 'A', name: '기사' },
     M: { code: 'M', name: '영상' },
+    I: { code: 'I', name: '패키지' },
     P: { code: 'P', name: '포토' },
+    L: { code: 'L', name: '라이브' },
     K: { code: 'K', name: '키워드' },
     G: { code: 'G', name: '그래프' },
 };

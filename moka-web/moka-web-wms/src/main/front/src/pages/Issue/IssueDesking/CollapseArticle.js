@@ -3,7 +3,7 @@ import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { CHANNEL_TYPE, ISSUE_CHANNEL_TYPE, ARTICLE_URL } from '@/constants';
+import { CHANNEL_TYPE, ISSUE_CHANNEL_TYPE, ARTICLE_URL, ISSUE_URL } from '@/constants';
 import { MokaInputLabel, MokaTable } from '@components';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
 import { initialState } from '@store/issue';
@@ -63,6 +63,20 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
                 ],
             });
         } else if (channelType === CHANNEL_TYPE.I.code) {
+            gridInstance.api.applyTransaction({
+                add: [
+                    {
+                        ...initialState.initialDesking,
+                        pkgSeq,
+                        compNo,
+                        contentsOrd: cnt + 1,
+                        contentsId: data.pkgSeq,
+                        title: data.pkgTitle,
+                        linkUrl: `${ISSUE_URL}${data.pkgSeq}`,
+                        channelType: ISSUE_CHANNEL_TYPE.I.code,
+                    },
+                ],
+            });
         } else if (channelType === CHANNEL_TYPE.G.code) {
         }
     };
@@ -76,14 +90,14 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
     }, []);
 
     /**
-     * 드래그 후 ordNo 정렬
+     * 드래그 후 contentsOrd 정렬
      * @param {object} params grid instance
      */
     const handleRowDragEnd = (params) => {
         const displayedRows = getDisplayedRows(params.api);
         const ordered = displayedRows.map((data, idx) => ({
             ...data,
-            ordNo: idx + 1,
+            contentsOrd: idx + 1,
         }));
         params.api.applyTransaction({ update: ordered });
     };

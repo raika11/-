@@ -4,17 +4,17 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaInputLabel, MokaTable } from '@components';
-import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
+import { messageBox } from '@utils/toastUtil';
 import { ArticleTabModal } from '@pages/Article/modals';
-import { artColumnDefs } from './IssueDeskingColumns';
+import { liveColumnDefs } from './IssueDeskingColumns';
 
 /**
- * 패키지관리 > 관련 데이터 편집 > 기사 (편집)
+ * 패키지관리 > 관련 데이터 편집 > 라이브기사
  */
-const CollapseArticle = ({ gridInstance, setGridInstance }) => {
+const CollapseLive = ({ gridInstance, setGridInstance }) => {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
-    const controls = 'collapse-art';
+    const controls = 'collapse-live';
 
     /**
      * 기사 선택
@@ -22,39 +22,27 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
      * @param {object} data data
      */
     const selectArticle = (type, data) => {
-        gridInstance.api.applyTransaction({
-            add: [data],
-        });
-    };
-
-    /**
-     * 스크롤 처리
-     */
-    const handleRowDragMove = React.useCallback((params) => {
-        const scrollBox = classElementsFromPoint(params.event, 'scrollable');
-        autoScroll(scrollBox, { clientX: params.event.clientX, clientY: params.event.clientY });
-    }, []);
-
-    /**
-     * 드래그 후 ordNo 정렬
-     * @param {object} params grid instance
-     */
-    const handleRowDragEnd = (params) => {
-        const displayedRows = getDisplayedRows(params.api);
-        const ordered = displayedRows.map((data, idx) => ({
-            ...data,
-            ordNo: idx + 1,
-        }));
-        params.api.applyTransaction({ update: ordered });
+        const cnt = gridInstance.api.getDisplayedRowCount();
+        if (cnt < 1) {
+            gridInstance.api.setRowData([data]);
+        } else {
+            messageBox.confirm(
+                '라이브 기사 등록은 1개만 등록 가능합니다.\n등록된 기사를 삭제 후 등록하시겠습니까?',
+                () => {
+                    gridInstance.api.setRowData([data]);
+                },
+                () => {},
+            );
+        }
     };
 
     return (
         <>
-            <Row className="py-2 d-flex border-bottom" noGutters>
+            <Row className="py-2 mt-2 d-flex border-bottom" noGutters>
                 <Col xs={3}>
                     <MokaInputLabel
                         as="switch"
-                        label="메인기사"
+                        label="라이브기사"
                         id={controls}
                         inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
                         onChange={(e) => setOpen(e.target.checked)}
@@ -81,17 +69,12 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
             <Collapse in={open}>
                 <div id={controls} className="mt-2">
                     <MokaTable
-                        rowHeight={210}
+                        rowHeight={90}
                         header={false}
                         paging={false}
-                        columnDefs={artColumnDefs}
+                        columnDefs={liveColumnDefs}
                         onRowNodeId={(data) => data.totalId}
                         setGridInstance={setGridInstance}
-                        animateRows
-                        rowDragManaged
-                        suppressMoveWhenRowDragging
-                        onRowDragMove={handleRowDragMove}
-                        onRowDragEnd={handleRowDragEnd}
                         dragStyle
                     />
                 </div>
@@ -100,4 +83,4 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
     );
 };
 
-export default CollapseArticle;
+export default CollapseLive;

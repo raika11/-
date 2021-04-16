@@ -19,10 +19,11 @@ font-*,color,text-align,vertical-align, ...
 .article_header .source_date .source {position:relative; margin-right: 10px; padding-right: 11px; font-size:13px;line-height:20px;color:#999;}
 .article_header .source_date .source::before { content:'';position:absolute;right:0;top:50%;width:1px;height:12px;background-color:#979797;transform: translateY(-50%);}
 .article_header .source_date .date_bx { position: relative;  }
-.article_header .source_date .date .ico
+.article_header .source_date .date .ico_arrow_down { width: 8px; height: 7px; }
 .article_header .source_date .epaper {position:absolute;right:0;top:0;font-size:13px;line-height:22px;color:#999;}
-.article_header .byline {display:flex;align-items:center;height:52px;margin:0 -5px;}
-.article_header .byline > a {padding:0 5px;}
+.article_header > .byline {display:flex;align-items:center;height:52px;margin:0 -5px;}
+.article_header > .byline > a {padding:0 5px;}
+.article_header .byline_bx { position: relative; }
 
 .article_body {width:100%;margin:0 auto;padding:30px 0 40px;border-top:4px solid #ff4620;border-bottom:1px solid #e2e2e2;}
 

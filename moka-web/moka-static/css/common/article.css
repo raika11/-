@@ -31,7 +31,8 @@ font-*,color,text-align,vertical-align, ...
 .article_body {padding:30px 0 40px;border-top:4px solid #ff4620;}
 .article_footer {padding:30px 0 60px;border-top:1px solid #e2e2e2;}
 .article_footer .comment_wrap { margin-top: 40px; }
-
+.article_footer .subscription_wrap, 
+.article_footer .empathy_wrap { margin-top: 30px; }
 
 
 /* 공감 */

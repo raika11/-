@@ -3,7 +3,9 @@ package jmnet.moka.core.tps.mvc.reporter.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -30,7 +32,6 @@ import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -73,10 +74,6 @@ public class ReporterRestController extends AbstractCommonController {
 
     @Autowired
     private RestTemplateHelper restTemplateHelper;
-
-    @Value("http://172.29.58.95:8100")  //로컬 BO API 주소
-    //@Value("https://stg-backoffice.joongang.co.kr") //스테이징 BO API 주소
-    private String backOfficeServer;
 
     public ReporterRestController(ReporterService reporterService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger) {
         this.reporterService = reporterService;
@@ -214,14 +211,18 @@ public class ReporterRestController extends AbstractCommonController {
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
 
+        String date = McpDate.dateStr(reporterJamSaveDTO.getRegDt(), "yyyyMMdd");
+        int dt = Integer.parseInt(McpDate.dateStr(reporterJamSaveDTO.getRegDt(), "yyyyMMdd"));
+        String date1 = String.valueOf(dt + 1);
+
         //md5 hash check   MD5(jcms기자고유번호(신규:0) + jam기자고유번호+ yyyymmdd)
         String hasedKey1 = getMD5("0" + reporterJamSaveDTO
                 .getJamRepSeq()
-                .toString() + McpDate.dateStr(McpDate.now(), "yyyyMMdd"));  //   DateTime.Now.ToString("yyyyMMdd")
+                .toString() + date);  //   DateTime.Now.ToString("yyyyMMdd")
 
         String hasedKey2 = getMD5("0" + reporterJamSaveDTO
                 .getJamRepSeq()
-                .toString() + McpDate.dateStr(McpDate.todayDatePlus(1), "yyyyMMdd"));
+                .toString() + date1);
 
         log.info("hasedKey1 {} ", hasedKey1);
         log.info("hasedKey2 {} ", hasedKey2);
@@ -297,18 +298,22 @@ public class ReporterRestController extends AbstractCommonController {
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
 
+        String date = McpDate.dateStr(reporterJamUpdateDTO.getModDt(), "yyyyMMdd");
+        int dt = Integer.parseInt(McpDate.dateStr(reporterJamUpdateDTO.getModDt(), "yyyyMMdd"));
+        String date1 = String.valueOf(dt + 1);
+
         //md5 hash check MD5(jcms기자고유번호 + jam기자고유번호+ yyyymmdd)
         String hasedKey1 = getMD5(reporterJamUpdateDTO
                 .getRepSeq()
                 .toString() + reporterJamUpdateDTO
                 .getJamRepSeq()
-                .toString() + McpDate.dateStr(McpDate.now(), "yyyyMMdd"));  //   DateTime.Now.ToString("yyyyMMdd")
+                .toString() + date);
 
         String hasedKey2 = getMD5(reporterJamUpdateDTO
                 .getRepSeq()
                 .toString() + reporterJamUpdateDTO
                 .getJamRepSeq()
-                .toString() + McpDate.dateStr(McpDate.todayDatePlus(1), "yyyyMMdd"));
+                .toString() + date1);
 
         log.info("hasedKey1 {} ", hasedKey1);
         log.info("hasedKey2 {} ", hasedKey2);
@@ -352,39 +357,15 @@ public class ReporterRestController extends AbstractCommonController {
     }
 
     public static String getMD5(String str) {
-
+        MessageDigest m = null;
         String rtnMD5 = "";
-
         try {
-            //MessageDigest 인스턴스 생성
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            //해쉬값 업데이트
-            md.update(str.getBytes());
-            //해쉬값(다이제스트) 얻기
-            byte byteData[] = md.digest();
-
-            StringBuffer sb = new StringBuffer();
-
-            //출력
-            for (byte byteTmp : byteData) {
-                sb.append(Integer
-                        .toString((byteTmp & 0xff) + 0x100, 16)
-                        .substring(1));
-                /*
-                int tmp1 = (byteTmp & 0xff);
-                int tmp2 = ((byteTmp&0xff) + 0x100);
-
-                System.out.println(byteTmp +" : "+ tmp1 +" : "+ tmp2
-                        +" : "+Integer.toString((byteTmp&0xff)+0x100, 16)
-                        +" : "+(Integer.toString((byteTmp&0xff) + 0x100, 16).substring(1)));
-                */
-
-                // byte 타입의 범위 : -128~127 ( -2^7 ~ 2^7-1 )
-                //-129 + 256 = 127
-                // 0x100 = 256
-            }
-            rtnMD5 = sb.toString();
-        } catch (Exception e) {
+            m = MessageDigest.getInstance("MD5");
+            m.update(str.getBytes(), 0, str.length());
+            rtnMD5 = new BigInteger(1, m.digest())
+                    .toString(16)
+                    .toUpperCase();
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             rtnMD5 = null;
         }

@@ -35,7 +35,7 @@ public class DeskingReserveJob extends AbstractReserveJob {
     @Override
     public GenContentHistory invoke(GenContentHistory history) {
         log.debug("비동기 예약 작업 처리 : {}", history.getJobSeq());
-
+        GenStatus desingResult = history.getGenContent().getGenStatus();
         /**
          * todo 1. 작업 테이블에서 조회하여 이미 완료 되었거나, 삭제 된 작업이 아닌 경우 진행 시작
          * - AbstractReserveJob에 공통 메소드 생성하여 사용할 수 있도록 조치 필요
@@ -62,7 +62,7 @@ public class DeskingReserveJob extends AbstractReserveJob {
             //api 필수 파라미터 입력
             params.add("componentSeq", historyParam.get("componentSeq"));
 
-            GenStatus desingResult = history.getGenContent().getGenStatus();
+
             desingResult.setSendExecTime((new Date()).getTime());
 
             //api 실행
@@ -84,6 +84,7 @@ public class DeskingReserveJob extends AbstractReserveJob {
             }
         } catch (Exception ex) {
             log.error("[GEN STATUS HISTORY ERROR] : {}", ex.getMessage());
+            desingResult.setSendExecTime(0l);
             history.setStatus(StatusFlagType.FAILED_TASK);
             history
                     .getGenContent()

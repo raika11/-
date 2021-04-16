@@ -9,7 +9,7 @@ import { bannerColumnDefs } from './IssueDeskingColumns';
 /**
  * 패키지관리 > 관련 데이터 편집 > 배너
  */
-const CollapseBanner = ({ gridInstance, setGridInstance }) => {
+const CollapseBanner = ({ setGridInstance }) => {
     const controls = 'collapse-banner';
     const [open, setOpen] = useState(false);
 
@@ -21,9 +21,6 @@ const CollapseBanner = ({ gridInstance, setGridInstance }) => {
                 </Col>
                 <Col xs={4}></Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
-                    <Button variant="outline-neutral" size="sm" className="mr-1">
-                        미리보기
-                    </Button>
                     <Button variant="positive-a" size="sm" className="mr-1">
                         임시저장
                     </Button>

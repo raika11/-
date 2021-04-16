@@ -1,6 +1,7 @@
-import React, { useState, forwardRef, useEffect } from 'react';
-import { addDeskingWorkDropzone } from '@utils/deskingUtil';
+import React, { useState, forwardRef, useEffect, useCallback } from 'react';
 import { GRID_ROW_HEIGHT } from '@/style_constants';
+import { addDeskingWorkDropzone } from '@utils/deskingUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { MokaTable } from '@components';
 import columnDefs from './AgGridColumns';
 import IssueContentsModal from './IssueContentsModal';
@@ -8,10 +9,8 @@ import IssueContentsModal from './IssueContentsModal';
 /**
  * 홈 섹션편집 > 패키지 목록 > AgGrid
  */
-const AgGrid = forwardRef((props, ref) => {
-    const { search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption } = props;
-
-    // state
+const AgGrid = forwardRef(({ search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption, addColumnDefs }, ref) => {
+    const [rowData, setRowData] = useState([]);
     const [gridInstance, setGridInstance] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const [selected, setSelected] = useState({});
@@ -27,6 +26,23 @@ const AgGrid = forwardRef((props, ref) => {
             setModalShow(true);
         }
     };
+
+    /**
+     * 컬럼 명세
+     * @returns {array} columnDefs
+     */
+    const makeDefs = useCallback(() => {
+        let newDefs = [...columnDefs];
+        if (!dropTargetAgGrid) newDefs.splice(0, 2);
+        if (addColumnDefs) {
+            addColumnDefs.forEach((nd) => {
+                var copy = Object.assign({}, nd);
+                delete copy.index;
+                newDefs.splice(nd.index, 0, copy);
+            });
+        }
+        return newDefs;
+    }, [addColumnDefs, dropTargetAgGrid]);
 
     useEffect(() => {
         // 드롭 타겟 ag-grid에 drop-zone 설정
@@ -46,6 +62,15 @@ const AgGrid = forwardRef((props, ref) => {
     }, [dropTargetAgGrid, gridInstance, onDragStop]);
 
     useEffect(() => {
+        setRowData(
+            list.map((data) => ({
+                ...data,
+                pkgTitle: unescapeHtmlArticle(data.pkgTitle || ''),
+            })),
+        );
+    }, [list]);
+
+    useEffect(() => {
         return () => {
             setSelected({});
             setModalShow(false);
@@ -58,8 +83,8 @@ const AgGrid = forwardRef((props, ref) => {
                 ref={ref}
                 className="overflow-hidden flex-fill"
                 setGridInstance={setGridInstance}
-                columnDefs={columnDefs}
-                rowData={list}
+                columnDefs={makeDefs()}
+                rowData={rowData}
                 rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(pkg) => pkg.pkgSeq}
                 onRowClicked={handleRowClicked}
@@ -70,6 +95,7 @@ const AgGrid = forwardRef((props, ref) => {
                 selected={selected.pkgSeq}
                 onChangeSearchOption={onChangeSearchOption}
                 preventRowClickCell={['info']}
+                applyColumnDefOrder
             />
 
             <IssueContentsModal

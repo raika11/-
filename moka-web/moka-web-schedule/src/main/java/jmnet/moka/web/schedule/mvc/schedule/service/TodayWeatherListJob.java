@@ -127,11 +127,10 @@ public class TodayWeatherListJob extends AbstractScheduleJob {
             setFinish(success, info);
 
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.toString());
-            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), info);
+            scheduleResult.setSendExecTime(0l);
+            setFinish(StatusResultType.FAILED_JOB, e.getMessage(), scheduleInfo);
         }
-
     }
 
     //코드화에 대한 방침이 없는 관계로 소스 하드코딩 대신 데이터의 하드코딩으로 대체 > 추후 DB화 시 대체필요

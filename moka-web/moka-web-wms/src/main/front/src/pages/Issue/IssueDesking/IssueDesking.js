@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { initialState } from '@store/issue';
 import { MokaCard } from '@components';
 import CollapseArticle from './CollapseArticle';
 import CollapseArticleAuto from './CollapseArticleAuto';
@@ -12,6 +14,7 @@ import CollapseKeyword from './CollapseKeyword';
  * 패키지 관리 > 관련 데이터 편집
  */
 const IssueDesking = () => {
+    const { pkgSeq } = useParams;
     const [artInstance, setArtInstance] = useState(null);
     const [liveInstance, setLiveInstance] = useState(null);
     const [packetInstance, setPacketInstance] = useState(null);
@@ -36,22 +39,23 @@ const IssueDesking = () => {
     }, [moviePhotoInstance]);
 
     React.useEffect(() => {
-        if (bannerInstance) bannerInstance.api.setRowData([{ id: 'banner-1' }]);
-    }, [bannerInstance]);
+        if (bannerInstance) bannerInstance.api.setRowData([{ ...initialState.initialDesking, pkgSeq, compNo: 7, id: 'banner-1' }]);
+    }, [bannerInstance, pkgSeq]);
 
     React.useEffect(() => {
-        if (keywordInstance) keywordInstance.api.setRowData([{ id: 'keyword-1' }]);
-    }, [keywordInstance]);
+        if (keywordInstance) keywordInstance.api.setRowData([{ ...initialState.initialDesking, pkgSeq, compNo: 9, id: 'keyword-1' }]);
+    }, [keywordInstance, pkgSeq]);
 
     return (
         <MokaCard header={false} className="w-100 d-flex flex-column" bodyClassName="scrollable">
-            <CollapseArticle gridInstance={artInstance} setGridInstance={setArtInstance} />
-            <CollapseArticleAuto />
-            <CollapseLive gridInstance={liveInstance} setGridInstance={setLiveInstance} />
-            <CollapsePacket gridInstance={packetInstance} setGridInstance={setPacketInstance} />
-            <CollapseMoviePhoto gridInstance={moviePhotoInstance} setGridInstance={setMoviePhotoInstance} />
-            <CollapseBanner gridInstance={bannerInstance} setGridInstance={setBannerInstance} />
-            <CollapseKeyword gridInstance={keywordInstance} setGridInstance={setKeywordInstance} />
+            <CollapseArticle pkgSeq={pkgSeq} compNo={1} gridInstance={artInstance} setGridInstance={setArtInstance} />
+            <CollapseArticleAuto compNo={2} />
+            <CollapseLive pkgSeq={pkgSeq} compNo={3} gridInstance={liveInstance} setGridInstance={setLiveInstance} />
+            <CollapsePacket pkgSeq={pkgSeq} compNo={4} gridInstance={packetInstance} setGridInstance={setPacketInstance} />
+            <CollapseMoviePhoto pkgSeq={pkgSeq} compNo={5} gridInstance={moviePhotoInstance} setGridInstance={setMoviePhotoInstance} />
+            {/* 그래프가 6번 */}
+            <CollapseBanner pkgSeq={pkgSeq} compNo={7} gridInstance={bannerInstance} setGridInstance={setBannerInstance} />
+            <CollapseKeyword pkgSeq={pkgSeq} compNo={8} gridInstance={keywordInstance} setGridInstance={setKeywordInstance} />
         </MokaCard>
     );
 };

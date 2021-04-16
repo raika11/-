@@ -201,7 +201,7 @@ const EpisodeForm = ({
                 />
             </Form.Row>
 
-            <hr />
+            <hr className="divider" />
 
             {/* 팟캐스트 파일 등록 */}
             <Form.Row className="mb-2">
@@ -219,7 +219,7 @@ const EpisodeForm = ({
                 </div>
             </Form.Row>
 
-            <hr />
+            <hr className="divider" />
 
             {/* 메타이미지, 카톡 이미지 */}
             {episode.jpodType === 'V' && (
@@ -278,7 +278,7 @@ const EpisodeForm = ({
                         </Col>
                     </Form.Row>
 
-                    <hr />
+                    <hr className="divider" />
                 </React.Fragment>
             )}
 
@@ -294,7 +294,7 @@ const EpisodeForm = ({
                 onResetMember={onResetMember}
             />
 
-            <hr />
+            <hr className="divider" />
 
             {/* 출연진 (게스트) */}
             <PannelForm
@@ -308,7 +308,7 @@ const EpisodeForm = ({
                 onResetMember={onResetMember}
             />
 
-            <hr />
+            <hr className="divider" />
 
             {/* 관련기사 테이블 */}
             <RelArticleTable articles={episode.articles || []} gridInstance={gridInstance} setGridInstance={setGridInstance} />

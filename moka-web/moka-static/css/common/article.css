@@ -70,8 +70,6 @@ font-*,color,text-align,vertical-align, ...
 .comment_list .ico_more_option { width: 3px; height: 17px;  }
 
 
-
-
 .fs1 {font-size:14px;line-height:1.93;letter-spacing:normal;}
 .fs2 {font-size:16px;line-height:1.81;letter-spacing:normal;}
 .fs3 {font-size:18px;line-height:1.72;letter-spacing:-0.5px;}
@@ -91,7 +89,7 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 /***                                             tag                                              ***/
 /****************************************************************************************************/
-.tag_wrap {display:flex;align-items:center;margin-top:30px;}
+.tag_wrap {display:flex;align-items:center;padding-top:30px;border-top:1px solid #e2e2e2;}
 .tag_wrap .tag {display: inline-flex;flex: 0 0 auto;width:auto;padding: 3px 12px 4px;margin-bottom:7px;background:#fff4f1;border:1px solid #f6330a;color:#f6330a;font-size: 13px;font-weight: bold;line-height:normal;}
 
 

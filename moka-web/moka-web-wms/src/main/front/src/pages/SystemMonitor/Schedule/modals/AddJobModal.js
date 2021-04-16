@@ -185,7 +185,7 @@ const AddJobModal = (props) => {
                 <Form.Row className="mb-2">
                     <Col sm={6} className="p-0">
                         <MokaInputLabel label="배포 서버" as="select" name="serverSeq" value={data.serverSeq} onChange={handleChangeValue}>
-                            <option value="0"></option>
+                            <option value=""></option>
                             {deployServerCode &&
                                 deployServerCode.map((s) => (
                                     <option key={s.serverSeq} value={s.serverSeq}>
@@ -197,7 +197,9 @@ const AddJobModal = (props) => {
                 </Form.Row>
                 <MokaInputLabel label="작업명" className="mb-2" name="jobNm" value={data.jobNm} onChange={handleChangeValue} />
                 <MokaInputLabel label="옵션 파라미터" className="mb-2" name="pkgOpt" value={data.pkgOpt} onChange={handleChangeValue} />
+                {data.jobType === 'S' && <MokaInputLabel label="호출 URL" className="mb-2" name="callUrl" value={data.callUrl} onChange={handleChangeValue} />}
                 <MokaInputLabel label="배포 경로" className="mb-2" name="targetPath" value={data.targetPath} onChange={handleChangeValue} />
+                <MokaInputLabel label="파일명" className="mb-2" name="targetFileName" value={data.targetFileName} onChange={handleChangeValue} />
                 <MokaInputLabel label="패키지명" className="mb-2" name="pkgNm" value={data.pkgNm} onChange={handleChangeValue} required />
                 <MokaInputLabel as="textarea" label="설명" name="jobDesc" inputProps={{ rows: 5 }} value={data.jobDesc} onChange={handleChangeValue} />
             </Form>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { CHANNEL_TYPE } from '@/constants';
 import { MokaModal, MokaCardTabs } from '@components';
 import ArticleList from '@pages/Article/components/Desking';
 import IssueList from '@pages/Issue/components/Desking';
@@ -22,7 +23,7 @@ const ArticleTabModal = ({ show, onHide, onRowClicked }) => {
     const [navIdx, setNavIdx] = useState(0);
 
     return (
-        <MokaModal show={show} onHide={onHide} size="lg" width={1000} height={800} bodyClassName="p-0" headerClassName="p-0" headerStyle={{ zIndex: 1 }}>
+        <MokaModal show={show} onHide={onHide} size="lg" width={1000} height={800} bodyClassName="p-0" headerStyle={{ zIndex: 1 }}>
             <MokaCardTabs
                 className="w-100 h-100 shadow-none"
                 onSelectNav={(idx) => setNavIdx(idx)}
@@ -37,7 +38,7 @@ const ArticleTabModal = ({ show, onHide, onRowClicked }) => {
                                 field: 'add',
                                 width: 60,
                                 cellRenderer: 'buttonRenderer',
-                                cellRendererParams: { onClick: (data) => onRowClicked('article', data) },
+                                cellRendererParams: { onClick: (data) => onRowClicked(CHANNEL_TYPE.A.code, data) },
                             },
                         ]}
                         suppressChangeArtGroup
@@ -53,7 +54,7 @@ const ArticleTabModal = ({ show, onHide, onRowClicked }) => {
                                 field: 'add',
                                 width: 60,
                                 cellRenderer: 'buttonRenderer',
-                                cellRendererParams: { onClick: (data) => onRowClicked('movie', data) },
+                                cellRendererParams: { onClick: (data) => onRowClicked(CHANNEL_TYPE.M.code, data) },
                             },
                         ]}
                         movie

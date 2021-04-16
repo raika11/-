@@ -16,7 +16,7 @@ const VodModal = ({ show, onHide, vodUrl, onSave }) => {
     const vodOptions = useSelector((store) => store.bright.vodOptions);
     const OVP_PREVIEW_URL = useSelector((store) => store.app.OVP_PREVIEW_URL);
     const [activeKey, setActivekey] = useState(0);
-    const [resultVId, setResultVId] = useState(null);
+    const [selected, setSelected] = useState({});
     const [youtubeUrl, setYoutubeUrl] = useState({ url: '', option: '' });
 
     /**
@@ -24,7 +24,7 @@ const VodModal = ({ show, onHide, vodUrl, onSave }) => {
      */
     const handleHide = useCallback(() => {
         setActivekey(0);
-        setResultVId(null);
+        setSelected({});
         setYoutubeUrl({ url: '', option: '' });
         dispatch(clearVodOptions());
         if (onHide) onHide();
@@ -40,16 +40,16 @@ const VodModal = ({ show, onHide, vodUrl, onSave }) => {
         if (activeKey === 0) {
             url = `${youtubeUrl.url}${youtubeUrl.option}`;
         } else {
-            if (!resultVId) {
+            if (!selected) {
                 messageBox.warn('선택된 URL이 없습니다');
                 return;
             } else {
-                const op = vodOptions[resultVId];
+                const op = vodOptions[selected.id];
                 // options[loop]=true 이런 형식
-                url = `${OVP_PREVIEW_URL}?videoId=${resultVId}&${qs.stringify({ options: op }, { encode: false })}`;
+                url = `${OVP_PREVIEW_URL}?videoId=${selected.id}&${qs.stringify({ options: op }, { encode: false })}`;
             }
         }
-        if (onSave) onSave(url);
+        if (onSave) onSave(url, selected || {});
         handleHide();
     };
 
@@ -108,8 +108,8 @@ const VodModal = ({ show, onHide, vodUrl, onSave }) => {
                 className="w-100 h-100"
                 tabs={[
                     <YoutubeList show={show && activeKey === 0} youtubeUrl={youtubeUrl} setYoutubeUrl={setYoutubeUrl} />,
-                    <LiveList show={show && activeKey === 1} resultVId={resultVId} setResultVId={setResultVId} OVP_PREVIEW_URL={OVP_PREVIEW_URL} />,
-                    <OvpList show={show && activeKey === 2} resultVId={resultVId} setResultVId={setResultVId} />,
+                    <LiveList show={show && activeKey === 1} selected={selected} setSelected={setSelected} OVP_PREVIEW_URL={OVP_PREVIEW_URL} />,
+                    <OvpList show={show && activeKey === 2} selected={selected} setSelected={setSelected} />,
                 ]}
             />
         </MokaModal>

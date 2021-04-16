@@ -441,7 +441,7 @@ const SnsMetaEdit = () => {
                     </div>
                 </Form.Row>*/}
 
-                <hr />
+                <hr className="divider" />
 
                 {/* 트위터 */}
                 <Form.Row className="mb-2 align-items-center">

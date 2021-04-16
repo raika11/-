@@ -101,6 +101,7 @@ public class TodayJoongangPdfJob extends AbstractScheduleJob {
                 stringBuffer.append(" ] };");
                 log.debug("stringBuffer : {}", stringBuffer);
 
+                scheduleResult.setSendExecTime((new Date()).getTime());
                 //success = stringFileUpload(stringBuffer.toString());
                 FileUpload fileUpload = new FileUpload(scheduleInfo, mokaCrypt);
                 success = fileUpload.stringFileUpload(stringBuffer.toString(), "");
@@ -108,6 +109,12 @@ public class TodayJoongangPdfJob extends AbstractScheduleJob {
                 //업로드 성공 시 GenStatus.content에 파일생성에 사용된 String 저장
                 if (success) {
                     scheduleResult.setContent(stringBuffer.toString());
+                    scheduleResult.setSendResult(StatusResultType.SUCCESS.getCode());
+                    scheduleResult.setSendExecTime(((new Date()).getTime() - scheduleResult.getSendExecTime()) / 1000);
+                }
+                else {
+                    scheduleResult.setSendResult(StatusResultType.FAILED.getCode());
+                    scheduleResult.setSendExecTime(0l);
                 }
 
             } else {

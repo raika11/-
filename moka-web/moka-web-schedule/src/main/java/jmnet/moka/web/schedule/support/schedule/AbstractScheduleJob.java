@@ -81,13 +81,13 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
      */
 
     public void finish(GenContent info) {
+        //실행 완료시 상태값 저장
         GenStatus scheduleResult = info.getGenStatus();
-
+        scheduleResult.setGenExecTime(((new Date()).getTime() - scheduleResult.getLastExecDt().getTime()) / 1000);
         scheduleResult.setLastExecDt(new Date());
         scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
 
         log.debug("{} finish : {}", scheduleResult.getJobSeq(), scheduleResult.getGenResult());
-
     }
 
     /**

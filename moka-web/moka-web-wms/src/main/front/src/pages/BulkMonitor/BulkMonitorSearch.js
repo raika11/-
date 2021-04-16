@@ -91,8 +91,6 @@ const BulkMonitorSearch = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
-    console.log(search.portalDiv);
-
     return (
         <>
             <Form className="mb-14">
@@ -195,7 +193,7 @@ const BulkMonitorSearch = () => {
                     <Button variant="searching" className="mr-1" onClick={handleClickSearch}>
                         검색
                     </Button>
-                    <Button variant="outline-neutral" onClick={handleClickReset}>
+                    <Button variant="negative" onClick={handleClickReset}>
                         초기화
                     </Button>
                 </Form.Row>

@@ -75,6 +75,9 @@ public class JobContentUpdateDTO implements Serializable {
     @ApiModelProperty("저장파일 명")
     private String targetFileName;
 
+    @ApiModelProperty("호출URL")
+    private String callUrl;
+
     @ApiModelProperty("설명")
     private String jobDesc;
 

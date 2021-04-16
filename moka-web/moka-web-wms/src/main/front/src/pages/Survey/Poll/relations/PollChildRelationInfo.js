@@ -185,7 +185,7 @@ const PollChildRelation = () => {
                 loading={loading}
             >
                 <Form>
-                    <hr />
+                    <hr className="divider" />
                     <Form.Group>
                         <Form.Row>
                             <Col xs={12}>
@@ -199,7 +199,7 @@ const PollChildRelation = () => {
                         </Form.Row>
                         <RelationPollSortAgGridComponent rows={relationPolls} onChange={setRelationPolls} onDelete={handleClickRelationPollDelete} />
                     </Form.Group>
-                    <hr />
+                    <hr className="divider" />
                     <Form.Group>
                         {/*<Form.Row>
                             <Col xs={12}>

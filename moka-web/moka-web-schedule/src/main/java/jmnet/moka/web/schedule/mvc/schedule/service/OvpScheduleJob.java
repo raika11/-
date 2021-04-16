@@ -113,6 +113,7 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
                         .build());
             }
 
+            scheduleResult.setSendExecTime((new Date()).getTime());
             //boolean success = stringFileUpload(generateNewsbriefingByGoogle(rssList));
             FileUpload fileUpload = new FileUpload(scheduleInfo, mokaCrypt);
             boolean success = fileUpload.stringFileUpload(generateNewsbriefingByGoogle(rssList), "");
@@ -120,6 +121,12 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
             //업로드 성공 시 GenStatus.content에 파일생성에 사용된 String 저장
             if (success) {
                 scheduleResult.setContent(generateNewsbriefingByGoogle(rssList));
+                scheduleResult.setSendResult(StatusResultType.SUCCESS.getCode());
+                scheduleResult.setSendExecTime(((new Date()).getTime() - scheduleResult.getSendExecTime()) / 1000);
+            }
+            else {
+                scheduleResult.setSendResult(StatusResultType.FAILED.getCode());
+                scheduleResult.setSendExecTime(0l);
             }
 
             //AbstractSchduleJob.finish() 에서 필요한 schedule 실행 결과 값 입력

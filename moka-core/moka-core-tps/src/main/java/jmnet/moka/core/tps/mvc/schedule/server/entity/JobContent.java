@@ -126,6 +126,12 @@ public class JobContent extends BaseAudit {
     private String targetFileName;
 
     /**
+     * 호출URL
+     */
+    @Column(name = "CALL_URL")
+    private String callUrl;
+
+    /**
      * 설명
      */
     @Column(name = "JOB_DESC")

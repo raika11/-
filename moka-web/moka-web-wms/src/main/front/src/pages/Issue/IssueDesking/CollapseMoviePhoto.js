@@ -3,27 +3,31 @@ import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import util from '@utils/commonUtil';
 import { MokaInputLabel, MokaTable } from '@components';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
 import { ArticleTabModal } from '@pages/Article/modals';
-import { artColumnDefs } from './IssueDeskingColumns';
+import { VodModal } from '@pages/Desking/modals';
+import { moviePhotoColumnDefs } from './IssueDeskingColumns';
 
 /**
- * 패키지관리 > 관련 데이터 편집 > 기사 (편집)
+ * 패키지관리 > 관련 데이터 편집 > 영상/포토
  */
-const CollapseArticle = ({ gridInstance, setGridInstance }) => {
+const CollapseMoviePhoto = ({ gridInstance, setGridInstance }) => {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
-    const controls = 'collapse-art';
+    const [vodShow, setVodShow] = useState(false);
+    const controls = 'collapse-mp';
 
     /**
-     * 기사 선택
+     * 기사 등록
      * @param {string} type type
      * @param {object} data data
      */
-    const selectArticle = (type, data) => {
+    const addArticle = (type, data) => {
+        const id = `${type}${util.getUniqueKey()}`;
         gridInstance.api.applyTransaction({
-            add: [data],
+            add: [{ ...data, id }],
         });
     };
 
@@ -50,11 +54,11 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
 
     return (
         <>
-            <Row className="py-2 d-flex border-bottom" noGutters>
+            <Row className="py-2 mt-2 d-flex border-bottom" noGutters>
                 <Col xs={3}>
                     <MokaInputLabel
                         as="switch"
-                        label="메인기사"
+                        label="영상/포토"
                         id={controls}
                         inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
                         onChange={(e) => setOpen(e.target.checked)}
@@ -64,7 +68,12 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>
-                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={selectArticle} />
+                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
+
+                    <Button variant="searching" size="sm" className="mr-1" onClick={() => setVodShow(true)}>
+                        영상검색
+                    </Button>
+                    <VodModal show={vodShow} onHide={() => setVodShow(false)} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <Button variant="outline-neutral" size="sm" className="mr-1">
@@ -81,11 +90,11 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
             <Collapse in={open}>
                 <div id={controls} className="mt-2">
                     <MokaTable
-                        rowHeight={210}
+                        rowHeight={46}
                         header={false}
                         paging={false}
-                        columnDefs={artColumnDefs}
-                        onRowNodeId={(data) => data.totalId}
+                        columnDefs={moviePhotoColumnDefs}
+                        onRowNodeId={(data) => data.id}
                         setGridInstance={setGridInstance}
                         animateRows
                         rowDragManaged
@@ -100,4 +109,4 @@ const CollapseArticle = ({ gridInstance, setGridInstance }) => {
     );
 };
 
-export default CollapseArticle;
+export default CollapseMoviePhoto;

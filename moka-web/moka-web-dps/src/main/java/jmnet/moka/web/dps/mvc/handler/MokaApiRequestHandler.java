@@ -166,7 +166,7 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
             } else {
                 String requestKey = ApiCacheHelper.makeCacheType(apiContext) + ":"+ApiCacheHelper.makeCacheKey(apiContext);
                 ApiResult apiResult = null;
-                if ( !this.requestSet.contains(requestKey) ) {
+                if ( !this.requestSet.contains(requestKey) || api.getExpire() == 0L) {
                     try {
                         this.requestSet.add(requestKey);
                         apiResult = processApi(apiContext);
@@ -201,7 +201,6 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
                     }
                 } else {
                     int retryCount = 0;
-                    logger.info("Enter wait...");
                     while (cachedString == null && retryCount < 20) {
                         cachedString = ApiCacheHelper.getCachedString(apiContext, this.cacheManager);
                         try {
@@ -213,7 +212,6 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
                         }
                         retryCount++;
                     }
-                    logger.info("{}:{}",retryCount,cachedString.length());
                 }
             }
             responseEntity = ResponseEntity

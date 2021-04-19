@@ -201,17 +201,19 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
                     }
                 } else {
                     int retryCount = 0;
+                    logger.info("Enter wait...");
                     while (cachedString == null && retryCount < 20) {
                         cachedString = ApiCacheHelper.getCachedString(apiContext, this.cacheManager);
                         try {
                             Thread
                                     .currentThread()
-                                    .wait(100);
+                                    .sleep(100);
                         } catch (InterruptedException e) {
                             logger.warn("WAIT FAILED");
                         }
                         retryCount++;
                     }
+                    logger.info("{}:{}",retryCount,cachedString.length());
                 }
             }
             responseEntity = ResponseEntity

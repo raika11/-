@@ -116,9 +116,17 @@ const ArticleRenderer = forwardRef((params, ref) => {
                     </div>
                 </div>
                 <div className="d-flex flex-fill flex-column">
-                    <MokaInputLabel label="제목" name="title" labelWidth={labelWidth} value={contents.title} onChange={handleChangeValue} className="mb-2" />
+                    <MokaInputLabel label="제목" name="title" labelWidth={labelWidth} value={contents.title} onChange={handleChangeValue} className="mb-2" required />
                     <div className="d-flex mb-2">
-                        <MokaInputLabel label="URL" name="linkUrl" labelWidth={labelWidth} value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" />
+                        <MokaInputLabel
+                            label="URL"
+                            name="linkUrl"
+                            labelWidth={labelWidth}
+                            value={contents.linkUrl}
+                            onChange={handleChangeValue}
+                            className="flex-fill mr-2"
+                            required
+                        />
                         <div className="flex-shrink-0 d-flex">
                             <MokaInput as="select" name="linkTarget" value={contents.linkTarget} onChange={handleChangeValue}>
                                 <option value="_self">본창</option>
@@ -163,7 +171,7 @@ const LiveRenderer = forwardRef((params, ref) => {
     /**
      * 관련기사 삭제
      */
-    const handleDeleteArticle = () => params.api.applyTransaction({ remove: [{ ...params.node.data }] });
+    const handleDeleteArticle = () => params.api.applyTransaction({ update: [{ ...initialState.initialDesking, id: params.node.data.id }] });
 
     /**
      * 컨텐츠 변경

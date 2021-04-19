@@ -98,6 +98,13 @@ export const finishIssue = ({ pkgSeq }) => {
     });
 };
 
+// 이슈 데스킹 조회
+export const getIssueDesking = ({ pkgSeq }) => {
+    return instance.get(`/api/issue/${pkgSeq}/desking`).catch((err) => {
+        throw err;
+    });
+};
+
 // 이슈 데스킹 임시저장(폼데이터)
 export const saveIssueDesking = ({ pkgSeq, compNo, issueDeskingList }) => {
     return instance

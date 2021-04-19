@@ -124,6 +124,11 @@ export const MAX_GROUP_NUMBER = 8;
 // 편집기사 기본언어
 export const DEFAULT_LANG = 'KR';
 
+// 편집상태
+export const DESK_STATUS_WORK = 'WORK';
+export const DESK_STATUS_SAVE = 'SAVE';
+export const DESK_STATUS_PUBLISH = 'PUBLISH';
+
 // 페이지편집의 편집상태
 export const DESK_HIST_SAVE = 'SAVE'; // 임시저장
 export const DESK_HIST_PUBLISH = 'PUBLISH'; // 전송

@@ -77,7 +77,7 @@ export const toast = {
             escapeHtml: false,
         });
     },
-    warning: (message) => {
+    warning: (message, options) => {
         toastr.warning(DEFAULT_TITLE.FAIL, message, {
             closeButton: true,
             progressBar: false,
@@ -87,6 +87,7 @@ export const toast = {
             position: 'top-right',
             timeOut: 5000,
             escapeHtml: false,
+            ...options,
         });
     },
 

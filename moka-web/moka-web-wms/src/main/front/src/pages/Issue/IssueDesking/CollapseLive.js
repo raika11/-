@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -13,9 +13,10 @@ import { liveColumnDefs } from './IssueDeskingColumns';
 /**
  * 패키지관리 > 관련 데이터 편집 > 라이브기사
  */
-const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
+const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskingList }) => {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
+    const id = 'live-1';
     const controls = 'collapse-live';
 
     /**
@@ -28,6 +29,7 @@ const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
             const cnt = gridInstance.api.getDisplayedRowCount();
             const ndata = {
                 ...initialState,
+                id,
                 pkgSeq,
                 compNo,
                 title: data.artTitle,
@@ -51,6 +53,27 @@ const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
             messageBox.alert('기사, 영상탭에서 선택해주세요.');
         }
     };
+
+    useEffect(() => {
+        const data =
+            deskingList.length > 0
+                ? {
+                      ...initialState.initialDesking,
+                      ...deskingList[0],
+                      id,
+                      pkgSeq,
+                      compNo,
+                      channelType: ISSUE_CHANNEL_TYPE.L.code,
+                  }
+                : {
+                      ...initialState.initialDesking,
+                      id,
+                      pkgSeq,
+                      compNo,
+                      channelType: ISSUE_CHANNEL_TYPE.L.code,
+                  };
+        if (gridInstance) gridInstance.api.setRowData([data]);
+    }, [compNo, deskingList, gridInstance, pkgSeq]);
 
     return (
         <>
@@ -86,7 +109,7 @@ const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
                         header={false}
                         paging={false}
                         columnDefs={liveColumnDefs}
-                        onRowNodeId={(data) => data.contentsId}
+                        onRowNodeId={(data) => data.id}
                         setGridInstance={setGridInstance}
                         dragStyle
                     />

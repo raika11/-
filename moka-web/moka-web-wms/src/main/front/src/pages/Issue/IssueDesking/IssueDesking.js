@@ -32,6 +32,8 @@ const IssueDesking = () => {
         desking: issue.desking,
     }));
     const [deskingByCompNo, setDeskingByCompNo] = useState({});
+    const [opaBox, setOpaBox] = useState(true);
+    const [opaText, setOpaText] = useState('패키지 정보가 없습니다');
     const artRef = useRef(null);
     const artAutoRef = useRef(null);
     const liveRef = useRef(null);
@@ -113,22 +115,55 @@ const IssueDesking = () => {
     }, [pkgSeq, domainId]);
 
     useEffect(() => {
-        if (pkg.pkgSeq) {
-            dispatch(
-                getIssueDesking({
-                    pkgSeq: pkg.pkgSeq,
-                }),
-            );
+        if (pkgSeq) {
+            if (pkg.pkgDiv === 'I' && pkg.pkgType === 'E') {
+                dispatch(
+                    getIssueDesking({
+                        pkgSeq,
+                    }),
+                );
+                setOpaBox(false);
+            } else {
+                setDeskingByCompNo({});
+                setOpaBox(true);
+                setOpaText('확장형 이슈 유형의 패키지만 편집할 수 있습니다');
+            }
+        } else {
+            setDeskingByCompNo({});
+            setOpaBox(true);
+            setOpaText('패키지 정보가 없습니다');
         }
-    }, [pkg.pkgSeq, dispatch]);
+
+        return () => {
+            setDeskingByCompNo({});
+            setOpaBox(true);
+            setOpaText('패키지 정보가 없습니다');
+        };
+    }, [pkg, pkgSeq, dispatch]);
 
     useEffect(() => {
-        // 데스킹 => compNo별 데스킹 데이터로 파싱
-        setDeskingByCompNo(desking.reduce((all, compData) => ({ ...all, [`comp${compData.compNo}`]: compData }), {}));
+        // 데스킹 => compNo별 데스킹 데이터로 파싱 (viewYn === 'Y'만 노출)
+        setDeskingByCompNo(
+            desking.reduce(
+                (all, compData) => ({
+                    ...all,
+                    [`comp${compData.compNo}`]: {
+                        ...compData,
+                        issueDeskings: (compData.issueDeskings || []).filter((d) => d.viewYn === 'Y'),
+                    },
+                }),
+                {},
+            ),
+        );
     }, [desking]);
 
     return (
-        <MokaCard header={false} className="w-100 d-flex flex-column" bodyClassName="scrollable" loading={loading}>
+        <MokaCard header={false} className="w-100 d-flex flex-column" bodyClassName="scrollable position-relative" loading={loading}>
+            {opaBox && (
+                <div className="opacity-box">
+                    <h2>{opaText}</h2>
+                </div>
+            )}
             {/* 메인기사(편집) */}
             <CollapseArticle
                 pkgSeq={pkgSeq}
@@ -140,7 +175,7 @@ const IssueDesking = () => {
                 MESSAGE={MESSAGE}
             />
             {/* 메인기사(자동) */}
-            <CollapseArticleAuto ref={artAutoRef} compNo={2} desking={deskingByCompNo.comp2 || {}} />
+            <CollapseArticleAuto ref={artAutoRef} pkgSeq={pkgSeq} compNo={2} desking={deskingByCompNo.comp2 || {}} MESSAGE={MESSAGE} />
             {/* 라이브기사 */}
             <CollapseLive
                 pkgSeq={pkgSeq}

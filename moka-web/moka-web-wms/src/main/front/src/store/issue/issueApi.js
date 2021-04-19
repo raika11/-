@@ -118,15 +118,9 @@ export const saveIssueDesking = ({ pkgSeq, compNo, issueDesking }) => {
         });
 };
 
-// 이슈 데스킹 전송(폼데이터)
-export const publishIssueDesking = ({ pkgSeq, compNo, issueDesking }) => {
-    return instance
-        .post(`/api/issue/${pkgSeq}/desking/${compNo}/publish`, objectToFormData(issueDesking), {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        .catch((err) => {
-            throw err;
-        });
+// 이슈 데스킹 전송
+export const publishIssueDesking = ({ pkgSeq, compNo }) => {
+    return instance.post(`/api/issue/${pkgSeq}/desking/${compNo}/publish?${qs.stringify({ pkgSeq, compNo })}`).catch((err) => {
+        throw err;
+    });
 };

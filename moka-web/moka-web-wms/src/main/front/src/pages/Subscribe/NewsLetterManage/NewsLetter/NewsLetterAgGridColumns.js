@@ -15,7 +15,7 @@ export default [
     },
     {
         headerName: '유형',
-        field: 'type',
+        field: 'letterYype',
         sortable: true,
         unSortIcon: true,
         sort: null,
@@ -24,7 +24,7 @@ export default [
     },
     {
         headerName: '뉴스레터 명',
-        field: 'newsLetter',
+        field: 'letterName',
         sortable: true,
         unSortIcon: true,
         sort: null,
@@ -33,17 +33,17 @@ export default [
     },
     {
         headerName: '발송 시작일',
-        field: 'startDt',
+        field: 'sendDt',
         width: 78,
     },
     {
         headerName: '최근 발송일',
-        field: 'recentDt',
+        field: 'recentSendDt',
         width: 78,
     },
     {
         headerName: '발송 주기',
-        field: 'priod',
+        field: 'sendPriod',
         children: [
             { headerName: '일정/콘텐츠', field: 'ct', width: 80 },
             { headerName: '시간', field: 'time', width: 35 },
@@ -56,7 +56,7 @@ export default [
     },
     {
         headerName: '상태',
-        field: 'state',
+        field: 'status',
         sortable: true,
         unSortIcon: true,
         sort: null,
@@ -79,7 +79,7 @@ export default [
     },
     {
         headerName: 'A/B TEST',
-        field: 'abYn',
+        field: 'abtestYn',
         width: 65,
     },
 ];

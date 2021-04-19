@@ -6,7 +6,7 @@ export default [
     },
     {
         headerName: '유형',
-        field: 'type',
+        field: 'letterType',
         sortable: true,
         unSortIcon: true,
         sort: null,
@@ -15,7 +15,7 @@ export default [
     },
     {
         headerName: '뉴스레터 명',
-        field: 'newsLetter',
+        field: 'letterName',
         sortable: true,
         unSortIcon: true,
         sort: null,
@@ -24,7 +24,7 @@ export default [
     },
     {
         headerName: '제목',
-        field: 'title',
+        field: 'letterTitle',
         flex: 1,
     },
     {
@@ -38,7 +38,7 @@ export default [
     },
     {
         headerName: 'A/B TEST',
-        field: 'ab',
+        field: 'abtestYn',
         width: 70,
     },
 ];

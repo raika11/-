@@ -30,7 +30,7 @@ const NewsLetterSend = ({ match, displayName }) => {
 
                 <Col xs={5}>
                     <Switch>
-                        <Route path={[`${match.path}/add`, `${match.path}/:sendSeq`]} exact render={() => <NewsLetterSendEdit match={match} />} />
+                        <Route path={[`${match.path}/send`, `${match.path}/:sendSeq`]} exact render={() => <NewsLetterSendEdit match={match} />} />
                     </Switch>
                 </Col>
             </Row>

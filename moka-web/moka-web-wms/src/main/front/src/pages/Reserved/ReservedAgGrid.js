@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';
 import { columnDefs } from './ReservedAgGridColumns';
 import { changeSearchOption, getReservedList, GET_RESERVED_LIST } from '@store/reserved';
@@ -34,34 +33,21 @@ const ReservedAgGrid = ({ match }) => {
      */
     const handleRowClicked = useCallback((reserved) => history.push(`${match.path}/${reserved.reservedSeq}`), [history, match.path]);
 
-    /**
-     * 예약어 등록 버튼 클릭
-     */
-    const handleAddClick = useCallback(() => history.push(`${match.path}/add`), [history, match.path]);
-
     return (
-        <>
-            <div className="d-flex justify-content-end mb-14">
-                <Button variant="positive" onClick={handleAddClick}>
-                    예약어 등록
-                </Button>
-            </div>
-            {/* table */}
-            <MokaTable
-                className="overflow-hidden flex-fill"
-                columnDefs={columnDefs}
-                rowData={list}
-                onRowNodeId={(reserved) => reserved.reservedSeq}
-                onRowClicked={handleRowClicked}
-                loading={loading}
-                total={total}
-                page={search.page}
-                size={search.size}
-                displayPageNum={3}
-                selected={reserved.reservedSeq}
-                onChangeSearchOption={handleChangeSearchOption}
-            />
-        </>
+        <MokaTable
+            className="overflow-hidden flex-fill"
+            columnDefs={columnDefs}
+            rowData={list}
+            onRowNodeId={(reserved) => reserved.reservedSeq}
+            onRowClicked={handleRowClicked}
+            loading={loading}
+            total={total}
+            page={search.page}
+            size={search.size}
+            displayPageNum={3}
+            selected={reserved.reservedSeq}
+            onChangeSearchOption={handleChangeSearchOption}
+        />
     );
 };
 

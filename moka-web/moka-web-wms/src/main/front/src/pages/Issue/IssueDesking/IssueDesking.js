@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { API_BASE_URL } from '@/constants';
 import { getIssueDesking, GET_ISSUE_DESKING } from '@store/issue';
+import util from '@utils/commonUtil';
 import { MokaCard } from '@components';
 import CollapseArticle from './CollapseArticle';
 import CollapseArticleAuto from './CollapseArticleAuto';
@@ -24,17 +26,91 @@ const IssueDesking = () => {
     const { pkgSeq } = useParams();
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_ISSUE_DESKING]);
+    const domainId = useSelector(({ auth }) => auth.latsetDomainId);
     const { pkg, desking } = useSelector(({ issue }) => ({
         pkg: issue.pkg,
         desking: issue.desking,
     }));
     const [deskingByCompNo, setDeskingByCompNo] = useState({});
-    const [artInstance, setArtInstance] = useState(null);
-    const [liveInstance, setLiveInstance] = useState(null);
-    const [packetInstance, setPacketInstance] = useState(null);
-    const [moviePhotoInstance, setMoviePhotoInstance] = useState(null);
-    const [bannerInstance, setBannerInstance] = useState(null);
-    const [keywordInstance, setKeywordInstance] = useState(null);
+    const artRef = useRef(null);
+    const artAutoRef = useRef(null);
+    const liveRef = useRef(null);
+    const packetRef = useRef(null);
+    const mpRef = useRef(null);
+    const bannerRef = useRef(null);
+    const keywordRef = useRef(null);
+
+    /**
+     * 미리보기
+     */
+    const preview = useCallback(() => {
+        // article work
+        const comp1 = {
+            pkgSeq,
+            compNo: 1,
+            viewYn: artRef.current.viewYn,
+            issueDeskings: artRef.current.getDisplayedRows(),
+        };
+
+        // article auto work
+        const comp2 = {
+            pkgSeq,
+            compNo: 2,
+            viewYn: artAutoRef.current.viewYn,
+            issueDeskings: [],
+        };
+
+        // live work
+        const comp3 = {
+            pkgSeq,
+            compNo: 3,
+            viewYn: liveRef.current.viewYn,
+            issueDeskings: liveRef.current.getDisplayedRows(),
+        };
+
+        // packet work
+        const comp4 = {
+            pkgSeq,
+            compNo: 4,
+            viewYn: packetRef.current.viewYn,
+            issueDeskings: packetRef.current.getDisplayedRows(),
+        };
+
+        // mp work
+        const comp5 = {
+            pkgSeq,
+            compNo: 5,
+            viewYn: mpRef.current.viewYn,
+            issueDeskings: mpRef.current.getDisplayedRows(),
+        };
+
+        // graph work (TODO)
+        const comp6 = {
+            pkgSeq,
+            compNo: 6,
+            viewYn: 'N',
+            issueDeskings: [],
+        };
+
+        // banner work
+        const comp7 = {
+            pkgSeq,
+            compNo: 7,
+            viewYn: bannerRef.current.viewYn,
+            issueDeskings: bannerRef.current.getDisplayedRows(),
+        };
+
+        // keyword work
+        const comp8 = {
+            pkgSeq,
+            compNo: 8,
+            viewYn: keywordRef.current.viewYn,
+            issueDeskings: keywordRef.current.getDisplayedRows(),
+        };
+
+        const previewData = [comp1, comp2, comp3, comp4, comp5, comp6, comp7, comp8];
+        util.newTabPreview(`${API_BASE_URL}/preview/issue/${pkgSeq}`, { issueDeskings: previewData, domainId });
+    }, [pkgSeq, domainId]);
 
     useEffect(() => {
         if (pkg.pkgSeq) {
@@ -57,20 +133,19 @@ const IssueDesking = () => {
             <CollapseArticle
                 pkgSeq={pkgSeq}
                 compNo={1}
-                gridInstance={artInstance}
-                setGridInstance={setArtInstance}
+                ref={artRef}
                 desking={deskingByCompNo.comp1 || {}}
                 deskingList={deskingByCompNo.comp1?.issueDeskings || []}
+                preview={preview}
                 MESSAGE={MESSAGE}
             />
             {/* 메인기사(자동) */}
-            <CollapseArticleAuto compNo={2} desking={deskingByCompNo.comp2 || {}} />
+            <CollapseArticleAuto ref={artAutoRef} compNo={2} desking={deskingByCompNo.comp2 || {}} />
             {/* 라이브기사 */}
             <CollapseLive
                 pkgSeq={pkgSeq}
                 compNo={3}
-                gridInstance={liveInstance}
-                setGridInstance={setLiveInstance}
+                ref={liveRef}
                 desking={deskingByCompNo.comp3 || {}}
                 deskingList={deskingByCompNo.comp3?.issueDeskings || []}
                 MESSAGE={MESSAGE}
@@ -79,8 +154,7 @@ const IssueDesking = () => {
             <CollapsePacket
                 pkgSeq={pkgSeq}
                 compNo={4}
-                gridInstance={packetInstance}
-                setGridInstance={setPacketInstance}
+                ref={packetRef}
                 desking={deskingByCompNo.comp4 || {}}
                 deskingList={deskingByCompNo.comp4?.issueDeskings || []}
                 MESSAGE={MESSAGE}
@@ -89,8 +163,7 @@ const IssueDesking = () => {
             <CollapseMoviePhoto
                 pkgSeq={pkgSeq}
                 compNo={5}
-                gridInstance={moviePhotoInstance}
-                setGridInstance={setMoviePhotoInstance}
+                ref={mpRef}
                 desking={deskingByCompNo.comp5 || {}}
                 deskingList={deskingByCompNo.comp5?.issueDeskings || []}
                 MESSAGE={MESSAGE}
@@ -100,8 +173,7 @@ const IssueDesking = () => {
             <CollapseBanner
                 pkgSeq={pkgSeq}
                 compNo={6}
-                gridInstance={bannerInstance}
-                setGridInstance={setBannerInstance}
+                ref={bannerRef}
                 desking={deskingByCompNo.comp6 || {}}
                 deskingList={deskingByCompNo.comp6?.issueDeskings || []}
                 MESSAGE={MESSAGE}
@@ -110,8 +182,7 @@ const IssueDesking = () => {
             <CollapseKeyword
                 pkgSeq={pkgSeq}
                 compNo={7}
-                gridInstance={keywordInstance}
-                setGridInstance={setKeywordInstance}
+                ref={keywordRef}
                 desking={deskingByCompNo.comp7 || {}}
                 deskingList={deskingByCompNo.comp7?.issueDeskings || []}
                 MESSAGE={MESSAGE}

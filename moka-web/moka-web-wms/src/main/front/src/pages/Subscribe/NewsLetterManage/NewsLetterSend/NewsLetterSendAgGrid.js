@@ -27,17 +27,17 @@ const NewsLetterSendAgGrid = ({ match }) => {
     }, []);
 
     /**
-     * 뉴스레터 등록
+     * 뉴스레터 발송
      */
-    const handleClickAdd = () => {
-        history.push(`${match.path}/add`);
+    const handleClickSend = () => {
+        history.push(`${match.path}/send`);
     };
 
     return (
         <>
             <div className="mb-14 d-flex justify-content-end">
-                <Button variant="positive" className="mr-1" onClick={handleClickAdd}>
-                    뉴스레터 등록
+                <Button variant="positive" className="mr-1" onClick={handleClickSend}>
+                    뉴스레터 발송
                 </Button>
                 <Button variant="outline-neutral" className="mr-1">
                     아카이브 확인
@@ -48,6 +48,24 @@ const NewsLetterSendAgGrid = ({ match }) => {
                 suppressMultiSort // 다중 정렬 비활성
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
+                rowData={[
+                    {
+                        no: '1',
+                        letterType: '오리지널',
+                        letterName: '정치 언박싱',
+                        letterTitle: '[정치 언박싱] 지지후보 바꿀수도...',
+                        sendDt: '2021-03-01',
+                        abtestYn: 'N',
+                    },
+                    {
+                        no: '2',
+                        letterType: '알림',
+                        letterName: '폴인 인사이트',
+                        letterTitle: "[폴인 인사이트] '초통령' 로블록스, 졸업 할 수 있을까",
+                        sendDt: '2021-03-02',
+                        abtestYn: 'Y',
+                    },
+                ]}
                 onRowNodeId={(data) => data.no}
                 onRowClicked={handleRowClicked}
                 loading={loading}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { MokaSearchInput, MokaInput } from '@components';
 import { getReservedList, changeSearchOption, initialState } from '@store/reserved';
@@ -54,6 +55,11 @@ const ReservedSearch = ({ match }) => {
         }
     };
 
+    /**
+     * 예약어 등록 버튼 클릭
+     */
+    const handleAddClick = useCallback(() => history.push(`${match.path}/add`), [history, match.path]);
+
     useEffect(() => {
         setSearch(storeSearch);
     }, [storeSearch]);
@@ -92,7 +98,10 @@ const ReservedSearch = ({ match }) => {
                         ))}
                     </MokaInput>
                 </div>
-                <MokaSearchInput className="flex-fill" value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
+                <MokaSearchInput className="flex-fill mr-1" value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
+                <Button variant="positive" className="flex-shrink-0" onClick={handleAddClick}>
+                    예약어 등록
+                </Button>
             </Form.Row>
         </Form>
     );

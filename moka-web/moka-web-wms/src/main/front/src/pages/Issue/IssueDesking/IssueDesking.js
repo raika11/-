@@ -27,12 +27,13 @@ const IssueDesking = () => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_ISSUE_DESKING]);
     const domainId = useSelector(({ auth }) => auth.latsetDomainId);
-    const { desking } = useSelector(({ issue }) => ({
+    const { pkg, desking } = useSelector(({ issue }) => ({
         pkg: issue.pkg,
         desking: issue.desking,
     }));
     const [deskingByCompNo, setDeskingByCompNo] = useState({});
     const [opaBox, setOpaBox] = useState(true);
+    const [opaText, setOpaText] = useState('패키지 정보가 없습니다');
     const artRef = useRef(null);
     const artAutoRef = useRef(null);
     const liveRef = useRef(null);
@@ -115,22 +116,30 @@ const IssueDesking = () => {
 
     useEffect(() => {
         if (pkgSeq) {
-            dispatch(
-                getIssueDesking({
-                    pkgSeq,
-                }),
-            );
-            setOpaBox(false);
+            if (pkg.pkgDiv === 'I' && pkg.pkgType === 'E') {
+                dispatch(
+                    getIssueDesking({
+                        pkgSeq,
+                    }),
+                );
+                setOpaBox(false);
+            } else {
+                setDeskingByCompNo({});
+                setOpaBox(true);
+                setOpaText('확장형 이슈 유형의 패키지만 편집할 수 있습니다');
+            }
         } else {
             setDeskingByCompNo({});
             setOpaBox(true);
+            setOpaText('패키지 정보가 없습니다');
         }
 
         return () => {
             setDeskingByCompNo({});
             setOpaBox(true);
+            setOpaText('패키지 정보가 없습니다');
         };
-    }, [pkgSeq, dispatch]);
+    }, [pkg, pkgSeq, dispatch]);
 
     useEffect(() => {
         // 데스킹 => compNo별 데스킹 데이터로 파싱 (viewYn === 'Y'만 노출)
@@ -152,7 +161,7 @@ const IssueDesking = () => {
         <MokaCard header={false} className="w-100 d-flex flex-column" bodyClassName="scrollable position-relative" loading={loading}>
             {opaBox && (
                 <div className="opacity-box">
-                    <h2>패키지 정보가 없습니다</h2>
+                    <h2>{opaText}</h2>
                 </div>
             )}
             {/* 메인기사(편집) */}

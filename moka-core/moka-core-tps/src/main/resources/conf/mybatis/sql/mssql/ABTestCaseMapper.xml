@@ -9,7 +9,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="jmnet.moka.core.tps.mvc.abtest.mapper.ABTestCaseMapper">
+<mapper namespace="jmnet.moka.core.tps.mvc.abTest.mapper.ABTestCaseMapper">
 
   <!--ABTest 목록 조회 -->
   <select id="findAllList" parameterType="ABTestCaseSearchDTO" resultType="ABTestCaseVO"
@@ -53,8 +53,8 @@
     </choose>
 
     <choose>
-      <when test="abtestPurpose != 'all' and abtestPurpose != null and abtestPurpose != ''">
-        #{abtestPurpose},
+      <when test="abTestPurpose != 'all' and abTestPurpose != null and abTestPurpose != ''">
+        #{abTestPurpose},
       </when>
       <otherwise>
         NULL,
@@ -65,8 +65,8 @@
     #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
-      <when test="abtestType != 'all' and abtestType != null and abtestType != ''">
-        #{abtestType},
+      <when test="abTestType != 'all' and abTestType != null and abTestType != ''">
+        #{abTestType},
       </when>
       <otherwise>
         NULL,
@@ -83,7 +83,7 @@
     </choose>
 
     <choose>
-      <when test="searchType == 'abtestTitle' and keyword != null and keyword != ''">
+      <when test="searchType == 'abTestTitle' and keyword != null and keyword != ''">
         #{keyword},
       </when>
       <otherwise>
@@ -92,7 +92,7 @@
     </choose>
 
     <choose>
-      <when test="searchType == 'abtestDesc' and keyword != null and keyword != ''">
+      <when test="searchType == 'abTestDesc' and keyword != null and keyword != ''">
         #{keyword},
       </when>
       <otherwise>

@@ -2,7 +2,7 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.abtest.entity;
+package jmnet.moka.core.tps.mvc.abTest.entity;
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -38,19 +38,19 @@ public class ABTestCase extends BaseAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ABTEST_SEQ", nullable = false)
-    private Long abtestSeq;
+    private Long abTestSeq;
 
     /**
      * AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
     @Column(name = "ABTEST_TYPE")
-    private String abtestType;
+    private String abTestType;
 
     /**
      * AB테스트 목표(T:디자인 D:데이터)
      */
     @Column(name = "ABTEST_PURPOSE")
-    private String abtestPurpose;
+    private String abTestPurpose;
 
     /**
      * 도메인ID
@@ -245,12 +245,12 @@ public class ABTestCase extends BaseAudit {
      * AB테스트제목
      */
     @Column(name = "ABTEST_TITLE")
-    private String abtestTitle;
+    private String abTestTitle;
 
     /**
      * AB테스트설명
      */
     @Column(name = "ABTEST_DESC")
-    private String abtestDesc;
+    private String abTestDesc;
 
 }

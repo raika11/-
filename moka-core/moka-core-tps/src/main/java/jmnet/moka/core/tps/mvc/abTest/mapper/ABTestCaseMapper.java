@@ -1,15 +1,15 @@
-package jmnet.moka.core.tps.mvc.abtest.mapper;
+package jmnet.moka.core.tps.mvc.abTest.mapper;
 
 import java.util.List;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
-import jmnet.moka.core.tps.mvc.abtest.dto.ABTestCaseSearchDTO;
-import jmnet.moka.core.tps.mvc.abtest.vo.ABTestCaseVO;
+import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseSearchDTO;
+import jmnet.moka.core.tps.mvc.abTest.vo.ABTestCaseVO;
 
 /**
  * <pre>
  *
  * Project : moka
- * Package : jmnet.moka.core.tps.mvc.abtest.mapper
+ * Package : jmnet.moka.core.tps.mvc.abTest.mapper
  * ClassName : ABTestCaseMapper
  * Created : 2021-04-15
  * </pre>
@@ -34,4 +34,13 @@ public interface ABTestCaseMapper extends BaseMapper<ABTestCaseVO, ABTestCaseSea
      * @return 조회 결과
      */
     List<ABTestCaseVO> findABTestById(Long abTestSeq);
+
+    /**
+     * ABTest 등록
+     *
+     * @param abTestCaseVO 등록
+     * @return 조회 결과
+     */
+    ABTestCaseVO insertABTestCase(ABTestCaseVO abTestCaseVO);
+
 }

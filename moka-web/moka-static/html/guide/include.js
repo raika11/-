@@ -72,6 +72,7 @@ var include = {
             document.write('            <a class="nav_link" href="javascript:(0);">아티클</a>');
             document.write('            <ul class="nav">');
             document.write('                <li class="nav_item"><a class="nav_link" href="article_smp_cover.html" target="_blank">페이지-cover</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="article_p.html" target="_blank">페이지-p 태그</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="article_layout.html">레이아웃</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="particle.html">파티클</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="particle_imagea.html">이미지</a></li>');

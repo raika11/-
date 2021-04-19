@@ -96,9 +96,14 @@ const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking, 
      */
     const saveDesking = () => {
         const viewYn = open ? 'Y' : 'N';
-        // rowData 데이터 + viewYn 셋팅
-        const displayedRows = getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn }));
-        if (validate(displayedRows)) {
+        const displayedRows = open ? getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn })) : [];
+
+        if (open && displayedRows.length < 1) {
+            messageBox.alert(MESSAGE.FAIL_SAVE_NO_DATA);
+            return;
+        }
+
+        if (!open || validate(displayedRows)) {
             setLoading(true);
             dispatch(
                 saveIssueDesking({

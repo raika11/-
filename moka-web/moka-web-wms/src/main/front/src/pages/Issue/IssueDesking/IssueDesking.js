@@ -14,6 +14,7 @@ import CollapseKeyword from './CollapseKeyword';
 const MESSAGE = {
     FAIL_PUBLISH_UNTIL_SAVE: '편집된 정보가 있습니다. 임시저장 버튼을 클릭 후\n전송 버튼을 클릭하여 주세요',
     FAIL_PUBLISH_NO_SAVE: '임시저장 데이터가 없습니다. 임시저장 버튼을 클릭 후\n전송 버튼을 클릭하여 주세요.',
+    FAIL_SAVE_NO_DATA: '데이터를 하나 이상 추가해주세요.',
 };
 
 /**

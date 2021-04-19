@@ -3,6 +3,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dps.article">
 
+  <resultMap id="map" type="hashmap"/>
+
   <!-- article basic -->
   <select id="Abasic" parameterType="hashmap" resultType="map">
     select A.*, SOURCE_NAME, SOURCE_BASEURL, SOURCE_TYPE
@@ -116,8 +118,6 @@
     ON M.TOTAL_ID = B.TOTAL_ID AND M.USED_YN='Y' AND M.SNS_TYPE='JA'
     WHERE B.TOTAL_ID = #{totalId}
   </select>
-
-  <resultMap id="map" type="hashmap"/>
 
   <!-- article basic New -->
   <select id="articleN" parameterType="map" resultType="map" resultMap="map,map,map,map"
@@ -256,7 +256,6 @@
       #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{site, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{dev, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{loginDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},

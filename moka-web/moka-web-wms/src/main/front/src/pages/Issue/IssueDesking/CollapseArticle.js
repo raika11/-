@@ -5,19 +5,22 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH, CHANNEL_TYPE, ISSUE_CHANNEL_TYPE, ARTICLE_URL, ISSUE_URL } from '@/constants';
-import { MokaInputLabel, MokaTable } from '@components';
+import { MokaInputLabel, MokaTable, MokaLoader } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
 import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issue';
 import { ArticleTabModal } from '@pages/Article/modals';
+import StatusBadge from './StatusBadge';
 import { artColumnDefs } from './IssueDeskingColumns';
 
 /**
  * 패키지관리 > 관련 데이터 편집 > 기사 (편집)
  */
-const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking, deskingList }) => {
+const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking, deskingList, MESSAGE }) => {
     const dispatch = useDispatch();
     const [status, setStatus] = useState(DESK_STATUS_WORK);
+    const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
     const controls = 'collapse-art';
@@ -30,6 +33,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
     const addArticle = (channelType, data) => {
         const cnt = gridInstance.api.getDisplayedRowCount();
 
+        // 기사모달에서 넘어오는 데이터 unescapeHtmlArticle 처리 되어있음
         if (channelType === CHANNEL_TYPE.A.code) {
             gridInstance.api.applyTransaction({
                 add: [
@@ -45,6 +49,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                         linkUrl: `${ARTICLE_URL}${data.totalId}`,
                         duration: data.duration,
                         channelType: ISSUE_CHANNEL_TYPE.A.code,
+                        afterOnChange: () => setStatus(DESK_STATUS_WORK),
                         distDt: data.serviceDaytime, // 기사 등록일
                     },
                 ],
@@ -64,6 +69,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                         linkUrl: `${ARTICLE_URL}${data.totalId}`,
                         duration: data.duration,
                         channelType: ISSUE_CHANNEL_TYPE.A.code,
+                        afterOnChange: () => setStatus(DESK_STATUS_WORK),
                         distDt: data.serviceDaytime, // 기사 등록일
                     },
                 ],
@@ -80,12 +86,15 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                         title: data.pkgTitle,
                         linkUrl: `${ISSUE_URL}${data.pkgSeq}`,
                         channelType: ISSUE_CHANNEL_TYPE.I.code,
+                        afterOnChange: () => setStatus(DESK_STATUS_WORK),
                         distDt: data.regDt, // 이슈 생성일
                     },
                 ],
             });
         } else if (channelType === CHANNEL_TYPE.G.code) {
         }
+
+        setStatus(DESK_STATUS_WORK);
     };
 
     /**
@@ -107,6 +116,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
             contentsOrd: idx + 1,
         }));
         params.api.applyTransaction({ update: ordered });
+        setStatus(DESK_STATUS_WORK);
     };
 
     /**
@@ -149,6 +159,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
         // rowData 데이터 + viewYn 셋팅
         const displayedRows = getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn }));
         if (validate(displayedRows)) {
+            setLoading(true);
             dispatch(
                 saveIssueDesking({
                     compNo,
@@ -163,7 +174,11 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                     callback: ({ header }) => {
                         if (header.success) {
                             setStatus(DESK_STATUS_SAVE);
+                            toast.success(header.message);
+                        } else {
+                            messageBox.alert(header.message);
                         }
+                        setLoading(false);
                     },
                 }),
             );
@@ -175,20 +190,67 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
      */
     const publishDesking = () => {
         if (status === DESK_STATUS_WORK) {
-            messageBox.alert('편집된 정보가 있습니다. 임시저장 버튼을 클릭후\n전송 버튼을 클릭하여 주세요.');
+            messageBox.alert(MESSAGE.FAIL_PUBLISH_UNTIL_SAVE);
+        } else if (!desking.lastSaveDt) {
+            messageBox.alert(MESSAGE.FAIL_PUBLISH_NO_SAVE);
         } else {
+            messageBox.confirm(
+                '전송하시겠습니까?',
+                () => {
+                    setLoading(true);
+                    const viewYn = open ? 'Y' : 'N';
+                    // rowData 데이터 + viewYn 셋팅
+                    const displayedRows = getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn }));
+                    dispatch(
+                        publishIssueDesking({
+                            compNo,
+                            pkgSeq,
+                            issueDesking: {
+                                ...desking,
+                                compNo,
+                                pkgSeq,
+                                viewYn,
+                                issueDeskings: displayedRows,
+                            },
+                            callback: ({ header }) => {
+                                if (header.success) {
+                                    setStatus(DESK_STATUS_PUBLISH);
+                                    toast.success(header.message);
+                                } else {
+                                    messageBox.alert(header.message);
+                                }
+                                setLoading(false);
+                            },
+                        }),
+                    );
+                },
+                () => {},
+            );
         }
     };
 
     useEffect(() => {
+        setOpen(desking.viewYn === 'Y');
+    }, [desking.viewYn]);
+
+    useEffect(() => {
         if (gridInstance) {
-            gridInstance.api.setRowData(deskingList);
+            // title, bodyHead unescapeHtmlArticle 처리
+            gridInstance.api.setRowData(
+                deskingList.map((d) => ({
+                    ...d,
+                    title: unescapeHtmlArticle(d.title),
+                    bodyHead: unescapeHtmlArticle(d.bodyHead),
+                    afterOnChange: () => setStatus(DESK_STATUS_WORK),
+                })),
+            );
             setStatus(DESK_STATUS_SAVE);
         }
     }, [gridInstance, pkgSeq, deskingList]);
 
     return (
-        <>
+        <div className="position-relative">
+            {loading && <MokaLoader />}
             <Row className="py-2 d-flex border-bottom" noGutters>
                 <Col xs={3}>
                     <MokaInputLabel
@@ -206,6 +268,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                     <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
+                    <StatusBadge desking={desking} />
                     <Button variant="outline-neutral" size="sm" className="mr-1">
                         미리보기
                     </Button>
@@ -229,14 +292,13 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                         animateRows
                         rowDragManaged
                         suppressMoveWhenRowDragging
-                        onRowDataUpdated={() => setStatus(DESK_STATUS_WORK)}
                         onRowDragMove={handleRowDragMove}
                         onRowDragEnd={handleRowDragEnd}
                         dragStyle
                     />
                 </div>
             </Collapse>
-        </>
+        </div>
     );
 };
 

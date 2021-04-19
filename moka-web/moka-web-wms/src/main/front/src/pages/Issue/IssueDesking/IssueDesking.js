@@ -11,6 +11,11 @@ import CollapseMoviePhoto from './CollapseMoviePhoto';
 import CollapseBanner from './CollapseBanner';
 import CollapseKeyword from './CollapseKeyword';
 
+const MESSAGE = {
+    FAIL_PUBLISH_UNTIL_SAVE: '편집된 정보가 있습니다. 임시저장 버튼을 클릭 후\n전송 버튼을 클릭하여 주세요',
+    FAIL_PUBLISH_NO_SAVE: '임시저장 데이터가 없습니다. 임시저장 버튼을 클릭 후\n전송 버튼을 클릭하여 주세요.',
+};
+
 /**
  * 패키지 관리 > 관련 데이터 편집
  */
@@ -53,19 +58,21 @@ const IssueDesking = () => {
                 compNo={1}
                 gridInstance={artInstance}
                 setGridInstance={setArtInstance}
-                desking={deskingByCompNo.comp1}
+                desking={deskingByCompNo.comp1 || {}}
                 deskingList={deskingByCompNo.comp1?.issueDeskings || []}
+                MESSAGE={MESSAGE}
             />
             {/* 메인기사(자동) */}
-            <CollapseArticleAuto compNo={2} />
+            <CollapseArticleAuto compNo={2} desking={deskingByCompNo.comp2 || {}} />
             {/* 라이브기사 */}
             <CollapseLive
                 pkgSeq={pkgSeq}
                 compNo={3}
                 gridInstance={liveInstance}
                 setGridInstance={setLiveInstance}
-                desking={deskingByCompNo.comp3}
+                desking={deskingByCompNo.comp3 || {}}
                 deskingList={deskingByCompNo.comp3?.issueDeskings || []}
+                MESSAGE={MESSAGE}
             />
             {/* 관련기사꾸러미 */}
             <CollapsePacket
@@ -73,8 +80,9 @@ const IssueDesking = () => {
                 compNo={4}
                 gridInstance={packetInstance}
                 setGridInstance={setPacketInstance}
-                desking={deskingByCompNo.comp4}
+                desking={deskingByCompNo.comp4 || {}}
                 deskingList={deskingByCompNo.comp4?.issueDeskings || []}
+                MESSAGE={MESSAGE}
             />
             {/* 영상/포토 */}
             <CollapseMoviePhoto
@@ -82,8 +90,9 @@ const IssueDesking = () => {
                 compNo={5}
                 gridInstance={moviePhotoInstance}
                 setGridInstance={setMoviePhotoInstance}
-                desking={deskingByCompNo.comp5}
+                desking={deskingByCompNo.comp5 || {}}
                 deskingList={deskingByCompNo.comp5?.issueDeskings || []}
+                MESSAGE={MESSAGE}
             />
             {/* 그래프가 6번 */}
             {/* 배너 */}
@@ -92,8 +101,9 @@ const IssueDesking = () => {
                 compNo={6}
                 gridInstance={bannerInstance}
                 setGridInstance={setBannerInstance}
-                desking={deskingByCompNo.comp6}
+                desking={deskingByCompNo.comp6 || {}}
                 deskingList={deskingByCompNo.comp6?.issueDeskings || []}
+                MESSAGE={MESSAGE}
             />
             {/* 키워드 */}
             <CollapseKeyword
@@ -101,8 +111,9 @@ const IssueDesking = () => {
                 compNo={7}
                 gridInstance={keywordInstance}
                 setGridInstance={setKeywordInstance}
-                desking={deskingByCompNo.comp7}
+                desking={deskingByCompNo.comp7 || {}}
                 deskingList={deskingByCompNo.comp7?.issueDeskings || []}
+                MESSAGE={MESSAGE}
             />
         </MokaCard>
     );

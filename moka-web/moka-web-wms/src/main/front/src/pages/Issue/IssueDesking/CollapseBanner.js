@@ -11,7 +11,7 @@ import { bannerColumnDefs } from './IssueDeskingColumns';
 /**
  * 패키지관리 > 관련 데이터 편집 > 배너
  */
-const CollapseBanner = ({ compNo, gridInstance, pkgSeq, setGridInstance, deskingList }) => {
+const CollapseBanner = ({ compNo, gridInstance, pkgSeq, setGridInstance, desking, deskingList }) => {
     const controls = 'collapse-banner';
     const [open, setOpen] = useState(false);
 
@@ -35,6 +35,10 @@ const CollapseBanner = ({ compNo, gridInstance, pkgSeq, setGridInstance, desking
                   };
         if (gridInstance) gridInstance.api.setRowData([data]);
     }, [compNo, deskingList, gridInstance, pkgSeq]);
+
+    useEffect(() => {
+        setOpen(desking.viewYn === 'Y');
+    }, [desking.viewYn]);
 
     return (
         <>

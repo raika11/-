@@ -51,33 +51,13 @@
                         </div>
                         <h1 class="headline">백신 3종 이상 확보한 나라 벌써 12개국… <br>한국은 1종</h1>
 
-
-                        <div class="datetime">
-                            <span class="source">중앙일보</span>
-                            <div class="time_bx">
-                                <p class="date pc">입력 2021.01.25 15:00</p>
-                                <p class="date">수정 2021.01.25 15:00  <button type="button" class="date mo"><i class=" ico_arrow_down"></i></button></p>
-
-
-                                <div class="layer_popup layer_datetime hide"  id=""><!-- 여기에 개별 클래스 추가 -->
-                                    <div class="layer_body">
-                                        <p class="date">입력 2021.01.25 15:00</p>
-                                        <p class="date">수정 2021.01.25 15:00</p>
-                                    </div>
-                                    <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
-                                </div>
-                            </div>
-                            <a href="#" class="epaper" target="_blank" title="지면 구독신청">지면보기</a>
-                        </div>
-
-
                         <div class="datetime">
                             <span class="source">중앙일보</span>
                             <div class="time_bx">
                                 <p class="date">입력 2021.01.25 15:00</p>
                                 <p class="date">수정 2021.01.25 15:00</p>
-                                <button type="button" class="btn_datetime"><i class="ico_arrow_down"></i></button>
-                                <div class="layer_popup layer_datetime" style="display:none;" id=""><!-- 여기에 개별 클래스 추가 -->
+                                <button type="button" class="btn_datetime" onclick="openLayer(modal_datetime, this);" ><i class="ico_arrow_down"></i></button>
+                                <div class="layer_popup layer_datetime" id="modal_datetime"><!-- 여기에 개별 클래스 추가 -->
                                     <div class="layer_body">
                                         <p class="date">입력 2021.01.25 15:00</p>
                                         <p class="date">수정 2021.01.25 15:00</p>
@@ -87,16 +67,14 @@
                             </div>
                             <a href="#" class="epaper" target="_blank" title="지면 구독신청">지면보기</a>
                         </div>
-
-
 
                         <div class="byline">
                             <a href="#">정혜정 기자</a>
                             <a href="#">김중앙 기자</a>
                             <a href="#">김유미 기자</a>
                             <div class="byline_bx">
-                                <button type="button" class="byline">외 3명</button>
-                                <div class="layer_popup layer_byline" style="display:none;" id=""><!-- 여기에 개별 클래스 추가 -->
+                                <button type="button" class="byline" onclick="openLayer(modal_byline, this);">외 3명</button>
+                                <div class="layer_popup layer_byline" id="modal_byline"><!-- 여기에 개별 클래스 추가 -->
                                     <div class="layer_header">
                                         <strong class="layer_title">작성한 기자</strong>
                                     </div>
@@ -147,11 +125,6 @@
                             </div>
                         </div>
                         <!-- //팩플 레터 -->
-
-                        
-
-
-
 
                     </div>
                     <div class="article_footer">
@@ -230,15 +203,6 @@
                                         </div>
                                     </div>
                                     <!-- //Comment -->
-                                    <!-- Comment Input Area -->
-                                    <!-- <div class="comment_form">
-                                        <form>
-                                            <textarea class="form_control"></textarea>
-                                            <button type="button" class="btn">Cancel</button>
-                                            <button type="button" class="btn">Submit</button>
-                                        </form>
-                                    </div> -->
-                                    <!-- //Comment Input Area -->
                                 </li>
                                 <li>
                                     <!-- Comment -->
@@ -272,15 +236,6 @@
                                         </div>
                                     </div>
                                     <!-- //Comment -->
-                                    <!-- Comment Input Area -->
-                                    <!-- <div class="comment_form">
-                                        <form>
-                                            <textarea class="form_control"></textarea>
-                                            <button type="button" class="btn">Cancel</button>
-                                            <button type="button" class="btn">Submit</button>
-                                        </form>
-                                    </div> -->
-                                    <!-- //Comment Input Area -->
                                 </li>
                                 <li>
                                     <!-- Comment -->
@@ -314,15 +269,6 @@
                                         </div>
                                     </div>
                                     <!-- //Comment -->
-                                    <!-- Comment Input Area -->
-                                    <!-- <div class="comment_form">
-                                        <form>
-                                            <textarea class="form_control"></textarea>
-                                            <button type="button" class="btn">Cancel</button>
-                                            <button type="button" class="btn">Submit</button>
-                                        </form>
-                                    </div> -->
-                                    <!-- //Comment Input Area -->
                                 </li>
                             </ul>
                             <!-- <button type="button" class="btn_gray">댓글 작성하기 <i class="ico_arrow_right"></i></button> -->
@@ -337,8 +283,11 @@
         <!-- // container -->
 
         <!-- 댓글 임시 -->
-        <div class="layer_popup layer_comment" style="display:block;" id=""><!-- 여기에 개별 클래스 추가 -->
-
+        <div class="side_popup side_comment active" id=""><!-- 여기에 개별 클래스 추가 -->
+            <div class="comment_header">
+                <strong>댓글 0개</strong>
+                <button class=""><i class="ico_reset"></i><span class="visually_hidden">새로고침</span></button>
+            </div>
             <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
         </div>
         <!-- //댓글 임시 -->

@@ -709,27 +709,16 @@ public class IssueRestController extends AbstractCommonController {
     }
 
     @ApiOperation(value = "편집기사 전송")
-    //    @PostMapping(value = "/{pkgSeq}/desking/{compNo}/publish", headers = {
-    //            "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = "/{pkgSeq}/desking/{compNo}/publish", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> postPublishIssueDesking(@Valid IssueDeskingComponentDTO issueDeskingComponentDTO,
-            @ApiParam(hidden = true) Principal principal)
-            throws InvalidDataException, Exception {
+    @PostMapping("/{pkgSeq}/desking/{compNo}/publish")
+    public ResponseEntity<?> postPublishIssueDesking(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
+            @ApiParam(value = "컴포넌트순번", required = true) @PathVariable("compNo") Integer compNo, @ApiParam(hidden = true) Principal principal)
+            throws Exception {
         PackageMaster packageMaster = packageService
-                .findByPkgSeq(issueDeskingComponentDTO.getPkgSeq())
+                .findByPkgSeq(pkgSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
         try {
-            // escape
-            issueDeskingComponentDTO
-                    .getIssueDeskings()
-                    .stream()
-                    .forEach((dto -> issueDeskingService.escapeHtml(dto)));
-
-            // 썸네일 파일 저장
-            uploadThumbfile(issueDeskingComponentDTO.getIssueDeskings());
-
             // 등록
-            IssueDeskingComponentDTO returnValue = issueDeskingService.publish(packageMaster, issueDeskingComponentDTO, principal.getName());
+            IssueDeskingComponentDTO returnValue = issueDeskingService.publish(packageMaster, compNo, principal.getName());
 
             // 결과리턴
             IssueDeskingComponentDTO dto = modelMapper.map(returnValue, IssueDeskingComponentDTO.class);

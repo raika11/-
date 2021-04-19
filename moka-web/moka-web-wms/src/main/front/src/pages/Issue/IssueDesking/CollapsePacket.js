@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
@@ -17,8 +17,9 @@ import StatusBadge from './StatusBadge';
 /**
  * 패키지관리 > 관련 데이터 편집 > 관련기사 꾸러미
  */
-const CollapsePacket = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking, deskingList, MESSAGE }) => {
+const CollapsePacket = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE }, ref) => {
     const dispatch = useDispatch();
+    const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -219,6 +220,16 @@ const CollapsePacket = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking
         }
     };
 
+    useImperativeHandle(
+        ref,
+        () => ({
+            viewYn: open ? 'Y' : 'N',
+            gridInstance,
+            getDisplayedRows: () => getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn: open ? 'Y' : 'N' })),
+        }),
+        [gridInstance, open],
+    );
+
     useEffect(() => {
         if (gridInstance) {
             // title, bodyHead unescapeHtmlArticle 처리
@@ -286,6 +297,6 @@ const CollapsePacket = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking
             </Collapse>
         </div>
     );
-};
+});
 
 export default CollapsePacket;

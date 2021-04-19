@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,13 +8,21 @@ import StatusBadge from './StatusBadge';
 /**
  * 패키지관리 > 관련 데이터 편집 > 기사 (자동)
  */
-const CollapseArticleAuto = ({ desking }) => {
+const CollapseArticleAuto = forwardRef(({ desking }, ref) => {
     const controls = 'collapse-art-auto';
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
         setOpen(desking.viewYn === 'Y');
     }, [desking.viewYn]);
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            viewYn: open ? 'Y' : 'N',
+        }),
+        [open],
+    );
 
     return (
         <>
@@ -37,6 +45,6 @@ const CollapseArticleAuto = ({ desking }) => {
             </Row>
         </>
     );
-};
+});
 
 export default CollapseArticleAuto;

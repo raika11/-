@@ -183,6 +183,22 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
     @Transactional
     public IssueDeskingComponentDTO save(PackageMaster packageMaster, IssueDeskingComponentDTO issueDeskingComponentDTO, String regId) {
 
+        //편집기사가 없는경우, hist에 임시저장을 위한 빈데이타를 넣는다.
+        //노출상태로 임시저장할 수 없다.(front에서 제어)
+        //만약, 노출로 편집정보없이 임시저장할경우, hist에는 노출됐다는 정보를 기억할 수 없게된다.
+        //       그래서, 현재는 편집정보가 없으면 무조건 가짜 편집정보를 넣도록 코딩함.
+        if (issueDeskingComponentDTO.getIssueDeskings() == null || issueDeskingComponentDTO
+                .getIssueDeskings()
+                .size() <= 0) {
+            IssueDeskingHistDTO dto = IssueDeskingHistDTO
+                    .builder()
+                    .pkgSeq(issueDeskingComponentDTO.getPkgSeq())
+                    .compNo(issueDeskingComponentDTO.getCompNo())
+                    .viewYn(issueDeskingComponentDTO.getViewYn())
+                    .build();
+            issueDeskingComponentDTO.appendDesking(dto);
+        }
+
         // 히스토리등록
         this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, EditStatusCode.SAVE);
 
@@ -213,6 +229,7 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
         String viewYn = getCompYn(AUTO_COMPONENT_NO, packageMaster.getCompYn());
         IssueDeskingComponentDTO issueDeskingComponentDTO = IssueDeskingComponentDTO
                 .builder()
+                .pkgSeq(packageMaster.getPkgSeq())
                 .compNo(AUTO_COMPONENT_NO)
                 .viewYn(viewYn)
                 .build();

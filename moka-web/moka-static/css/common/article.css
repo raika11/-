@@ -259,9 +259,10 @@ font-*,color,text-align,vertical-align, ...
 .ab_sub_headingline * {color:#3c3e40 !important;}
 .ab_related_article {clear:both;position:relative;padding:24px 0 16px;}
 .article_body > div.ab_related_article:first-child{padding:24px 0 16px !important;}
-.ab_related_article .hd {position:absolute;top:9px;left:0;padding-right:10px;background:#fff;color:#5d81c3;font-weight:bold;font-size:16px;line-height:1.8;}
+.ab_related_article .hd {position:absolute;top:9px;left:0;padding-right:10px;background:#fff;color:#ff3c14;font-weight:700;font-size:16px;line-height:1.8;}
 .ab_related_article .bd {border-top:1px solid #ebebeb;border-bottom:1px solid #ebebeb;}
 .ab_related_article .text_type {padding:10px 0 22px;}
+
 .ab_related_article .image_type {padding:10px 0 24px;overflow:hidden;}
 .ab_related_article .image_type li {float:left;width:50%;overflow:hidden;}
 .ab_related_article .headline {display:block;max-height:75px;margin-top:7px;color:#3c3e40;font-weight:bold;font-size:17px;line-height:25px;overflow:hidden;}

@@ -177,7 +177,7 @@ const LiveRenderer = forwardRef((params, ref) => {
      */
     const handleDeleteArticle = () => {
         params.node.data.afterOnChange();
-        params.api.applyTransaction({ update: [{ ...initialState.initialDesking, id: params.node.data.id }] });
+        params.api.applyTransaction({ update: [{ ...initialState.initialDesking, afterOnChange: params.node.data.afterOnChange, id: params.node.data.id }] });
     };
 
     /**
@@ -203,7 +203,7 @@ const LiveRenderer = forwardRef((params, ref) => {
 
     return (
         <div className="w-100 h-100 d-flex align-items-center">
-            <div className="flex-fill d-flex flex-column pl-2">
+            <div className="flex-fill d-flex flex-column pl-3">
                 <MokaInputLabel label="제목" labelWidth={labelWidth} name="title" value={contents.title} onChange={handleChangeValue} className="mb-2" required />
                 <div className="d-flex">
                     <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" required />
@@ -261,7 +261,7 @@ const PacketRenderer = forwardRef((params, ref) => {
 
     return (
         <div className="w-100 h-100 d-flex align-items-center">
-            <div className="flex-fill d-flex flex-column pl-2">
+            <div className="flex-fill d-flex flex-column">
                 <MokaInputLabel label="제목" labelWidth={labelWidth} name="title" value={contents.title} onChange={handleChangeValue} className="mb-2" required />
                 <div className="d-flex">
                     <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" required />
@@ -341,7 +341,10 @@ const BannerRenderer = forwardRef((params, ref) => {
     /**
      * 컨텐츠 삭제
      */
-    const handleDelete = () => params.api.applyTransaction({ update: [{ ...initialState.initialDesking, id: params.node.data.id }] });
+    const handleDelete = () => {
+        params.node.data.afterOnChange();
+        params.api.applyTransaction({ update: [{ ...initialState.initialDesking, afterOnChange: params.node.data.afterOnChange, id: params.node.data.id }] });
+    };
 
     /**
      * 컨텐츠 변경
@@ -350,6 +353,7 @@ const BannerRenderer = forwardRef((params, ref) => {
     const handleChangeValue = (e) => {
         setContent({ ...content, [e.target.name]: e.target.value });
         params.api.applyTransaction({ update: [{ ...params.node.data, [e.target.name]: e.target.value }] });
+        params.node.data.afterOnChange();
     };
 
     /**
@@ -358,33 +362,9 @@ const BannerRenderer = forwardRef((params, ref) => {
      * @param {*} file 파일데이터
      */
     const handleThumbFileApply = (imageSrc, file) => {
-        setContent({ ...content, thumb: imageSrc, thumbFile: file });
-        params.api.applyTransaction({ update: [{ ...content, thumb: imageSrc, thumbFile: file }] });
-    };
-
-    /**
-     * 이미지 편집
-     */
-    const handleEditClick = () => {
-        if (content.thumb) {
-            imageEditer.create(
-                content.thumb,
-                (editImageSrc) => {
-                    (async () => {
-                        await fetch(editImageSrc)
-                            .then((r) => r.blob())
-                            .then((blobFile) => {
-                                const file = commonUtil.blobToFile(blobFile, commonUtil.getUniqueKey);
-                                setContent({ ...content, thumb: editImageSrc, thumbFile: file });
-                                params.api.applyTransaction({ update: [{ ...content, thumb: editImageSrc, thumbFile: file }] });
-                            });
-                    })();
-                },
-                { cropWidth: 300, cropHeight: 300 },
-            );
-        } else {
-            messageBox.alert('편집할 이미지가 없습니다');
-        }
+        setContent({ ...content, thumbFileName: imageSrc, thumbFile: file });
+        params.api.applyTransaction({ update: [{ ...content, thumbFileName: imageSrc, thumbFile: file }] });
+        params.node.data.afterOnChange();
     };
 
     useImperativeHandle(
@@ -402,7 +382,7 @@ const BannerRenderer = forwardRef((params, ref) => {
         <div className="w-100 h-100 d-flex align-items-center">
             <Row className="flex-fill align-items-center" noGutters>
                 <Col xs={4} className="d-flex">
-                    <div className="d-flex flex-column justify-content-center pl-1 mr-2">
+                    <div className="pl-1 mr-2">
                         <Button size="sm" variant="gray-700" className="mb-2" onClick={() => setShow(true)}>
                             신규 등록
                         </Button>
@@ -411,18 +391,15 @@ const BannerRenderer = forwardRef((params, ref) => {
                             cropHeight={cropHeight}
                             cropWidth={cropWidth}
                             onHide={() => setShow(false)}
-                            thumbFileName={content.thumb}
+                            thumbFileName={content.thumbFileName}
                             apply={handleThumbFileApply}
                         />
-                        <Button size="sm" variant="outline-gray-700" onClick={handleEditClick}>
-                            편집
-                        </Button>
                     </div>
-                    <MokaImage width={105} className="flex-shrink-0" img={content.thumb} ratio={[6, 4]} />
+                    <MokaImage width={105} className="flex-shrink-0" img={content.thumbFileName} ratio={[6, 4]} />
                 </Col>
-                <Col xs={8} className="d-flex flex-column pl-3">
+                <Col xs={8} className="d-flex flex-column pl-4">
                     <div className="d-flex mb-2">
-                        <MokaInputLabel label="제목" name="title" labelWidth={labelWidth} value={content.title} onChange={handleChangeValue} className="flex-fill mr-2" />
+                        <MokaInputLabel label="제목" name="title" labelWidth={35} value={content.title} onChange={handleChangeValue} className="flex-fill mr-2" required />
                         <MokaInputLabel
                             label="배경컬러"
                             name="bgColor"
@@ -433,7 +410,7 @@ const BannerRenderer = forwardRef((params, ref) => {
                         />
                     </div>
                     <div className="d-flex">
-                        <MokaInputLabel label="URL" name="linkUrl" labelWidth={labelWidth} value={content.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" />
+                        <MokaInputLabel label="URL" name="linkUrl" labelWidth={35} value={content.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" />
                         <div className="flex-shrink-0 d-flex">
                             <MokaInput as="select" name="linkTarget" value={content.linkTarget} onChange={handleChangeValue}>
                                 <option value="_self">본창</option>
@@ -461,7 +438,10 @@ const KeywordRenderer = forwardRef((params, ref) => {
     /**
      * 컨텐츠 삭제
      */
-    const handleDelete = () => params.api.applyTransaction({ update: [{ ...initialState.initialDesking, id: params.node.data.id }] });
+    const handleDelete = () => {
+        params.node.data.afterOnChange();
+        params.api.applyTransaction({ update: [{ ...initialState.initialDesking, afterOnChange: params.node.data.afterOnChange, id: params.node.data.id }] });
+    };
 
     /**
      * 컨텐츠 변경
@@ -470,6 +450,7 @@ const KeywordRenderer = forwardRef((params, ref) => {
     const handleChangeValue = (e) => {
         setContent({ ...content, [e.target.name]: e.target.value });
         params.api.applyTransaction({ update: [{ ...params.node.data, [e.target.name]: e.target.value }] });
+        params.node.data.afterOnChange();
     };
 
     useImperativeHandle(
@@ -485,9 +466,9 @@ const KeywordRenderer = forwardRef((params, ref) => {
 
     return (
         <div className="w-100 h-100 d-flex align-items-center">
-            <div className="flex-fill d-flex flex-column pl-2">
-                <MokaInputLabel label="제목" name="title" labelWidth={labelWidth} value={content.title} className="mb-2" onChange={handleChangeValue} />
-                <MokaInputLabel label="키워드" name="bodyHead" labelWidth={labelWidth} value={content.bodyHead} onChange={handleChangeValue} />
+            <div className="flex-fill d-flex flex-column pl-3">
+                <MokaInputLabel label="제목" name="title" labelWidth={labelWidth} value={content.title} className="mb-2" onChange={handleChangeValue} required />
+                <MokaInputLabel label="키워드" name="bodyHead" labelWidth={labelWidth} value={content.bodyHead} onChange={handleChangeValue} required />
             </div>
             <div className="pl-2 pr-1 flex-shrink-0 d-flex align-items-center">
                 <Button variant="white" className="border-0 p-0 bg-transparent" onClick={handleDelete}>

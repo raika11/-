@@ -280,17 +280,21 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
 
     private void insertDeskingHist(PackageMaster packageMaster, IssueDeskingComponentDTO issueDeskingComponentDTO, String regId,
             EditStatusCode status) {
-        Date today = new Date();   // 히스토리 등록시, 컴포넌트별 등록시간을 동일한 값으로 넣도록 한다.
-        for (IssueDeskingHistDTO dto : issueDeskingComponentDTO.getIssueDeskings()) {
-            IssueDeskingHist hist = modelMapper.map(dto, IssueDeskingHist.class);
-            hist.setSeqNo(null);
-            hist.setPackageMaster(packageMaster);
-            hist.setStatus(status.getCode());
-            if (regId != null) {
-                hist.setRegId(regId);
+        if (issueDeskingComponentDTO.getIssueDeskings() != null && issueDeskingComponentDTO
+                .getIssueDeskings()
+                .size() > 0) {
+            Date today = new Date();   // 히스토리 등록시, 컴포넌트별 등록시간을 동일한 값으로 넣도록 한다.
+            for (IssueDeskingHistDTO dto : issueDeskingComponentDTO.getIssueDeskings()) {
+                IssueDeskingHist hist = modelMapper.map(dto, IssueDeskingHist.class);
+                hist.setSeqNo(null);
+                hist.setPackageMaster(packageMaster);
+                hist.setStatus(status.getCode());
+                if (regId != null) {
+                    hist.setRegId(regId);
+                }
+                hist.setRegDt(today);
+                issueDeskingHistRepository.save(hist);
             }
-            hist.setRegDt(today);
-            issueDeskingHistRepository.save(hist);
         }
     }
 

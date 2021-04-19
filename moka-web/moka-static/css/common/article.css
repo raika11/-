@@ -240,6 +240,38 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 .row.gutter0 {margin-left: 0;margin-right: 0;}
 .row.gutter0 > * {padding-left: 0;padding-right: 0;}
+
+
+/* 텍스트형 */
+/* 2016-06-22 모듈 추가(박스기사, 관련기사, 소제목) */
+.ab_box_article {clear:both;position:relative;padding-top:17px;padding-bottom:16px;*zoom:1;}
+.article_body > div.ab_box_article:first-child{padding-top:17px !important;padding-bottom:16px !important;}
+.ab_box_article .ab_photo {max-width:538px;padding-top:8px;padding-bottom:12px;}
+.ab_box_article .ab_photo.photo_center {}
+.ab_box_article .ab_photo.photo_left {margin-right:20px;}
+.ab_box_inner {padding:42px 20px 24px;border:1px solid #dddddd;overflow:hidden;}
+.ab_box_title {margin-bottom:17px;color:#5d81c3;font-size:20px;line-height:1.5;}
+.ab_box_bullet {display:block;position:absolute;top:12px;left:20px;width:18px;height:28px;background:#5d81c3;overflow:hidden;}
+.ab_box_titleline {font-weight:bold;}
+.ab_box_content {color:#3c3e40;font-size:16px;line-height:30px;}
+.ab_sub_heading {clear:both;position:relative;margin-top:17px;margin-bottom:16px;padding-top:12px;padding-bottom:16px;border-top:1px solid #444446;border-bottom:1px solid #ebebeb;color:#3e3e40;font-size:20px;line-height:1.5;}
+.article_body > div.ab_sub_heading:first-child{padding-top:12px !important;padding-bottom:16px !important;}
+.ab_sub_headingline {color:#3c3e40;font-weight:bold;}
+.ab_sub_headingline * {color:#3c3e40 !important;}
+.ab_related_article {clear:both;position:relative;padding:24px 0 16px;}
+.article_body > div.ab_related_article:first-child{padding:24px 0 16px !important;}
+.ab_related_article .hd {position:absolute;top:9px;left:0;padding-right:10px;background:#fff;color:#5d81c3;font-weight:bold;font-size:16px;line-height:1.8;}
+.ab_related_article .bd {border-top:1px solid #ebebeb;border-bottom:1px solid #ebebeb;}
+.ab_related_article .text_type {padding:10px 0 22px;}
+.ab_related_article .image_type {padding:10px 0 24px;overflow:hidden;}
+.ab_related_article .image_type li {float:left;width:50%;overflow:hidden;}
+.ab_related_article .headline {display:block;max-height:75px;margin-top:7px;color:#3c3e40;font-weight:bold;font-size:17px;line-height:25px;overflow:hidden;}
+.ab_related_article .headline a {color:#3c3e40;}
+.ab_related_article .thumb {display:block;float:left;position:relative;width:70px;height:70px;margin-top:14px;margin-right:15px;overflow:hidden;}
+.ab_related_article .thumb img {width:70px;height:70px;}
+.ab_related_article .text_type .headline {padding-left:16px;background:url('https://images.joins.com/ui_joongang/news/pc/article/bu_related_article.png') 0 11px no-repeat;}
+.ab_related_article .image_type .headline {margin-right:15px;}
+
 @media (max-width: 1023px) {
     .row.sm_gutter0 {margin-left: 0;margin-right: 0;}
     .row.sm_gutter0 > * {padding-left: 0;padding-right: 0;}

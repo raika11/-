@@ -99,7 +99,7 @@
                     </header>
                 </div>
                 <!-- //구독 -->
-                <div class="article_body">
+                <div class="article_body fs3">
                     정부는 우리 국민의 4400만 명분에 해당하는 코로나19 해외 백신을 선구매했다고 8일 밝혔다. 구체적으로 ‘코박스 퍼실러티(COVAX Facility)를 통해 약 1000만 명분 글로벌 백신 기업을 통해 약 3400만 명분이다. <br />
                     정부는 그간 코로나19 백신 확보를 위해 투트랙으로 접근했다. 세계보건기구(WHO) 중심으로 마련된 다국가 연합체인 ‘코박스 퍼실러티’(COVAX Facility)에 가입해 1000만 명분을 확보하고, 임상 3상 시험에 돌입한 글로벌 제약사와 개별 협상을 통해 선구매하는 것이다.
                     <div class="ab_photo photo_center" contenteditable="false" style="width: 1200px;">
@@ -139,59 +139,128 @@
                     </div>
                     <!-- //구독 -->
 
-                    <!-- 공감 -->
-                    <!-- 클래스명 변경 가능 -->
-                    <div class="" style="margin: 0 auto; max-width: 580px;">
-                        <div class="empathy_wrap">
-                            <button type="button" class="active">
-                                <i class="ico_face_like"></i>
-                                <span class="visually_hidden">좋아요</span>
-                                <span class="count">526</span>
-                            </button>
-                            <button type="button">
-                                <i class="ico_face_hate"></i>
-                                <span class="visually_hidden">싫어요</span>
-                                <span class="count">3</span>
-                            </button>
-                        </div>
+                    <!-- 공감 컴포넌트 -->
+                    <div class="empathy_wrap">
+                        <button type="button" class="active">
+                            <i class="ico_face_like"></i>
+                            <span class="visually_hidden">좋아요</span>
+                            <span class="count">526</span>
+                        </button>
+                        <button type="button">
+                            <i class="ico_face_hate"></i>
+                            <span class="visually_hidden">싫어요</span>
+                            <span class="count">3</span>
+                        </button>
                     </div>
-                    <!-- //공감 -->
+                    <!-- //공감 컴포넌트 -->
 
-                    <!-- 댓글 -->
-                    <div class="comment">
-                        <div class="comment_header">
-                            <span class="comment_userid">good****</span>
-                            <span class="comment_date">2021.03.09 12:30</span>
-                            <div class="more_option_area open">
-                                <button type="button" class="btn_more" ><i class="ico_more_option"></i></button>
-                                <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
-                                <button type="button" class="btn_outline_gray">신고</button>
-                            </div>
-                        </div>
-                        <div class="comment_content">
-                            <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
-                        </div>
-                        <div class="comment_footer">
-                            <button type="button" class="btn_reply">답글<span class="count">2</span></button>
-                            <div class="empathy_area">
-                                <button type="button" class="active">
-                                    <i class="ico_face_like"></i>
-                                    <span class="visually_hidden">좋아요</span>
-                                    <span class="count">536</span>
-                                </button>
-                                <button type="button">
-                                    <i class="ico_face_hate"></i>
-                                    <span class="visually_hidden">화나요</span>
-                                    <span class="count">3</span>
-                                </button>
-                            </div>
-                        </div>
+                    <!-- 댓글 컴포넌트 -->
+                    <div class="comment_wrap">
+                        <ul class="comment_list">
+                            <li>
+                                <!-- Comment -->
+                                <div class="comment">
+                                    <div class="comment_header">
+                                        <span class="comment_userid">good****</span>
+                                        <span class="comment_date">2021.03.09 12:30</span>
+                                    </div>
+                                    <div class="comment_content">
+                                        <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                    </div>
+                                    <div class="comment_footer">
+                                        <button type="button" class="btn_reply_cnt">답글 <span>2</span></button>
+                                        <div class="comment_recomm">
+                                            <button type="button" class="active" class="btn_like">
+                                                <i class="ico_face_like"></i>
+                                                <span class="visually_hidden">좋아요</span>
+                                                <span class="count">536</span>
+                                            </button>
+                                            <button type="button" class="btn_dislike">
+                                                <i class="ico_face_hate"></i>
+                                                <span class="visually_hidden">화나요</span>
+                                                <span class="count">3</span>
+                                            </button>
+                                        </div>
+                                        <div class="more_option_area open">
+                                            <button type="button" type="button" class="btn_toggle" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
+                                            <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
+                                            <button type="button" class="btn_outline_gray">신고</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- //Comment -->
+                            </li>
+                            <li>
+                                <!-- Comment -->
+                                <div class="comment">
+                                    <div class="comment_header">
+                                        <span class="comment_userid">good****</span>
+                                        <span class="comment_date">2021.03.09 12:30</span>
+                                    </div>
+                                    <div class="comment_content">
+                                        <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                    </div>
+                                    <div class="comment_footer">
+                                        <button type="button" class="btn_reply_cnt">답글 <span>2</span></button>
+                                        <div class="comment_recomm">
+                                            <button type="button" class="btn_like">
+                                                <i class="ico_face_like"></i>
+                                                <span class="visually_hidden">좋아요</span>
+                                                <span class="count">536</span>
+                                            </button>
+                                            <button type="button" class="btn_dislike">
+                                                <i class="ico_face_hate"></i>
+                                                <span class="visually_hidden">화나요</span>
+                                                <span class="count">3</span>
+                                            </button>
+                                        </div>
+                                        <div class="more_option_area">
+                                            <button type="button" class="btn_toggle" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                            <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
+                                            <button type="button" class="btn_outline_gray">신고</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- //Comment -->
+                            </li>
+                            <li>
+                                <!-- Comment -->
+                                <div class="comment">
+                                    <div class="comment_header">
+                                        <span class="comment_userid">good****</span>
+                                        <span class="comment_date">2021.03.09 12:30</span>
+                                    </div>
+                                    <div class="comment_content">
+                                        <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                    </div>
+                                    <div class="comment_footer">
+                                        <button type="button" class="btn_reply_cnt">답글 <span>2</span></button>
+                                        <div class="comment_recomm">
+                                            <button type="button" class="btn_like">
+                                                <i class="ico_face_like"></i>
+                                                <span class="visually_hidden">좋아요</span>
+                                                <span class="count">536</span>
+                                            </button>
+                                            <button type="button" class="btn_dislike">
+                                                <i class="ico_face_hate"></i>
+                                                <span class="visually_hidden">화나요</span>
+                                                <span class="count">3</span>
+                                            </button>
+                                        </div>
+                                        <div class="more_option_area">
+                                            <button type="button" type="button" class="btn_toggle" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
+                                            <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
+                                            <button type="button" class="btn_outline_gray">신고</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- //Comment -->
+                            </li>
+                        </ul>
+                        <!-- <button type="button" class="btn_gray">댓글 작성하기 <i class="ico_arrow_right"></i></button> -->
+                        <button type="button" class="btn_gray">댓글 <span class="font_orange">2,346</span>개 보기 <i class="ico_arrow_right"></i></button>
                     </div>
-
-                    <!-- loof -->
-                    <div class="comment"><div class="comment_header"><span class="comment_userid">good****</span><span class="comment_date">2021.03.09 12:30</span><div class="more_option_area open"><button type="button" class="btn_more"><i class="ico_more_option"></i></button> <button type="button" class="btn_outline_gray">신고</button></div></div><div class="comment_content"><p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p></div><div class="comment_footer"><button type="button" class="btn_reply">답글<span class="count">2</span></button><div class="empathy_area"><button type="button" class="active"><i class="ico_face_like"></i><span class="visually_hidden">좋아요</span><span class="count">536</span></button><button type="button"><i class="ico_face_hate"></i><span class="visually_hidden">화나요</span><span class="count">3</span></button></div></div></div>
-                    <div class="comment"><div class="comment_header"><span class="comment_userid">good****</span><span class="comment_date">2021.03.09 12:30</span><div class="more_option_area open"><button type="button" class="btn_more"><i class="ico_more_option"></i></button> <button type="button" class="btn_outline_gray">신고</button></div></div><div class="comment_content"><p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p></div><div class="comment_footer"><button type="button" class="btn_reply">답글<span class="count">2</span></button><div class="empathy_area"><button type="button" class="active"><i class="ico_face_like"></i><span class="visually_hidden">좋아요</span><span class="count">536</span></button><button type="button"><i class="ico_face_hate"></i><span class="visually_hidden">화나요</span><span class="count">3</span></button></div></div></div>
-                    <!-- //댓글 -->
+                    <!-- //댓글 컴포넌트 -->
                 </div>
             </article>
         </main>

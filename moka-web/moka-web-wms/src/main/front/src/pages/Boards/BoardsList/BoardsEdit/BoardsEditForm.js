@@ -145,20 +145,17 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
             <Form>
                 {boardSeq && !parentBoardSeq && (
                     <>
-                        <Form.Row className="mb-2">
-                            {data.boardSeq && data.regDt && (
-                                <Col xs={7} className="p-0 d-flex align-items-center">
-                                    <MokaInputLabel label="등록일시" as="none" labelWidth={50} />
-                                    <p className="mb-0">{`${data.regDt} ${data.regName || ''}(${data.regId || ''})`}</p>
-                                </Col>
-                            )}
-                            {data.boardSeq && data.modDt && (
-                                <Col xs={5} className="p-0 d-flex align-items-center justify-content-end">
-                                    <MokaInputLabel label="수정일시" as="none" labelWidth={50} />
-                                    <p className="mb-0">{`${data.modDt} ${data.modId || ''}`}</p>
-                                </Col>
-                            )}
-                        </Form.Row>
+                        {data.boardSeq && data.regDt && (
+                            <MokaInputLabel
+                                label="등록일시"
+                                className="mb-2"
+                                value={`${data.regDt} ${data.regName || ''}(${data.regId || ''})`}
+                                inputProps={{ readOnly: true, plaintext: true }}
+                            />
+                        )}
+                        {data.boardSeq && data.modDt && (
+                            <MokaInputLabel label="수정일시" className="mb-2" value={`${data.modDt} ${data.modId || ''}`} inputProps={{ readOnly: true, plaintext: true }} />
+                        )}
                         <Form.Row className="mb-2 align-items-center">
                             <Col xs={4} className="p-0 d-flex">
                                 <MokaInputLabel label="조회수" as="none" />

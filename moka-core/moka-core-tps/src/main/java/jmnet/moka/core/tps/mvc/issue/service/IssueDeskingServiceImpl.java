@@ -103,7 +103,7 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
      */
     private void resetComponentList(List<IssueDeskingComponentDTO> issueDeskings, PackageMaster packageMaster) {
 
-        String pakcageCompYn = McpString.defaultValue(packageMaster.getCompYn(), packageCompYn);
+        String pakcageCompYn = packageCompYn; //McpString.defaultValue(packageMaster.getCompYn(), packageCompYn);
 
         if (McpString.isNotEmpty(pakcageCompYn)) {
             for (int i = 0; i < pakcageCompYn.length(); i++) {
@@ -192,7 +192,9 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
 
     @Override
     @Transactional
-    public IssueDeskingComponentDTO publish(PackageMaster packageMaster, IssueDeskingComponentDTO issueDeskingComponentDTO, String regId) {
+    public IssueDeskingComponentDTO publish(PackageMaster packageMaster, Integer compNo, String regId) {
+
+        IssueDeskingComponentDTO issueDeskingComponentDTO = findIssueDeskingComponent(packageMaster, compNo);
 
         // 히스토리등록
         this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, EditStatusCode.PUBLISH);

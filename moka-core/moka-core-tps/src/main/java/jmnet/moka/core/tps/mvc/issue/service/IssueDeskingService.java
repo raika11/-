@@ -46,12 +46,12 @@ public interface IssueDeskingService {
     /**
      * 편집기사 전송
      *
-     * @param packageMaster            패키지
-     * @param issueDeskingComponentDTO 컴포넌트 편집기사
-     * @param regId                    작업자ID
+     * @param packageMaster 패키지
+     * @param compNo        컴포넌트 순번
+     * @param regId         작업자ID
      * @return
      */
-    IssueDeskingComponentDTO publish(PackageMaster packageMaster, IssueDeskingComponentDTO issueDeskingComponentDTO, String regId);
+    IssueDeskingComponentDTO publish(PackageMaster packageMaster, Integer compNo, String regId);
 
     /**
      * 자동컴포넌트의 편집기사 저장

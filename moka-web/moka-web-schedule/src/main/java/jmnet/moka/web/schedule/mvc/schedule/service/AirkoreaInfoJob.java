@@ -59,46 +59,53 @@ public class AirkoreaInfoJob extends AbstractScheduleJob {
                                 "&searchCondition=" + apiSchCondition;
 
                 ResponseEntity<String> res      = restTemplateHelper.get(apiUrl);
-                String reponseAirXml            = res.getBody();
-                DocumentBuilderFactory factory  = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder         = factory.newDocumentBuilder();
-                Document document               = builder.parse(new InputSource(new StringReader(reponseAirXml.toString())));
-                NodeList nodelist               = document.getElementsByTagName("item");
 
-                for(int idx = 0; idx < nodelist.getLength() ; idx++) {
-                    AirkoreaInfoJobDTO airkoreaInfoDTO = new AirkoreaInfoJobDTO();
+                if(res.getStatusCodeValue() == StatusResultType.SUCCESS.getCode()) {
 
-                    for (Node node = nodelist.item(idx).getFirstChild(); node != null; node = node.getNextSibling()) {
-                        if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    String reponseAirXml            = res.getBody();
+                    DocumentBuilderFactory factory  = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder builder         = factory.newDocumentBuilder();
+                    Document document               = builder.parse(new InputSource(new StringReader(reponseAirXml.toString())));
+                    NodeList nodelist               = document.getElementsByTagName("item");
 
-                            String val = node.getTextContent();
-                            switch(node.getNodeName()) {
-                                case "dataTime":    airkoreaInfoDTO.setDataTime(val);                   break;
-                                case "itemCode":    airkoreaInfoDTO.setItemCode(val);                   break;
-                                case "seoul":       airkoreaInfoDTO.setSeoul(checkNodeValue(val));      break;  // BigDecimal.valueOf(0.55)
-                                case "busan":       airkoreaInfoDTO.setBusan(checkNodeValue(val));      break;
-                                case "incheon":     airkoreaInfoDTO.setIncheon(checkNodeValue(val));    break;
-                                case "daegu":       airkoreaInfoDTO.setDaegu(checkNodeValue(val));      break;
-                                case "ulsan":       airkoreaInfoDTO.setUlsan(checkNodeValue(val));      break;
-                                case "daejeon":     airkoreaInfoDTO.setDaejeon(checkNodeValue(val));    break;
-                                case "gwangju":     airkoreaInfoDTO.setGwangju(checkNodeValue(val));    break;
-                                case "sejong":      airkoreaInfoDTO.setSejong(checkNodeValue(val));     break;
-                                case "jeju":        airkoreaInfoDTO.setJeju(checkNodeValue(val));       break;
-                                case "gyeonggi":    airkoreaInfoDTO.setGyeonggi(checkNodeValue(val));   break;
-                                case "gangwon":     airkoreaInfoDTO.setGangwon(checkNodeValue(val));    break;
-                                case "gyeongnam":   airkoreaInfoDTO.setGyeongnam(checkNodeValue(val));  break;
-                                case "gyeongbuk":   airkoreaInfoDTO.setGyeongbuk(checkNodeValue(val));  break;
-                                case "chungnam":    airkoreaInfoDTO.setChungnam(checkNodeValue(val));   break;
-                                case "chungbuk":    airkoreaInfoDTO.setChungbuk(checkNodeValue(val));   break;
-                                case "jeonnam":     airkoreaInfoDTO.setJeonnam(checkNodeValue(val));    break;
-                                case "jeonbuk":     airkoreaInfoDTO.setJeonbuk(checkNodeValue(val));    break;
+                    for (int idx = 0; idx < nodelist.getLength(); idx++) {
+                        AirkoreaInfoJobDTO airkoreaInfoDTO = new AirkoreaInfoJobDTO();
+
+                        for (Node node = nodelist.item(idx).getFirstChild(); node != null; node = node.getNextSibling()) {
+                            if (node.getNodeType() == Node.ELEMENT_NODE) {
+
+                                String val = node.getTextContent();
+                                switch (node.getNodeName()) {
+                                    case "dataTime":    airkoreaInfoDTO.setDataTime(val);                   break;
+                                    case "itemCode":    airkoreaInfoDTO.setItemCode(val);                   break;
+                                    case "seoul":       airkoreaInfoDTO.setSeoul(checkNodeValue(val));      break;  // BigDecimal.valueOf(0.55)
+                                    case "busan":       airkoreaInfoDTO.setBusan(checkNodeValue(val));      break;
+                                    case "incheon":     airkoreaInfoDTO.setIncheon(checkNodeValue(val));    break;
+                                    case "daegu":       airkoreaInfoDTO.setDaegu(checkNodeValue(val));      break;
+                                    case "ulsan":       airkoreaInfoDTO.setUlsan(checkNodeValue(val));      break;
+                                    case "daejeon":     airkoreaInfoDTO.setDaejeon(checkNodeValue(val));    break;
+                                    case "gwangju":     airkoreaInfoDTO.setGwangju(checkNodeValue(val));    break;
+                                    case "sejong":      airkoreaInfoDTO.setSejong(checkNodeValue(val));     break;
+                                    case "jeju":        airkoreaInfoDTO.setJeju(checkNodeValue(val));       break;
+                                    case "gyeonggi":    airkoreaInfoDTO.setGyeonggi(checkNodeValue(val));   break;
+                                    case "gangwon":     airkoreaInfoDTO.setGangwon(checkNodeValue(val));    break;
+                                    case "gyeongnam":   airkoreaInfoDTO.setGyeongnam(checkNodeValue(val));  break;
+                                    case "gyeongbuk":   airkoreaInfoDTO.setGyeongbuk(checkNodeValue(val));  break;
+                                    case "chungnam":    airkoreaInfoDTO.setChungnam(checkNodeValue(val));   break;
+                                    case "chungbuk":    airkoreaInfoDTO.setChungbuk(checkNodeValue(val));   break;
+                                    case "jeonnam":     airkoreaInfoDTO.setJeonnam(checkNodeValue(val));    break;
+                                    case "jeonbuk":     airkoreaInfoDTO.setJeonbuk(checkNodeValue(val));    break;
+                                }
                             }
                         }
-                    }
 
-                    if(checkAirkoreaInfoDTO(airkoreaInfoDTO) && airkoreaInfoJobMapper.insertAirkoreaInfo(airkoreaInfoDTO) != 1) {
-                        throw new RuntimeException("대기정보 데이터 생성시에 오류가 발생하였습니다.");
+                        if (checkAirkoreaInfoDTO(airkoreaInfoDTO) && airkoreaInfoJobMapper.insertAirkoreaInfo(airkoreaInfoDTO) != 1) {
+                            throw new RuntimeException("대기정보 데이터 생성시에 오류가 발생하였습니다.");
+                        }
                     }
+                }
+                else {
+                    scheduleResult.setSendResult(StatusResultType.FAILED.getCode());
                 }
             }
 

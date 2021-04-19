@@ -34,23 +34,30 @@ public class CallUrlJob extends AbstractScheduleJob {
 
         try {
             ResponseEntity<String> res = restTemplateHelper.get(scheduleInfo.getCallUrl());
-            String callUrlReponse = res.getBody();
-            scheduleResult.setSendExecTime((new Date()).getTime());
+            if(res.getStatusCodeValue() == StatusResultType.SUCCESS.getCode()) {
+                String callUrlReponse = res.getBody();
+                scheduleResult.setSendExecTime((new Date()).getTime());
 
-            FileUpload fileUpload = new FileUpload(scheduleInfo, mokaCrypt);
-            boolean success = fileUpload.stringFileUpload(callUrlReponse, scheduleInfo.getTargetFileName());
+                FileUpload fileUpload = new FileUpload(scheduleInfo, mokaCrypt);
+                boolean success = fileUpload.stringFileUpload(callUrlReponse, scheduleInfo.getTargetFileName());
 
-            if (success) {
-                scheduleResult.setContent(callUrlReponse);
-                scheduleResult.setSendResult(StatusResultType.SUCCESS.getCode());
-                scheduleResult.setSendExecTime(((new Date()).getTime() - scheduleResult.getSendExecTime()) / 1000);
+                if (success) {
+                    scheduleResult.setContent(callUrlReponse);
+                    scheduleResult.setSendResult(StatusResultType.SUCCESS.getCode());
+                    scheduleResult.setSendExecTime(((new Date()).getTime() - scheduleResult.getSendExecTime()) / 1000);
+                } else {
+                    scheduleResult.setSendResult(StatusResultType.FAILED.getCode());
+                    scheduleResult.setSendExecTime(0l);
+                }
+
+                setFinish(success, info);
             }
-            else {
+            else
+            {
                 scheduleResult.setSendResult(StatusResultType.FAILED.getCode());
+                scheduleResult.setSendResult(0l);
                 scheduleResult.setSendExecTime(0l);
             }
-
-            setFinish(success, info);
         }
         catch(Exception e)
         {

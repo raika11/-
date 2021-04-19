@@ -227,7 +227,7 @@ font-*,color,text-align,vertical-align, ...
 .subscription_info {padding:7px 0 30px;color:#f6330a;font-size: 14px;line-height: 1.5;letter-spacing: normal;word-break: break-all;text-align: justify;}
 
 /*** 팩플레터 ***/
-.subscription_wrap.letter_wrap {display:flex;padding:20px 16px 24px;background-color: #f3f3f3;}
+.subscription_wrap.letter_wrap {display:flex;padding:20px 16px 24px;margin:40px auto;background-color: #f3f3f3;}
 .letter_wrap .thum {flex:0 0 auto;display:inline-block;width:62px;margin-top:7px;margin-right:16px;}
 .letter_wrap .pp_letter {width:calc(100% - 78px);}
 .letter_wrap .title_wrap {padding:0;height:28px;}

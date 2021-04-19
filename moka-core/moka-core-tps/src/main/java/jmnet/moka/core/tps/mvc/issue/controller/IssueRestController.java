@@ -647,14 +647,18 @@ public class IssueRestController extends AbstractCommonController {
                 .findByPkgSeq(issueDeskingComponentDTO.getPkgSeq())
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
         try {
-            // escape
-            issueDeskingComponentDTO
+            if (issueDeskingComponentDTO.getIssueDeskings() != null && issueDeskingComponentDTO
                     .getIssueDeskings()
-                    .stream()
-                    .forEach((dto -> issueDeskingService.escapeHtml(dto)));
+                    .size() > 0) {
+                // escape
+                issueDeskingComponentDTO
+                        .getIssueDeskings()
+                        .stream()
+                        .forEach((dto -> issueDeskingService.escapeHtml(dto)));
 
-            // 썸네일 파일 저장
-            uploadThumbfile(issueDeskingComponentDTO.getIssueDeskings());
+                // 썸네일 파일 저장
+                uploadThumbfile(issueDeskingComponentDTO.getIssueDeskings());
+            }
 
             // 등록
             IssueDeskingComponentDTO returnValue = issueDeskingService.save(packageMaster, issueDeskingComponentDTO, principal.getName());

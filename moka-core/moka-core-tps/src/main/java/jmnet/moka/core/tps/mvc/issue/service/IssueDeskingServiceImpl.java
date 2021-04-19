@@ -181,7 +181,7 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
 
     @Override
     @Transactional
-    public IssueDeskingComponentDTO save(PackageMaster packageMaster, IssueDeskingComponentDTO issueDeskingComponentDTO, String regId) {
+    public void save(PackageMaster packageMaster, IssueDeskingComponentDTO issueDeskingComponentDTO, String regId) {
 
         //편집기사가 없는경우, hist에 임시저장을 위한 빈데이타를 넣는다.
         //노출상태로 임시저장할 수 없다.(front에서 제어)
@@ -201,13 +201,11 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
 
         // 히스토리등록
         this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, EditStatusCode.SAVE);
-
-        return this.findIssueDeskingComponent(packageMaster, issueDeskingComponentDTO.getCompNo());
     }
 
     @Override
     @Transactional
-    public IssueDeskingComponentDTO publish(PackageMaster packageMaster, Integer compNo, String regId) {
+    public void publish(PackageMaster packageMaster, Integer compNo, String regId) {
 
         IssueDeskingComponentDTO issueDeskingComponentDTO = findIssueDeskingComponent(packageMaster, compNo);
 
@@ -216,8 +214,6 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
 
         // 등록
         this.insertDesking(packageMaster, issueDeskingComponentDTO);
-
-        return this.findIssueDeskingComponent(packageMaster, issueDeskingComponentDTO.getCompNo());
     }
 
     @Override
@@ -255,6 +251,7 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
         // 새로운 편집기사 등록
         for (IssueDeskingHistDTO dto : issueDeskingComponentDTO.getIssueDeskings()) {
             IssueDesking desking = modelMapper.map(dto, IssueDesking.class);
+            desking.setSeqNo(null);
             desking.setPackageMaster(packageMaster);
             issueDeskingRepository.save(desking);
         }

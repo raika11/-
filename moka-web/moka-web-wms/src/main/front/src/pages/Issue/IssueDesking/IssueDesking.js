@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { API_BASE_URL } from '@/constants';
+import { API_BASE_URL, PREVIEW_DOMAIN_ID } from '@/constants';
 import { getIssueDesking, GET_ISSUE_DESKING } from '@store/issue';
 import util from '@utils/commonUtil';
 import { MokaCard } from '@components';
@@ -26,7 +26,7 @@ const IssueDesking = () => {
     const { pkgSeq } = useParams();
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_ISSUE_DESKING]);
-    const domainId = useSelector(({ auth }) => auth.latsetDomainId);
+    // const domainId = useSelector(({ auth }) => auth.latsetDomainId);
     const { pkg, desking } = useSelector(({ issue }) => ({
         pkg: issue.pkg,
         desking: issue.desking,
@@ -109,8 +109,9 @@ const IssueDesking = () => {
         };
 
         const previewData = [comp1, comp2, comp3, comp4, comp5, comp6, comp7, comp8];
-        util.newTabPreview(`${API_BASE_URL}/preview/issue/${pkgSeq}`, { issueDeskings: previewData, domainId });
-    }, [pkgSeq, domainId]);
+        // util.newTabPreview(`${API_BASE_URL}/preview/issue/${pkgSeq}`, { issueDeskings: previewData, domainId: PREVIEW_DOMAIN_ID });
+        util.newTabPreview(`${API_BASE_URL}/preview/issue/${pkgSeq}`, { issueDeskings: previewData, domainId: 2000 });
+    }, [pkgSeq]);
 
     useEffect(() => {
         if (pkg.pkgSeq) {

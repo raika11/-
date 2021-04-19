@@ -26,6 +26,7 @@ const ArticleRenderer = forwardRef((params, ref) => {
      * 관련기사 삭제
      */
     const handleDeleteArticle = () => {
+        params.node.data.afterOnChange();
         params.api.applyTransaction({ remove: [{ ...params.node.data }] });
     };
 
@@ -36,6 +37,7 @@ const ArticleRenderer = forwardRef((params, ref) => {
     const handleChangeValue = (e) => {
         setContents({ ...contents, [e.target.name]: e.target.value });
         params.api.applyTransaction({ update: [{ ...params.node.data, [e.target.name]: e.target.value }] });
+        params.node.data.afterOnChange();
     };
 
     /**
@@ -50,6 +52,7 @@ const ArticleRenderer = forwardRef((params, ref) => {
             thumbFile: file,
         });
         params.api.applyTransaction({ update: [{ ...contents, thumbFileName: imageSrc, thumbFile: file }] });
+        params.node.data.afterOnChange();
     };
 
     /**
@@ -71,6 +74,7 @@ const ArticleRenderer = forwardRef((params, ref) => {
                                     thumbFile: file,
                                 });
                                 params.api.applyTransaction({ update: [{ ...contents, thumbFileName: editImageSrc, thumbFile: file }] });
+                                params.node.data.afterOnChange();
                             });
                     })();
                 },
@@ -171,7 +175,10 @@ const LiveRenderer = forwardRef((params, ref) => {
     /**
      * 관련기사 삭제
      */
-    const handleDeleteArticle = () => params.api.applyTransaction({ update: [{ ...initialState.initialDesking, id: params.node.data.id }] });
+    const handleDeleteArticle = () => {
+        params.node.data.afterOnChange();
+        params.api.applyTransaction({ update: [{ ...initialState.initialDesking, id: params.node.data.id }] });
+    };
 
     /**
      * 컨텐츠 변경
@@ -180,6 +187,7 @@ const LiveRenderer = forwardRef((params, ref) => {
     const handleChangeValue = (e) => {
         setContents({ ...contents, [e.target.name]: e.target.value });
         params.api.applyTransaction({ update: [{ ...params.node.data, [e.target.name]: e.target.value }] });
+        params.node.data.afterOnChange();
     };
 
     useImperativeHandle(
@@ -196,9 +204,67 @@ const LiveRenderer = forwardRef((params, ref) => {
     return (
         <div className="w-100 h-100 d-flex align-items-center">
             <div className="flex-fill d-flex flex-column pl-2">
-                <MokaInputLabel label="제목" labelWidth={labelWidth} name="title" value={contents.title} onChange={handleChangeValue} className="mb-2" />
+                <MokaInputLabel label="제목" labelWidth={labelWidth} name="title" value={contents.title} onChange={handleChangeValue} className="mb-2" required />
                 <div className="d-flex">
-                    <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" />
+                    <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" required />
+                    <div className="flex-shrink-0 d-flex">
+                        <MokaInput name="linkTarget" value={contents.linkTarget} as="select" onChange={handleChangeValue}>
+                            <option value="_self">본창</option>
+                            <option value="_blank">새창</option>
+                        </MokaInput>
+                    </div>
+                </div>
+            </div>
+            <div className="pl-2 pr-1 flex-shrink-0 d-flex align-items-center">
+                <Button variant="white" className="border-0 p-0 bg-transparent" onClick={handleDeleteArticle}>
+                    <MokaIcon iconName="fas-minus-circle" />
+                </Button>
+            </div>
+        </div>
+    );
+});
+
+/**
+ * 관련기사 꾸러미 렌더러
+ */
+const PacketRenderer = forwardRef((params, ref) => {
+    const [contents, setContents] = useState(params.node.data);
+
+    /**
+     * 관련기사 삭제
+     */
+    const handleDeleteArticle = () => {
+        params.node.data.afterOnChange();
+        params.api.applyTransaction({ remove: [{ ...params.node.data }] });
+    };
+
+    /**
+     * 컨텐츠 변경
+     * @param {object} e 이벤트
+     */
+    const handleChangeValue = (e) => {
+        setContents({ ...contents, [e.target.name]: e.target.value });
+        params.api.applyTransaction({ update: [{ ...params.node.data, [e.target.name]: e.target.value }] });
+        params.node.data.afterOnChange();
+    };
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            refresh: (params) => {
+                setContents(params.node.data || {});
+                return true;
+            },
+        }),
+        [],
+    );
+
+    return (
+        <div className="w-100 h-100 d-flex align-items-center">
+            <div className="flex-fill d-flex flex-column pl-2">
+                <MokaInputLabel label="제목" labelWidth={labelWidth} name="title" value={contents.title} onChange={handleChangeValue} className="mb-2" required />
+                <div className="d-flex">
+                    <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" required />
                     <div className="flex-shrink-0 d-flex">
                         <MokaInput name="linkTarget" value={contents.linkTarget} as="select" onChange={handleChangeValue}>
                             <option value="_self">본창</option>
@@ -225,7 +291,10 @@ const MPRenderer = forwardRef((params, ref) => {
     /**
      * 컨텐츠 삭제
      */
-    const handleDelete = () => params.api.applyTransaction({ remove: [{ ...params.node.data }] });
+    const handleDelete = () => {
+        params.node.data.afterOnChange();
+        params.api.applyTransaction({ remove: [{ ...params.node.data }] });
+    };
 
     /**
      * 컨텐츠 변경
@@ -234,6 +303,7 @@ const MPRenderer = forwardRef((params, ref) => {
     const handleChangeValue = (e) => {
         setContent({ ...content, [e.target.name]: e.target.value });
         params.api.applyTransaction({ update: [{ ...params.node.data, [e.target.name]: e.target.value }] });
+        params.node.data.afterOnChange();
     };
 
     useImperativeHandle(
@@ -250,7 +320,7 @@ const MPRenderer = forwardRef((params, ref) => {
     return (
         <div className="w-100 h-100 d-flex align-items-center">
             <div className="flex-fill d-flex flex-column pl-2">
-                <MokaInputLabel label="라벨명" name="title" labelWidth={labelWidth} value={content.title} onChange={handleChangeValue} />
+                <MokaInputLabel label="라벨명" name="title" labelWidth={labelWidth} value={content.title} onChange={handleChangeValue} required />
             </div>
             <div className="pl-2 pr-1 flex-shrink-0 d-flex align-items-center">
                 <Button variant="white" className="border-0 p-0 bg-transparent" onClick={handleDelete}>
@@ -428,4 +498,4 @@ const KeywordRenderer = forwardRef((params, ref) => {
     );
 });
 
-export { ArticleRenderer, LiveRenderer, MPRenderer, BannerRenderer, KeywordRenderer };
+export { ArticleRenderer, LiveRenderer, PacketRenderer, MPRenderer, BannerRenderer, KeywordRenderer };

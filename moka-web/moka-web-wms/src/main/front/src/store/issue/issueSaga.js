@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 import moment from 'moment';
 import { DATE_FORMAT, DB_DATEFORMAT } from '@/constants';
 import { errorResponse, createRequestSaga } from '@store/commons/saga';
@@ -223,7 +223,7 @@ const toSavePackageKeywords = (viewKeywords) => {
         const schCondi = toSaveSchCondi(pkgSchCondi);
 
         if (key === 'reporter') {
-            keyword.reporter.map((data) => {
+            keyword.reporter.forEach((data) => {
                 const copyKeyword = { ...keyword };
                 const sdate = commonUtil.isEmpty(data.sdate) ? null : moment(data.sdate).format(DATE_FORMAT);
                 const edate = commonUtil.isEmpty(data.edate) ? null : moment(data.edate).format(DATE_FORMAT);
@@ -366,6 +366,17 @@ function* saveIssueDesking({ payload }) {
     try {
         const response = yield call(api.saveIssueDesking, rest);
         callbackData = response.data;
+        if (response.data.header.success) {
+            let desking = yield select(({ issue }) => issue.desking);
+            desking = produce(desking, (draft) => {
+                const idx = desking.findIndex((d) => d.compNo === response.data.body.compNo);
+                if (idx > -1) draft.splice(idx, 1, response.data.body);
+            });
+            yield put({
+                type: act.GET_ISSUE_DESKING_SUCCESS,
+                payload: { body: { list: desking } },
+            });
+        }
     } catch (e) {
         callbackData = errorResponse(e);
     }
@@ -380,7 +391,35 @@ function* saveIssueDesking({ payload }) {
 /**
  * 이슈 데스킹 전송
  */
-const publishIssueDesking = createRequestSaga(act.PUBLISH_ISSUE_DESKING, api.publishIssueDesking);
+function* publishIssueDesking({ payload }) {
+    const ACTION = act.SAVE_ISSUE_DESKING;
+    const { callback, ...rest } = payload;
+    let callbackData;
+
+    try {
+        const response = yield call(api.publishIssueDesking, rest);
+        callbackData = response.data;
+        if (response.data.header.success) {
+            let desking = yield select(({ issue }) => issue.desking);
+            desking = produce(desking, (draft) => {
+                const idx = desking.findIndex((d) => d.compNo === response.data.body.compNo);
+                if (idx > -1) draft.splice(idx, 1, response.data.body);
+            });
+            yield put({
+                type: act.GET_ISSUE_DESKING_SUCCESS,
+                payload: { body: { list: desking } },
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
 
 /**
  * saga

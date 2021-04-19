@@ -11,7 +11,7 @@ import { keywordColumnDefs } from './IssueDeskingColumns';
 /**
  * 패키지관리 > 관련 데이터 편집 > 키워드
  */
-const CollapseKeyword = ({ gridInstance, setGridInstance, pkgSeq, compNo, deskingList }) => {
+const CollapseKeyword = ({ gridInstance, setGridInstance, pkgSeq, compNo, desking, deskingList }) => {
     const controls = 'collapse-keyword';
     const [open, setOpen] = useState(false);
 
@@ -35,6 +35,10 @@ const CollapseKeyword = ({ gridInstance, setGridInstance, pkgSeq, compNo, deskin
                   };
         if (gridInstance) gridInstance.api.setRowData([data]);
     }, [compNo, deskingList, gridInstance, pkgSeq]);
+
+    useEffect(() => {
+        setOpen(desking.viewYn === 'Y');
+    }, [desking.viewYn]);
 
     return (
         <>

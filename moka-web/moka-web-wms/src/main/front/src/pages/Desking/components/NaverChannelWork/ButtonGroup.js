@@ -134,7 +134,15 @@ const ButtonGroup = (props) => {
 
                 <Col className="p-0 d-flex align-items-center justify-content-end" xs={4}>
                     {/* 최종 전송 상태 표기 */}
-                    <StatusBadge className="mr-1" component={component} />
+                    <StatusBadge
+                        lastPublishDt={component.lastPublishDt}
+                        lastPublishNm={component.lastPublishNm}
+                        lastPublishId={component.lastPublishId}
+                        lastSaveNm={component.lastSaveNm}
+                        lastSaveId={component.lastSaveId}
+                        lastSaveDt={component.lastSaveDt}
+                        className="mr-1"
+                    />
 
                     {/* 기능 버튼 */}
                     {iconButton.map((icon, idx) => (

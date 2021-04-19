@@ -1,4 +1,4 @@
-import { ArticleRenderer, LiveRenderer, MPRenderer, BannerRenderer, KeywordRenderer } from './ColumnRenderer';
+import { ArticleRenderer, LiveRenderer, PacketRenderer, MPRenderer, BannerRenderer, KeywordRenderer } from './ColumnRenderer';
 
 const artColumnDefs = [
     {
@@ -34,7 +34,7 @@ const packetColumnDefs = [
     {
         field: 'title',
         flex: 1,
-        cellRendererFramework: LiveRenderer,
+        cellRendererFramework: PacketRenderer,
     },
 ];
 

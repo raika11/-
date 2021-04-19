@@ -182,6 +182,14 @@ export default handleActions(
                 draft.pkg = initialState.pkg;
             });
         },
+        /**
+         * 이슈 데스킹
+         */
+        [act.GET_ISSUE_DESKING_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.desking = payload.body.list;
+            });
+        },
     },
     initialState,
 );

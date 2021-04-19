@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import moment from 'moment';
 import { DATE_FORMAT, DB_DATEFORMAT } from '@/constants';
 import { errorResponse, createRequestSaga } from '@store/commons/saga';
@@ -139,8 +139,8 @@ export const toIssueData = (response) => {
     const section = getKeyword(packageKeywords, CAT_DIV.SECTION);
     const digitalSpecial = getKeyword(packageKeywords, CAT_DIV.DIGITAL_SPECIAL);
     const ovp = getKeyword(packageKeywords, CAT_DIV.OVP);
-    const category = getKeyword(packageKeywords, CAT_DIV.CATEGORY);
-    const pkg = getKeyword(packageKeywords, CAT_DIV.PACKAGE);
+    // const category = getKeyword(packageKeywords, CAT_DIV.CATEGORY);
+    // const pkg = getKeyword(packageKeywords, CAT_DIV.PACKAGE);
     let seasons = [
         { checked: false, value: '' },
         { checked: false, value: '' },
@@ -351,6 +351,11 @@ function* updateFinishIssue({ type, payload }) {
 const getIssueContentsListModal = createRequestSaga(act.GET_ISSUE_CONTENTS_LIST_MODAL, api.getIssueContentsList);
 
 /**
+ * 이슈 데스킹 조회
+ */
+const getIssueDesking = createRequestSaga(act.GET_ISSUE_DESKING, api.getIssueDesking);
+
+/**
  * 이슈 데스킹 임시저장
  */
 function* saveIssueDesking({ payload }) {
@@ -360,11 +365,7 @@ function* saveIssueDesking({ payload }) {
 
     try {
         const response = yield call(api.saveIssueDesking, rest);
-        if (response.data.header.success) {
-            // yield put({ type: `${ACTION}_SUCCESS`, payload: data });
-        } else {
-            // yield put({ type: `${ACTION}_FAILURE`, payload: response.data });
-        }
+        callbackData = response.data;
     } catch (e) {
         callbackData = errorResponse(e);
     }
@@ -375,6 +376,11 @@ function* saveIssueDesking({ payload }) {
 
     yield put(finishLoading(ACTION));
 }
+
+/**
+ * 이슈 데스킹 전송
+ */
+const publishIssueDesking = createRequestSaga(act.PUBLISH_ISSUE_DESKING, api.publishIssueDesking);
 
 /**
  * saga
@@ -388,5 +394,7 @@ export default function* saga() {
     yield takeLatest(act.GET_ISSUE_LIST_MODAL, getIssueListModal);
     yield takeLatest(act.GET_ISSUE_CONTENTS_LIST_MODAL, getIssueContentsListModal);
     yield takeLatest(act.EXISTS_ISSUE_TITLE, existsIssueTitle);
+    yield takeLatest(act.GET_ISSUE_DESKING, getIssueDesking);
     yield takeLatest(act.SAVE_ISSUE_DESKING, saveIssueDesking);
+    yield takeLatest(act.PUBLISH_ISSUE_DESKING, publishIssueDesking);
 }

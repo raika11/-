@@ -1,17 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { ISSUE_CHANNEL_TYPE } from '@/constants';
+import { initialState } from '@store/issue';
 import { MokaInputLabel, MokaTable } from '@components';
 import { keywordColumnDefs } from './IssueDeskingColumns';
 
 /**
  * 패키지관리 > 관련 데이터 편집 > 키워드
  */
-const CollapseKeyword = ({ gridInstance, setGridInstance }) => {
+const CollapseKeyword = ({ gridInstance, setGridInstance, pkgSeq, compNo, deskingList }) => {
     const controls = 'collapse-keyword';
     const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        const data =
+            deskingList.length > 0
+                ? {
+                      ...initialState.initialDesking,
+                      ...deskingList[0],
+                      pkgSeq,
+                      compNo,
+                      channelType: ISSUE_CHANNEL_TYPE.K.code,
+                      id: 'keyword-1',
+                  }
+                : {
+                      ...initialState.initialDesking,
+                      pkgSeq,
+                      compNo,
+                      channelType: ISSUE_CHANNEL_TYPE.K.code,
+                      id: 'keyword-1',
+                  };
+        if (gridInstance) gridInstance.api.setRowData([data]);
+    }, [compNo, deskingList, gridInstance, pkgSeq]);
 
     return (
         <>

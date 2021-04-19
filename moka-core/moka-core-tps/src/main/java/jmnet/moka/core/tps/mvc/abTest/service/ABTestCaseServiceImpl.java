@@ -1,9 +1,10 @@
-package jmnet.moka.core.tps.mvc.abtest.service;
+package jmnet.moka.core.tps.mvc.abTest.service;
 
 import java.util.List;
-import jmnet.moka.core.tps.mvc.abtest.dto.ABTestCaseSearchDTO;
-import jmnet.moka.core.tps.mvc.abtest.mapper.ABTestCaseMapper;
-import jmnet.moka.core.tps.mvc.abtest.vo.ABTestCaseVO;
+import javax.transaction.Transactional;
+import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseSearchDTO;
+import jmnet.moka.core.tps.mvc.abTest.mapper.ABTestCaseMapper;
+import jmnet.moka.core.tps.mvc.abTest.vo.ABTestCaseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
  * <pre>
  * ABTest 서비스
  * Project : moka
- * Package : jmnet.moka.core.tps.mvc.abtest.service
+ * Package : jmnet.moka.core.tps.mvc.abTest.service
  * ClassName : ABTestCaseServiceImpl
  * Created : 2021-04-15
  * </pre>
@@ -39,6 +40,9 @@ public class ABTestCaseServiceImpl implements ABTestCaseService {
         return list;
     }
 
-
-
+    @Override
+    @Transactional
+    public ABTestCaseVO insertABTestCase(ABTestCaseVO abTestCaseVO) {
+        return abTestCaseMapper.insertABTestCase(abTestCaseVO);
+    }
 }

@@ -1,26 +1,30 @@
-package jmnet.moka.core.tps.mvc.abtest.controller;
+package jmnet.moka.core.tps.mvc.abTest.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.mvc.abtest.dto.ABTestCaseSearchDTO;
-import jmnet.moka.core.tps.mvc.abtest.service.ABTestCaseService;
-import jmnet.moka.core.tps.mvc.abtest.vo.ABTestCaseVO;
+import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseSaveDTO;
+import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseSearchDTO;
+import jmnet.moka.core.tps.mvc.abTest.service.ABTestCaseService;
+import jmnet.moka.core.tps.mvc.abTest.vo.ABTestCaseVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
  * <pre>
  * ABTest API Controller
  * Project : moka
- * Package : jmnet.moka.core.tps.mvc.abtest.controller
+ * Package : jmnet.moka.core.tps.mvc.abTest.controller
  * ClassName : ABTestRestController
  * Created : 2021-04-15
  * </pre>
@@ -100,5 +104,41 @@ public class ABTestRestController extends AbstractCommonController {
         tpsLogger.success(ActionType.SELECT);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * ABTest 등록
+     *
+     * @param request           요청
+     * @param abTestCaseSaveDTO 등록할 ABTest 정보
+     * @return 등록된 게시판정보
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "ABTest 등록")
+    @PostMapping
+    public ResponseEntity<?> postABTest(HttpServletRequest request, @Valid ABTestCaseSaveDTO abTestCaseSaveDTO)
+            throws InvalidDataException, Exception {
+        ABTestCaseVO abTestCaseVO = modelMapper.map(abTestCaseSaveDTO, ABTestCaseVO.class);
+
+        try {
+
+            // insert
+            ABTestCaseVO returnValue = abTestCaseService.insertABTestCase(abTestCaseVO);
+
+            // 결과리턴
+            ABTestCaseSaveDTO dto = modelMapper.map(returnValue, ABTestCaseSaveDTO.class);
+            ResultDTO<ABTestCaseSaveDTO> resultDto = new ResultDTO<>(dto, msg("tps.abTest.success.insert"));
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.INSERT);
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT ABTest]", e);
+            // 액션 로그에 오류 내용 출력
+            tpsLogger.error(ActionType.INSERT, e);
+            throw new Exception(msg("tps.abTest.error.insert"), e);
+        }
     }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -13,7 +13,7 @@ import { packetColumnDefs } from './IssueDeskingColumns';
 /**
  * 패키지관리 > 관련 데이터 편집 > 관련기사 꾸러미
  */
-const CollapsePacket = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
+const CollapsePacket = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskingList }) => {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
     const controls = 'collapse-packet';
@@ -95,6 +95,10 @@ const CollapsePacket = ({ pkgSeq, compNo, gridInstance, setGridInstance }) => {
         }));
         params.api.applyTransaction({ update: ordered });
     };
+
+    useEffect(() => {
+        if (gridInstance) gridInstance.api.setRowData(deskingList);
+    }, [gridInstance, deskingList]);
 
     return (
         <>

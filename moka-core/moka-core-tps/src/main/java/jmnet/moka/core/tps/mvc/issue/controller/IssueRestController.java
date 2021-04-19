@@ -221,7 +221,7 @@ public class IssueRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "패키지 등록")
     @PostMapping
-    public ResponseEntity<?> postPackage(@RequestBody @Valid PackageMasterDTO packageMasterDTO)
+    public ResponseEntity<?> postPackage(@RequestBody @Valid PackageMasterDTO packageMasterDTO, @ApiParam(hidden = true) Principal principal)
             throws InvalidDataException, Exception {
         if (packageMasterDTO.getPkgSeq() != null) {
             throw new MokaException(msg("tps.common.error.duplicated.key"));
@@ -233,7 +233,7 @@ public class IssueRestController extends AbstractCommonController {
         PackageMaster returnValue = packageService.insertPackage(packageMaster);
 
         // 확장형일경우, 자동컴포넌트에 편집정보추가
-        issueDeskingService.insertAutoComponentDeskingHist(returnValue);
+        issueDeskingService.insertAutoComponentDeskingHist(returnValue, principal.getName());
 
         // 등록후 패키지 기사 묶기
         packageService.updatePackageTotalId(returnValue.getPkgSeq());
@@ -256,7 +256,8 @@ public class IssueRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "패키지 등록 (화면기준)")
     @PostMapping("/group-by-ordno")
-    public ResponseEntity<?> postPackageGroupByOrdno(@RequestBody @Valid PackageMasterDTO packageMasterDTO)
+    public ResponseEntity<?> postPackageGroupByOrdno(@RequestBody @Valid PackageMasterDTO packageMasterDTO,
+            @ApiParam(hidden = true) Principal principal)
             throws InvalidDataException, Exception {
         if (packageMasterDTO.getPkgSeq() != null) {
             throw new MokaException(msg("tps.common.error.duplicated.key"));
@@ -271,7 +272,7 @@ public class IssueRestController extends AbstractCommonController {
         PackageMaster returnValue = packageService.insertPackage(packageMaster);
 
         // 확장형일경우, 자동컴포넌트에 편집정보추가
-        issueDeskingService.insertAutoComponentDeskingHist(returnValue);
+        issueDeskingService.insertAutoComponentDeskingHist(returnValue, principal.getName());
 
         // 등록후 패키지 기사 묶기
         packageService.updatePackageTotalId(returnValue.getPkgSeq());
@@ -296,7 +297,7 @@ public class IssueRestController extends AbstractCommonController {
     @ApiOperation(value = "패키지 수정")
     @PutMapping("/{pkgSeq}")
     public ResponseEntity<?> putPackage(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
-            @RequestBody @Valid PackageMasterDTO packageMasterDTO)
+            @RequestBody @Valid PackageMasterDTO packageMasterDTO, @ApiParam(hidden = true) Principal principal)
             throws InvalidDataException, Exception {
         if (packageMasterDTO.getPkgSeq() == null) {
             throw new MokaException(msg("tps.common.error.no-data"));
@@ -307,7 +308,7 @@ public class IssueRestController extends AbstractCommonController {
         PackageMaster returnValue = packageService.updatePackage(packageMaster);
 
         // 확장형일경우, 자동컴포넌트에 편집정보추가
-        issueDeskingService.insertAutoComponentDeskingHist(returnValue);
+        issueDeskingService.insertAutoComponentDeskingHist(returnValue, principal.getName());
 
         // 수정후 패키지 기사 묶기
         packageService.updatePackageTotalId(returnValue.getPkgSeq());
@@ -362,7 +363,7 @@ public class IssueRestController extends AbstractCommonController {
     @ApiOperation(value = "패키지 수정 (화면기준)")
     @PutMapping("/{pkgSeq}/group-by-ordno")
     public ResponseEntity<?> putPackageGroupByOrdno(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
-            @RequestBody @Valid PackageMasterDTO packageMasterDTO)
+            @RequestBody @Valid PackageMasterDTO packageMasterDTO, @ApiParam(hidden = true) Principal principal)
             throws InvalidDataException, Exception {
         if (packageMasterDTO.getPkgSeq() == null) {
             throw new MokaException(msg("tps.common.error.notnull.seq"));
@@ -376,7 +377,7 @@ public class IssueRestController extends AbstractCommonController {
         PackageMaster returnValue = packageService.updatePackage(packageMaster);
 
         // 확장형일경우, 자동컴포넌트에 편집정보추가
-        issueDeskingService.insertAutoComponentDeskingHist(returnValue);
+        issueDeskingService.insertAutoComponentDeskingHist(returnValue, principal.getName());
 
         // 수정후 패키지 기사 묶기
         packageService.updatePackageTotalId(returnValue.getPkgSeq());

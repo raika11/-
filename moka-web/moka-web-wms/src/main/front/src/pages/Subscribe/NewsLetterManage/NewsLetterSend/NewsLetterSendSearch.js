@@ -1,20 +1,19 @@
-import React, { useState } from 'react';
-// import { useHistory } from 'react-router';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
+import { initialState } from '@store/newsLetter';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 발송 검색
  */
 const NewsLetterSendSearch = () => {
-    const [search, setSearch] = useState({
-        startDt: null,
-        endDt: null,
-        newsLetterNm: '',
-    });
+    const dispatch = useDispatch();
+    const storeSearch = useSelector(({ newsLetter }) => newsLetter.send.search);
+    const [search, setSearch] = useState(initialState.send.search);
     const [period, setPeriod] = useState([0, 'days']);
     const [nlName, setNlName] = useState([]);
 
@@ -24,14 +23,19 @@ const NewsLetterSendSearch = () => {
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
         if (name === 'period') {
-            // 기간 설정
             const { number, date } = e.target.selectedOptions[0].dataset;
             setPeriod([Number(number), date]);
 
-            const nd = new Date();
-            const startDt = moment(nd).subtract(Number(number), date).startOf('day');
-            const endDt = moment(nd).endOf('day');
-            setSearch({ ...search, startDt, endDt });
+            // 기간 설정
+            if (date === 'all') {
+                setSearch({ ...search, startDt: null, endDt: null });
+                return;
+            } else {
+                const nd = new Date();
+                const startDt = moment(nd).subtract(Number(number), date).startOf('day');
+                const endDt = moment(nd).endOf('day');
+                setSearch({ ...search, startDt, endDt });
+            }
         } else {
             setSearch({ ...search, [name]: value });
         }
@@ -40,13 +44,22 @@ const NewsLetterSendSearch = () => {
     /**
      * 초기화
      */
-    const handleClickReset = () => [setSearch({ ...search, startDt: null, endDt: null, newsLetterNm: '' })];
+    const handleClickReset = () => {
+        setSearch(initialState.send.search);
+    };
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     return (
         <Form className="mb-14">
             <Form.Row className="mb-2">
-                <Col xs={1} className="p-0 pr-2">
+                <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="period" value={period.join('')} onChange={handleChangeValue}>
+                        <option value="all" data-number="0" data-date="all">
+                            기간 전체
+                        </option>
                         <option value="7days" data-number="7" data-date="days">
                             1주
                         </option>
@@ -93,7 +106,7 @@ const NewsLetterSendSearch = () => {
                 </Col>
                 <MokaInput
                     as="autocomplete"
-                    name="newsLetterNm"
+                    name="letterTitle"
                     className="mr-2 flex-fill"
                     value={nlName}
                     inputProps={{
@@ -101,13 +114,16 @@ const NewsLetterSendSearch = () => {
                             { value: '001', label: '정치 언박싱' },
                             { value: '002', label: '팩플' },
                             { value: '003', label: '백성호의 현문우답' },
+                            { value: '004', label: '풀인 인사이트' },
+                            { value: '005', label: '뉴스다이제스트' },
+                            { value: '006', label: '기타 상품' },
                         ],
                         maxMenuHeight: 300,
                         placeholder: '뉴스레터 명 검색',
                     }}
                     onChange={(value) => {
                         setNlName(value);
-                        setSearch({ ...search, newsLetterNm: value?.value });
+                        setSearch({ ...search, letterTitle: value?.value });
                     }}
                 />
                 <Button variant="searching" className="mr-1">

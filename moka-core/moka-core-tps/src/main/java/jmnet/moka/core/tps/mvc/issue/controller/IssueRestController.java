@@ -515,6 +515,9 @@ public class IssueRestController extends AbstractCommonController {
                                             .toBuilder()
                                             .schCondi(schCondi)
                                             .keyword(kwd)
+                                            .kwdCnt(Long.valueOf(keyword
+                                                    .getKeyword()
+                                                    .split(",").length))
                                             .kwdOrd(kwdOrd.incrementAndGet())
                                             .build()));
                         }));
@@ -538,6 +541,9 @@ public class IssueRestController extends AbstractCommonController {
                                         .catDiv("C")
                                         .repMaster(Long.parseLong(category))
                                         .kwdOrd(kwdOrd.incrementAndGet())
+                                        .kwdCnt(Long.valueOf(viewDto
+                                                .getCatList()
+                                                .split(",").length))
                                         .ordNo(maxOrdNoDto.getOrdNo() + plus)
                                         .build()));
                     }

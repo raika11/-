@@ -57,8 +57,9 @@ public interface IssueDeskingService {
      * 자동컴포넌트의 편집기사 저장
      *
      * @param packageMaster 패키지
+     * @param regId         작업자ID
      */
-    void insertAutoComponentDeskingHist(PackageMaster packageMaster);
+    void insertAutoComponentDeskingHist(PackageMaster packageMaster, String regId);
 
     /**
      * escape

@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import jmnet.moka.core.tps.common.entity.RegAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,7 +33,7 @@ import org.hibernate.annotations.Nationalized;
 @Builder
 @Entity
 @Table(name = "TB_ISSUE_DESKING_HIST")
-public class IssueDeskingHist extends RegAudit {
+public class IssueDeskingHist {
 
     private static final long serialVersionUID = 1L;
 
@@ -154,6 +153,18 @@ public class IssueDeskingHist extends RegAudit {
     @Nationalized
     @Column(name = "BODY_HEAD")
     private String bodyHead;
+
+    /**
+     * 등록자
+     */
+    @Column(name = "REG_ID", updatable = false)
+    protected String regId;
+
+    /**
+     * 등록일시
+     */
+    @Column(name = "REG_DT", updatable = false)
+    protected Date regDt;
 
     @PrePersist
     @PreUpdate

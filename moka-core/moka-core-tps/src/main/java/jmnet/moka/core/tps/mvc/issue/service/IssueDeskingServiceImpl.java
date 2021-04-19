@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
@@ -206,7 +205,7 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
     }
 
     @Override
-    public void insertAutoComponentDeskingHist(PackageMaster packageMaster) {
+    public void insertAutoComponentDeskingHist(PackageMaster packageMaster, String regId) {
         // 기존데이타삭제
         issueDeskingHistRepository.deleteByPackageMaster_PkgSeqAndCompNo(packageMaster.getPkgSeq(), AUTO_COMPONENT_NO);
 
@@ -217,8 +216,8 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
                 .compNo(AUTO_COMPONENT_NO)
                 .viewYn(viewYn)
                 .build();
-        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, null, EditStatusCode.SAVE);
-        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, null, EditStatusCode.PUBLISH);
+        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, EditStatusCode.SAVE);
+        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, EditStatusCode.PUBLISH);
     }
 
     @Override
@@ -264,7 +263,7 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
 
     private void insertDeskingHist(PackageMaster packageMaster, IssueDeskingComponentDTO issueDeskingComponentDTO, String regId,
             EditStatusCode status) {
-        Date today = McpDate.todayDate();   // 히스토리 등록시, 컴포넌트별 등록시간을 동일한 값으로 넣도록 한다.
+        Date today = new Date();   // 히스토리 등록시, 컴포넌트별 등록시간을 동일한 값으로 넣도록 한다.
         for (IssueDeskingHistDTO dto : issueDeskingComponentDTO.getIssueDeskings()) {
             IssueDeskingHist hist = modelMapper.map(dto, IssueDeskingHist.class);
             hist.setSeqNo(null);

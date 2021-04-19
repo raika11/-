@@ -378,6 +378,11 @@ function* saveIssueDesking({ payload }) {
 }
 
 /**
+ * 이슈 데스킹 전송
+ */
+const publishIssueDesking = createRequestSaga(act.PUBLISH_ISSUE_DESKING, api.publishIssueDesking);
+
+/**
  * saga
  */
 export default function* saga() {
@@ -391,4 +396,5 @@ export default function* saga() {
     yield takeLatest(act.EXISTS_ISSUE_TITLE, existsIssueTitle);
     yield takeLatest(act.GET_ISSUE_DESKING, getIssueDesking);
     yield takeLatest(act.SAVE_ISSUE_DESKING, saveIssueDesking);
+    yield takeLatest(act.PUBLISH_ISSUE_DESKING, publishIssueDesking);
 }

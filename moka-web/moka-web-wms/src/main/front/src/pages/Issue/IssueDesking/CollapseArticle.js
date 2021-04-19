@@ -6,16 +6,16 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH, CHANNEL_TYPE, ISSUE_CHANNEL_TYPE, ARTICLE_URL, ISSUE_URL } from '@/constants';
 import { MokaInputLabel, MokaTable } from '@components';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
-import { initialState, saveIssueDesking } from '@store/issue';
+import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issue';
 import { ArticleTabModal } from '@pages/Article/modals';
 import { artColumnDefs } from './IssueDeskingColumns';
 
 /**
  * 패키지관리 > 관련 데이터 편집 > 기사 (편집)
  */
-const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskingList }) => {
+const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking, deskingList }) => {
     const dispatch = useDispatch();
     const [status, setStatus] = useState(DESK_STATUS_WORK);
     const [open, setOpen] = useState(false);
@@ -45,6 +45,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                         linkUrl: `${ARTICLE_URL}${data.totalId}`,
                         duration: data.duration,
                         channelType: ISSUE_CHANNEL_TYPE.A.code,
+                        distDt: data.serviceDaytime, // 기사 등록일
                     },
                 ],
             });
@@ -63,6 +64,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                         linkUrl: `${ARTICLE_URL}${data.totalId}`,
                         duration: data.duration,
                         channelType: ISSUE_CHANNEL_TYPE.A.code,
+                        distDt: data.serviceDaytime, // 기사 등록일
                     },
                 ],
             });
@@ -78,13 +80,12 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                         title: data.pkgTitle,
                         linkUrl: `${ISSUE_URL}${data.pkgSeq}`,
                         channelType: ISSUE_CHANNEL_TYPE.I.code,
+                        distDt: data.regDt, // 이슈 생성일
                     },
                 ],
             });
         } else if (channelType === CHANNEL_TYPE.G.code) {
         }
-
-        setStatus(DESK_STATUS_WORK);
     };
 
     /**
@@ -106,7 +107,6 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
             contentsOrd: idx + 1,
         }));
         params.api.applyTransaction({ update: ordered });
-        setStatus(DESK_STATUS_WORK);
     };
 
     /**
@@ -145,13 +145,21 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
      * 임시저장
      */
     const saveDesking = () => {
-        const displayedRows = getDisplayedRows(gridInstance.api);
+        const viewYn = open ? 'Y' : 'N';
+        // rowData 데이터 + viewYn 셋팅
+        const displayedRows = getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn }));
         if (validate(displayedRows)) {
             dispatch(
                 saveIssueDesking({
                     compNo,
                     pkgSeq,
-                    issueDeskingList: displayedRows,
+                    issueDesking: {
+                        ...desking,
+                        compNo,
+                        pkgSeq,
+                        viewYn,
+                        issueDeskings: displayedRows,
+                    },
                     callback: ({ header }) => {
                         if (header.success) {
                             setStatus(DESK_STATUS_SAVE);
@@ -159,6 +167,16 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                     },
                 }),
             );
+        }
+    };
+
+    /**
+     * 전송
+     */
+    const publishDesking = () => {
+        if (status === DESK_STATUS_WORK) {
+            messageBox.alert('편집된 정보가 있습니다. 임시저장 버튼을 클릭후\n전송 버튼을 클릭하여 주세요.');
+        } else {
         }
     };
 
@@ -194,7 +212,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                     <Button variant="positive-a" size="sm" className="mr-1" onClick={saveDesking}>
                         임시저장
                     </Button>
-                    <Button variant="positive" size="sm">
+                    <Button variant="positive" size="sm" onClick={publishDesking}>
                         전송
                     </Button>
                 </Col>
@@ -211,6 +229,7 @@ const CollapseArticle = ({ pkgSeq, compNo, gridInstance, setGridInstance, deskin
                         animateRows
                         rowDragManaged
                         suppressMoveWhenRowDragging
+                        onRowDataUpdated={() => setStatus(DESK_STATUS_WORK)}
                         onRowDragMove={handleRowDragMove}
                         onRowDragEnd={handleRowDragEnd}
                         dragStyle

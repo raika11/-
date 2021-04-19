@@ -48,30 +48,60 @@ const IssueDesking = () => {
     return (
         <MokaCard header={false} className="w-100 d-flex flex-column" bodyClassName="scrollable" loading={loading}>
             {/* 메인기사(편집) */}
-            <CollapseArticle pkgSeq={pkgSeq} compNo={1} gridInstance={artInstance} setGridInstance={setArtInstance} deskingList={deskingByCompNo.comp1?.issueDeskings || []} />
+            <CollapseArticle
+                pkgSeq={pkgSeq}
+                compNo={1}
+                gridInstance={artInstance}
+                setGridInstance={setArtInstance}
+                desking={deskingByCompNo.comp1}
+                deskingList={deskingByCompNo.comp1?.issueDeskings || []}
+            />
             {/* 메인기사(자동) */}
             <CollapseArticleAuto compNo={2} />
             {/* 라이브기사 */}
-            <CollapseLive pkgSeq={pkgSeq} compNo={3} gridInstance={liveInstance} setGridInstance={setLiveInstance} deskingList={deskingByCompNo.comp3?.issueDeskings || []} />
+            <CollapseLive
+                pkgSeq={pkgSeq}
+                compNo={3}
+                gridInstance={liveInstance}
+                setGridInstance={setLiveInstance}
+                desking={deskingByCompNo.comp3}
+                deskingList={deskingByCompNo.comp3?.issueDeskings || []}
+            />
             {/* 관련기사꾸러미 */}
-            <CollapsePacket pkgSeq={pkgSeq} compNo={4} gridInstance={packetInstance} setGridInstance={setPacketInstance} deskingList={deskingByCompNo.comp4?.issueDeskings || []} />
+            <CollapsePacket
+                pkgSeq={pkgSeq}
+                compNo={4}
+                gridInstance={packetInstance}
+                setGridInstance={setPacketInstance}
+                desking={deskingByCompNo.comp4}
+                deskingList={deskingByCompNo.comp4?.issueDeskings || []}
+            />
             {/* 영상/포토 */}
             <CollapseMoviePhoto
                 pkgSeq={pkgSeq}
                 compNo={5}
                 gridInstance={moviePhotoInstance}
                 setGridInstance={setMoviePhotoInstance}
+                desking={deskingByCompNo.comp5}
                 deskingList={deskingByCompNo.comp5?.issueDeskings || []}
             />
             {/* 그래프가 6번 */}
             {/* 배너 */}
-            <CollapseBanner pkgSeq={pkgSeq} compNo={6} gridInstance={bannerInstance} setGridInstance={setBannerInstance} deskingList={deskingByCompNo.comp6?.issueDeskings || []} />
+            <CollapseBanner
+                pkgSeq={pkgSeq}
+                compNo={6}
+                gridInstance={bannerInstance}
+                setGridInstance={setBannerInstance}
+                desking={deskingByCompNo.comp6}
+                deskingList={deskingByCompNo.comp6?.issueDeskings || []}
+            />
             {/* 키워드 */}
             <CollapseKeyword
                 pkgSeq={pkgSeq}
                 compNo={7}
                 gridInstance={keywordInstance}
                 setGridInstance={setKeywordInstance}
+                desking={deskingByCompNo.comp7}
                 deskingList={deskingByCompNo.comp7?.issueDeskings || []}
             />
         </MokaCard>

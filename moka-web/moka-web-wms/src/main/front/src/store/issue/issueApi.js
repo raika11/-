@@ -106,9 +106,22 @@ export const getIssueDesking = ({ pkgSeq }) => {
 };
 
 // 이슈 데스킹 임시저장(폼데이터)
-export const saveIssueDesking = ({ pkgSeq, compNo, issueDeskingList }) => {
+export const saveIssueDesking = ({ pkgSeq, compNo, issueDesking }) => {
     return instance
-        .post(`/api/issue/${pkgSeq}/desking/${compNo}/save`, objectToFormData(issueDeskingList), {
+        .post(`/api/issue/${pkgSeq}/desking/${compNo}/save`, objectToFormData(issueDesking), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// 이슈 데스킹 전송(폼데이터)
+export const publishIssueDesking = ({ pkgSeq, compNo, issueDesking }) => {
+    return instance
+        .post(`/api/issue/${pkgSeq}/desking/${compNo}/publish`, objectToFormData(issueDesking), {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

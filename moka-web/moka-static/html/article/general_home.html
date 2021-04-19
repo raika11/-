@@ -51,33 +51,13 @@
                         </div>
                         <h1 class="headline">백신 3종 이상 확보한 나라 벌써 12개국… <br>한국은 1종</h1>
 
-
-                        <div class="datetime">
-                            <span class="source">중앙일보</span>
-                            <div class="time_bx">
-                                <p class="date pc">입력 2021.01.25 15:00</p>
-                                <p class="date">수정 2021.01.25 15:00  <button type="button" class="date mo"><i class=" ico_arrow_down"></i></button></p>
-
-
-                                <div class="layer_popup layer_datetime hide"  id=""><!-- 여기에 개별 클래스 추가 -->
-                                    <div class="layer_body">
-                                        <p class="date">입력 2021.01.25 15:00</p>
-                                        <p class="date">수정 2021.01.25 15:00</p>
-                                    </div>
-                                    <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
-                                </div>
-                            </div>
-                            <a href="#" class="epaper" target="_blank" title="지면 구독신청">지면보기</a>
-                        </div>
-
-
                         <div class="datetime">
                             <span class="source">중앙일보</span>
                             <div class="time_bx">
                                 <p class="date">입력 2021.01.25 15:00</p>
                                 <p class="date">수정 2021.01.25 15:00</p>
-                                <button type="button" class="btn_datetime"><i class="ico_arrow_down"></i></button>
-                                <div class="layer_popup layer_datetime" style="display:none;" id=""><!-- 여기에 개별 클래스 추가 -->
+                                <button type="button" class="btn_datetime" onclick="openLayer(modal_datetime, this);" ><i class="ico_arrow_down"></i></button>
+                                <div class="layer_popup layer_datetime" id="modal_datetime"><!-- 여기에 개별 클래스 추가 -->
                                     <div class="layer_body">
                                         <p class="date">입력 2021.01.25 15:00</p>
                                         <p class="date">수정 2021.01.25 15:00</p>
@@ -87,16 +67,14 @@
                             </div>
                             <a href="#" class="epaper" target="_blank" title="지면 구독신청">지면보기</a>
                         </div>
-
-
 
                         <div class="byline">
                             <a href="#">정혜정 기자</a>
                             <a href="#">김중앙 기자</a>
                             <a href="#">김유미 기자</a>
                             <div class="byline_bx">
-                                <button type="button" class="byline">외 3명</button>
-                                <div class="layer_popup layer_byline" style="display:none;" id=""><!-- 여기에 개별 클래스 추가 -->
+                                <button type="button" class="byline" onclick="openLayer(modal_byline, this);">외 3명</button>
+                                <div class="layer_popup layer_byline" id="modal_byline"><!-- 여기에 개별 클래스 추가 -->
                                     <div class="layer_header">
                                         <strong class="layer_title">작성한 기자</strong>
                                     </div>
@@ -147,11 +125,6 @@
                             </div>
                         </div>
                         <!-- //팩플 레터 -->
-
-                        
-
-
-
 
                     </div>
                     <div class="article_footer">
@@ -204,41 +177,32 @@
                                         <div class="comment_header">
                                             <span class="comment_userid">good****</span>
                                             <span class="comment_date">2021.03.09 12:30</span>
+                                        </div>
+                                        <div class="comment_content">
+                                            <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                        </div>
+                                        <div class="comment_footer">
+                                            <button type="button" class="btn_reply_cnt">답글 <span>2</span></button>
+                                            <div class="comment_recomm">
+                                                <button type="button" class="active" class="btn_like">
+                                                    <i class="ico_face_like"></i>
+                                                    <span class="visually_hidden">좋아요</span>
+                                                    <span class="count">536</span>
+                                                </button>
+                                                <button type="button" class="btn_dislike">
+                                                    <i class="ico_face_hate"></i>
+                                                    <span class="visually_hidden">화나요</span>
+                                                    <span class="count">3</span>
+                                                </button>
+                                            </div>
                                             <div class="more_option_area open">
-                                                <button type="button" class="btn_more" ><i class="ico_more_option"></i></button>
+                                                <button type="button" type="button" class="btn_toggle" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
                                                 <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
                                                 <button type="button" class="btn_outline_gray">신고</button>
                                             </div>
                                         </div>
-                                        <div class="comment_content">
-                                            <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
-                                        </div>
-                                        <div class="comment_footer">
-                                            <button type="button" class="btn_reply">답글<span class="count">2</span></button>
-                                            <div class="empathy_area">
-                                                <button type="button" class="active">
-                                                    <i class="ico_face_like"></i>
-                                                    <span class="visually_hidden">좋아요</span>
-                                                    <span class="count">536</span>
-                                                </button>
-                                                <button type="button">
-                                                    <i class="ico_face_hate"></i>
-                                                    <span class="visually_hidden">화나요</span>
-                                                    <span class="count">3</span>
-                                                </button>
-                                            </div>
-                                        </div>
                                     </div>
                                     <!-- //Comment -->
-                                    <!-- Comment Input Area -->
-                                    <!-- <div class="comment_form">
-                                        <form>
-                                            <textarea class="form_control"></textarea>
-                                            <button type="button" class="btn">Cancel</button>
-                                            <button type="button" class="btn">Submit</button>
-                                        </form>
-                                    </div> -->
-                                    <!-- //Comment Input Area -->
                                 </li>
                                 <li>
                                     <!-- Comment -->
@@ -246,41 +210,32 @@
                                         <div class="comment_header">
                                             <span class="comment_userid">good****</span>
                                             <span class="comment_date">2021.03.09 12:30</span>
-                                            <div class="more_option_area">
-                                                <button type="button" class="btn_more" ><i class="ico_more_option"></i></button>
-                                                <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
-                                                <button type="button" class="btn_outline_gray">신고</button>
-                                            </div>
                                         </div>
                                         <div class="comment_content">
                                             <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
                                         </div>
                                         <div class="comment_footer">
-                                            <button type="button" class="btn_reply">답글<span class="count">2</span></button>
-                                            <div class="empathy_area">
-                                                <button type="button">
+                                            <button type="button" class="btn_reply_cnt">답글 <span>2</span></button>
+                                            <div class="comment_recomm">
+                                                <button type="button" class="btn_like">
                                                     <i class="ico_face_like"></i>
                                                     <span class="visually_hidden">좋아요</span>
                                                     <span class="count">536</span>
                                                 </button>
-                                                <button type="button">
+                                                <button type="button" class="btn_dislike">
                                                     <i class="ico_face_hate"></i>
                                                     <span class="visually_hidden">화나요</span>
                                                     <span class="count">3</span>
                                                 </button>
                                             </div>
+                                            <div class="more_option_area">
+                                                <button type="button" class="btn_toggle" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
+                                                <button type="button" class="btn_outline_gray">신고</button>
+                                            </div>
                                         </div>
                                     </div>
                                     <!-- //Comment -->
-                                    <!-- Comment Input Area -->
-                                    <!-- <div class="comment_form">
-                                        <form>
-                                            <textarea class="form_control"></textarea>
-                                            <button type="button" class="btn">Cancel</button>
-                                            <button type="button" class="btn">Submit</button>
-                                        </form>
-                                    </div> -->
-                                    <!-- //Comment Input Area -->
                                 </li>
                                 <li>
                                     <!-- Comment -->
@@ -288,41 +243,32 @@
                                         <div class="comment_header">
                                             <span class="comment_userid">good****</span>
                                             <span class="comment_date">2021.03.09 12:30</span>
-                                            <div class="more_option_area">
-                                                <button type="button" class="btn_more" ><i class="ico_more_option"></i></button>
-                                                <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
-                                                <button type="button" class="btn_outline_gray">신고</button>
-                                            </div>
                                         </div>
                                         <div class="comment_content">
                                             <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
                                         </div>
                                         <div class="comment_footer">
-                                            <button type="button" class="btn_reply">답글<span class="count">2</span></button>
-                                            <div class="empathy_area">
-                                                <button type="button">
+                                            <button type="button" class="btn_reply_cnt">답글 <span>2</span></button>
+                                            <div class="comment_recomm">
+                                                <button type="button" class="btn_like">
                                                     <i class="ico_face_like"></i>
                                                     <span class="visually_hidden">좋아요</span>
                                                     <span class="count">536</span>
                                                 </button>
-                                                <button type="button">
+                                                <button type="button" class="btn_dislike">
                                                     <i class="ico_face_hate"></i>
                                                     <span class="visually_hidden">화나요</span>
                                                     <span class="count">3</span>
                                                 </button>
                                             </div>
+                                            <div class="more_option_area">
+                                                <button type="button" type="button" class="btn_toggle" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
+                                                <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
+                                                <button type="button" class="btn_outline_gray">신고</button>
+                                            </div>
                                         </div>
                                     </div>
                                     <!-- //Comment -->
-                                    <!-- Comment Input Area -->
-                                    <!-- <div class="comment_form">
-                                        <form>
-                                            <textarea class="form_control"></textarea>
-                                            <button type="button" class="btn">Cancel</button>
-                                            <button type="button" class="btn">Submit</button>
-                                        </form>
-                                    </div> -->
-                                    <!-- //Comment Input Area -->
                                 </li>
                             </ul>
                             <!-- <button type="button" class="btn_gray">댓글 작성하기 <i class="ico_arrow_right"></i></button> -->
@@ -337,8 +283,103 @@
         <!-- // container -->
 
         <!-- 댓글 임시 -->
-        <div class="layer_popup layer_comment" style="display:block;" id=""><!-- 여기에 개별 클래스 추가 -->
-
+        <div class="side_popup side_comment active" id=""><!-- 여기에 개별 클래스 추가 -->
+            <div class="comment_header">
+                <strong class="comment_count">댓글 0개</strong>
+                <button class="btn_reset"><i class="ico_reset"></i><span class="visually_hidden">새로고침</span></button>
+            </div>
+            <div class="comment_content">
+                <div class="comment_form on">
+                    <fieldset>
+                        <legend class="visually_hidden">댓글 입력 폼</legend>
+                        <div class="comment_header">
+                            <!-- 작성자 아이디 -->
+                            <span class="comment_userid h5">joongang</span>
+                        </div>
+                        <div class="comment_body">
+                            <!-- 내용 입력 필드 -->
+                            <textarea class="comment_textarea" title="댓글 내용 입력 공간" placeholder="건전한 토론문화를 위해 타인에게 불쾌감을 주는 욕설, 비방, 비하 등의 내용은 삼가해 주시기 바랍니다. 관련 규정을 준수하지 않을 경우 관리자에 의해 삭제처리 될 수 있습니다.">바야흐로 진짜 지갑 없는 세상이 되겠어요~~</textarea>
+                        </div>
+                        <div class="comment_footer">
+                            <!-- 작성 글자수 표기 -->
+                            <span class="comment_byte">24/500</span>
+                            <!-- 등록 버튼 -->
+                            <button type="button" class="btn btn_gray2">등록</button>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="comment_wrap">
+                    <div class="comment_area">
+                        <div class="select_bx">
+                            <label class="visually_hidden" for="alignSelect">Choose a select menu</label>
+                            <select id="alignSelect" class="select" title="Default select example">
+                                <option selected="">최신순</option>
+                                <option value="1">답글 많은순</option>
+                                <option value="2">좋아요 많은 순</option>
+                                <option value="3">화나요 많은 순</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn_mycomment">내댓글<i class="ico_arrow_primary_right"></i></button>
+                    </div>
+                    <ul class="comment_list">
+                        <li>
+                            <!-- Comment -->
+                            <div class="comment new_coment">
+                                <div class="comment_header">
+                                    <span class="comment_userid">good****</span>
+                                    <span class="comment_date">2021.03.09 12:30</span>
+                                    <div class="more_option_area open">
+                                        <button type="button" type="button" class="btn_toggle" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
+                                        <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
+                                        <button type="button" class="btn_outline_gray">신고</button>
+                                    </div>
+                                </div>
+                                <div class="comment_content">
+                                    <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!믿기지않지만드디어디지털화폐가새하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                </div>
+                                <div class="comment_footer">
+                                    <button type="button" class="btn_reply">답글작성</button>
+                                    <button type="button" class="btn_reply_cnt">답글 <span>2</span></button>
+                                    <div class="comment_recomm">
+                                        <button type="button" class="active">
+                                            <i class="ico_face_like"></i>
+                                            <span class="visually_hidden">좋아요</span>
+                                            <span class="count">536</span>
+                                        </button>
+                                        <button type="button">
+                                            <i class="ico_face_hate"></i>
+                                            <span class="visually_hidden">화나요</span>
+                                            <span class="count">3</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- //Comment -->
+                            <!-- Comment Input Area -->
+                            <div class="comment_form">
+                                <fieldset>
+                                    <legend class="visually_hidden">댓글 입력 폼</legend>
+                                    <div class="comment_header">
+                                        <!-- 작성자 아이디 -->
+                                        <span class="comment_userid h5">joongang</span>
+                                    </div>
+                                    <div class="comment_body">
+                                        <!-- 내용 입력 필드 -->
+                                        <textarea class="comment_textarea" title="댓글 내용 입력 공간" placeholder="건전한 토론문화를 위해 타인에게 불쾌감을 주는 욕설, 비방, 비하 등의 내용은 삼가해 주시기 바랍니다. 관련 규정을 준수하지 않을 경우 관리자에 의해 삭제처리 될 수 있습니다.">바야흐로 진짜 지갑 없는 세상이 되겠어요~~</textarea>
+                                    </div>
+                                    <div class="comment_footer">
+                                        <!-- 작성 글자수 표기 -->
+                                        <span class="comment_byte">24/500</span>
+                                        <!-- 등록 버튼 -->
+                                        <button type="button" class="btn btn_gray2">등록</button>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <!-- //Comment Input Area -->
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
         </div>
         <!-- //댓글 임시 -->

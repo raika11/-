@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.abtest.vo;
+package jmnet.moka.core.tps.mvc.abTest.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
@@ -14,7 +14,7 @@ import org.apache.ibatis.type.Alias;
  * <pre>
  * ABTest목록 조회용 VO
  * Project : moka
- * Package : jmnet.moka.core.tps.mvc.abtest.vo
+ * Package : jmnet.moka.core.tps.mvc.abTest.vo
  * ClassName : ABTestVO
  * Created : 2021-04-15
  * </pre>
@@ -36,19 +36,19 @@ public class ABTestCaseVO {
      */
     @Builder.Default
     @ApiModelProperty("AB테스트일련번호")
-    private Long abtestSeq = 0l;
+    private Long abTestSeq = 0l;
 
     /**
      * AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
     @ApiModelProperty("AB테스트 유형")
-    private String abtestType;
+    private String abTestType;
 
     /**
      * AB테스트 목표(T:디자인 D:데이터)
      */
     @ApiModelProperty("AB테스트 목표")
-    private String abtestPurpose;
+    private String abTestPurpose;
 
     /**
      * 도메인ID
@@ -276,11 +276,11 @@ public class ABTestCaseVO {
      * AB테스트제목
      */
     @ApiModelProperty("AB테스트제목")
-    private String abtestTitle;
+    private String abTestTitle;
 
     /**
      * AB테스트설명
      */
     @ApiModelProperty("AB테스트설명")
-    private String abtestDesc;
+    private String abTestDesc;
 }

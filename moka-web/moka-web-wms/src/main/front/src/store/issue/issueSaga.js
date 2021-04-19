@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 import moment from 'moment';
 import { DATE_FORMAT, DB_DATEFORMAT } from '@/constants';
 import { errorResponse, createRequestSaga } from '@store/commons/saga';
@@ -139,8 +139,8 @@ export const toIssueData = (response) => {
     const section = getKeyword(packageKeywords, CAT_DIV.SECTION);
     const digitalSpecial = getKeyword(packageKeywords, CAT_DIV.DIGITAL_SPECIAL);
     const ovp = getKeyword(packageKeywords, CAT_DIV.OVP);
-    const category = getKeyword(packageKeywords, CAT_DIV.CATEGORY);
-    const pkg = getKeyword(packageKeywords, CAT_DIV.PACKAGE);
+    // const category = getKeyword(packageKeywords, CAT_DIV.CATEGORY);
+    // const pkg = getKeyword(packageKeywords, CAT_DIV.PACKAGE);
     let seasons = [
         { checked: false, value: '' },
         { checked: false, value: '' },
@@ -223,7 +223,7 @@ const toSavePackageKeywords = (viewKeywords) => {
         const schCondi = toSaveSchCondi(pkgSchCondi);
 
         if (key === 'reporter') {
-            keyword.reporter.map((data) => {
+            keyword.reporter.forEach((data) => {
                 const copyKeyword = { ...keyword };
                 const sdate = commonUtil.isEmpty(data.sdate) ? null : moment(data.sdate).format(DATE_FORMAT);
                 const edate = commonUtil.isEmpty(data.edate) ? null : moment(data.edate).format(DATE_FORMAT);
@@ -351,6 +351,11 @@ function* updateFinishIssue({ type, payload }) {
 const getIssueContentsListModal = createRequestSaga(act.GET_ISSUE_CONTENTS_LIST_MODAL, api.getIssueContentsList);
 
 /**
+ * 이슈 데스킹 조회
+ */
+const getIssueDesking = createRequestSaga(act.GET_ISSUE_DESKING, api.getIssueDesking);
+
+/**
  * 이슈 데스킹 임시저장
  */
 function* saveIssueDesking({ payload }) {
@@ -360,10 +365,50 @@ function* saveIssueDesking({ payload }) {
 
     try {
         const response = yield call(api.saveIssueDesking, rest);
+        callbackData = response.data;
         if (response.data.header.success) {
-            // yield put({ type: `${ACTION}_SUCCESS`, payload: data });
-        } else {
-            // yield put({ type: `${ACTION}_FAILURE`, payload: response.data });
+            let desking = yield select(({ issue }) => issue.desking);
+            desking = produce(desking, (draft) => {
+                const idx = desking.findIndex((d) => d.compNo === response.data.body.compNo);
+                if (idx > -1) draft.splice(idx, 1, response.data.body);
+            });
+            yield put({
+                type: act.GET_ISSUE_DESKING_SUCCESS,
+                payload: { body: { list: desking } },
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 이슈 데스킹 전송
+ */
+function* publishIssueDesking({ payload }) {
+    const ACTION = act.SAVE_ISSUE_DESKING;
+    const { callback, ...rest } = payload;
+    let callbackData;
+
+    try {
+        const response = yield call(api.publishIssueDesking, rest);
+        callbackData = response.data;
+        if (response.data.header.success) {
+            let desking = yield select(({ issue }) => issue.desking);
+            desking = produce(desking, (draft) => {
+                const idx = desking.findIndex((d) => d.compNo === response.data.body.compNo);
+                if (idx > -1) draft.splice(idx, 1, response.data.body);
+            });
+            yield put({
+                type: act.GET_ISSUE_DESKING_SUCCESS,
+                payload: { body: { list: desking } },
+            });
         }
     } catch (e) {
         callbackData = errorResponse(e);
@@ -388,5 +433,7 @@ export default function* saga() {
     yield takeLatest(act.GET_ISSUE_LIST_MODAL, getIssueListModal);
     yield takeLatest(act.GET_ISSUE_CONTENTS_LIST_MODAL, getIssueContentsListModal);
     yield takeLatest(act.EXISTS_ISSUE_TITLE, existsIssueTitle);
+    yield takeLatest(act.GET_ISSUE_DESKING, getIssueDesking);
     yield takeLatest(act.SAVE_ISSUE_DESKING, saveIssueDesking);
+    yield takeLatest(act.PUBLISH_ISSUE_DESKING, publishIssueDesking);
 }

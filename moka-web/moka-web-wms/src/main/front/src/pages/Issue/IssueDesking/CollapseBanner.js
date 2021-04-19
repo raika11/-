@@ -1,17 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { ISSUE_CHANNEL_TYPE } from '@/constants';
+import { initialState } from '@store/issue';
 import { MokaInputLabel, MokaTable } from '@components';
 import { bannerColumnDefs } from './IssueDeskingColumns';
 
 /**
  * 패키지관리 > 관련 데이터 편집 > 배너
  */
-const CollapseBanner = ({ setGridInstance }) => {
+const CollapseBanner = ({ compNo, gridInstance, pkgSeq, setGridInstance, desking, deskingList }) => {
     const controls = 'collapse-banner';
     const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        const data =
+            deskingList.length > 0
+                ? {
+                      ...initialState.initialDesking,
+                      ...deskingList[0],
+                      pkgSeq,
+                      compNo,
+                      channelType: ISSUE_CHANNEL_TYPE.B.code,
+                      id: 'banner-1',
+                  }
+                : {
+                      ...initialState.initialDesking,
+                      pkgSeq,
+                      compNo,
+                      channelType: ISSUE_CHANNEL_TYPE.B.code,
+                      id: 'banner-1',
+                  };
+        if (gridInstance) gridInstance.api.setRowData([data]);
+    }, [compNo, deskingList, gridInstance, pkgSeq]);
+
+    useEffect(() => {
+        setOpen(desking.viewYn === 'Y');
+    }, [desking.viewYn]);
 
     return (
         <>

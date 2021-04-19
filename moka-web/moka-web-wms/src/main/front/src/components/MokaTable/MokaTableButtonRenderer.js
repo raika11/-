@@ -83,5 +83,6 @@ const MokaTableButton = forwardRef((params, ref) => {
 });
 
 MokaTableButton.defaultProps = defaultProps;
+MokaTableButton.propTypes = propTypes;
 
 export default MokaTableButton;

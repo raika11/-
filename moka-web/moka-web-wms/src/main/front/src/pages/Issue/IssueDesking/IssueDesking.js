@@ -140,7 +140,7 @@ const IssueDesking = () => {
                 MESSAGE={MESSAGE}
             />
             {/* 메인기사(자동) */}
-            <CollapseArticleAuto ref={artAutoRef} compNo={2} desking={deskingByCompNo.comp2 || {}} />
+            <CollapseArticleAuto ref={artAutoRef} pkgSeq={pkgSeq} compNo={2} desking={deskingByCompNo.comp2 || {}} MESSAGE={MESSAGE} />
             {/* 라이브기사 */}
             <CollapseLive
                 pkgSeq={pkgSeq}

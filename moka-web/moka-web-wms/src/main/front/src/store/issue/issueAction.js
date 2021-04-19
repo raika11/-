@@ -79,4 +79,4 @@ export const saveIssueDesking = createAction(SAVE_ISSUE_DESKING, ({ pkgSeq, comp
  * 이슈 데스킹 전송
  */
 export const [PUBLISH_ISSUE_DESKING, PUBLISH_ISSUE_DESKING_SUCCESS] = createRequestActionTypes('issue/PUBLISH_ISSUE_DESKING');
-export const publishIssueDesking = createAction(PUBLISH_ISSUE_DESKING, ({ pkgSeq, compNo, issueDesking, callback }) => ({ pkgSeq, compNo, issueDesking, callback }));
+export const publishIssueDesking = createAction(PUBLISH_ISSUE_DESKING, ({ pkgSeq, compNo, callback }) => ({ pkgSeq, compNo, callback }));

@@ -197,20 +197,10 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                 '전송하시겠습니까?',
                 () => {
                     setLoading(true);
-                    const viewYn = open ? 'Y' : 'N';
-                    // rowData 데이터 + viewYn 셋팅
-                    const displayedRows = getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn }));
                     dispatch(
                         publishIssueDesking({
                             compNo,
                             pkgSeq,
-                            issueDesking: {
-                                ...desking,
-                                compNo,
-                                pkgSeq,
-                                viewYn,
-                                issueDeskings: displayedRows,
-                            },
                             callback: ({ header }) => {
                                 if (header.success) {
                                     setStatus(DESK_STATUS_PUBLISH);

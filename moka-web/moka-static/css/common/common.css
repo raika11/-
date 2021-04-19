@@ -263,7 +263,7 @@ textarea {resize:none;}
 
 /* input custom */
 .form_select {display:block;width:100%;padding:6px 36px 6px 12px;line-height:1.5;color:#212529;background-color:#fff;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 12px center;background-size:16px 12px;border:1px solid #ced4da;border-radius:4px;-webkit-appearance:none;-moz-appearance:none;appearance:none;}
-
+.select {display:block;width:auto;padding-right:36px;line-height:1.5;color:#212529;background-color:#fff;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 12px center;background-size:16px 12px; border: 0;-webkit-appearance:none;-moz-appearance:none;appearance:none;  }
 .form {width:100%;}
 
 .input_group {position:relative;display:flex;flex-wrap:wrap;align-items:stretch;width:100%;}

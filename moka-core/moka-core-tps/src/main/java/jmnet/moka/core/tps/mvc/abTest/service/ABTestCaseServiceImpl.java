@@ -4,6 +4,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseSearchDTO;
 import jmnet.moka.core.tps.mvc.abTest.mapper.ABTestCaseMapper;
+import jmnet.moka.core.tps.mvc.abTest.vo.ABTestCaseSaveVO;
 import jmnet.moka.core.tps.mvc.abTest.vo.ABTestCaseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,7 +43,12 @@ public class ABTestCaseServiceImpl implements ABTestCaseService {
 
     @Override
     @Transactional
-    public ABTestCaseVO insertABTestCase(ABTestCaseVO abTestCaseVO) {
-        return abTestCaseMapper.insertABTestCase(abTestCaseVO);
+    public boolean insertABTestCase(ABTestCaseSaveVO abTestCaseSaveVO) {
+        int chk = abTestCaseMapper.insertABTestCase(abTestCaseSaveVO);
+        if (chk == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

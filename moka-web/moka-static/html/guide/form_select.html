@@ -104,18 +104,16 @@
                     <h2 class="guide_title">항목이름</h2>
                     <div class="sample_wrap">
                         <!-- li셀렉트박스 -->
-                        <div class="select_box">
-                            <div class="box">
-                                <div class="select_txt"><a href="javascript:void(0);" class="select">최신순</a></div>
-                                <ul class="list" style="display: none;">
-                                    <li><a href="#">최신순</a></li>
-                                    <li class=""><a href="#">좋아요 많은 순</a></li>
-                                    <li><a href="#">화나요 많은 순</a></li>
-                                    <li class="selected"><a href="#">답글 많은 순</a></li>
-                                </ul>
-                            </div>
+                        <div class="select" data-role="selectBox">
+                            <span date-value="optValue" class="selected-option"><!-- 선택된 옵션 값이 출력되는 부분 --></span>
+                            <!-- 옵션 영역 -->
+                            <ul class="hide">
+                                <li><i class="ico_sns_face"></i>사과</li>
+                                <li><i class="ico_sns_twt"></i>바나나</li>
+                                <li><i class="ico_sns_ktalk"></i>오렌지</li>
+                            </ul>
                         </div>
-                        <!-- li셀렉트박스 -->
+                        <!-- //li셀렉트박스 -->
 
                     </div>
                     <div class="code_wrap">
@@ -129,19 +127,23 @@
 </code></pre>
                     </div>
 
-                    <h2 class="guide_title">항목이름</h2>
+                    <h2 class="guide_title">li셀렉트2</h2>
                     <div class="sample_wrap">
-                        <!-- li셀렉트박스 -->
-                        <div class="box_select mobile_select_Box_02">
-                            <div class="box_select">
-                                <select title="옵션 선택" class="select2 select2-single">
-                                <option value="">구역전체</option>
-                                <option value="" target="_blank">옵션1</option>
-                                <option value="" target="_blank">옵션2</option>
-                                </select>
+                        <!-- select2 -->
+                        <div id="searchOptionBox" class="search_option_box off">
+                            <div class="search_option">
+                                <button type="button" class="search_option_button">전체<span class="ico_arrow_down"></span><span class="ico_arrow_up"></span><span class="ic_and"></span></button>
+                                    <!-- <button class="btn" type="button">Button</button> -->
                             </div>
+                            <ul class="search_option_layer">
+                                <li><a href="javascript:void(null);">전체</a></li>
+                                <li><a href="javascript:void(null);">옵션1</a></li>
+                                <li><a href="javascript:void(null);">옵션2</a></li>
+                                <li><a href="javascript:void(null);">옵션3</a></li>
+                                <!---->
+                            </ul>
                         </div>
-                        <!-- li셀렉트박스 -->
+                        <!-- //select2 -->
 
                     </div>
                     <div class="code_wrap">

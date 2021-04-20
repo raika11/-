@@ -44,8 +44,12 @@
         <!-- container -->
         <main role="main" id="container">
             <!-- sticky menu -->
-            <div class="s">
-
+            <div class="sticky_menu">
+                <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="sm_hidden">북마크</span></button>
+                <button type="button" class="btn_comment"><i class="ico_comment"></i><span class="sm_hidden">댓글</span></button>
+                <button type="button" class="btn_share"><i class="ico_share"></i><span class="sm_hidden">공유</span></button>
+                <button type="button" class="btn_fontsize"><i class="ico_fontsize"></i><span class="sm_hidden">글자크기</span></button>
+                <button type="button" class="btn_print sm_hidden"><i class="ico_print"></i><span class="sm_hidden">인쇄</span></button>
             </div>
             <!-- //sticky menu -->
             <!-- contents -->
@@ -322,7 +326,7 @@
                 <div class="comment_wrap">
                     <div class="comment_area">
                         <div class="dropdown type_down">
-                            <button type="button" class="dropdown_toggle">최신순<i class="ico_arrow_down"></i></button>
+                            <button type="button" class="dropdown_toggle">최신순</button>
                             <div id="dropdown" class="dropdown_menu">
                                 <ul role="listbox">
                                     <li class="dropdown_item" role="option"><a href="#" class="active">최신순</a></li>

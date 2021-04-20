@@ -131,17 +131,6 @@ font-*,color,text-align,vertical-align, ...
 #scroll_indicator { position: fixed; left: 0; top: 60px; width: 100%; height: 4px; transform: translateX(-100%); background-color: #f6330a;  }
 #scroll_indicator::before { content: ''; position: fixed; left: 0; top: 0; width: 100%; height: 4px; transform: translateX(100%); background-color: #e2e2e2; }
 
-/* dropdown */
-.dropdown .dropdown_toggle { display: flex; align-items: center; font-size: 14px; font-weight: 700; color: #111; }
-.dropdown .ico_arrow_down { width: 20px; height: 20px; }
-.dropdown_menu { display: none; z-index: 10; position: absolute; top: 42px; left: 0; padding: 20px; border: 1px solid #e2e2e2; background-color: #fff; }
-.dropdown.open .dropdown_menu { display: block; }
-.dropdown_menu .dropdown_item { display: block; color: #111; }
-.dropdown_menu .dropdown_item .active { font-weight: 700; }
-.dropdown_menu .dropdown_item:nth-child(n+2) { margin-top: 10px; }
-
-
-
 
 .fs1 {font-size:14px;line-height:1.93;letter-spacing:normal;}
 .fs2 {font-size:16px;line-height:1.81;letter-spacing:normal;}

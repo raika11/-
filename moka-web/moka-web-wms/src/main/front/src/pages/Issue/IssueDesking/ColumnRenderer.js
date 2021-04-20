@@ -1,5 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { ISSUE_CHANNEL_TYPE } from '@/constants';
@@ -11,8 +12,8 @@ import { VodModal, EditThumbModal } from '@pages/Desking/modals';
 import { MokaIcon, MokaImage, MokaInput, MokaInputLabel } from '@components';
 
 const labelWidth = 50;
-const cropHeight = 300;
-const cropWidth = 300;
+const cropWidth = '500px';
+const cropHeight = '300px';
 
 /**
  * 기사 렌더러
@@ -78,7 +79,7 @@ const ArticleRenderer = forwardRef((params, ref) => {
                             });
                     })();
                 },
-                { cropWidth: 300, cropHeight: 300 },
+                { cropWidth, cropHeight },
             );
         } else {
             messageBox.alert('편집할 이미지가 없습니다');
@@ -100,6 +101,7 @@ const ArticleRenderer = forwardRef((params, ref) => {
         <div className="w-100 h-100 d-flex align-items-center">
             <div className="flex-fill d-flex">
                 <div className="flex-shrink-0 d-flex flex-column mr-3">
+                    <Form.Row>이미지size 500 * 300</Form.Row>
                     <MokaImage width={115} img={contents.thumbFileName} ratio={[6, 4]} />
                     <div className="d-flex justify-content-between mt-2">
                         <Button size="sm" variant="gray-700" className="mr-1" onClick={() => setShow(true)}>

@@ -13,8 +13,6 @@ import IssueEdit from './IssueEdit';
 import IssueDesking from './IssueDesking/index';
 import { clearStore } from '@store/issue';
 import { getReporterAllList } from '@store/reporter';
-// import PollEdit from '@pages/Survey/Poll/PollEdit';
-// import PollChildRelation from '@pages/Survey/Poll/relations/PollChildRelationInfo';
 
 /**
  * 패키지 관리
@@ -57,10 +55,10 @@ const Issue = ({ match, displayName }) => {
                                 <MokaIconTabs
                                     foldable={false}
                                     className="w-100"
-                                    // activeKey={1}
                                     tabs={[<IssueEdit match={match} reporters={allReporter} />, <IssueDesking match={match} />]}
                                     tabNavWidth={48}
                                     placement="left"
+                                    hasHotkeys
                                     tabNavs={[
                                         { title: '이슈 정보', text: 'Info' },
                                         { title: '편집', text: '편집' },
@@ -80,9 +78,9 @@ const Issue = ({ match, displayName }) => {
                                 <MokaIconTabs
                                     foldable={false}
                                     className="w-100"
-                                    // activeKey={1}
                                     tabs={[<IssueEdit match={match} reporters={allReporter} />, <IssueDesking match={match} />]}
                                     tabNavWidth={48}
+                                    hasHotkeys
                                     placement="left"
                                     tabNavs={[
                                         { title: '이슈 정보', text: 'Info' },

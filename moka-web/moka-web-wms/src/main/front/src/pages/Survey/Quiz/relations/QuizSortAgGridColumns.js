@@ -32,7 +32,6 @@ export const columnDefs = [
         field: 'relOrdEx',
         width: 0,
         cellClassRules: cellClassRules,
-        cellStyle: { fontSize: '12px' },
     },
     {
         field: 'item',

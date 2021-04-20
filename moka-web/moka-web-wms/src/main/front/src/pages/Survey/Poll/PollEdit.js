@@ -266,19 +266,17 @@ const PollEdit = ({ onDelete }) => {
             footer
             footerClassName="justify-content-center"
             footerButtons={getFooterButtons()}
+            titleButtons={[
+                pollStatus !== 'N' && {
+                    text: `투표 ${pollStatus === 'S' ? '현황' : '결과'}`,
+                    variant: 'outline-neutral',
+                    onClick: handleClickPollResult,
+                },
+            ].filter(Boolean)}
             width={570}
             loading={loading}
         >
             <Form>
-                {pollStatus !== 'N' && (
-                    <Form.Row>
-                        <Col xs={12} className="mb-14 d-flex justify-content-end">
-                            <Button variant="outline-neutral" onClick={handleClickPollResult}>
-                                투표 {pollStatus === 'S' ? '현황' : '결과'}
-                            </Button>
-                        </Col>
-                    </Form.Row>
-                )}
                 <Form.Row className="mb-2 justify-content-between">
                     <Col xs={6}>
                         <MokaInputLabel

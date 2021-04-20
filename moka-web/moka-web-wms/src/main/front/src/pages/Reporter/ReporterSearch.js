@@ -4,19 +4,14 @@ import { Button, Col, Form } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { getJplusRep } from '@/store/codeMgt';
 import { initialState, changeSearchOption, getReporterList } from '@store/reporter';
-import ReporterSearchListModal from './modals/ReporterSearchListModal';
 
 /**
  * 기자 관리 > 기자 목록 검색
  */
 const ReporterMgrSearch = () => {
     const dispatch = useDispatch();
-    const [datasetApiListModalShow, setDatasetApiListModalShow] = useState(false);
     const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
-    const { search: storeSearch } = useSelector((store) => ({
-        search: store.reporter.search,
-    }));
-
+    const storeSearch = useSelector(({ reporter }) => reporter.search);
     const [search, setSearch] = useState(initialState.search);
 
     /**
@@ -46,23 +41,7 @@ const ReporterMgrSearch = () => {
         setSearch({ ...search, [name]: value });
     };
 
-    /**
-     * dataApiListPopup 저장 이벤트 핸들러
-     * @param {Object} selectApi 선택한 API
-     * @param {function} hideCallback 숨김 함수
-     */
-    const handleClicktListModalSave = (data, hideCallback) => {
-        if (data) {
-            setSearch({
-                ...search,
-                keyword: data.repName,
-            });
-            hideCallback();
-        }
-    };
-
     useEffect(() => {
-        // 스토어의 search 객체 변경 시 로컬 state에 셋팅
         setSearch(storeSearch);
     }, [storeSearch]);
 
@@ -103,7 +82,6 @@ const ReporterMgrSearch = () => {
                     </Button>
                 </Form.Row>
             </Form>
-            <ReporterSearchListModal show={datasetApiListModalShow} onHide={() => setDatasetApiListModalShow(false)} onClickSave={handleClicktListModalSave} />
         </>
     );
 };

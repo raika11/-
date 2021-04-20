@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { AgGridReact } from 'ag-grid-react';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 import { columnDefs } from './SortAgGridColumns';
 import ItemRenderer from './ItemRenderer';
 import toast, { messageBox } from '@utils/toastUtil';
 import { selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
-import { MokaTableDefaultProps } from '@components';
+import { MokaInputLabel, MokaTable } from '@components';
 
+/**
+ * 관련 기사 AgGrid
+ */
 const SortAgGrid = ({ SearchForm }) => {
     const dispatch = useDispatch();
     const [articleListModalState, setArticleListModalState] = useState(false);
@@ -49,14 +51,6 @@ const SortAgGrid = ({ SearchForm }) => {
         return displayedRows;
     };
 
-    /**
-     * 그리드 onGridReady
-     * @param {object} params grid instance
-     */
-    const handleGridReady = (params) => {
-        setInstance(params);
-    };
-
     const handleDragEnd = (params) => {
         const displayedRows = getRows(params.api);
         let list = [];
@@ -77,17 +71,6 @@ const SortAgGrid = ({ SearchForm }) => {
         params.api.refreshCells({ force: true });
 
         // params.api.applyTransaction({ update: displayedRows });
-    };
-
-    const handleDelete = (itemIdex) => {
-        // let newList2 = selectArticleList.filter((e, index) => index !== Number(itemIdex));
-        // if (newList2.length === 0) {
-        //     dispatch(clearSelectArticleList());
-        // } else {
-        //     dispatch(selectArticleListChange(newList2));
-        // }
-        // let newList = selectArticleItem.filter((e, index) => index !== Number(itemIdex));
-        // dispatch(selectArticleItemChange(newList));
     };
 
     useEffect(() => {
@@ -149,50 +132,36 @@ const SortAgGrid = ({ SearchForm }) => {
                     );
                 } else {
                     return (
-                        <Form.Group>
-                            <Form.Row>
-                                <Col xs={12} className="p-0">
-                                    <Form.Group>
-                                        <Form.Label className="pr-2 mb-0">관련 기사</Form.Label>
-                                        <Button variant="positive" onClick={() => setArticleListModalState(true)} className="mr-2">
-                                            기사 검색
-                                        </Button>
-                                        <Button variant="positive" onClick={() => handleClickRelationArticleAdd()}>
-                                            추가
-                                        </Button>
-                                    </Form.Group>
-                                </Col>
-                            </Form.Row>
-                        </Form.Group>
+                        <Form.Row>
+                            <MokaInputLabel as="none" label="관련 기사" />
+                            <Button variant="searching" onClick={() => setArticleListModalState(true)} className="mr-1">
+                                기사 검색
+                            </Button>
+                            <ArticleListModal show={articleListModalState} onHide={() => setArticleListModalState(false)} onRowClicked={handleClickArticleAdd} />
+                            <Button variant="positive" onClick={() => handleClickRelationArticleAdd()}>
+                                추가
+                            </Button>
+                        </Form.Row>
                     );
                 }
             })()}
 
-            <Form.Group>
-                <Form.Row>
-                    <Col xs={12} className="p-0">
-                        <div className="ag-theme-moka-dnd-grid position-relative overflow-hidden flex-fill">
-                            <AgGridReact
-                                immutableData
-                                onGridReady={handleGridReady}
-                                rowData={rowData}
-                                getRowNodeId={(params) => params.id}
-                                columnDefs={columnDefs}
-                                localeText={MokaTableDefaultProps.localeText}
-                                onRowDragEnd={handleDragEnd}
-                                animateRows
-                                rowDragManaged
-                                suppressRowClickSelection
-                                suppressMoveWhenRowDragging
-                                headerHeight={0}
-                                rowHeight={100}
-                                frameworkComponents={{ itemRenderer: ItemRenderer }}
-                            />
-                        </div>
-                    </Col>
-                </Form.Row>
-                <ArticleListModal show={articleListModalState} onHide={() => setArticleListModalState(false)} onRowClicked={handleClickArticleAdd} />
-            </Form.Group>
+            <MokaTable
+                rowData={rowData}
+                setGridInstance={setInstance}
+                onRowNodeId={(params) => params.id}
+                columnDefs={columnDefs}
+                onRowDragEnd={handleDragEnd}
+                dragStyle
+                animateRows
+                rowDragManaged
+                suppressRowClickSelection
+                suppressMoveWhenRowDragging
+                paging={false}
+                header={false}
+                rowHeight={92}
+                frameworkComponents={{ itemRenderer: ItemRenderer }}
+            />
         </>
     );
 };

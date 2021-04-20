@@ -1,5 +1,10 @@
 import React from 'react';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
 import { QuestionsInfoAddButtonRenderer, QuestionsPreviewRenderer } from './ModalGridRenderer';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+};
 
 export const columnDefs = [
     {
@@ -8,20 +13,20 @@ export const columnDefs = [
         width: 100,
         field: 'questionsInfo',
         cellRendererFramework: ({ value }) => <QuestionsInfoAddButtonRenderer questionsInfo={value} />,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellStyle,
     },
     {
         headerName: '퀴즈명',
         field: 'quizTitle',
         width: 250,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        cellStyle,
     },
     {
         headerName: '유형',
         field: 'Type',
         width: 200,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         tooltipField: 'Type',
+        cellStyle,
     },
     {
         headerName: '문항제목',
@@ -29,7 +34,7 @@ export const columnDefs = [
         width: 200,
         flex: 1,
         cellRendererFramework: ({ value }) => <QuestionsPreviewRenderer questionsPriviewInfo={value} />,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         tooltipField: 'title',
+        cellStyle,
     },
 ];

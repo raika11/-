@@ -213,16 +213,18 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         if (cacheable && (templateRoot = this.templateRootMap.get(itemKey)) != null) {
             MergeItem localItem = templateRoot.getItem();
             // expire time을 초과하면 item을 가져와 변경여부를 체크한다.
-            if (System.currentTimeMillis() - localItem.getLastLoaded() > this.itemExpireTime) {
-                remoteItem = getItem(itemType, itemId, true);
-                if (localItem.equalsModified(remoteItem)) {
-                    // 로드 시간을 reset 한다.
-                    localItem.resetLastLoad();
+            synchronized (this) {
+                if (System.currentTimeMillis() - localItem.getLastLoaded() > this.itemExpireTime) {
+                    remoteItem = getItem(itemType, itemId, true);
+                    if (localItem.equalsModified(remoteItem)) {
+                        // 로드 시간을 reset 한다.
+                        localItem.resetLastLoad();
+                        return templateRoot;
+                    }
+                    // 변경된 아이템의  Template 파싱하는 과정은 아래에서 처리한다.
+                } else {
                     return templateRoot;
                 }
-                // 변경된 아이템의  Template 파싱하는 과정은 아래에서 처리한다.
-            } else {
-                return templateRoot;
             }
         }
         if (remoteItem == null) {

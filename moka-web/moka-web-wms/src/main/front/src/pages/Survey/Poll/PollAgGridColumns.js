@@ -1,11 +1,8 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import MultiRowColumnComponent from '@pages/Survey/Poll/components/MultiRowColumnComponent';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
-import { MokaIcon, MokaTableDeleteButton } from '@components';
-import { messageBox } from '@utils/toastUtil';
 import { GRID_LINE_HEIGHT } from '@/style_constants';
+import { messageBox } from '@utils/toastUtil';
+import { MokaTableDeleteButton } from '@components';
+import MultiRowColumnComponent from '@pages/Survey/Poll/components/MultiRowColumnComponent';
 
 export const columnDefs = [
     {
@@ -36,7 +33,7 @@ export const columnDefs = [
     {
         headerName: '시작일\n종료일',
         field: 'endDt',
-        width: 130,
+        width: 110,
         cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
         cellRendererFramework: (param) => {
             return <MultiRowColumnComponent values={[param.data.startDt, param.value]} />;
@@ -46,24 +43,12 @@ export const columnDefs = [
         headerName: '보기',
         field: 'preview',
         width: 50,
-        cellRendererFramework: (param) => {
-            return (
-                <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-                    <OverlayTrigger overlay={<Tooltip id="tooltip-table-preview-button">미리보기</Tooltip>}>
-                        <Button
-                            variant="white"
-                            className="border-0 p-0 bg-transparent shadow-none"
-                            onClick={() => {
-                                if (param.data.onPreview instanceof Function) {
-                                    param.data.onPreview(param.data.id);
-                                }
-                            }}
-                        >
-                            <MokaIcon iconName="fal-file-search" style={{ fontSize: '18px' }} />
-                        </Button>
-                    </OverlayTrigger>
-                </div>
-            );
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: {
+            iconButton: true,
+            iconName: 'fal-file-search',
+            overlayText: '미리보기',
+            clickFunctionName: 'onPreview',
         },
     },
     /*{
@@ -90,7 +75,7 @@ export const columnDefs = [
     {
         headerName: '등록자\n등록일시',
         field: 'regDt',
-        width: 130,
+        width: 110,
         cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
         cellRendererFramework: (param) => {
             const regMember = param.data.regMember;
@@ -104,7 +89,7 @@ export const columnDefs = [
     {
         headerName: '수정자\n수정일시',
         field: 'modDt',
-        width: 130,
+        width: 110,
         cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
         cellRendererFramework: (param) => {
             const modMember = param.data.modMember;
@@ -143,7 +128,7 @@ export const columnDefs = [
     {
         headerName: '',
         field: 'delete',
-        width: 50,
+        width: 38,
         cellRendererFramework: (param) => {
             return (
                 param.data.isDelete && (

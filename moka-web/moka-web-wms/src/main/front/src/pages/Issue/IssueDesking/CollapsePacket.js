@@ -17,7 +17,7 @@ import StatusBadge from './StatusBadge';
 /**
  * 패키지관리 > 관련 데이터 편집 > 관련기사 꾸러미
  */
-const CollapsePacket = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE }, ref) => {
+const CollapsePacket = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
@@ -31,7 +31,7 @@ const CollapsePacket = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSA
      * @param {string} channelType channelType
      * @param {object} data data
      */
-    const selectArticle = (channelType, data) => {
+    const addArticle = (channelType, data) => {
         const cnt = gridInstance.api.getDisplayedRowCount();
 
         if (channelType === CHANNEL_TYPE.A.code) {
@@ -142,7 +142,7 @@ const CollapsePacket = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSA
      */
     const saveDesking = () => {
         const viewYn = open ? 'Y' : 'N';
-        const displayedRows = open ? getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn })) : [];
+        const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
 
         if (open && displayedRows.length < 1) {
             messageBox.alert(MESSAGE.FAIL_SAVE_NO_DATA);
@@ -215,9 +215,9 @@ const CollapsePacket = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSA
         () => ({
             viewYn: open ? 'Y' : 'N',
             gridInstance,
-            getDisplayedRows: () => getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn: open ? 'Y' : 'N' })),
+            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
         }),
-        [gridInstance, open],
+        [gridInstance, open, rowToData],
     );
 
     useEffect(() => {
@@ -255,7 +255,7 @@ const CollapsePacket = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSA
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>
-                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={selectArticle} />
+                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <StatusBadge desking={desking} />

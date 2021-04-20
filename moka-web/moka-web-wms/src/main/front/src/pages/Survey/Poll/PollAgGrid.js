@@ -28,7 +28,7 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
         history.push(`/poll/${id}`);
     };
 
-    const handleClickPreview = (id) => {
+    const handleClickPreview = ({ id }) => {
         messageBox.alert('미리보기 기능은 준비중입니다.');
         //TODO: 추후 미리보기 기획 및 디자인 확정시 처리
         setPreviewModalShow(false);

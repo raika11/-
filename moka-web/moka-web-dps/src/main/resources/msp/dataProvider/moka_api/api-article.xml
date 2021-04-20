@@ -56,7 +56,7 @@
       <todaypress desc="오늘중앙" default="N">^[Y|N]{1}$</todaypress>
       <total desc="총건수사용" default="Y">^[Y|N]{1}$</total>
     </parameter>
-    <request dmlType="sp" setNames="_DATA,SOURCES" outParam="_TOTAL">dps.article.list</request>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.article.list</request>
     <keys>
       sources
       scodes
@@ -173,15 +173,14 @@
     </keys>
   </api>
 
-  <!--좋아요/싫어요 등록(기사,JPOD)-->
+  <!--좋아요/싫어요 등록(기사)-->
   <api id="like.insert" membership="cookiePass" expire="0" method="post">
-    <description>좋아요/싫어요 등록한다.(기사,JPOD)</description>
+    <description>좋아요/싫어요 등록한다.(기사)</description>
     <parameter>
       <cid desc="컨텐트아이디" require="Y" type="number">^[0-9]{1,9}$</cid>
-      <ctype desc="컨텐트타입" require="Y" default="A">^[A|J]$</ctype>
+      <ctype desc="컨텐트타입" require="Y" default="A">^[A]{1}$</ctype>
       <site desc="좋아요구분" require="Y" default="L">^[H|L]$</site>
       <dev desc="공유디바이스" require="Y" default="M">^[P|M|T|A|B]$</dev>
-      <loginDiv desc="로그인구분" require="Y" default="0">^(0|1|2|3)$</loginDiv>
       <pcid desc="PCID" require="Y">^[0-9]{23}$</pcid>
       <remoteIp/>
     </parameter>
@@ -192,12 +191,6 @@
       if ($param.get("member_memSeq") == null) {
       $param.put("member_memSeq", null);
       $param.put("member_loginType", null);
-      $param.put("loginDiv", 0);
-      }
-
-      // Jpod 좋아요/싫어요는 쿼리 분기
-      if ($param.get("ctype").equals("J")) {
-      //queryId = "dps.jpod.shareInsert";
       }
 
       queryId;
@@ -207,20 +200,18 @@
       ctype
       site
       dev
-      loginDiv
       pcid
     </keys>
   </api>
 
   <!--공유 등록-->
   <api id="share.insert" membership="cookiePass" expire="0" method="post">
-    <description>공유 등록한다.</description>
+    <description>공유 등록한다.(JPOD제외)</description>
     <parameter>
       <cid desc="컨텐트아이디" require="Y" type="number">^[0-9]{1,9}$</cid>
-      <ctype desc="컨텐트타입" require="Y" default="A">^[A|R|I|S|D|J]$</ctype>
+      <ctype desc="컨텐트타입" require="Y" default="A">^[A|R|I|S|D]$</ctype>
       <site desc="사이트" require="Y" default="0">^([0-9]{1,2}|A|B)$</site>
       <dev desc="공유디바이스" require="Y" default="M">^[P|M|T|A|B]$</dev>
-      <loginDiv desc="로그인구분" require="Y" default="0">^(0|1|2|3)$</loginDiv>
       <pcid desc="PCID" require="Y">^[0-9]{23}$</pcid>
       <remoteIp/>
     </parameter>
@@ -231,14 +222,7 @@
       if ($param.get("member_memSeq") == null) {
       $param.put("member_memSeq", null);
       $param.put("member_loginType", null);
-      $param.put("loginDiv", 0);
       }
-
-      // Jpod 좋아요/싫어요는 쿼리 분기
-      if ($param.get("ctype").equals("J")) {
-      //queryId = "dps.jpod.shareInsert";
-      }
-
       queryId;
     </request>
     <keys>
@@ -246,7 +230,6 @@
       ctype
       site
       dev
-      loginDiv
       pcid
     </keys>
   </api>
@@ -281,6 +264,23 @@
     <description>최신영상목록을 조회한다.</description>
     <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.article.video</request>
     <keys>
+      #paging
+    </keys>
+  </api>
+
+  <!--더오래 인기있는 기사 조회
+  https://static.joins.com/joongang_15re/scripts/data/sonagi/xml/article_right_sonagi_retirement.xml
+  -->
+  <api id="stat.retirement" method="get" expire="5s">
+    <description>더오래 인기 많은 기사를 조회한다.</description>
+    <parameter>
+      <url desc="URL">^.{0,1000}$</url>
+    </parameter>
+    <request type="module" methodName="getXmlLoad">
+      jmnet.moka.web.dps.module.UrlModule
+    </request>
+    <keys>
+      url
       #paging
     </keys>
   </api>

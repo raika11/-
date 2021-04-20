@@ -94,6 +94,9 @@ public class IssueDeskingHistDTO implements Serializable {
     @ApiModelProperty("재생시간")
     private String duration;
 
+    @ApiModelProperty("영상URL")
+    private String vodUrl;
+
     @ApiModelProperty("발췌문")
     private String bodyHead;
 

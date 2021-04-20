@@ -9,12 +9,13 @@ import { getDisplayedRows } from '@utils/agGridUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issue';
 import { MokaInputLabel, MokaTable, MokaLoader } from '@components';
+import StatusBadge from './StatusBadge';
 import { keywordColumnDefs } from './IssueDeskingColumns';
 
 /**
  * 패키지관리 > 관련 데이터 편집 > 키워드
  */
-const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE }, ref) => {
+const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
@@ -36,6 +37,12 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
                 invalidList.push({ index, message: '제목을 입력해주세요' });
                 isInvalid = true;
             }
+
+            // 키워드 검사
+            if (!data.bodyHead || data.bodyHead === '') {
+                invalidList.push({ index, message: '키워드를 입력해주세요' });
+                isInvalid = true;
+            }
         });
 
         invalidList.forEach((d) => {
@@ -49,7 +56,7 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
      */
     const saveDesking = () => {
         const viewYn = open ? 'Y' : 'N';
-        const displayedRows = open ? getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn })) : [];
+        const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
 
         if (!open || validate(displayedRows)) {
             setLoading(true);
@@ -117,9 +124,9 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
         () => ({
             viewYn: open ? 'Y' : 'N',
             gridInstance,
-            getDisplayedRows: () => getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn: open ? 'Y' : 'N' })),
+            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
         }),
-        [gridInstance, open],
+        [gridInstance, open, rowToData],
     );
 
     useEffect(() => {
@@ -161,6 +168,7 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
                 </Col>
                 <Col xs={4}></Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
+                    <StatusBadge desking={desking} />
                     <Button variant="positive-a" size="sm" className="mr-1" onClick={saveDesking}>
                         임시저장
                     </Button>

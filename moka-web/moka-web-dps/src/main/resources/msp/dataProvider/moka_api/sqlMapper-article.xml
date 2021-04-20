@@ -3,6 +3,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dps.article">
 
+  <resultMap id="map" type="hashmap"/>
+
   <!-- article basic -->
   <select id="Abasic" parameterType="hashmap" resultType="map">
     select A.*, SOURCE_NAME, SOURCE_BASEURL, SOURCE_TYPE
@@ -117,8 +119,6 @@
     WHERE B.TOTAL_ID = #{totalId}
   </select>
 
-  <resultMap id="map" type="hashmap"/>
-
   <!-- article basic New -->
   <select id="articleN" parameterType="map" resultType="map" resultMap="map,map,map,map"
     statementType="CALLABLE">
@@ -129,7 +129,7 @@
   </select>
 
   <!-- article list -->
-  <select id="list" parameterType="map" resultType="map" resultMap="map,map"
+  <select id="list" parameterType="map" resultType="map" resultMap="map"
     statementType="CALLABLE">
     {call UPU_15RE_ARTICLE_LIST_SEL(
       #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
@@ -256,7 +256,6 @@
       #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{site, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{dev, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{loginDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},

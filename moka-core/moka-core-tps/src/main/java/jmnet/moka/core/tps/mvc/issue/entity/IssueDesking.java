@@ -137,6 +137,12 @@ public class IssueDesking extends RegAudit {
     private String duration;
 
     /**
+     * 영상URL
+     */
+    @Column(name = "VOD_URL")
+    private String vodUrl;
+
+    /**
      * 발췌문
      */
     @Nationalized

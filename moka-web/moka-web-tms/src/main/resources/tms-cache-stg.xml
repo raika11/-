@@ -4,8 +4,8 @@
 		<cache expire="5s" enable="true">
 			<instance class="jmnet.moka.common.cache.HazelcastCache" name="hazelcast"/>
 		    <property name="config" value="classpath:tms-hazelcast-stg.xml"/>
-				<!--
 				<type name="pg.merge" expire="1m"/>
+				<!--
 				<type name="article.merge" expire="3m"/>
 				<type name="ampArticle.merge" expire="3m"/>
 				<type name="ct.merge" expire="1m"/>

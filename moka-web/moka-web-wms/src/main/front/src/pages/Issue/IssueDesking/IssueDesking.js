@@ -20,13 +20,27 @@ const MESSAGE = {
 };
 
 /**
+ * rowNode의 데이터를 issueDeskings 리스트로 변환
+ * @param {array} rows rowNode의 데이터 리스트
+ * @param {string} viewYn Y || N
+ * @returns issueDeskings 리스트
+ */
+const rowToData = (rows, viewYn) =>
+    rows.map((r) => {
+        const result = { ...r, viewYn };
+        delete result.id;
+        delete result.afterOnChange;
+        return result;
+    });
+
+/**
  * 패키지 관리 > 관련 데이터 편집
  */
 const IssueDesking = () => {
     const { pkgSeq } = useParams();
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_ISSUE_DESKING]);
-    const domainId = useSelector(({ auth }) => auth.latsetDomainId);
+    // const domainId = useSelector(({ auth }) => auth.latsetDomainId);
     const { pkg, desking } = useSelector(({ issue }) => ({
         pkg: issue.pkg,
         desking: issue.desking,
@@ -111,8 +125,9 @@ const IssueDesking = () => {
         };
 
         const previewData = [comp1, comp2, comp3, comp4, comp5, comp6, comp7, comp8];
-        util.newTabPreview(`${API_BASE_URL}/preview/issue/${pkgSeq}`, { issueDeskings: previewData, domainId });
-    }, [pkgSeq, domainId]);
+        // util.newTabPreview(`${API_BASE_URL}/preview/issue/${pkgSeq}`, { issueDeskings: previewData, domainId: PREVIEW_DOMAIN_ID });
+        util.newTabPreview(`${API_BASE_URL}/preview/issue/${pkgSeq}`, { issueDeskings: previewData, domainId: 2000 });
+    }, [pkgSeq]);
 
     useEffect(() => {
         if (pkgSeq) {
@@ -173,6 +188,7 @@ const IssueDesking = () => {
                 deskingList={deskingByCompNo.comp1?.issueDeskings || []}
                 preview={preview}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
             {/* 메인기사(자동) */}
             <CollapseArticleAuto ref={artAutoRef} pkgSeq={pkgSeq} compNo={2} desking={deskingByCompNo.comp2 || {}} MESSAGE={MESSAGE} />
@@ -184,6 +200,7 @@ const IssueDesking = () => {
                 desking={deskingByCompNo.comp3 || {}}
                 deskingList={deskingByCompNo.comp3?.issueDeskings || []}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
             {/* 관련기사꾸러미 */}
             <CollapsePacket
@@ -193,6 +210,7 @@ const IssueDesking = () => {
                 desking={deskingByCompNo.comp4 || {}}
                 deskingList={deskingByCompNo.comp4?.issueDeskings || []}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
             {/* 영상/포토 */}
             <CollapseMoviePhoto
@@ -202,25 +220,28 @@ const IssueDesking = () => {
                 desking={deskingByCompNo.comp5 || {}}
                 deskingList={deskingByCompNo.comp5?.issueDeskings || []}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
             {/* 그래프가 6번 */}
             {/* 배너 */}
             <CollapseBanner
                 pkgSeq={pkgSeq}
-                compNo={6}
+                compNo={7}
                 ref={bannerRef}
-                desking={deskingByCompNo.comp6 || {}}
-                deskingList={deskingByCompNo.comp6?.issueDeskings || []}
+                desking={deskingByCompNo.comp7 || {}}
+                deskingList={deskingByCompNo.comp7?.issueDeskings || []}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
             {/* 키워드 */}
             <CollapseKeyword
                 pkgSeq={pkgSeq}
-                compNo={7}
+                compNo={8}
                 ref={keywordRef}
-                desking={deskingByCompNo.comp7 || {}}
-                deskingList={deskingByCompNo.comp7?.issueDeskings || []}
+                desking={deskingByCompNo.comp8 || {}}
+                deskingList={deskingByCompNo.comp8?.issueDeskings || []}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
         </MokaCard>
     );

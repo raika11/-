@@ -325,10 +325,14 @@ const DeskingWorkAgGrid = ({
     const handleRowDragEnd = useCallback(
         (params) => {
             const draggingNode = params.node;
-            let overNode = params.api.getDisplayedRowAtIndex(getRowIndex(params.event));
-            const sameNode = draggingNode === overNode;
-
             handleRowDragLeave(params);
+
+            let overNode = params.api.getDisplayedRowAtIndex(getRowIndex(params.event));
+            if (!overNode) {
+                return;
+            }
+
+            const sameNode = draggingNode === overNode || draggingNode.rowIndex === overNode.rowIndex + 1;
             if (sameNode) {
                 params.api.deselectAll();
                 return;

@@ -263,8 +263,8 @@ $rel-row-hover-color: darken($rel-row-color, 5);
                 content: "";
                 z-index: 50;
                 position: absolute;
-                top: -3px;
-                bottom: 48px;
+                top: -2px;
+                bottom: 52px;
                 left: 0px;
                 right: 0px;
                 background: $positive;
@@ -274,8 +274,8 @@ $rel-row-hover-color: darken($rel-row-color, 5);
                 content: "";
                 z-index: 50;
                 position: absolute;
-                top: 48px;
-                bottom: -3px;
+                top: 52px;
+                bottom: -2px;
                 left: 0px;
                 right: 0px;
                 background: $positive;
@@ -303,11 +303,11 @@ $rel-row-hover-color: darken($rel-row-color, 5);
             }
     
             &.next::before {
-                bottom: 37px;
+                bottom: 38px;
             }
     
             &.hover::before {
-                top: 37px;
+                top: 38px;
             }
         }
     }

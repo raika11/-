@@ -1,14 +1,18 @@
 
 $(document).ready(function() {
+    $('.dropdown .dropdown_toggle').on('click', function(){
+        $(this).parent().toggleClass('open');
+    });
+
     btnCloseModal();
     /* 스크롤 인디케이터 */
-    const scrollIndicator = document.getElementById("scrollIndicator");
+    const scrollIndicator = document.getElementById("scroll_indicator");
     window.addEventListener("scroll", (e) => {
         // clientHeight : 웹 브라우저 창의 높이
         // scrollTop : 현재 스크롤된 부분의 맨 위의 높이
         // scrollHeight : 문서의 총 높이 (= 스크롤의 총 높이)
         // contentHeight : 전체 총 높이에서 클라이언트 높이를 뺀 것
-
+        
         const { scrollTop, scrollHeight, clientHeight } = e.target.scrollingElement;
         const contentHeight = scrollHeight - clientHeight;
         const percentage = (scrollTop / contentHeight) * 100;

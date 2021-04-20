@@ -37,12 +37,17 @@
                     </div>
                 </div>
             </div>
-            <div id="scrollIndicator"></div>
+            <div id="scroll_indicator"></div>
         </header>
         <!-- //header -->
 
         <!-- container -->
         <main role="main" id="container">
+            <!-- sticky menu -->
+            <div class="s">
+
+            </div>
+            <!-- //sticky menu -->
             <!-- contents -->
             <section class="contents">
                 <article class="article">
@@ -316,15 +321,15 @@
                 </div>
                 <div class="comment_wrap">
                     <div class="comment_area">
-                        <div class="select_bx">
-                            <button type="button" class="btn_select" onclick="toggleOpenLayer(layer_select1);" >최신순<i class="ico_arrow_down"></i></button>
-                            <div class="layer_popup layer_select" id="layer_select1"><!-- 여기에 개별 클래스 추가 -->
-                                <div class="layer_body">
-                                    <button type="button" class="active">최신순</button>
-                                    <button type="button">답글 많은순</button>
-                                    <button type="button">좋아요 많은 순</button>
-                                    <button type="button">화나요 많은 순</button>
-                                </div>
+                        <div class="dropdown type_down">
+                            <button type="button" class="dropdown_toggle">최신순<i class="ico_arrow_down"></i></button>
+                            <div id="dropdown" class="dropdown_menu">
+                                <ul role="listbox">
+                                    <li class="dropdown_item" role="option"><a href="#" class="active">최신순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="#">답글 많은순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="#">좋아요 많은 순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="#">화나요 많은 순</a></li>
+                                </ul>
                             </div>
                         </div>
                         <button type="button" class="btn_mycomment">내댓글<i class="ico_arrow_primary_right"></i></button>

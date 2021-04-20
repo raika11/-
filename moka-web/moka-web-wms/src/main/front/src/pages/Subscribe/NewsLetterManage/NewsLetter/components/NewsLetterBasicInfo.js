@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@/components';
 import NewsLetterPackageModal from '../modals/NewsLetterPackageModal';
 import ReporterListModal from '@/pages/Reporter/modals/ReporterListModal';
+import NewsLetterJpodModal from '../modals/NewsLetterJpodModal';
 
 /**
  * 뉴스레터 편집 > 기본정보 설정
@@ -16,8 +17,10 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
     const [issueSeq, setIssueSeq] = useState('');
     const [reporterSeq, setReporterSeq] = useState('');
     const [jpodSeq, setJpodSeq] = useState('');
+    // 모달 state
     const [pkgModal, setPkgModal] = useState(false);
     const [reporterModal, setReporterModal] = useState(false);
+    const [jpodModal, setJpodModal] = useState(false);
 
     /**
      * 입력값 변경
@@ -39,6 +42,33 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
         });
         setReporterModal(false);
     };
+
+    /**
+     * JPOD 모달 > JPOD 채널 선택
+     * @param {object} chnl 채널 데이터
+     */
+    const addJpod = (chnl) => {
+        setJpodSeq(chnl.chnlSeq);
+        setTemp({
+            ...temp,
+            channelId: chnl.chnlSeq,
+        });
+    };
+
+    useEffect(() => {
+        // 채널 타입별 lacal state 변경
+        if (temp.channelType !== 'ISSUE' || temp.channelType !== 'TOPIC' || temp.channelType !== 'SERIES' || temp.channelType !== 'ARTICLE') {
+            setIssueSeq('');
+        }
+
+        if (temp.channelType !== 'REPORTER') {
+            setReporterSeq('');
+        }
+
+        if (temp.channelType !== 'JPOD') {
+            setJpodSeq('');
+        }
+    }, [temp.channelType]);
 
     return (
         <>
@@ -125,7 +155,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                         as="radio"
                         name="letterType"
                         value="O"
-                        id="letter-type-org"
+                        id="letter-type-o"
                         inputProps={{ label: '오리지널', custom: true, checked: temp.letterType === 'O' }}
                         onChange={handleChangeValue}
                     />
@@ -135,7 +165,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                         as="radio"
                         name="letterType"
                         value="B"
-                        id="letter-type-briefing"
+                        id="letter-type-b"
                         inputProps={{ label: '브리핑', custom: true, checked: temp.letterType === 'B' }}
                         onChange={handleChangeValue}
                     />
@@ -145,7 +175,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                         as="radio"
                         name="letterType"
                         value="N"
-                        id="letter-type-notice"
+                        id="letter-type-n"
                         inputProps={{ label: '알림', custom: true, checked: temp.letterType === 'N' }}
                         onChange={handleChangeValue}
                     />
@@ -156,7 +186,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                             as="radio"
                             name="letterType"
                             value="E"
-                            id="letter-type-etc"
+                            id="letter-type-e"
                             inputProps={{ label: '기타', custom: true, checked: temp.letterType === 'E' }}
                             onChange={handleChangeValue}
                         />
@@ -174,7 +204,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                                     as="radio"
                                     name="channelType"
                                     value="ISSUE"
-                                    id="letter-channelType-article-issue"
+                                    id="letter-channelType-issue"
                                     inputProps={{ label: '이슈', custom: true, checked: temp.channelType === 'ISSUE' }}
                                     onChange={handleChangeValue}
                                 />
@@ -184,7 +214,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                                     as="radio"
                                     name="channelType"
                                     value="TOPIC"
-                                    id="letter-channelType-article-topic"
+                                    id="letter-channelType-topic"
                                     inputProps={{ label: '토픽', custom: true, checked: temp.channelType === 'TOPIC' }}
                                     onChange={handleChangeValue}
                                 />
@@ -194,7 +224,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                                     as="radio"
                                     name="channelType"
                                     value="SERIES"
-                                    id="letter-channelType-article-series"
+                                    id="letter-channelType-series"
                                     inputProps={{ label: '연재', custom: true, checked: temp.channelType === 'SERIES' }}
                                     onChange={handleChangeValue}
                                 />
@@ -204,7 +234,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                                     as="radio"
                                     name="channelType"
                                     value="ARTICLE"
-                                    id="letter-channelType-article-pkg"
+                                    id="letter-channelType-article"
                                     inputProps={{ label: '기사 패키지', custom: true, checked: temp.channelType === 'ARTICLE' }}
                                     onChange={handleChangeValue}
                                 />
@@ -217,7 +247,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                                 value={issueSeq}
                                 placeholder="이슈를 검색하세요"
                                 onSearch={() => {
-                                    if (temp.channelType === 'ISSUE') {
+                                    if (temp.channelType === 'ISSUE' || temp.channelType === 'TOPIC' || temp.channelType === 'SERIES' || temp.channelType === 'ARTICLE') {
                                         setPkgModal(true);
                                     } else {
                                         return;
@@ -272,13 +302,14 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                                     inputProps={{ readOnly: true }}
                                     onSearch={() => {
                                         if (temp.channelType === 'JPOD') {
-                                            return;
+                                            setJpodModal(true);
                                         } else {
                                             return;
                                         }
                                     }}
                                     disabled={temp.channelType === '' ? true : false}
                                 />
+                                <NewsLetterJpodModal show={jpodModal} onHide={() => setJpodModal(false)} onRowSelected={addJpod} />
                             </Col>
                         </div>
                         <div className="d-flex align-items-center" style={{ height: 31 }}>
@@ -306,8 +337,16 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                     </div>
                 </Form.Row>
             )}
-            <MokaInputLabel label="뉴스레터 명" className="mb-2" value={temp.letterName} onChange={handleChangeValue} />
-            <MokaInputLabel as="textarea" label="뉴스레터 설명" value={temp.letterDesc} inputClassName="resize-none" inputProps={{ rows: 3 }} onChange={handleChangeValue} />
+            <MokaInputLabel label="뉴스레터 명" name="letterName" className="mb-2" value={temp.letterName} onChange={handleChangeValue} />
+            <MokaInputLabel
+                as="textarea"
+                name="letterDesc"
+                label="뉴스레터 설명"
+                value={temp.letterDesc}
+                inputClassName="resize-none"
+                inputProps={{ rows: 3 }}
+                onChange={handleChangeValue}
+            />
 
             <hr className="divider" />
         </>

@@ -41,7 +41,6 @@ const RunStateSearchAgGrid = () => {
     );
 
     useEffect(() => {
-        // if ()
         setRowData(
             list.map((job) => {
                 let findCate = genCateRows.find((c) => c.id === job.category);

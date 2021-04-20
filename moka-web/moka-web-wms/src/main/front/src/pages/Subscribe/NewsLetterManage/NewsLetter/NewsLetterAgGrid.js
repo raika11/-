@@ -43,7 +43,7 @@ const NewsLetterAgGrid = ({ match }) => {
                 columnDefs={columnDefs}
                 rowData={[
                     {
-                        no: '1',
+                        letterSeq: '1',
                         sendType: '자동',
                         letterType: '오리지널',
                         letterName: '정치 언박싱',
@@ -58,7 +58,7 @@ const NewsLetterAgGrid = ({ match }) => {
                         abtestYn: 'N',
                     },
                     {
-                        no: '2',
+                        letterSeq: '2',
                         sendType: '수동',
                         letterType: '알림',
                         letterName: '폴인 인사이트',
@@ -73,7 +73,7 @@ const NewsLetterAgGrid = ({ match }) => {
                         abtestYn: 'Y',
                     },
                 ]}
-                onRowNodeId={(data) => data.no}
+                onRowNodeId={(data) => data.letterSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 page={search.page}

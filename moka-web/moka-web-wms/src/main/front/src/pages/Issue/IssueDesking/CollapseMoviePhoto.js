@@ -76,7 +76,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
     };
 
     /**
-     * TODO 영상 등록 ===> 영상 링크 등록할 필드가 없음~~~
+     * 영상 등록
      * @param {string} url url path
      * @param {object} data ovp 데이터 (유투브일 경우 null)
      */
@@ -94,6 +94,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                     thumbFileName: data.thumbFileName,
                     title: data.name,
                     channelType: ISSUE_CHANNEL_TYPE.M.code,
+                    vodUrl: url,
                     afterOnChange: () => setStatus(DESK_STATUS_WORK),
                 },
             ],

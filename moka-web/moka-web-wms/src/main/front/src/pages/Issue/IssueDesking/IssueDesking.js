@@ -19,6 +19,12 @@ const MESSAGE = {
     FAIL_SAVE_NO_DATA: '데이터를 하나 이상 추가해주세요.',
 };
 
+/**
+ * rowNode의 데이터를 issueDeskings 리스트로 변환
+ * @param {array} rows rowNode의 데이터 리스트
+ * @param {string} viewYn Y || N
+ * @returns issueDeskings 리스트
+ */
 const rowToData = (rows, viewYn) =>
     rows.map((r) => {
         const result = { ...r, viewYn };

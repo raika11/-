@@ -29,9 +29,8 @@ const NewsLetterSearch = () => {
             setPeriod([Number(number), date]);
 
             // 기간 설정
-            if (date === 'all') {
+            if (number === 0 && date === 'all') {
                 setSearch({ ...search, startDt: null, endDt: null });
-                return;
             } else {
                 const nd = new Date();
                 const startDt = moment(nd).subtract(Number(number), date).startOf('day');
@@ -96,7 +95,7 @@ const NewsLetterSearch = () => {
                     <option value="A">자동</option>
                     <option value="E">수동</option>
                 </MokaInput>
-                <MokaInput as="select" name="abTestYn" className="mr-2" value={search.abTestYn} onChange={handleChangeValue}>
+                <MokaInput as="select" name="abtestYn" className="mr-2" value={search.abtestYn} onChange={handleChangeValue}>
                     <option>A/B TEST 여부 전체</option>
                     <option value="Y">사용</option>
                     <option value="N">미사용</option>
@@ -108,7 +107,7 @@ const NewsLetterSearch = () => {
             <Form.Row className="mb-2">
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="period" value={period.join('')} onChange={handleChangeValue}>
-                        <option value="all" data-number="0" data-date="all">
+                        <option value="0all" data-number="0" data-date="all">
                             기간 전체
                         </option>
                         <option value="7days" data-number="7" data-date="days">
@@ -157,7 +156,6 @@ const NewsLetterSearch = () => {
                 </Col>
                 <MokaInput
                     as="autocomplete"
-                    name="letterTitle"
                     className="mr-2 flex-fill"
                     value={nlTitle}
                     inputProps={{
@@ -174,7 +172,7 @@ const NewsLetterSearch = () => {
                     }}
                     onChange={(value) => {
                         setNlTitle(value);
-                        setSearch({ ...search, letterTitle: value?.label });
+                        setSearch({ ...search, letterName: value?.label });
                     }}
                 />
                 <Button variant="searching" onClick={handleClickSearch}>

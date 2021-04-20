@@ -8,7 +8,7 @@ import { MokaCard, MokaInput, MokaInputLabel, MokaSearchInput } from '@/componen
 import NewsLetterSendRelArticleAgGrid from './components/NewsLetterSendRelArticleAgGrid';
 import NewsLetterSendEditor from './NewsLetterSendEditor';
 import { EditThumbModal } from '@/pages/Desking/modals';
-import NewsLetterLayoutModal from '../NewsLetter/modals/NewLetterLayoutModal';
+import NewsLetterLayoutModal from '../NewsLetter/modals/NewsLetterLayoutModal';
 import { initialState } from '@store/newsLetter';
 
 /**

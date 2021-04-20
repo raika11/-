@@ -16,10 +16,16 @@ export const initialState = {
             letterType: '',
             status: '',
             sendType: '',
-            abTestYn: '',
+            abtestYn: '',
             startDt: null,
             endDt: null,
-            letterTitle: '',
+            letterName: '',
+        },
+        // 모달 검색 조건
+        modalSearch: {
+            jpodSearch: {
+                chnlNm: '',
+            },
         },
         letterInfo: {
             letterSeq: '',

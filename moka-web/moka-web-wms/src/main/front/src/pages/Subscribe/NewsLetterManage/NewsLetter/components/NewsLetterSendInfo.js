@@ -132,7 +132,7 @@ const NewsLetterSendInfo = ({ temp, setTemp, onChangeValue }) => {
                                 </Col>
                                 <p className="mb-0 pr-2">일</p>
                                 <Col xs={3} className="p-0">
-                                    <MokaInput as="dateTimePicker" inputProps={{ dateFormat: null }} disabled={temp.sendPeriod !== 'S'} />
+                                    <MokaInput as="dateTimePicker" className="right" inputProps={{ dateFormat: null }} disabled={temp.sendPeriod !== 'S'} />
                                 </Col>
                             </>
                         )}
@@ -182,7 +182,7 @@ const NewsLetterSendInfo = ({ temp, setTemp, onChangeValue }) => {
                                 </Col>
                             </>
                         )}
-                        {temp.sendType === 'M' && (
+                        {temp.sendType === 'E' && (
                             <>
                                 <Col xs={2} className="p-0 pr-2">
                                     <MokaInput as="radio" value="D" id="direct" inputProps={{ label: '직접 입력', custom: true }} disabled />
@@ -265,14 +265,28 @@ const NewsLetterSendInfo = ({ temp, setTemp, onChangeValue }) => {
                         <div className="flex-fill">
                             <div className="d-flex align-items-center" style={{ height: 31 }}>
                                 <Col xs={3} className="p-0 pr-2">
-                                    <MokaInput as="radio" value="S" id="direct" inputProps={{ label: '구독자 연동', custom: true }} disabled />
+                                    <MokaInput
+                                        as="radio"
+                                        name="scbLinkYn"
+                                        value="Y"
+                                        id="letter-scbLinkYn-y"
+                                        inputProps={{ label: '구독자 연동', custom: true, checked: temp.scbLinkYn === 'Y' }}
+                                    />
                                 </Col>
                                 <Col xs={3} className="p-0 pr-2">
-                                    <MokaInput as="radio" value="D" id="direct" inputProps={{ label: '직접 등록', custom: true }} disabled />
+                                    <MokaInput
+                                        as="radio"
+                                        name="scbLinkYn"
+                                        value="N"
+                                        id="letter-scbLinkYn-n"
+                                        inputProps={{ label: '직접 등록', custom: true, checked: temp.scbLinkYn === 'N' }}
+                                    />
                                 </Col>
-                                <Button variant="positive" size="sm" style={{ overflow: 'visible' }}>
-                                    Excel 업로드
-                                </Button>
+                                {temp.scbLinkYn === 'N' && (
+                                    <Button variant="positive" size="sm" style={{ overflow: 'visible' }}>
+                                        Excel 업로드
+                                    </Button>
+                                )}
                             </div>
                             <p className="mb-0 color-primary">※ 직접 등록 시 Excel 업로드는 필수입니다.</p>
                         </div>

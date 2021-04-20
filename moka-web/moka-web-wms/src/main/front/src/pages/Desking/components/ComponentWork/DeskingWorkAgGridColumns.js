@@ -69,7 +69,6 @@ export const columnDefs = [
         width: 42,
         field: 'irThumbFileName',
         cellRenderer: 'imageRenderer',
-        cellRendererParams: { autoRatio: false },
         cellClassRules: cellClassRules,
         cellStyle: { paddingTop: '8px', paddingBottom: '8px' },
     },
@@ -105,7 +104,6 @@ export const naverChannelColumnDefs = [
         width: 42,
         field: 'irThumbFileName',
         cellRenderer: 'imageRenderer',
-        cellRendererParams: { autoRatio: false },
         cellStyle: { paddingTop: '8px', paddingBottom: '8px' },
     },
     {

@@ -11,7 +11,7 @@ import { GRID_ROW_HEIGHT } from '@/style_constants';
  */
 const BannedListBox = () => {
     const dispatch = useDispatch();
-    const [gridApi, setGridApi] = useState(null);
+    const [, setGridApi] = useState(null);
     // const selectDoubleClickRow = useRef(null);
     const [rowData, setRowData] = useState([]);
 

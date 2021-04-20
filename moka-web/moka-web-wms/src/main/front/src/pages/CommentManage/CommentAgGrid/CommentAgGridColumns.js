@@ -1,12 +1,11 @@
-import React from 'react';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
-import Button from 'react-bootstrap/Button';
-import { MokaIcon } from '@components';
 import { GRID_LINE_HEIGHT } from '@/style_constants';
 
 const cellClassRules = {
     'ag-center-cell': () => true,
+};
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
 };
 
 export const columnDefs = [
@@ -109,7 +108,7 @@ export const BannedColumnDefs = {
         {
             headerName: '',
             colId: 'button',
-            width: 80,
+            width: 60,
             field: 'bannedElement',
             cellClassRules,
             cellRenderer: 'banneButtonRenderer',
@@ -119,47 +118,54 @@ export const BannedColumnDefs = {
             field: 'seqNo',
             tooltipField: 'seqNo',
             width: 100,
+            cellStyle,
         },
         {
             headerName: '아이디',
             field: 'tagValue',
             tooltipField: 'tagValue',
             width: 130,
+            cellStyle,
         },
         {
             headerName: '계정',
             field: 'tagSource',
             tooltipField: 'tagSource',
             width: 80,
+            cellStyle,
         },
         {
             headerName: '사유',
             field: 'cdNm',
             tooltipField: 'cdNm',
             width: 60,
+            cellStyle,
         },
         {
             headerName: '내용',
             field: 'tagDesc',
             tooltipField: 'tagDesc',
             flex: 1,
+            cellStyle,
         },
         {
             headerName: '등록자',
             field: 'regMemberInfo',
             tooltipField: 'regMemberInfo',
             width: 150,
+            cellStyle,
         },
         {
             headerName: '등록일시',
             field: 'regDt',
             tooltipField: 'regDt',
-            width: 160,
+            width: 110,
+            cellStyle,
         },
         {
             headerName: '',
             colId: 'button',
-            width: 80,
+            width: 40,
             field: 'historyInfo',
             cellRenderer: 'historyButtonRenderer',
         },
@@ -169,7 +175,7 @@ export const BannedColumnDefs = {
         {
             headerName: '',
             colId: 'button',
-            width: 80,
+            width: 60,
             field: 'bannedElement',
             cellRenderer: 'banneButtonRenderer',
         },
@@ -178,40 +184,46 @@ export const BannedColumnDefs = {
             field: 'seqNo',
             tooltipField: 'seqNo',
             width: 100,
+            cellStyle,
         },
         {
             headerName: '등록IP',
             field: 'tagValue',
             tooltipField: 'tagValue',
             width: 150,
+            cellStyle,
         },
         {
             headerName: '사유',
             field: 'cdNm',
             tooltipField: 'cdNm',
             width: 100,
+            cellStyle,
         },
         {
             headerName: '내용',
             field: 'tagDesc',
             flex: 1,
+            cellStyle,
         },
         {
             headerName: '등록자',
             field: 'regMemberInfo',
             tooltipField: 'regMemberInfo',
             width: 150,
+            cellStyle,
         },
         {
             headerName: '등록일시',
             field: 'regDt',
             tooltipField: 'regDt',
-            width: 160,
+            width: 110,
+            cellStyle,
         },
         {
             headerName: '',
             colId: 'button',
-            width: 80,
+            width: 40,
             field: 'historyInfo',
             cellRenderer: 'historyButtonRenderer',
         },
@@ -221,7 +233,7 @@ export const BannedColumnDefs = {
         {
             headerName: '',
             colId: 'button',
-            width: 80,
+            width: 60,
             field: 'bannedElement',
             cellRenderer: 'banneButtonRenderer',
         },
@@ -230,36 +242,42 @@ export const BannedColumnDefs = {
             field: 'seqNo',
             tooltipField: 'seqNo',
             width: 100,
+            cellStyle,
         },
         {
             headerName: '금지어',
             field: 'tagValue',
             tooltipField: 'tagValue',
             width: 150,
+            cellStyle,
         },
         {
             headerName: '사유',
             field: 'cdNm',
             tooltipField: 'cdNm',
             width: 100,
+            cellStyle,
         },
         {
             headerName: '내용',
             field: 'tagDesc',
             tooltipField: 'tagDesc',
             flex: 1,
+            cellStyle,
         },
         {
             headerName: '등록자',
             field: 'regMemberInfo',
             tooltipField: 'regMemberInfo',
             width: 150,
+            cellStyle,
         },
         {
             headerName: '등록일시',
             field: 'regDt',
             tooltipField: 'regDt',
-            width: 160,
+            width: 110,
+            cellStyle,
         },
     ],
 };

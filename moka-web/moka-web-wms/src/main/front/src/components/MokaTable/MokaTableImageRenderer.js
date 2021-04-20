@@ -16,8 +16,8 @@ const defaultProps = {
 const MokaTableImageRenderer = forwardRef((params, ref) => {
     const [field] = useState(params.colDef.field);
     const [data, setData] = useState(params.node.data);
-    const [roundedCircle, setRoundedCircle] = useState(params.roundedCircle);
-    const [autoRatio, setAutoRatio] = useState(params.autoRatio);
+    const [roundedCircle] = useState(params.roundedCircle);
+    const [autoRatio] = useState(params.autoRatio);
 
     const boxRef = useRef(null);
     const imgRef = useRef(null);
@@ -46,8 +46,6 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
     useImperativeHandle(ref, () => ({
         refresh: (params) => {
             setData(params.node.data);
-            setRoundedCircle(params.roundedCircle);
-            setAutoRatio(params.setAutoRatio);
             return true;
         },
         getGui: () => {
@@ -78,6 +76,7 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
                 if (h > w) h = w;
                 else if (w > h) boxRef.current.style.setProperty('width', `${h}px`, 'important');
             }
+
             boxRef.current.style.setProperty('height', `${h}px`, `important`);
         }
     }, [autoRatio, roundedCircle]);

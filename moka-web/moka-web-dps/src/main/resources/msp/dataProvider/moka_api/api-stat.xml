@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<apiConfig>
+  <!--인기 많은 기사 조회
+  더오래 인기있는 기사 조회 : cat = Retirement
+  -->
+  <api id="stat">
+    <description>인기 많은 기사를 조회한다.</description>
+    <parameter>
+      <cat desc="카테고리키">^.{0,1000}$</cat>
+      <count desc="개수" type="number" default="20">[0-9]{1,3}</count>
+    </parameter>
+    <request type="module" setNames="_DATA" outParam="_SUCCESS,_MESSAGE" methodName="getXmlLoad">
+      jmnet.moka.web.dps.module.UrlModule
+    </request>
+    <keys>
+      cat
+      count
+    </keys>
+  </api>
+
+</apiConfig>

@@ -33,7 +33,7 @@ export const columnDefs = [
     {
         headerName: '시작일\n종료일',
         field: 'endDt',
-        width: 130,
+        width: 110,
         cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
         cellRendererFramework: (param) => {
             return <MultiRowColumnComponent values={[param.data.startDt, param.value]} />;
@@ -75,7 +75,7 @@ export const columnDefs = [
     {
         headerName: '등록자\n등록일시',
         field: 'regDt',
-        width: 130,
+        width: 110,
         cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
         cellRendererFramework: (param) => {
             const regMember = param.data.regMember;
@@ -89,7 +89,7 @@ export const columnDefs = [
     {
         headerName: '수정자\n수정일시',
         field: 'modDt',
-        width: 130,
+        width: 110,
         cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },
         cellRendererFramework: (param) => {
             const modMember = param.data.modMember;

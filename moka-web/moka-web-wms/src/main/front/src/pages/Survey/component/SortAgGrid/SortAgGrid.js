@@ -132,7 +132,7 @@ const SortAgGrid = ({ SearchForm }) => {
                     );
                 } else {
                     return (
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <MokaInputLabel as="none" label="관련 기사" />
                             <Button variant="searching" onClick={() => setArticleListModalState(true)} className="mr-1">
                                 기사 검색

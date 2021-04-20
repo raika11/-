@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { MokaTableEditCancleButton } from '@components';
 import { changeHotClickList, clearHotclicklist } from '@store/bulks';
 
+const labelWidth = 45;
+
 const ItemRenderer = forwardRef((props, ref) => {
     const dispatch = useDispatch();
     const { hotClickList } = useSelector((store) => ({
@@ -61,12 +63,12 @@ const ItemRenderer = forwardRef((props, ref) => {
     }, [data]);
 
     return (
-        <div className="h-100 w-100 d-flex py-1">
+        <div className="h-100 w-100 d-flex py-10">
             <div className="flex-fill">
-                <MokaInputLabel name="title" label="타이틀" labelWidth={35} onChange={handleChangeBulkinputBox} value={item.title} className="mb-1" />
-                <MokaInputLabel name="url" label="URL" labelWidth={35} onChange={handleChangeBulkinputBox} value={item.url} />
+                <MokaInputLabel name="title" label="타이틀" labelWidth={labelWidth} onChange={handleChangeBulkinputBox} value={item.title} className="mb-1" />
+                <MokaInputLabel name="url" label="URL" labelWidth={labelWidth} onChange={handleChangeBulkinputBox} value={item.url} />
             </div>
-            <div className="h-100" style={{ width: 23 }}>
+            <div className="h-100 mr-10 ml-12" style={{ width: 13 }}>
                 <MokaTableEditCancleButton onClick={handleClickCancle} />
             </div>
         </div>

@@ -12,6 +12,13 @@
     overflow: hidden;
 }
 
+.ag-content-center-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
 .ag-pre-cell {
     display: flex;
     align-items: center;
@@ -244,8 +251,8 @@ $row-hover-color: darken($desking-row-color, 5);
         border-color: $table-border-color;
     }
 
-    .color-positive {
-        color: $positive
+    .ag-ltr .ag-row-drag, .ag-ltr .ag-selection-checkbox, .ag-ltr .ag-group-expanded, .ag-ltr .ag-group-contracted {
+        margin-right: 0px;
     }
 }
 
@@ -391,12 +398,12 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         .ag-root-wrapper {
             .ag-row {
                 &.next::before {
-                    top: -3px;
-                    bottom: 79px;
+                    top: -2px;
+                    bottom: 88px;
                 }
 
                 &.hover::before {
-                    top: 79px;
+                    top: 88px;
                 }
             }
         }

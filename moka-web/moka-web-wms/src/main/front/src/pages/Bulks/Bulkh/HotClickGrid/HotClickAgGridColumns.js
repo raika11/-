@@ -5,20 +5,17 @@ const suppressKeyboardEvent = () => true;
 export const columnDefs = [
     {
         rowDrag: true,
-        width: 24,
-        maxWidth: 24,
-        rowDragText: (params, dragItemCount) => {
-            if (dragItemCount > 1) {
-                const message = params.rowNodes ? params.rowNodes[0].data.title : '';
-                return `${message} 외 [${dragItemCount - 1}건]`;
-            }
-            return params.rowNode.data.title;
-        },
+        width: 32,
+        rowDragText: (params) => params.rowNode.data.title,
+        cellClass: 'ag-content-center-cell',
     },
     {
         field: 'ordNo',
-        width: 30,
-        maxWidth: 30,
+        width: 28,
+        maxWidth: 28,
+        cellStyle: {
+            paddingLeft: '0px',
+        },
     },
     {
         field: 'item',
@@ -26,6 +23,5 @@ export const columnDefs = [
         flex: 1,
         suppressKeyboardEvent,
         cellRendererFramework: ItemRenderer,
-        // cellStyle: { fontSize: '14px', lineHeight: '40px', paddingTop: '7px', alignItems: 'center' },
     },
 ];

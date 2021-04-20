@@ -10,13 +10,13 @@ import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseSaveDTO;
 import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseSearchDTO;
 import jmnet.moka.core.tps.mvc.abTest.service.ABTestCaseService;
+import jmnet.moka.core.tps.mvc.abTest.vo.ABTestCaseSaveVO;
 import jmnet.moka.core.tps.mvc.abTest.vo.ABTestCaseVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -83,20 +83,20 @@ public class ABTestRestController extends AbstractCommonController {
     /**
      * ABTest 상세 정보 조회
      *
-     * @param abTestSeq ABTest일련번호 (필수)
+     * @param abtestSeq ABTest일련번호 (필수)
      * @return ABTest정보
      * @throws NoDataException ABTest 정보가 없음
      */
     @ApiOperation(value = "ABTest 상세 조회")
-    @GetMapping("/{abTestSeq}")
-    public ResponseEntity<?> getABTest(@ApiParam("ABTest일련번호(필수)") @PathVariable("abTestSeq")
-    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abTestSeq}") Long abTestSeq)
+    @GetMapping("/{abtestSeq}")
+    public ResponseEntity<?> getABTest(@ApiParam("ABTest일련번호(필수)") @PathVariable("abtestSeq")
+    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq)
             throws NoDataException {
 
         ResultListDTO<ABTestCaseVO> resultListMessage = new ResultListDTO<>();
 
         // 조회
-        List<ABTestCaseVO> returnValue = abTestCaseService.findABTestById(abTestSeq);
+        List<ABTestCaseVO> returnValue = abTestCaseService.findABTestById(abtestSeq);
         resultListMessage.setList(returnValue);
 
         ResultDTO<ResultListDTO<ABTestCaseVO>> resultDto = new ResultDTO<>(resultListMessage);
@@ -112,33 +112,35 @@ public class ABTestRestController extends AbstractCommonController {
      * @param request           요청
      * @param abTestCaseSaveDTO 등록할 ABTest 정보
      * @return 등록된 게시판정보
-     * @throws InvalidDataException 데이타 유효성 오류
-     * @throws Exception            예외처리
+     * @throws Exception 예외처리
      */
     @ApiOperation(value = "ABTest 등록")
     @PostMapping
     public ResponseEntity<?> postABTest(HttpServletRequest request, @Valid ABTestCaseSaveDTO abTestCaseSaveDTO)
-            throws InvalidDataException, Exception {
-        ABTestCaseVO abTestCaseVO = modelMapper.map(abTestCaseSaveDTO, ABTestCaseVO.class);
+            throws Exception {
+        ABTestCaseSaveVO abTestCaseSaveVO = modelMapper.map(abTestCaseSaveDTO, ABTestCaseSaveVO.class);
 
         try {
 
             // insert
-            ABTestCaseVO returnValue = abTestCaseService.insertABTestCase(abTestCaseVO);
+            boolean insertOk = abTestCaseService.insertABTestCase(abTestCaseSaveVO);
 
-            // 결과리턴
-            ABTestCaseSaveDTO dto = modelMapper.map(returnValue, ABTestCaseSaveDTO.class);
-            ResultDTO<ABTestCaseSaveDTO> resultDto = new ResultDTO<>(dto, msg("tps.abTest.success.insert"));
+            String message = "";
+            if (insertOk) {
+                message = msg("tps.common.success.insert");
+            } else {
+                message = msg("tps.common.error.insert");
+            }
 
-            // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.INSERT);
-
+            ABTestCaseSaveDTO dto = modelMapper.map(abTestCaseSaveVO, ABTestCaseSaveDTO.class);
+            ResultDTO<ABTestCaseSaveDTO> resultDto = new ResultDTO<>(dto, message);
+            tpsLogger.success(ActionType.SELECT);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
         } catch (Exception e) {
-            log.error("[FAIL TO INSERT ABTest]", e);
-            // 액션 로그에 오류 내용 출력
-            tpsLogger.error(ActionType.INSERT, e);
-            throw new Exception(msg("tps.abTest.error.insert"), e);
+            log.error("[FAIL TO ABTest INSERT]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO ABTest INSERT]", e, true);
+            throw new Exception(msg("tps.common.error.insert"), e);
         }
     }
 }

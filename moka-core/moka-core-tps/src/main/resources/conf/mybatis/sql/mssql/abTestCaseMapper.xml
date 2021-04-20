@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.abTest.mapper.ABTestCaseMapper">
+
+  <!--ABTest 목록 조회 -->
+  <select id="findAllList" parameterType="ABTestCaseSearchDTO" resultType="ABTestCaseVO"
+    statementType="CALLABLE">
+    {call UPA_ABTEST_CASE_LIST_SEL(
+
+    <choose>
+      <when test="domainId != null and domainId != ''">
+        #{domainId},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="status != 'all' and status != null and status != ''">
+        #{status},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="pageSeq != '0' and pageSeq != null and pageSeq != ''">
+        #{pageSeq},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="areaSeq != '0' and areaSeq != null and areaSeq != ''">
+        #{areaSeq},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="abtestPurpose != 'all' and abtestPurpose != null and abtestPurpose != ''">
+        #{abtestPurpose},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+
+    <choose>
+      <when test="abtestType != 'all' and abtestType != null and abtestType != ''">
+        #{abtestType},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'all' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'abtestTitle' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'abtestDesc' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+
+  <!--ABTest 상세 정보 조회 -->
+  <select id="findABTestById" parameterType="ABTestCaseSearchDTO" resultType="ABTestCaseVO"
+    statementType="CALLABLE">
+    {call UPA_ABTEST_CASE_SEL(
+      #{abtestSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
+  </select>
+
+  <insert id="insertABTestCase" parameterType="ABTestCaseSaveVO"
+    statementType="CALLABLE">
+    { call UPA_ABTEST_CASE_INS(
+      #{abtestType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestPurpose, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{domainId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{pageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{componentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{letterSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+      #{endDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+      #{endCondi, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{endPeriod, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{endKpi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{kpiClickCondi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{kpiPeriodCondi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{autoApplyYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{status, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{delYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{regDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+      #{regId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{modDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+      #{modId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{loginYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{subscribeYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{subscribeSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{devDiv, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{browser, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{referer, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{pwaYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{pushYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{utm, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{utmSource, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{utmMedium, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{utmCampaign, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{utmTerm, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{utmContent, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestTitle, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestDesc, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestGrpMethod, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{kpiValueA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{kpiValueB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.String},
+      #{deskingPart, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{templateSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{datasetSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{title, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{senderName, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{sendDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date}
+      )}
+  </insert>
+</mapper>

@@ -59,7 +59,7 @@ public class ABTestCaseSearchDTO extends SearchDTO {
      * AB테스트 목표(T:디자인 D:데이터)
      */
     @ApiModelProperty("테스트대상(T:디자인 D:데이터)")
-    private String abTestPurpose;
+    private String abtestPurpose;
 
     /**
      * 시작일시
@@ -79,22 +79,22 @@ public class ABTestCaseSearchDTO extends SearchDTO {
      * AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
     @ApiModelProperty("유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)")
-    private String abTestType;
+    private String abtestType;
 
     /**
      * 제목
      */
     @ApiModelProperty("제목")
-    private String abTestTitle;
+    private String abtestTitle;
 
     /**
      * 설명
      */
     @ApiModelProperty("설명")
-    private String abTestDesc;
+    private String abtestDesc;
 
     public ABTestCaseSearchDTO() {
-        super(ABTestCaseVO.class, "abTestSeq,desc");
+        super(ABTestCaseVO.class, "abtestSeq,desc");
         super.setUseTotal(MokaConstants.YES);
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
         super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);

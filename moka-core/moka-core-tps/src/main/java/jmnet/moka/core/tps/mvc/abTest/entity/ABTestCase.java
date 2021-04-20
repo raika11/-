@@ -38,19 +38,19 @@ public class ABTestCase extends BaseAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ABTEST_SEQ", nullable = false)
-    private Long abTestSeq;
+    private Long abtestSeq;
 
     /**
      * AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
     @Column(name = "ABTEST_TYPE")
-    private String abTestType;
+    private String abtestType;
 
     /**
      * AB테스트 목표(T:디자인 D:데이터)
      */
     @Column(name = "ABTEST_PURPOSE")
-    private String abTestPurpose;
+    private String abtestPurpose;
 
     /**
      * 도메인ID
@@ -245,12 +245,12 @@ public class ABTestCase extends BaseAudit {
      * AB테스트제목
      */
     @Column(name = "ABTEST_TITLE")
-    private String abTestTitle;
+    private String abtestTitle;
 
     /**
      * AB테스트설명
      */
     @Column(name = "ABTEST_DESC")
-    private String abTestDesc;
+    private String abtestDesc;
 
 }

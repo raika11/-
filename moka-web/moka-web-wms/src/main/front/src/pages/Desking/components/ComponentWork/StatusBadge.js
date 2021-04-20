@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import clsx from 'clsx';
 import Badge from 'react-bootstrap/Badge';
 import Popover from 'react-bootstrap/Popover';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -40,7 +39,7 @@ const StatusBadge = (props) => {
 
     return (
         <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={popover}>
-            <Badge variant={published ? 'info' : 'gray-600'} className={clsx('rounded-0', className)}>
+            <Badge variant={published ? 'info' : 'gray-900'} className={className}>
                 {published ? '전송' : '임시'}
             </Badge>
         </OverlayTrigger>

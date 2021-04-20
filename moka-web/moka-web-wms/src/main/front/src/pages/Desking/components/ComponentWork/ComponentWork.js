@@ -147,7 +147,7 @@ const ComponentWork = (props) => {
 
     return (
         <div
-            className={clsx('component-work', 'border-top', {
+            className={clsx('component-work', {
                 disabled: component.viewYn === 'N',
                 work: workStatus[component.seq] === 'work',
                 save: workStatus[component.seq] === undefined || workStatus[component.seq] === 'save',

@@ -115,7 +115,7 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                         inputProps={{ timeFormat: null, timeDefault: 'start' }}
                     />
                 </Col>
-                <Col xs={3} className="p-0 pr-2">
+                <Col xs={3} className="p-0">
                     <MokaInput
                         as="dateTimePicker"
                         className="mb-0 is-not-position-center right"
@@ -165,7 +165,7 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                         </Col>
                     </Form.Row>
                 </Col>
-                <Col xs={2} className="p-0  pr-2 text-right">
+                <Col xs={2} className="p-0 text-right">
                     <AuthButton variant="positive h-100" onClick={onAdd}>
                         등록
                     </AuthButton>

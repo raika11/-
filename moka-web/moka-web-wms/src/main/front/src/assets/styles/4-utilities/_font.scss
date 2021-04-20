@@ -26,3 +26,8 @@ $font-sizes: 9, 10, 11, 12, 13, 14, 15, 16;
 .pre-wrap {
   white-space: pre-wrap !important;
 }
+
+.h7 {
+  @include font-size($h7-font-size);
+  color: $gray-600;
+}

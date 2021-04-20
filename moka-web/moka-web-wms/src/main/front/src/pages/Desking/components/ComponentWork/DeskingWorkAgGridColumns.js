@@ -22,6 +22,9 @@ export const columnDefs = [
             }
             return params.rowNode.data.title;
         },
+        cellStyle: {
+            paddingLeft: '8px',
+        },
         cellClassRules: cellClassRules,
     },
     {
@@ -36,9 +39,13 @@ export const columnDefs = [
     {
         colId: 'checkbox',
         width: 24,
+        maxWidth: 24,
         checkboxSelection: true,
         suppressMenu: true,
         headerCheckboxSelection: true,
+        cellStyle: {
+            paddingLeft: '0px',
+        },
         cellClassRules: cellClassRules,
     },
     {
@@ -59,11 +66,12 @@ export const columnDefs = [
         cellStyle: { fontSize: '12px' },
     },
     {
-        width: 50,
+        width: 42,
         field: 'irThumbFileName',
         cellRenderer: 'imageRenderer',
+        cellRendererParams: { autoRatio: false },
         cellClassRules: cellClassRules,
-        cellStyle: { paddingTop: '4px', paddingBottom: '4px' },
+        cellStyle: { paddingTop: '8px', paddingBottom: '8px' },
     },
     {
         width: 200,
@@ -83,6 +91,9 @@ export const naverChannelColumnDefs = [
         width: 24,
         suppressMenu: true,
         rowDragText: (params) => params.rowNode.data.title,
+        cellStyle: {
+            paddingLeft: '8px',
+        },
     },
     {
         field: 'contentOrdEx',
@@ -91,10 +102,11 @@ export const naverChannelColumnDefs = [
         cellStyle: { fontSize: '12px' },
     },
     {
-        width: 50,
+        width: 42,
         field: 'irThumbFileName',
         cellRenderer: 'imageRenderer',
-        cellStyle: { paddingTop: '3px', paddingBottom: '3px' },
+        cellRendererParams: { autoRatio: false },
+        cellStyle: { paddingTop: '8px', paddingBottom: '8px' },
     },
     {
         width: 200,

@@ -581,9 +581,9 @@ body {
 // 페이지편집
 .component-work {
     position: relative;
-    
-    &:nth-child(1) {
-        border-top: unset !important;
+
+    .ag-theme-moka-dnd-grid .ag-root-wrapper .ag-body-viewport {
+        padding-top: 0px;
     }
 
     &.work {

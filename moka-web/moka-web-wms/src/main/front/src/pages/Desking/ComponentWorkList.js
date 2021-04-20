@@ -8,6 +8,8 @@ import { GET_COMPONENT_WORK_LIST, changeWorkStatus, putComponentWorkTemplate, PU
 import { getChannelTp } from '@store/codeMgt';
 import { ComponentWork, NaverChannelWork, NaverStandWork } from './components';
 
+const saveFailMsg = '편집된 정보가 있습니다. 임시저장 버튼을 클릭후\n전송 버튼을 클릭하여 주세요.';
+
 /**
  * 홈 섹션편집 > 워크 목록
  */
@@ -17,9 +19,6 @@ const ComponentWorkList = (props) => {
     const { area, isNaverChannel, isNaverStand } = useSelector(({ desking }) => desking);
     const { list: componentWorkList, workStatus } = useSelector(({ desking }) => desking);
     const channelTpRows = useSelector(({ codeMgt }) => codeMgt.channelTpRows);
-    const saveFailMsg = '편집된 정보가 있습니다. 임시저장 버튼을 클릭후\n전송 버튼을 클릭하여 주세요.';
-
-    // state
     const [disabledList, setDisabledList] = useState([]); // 비활성영역 리스트
     const [leftList, setLeftList] = useState([]); // 왼쪽 워크리스트
     const [rightList, setRightList] = useState([]); // 오른쪽 워크리스트
@@ -231,7 +230,7 @@ const ComponentWorkList = (props) => {
                 className={clsx('p-0 position-relative h-100', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H, 'mr-1': area.areaAlign === AREA_ALIGN_H })}
                 bodyClassName="p-0 mt-0 overflow-hidden"
             >
-                <div className="d-flex justify-content-between p-2 border-bottom align-items-center" style={{ height: 52 }}>
+                <div className="d-flex justify-content-between px-3 py-2 border-bottom align-items-center" style={{ height: 52 }}>
                     {renderTitle()}
                 </div>
 

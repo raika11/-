@@ -18,7 +18,7 @@ import StatusBadge from './StatusBadge';
 /**
  * 패키지관리 > 관련 데이터 편집 > 영상/포토
  */
-const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE }, ref) => {
+const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
@@ -150,7 +150,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
      */
     const saveDesking = () => {
         const viewYn = open ? 'Y' : 'N';
-        const displayedRows = open ? getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn })) : [];
+        const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
 
         if (open && displayedRows.length < 1) {
             messageBox.alert(MESSAGE.FAIL_SAVE_NO_DATA);
@@ -223,9 +223,9 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
         () => ({
             viewYn: open ? 'Y' : 'N',
             gridInstance,
-            getDisplayedRows: () => getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn: open ? 'Y' : 'N' })),
+            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
         }),
-        [gridInstance, open],
+        [gridInstance, open, rowToData],
     );
 
     useEffect(() => {

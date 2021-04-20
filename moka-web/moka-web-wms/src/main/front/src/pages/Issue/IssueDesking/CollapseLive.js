@@ -17,7 +17,7 @@ import StatusBadge from './StatusBadge';
 /**
  * 패키지관리 > 관련 데이터 편집 > 라이브기사
  */
-const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE }, ref) => {
+const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
@@ -97,7 +97,7 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
      */
     const saveDesking = () => {
         const viewYn = open ? 'Y' : 'N';
-        const displayedRows = open ? getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn })) : [];
+        const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
 
         if (open && displayedRows.length < 1) {
             messageBox.alert(MESSAGE.FAIL_SAVE_NO_DATA);
@@ -170,9 +170,9 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
         () => ({
             viewYn: open ? 'Y' : 'N',
             gridInstance,
-            getDisplayedRows: () => getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn: open ? 'Y' : 'N' })),
+            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
         }),
-        [gridInstance, open],
+        [gridInstance, open, rowToData],
     );
 
     useEffect(() => {

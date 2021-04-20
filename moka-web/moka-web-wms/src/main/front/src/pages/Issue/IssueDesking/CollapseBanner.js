@@ -15,7 +15,7 @@ import { bannerColumnDefs } from './IssueDeskingColumns';
 /**
  * 패키지관리 > 관련 데이터 편집 > 배너
  */
-const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSAGE }, ref) => {
+const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSAGE, rowToData }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
@@ -50,7 +50,7 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
      */
     const saveDesking = () => {
         const viewYn = open ? 'Y' : 'N';
-        const displayedRows = open ? getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn })) : [];
+        const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
 
         if (!open || validate(displayedRows)) {
             setLoading(true);
@@ -118,9 +118,9 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
         () => ({
             viewYn: open ? 'Y' : 'N',
             gridInstance,
-            getDisplayedRows: () => getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn: open ? 'Y' : 'N' })),
+            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
         }),
-        [gridInstance, open],
+        [gridInstance, open, rowToData],
     );
 
     useEffect(() => {

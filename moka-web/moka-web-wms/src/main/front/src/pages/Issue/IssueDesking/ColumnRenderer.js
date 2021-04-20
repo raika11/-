@@ -468,7 +468,15 @@ const KeywordRenderer = forwardRef((params, ref) => {
         <div className="w-100 h-100 d-flex align-items-center">
             <div className="flex-fill d-flex flex-column pl-3">
                 <MokaInputLabel label="제목" name="title" labelWidth={labelWidth} value={content.title} className="mb-2" onChange={handleChangeValue} required />
-                <MokaInputLabel label="키워드" name="bodyHead" labelWidth={labelWidth} value={content.bodyHead} onChange={handleChangeValue} required />
+                <MokaInputLabel
+                    label="키워드"
+                    name="bodyHead"
+                    labelWidth={labelWidth}
+                    value={content.bodyHead}
+                    onChange={handleChangeValue}
+                    placeholder="구분자는 (,) 입니다"
+                    required
+                />
             </div>
             <div className="pl-2 pr-1 flex-shrink-0 d-flex align-items-center">
                 <Button variant="white" className="border-0 p-0 bg-transparent" onClick={handleDelete}>

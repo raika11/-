@@ -69,7 +69,7 @@ export const initialState = {
             sendSeq: '',
             letterSeq: '',
             abtestYN: 'Y',
-            abItem: '', // 임시 데이터(테이블에 없음)
+            abVariantType: '',
             abDiv: '',
             sendStatus: '',
             senderName: '',

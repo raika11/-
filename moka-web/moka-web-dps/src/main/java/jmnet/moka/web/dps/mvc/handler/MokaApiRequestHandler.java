@@ -166,7 +166,7 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
             } else {
                 String requestKey = ApiCacheHelper.makeCacheType(apiContext) + ":"+ApiCacheHelper.makeCacheKey(apiContext);
                 ApiResult apiResult = null;
-                if ( !this.requestSet.contains(requestKey) ) {
+                if ( !this.requestSet.contains(requestKey) || api.getExpire() == 0L) {
                     try {
                         this.requestSet.add(requestKey);
                         apiResult = processApi(apiContext);
@@ -206,7 +206,7 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
                         try {
                             Thread
                                     .currentThread()
-                                    .wait(100);
+                                    .sleep(100);
                         } catch (InterruptedException e) {
                             logger.warn("WAIT FAILED");
                         }

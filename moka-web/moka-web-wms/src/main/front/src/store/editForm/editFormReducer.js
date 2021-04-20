@@ -73,6 +73,11 @@ export default handleActions(
         /**
          * 데이터 변경
          */
+        [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.search = payload;
+            });
+        },
         [act.CHANGE_FIELD]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.editFormParts[payload.partIdx].fieldGroups[payload.groupIdx].fields[payload.fieldIdx] = payload.field;

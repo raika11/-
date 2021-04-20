@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { API_BASE_URL, PREVIEW_DOMAIN_ID } from '@/constants';
+import { API_BASE_URL } from '@/constants';
 import { getIssueDesking, GET_ISSUE_DESKING } from '@store/issue';
 import util from '@utils/commonUtil';
 import { MokaCard } from '@components';
@@ -18,6 +18,14 @@ const MESSAGE = {
     FAIL_PUBLISH_NO_SAVE: '임시저장 데이터가 없습니다. 임시저장 버튼을 클릭 후\n전송 버튼을 클릭하여 주세요.',
     FAIL_SAVE_NO_DATA: '데이터를 하나 이상 추가해주세요.',
 };
+
+const rowToData = (rows, viewYn) =>
+    rows.map((r) => {
+        const result = { ...r, viewYn };
+        delete result.id;
+        delete result.afterOnChange;
+        return result;
+    });
 
 /**
  * 패키지 관리 > 관련 데이터 편집
@@ -174,6 +182,7 @@ const IssueDesking = () => {
                 deskingList={deskingByCompNo.comp1?.issueDeskings || []}
                 preview={preview}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
             {/* 메인기사(자동) */}
             <CollapseArticleAuto ref={artAutoRef} pkgSeq={pkgSeq} compNo={2} desking={deskingByCompNo.comp2 || {}} MESSAGE={MESSAGE} />
@@ -185,6 +194,7 @@ const IssueDesking = () => {
                 desking={deskingByCompNo.comp3 || {}}
                 deskingList={deskingByCompNo.comp3?.issueDeskings || []}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
             {/* 관련기사꾸러미 */}
             <CollapsePacket
@@ -194,6 +204,7 @@ const IssueDesking = () => {
                 desking={deskingByCompNo.comp4 || {}}
                 deskingList={deskingByCompNo.comp4?.issueDeskings || []}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
             {/* 영상/포토 */}
             <CollapseMoviePhoto
@@ -203,25 +214,28 @@ const IssueDesking = () => {
                 desking={deskingByCompNo.comp5 || {}}
                 deskingList={deskingByCompNo.comp5?.issueDeskings || []}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
             {/* 그래프가 6번 */}
             {/* 배너 */}
             <CollapseBanner
                 pkgSeq={pkgSeq}
-                compNo={6}
+                compNo={7}
                 ref={bannerRef}
-                desking={deskingByCompNo.comp6 || {}}
-                deskingList={deskingByCompNo.comp6?.issueDeskings || []}
+                desking={deskingByCompNo.comp7 || {}}
+                deskingList={deskingByCompNo.comp7?.issueDeskings || []}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
             {/* 키워드 */}
             <CollapseKeyword
                 pkgSeq={pkgSeq}
-                compNo={7}
+                compNo={8}
                 ref={keywordRef}
-                desking={deskingByCompNo.comp7 || {}}
-                deskingList={deskingByCompNo.comp7?.issueDeskings || []}
+                desking={deskingByCompNo.comp8 || {}}
+                deskingList={deskingByCompNo.comp8?.issueDeskings || []}
                 MESSAGE={MESSAGE}
+                rowToData={rowToData}
             />
         </MokaCard>
     );

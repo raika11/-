@@ -12,12 +12,16 @@ var include = {
         document.write('<link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">');
         document.write('<link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">');
         
+        // document.write('<link href="//stg-static.joongang.co.kr/css/common/select2.min.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">');
+        
         document.write('<link href="//stg-static.joongang.co.kr/css/common/section.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/common/article.css" rel="stylesheet">');
 
         document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/utils/scroll.js"></script>');
+        // document.write('<script src="//stg-static.joongang.co.kr/js/utils/select2.min.js"></script>');
+        document.write('<script src="//stg-static.joongang.co.kr/js/utils/pub.js"></script>');
 
         document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs2015.min.css">');
         document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>');
@@ -87,7 +91,7 @@ var include = {
             document.write('            <a class="nav_link" href="javascript:(0);">폼</a>');
             document.write('            <ul class="nav">');
             document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">폼컨트롤</a></li>');
-            document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">셀렉트</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="form_select.html">셀렉트</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">체크&라디오</a></li>');
             document.write('            </ul>');
             document.write('        </li>');

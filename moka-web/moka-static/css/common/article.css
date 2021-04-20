@@ -13,7 +13,7 @@ font-*,color,text-align,vertical-align, ...
 /***                                           layout                                             ***/
 /****************************************************************************************************/
 /* article */
-.article {position: relative;width: 540px;padding:40px 0 60px;margin:0 auto;background: #fff;zoom: 1;}
+.article {position: relative;max-width: 540px;padding:40px 0 60px;margin:0 auto;background: #fff;zoom: 1;}
 
 #cover_450h + .article{margin-top: 300px;padding:40px 30px 60px;}
 
@@ -72,16 +72,23 @@ font-*,color,text-align,vertical-align, ...
 
 
 /* 댓글 */
-.comment { position: relative; padding: 16px 0; }
-.new_coment { background-color: rgba(255, 246, 226, 0.5); }
+.comment { position: relative; z-index: 1; padding: 16px 0; }
+.new_comment::before { content:''; z-index: -1; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(255, 246, 226, 0.5); }
+.report_comment::before { content:''; z-index: -1; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: #e3e3e3;  } 
 .comment_header { display: flex; align-items: center; position: relative; }
 .comment_header .comment_userid { color: #000; font-size: 15px; line-height: 22px; font-weight: 700; }
-.comment_header .comment_date { margin-left: 12px; color: #999; font-size: 14px; line-height: 22px; }
-.comment .more_option_area { position: absolute; right: 0; top: 16px; text-align: right; }
+.my_comment .comment_header .comment_userid { color: #f6330a; }
+.comment_header .comment_date { margin-left: 12px; font-size: 13px; line-height: 22px; color: #999; }
+.comment_header .btn_report { position: relative; margin-left: 21px; font-size: 13px; line-height: 22px; color: #999; }
+.comment_header .btn_report::before { content: ''; position: absolute; left: -11px; top: 50%; transform: translateY(-50%); width: 1px; height: 11px; background-color: #999; }
+.comment .more_option_area { position: absolute; right: 0; top: 16px;}
 .comment .more_option_area .btn_toggle { position: relative; right: -8px; width: 20px; height: 20px;  }
 .comment .more_option_area .btn_outline_gray { display: none; position: absolute; right: 0; top: 30px; width: 58px; height: 30px; background-color: #fff; }
 .comment .more_option_area.open .btn_outline_gray { display: block; }
-.comment_content { margin-top: 10px; color: #111; font-size: 14px; line-height: 20px; }
+.comment_content { margin-top: 10px; font-size: 14px; line-height: 20px; }
+.comment_content .comment_text { color: #111; }
+.comment_content .report_text { display: flex; align-items: center; color: #666; }
+.comment_content .report_text .ico_bang { margin-right: 5px; width: 18px; height: 18px;  }
 .comment_footer { margin-top: 12px; }
 .comment_footer::after { display: block; content: ''; clear: both; }
 .comment_footer .btn_reply_cnt,
@@ -100,16 +107,18 @@ font-*,color,text-align,vertical-align, ...
 
 /* 답글쓰기 */
 .comment_form { display: none; padding: 12px 20px; border: 1px solid #111; }
-.comment_form.on { display: block; }
+.comment_form.active { display: block; }
 .comment_form .comment_userid { font-size: 14px; line-height: 20px; font-weight: bold; color: #111; }
 .comment_form .comment_body { margin-top: 10px; }
 .comment_form .comment_textarea { width: 100%; max-height: 58px; border: 0; font-size: 14px; line-height: 20px; color: #999; }
 .comment_form .comment_byte { float: left; font-size: 13px; line-height: 30px; letter-spacing: -0.5px; color: #999;  }
 .comment_form .btn_gray2 { float: right; }
 /*답글*/
-.reply_area { padding: 16px 20px; border-top: 1px solid #e2e2e2; }
+.reply_area { padding: 0 20px; border-top: 1px solid #e2e2e2; }
+.reply_area .new_comment::before { left: -20px; width: calc(100% + 40px);}
 
-.side_popup { overflow-y: auto; z-index:100; position: fixed; right: 0; top: 0; width: 560px; height: 100%; padding: 30px 40px; background-color: #fff; box-shadow: -5px 2px 7px rgba(0, 0, 0, 0.08); }
+.side_popup { overflow-y: auto; z-index:100; position: fixed; right: -100%; top: 0; transition: all 0.8s; width: 560px; height: 100%; padding: 30px 40px; background-color: #fff; box-shadow: -5px 2px 7px rgba(0, 0, 0, 0.08); }
+.side_popup.active { right: 0; transition: all 0.5s; }
 .side_popup .comment_count { font-size: 20px; line-height: 30px; letter-spacing: -0.4px; font-weight: 700; color: #111;  }
 .side_popup .btn_reset { width: 22px; height: 22px; margin-left: 6px; }
 .side_popup .ico_reset { width: 22px; height: 22px; }
@@ -118,11 +127,28 @@ font-*,color,text-align,vertical-align, ...
 .side_popup .comment_wrap { margin-top: 40px; }
 .txt_outline { padding: 18px 20px; border: 1px solid #e2e2e2; font-size: 15px; line-height: 24px; letter-spacing: -0.4px; color: #666;  }
 
+/* 스크롤 인디케이터 */
+#scroll_indicator { position: fixed; left: 0; top: 60px; width: 100%; height: 4px; transform: translateX(-100%); background-color: #f6330a;  }
+#scroll_indicator::before { content: ''; position: fixed; left: 0; top: 0; width: 100%; height: 4px; transform: translateX(100%); background-color: #e2e2e2; }
+
+/* sticky_menu */
+.sticky_menu { z-index: 100; position: fixed; left: 50%; top: 344px; transform: translateX(-50%); width: 80px; margin-left: -500px; padding: 30px 0; border: 1px solid #e2e2e2; border-radius: 40px; background-color: #fff;  }
+.sticky_menu button { display: block; position: relative; width: 100%; padding-top: 26px; text-align: center; }
+.sticky_menu button:nth-child(n+2) { margin-top: 16px;}
+.sticky_menu [class*="ico_"] { position: absolute; left: 50%; top: 0; transform: translateX(-50%); }
+.sticky_menu .sm_hidden { font-size: 13px; line-height: 22px; color: #999; }
+.sticky_menu .ico_bookmark { width: 24px; height: 24px; }
+
+
 .fs1 {font-size:14px;line-height:1.93;letter-spacing:normal;}
 .fs2 {font-size:16px;line-height:1.81;letter-spacing:normal;}
 .fs3 {font-size:18px;line-height:1.72;letter-spacing:-0.5px;}
 .fs4 {font-size:20px;line-height:1.8;letter-spacing:-0.5px;}
 .fs5 {font-size:22px;line-height:1.73;letter-spacing:-0.52px;}
+
+
+
+
 
 /****************************************************************************************************/
 /***                                            image                                             ***/

@@ -162,8 +162,8 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                     </Col>
                     <Col xs={9} className="p-0 d-flex">
                         <div className="flex-fill text-right">
-                            <p className="mb-0">{topTitleItem.send}</p>
-                            <p className={clsx('mb-0', topTitleItem.isWait && 'text-danger')}>{topTitleItem.wait}</p>
+                            <p className="mb-0 h7">{topTitleItem.send}</p>
+                            <p className={clsx('mb-0 h7', topTitleItem.isWait && 'text-danger')}>{topTitleItem.wait}</p>
                         </div>
                         <div className="ml-2 flex-shrink-0">
                             <Button variant="outline-neutral" className="w-auto h-auto" onClick={handleClickHistoryModalButton}>

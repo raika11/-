@@ -144,7 +144,7 @@ const ButtonGroup = (props) => {
     }, [handleClickSave, handleClickPublish, component.dataType]);
 
     return (
-        <div className="px-2 pt-2 pb-1 button-group">
+        <div className="pl-3 pr-2 py-12 button-group">
             <Row className="m-0 d-flex align-items-center justify-content-between position-relative">
                 {/* 예약(안씀) + 타이틀 */}
                 <Col className="d-flex align-items-center p-0 position-static" xs={8}>
@@ -160,18 +160,18 @@ const ButtonGroup = (props) => {
                         lastSaveNm={component.lastSaveNm}
                         lastSaveId={component.lastSaveId}
                         lastSaveDt={component.lastSaveDt}
-                        className="mr-1"
+                        className="mr-2"
                     />
 
                     {/* 기능 버튼 */}
                     {iconButton.map((icon, idx) => (
-                        <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="px-1 py-0 mr-1" onClick={icon.onClick}>
+                        <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="work-btn mr-2" onClick={icon.onClick}>
                             <MokaIcon iconName={icon.iconName} />
                         </MokaOverlayTooltipButton>
                     ))}
 
                     {/* 드롭다운 메뉴 */}
-                    <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0">
+                    <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="work-btn">
                         <Dropdown style={{ position: 'unset' }}>
                             <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
                             <Dropdown.Menu>{createDropdownItem()}</Dropdown.Menu>

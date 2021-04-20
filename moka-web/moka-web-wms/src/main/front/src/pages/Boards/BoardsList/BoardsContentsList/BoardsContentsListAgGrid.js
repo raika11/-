@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { MokaTable } from '@components';
 import { BASIC_DATEFORMAT, DISPLAY_PAGE_NUM } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 import FileItemRenderer from './FileItemRenderer';
 import { boardColumnDefs } from './BoardsContentsListAgGridColumns';
 import { GET_LIST_MENU_CONTENTS_LIST, changeListMenuSearchOption, getListMenuContentsList } from '@store/board';
@@ -22,11 +23,6 @@ const BoardsContentsListAgGrid = ({ match }) => {
     const contentsInfo = useSelector((store) => store.board.listMenu.contents.info);
     const contentsReply = useSelector((store) => store.board.listMenu.contents.reply);
     const loading = useSelector((store) => store.loading[GET_LIST_MENU_CONTENTS_LIST]);
-
-    // const [gridApi, setGridApi] = useState(null);
-    // const [gridColumnApi, setGridColumnApi] = useState(null);
-
-    // rowData
     const [rowData, setRowData] = useState([]);
 
     /**
@@ -64,6 +60,7 @@ const BoardsContentsListAgGrid = ({ match }) => {
                 let replay = data.boardSeq !== data.parentBoardSeq;
                 return {
                     ...data,
+                    noDel: data.delYn === 'N' ? 'Y' : 'N',
                     number: replay || data.delYn === 'Y' ? '' : data.boardSeq,
                     titlePrefix1: replay ? '' : data.titlePrefix1 || '',
                     titlePrefix2: replay ? '' : data.titlePrefix2 || '',
@@ -81,7 +78,7 @@ const BoardsContentsListAgGrid = ({ match }) => {
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
-            rowHeight={50}
+            rowHeight={GRID_ROW_HEIGHT.C[0]}
             columnDefs={boardColumnDefs(selectBoard)}
             rowData={rowData}
             onRowNodeId={(row) => row.boardSeq}

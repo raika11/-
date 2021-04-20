@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.abTest.service;
 
 import java.util.List;
 import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseSearchDTO;
+import jmnet.moka.core.tps.mvc.abTest.vo.ABTestCaseSaveVO;
 import jmnet.moka.core.tps.mvc.abTest.vo.ABTestCaseVO;
 import org.springframework.data.domain.Page;
 
@@ -20,13 +21,13 @@ import org.springframework.data.domain.Page;
 public interface ABTestCaseService {
     Page<ABTestCaseVO> findAllList(ABTestCaseSearchDTO searchDTO);
 
-    List<ABTestCaseVO> findABTestById(Long abTestSeq);
+    List<ABTestCaseVO> findABTestById(Long abtestSeq);
 
     /**
      * ABTest 등록
      *
-     * @param abTestCaseVO 정보
+     * @param abTestCaseSaveVO 정보
      * @return 작업
      */
-    ABTestCaseVO insertABTestCase(ABTestCaseVO abTestCaseVO);
+    boolean insertABTestCase(ABTestCaseSaveVO abTestCaseSaveVO);
 }

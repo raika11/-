@@ -1,11 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-
 import Pagination from 'react-bootstrap/Pagination';
 import Form from 'react-bootstrap/Form';
 import { MokaIcon } from '@components';
-
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
 export const propTypes = {
@@ -57,8 +55,14 @@ const defaultProps = {
 /**
  * 페이지네이션
  */
-const MokaPagination = (props) => {
-    const { className, total, page, size, pageSizes, paginationSize, displayPageNum, showTotalString, onChangeSearchOption } = props;
+const MokaPagination = ({ className, total, page, size, pageSizes, paginationSize, displayPageNum, showTotalString, onChangeSearchOption }) => {
+    const [pageItemsSize, setPageItemsSize] = useState('');
+    const [viewPage, setViewPage] = useState(0);
+    const [startPage, setStartPage] = useState(0);
+    const [endPage, setEndPage] = useState(0);
+    const [pageList, setPageList] = useState([]);
+    const [prev, setPrev] = useState(false);
+    const [next, setNext] = useState(false);
 
     const handleChangeRowsPerPage = useCallback(
         (event) => {
@@ -67,13 +71,33 @@ const MokaPagination = (props) => {
         [onChangeSearchOption],
     );
 
-    const [pageItemsSize, setPageItemsSize] = useState('');
-    const [viewPage, setViewPage] = useState(0);
-    const [startPage, setStartPage] = useState(0);
-    const [endPage, setEndPage] = useState(0);
-    const [pageList, setPageList] = useState([]);
-    const [prev, setPrev] = useState(false);
-    const [next, setNext] = useState(false);
+    /**
+     * 이전블럭
+     */
+    const handleBackButtonClick = useCallback(() => {
+        const movePage = startPage - 1 - 1;
+        onChangeSearchOption({ key: 'page', value: movePage });
+    }, [onChangeSearchOption, startPage]);
+
+    /**
+     * 다음블럭
+     */
+    const handleNextButtonClick = useCallback(() => {
+        const movePage = endPage + 1 - 1;
+        onChangeSearchOption({ key: 'page', value: movePage });
+    }, [onChangeSearchOption, endPage]);
+
+    /**
+     * 페이지
+     */
+    const handlePageClick = useCallback(
+        (event, pageNum, isActive) => {
+            if (!isActive) {
+                onChangeSearchOption({ key: 'page', value: pageNum });
+            }
+        },
+        [onChangeSearchOption],
+    );
 
     useEffect(() => {
         if (paginationSize === 'sm') {
@@ -108,32 +132,10 @@ const MokaPagination = (props) => {
         setNext(!(ep * size >= total || ep === 0));
     }, [displayPageNum, page, size, total]);
 
-    // 이전블럭
-    const handleBackButtonClick = useCallback(() => {
-        const movePage = startPage - 1 - 1;
-        onChangeSearchOption({ key: 'page', value: movePage });
-    }, [onChangeSearchOption, startPage]);
-
-    // 다음블럭
-    const handleNextButtonClick = useCallback(() => {
-        const movePage = endPage + 1 - 1;
-        onChangeSearchOption({ key: 'page', value: movePage });
-    }, [onChangeSearchOption, endPage]);
-
-    // 페이지
-    const handlePageClick = useCallback(
-        (event, pageNum, isActive) => {
-            if (!isActive) {
-                onChangeSearchOption({ key: 'page', value: pageNum });
-            }
-        },
-        [onChangeSearchOption],
-    );
-
     return (
         <div className={clsx('d-flex', 'align-items-center', className)}>
             {pageSizes && (
-                <Form.Control as="select" style={{ width: 65, height: 29 }} className="ft-12" onChange={handleChangeRowsPerPage} value={size} custom>
+                <Form.Control as="select" style={{ width: 65, height: 29 }} onChange={handleChangeRowsPerPage} value={size} custom>
                     {pageSizes.map((value) => (
                         <option key={value} value={value}>
                             {value}
@@ -156,7 +158,7 @@ const MokaPagination = (props) => {
                 </Pagination.Next>
             </Pagination>
 
-            {showTotalString && <div className="small">{`총: ${total} 건`}</div>}
+            {showTotalString && <div className="h7">{`총: ${total} 건`}</div>}
         </div>
     );
 };

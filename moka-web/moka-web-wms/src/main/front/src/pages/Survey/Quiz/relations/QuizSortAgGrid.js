@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { AgGridReact } from 'ag-grid-react';
-import { columnDefs } from './QuizSortAgGridColumns';
 import produce from 'immer';
 import { useSelector, useDispatch } from 'react-redux';
+import { MokaTable } from '@components';
 import { selectQuizChange } from '@store/survey/quiz';
+import { columnDefs } from './QuizSortAgGridColumns';
 
+/**
+ * 관련 퀴즈의 AgGrid
+ */
 const QuizSortAgGrid = () => {
-    const [rowData, setRowData] = useState([]);
     const dispatch = useDispatch();
+    const [rowData, setRowData] = useState([]);
+    const selectQuiz = useSelector(({ quiz }) => quiz.selectQuiz);
 
-    // 스토어 연결.
-    const { selectQuiz } = useSelector((store) => ({
-        selectQuiz: store.quiz.selectQuiz,
-    }));
-
-    // 그리드 옵션, 드래그핼때 필요함.
-    const onGridReady = (params) => {
-        // setInstance(params);
-    };
-
-    // 드래그 가 끝났을떄.
+    /**
+     * 드래그 종료
+     */
     const handleDragEnd = (params) => {
         const api = params.api;
         let displayedRows = [];
@@ -45,8 +41,8 @@ const QuizSortAgGrid = () => {
         );
     };
 
-    // 스토어가 변경 되면 grid 리스트를 업데이트.
     useEffect(() => {
+        // 스토어가 변경 되면 grid 리스트를 업데이트
         if (selectQuiz) {
             setRowData(
                 selectQuiz.map((item, index) => {
@@ -67,25 +63,21 @@ const QuizSortAgGrid = () => {
     }, [selectQuiz]);
 
     return (
-        <>
-            <div className="ag-theme-moka-dnd-grid w-100">
-                <AgGridReact
-                    immutableData
-                    onGridReady={onGridReady}
-                    rowData={rowData}
-                    getRowNodeId={(params) => params.ordNo}
-                    columnDefs={columnDefs}
-                    localeText={{ noRowsToShow: '관련 퀴즈가 없습니다', loadingOoo: '조회 중입니다' }}
-                    onRowDragEnd={handleDragEnd}
-                    animateRows
-                    rowDragManaged
-                    suppressRowClickSelection
-                    suppressMoveWhenRowDragging
-                    headerHeight={0}
-                    rowHeight={50}
-                />
-            </div>
-        </>
+        <MokaTable
+            rowData={rowData}
+            columnDefs={columnDefs}
+            header={false}
+            rowHeight={46}
+            onRowDragEng={handleDragEnd}
+            localeText={{ noRowsToShow: '관련 퀴즈가 없습니다', loadingOoo: '조회 중입니다' }}
+            onRowNodeId={(params) => params.ordNo}
+            dragStyle
+            rowDragManaged
+            animateRows
+            suppressRowClickSelection
+            suppressMoveWhenRowDragging
+            paging={false}
+        />
     );
 };
 

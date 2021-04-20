@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { MokaInputLabel } from '@components';
-import { MokaTableEditCancleButton } from '@components';
+import { MokaTableEditCancleButton, MokaPrependLinkInput } from '@components';
 
 const RelationPollSortItemRenderer = ({ item, onDelete }) => {
     const handleClickDelete = () => {
@@ -11,26 +10,25 @@ const RelationPollSortItemRenderer = ({ item, onDelete }) => {
     };
 
     return (
-        <>
-            <Row className="d-flex flex-fill align-items-center  h-100">
-                <Col className="justify-content-start mb-0 pr-0 w-100" xs={1}>
-                    {item.ordNo}
-                </Col>
-                <Col xs={10}>
-                    <Row className="d-flex h-100">
-                        <Col xs={2} className="mb-0 pl-0 pr-0">
-                            <MokaInputLabel name="id" id={`poll-id-${item.ordNo}`} labelWidth={30} value={`ID: ${item.contentId}`} disabled />
-                        </Col>
-                        <Col xs={10} className="mb-0 pl-0 pr-0">
-                            <MokaInputLabel name="title" id={`poll-title-${item.ordNo}`} labelWidth={30} value={item.title} disabled />
-                        </Col>
-                    </Row>
-                </Col>
-                <Col className="d-felx align-self-center text-left mb-0 pl-0">
-                    <MokaTableEditCancleButton onClick={handleClickDelete} />
-                </Col>
-            </Row>
-        </>
+        <Row className="d-flex flex-fill align-items-center h-100">
+            <Col className="justify-content-start mb-0 pr-0 w-100" xs={1}>
+                {item.ordNo}
+            </Col>
+            <Col xs={10}>
+                <MokaPrependLinkInput
+                    linkText={`ID: ${item.contentId}`}
+                    inputList={{
+                        value: item.title || '',
+                        disabled: true,
+                        name: 'title',
+                        className: 'bg-white',
+                    }}
+                />
+            </Col>
+            <Col className="d-felx align-self-center text-left mb-0 pl-0">
+                <MokaTableEditCancleButton onClick={handleClickDelete} />
+            </Col>
+        </Row>
     );
 };
 

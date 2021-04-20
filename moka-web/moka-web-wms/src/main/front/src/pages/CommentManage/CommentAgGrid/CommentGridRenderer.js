@@ -2,7 +2,7 @@ import React, { useCallback, useState, forwardRef, useImperativeHandle, useRef }
 import { useDispatch } from 'react-redux';
 import { Row, Col, Button, Dropdown } from 'react-bootstrap';
 import { GRID_ROW_HEIGHT, WEBKIT_BOX } from '@/style_constants';
-import { MokaIcon, MokaOverlayTooltipButton } from '@components';
+import { MokaIcon, MokaOverlayTooltipButton, MokaTableButtonRenderer } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { CommentActionModal, BannedHistoryModal } from '@pages/CommentManage/CommentModal';
 import { getCommentsBlocks, blocksUsed } from '@store/commentManage';
@@ -178,23 +178,14 @@ export const BanneButtonRenderer = (props) => {
         );
     };
 
-    // 차단 버튼
-    const handleClickBanneButton = () => {
-        handleBlocksUsed();
-    };
-    const handleClickRestoreButton = () => {
-        handleBlocksUsed();
-    };
-
-    // 차단 복원 버튼
     return (
-        <div className="h-100 d-flex align-items-center">
+        <div className="h-100 d-flex align-items-center justify-content-center">
             {usedYn === 'Y' ? (
-                <Button variant="outline-table-btn2" className="mr-2" size="sm" onClick={handleClickRestoreButton}>
+                <Button variant="outline-table-btn2" className="mr-2" size="sm" onClick={() => handleBlocksUsed()}>
                     복원
                 </Button>
             ) : (
-                <Button variant="outline-table-btn" className="mr-2" size="sm" onClick={handleClickBanneButton}>
+                <Button variant="outline-table-btn" className="mr-2" size="sm" onClick={() => handleBlocksUsed()}>
                     차단
                 </Button>
             )}
@@ -205,26 +196,16 @@ export const BanneButtonRenderer = (props) => {
 /**
  * 차단 히스토리 버튼
  */
-export const HistoryButtonRenderer = ({ value }) => {
+export const HistoryButtonRenderer = forwardRef((params, ref) => {
     const [historyState, setHistoryState] = useState(false);
 
-    const handleClickHistoryModal = () => {
-        setHistoryState(true);
-    };
-
     return (
-        <div className="h-100 d-flex align-items-center">
-            <MokaIcon iconName="fal-history" onClick={handleClickHistoryModal} />
-            <BannedHistoryModal
-                Element={value}
-                show={historyState}
-                onHide={() => {
-                    setHistoryState(false);
-                }}
-            />
-        </div>
+        <>
+            <MokaTableButtonRenderer ref={ref} {...params} iconButton iconName="fal-history" onClick={() => setHistoryState(true)} />
+            <BannedHistoryModal Element={params.value} show={historyState} onHide={() => setHistoryState(false)} />
+        </>
     );
-};
+});
 
 /**
  * 댓글 내용

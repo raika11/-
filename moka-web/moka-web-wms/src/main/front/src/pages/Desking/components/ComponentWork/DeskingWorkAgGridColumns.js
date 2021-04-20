@@ -13,7 +13,8 @@ const suppressKeyboardEvent = () => true;
 export const columnDefs = [
     {
         rowDrag: true,
-        width: 24,
+        width: 30,
+        maxWidth: 30,
         suppressMenu: true,
         rowDragText: (params, dragItemCount) => {
             if (dragItemCount > 1) {
@@ -22,7 +23,10 @@ export const columnDefs = [
             }
             return params.rowNode.data.title;
         },
-        cellClassRules: cellClassRules,
+        cellClassRules: {
+            ...cellClassRules,
+            'ag-content-center-cell': () => true,
+        },
     },
     {
         field: 'relOrdEx',
@@ -35,10 +39,14 @@ export const columnDefs = [
     },
     {
         colId: 'checkbox',
-        width: 24,
+        width: 30,
+        maxWidth: 30,
         checkboxSelection: true,
         suppressMenu: true,
         headerCheckboxSelection: true,
+        cellStyle: {
+            paddingLeft: '0px',
+        },
         cellClassRules: cellClassRules,
     },
     {
@@ -59,11 +67,12 @@ export const columnDefs = [
         cellStyle: { fontSize: '12px' },
     },
     {
-        width: 50,
+        width: 42,
         field: 'irThumbFileName',
         cellRenderer: 'imageRenderer',
+        cellRendererParams: { autoRatio: false },
         cellClassRules: cellClassRules,
-        cellStyle: { paddingTop: '4px', paddingBottom: '4px' },
+        cellStyle: { paddingTop: '8px', paddingBottom: '8px' },
     },
     {
         width: 200,
@@ -80,21 +89,25 @@ export const columnDefs = [
 export const naverChannelColumnDefs = [
     {
         rowDrag: true,
-        width: 24,
+        width: 28,
+        maxWidth: 28,
         suppressMenu: true,
         rowDragText: (params) => params.rowNode.data.title,
+        cellClass: 'ag-content-center-cell',
     },
     {
         field: 'contentOrdEx',
-        width: 24,
+        width: 26,
+        maxWidth: 26,
         cellClassRules: cellClassRules,
         cellStyle: { fontSize: '12px' },
     },
     {
-        width: 50,
+        width: 42,
         field: 'irThumbFileName',
         cellRenderer: 'imageRenderer',
-        cellStyle: { paddingTop: '3px', paddingBottom: '3px' },
+        cellRendererParams: { autoRatio: false },
+        cellStyle: { paddingTop: '8px', paddingBottom: '8px' },
     },
     {
         width: 200,

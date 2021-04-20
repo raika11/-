@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { MokaCard } from '@components';
-import { Form, Col, Button } from 'react-bootstrap';
+import produce from 'immer';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, Button } from 'react-bootstrap';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
-import { useHistory } from 'react-router-dom';
+import { MokaCard, MokaInputLabel } from '@components';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
-
-import { useDispatch, useSelector } from 'react-redux';
 import { getPoll, getPollList, updatePoll, GET_POLL, UPDATE_POLL } from '@store/survey/poll/pollAction';
-import produce from 'immer';
 import RelationPollSortAgGridComponent from '@pages/Survey/Poll/components/RelationPollSortAgGridComponent';
 import { selectArticleItemChange, selectArticleListChange } from '@store/survey/quiz';
-const SortAgGrid = React.lazy(() => import('@pages/Survey/component/SortAgGrid'));
-const RelationPollModal = React.lazy(() => import('@pages/Survey/Poll/modals/RelationPollModal'));
+import SortAgGrid from '@pages/Survey/component/SortAgGrid';
+import RelationPollModal from '@pages/Survey/Poll/modals/RelationPollModal';
 
+/**
+ * 투표관리 > 관련 정보
+ */
 const PollChildRelation = () => {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -170,62 +172,53 @@ const PollChildRelation = () => {
     }, [item]);
 
     return (
-        <div className="d-flex">
-            <MokaCard
-                title="관련 정보"
-                headerClassName="pb-0"
-                bodyClassName="pt-0"
-                className="flex-fill"
-                footer
-                footerClassName="justify-content-center"
-                footerButtons={[
-                    { text: '저장', variant: 'positive', onClick: handleChangeSave, className: 'mr-05', useAuth: true },
-                    { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
-                ]}
-                loading={loading}
-            >
-                <Form>
-                    <hr className="divider" />
-                    <Form.Group>
-                        <Form.Row>
-                            <Col xs={12}>
-                                <Form.Group>
-                                    <Form.Label className="pr-2">관련 투표</Form.Label>
-                                    <Button variant="searching" onClick={handleClickSearch}>
-                                        투표 검색
-                                    </Button>
-                                </Form.Group>
-                            </Col>
-                        </Form.Row>
-                        <RelationPollSortAgGridComponent rows={relationPolls} onChange={setRelationPolls} onDelete={handleClickRelationPollDelete} />
-                    </Form.Group>
-                    <hr className="divider" />
-                    <Form.Group>
-                        {/*<Form.Row>
-                            <Col xs={12}>
-                                <Form.Group>
-                                    <Form.Label className="pr-2 mb-0">관련 정보</Form.Label>
-                                    <Button variant="positive" onClick={handleClickArticleModalShow} className="mr-2">
-                                        기사 검색
-                                    </Button>
-                                    <Button
-                                        variant="positive"
-                                        onClick={() => {
-                                            handleClickRelationArticleAdd({ title: '', linkUrl: '', totalId: null, ordNo: relationArticles.length + 1 });
-                                        }}
-                                    >
-                                        추가
-                                    </Button>
-                                </Form.Group>
-                            </Col>
-                        </Form.Row>*/}
-                        <SortAgGrid />
-                    </Form.Group>
-                </Form>
-            </MokaCard>
-            <ArticleListModal show={isArticleModalShow} onHide={() => setIsArticleModalShow(false)} onRowClicked={handleClickRelationArticleAdd} />
-            <RelationPollModal title="관련 투표 추가" show={isPollModalShow} onHide={handleClickPollModalClose} onAdd={handleClickRelationPollAdd} codes={codes} />
-        </div>
+        <MokaCard
+            title="관련 정보"
+            className="w-100"
+            footerButtons={[
+                { text: '저장', variant: 'positive', onClick: handleChangeSave, className: 'mr-1', useAuth: true },
+                { text: '취소', variant: 'negative', onClick: () => history.push('/poll') },
+            ]}
+            loading={loading}
+        >
+            <Form>
+                <Form.Row className="mb-2">
+                    <MokaInputLabel as="none" label="관련 투표" />
+                    <Button variant="searching" onClick={handleClickSearch}>
+                        투표 검색
+                    </Button>
+                    <RelationPollModal title="관련 투표 추가" show={isPollModalShow} onHide={handleClickPollModalClose} onAdd={handleClickRelationPollAdd} codes={codes} />
+                </Form.Row>
+
+                <RelationPollSortAgGridComponent rows={relationPolls} onChange={setRelationPolls} onDelete={handleClickRelationPollDelete} />
+
+                <hr className="divider" />
+
+                <SortAgGrid />
+                <ArticleListModal show={isArticleModalShow} onHide={() => setIsArticleModalShow(false)} onRowClicked={handleClickRelationArticleAdd} />
+
+                {/* <Form.Group>
+                <Form.Row>
+                    <Col xs={12}>
+                        <Form.Group>
+                            <Form.Label className="pr-2 mb-0">관련 정보</Form.Label>
+                            <Button variant="positive" onClick={handleClickArticleModalShow} className="mr-2">
+                                기사 검색
+                            </Button>
+                            <Button
+                                variant="positive"
+                                onClick={() => {
+                                    handleClickRelationArticleAdd({ title: '', linkUrl: '', totalId: null, ordNo: relationArticles.length + 1 });
+                                }}
+                            >
+                                추가
+                            </Button>
+                        </Form.Group>
+                    </Col>
+                </Form.Row>
+            </Form.Group> */}
+            </Form>
+        </MokaCard>
     );
 };
 

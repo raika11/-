@@ -2,9 +2,10 @@ const columnDefs = [
     {
         headerName: '',
         rowDrag: true,
-        width: 24,
-        maxWidth: 24,
+        width: 28,
+        maxWidth: 28,
         rowDragText: (params) => params.rowNode.data.areaNm,
+        cellClass: 'ag-content-center-cell',
     },
     {
         headerName: '편집영역명',

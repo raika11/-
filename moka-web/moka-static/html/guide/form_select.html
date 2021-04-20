@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <script src="include.js"></script>
+    <script>include.meta()</script>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>퍼블 가이드 - 중앙일보</title>
+    <meta property="og:image" content="https://static.joins.com/joongang_15re/profile_joongang_200.png">
+    <script>include.head()</script>
+    <link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">
+
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>퍼블 가이드 - 중앙일보</title>
+    <meta property="og:image" content="https://static.joins.com/joongang_15re/profile_joongang_200.png">
+    <link href="https://static.joins.com/html/guide/guide.css" rel="stylesheet">
+    <link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">
+    <link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">
+
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.9/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.9/js/select2.min.js"></script>
+
+
+</head>
+<body class="guide">
+<div id="wrapper">
+    <!-- header -->
+    <script>include.header()</script>
+    <!-- // header -->
+
+    <div class="container ">
+        <section class="contents">
+            <section class="row">
+                <script>include.aside.menu0()</script>
+                <main class="main_guide col_sm12 col_md10 col_lg10">
+                    <!-- 가이드 내용 시작 -->
+
+                    <h2 class="guide_title">셀렉트박스</h2>
+                    <div class="sample_wrap">
+                        <!-- 셀렉트박스 -->
+                        <label class="visually_hidden" for="formSelect">Choose a select menu</label>
+                        <select id="formSelect" class="form_select" title="Default select example">
+                            <option selected="">Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                        <!-- 셀렉트박스 -->
+
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;!-- 셀렉트박스 --&gt;
+&lt;label class="visually_hidden" for="formSelect"&gt;Choose a select menu&lt;/label&gt;
+&lt;select id="formSelect" class="form_select" title="Default select example"&gt;
+    &lt;option selected=""&gt;Open this select menu&lt;/option&gt;
+    &lt;option value="1"&gt;One&lt;/option&gt;
+    &lt;option value="2"&gt;Two&lt;/option&gt;
+    &lt;option value="3"&gt;Three&lt;/option&gt;
+&lt;/select&gt;
+&lt;!-- 셀렉트박스 --&gt;
+</code></pre>
+                    </div>
+
+
+                    <h2 class="guide_title">셀렉트박스 + 버튼</h2>
+                    <div class="sample_wrap">
+                        <div class="input_group">
+                            <label class="visually_hidden" for="formCustomSelect">Choose a select menu</label>
+                            <select id="formCustomSelect" class="form_select" aria-label="...">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <button class="btn" type="button">Button</button>
+                        </div>
+
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="input_group"&gt;
+    &lt;label class="visually_hidden" for="formCustomSelect"&gt;Choose a select menu&lt;/label&gt;
+    &lt;select id="formCustomSelect" class="form_select" aria-label="..."&gt;
+        &lt;option selected&gt;Open this select menu&lt;/option&gt;
+        &lt;option value="1"&gt;One&lt;/option&gt;
+        &lt;option value="2"&gt;Two&lt;/option&gt;
+        &lt;option value="3"&gt;Three&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;button class="btn" type="button"&gt;Button&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+
+                    <h2 class="guide_title">드롭박스</h2>
+                    <div class="sample_wrap">
+                        <!-- 드롭박스 -->
+                        <div class="dropdown type_down ">
+                            <button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle">최신순</button>
+                            
+                            <div id="dropdown" class="dropdown_menu">
+                                <ul role="listbox">
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">최신순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">좋아요 많은 순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">화나요 많은 순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">답글 많은 순</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //드롭박스 -->
+
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;!-- 드롭박스 --&gt;
+&lt;div class="dropdown type_down "&gt;
+    &lt;button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle"&gt;최신순&lt;/button&gt;
+    
+    &lt;div id="dropdown" class="dropdown_menu"&gt;
+        &lt;ul role="listbox"&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;최신순&lt;/a&gt;&lt;/li&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;좋아요 많은 순&lt;/a&gt;&lt;/li&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;화나요 많은 순&lt;/a&gt;&lt;/li&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;답글 많은 순&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- //드롭박스 --&gt;
+</code></pre>
+                    </div>
+
+                    <h2 class="guide_title">드롭박스 업</h2>
+                    <div class="sample_wrap">
+                        <!-- 드롭박스 업 -->
+                        <div class="dropdown type_down type_up ">
+                            <button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle">북마크 많은 순</button>
+                            
+                            <div id="dropdown" class="dropdown_menu">
+                                <ul role="listbox">
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">종합</a></li>
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">많이 본 순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">댓글 많은 순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">공유 많은 순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">공감 많은 순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">북마크 많은 순</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //드롭박스 업 -->
+
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;!-- 드롭박스 업 --&gt;
+&lt;div class="dropdown type_down type_up "&gt;
+    &lt;button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle"&gt;북마크 많은 순&lt;/button&gt;
+    
+    &lt;div id="dropdown" class="dropdown_menu"&gt;
+        &lt;ul role="listbox"&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;종합&lt;/a&gt;&lt;/li&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;많이 본 순&lt;/a&gt;&lt;/li&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;댓글 많은 순&lt;/a&gt;&lt;/li&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;공유 많은 순&lt;/a&gt;&lt;/li&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;공감 많은 순&lt;/a&gt;&lt;/li&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;북마크 많은 순&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- //드롭박스 업 --&gt;
+</code></pre>
+                    </div>
+
+
+                    <!-- //가이드 내용 -->
+                </main>
+            </section>
+        </section>
+    </div>
+    <script>include.footer()</script>
+</div>
+</body>
+</html>

@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Column;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -44,64 +43,69 @@ public class ABTestCaseSaveDTO {
     /**
      * ` AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
-    @ApiModelProperty("AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)")
-    @NotNull(message = "{tps.abTest.error.notnull.abTestType}")
-    @Pattern(regexp = "[A|E|J|B|L]{1}$", message = "{tps.abTest.error.pattern.abTestType}")
-    private String abTestType;
+    @ApiModelProperty("AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)-필수")
+    @NotNull(message = "{tps.abTest.error.notnull.abtestType}")
+    @Pattern(regexp = "[A|E|J|B|L]{1}$", message = "{tps.abTest.error.pattern.abtestType}")
+    private String abtestType;
 
     /**
      * AB테스트 목표(T:디자인 D:데이터)
      */
-    @ApiModelProperty("AB테스트 목표(T:디자인 D:데이터)")
-    @NotNull(message = "{tps.abTest.error.notnull.abTestPurpose}")
-    @Pattern(regexp = "[T|D]{1}$", message = "{tps.abTest.error.pattern.abTestPurpose}")
-    private String abTestPurpose;
+    @ApiModelProperty("AB테스트 목표(T:디자인 D:데이터)-필수")
+    @NotNull(message = "{tps.abTest.error.notnull.abtestPurpose}")
+    @Pattern(regexp = "[T|D]{1}$", message = "{tps.abTest.error.pattern.abtestPurpose}")
+    private String abtestPurpose;
 
     /**
      * 도메인 아이디
      */
-    @ApiModelProperty("도메인 아이디(필수)")
+    @ApiModelProperty("도메인 아이디-필수")
     @NotNull(message = "{tps.domain.error.pattern.domainId}")
+    @Builder.Default
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
-    private String domainId;
+    private String domainId = "1000";
 
     /**
      * 페이지SEQ
      */
-    @ApiModelProperty("페이지SEQ")
+    @ApiModelProperty("페이지SEQ-필수")
     @Min(value = 0, message = "{tps.page.error.min.pageSeq}")
-    private Long pageSeq;
+    private Long pageSeq = 0L;
 
     /**
      * 영역일련번호
      */
-    @ApiModelProperty("영역일련번호")
+    @ApiModelProperty("영역일련번호-필수")
     @Min(value = 0, message = "{tps.area.error.min.areaSeq}")
-    private Long areaSeq;
+    private Long areaSeq = 0L;
 
     /**
      * 컴포넌트SEQ
      */
-    @ApiModelProperty("컴포넌트SEQ")
+    @ApiModelProperty("컴포넌트SEQ-필수")
     @Min(value = 0, message = "{tps.component.error.min.componentSeq}")
-    private Long componentSeq;
+    private Long componentSeq = 0L;
 
     /**
      * 뉴스레터SEQ
      */
-    @ApiModelProperty("뉴스레터SEQ")
+    @ApiModelProperty("뉴스레터SEQ-필수")
     @Min(value = 0, message = "{tps.abTest.error.min.letterSeq}")
-    private Long letterSeq;
+    private Long letterSeq = 0L;
 
     /**
-     * 시작일시
+     * 시작일시 TB_ABTEST_CASE(AB테스트 정의)
+     * <p>
+     * 테스트 시작일시 TB_ABTEST_INSTANCE(AB테스트 인스턴스)
      */
     @ApiModelProperty("시작일시")
     @DTODateTimeFormat
     private Date startDt;
 
     /**
-     * 종료일시
+     * 종료일시 TB_ABTEST_CASE(AB테스트 정의)
+     * <p>
+     * 테스트 종료일시 TB_ABTEST_INSTANCE(AB테스트 인스턴스)
      */
     @ApiModelProperty("종료일시")
     @DTODateTimeFormat
@@ -118,9 +122,9 @@ public class ABTestCaseSaveDTO {
      * 목표달성주기(JAM 수신기사의 경우 - 분단위)
      */
     @ApiModelProperty("목표달성주기(JAM 수신기사의 경우 - 분단위)")
-    @NotNull(message = "{tps.abTest.error.notnull.endPeriod}")
-    @Pattern(regexp = "[P|K|A]{1}$", message = "{tps.abTest.error.pattern.endPeriod}")
-    private String endPeriod;
+    @NotNull(message = "{tps.abTest.error.min.endPeriod}")
+    @Min(value = 0, message = "{tps.abTest.error.min.endPeriod}")
+    private Long endPeriod = 0L;
 
     /**
      * KPI달성 목표치(백분률(%)
@@ -174,31 +178,33 @@ public class ABTestCaseSaveDTO {
     private String delYn = MokaConstants.NO;
 
     /**
+     * 생성자 TB_ABTEST_CASE(AB테스트 정의)
+     * <p>
+     * 등록자(대안입력 편집자ID) TB_ABTEST_INSTANCE(AB테스트 인스턴스)
+     */
+    @ApiModelProperty(value = "등록자")
+    private String regId;
+
+    /**
      * 등록일시
      */
-    @ApiModelProperty(value = "등록일시", hidden = true)
+    @ApiModelProperty(value = "등록일시")
     @DTODateTimeFormat
     @Builder.Default
     private Date regDt = new Date();
 
     /**
-     * 생성자
+     * 수정자
      */
-    @Column(name = "REG_ID")
-    private String regId;
+    @ApiModelProperty(value = "수정자")
+    private String modId;
 
     /**
      * 수정일시
      */
-    @ApiModelProperty(value = "수정일시", hidden = true)
+    @ApiModelProperty(value = "수정일시")
     @DTODateTimeFormat
     private Date modDt;
-
-    /**
-     * 수정자
-     */
-    @Column(name = "MOD_ID")
-    private String modId;
 
     /**
      * 로그인 여부(전체:', 로그인:Y, 비로그인 : N)
@@ -248,7 +254,7 @@ public class ABTestCaseSaveDTO {
      */
     @ApiModelProperty("PWA설정여부")
     @Builder.Default
-    private String pwaeYn = MokaConstants.NO;
+    private String pwaYn = MokaConstants.NO;
 
     /**
      * 푸시설정여부
@@ -303,14 +309,83 @@ public class ABTestCaseSaveDTO {
      * AB테스트제목
      */
     @ApiModelProperty(value = "AB테스트제목")
-    @NotNull(message = "{tps.abTest.error.notnull.abTestTitle}")
-    @Size(max = 100, message = "{tps.abTest.error.size.abTestTitle}")
-    private String abTestTitle;
+    @NotNull(message = "{tps.abTest.error.notnull.abtestTitle}")
+    @Size(max = 100, message = "{tps.abTest.error.size.abtestTitle}")
+    private String abtestTitle;
 
     /**
      * AB테스트설명
      */
     @ApiModelProperty(value = "AB테스트설명")
-    @Size(max = 1000, message = "{tps.abTest.error.size.abTestDesc}")
-    private String abTestDesc;
+    @Size(max = 1000, message = "{tps.abTest.error.size.abtestDesc}")
+    private String abtestDesc;
+
+    /**
+     * AB테스트 그룹생성 방식(R:랜덤, S:고정) / TB_ABTEST_GRP(AB테스트 그룹) ABTEST_GRP_METHOD
+     */
+    @ApiModelProperty("AB테스트 그룹생성 방식(R:랜덤, S:고정)")
+    @Builder.Default
+    @Pattern(regexp = "[R|S]{1}$", message = "{tps.abTest.error.pattern.abtestGrpMethod}")
+    private String abtestGrpMethod = "R";
+
+    /**
+     * KPI달성율(A) / TB_ABTEST_INSTANCE(AB테스트 인스턴스) KPI_VALUE_A
+     */
+    @ApiModelProperty("KPI달성율(A) ")
+    @Builder.Default
+    private Long kpiValueA = 0L;
+
+    /**
+     * KPI달성율(B) / TB_ABTEST_INSTANCE(AB테스트 인스턴스) KPI_VALUE_B
+     */
+    @ApiModelProperty("KPI달성율(B)")
+    @Builder.Default
+    private Long kpiValueB = 0L;
+
+    /**
+     * 서비스기사ID(JAM설계경우) / TB_ABTEST_INSTANCE(AB테스트 인스턴스) TOTAL_ID
+     */
+    @ApiModelProperty("서비스기사ID(JAM설계경우)")
+    private String totalId;
+    /**
+     * 화면편집파트(T:제목,L:리드문,I:이미지,R;관련기사) / TB_ABTEST_INSTANCE(AB테스트 인스턴스) DESKING_PART
+     */
+    @ApiModelProperty("화면편집파트(T:제목,L:리드문,I:이미지,R;관련기사) : 텍스트 Comma(,)로 여러 개 입력")
+    @Size(max = 10, message = "{tps.abTest.error.size.deskingPart}")
+    private String deskingPart;
+
+    /**
+     * 템플릿SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT) TEMPLATE_SEQ
+     */
+    @ApiModelProperty("템플릿SEQ")
+    @Builder.Default
+    private Long templateSeq = 0L;
+
+    /**
+     * 데이터셋SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT) DATASET_SEQ
+     */
+    @ApiModelProperty("데이터셋SEQ")
+    @Builder.Default
+    private Long datasetSeq = 0L;
+
+    /**
+     * 제목(JAM 또는 뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT) TITLE
+     */
+    @ApiModelProperty(value = "제목(JAM 또는 뉴스레터)")
+    @Size(max = 510, message = "{tps.abTest.error.size.title}")
+    private String title;
+
+    /**
+     * 발송자명(뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT) SENDER_NAME
+     */
+    @ApiModelProperty(value = "발송자명(뉴스레터)")
+    @Size(max = 100, message = "{tps.abTest.error.size.senderName}")
+    private String senderName;
+
+    /**
+     * 발송일시(뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT) SEND_DT
+     */
+    @ApiModelProperty(value = "발송일시(뉴스레터)")
+    @DTODateTimeFormat
+    private Date sendDt;
 }

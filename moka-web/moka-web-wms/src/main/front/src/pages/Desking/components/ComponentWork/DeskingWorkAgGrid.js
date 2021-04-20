@@ -18,13 +18,20 @@ let hoverBox = makeHoverBox();
 /**
  * 데스킹 AgGrid
  */
-const DeskingWorkAgGrid = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave, onDelete, deskingPart, isNaverChannel = false } = props;
+const DeskingWorkAgGrid = ({
+    component,
+    agGridIndex,
+    componentAgGridInstances,
+    setComponentAgGridInstances,
+    onRowClicked,
+    onSave,
+    onDelete,
+    deskingPart,
+    isNaverChannel = false,
+}) => {
     const { deskingWorks } = component;
     const dispatch = useDispatch();
     // const IR_URL = useSelector(({ app }) => app.IR_URL);
-
-    // state
     const [rowData, setRowData] = useState([]);
     const [, setGridInstance] = useState(null);
     const [hoverNode, setHoverNode] = useState(null);
@@ -318,10 +325,14 @@ const DeskingWorkAgGrid = (props) => {
     const handleRowDragEnd = useCallback(
         (params) => {
             const draggingNode = params.node;
-            let overNode = params.api.getDisplayedRowAtIndex(getRowIndex(params.event));
-            const sameNode = draggingNode === overNode;
-
             handleRowDragLeave(params);
+
+            let overNode = params.api.getDisplayedRowAtIndex(getRowIndex(params.event));
+            if (!overNode) {
+                return;
+            }
+
+            const sameNode = draggingNode === overNode || draggingNode.rowIndex === overNode.rowIndex + 1;
             if (sameNode) {
                 params.api.deselectAll();
                 return;
@@ -379,18 +390,14 @@ const DeskingWorkAgGrid = (props) => {
                             arr.push(node);
                         }
                     });
-                    params.api.redrawRows({ rowNodes: arr });
                     params.api.resetRowHeights();
+                    params.api.redrawRows({ rowNodes: arr });
                     setHoverNode(null);
                     setNextNode(null);
                     setDraggingNodeData(null);
                 } else {
-                    params.api.redrawRows();
-                    // params.api.refreshCells({
-                    //     columns: ['relOrdEx', 'checkbox', 'relTitle', 'contentOrdEx', 'irThumbFileName', 'title'],
-                    //     force: true,
-                    // });
                     params.api.resetRowHeights();
+                    params.api.redrawRows();
                 }
             });
         },
@@ -402,7 +409,7 @@ const DeskingWorkAgGrid = (props) => {
      * @param {object} params ag-grid instance
      */
     const getRowHeight = useCallback((params) => {
-        return params.data.rel ? 42 : 53;
+        return params.data.rel ? 42 : 56;
     }, []);
 
     /**
@@ -509,7 +516,7 @@ const DeskingWorkAgGrid = (props) => {
     }, [deskingWorks]);
 
     return (
-        <div className={clsx('ag-theme-moka-dnd-grid desking-grid position-relative px-1', { 'naver-channel': isNaverChannel })}>
+        <div className={clsx('ag-theme-moka-dnd-grid desking-grid position-relative px-2', { 'naver-channel': isNaverChannel })}>
             {component.viewYn === 'N' && <div className="opacity-box"></div>}
             <AgGridReact
                 immutableData

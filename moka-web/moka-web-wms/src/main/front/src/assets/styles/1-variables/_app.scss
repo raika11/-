@@ -13,6 +13,7 @@ $h3-font-size: 0.9375rem !default;
 $h4-font-size: 0.875rem !default;
 $h5-font-size: 0.8125rem !default;
 $h6-font-size: 0.75rem !default;
+$h7-font-size: 0.625rem !default;
 
 // Spacer
 $spacer: 1rem !default;
@@ -146,11 +147,12 @@ $theme-colors: (
 	"gray-200": $gray-200,
 	"gray-600": $gray-600,
 	"gray-700": $gray-700,
+	"gray-900": $gray-900,
 	"table-btn": $gray-500,
 	"table-btn2": $gray-900,
 ) !default;
 
-// Social colors
+// social colors
 $social-colors: (
 	"tw": (
 		"border-color": #02A0DD,
@@ -444,6 +446,7 @@ $badge-font-size: 80% !default;
 $badge-padding-y: .3em !default;
 $badge-padding-x: .45em !default;
 $badge-pill-padding-x: .65em !default;
+$badge-border-radius: 3px !default;
 
 // Breadcrumbs
 $breadcrumb-bg: $gray-200 !default;

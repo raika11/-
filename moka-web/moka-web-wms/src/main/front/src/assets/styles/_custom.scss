@@ -581,20 +581,38 @@ body {
 // 페이지편집
 .component-work {
     position: relative;
-    
-    &:nth-child(1) {
-        border-top: unset !important;
+
+    .work-btn {
+        height: 18px;
+        width: 18px;
+        padding: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ag-theme-moka-dnd-grid .ag-root-wrapper .ag-body-viewport {
+        padding-top: 0px;
     }
 
     &.work {
         .component-title {
             color: $positive;
+            font-weight: bold;
+        }
+    }
+
+    &.save {
+        .component-title {
+            color: $gray-900;
+            font-weight: bold;
         }
     }
 
     &.publish {
         .component-title {
             color: $info;
+            font-weight: bold;
         }
     }
 
@@ -621,7 +639,7 @@ body {
         content: "";
         z-index: 1;
         position: absolute;
-        top: 33px;
+        top: 44px;
         left: 0px;
         right: 0px;
         border-top: 2px solid $positive;

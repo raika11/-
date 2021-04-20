@@ -142,12 +142,12 @@ const ReserveComponentWork = ({ component, workStatus }) => {
 
     return (
         <React.Fragment>
-            <MokaOverlayTooltipButton tooltipText="예약" variant="white" className="px-1 py-0 mr-1 flex-shrink-0" onClick={handleClickBtn}>
+            <MokaOverlayTooltipButton tooltipText="예약" variant="white" className="work-btn mr-1 flex-shrink-0" onClick={handleClickBtn}>
                 <MokaIcon iconName="fal-alarm-clock" className={clsx({ 'text-positive': reservation })} />
             </MokaOverlayTooltipButton>
 
             {openReserve && (
-                <div className="d-flex align-items-center justify-content-between position-absolute bg-white" style={{ left: 27, right: 0, zIndex: 1 }}>
+                <div className="d-flex align-items-center justify-content-between position-absolute bg-white" style={{ left: 21, right: 0, zIndex: 1 }}>
                     <div style={{ width: 180 }}>
                         <MokaInput
                             as="dateTimePicker"

@@ -1,8 +1,7 @@
 package jmnet.moka.core.tps.mvc.abTest.vo;
 
-import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
-import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import javax.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,253 +33,246 @@ public class ABTestCaseVO {
     /**
      * AB테스트일련번호
      */
-    @Builder.Default
-    @ApiModelProperty("AB테스트일련번호")
-    private Long abTestSeq = 0l;
+    @Column(name = "ABTEST_SEQ")
+    private Long abtestSeq = 0l;
 
     /**
      * AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
-    @ApiModelProperty("AB테스트 유형")
-    private String abTestType;
+    @Column(name = "ABTEST_TYPE")
+    private String abtestType;
 
     /**
      * AB테스트 목표(T:디자인 D:데이터)
      */
-    @ApiModelProperty("AB테스트 목표")
-    private String abTestPurpose;
+    @Column(name = "ABTEST_PURPOSE")
+    private String abtestPurpose;
 
     /**
      * 도메인ID
      */
-    @ApiModelProperty("도메인ID")
+    @Column(name = "DOMAIN_ID")
     private String domainId;
     /**
      * 도메인ID명
      */
-    @ApiModelProperty("도메인ID명")
     private String domainIdNm;
 
     /**
      * 페이지SEQ
      */
-    @ApiModelProperty("페이지SEQ")
+    @Column(name = "PAGE_SEQ")
     private Long pageSeq = 0l;
 
     /**
      * 페이지명
      */
-    @ApiModelProperty("페이지명")
     private String pageNm;
 
     /**
      * 영역일련번호(대안입력-디자인의 경우 영역으로 선택)
      */
-    @ApiModelProperty("영역일련번호")
+    @Column(name = "AREA_SEQ")
     private Long areaSeq = 0l;
 
     /**
      * 영역명
      */
-    @ApiModelProperty("영역명")
     private String areaNm;
 
     /**
      * 컴포넌트SEQ
      */
-    @ApiModelProperty("컴포넌트SEQ")
+    @Column(name = "COMPONENT_SEQ")
     private Long componentSeq = 0l;
 
     /**
      * 컴포넌트명
      */
-    @ApiModelProperty("컴포넌트명")
     private String componentNm;
 
     /**
      * 뉴스레터SEQ
      */
-    @ApiModelProperty("뉴스레터SEQ")
+    @Column(name = "LETTER_SEQ")
     private Long letterSeq = 0l;
 
     /**
      * 뉴스레터명
      */
-    @ApiModelProperty("뉴스레터명")
     private String letterNm;
 
     /**
      * 시작일시
      */
-    @ApiModelProperty("시작일시")
+    @Column(name = "START_DT")
     private Date startDt;
 
     /**
      * 종료일시
      */
-    @ApiModelProperty("종료일시")
+    @Column(name = "END_DT")
     private Date endDt;
 
     /**
      * 목표달성기준(P:기간 K:KPI A:모두)
      */
-    @ApiModelProperty("목표달성기준")
+    @Column(name = "END_CONDI")
     private String endCondi;
 
     /**
      * 목표달성주기(JAM 수신기사의 경우 - 분단위)
      */
-    @ApiModelProperty("목표달성주기")
+    @Column(name = "END_PERIOD")
     private Long endPeriod = 0l;
 
     /**
      * KPI달성 목표치(백분률(%))
      */
-    @ApiModelProperty("KPI달성 목표치(백분률(%))")
+    @Column(name = "END_KPI")
     private Long endKpi = 0l;
 
     /**
      * KPI산정조건(클릭수)
      */
-    @ApiModelProperty("KPI산정조건(클릭수)")
+    @Column(name = "KPI_CLICK_CONDI")
     private Long kpiClickCondi = 0l;
 
     /**
      * KPI산정조건(분)
      */
-    @ApiModelProperty("KPI산정조건(분)")
+    @Column(name = "KPI_PERIOD_CONDI")
     private Long kpiPeriodCondi = 0l;
 
     /**
      * 테스트 결과 자동반영여부
      */
-    @ApiModelProperty("테스트 결과 자동반영여부")
+    @Column(name = "AUTO_APPLY_YN")
     private String autoApplyYn;
 
     /**
      * 상태(임시T/진행Y/대기P/종료Q)
      */
-    @ApiModelProperty("상태(임시T/진행Y/대기P/종료Q)")
+    @Column(name = "STATUS")
     private String status;
 
     /**
      * 삭제여부
      */
-    @ApiModelProperty("삭제여부")
+    @Column(name = "DEL_YN")
     private String delYn;
 
-    @ApiModelProperty("생성일자")
-    @DTODateTimeFormat
+    @Column(name = "REG_DT")
     private Date regDt;
 
     /**
      * 생성자
      */
+    @Column(name = "REG_ID")
     private String regId;
 
-    @ApiModelProperty("수정일자")
-    @DTODateTimeFormat
+    @Column(name = "MOD_DT")
     private Date modDt;
 
     /**
      * 수정자
      */
-    @ApiModelProperty("수정자")
+    @Column(name = "MOD_ID")
     private String modId;
 
     /**
      * 로그인 여부(전체:`, 로그인:Y, 비로그인 : N)
      */
-    @ApiModelProperty("로그인 여부(전체:`, 로그인:Y, 비로그인 : N)")
+    @Column(name = "LOGIN_YN")
     private String loginYn;
 
     /**
      * 구독여부
      */
-    @ApiModelProperty("구독여부")
+    @Column(name = "SUBSCRIBE_YN")
     private String subscribeYn;
 
     /**
      * 구독상품SEQ
      */
-    @ApiModelProperty("구독상품SEQ")
+    @Column(name = "SUBSCRIBE_SEQ")
     private Long subscribeSeq = 0l;
 
     /**
      * 디바이스 구분(PC:P/Mobile:M/App:A/전체`) - 구분자콤마
      */
-    @ApiModelProperty("디바이스 구분(PC:P/Mobile:M/App:A/전체`) - 구분자콤마")
+    @Column(name = "DEV_DIV")
     private String devDiv;
 
     /**
      * 브라우저(전체:`/IE:IE/Chrome:CRM/Edge:EDG/Safari:SAF/안드로이드웹:AW/삼성IE:SIE/기타:ETC) - 구분자
      */
-    @ApiModelProperty("브라우저(전체:`/IE:IE/Chrome:CRM/Edge:EDG/Safari:SAF/안드로이드웹:AW/삼성IE:SIE/기타:ETC) - 구분자")
+    @Column(name = "BROWSER")
     private String browser;
 
     /**
      * 유입처(전체`/네이버:NAVER/구글:GOOGLE/카카오:KAKAO/트위터:TWITTER/기타:ETC) - 구분자콤마
      */
-    @ApiModelProperty("유입처(전체`/네이버:NAVER/구글:GOOGLE/카카오:KAKAO/트위터:TWITTER/기타:ETC) - 구분자콤마")
+    @Column(name = "REFERER")
     private String referer;
 
     /**
      * PWA설정여부
      */
-    @ApiModelProperty("PWA설정여부")
+    @Column(name = "PWA_YN")
     private String pwaYn;
 
     /**
      * 푸시설정여부
      */
-    @ApiModelProperty("푸시설정여부")
+    @Column(name = "PUSH_YN")
     private String pushYn;
 
     /**
      * UTM(SOURCE/MEDIUM/CAMPAIGN/TERM/CONTENT/전체`) - 구분자콤마
      */
-    @ApiModelProperty("UTM(SOURCE/MEDIUM/CAMPAIGN/TERM/CONTENT/전체`) - 구분자콤마")
+    @Column(name = "UTM")
     private String utm;
 
     /**
      * UTM SOURCE 태그
      */
-    @ApiModelProperty("UTM SOURCE 태그")
+    @Column(name = "UTM_SOURCE")
     private String utmSource;
 
     /**
      * UTM MEDIUM 태그
      */
-    @ApiModelProperty("UTM MEDIUM 태그")
+    @Column(name = "UTM_MEDIUM")
     private String utmMedium;
 
     /**
      * UTM CAMPAIGN 태그
      */
-    @ApiModelProperty("UTM CAMPAIGN 태그")
+    @Column(name = "UTM_CAMPAIGN")
     private String utmCampaign;
 
     /**
      * UTM TERM 태그
      */
-    @ApiModelProperty("UTM TERM 태그")
+    @Column(name = "UTM_TERM")
     private String utmTerm;
 
     /**
      * UTM CONTENT 태그
      */
-    @ApiModelProperty("UTM CONTENT 태그")
+    @Column(name = "UTM_CONTENT")
     private String utmContent;
 
     /**
      * AB테스트제목
      */
-    @ApiModelProperty("AB테스트제목")
-    private String abTestTitle;
+    @Column(name = "ABTEST_TITLE")
+    private String abtestTitle;
 
     /**
      * AB테스트설명
      */
-    @ApiModelProperty("AB테스트설명")
-    private String abTestDesc;
+    @Column(name = "ABTEST_DESC")
+    private String abtestDesc;
 }

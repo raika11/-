@@ -23,6 +23,7 @@ import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
+import org.infinispan.commons.util.concurrent.ConcurrentHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,8 @@ public class DefaultView extends AbstractView {
     protected boolean generatesDownloadContent() {
         return false;
     }
+
+    private ConcurrentHashSet requestedSet = new ConcurrentHashSet();
 
     /**
      * <pre>
@@ -141,11 +144,33 @@ public class DefaultView extends AbstractView {
                         cachedItem = this.cacheManager.get(cacheType, cacheKey);
                     }
                     if (cachedItem == null) {
-                        this.setCodesAndMenus(domainId, item, mergeContext);
-                        sb = templateMerger.merge(domainId, itemType, itemId, mergeContext);
-                        writer.append(sb);
-                        if (this.isPageCache) {
-                            this.cacheManager.set(cacheType, cacheKey, sb.toString());
+                        if (!this.requestedSet.contains(cacheKey)) {
+                            try {
+                                this.requestedSet.add(cacheKey);
+                                this.setCodesAndMenus(domainId, item, mergeContext);
+                                sb = templateMerger.merge(domainId, itemType, itemId, mergeContext);
+                                writer.append(sb);
+                                if (this.isPageCache) {
+                                    this.cacheManager.set(cacheType, cacheKey, sb.toString());
+                                }
+                            } catch ( Exception e) {
+                                logger.error("request Collapse fail: {}",e);
+                            } finally {
+                                this.requestedSet.remove(cacheKey);
+                            }
+                        } else {
+                            int retryCount = 0;
+                            while (cachedItem == null && retryCount < 20) {
+                                cachedItem = this.cacheManager.get(cacheType, cacheKey);
+                                try {
+                                    Thread
+                                            .currentThread()
+                                            .sleep(100);
+                                } catch (InterruptedException e) {
+                                    logger.error("request Collapse fail: {}",e);
+                                }
+                                retryCount++;
+                            }
                         }
                     } else {
                         writer.append(cachedItem);

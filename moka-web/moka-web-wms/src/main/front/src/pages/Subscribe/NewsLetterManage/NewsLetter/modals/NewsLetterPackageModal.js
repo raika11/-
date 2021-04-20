@@ -26,8 +26,8 @@ const NewsLetterPackageModal = ({ show, onHide }) => {
 
     return (
         <MokaModal
-            size="md"
-            width={600}
+            size="lg"
+            width={800}
             height={800}
             show={show}
             onHide={onHide}
@@ -42,7 +42,7 @@ const NewsLetterPackageModal = ({ show, onHide }) => {
             <hr className="divider" />
             <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
                 <Form.Row>
-                    <Col xs={3} clsssName="p-0 pr-2">
+                    <Col xs={3} className="p-0 pr-2">
                         <MokaInput as="select" disabled>
                             <option>이슈</option>
                         </MokaInput>

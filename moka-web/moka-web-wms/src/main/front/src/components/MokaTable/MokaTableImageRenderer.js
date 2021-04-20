@@ -14,9 +14,11 @@ const defaultProps = {
  * @param {object} params ag grid params
  */
 const MokaTableImageRenderer = forwardRef((params, ref) => {
-    const { colDef, roundedCircle, autoRatio } = params;
-    const [field] = useState(colDef.field);
+    const [field] = useState(params.colDef.field);
     const [data, setData] = useState(params.node.data);
+    const [roundedCircle, setRoundedCircle] = useState(params.roundedCircle);
+    const [autoRatio, setAutoRatio] = useState(params.autoRatio);
+
     const boxRef = useRef(null);
     const imgRef = useRef(null);
 
@@ -44,6 +46,8 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
     useImperativeHandle(ref, () => ({
         refresh: (params) => {
             setData(params.node.data);
+            setRoundedCircle(params.roundedCircle);
+            setAutoRatio(params.setAutoRatio);
             return true;
         },
         getGui: () => {

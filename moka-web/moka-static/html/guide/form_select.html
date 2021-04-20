@@ -101,17 +101,18 @@
                     </div>
 
 
-                    <h2 class="guide_title">항목이름</h2>
+                    <h2 class="guide_title">드롭박스</h2>
                     <div class="sample_wrap">
                         <!-- li셀렉트박스 -->
-                        <div class="select" data-role="selectBox">
-                            <span date-value="optValue" class="selected-option"><!-- 선택된 옵션 값이 출력되는 부분 --></span>
-                            <!-- 옵션 영역 -->
-                            <ul class="hide">
-                                <li><i class="ico_sns_face"></i>사과</li>
-                                <li><i class="ico_sns_twt"></i>바나나</li>
-                                <li><i class="ico_sns_ktalk"></i>오렌지</li>
-                            </ul>
+                        <div class="dropdown type_down">
+                            <button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle">Dropdown button</button>
+                            <div id="dropdown" class="dropdown_menu">
+                                <ul role="listbox">
+                                    <li class="dropdown_item" role="option"><a href="#">Link 1</a></li>
+                                    <li class="dropdown_item" role="option"><a href="#">Link 2</a></li>
+                                    <li class="dropdown_item" role="option"><a href="#">Link 3</a></li>
+                                </ul>
+                            </div>
                         </div>
                         <!-- //li셀렉트박스 -->
 

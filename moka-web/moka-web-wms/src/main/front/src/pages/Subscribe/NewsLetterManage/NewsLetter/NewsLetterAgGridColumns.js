@@ -1,7 +1,7 @@
 export default [
     {
         headerName: 'NO',
-        field: 'no',
+        field: 'letterSeq',
         width: 40,
     },
     {
@@ -15,7 +15,7 @@ export default [
     },
     {
         headerName: '유형',
-        field: 'letterYype',
+        field: 'letterType',
         sortable: true,
         unSortIcon: true,
         sort: null,
@@ -81,5 +81,6 @@ export default [
         headerName: 'A/B TEST',
         field: 'abtestYn',
         width: 65,
+        cellRenderer: 'usedYnRenderer',
     },
 ];

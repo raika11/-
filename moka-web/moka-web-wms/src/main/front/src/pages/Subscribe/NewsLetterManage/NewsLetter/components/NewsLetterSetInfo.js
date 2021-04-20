@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@/components';
 import { EditThumbModal } from '@/pages/Desking/modals';
-import NewsLetterLayoutModal from '../modals/NewLetterLayoutModal';
+import NewsLetterLayoutModal from '../modals/NewsLetterLayoutModal';
 import NewsLetterEditFormModal from '../modals/NewsLetterEditFormModal';
 
 /**
@@ -31,7 +31,7 @@ const NewsLetterSetInfo = ({ temp, setTemp, onChangeValue }) => {
         if (data) {
             setTemp({ ...temp, thumbnailFile: data });
         } else {
-            setTemp({ ...temp, imgUrl: null, thumbnailFile: data });
+            setTemp({ ...temp, headerImg: null, thumbnailFile: data });
         }
     };
 
@@ -41,7 +41,7 @@ const NewsLetterSetInfo = ({ temp, setTemp, onChangeValue }) => {
      * @param {*} file 파일데이터
      */
     const handleThumbFileApply = (imageSrc, file) => {
-        setTemp({ ...temp, imgUrl: imageSrc, thumbnailFile: file });
+        setTemp({ ...temp, headerImg: imageSrc, thumbnailFile: file });
     };
 
     return (
@@ -50,10 +50,10 @@ const NewsLetterSetInfo = ({ temp, setTemp, onChangeValue }) => {
             <p className="mb-2">※ 뉴스레터 설정</p>
             <Form.Row className="mb-2 align-items-center">
                 {temp.sendType === 'A' && (
-                    <>
+                    <div className="flex-fill">
                         <MokaInputLabel
                             as="imageFile"
-                            className="mr-2"
+                            inputClassName="w-100"
                             label={
                                 <React.Fragment>
                                     상단 이미지 선택
@@ -63,11 +63,13 @@ const NewsLetterSetInfo = ({ temp, setTemp, onChangeValue }) => {
                                     </Button>
                                 </React.Fragment>
                             }
-                            inputProps={{ img: temp.imgUrl, setFileValue: handleFileValue, width: 190, deleteButton: true, accept: 'image/jpeg, image/png, image/gif' }}
+                            inputProps={{ img: temp.headerImg, setFileValue: handleFileValue, height: 80, deleteButton: true, accept: 'image/jpeg, image/png' }}
                         />
-
-                        <p className="mb-0 color-primary">※ 변경하지 않을 경우 기본 이미지가 적용됩니다.</p>
-                    </>
+                        <div className="d-flex align-items-center">
+                            <MokaInputLabel as="none" label=" " />
+                            <p className="mb-0 color-primary">※ 변경하지 않을 경우 기본 이미지가 적용됩니다.</p>
+                        </div>
+                    </div>
                 )}
                 {temp.sendType === 'E' && (
                     <>
@@ -127,7 +129,7 @@ const NewsLetterSetInfo = ({ temp, setTemp, onChangeValue }) => {
                                     </Button>
                                 </React.Fragment>
                             }
-                            inputProps={{ img: temp.imgUrl, setFileValue: handleFileValue, width: 190, deleteButton: true, accept: 'image/jpeg, image/png, image/gif' }}
+                            inputProps={{ img: temp.headerImg, setFileValue: handleFileValue, width: 190, deleteButton: true, accept: 'image/jpeg, image/png' }}
                         />
 
                         <p className="mb-0 color-primary">※ 변경하지 않을 경우 기본 이미지가 적용됩니다.</p>
@@ -175,7 +177,6 @@ const NewsLetterSetInfo = ({ temp, setTemp, onChangeValue }) => {
                             inputProps={{ label: '직접 입력', custom: true, checked: temp.titleType === 'E' }}
                             onChange={handleChangeValue}
                         />
-                        {/* <hr className="vertical-divider" /> */}
                         <MokaInput
                             as="checkbox"
                             name="titleType"
@@ -191,7 +192,7 @@ const NewsLetterSetInfo = ({ temp, setTemp, onChangeValue }) => {
             </Form.Row>
 
             {/* 포토 아카이브 모달 */}
-            <EditThumbModal show={imgModal} cropWidth={290} cropHeight={180} onHide={() => setImgModal(false)} thumbFileName={temp.imgUrl} apply={handleThumbFileApply} />
+            <EditThumbModal show={imgModal} cropWidth={290} cropHeight={180} onHide={() => setImgModal(false)} thumbFileName={temp.headerImg} apply={handleThumbFileApply} />
         </>
     );
 };

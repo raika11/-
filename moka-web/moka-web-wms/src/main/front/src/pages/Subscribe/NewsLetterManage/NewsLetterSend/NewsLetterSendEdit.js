@@ -21,7 +21,7 @@ const NewsLetterSendEdit = ({ match }) => {
     // const [temp, setTemp] = useState({
     //     form: 'L',
     //     recipient: 'S',
-    //     abItem: '',
+    //     abVariantType: '',
     //     editor: '',
     // });
     const [temp, setTemp] = useState(initialState.send.sendInfo);
@@ -148,12 +148,12 @@ const NewsLetterSendEdit = ({ match }) => {
                 {temp.abtestYN === 'Y' && (
                     <Form.Row className="mb-2">
                         <Col xs={6} className="p-0">
-                            <MokaInputLabel as="select" name="abItem" label="A/B TEST" value={temp.abItem} onChange={handleChangeValue}>
+                            <MokaInputLabel as="select" name="abVariantType" label="A/B TEST" value={temp.abVariantType} onChange={handleChangeValue}>
                                 <option value="">테스트 안 함</option>
-                                <option value="sendDt">발송 일시</option>
-                                <option value="senderName">발송자 명</option>
-                                <option value="letterTitle">제목</option>
-                                <option value="layout">레이아웃</option>
+                                <option value="D">발송 일시</option>
+                                <option value="N">발송자 명</option>
+                                <option value="T">제목</option>
+                                <option value="L">레이아웃</option>
                             </MokaInputLabel>
                         </Col>
                     </Form.Row>
@@ -161,7 +161,7 @@ const NewsLetterSendEdit = ({ match }) => {
 
                 {/* 발송 일시 */}
                 <Form.Row className="mb-2 align-items-center">
-                    <MokaInputLabel as="none" label={temp.abItem === 'sendDt' ? '발송 일시(A)' : '발송 일시'} />
+                    <MokaInputLabel as="none" label={temp.abVariantType === 'D' ? '발송 일시(A)' : '발송 일시'} />
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInput
                             as="dateTimePicker"
@@ -192,7 +192,7 @@ const NewsLetterSendEdit = ({ match }) => {
                     </Col>
                     <MokaInput as="checkbox" id="immediate" inputProps={{ label: '즉시', custom: true }} disabled />
                 </Form.Row>
-                {temp.abItem === 'sendDt' && (
+                {temp.abVariantType === 'D' && (
                     <Form.Row className="mb-2 align-items-center">
                         <MokaInputLabel as="none" label="발송 일시(B)" />
                         <Col xs={4} className="p-0 pr-2">
@@ -228,7 +228,7 @@ const NewsLetterSendEdit = ({ match }) => {
                 )}
                 {/* 발송자 명 */}
                 <Form.Row className="mb-2">
-                    <MokaInputLabel as="none" label={temp.abItem === 'senderName' ? '발송자 명(A)' : '발송자 명'} />
+                    <MokaInputLabel as="none" label={temp.abVariantType === 'N' ? '발송자 명(A)' : '발송자 명'} />
                     <Col xs={2} className="p-0 pr-2">
                         <MokaInput as="select" value={sn} onChange={handleChangeValue}>
                             <option value="ja">중앙일보</option>
@@ -240,7 +240,7 @@ const NewsLetterSendEdit = ({ match }) => {
                     </Col>
                     <MokaInput placeholder="root@joongang.co.kr" name="senderEmail" value={temp.senderEmail} onChange={handleChangeValue} />
                 </Form.Row>
-                {temp.abItem === 'senderName' && (
+                {temp.abVariantType === 'N' && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel as="none" label="발송자 명(B)" />
                         <Col xs={2} className="p-0 pr-2">
@@ -298,7 +298,7 @@ const NewsLetterSendEdit = ({ match }) => {
 
                 {/* 레이아웃 */}
                 <Form.Row className="mb-2">
-                    <MokaInputLabel as="none" label={temp.abItem === 'layout' ? '레이아웃(A)' : '레이아웃'} />
+                    <MokaInputLabel as="none" label={temp.abVariantType === 'L' ? '레이아웃(A)' : '레이아웃'} />
                     <div>
                         <MokaSearchInput
                             placeholder="레이아웃을 검색해 주세요"
@@ -306,13 +306,13 @@ const NewsLetterSendEdit = ({ match }) => {
                             value={temp.containerSeq || ''}
                             onSearch={() => setLayoutModal(true)}
                             inputProps={{ readOnly: true }}
-                            disabled={temp.abItem === 'layout' && true}
+                            disabled={temp.abVariantType === 'L' && true}
                         />
-                        {temp.abItem !== 'layout' && <p className="mb-0 color-primary">※ 레이아웃이 미정인 경우 상품은 자동 임시 저장 상태 값으로 지정됩니다.</p>}
+                        {temp.abVariantType !== 'L' && <p className="mb-0 color-primary">※ 레이아웃이 미정인 경우 상품은 자동 임시 저장 상태 값으로 지정됩니다.</p>}
                     </div>
                     <NewsLetterLayoutModal show={layoutModal} onHide={() => setLayoutModal(false)} />
                 </Form.Row>
-                {temp.abItem === 'layout' && (
+                {temp.abVariantType === 'L' && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel as="none" label="레이아웃(B)" />
                         <MokaSearchInput
@@ -326,8 +326,8 @@ const NewsLetterSendEdit = ({ match }) => {
                 )}
 
                 {/* 제목 */}
-                <MokaInputLabel label={temp.abItem === 'letterTitle' ? '제목(A)' : '제목'} className="mb-2" value={temp.letterTitle} onChange={handleChangeValue} />
-                {temp.abItem === 'letterTitle' && <MokaInputLabel label="제목(B)" className="mb-2" value={temp.letterTitle} onChange={handleChangeValue} />}
+                <MokaInputLabel label={temp.abVariantType === 'T' ? '제목(A)' : '제목'} className="mb-2" value={temp.letterTitle} onChange={handleChangeValue} />
+                {temp.abVariantType === 'T' && <MokaInputLabel label="제목(B)" className="mb-2" value={temp.letterTitle} onChange={handleChangeValue} />}
 
                 {/* 이미지 등록 */}
                 <Form.Row className="mb-2 align-items-center">

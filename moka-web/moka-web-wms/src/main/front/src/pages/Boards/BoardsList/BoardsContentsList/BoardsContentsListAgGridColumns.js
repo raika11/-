@@ -1,5 +1,8 @@
-import React from 'react';
-import { MokaIcon } from '@/components';
+import { GRID_LINE_HEIGHT } from '@/style_constants';
+
+const cellStyle = {
+    lineHeight: `${GRID_LINE_HEIGHT.C[0]}px`,
+};
 
 export const boardColumnDefs = (data) => {
     const { titlePrefixNm1, titlePrefixNm2, fileYn, recomFlag, declareYn } = data;
@@ -7,20 +10,20 @@ export const boardColumnDefs = (data) => {
         {
             headerName: '번호',
             field: 'number',
-            cellStyle: { lineHeight: '48px' },
+            cellStyle,
             width: 50,
         },
         titlePrefixNm1 && {
             headerName: titlePrefixNm1,
             field: 'titlePrefix1',
-            cellStyle: { lineHeight: '48px' },
+            cellStyle,
             width: 80,
             tooltipField: 'titlePrefix1',
         },
         titlePrefixNm2 && {
             headerName: titlePrefixNm2,
             field: 'titlePrefix2',
-            cellStyle: { lineHeight: '48px' },
+            cellStyle,
             width: 80,
             tooltipField: 'titlePrefix2',
         },
@@ -28,67 +31,62 @@ export const boardColumnDefs = (data) => {
             headerName: '제목',
             field: 'title',
             flex: 1,
-            cellStyle: { lineHeight: '48px' },
+            cellStyle,
             tooltipField: 'title',
         },
         {
             headerName: '등록자',
             field: 'regInfo',
-            cellStyle: { lineHeight: '48px' },
+            cellStyle,
             width: 100,
             tooltipField: 'regInfo',
         },
         {
             headerName: '작성일시',
             field: 'regDt',
-            cellStyle: { lineHeight: '48px' },
+            cellStyle,
             width: 120,
         },
         {
             headerName: '조회수',
             field: 'viewCnt',
-            cellStyle: { lineHeight: '48px' },
+            cellStyle,
             width: 50,
             tooltipField: 'viewCnt',
         },
         fileYn === 'Y' && {
             headerName: '첨부파일',
             field: 'fileItem',
-            width: 70,
+            width: 60,
             cellRenderer: 'fileItemRenderer',
         },
         recomFlag === '1' && {
             headerName: '추천/비추천',
             field: 'recomInfo',
-            cellStyle: { lineHeight: '48px' },
-            width: 100,
+            cellStyle,
+            width: 75,
             tooltipField: 'recomInfo',
         },
         recomFlag === '2' && {
             headerName: '추천',
             field: 'recomCnt',
-            cellStyle: { lineHeight: '48px' },
+            cellStyle,
             width: 50,
             tooltipField: 'recomCnt',
         },
         declareYn === 'Y' && {
             headerName: '신고',
             field: 'declareCnt',
-            cellStyle: { lineHeight: '48px' },
+            cellStyle,
             width: 50,
             tooltipField: 'declareCnt',
         },
         {
             headerName: '노출',
-            field: 'delYn',
-            width: 40,
-            cellRendererFramework: ({ data }) => {
-                return (
-                    <div className="d-flex align-items-center justify-content-center h-100">
-                        <MokaIcon iconName="fas-circle" fixedWidth className={data.delYn === 'Y' ? 'color-gray-200' : 'color-primary'} />
-                    </div>
-                );
-            },
+            field: 'noDel',
+            width: 35,
+            maxWidth: 35,
+            cellRenderer: 'usedYnRenderer',
         },
     ].filter(Boolean);
 };

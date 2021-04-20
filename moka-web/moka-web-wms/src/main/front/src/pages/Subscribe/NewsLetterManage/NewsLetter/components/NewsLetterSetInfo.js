@@ -187,7 +187,7 @@ const NewsLetterSetInfo = ({ temp, setTemp, onChangeValue }) => {
                         />
                     </>
                 )}
-                {temp.sendType === 'E' && <MokaInput className="flex-fill" disabled />}
+                {temp.sendType === 'E' && <MokaInput className="flex-fill" value={temp.letterTitle} onChange={handleChangeValue} />}
             </Form.Row>
 
             {/* 포토 아카이브 모달 */}

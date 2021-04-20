@@ -1,5 +1,7 @@
 import RelArticleRenderer from './RelArticleRenderer';
+
 const replaceNo = (t) => ('00' + t).slice(-2);
+const suppressKeyboardEvent = () => true;
 
 export default [
     {
@@ -18,11 +20,13 @@ export default [
             return replaceNo(params.node.rowIndex + 1);
         },
         cellStyle: { display: 'flex', alignItems: 'center' },
+        suppressKeyboardEvent,
     },
     {
         headerName: '',
         field: 'article',
         flex: 1,
         cellRendererFramework: RelArticleRenderer,
+        suppressKeyboardEvent,
     },
 ];

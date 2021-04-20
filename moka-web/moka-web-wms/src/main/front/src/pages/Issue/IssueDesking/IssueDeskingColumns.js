@@ -1,5 +1,7 @@
 import { ArticleRenderer, LiveRenderer, PacketRenderer, MPRenderer, BannerRenderer, KeywordRenderer } from './ColumnRenderer';
 
+const suppressKeyboardEvent = () => true;
+
 const artColumnDefs = [
     {
         rowDrag: true,
@@ -12,6 +14,7 @@ const artColumnDefs = [
         field: 'title',
         flex: 1,
         cellRendererFramework: ArticleRenderer,
+        suppressKeyboardEvent,
     },
 ];
 
@@ -20,6 +23,7 @@ const liveColumnDefs = [
         field: 'title',
         flex: 1,
         cellRendererFramework: LiveRenderer,
+        suppressKeyboardEvent,
     },
 ];
 
@@ -35,6 +39,7 @@ const packetColumnDefs = [
         field: 'title',
         flex: 1,
         cellRendererFramework: PacketRenderer,
+        suppressKeyboardEvent,
     },
 ];
 
@@ -50,6 +55,7 @@ const moviePhotoColumnDefs = [
         field: 'title',
         flex: 1,
         cellRendererFramework: MPRenderer,
+        suppressKeyboardEvent,
     },
 ];
 
@@ -58,6 +64,7 @@ const bannerColumnDefs = [
         field: 'title',
         flex: 1,
         cellRendererFramework: BannerRenderer,
+        suppressKeyboardEvent,
     },
 ];
 
@@ -66,6 +73,7 @@ const keywordColumnDefs = [
         field: 'title',
         flex: 1,
         cellRendererFramework: KeywordRenderer,
+        suppressKeyboardEvent,
     },
 ];
 

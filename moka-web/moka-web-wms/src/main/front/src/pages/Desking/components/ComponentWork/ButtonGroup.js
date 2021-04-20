@@ -264,12 +264,12 @@ const ButtonGroup = (props) => {
                         lastSaveNm={component.lastSaveNm}
                         lastSaveId={component.lastSaveId}
                         lastSaveDt={component.lastSaveDt}
-                        className="mr-1"
+                        className="mr-2"
                     />
 
                     {/* 기능 버튼 */}
                     {iconButton.map((icon, idx) => (
-                        <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="px-1 py-0 mr-1" onClick={icon.onClick}>
+                        <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="work-btn mr-2" onClick={icon.onClick}>
                             <MokaIcon iconName={icon.iconName} />
                         </MokaOverlayTooltipButton>
                     ))}
@@ -282,7 +282,7 @@ const ButtonGroup = (props) => {
                     )} */}
 
                     {/* 드롭다운 메뉴 */}
-                    <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0">
+                    <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="work-btn">
                         <Dropdown style={{ position: 'unset' }}>
                             <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
                             <Dropdown.Menu>{createDropdownItem()}</Dropdown.Menu>

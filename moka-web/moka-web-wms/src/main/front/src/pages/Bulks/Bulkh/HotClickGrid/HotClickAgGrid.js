@@ -220,7 +220,7 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
                 suppressHorizontalScroll
                 onRowDataUpdated={handleRowDataUpdated}
                 headerHeight={0}
-                rowHeight={84}
+                rowHeight={92}
             />
         </div>
     );

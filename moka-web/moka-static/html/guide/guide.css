@@ -106,3 +106,33 @@ code{unicode-bidi:bidi-override;color:#ff3c14;font-size:inherit}
 /* icon */
 .guide .icon_wrap p{margin-bottom:15px;padding-bottom:5px;border-bottom:1px dashed #efefef;}
 .guide .icon_wrap [class*="ico"] {width:36px;height:36px;margin-right:16px;border:1px solid #ccc;}
+
+
+/* Mobile devices (mobile, 767px and down) */
+@media (max-width:767px) {
+    .nav_item{display:list-item;}
+}
+
+
+/* Medium devices (tablet + pc, 768px and up) */
+@media (min-width:768px) {
+
+}
+
+
+/* Medium devices (only tablet, 768px and 1023px) */
+@media (min-width:768px) and (max-width:1023px) {
+
+}
+
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width:1024px) {
+
+}
+
+
+/* Unique devices (large desktops, 1280px and up) */
+@media (min-width:1280px) {
+
+}

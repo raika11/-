@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <script src="include.js"></script>
+    <script>include.meta()</script>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>퍼블 가이드 - 중앙일보</title>
+    <meta property="og:image" content="https://static.joins.com/joongang_15re/profile_joongang_200.png">
+    <script>include.head()</script>
+    <link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">
+
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>퍼블 가이드 - 중앙일보</title>
+    <meta property="og:image" content="https://static.joins.com/joongang_15re/profile_joongang_200.png">
+    <link href="https://static.joins.com/html/guide/guide.css" rel="stylesheet">
+    <link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">
+    <link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">
+
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.9/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.9/js/select2.min.js"></script>
+
+
+</head>
+<body class="guide">
+<div id="wrapper">
+    <!-- header -->
+    <script>include.header()</script>
+    <!-- // header -->
+
+    <div class="container ">
+        <section class="contents">
+            <section class="row">
+                <script>include.aside.menu0()</script>
+                <main class="main_guide col_sm12 col_md10 col_lg10">
+                    <!-- 가이드 내용 시작 -->
+
+                    <h2 class="guide_title">셀렉트박스</h2>
+                    <div class="sample_wrap">
+                        <!-- 셀렉트박스 -->
+                        <label class="visually_hidden" for="formSelect">Choose a select menu</label>
+                        <select id="formSelect" class="form_select" title="Default select example">
+                            <option selected="">Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                        <!-- 셀렉트박스 -->
+
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;!-- 셀렉트박스 --&gt;
+&lt;label class="visually_hidden" for="formSelect"&gt;Choose a select menu&lt;/label&gt;
+&lt;select id="formSelect" class="form_select" title="Default select example"&gt;
+    &lt;option selected=""&gt;Open this select menu&lt;/option&gt;
+    &lt;option value="1"&gt;One&lt;/option&gt;
+    &lt;option value="2"&gt;Two&lt;/option&gt;
+    &lt;option value="3"&gt;Three&lt;/option&gt;
+&lt;/select&gt;
+&lt;!-- 셀렉트박스 --&gt;
+</code></pre>
+                    </div>
+
+
+                    <h2 class="guide_title">셀렉트박스 + 버튼</h2>
+                    <div class="sample_wrap">
+                        <div class="input_group">
+                            <label class="visually_hidden" for="formCustomSelect">Choose a select menu</label>
+                            <select id="formCustomSelect" class="form_select" aria-label="...">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <button class="btn" type="button">Button</button>
+                        </div>
+
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="input_group"&gt;
+    &lt;label class="visually_hidden" for="formCustomSelect"&gt;Choose a select menu&lt;/label&gt;
+    &lt;select id="formCustomSelect" class="form_select" aria-label="..."&gt;
+        &lt;option selected&gt;Open this select menu&lt;/option&gt;
+        &lt;option value="1"&gt;One&lt;/option&gt;
+        &lt;option value="2"&gt;Two&lt;/option&gt;
+        &lt;option value="3"&gt;Three&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;button class="btn" type="button"&gt;Button&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+
+                    <h2 class="guide_title">항목이름</h2>
+                    <div class="sample_wrap">
+                        <!-- li셀렉트박스 -->
+                        <div class="select_box">
+                            <div class="box">
+                                <div class="select_txt"><a href="javascript:void(0);" class="select">최신순</a></div>
+                                <ul class="list" style="display: none;">
+                                    <li><a href="#">최신순</a></li>
+                                    <li class=""><a href="#">좋아요 많은 순</a></li>
+                                    <li><a href="#">화나요 많은 순</a></li>
+                                    <li class="selected"><a href="#">답글 많은 순</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- li셀렉트박스 -->
+
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="row"&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+                    <h2 class="guide_title">항목이름</h2>
+                    <div class="sample_wrap">
+                        <!-- li셀렉트박스 -->
+                        <div class="box_select mobile_select_Box_02">
+                            <div class="box_select">
+                                <select title="옵션 선택" class="select2 select2-single">
+                                <option value="">구역전체</option>
+                                <option value="" target="_blank">옵션1</option>
+                                <option value="" target="_blank">옵션2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- li셀렉트박스 -->
+
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="row"&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+    &lt;div class="col_sm6 col_md4 col_lg3"&gt;코드&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+
+
+
+                    <!-- //가이드 내용 -->
+                </main>
+            </section>
+        </section>
+    </div>
+    <script>include.footer()</script>
+</div>
+</body>
+</html>

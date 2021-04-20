@@ -129,7 +129,7 @@
   </select>
 
   <!-- article list -->
-  <select id="list" parameterType="map" resultType="map" resultMap="map,map"
+  <select id="list" parameterType="map" resultType="map" resultMap="map"
     statementType="CALLABLE">
     {call UPU_15RE_ARTICLE_LIST_SEL(
       #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},

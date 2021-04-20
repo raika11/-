@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { MokaModal, MokaTable } from '@components';
 import { useSelector, useDispatch } from 'react-redux';
+import { MokaModal, MokaTable } from '@components';
 import { getBlockHistory, clearBlockHistory, GET_BLOCK_HISTORY } from '@store/commentManage';
 
 export const columnDefs = [
@@ -9,21 +9,18 @@ export const columnDefs = [
         field: 'bannedYn',
         tooltipField: 'bannedYn',
         width: 70,
-        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '등록자/ID',
         field: 'regInfo',
         tooltipField: 'regInfo',
         flex: 1,
-        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '등록일',
         field: 'regDt',
         tooltipField: 'regDt',
         width: 150,
-        cellStyle: { display: 'flex', alignItems: 'center' },
     },
 ];
 
@@ -91,16 +88,8 @@ const BannedHistoryModal = (props) => {
     }, [list]);
 
     return (
-        <MokaModal size="md" width={600} show={show} onHide={handleClickHide} title={banneTitle} draggable>
-            <MokaTable
-                className="overflow-hidden flex-fill"
-                columnDefs={columnDefs}
-                rowData={rowData}
-                rowHeight={80}
-                onRowNodeId={(data) => data.id}
-                loading={loading}
-                paging={false}
-            />
+        <MokaModal size="md" width={600} show={show} onHide={handleClickHide} title={banneTitle} centered>
+            <MokaTable className="overflow-hidden flex-fill" columnDefs={columnDefs} rowData={rowData} onRowNodeId={(data) => data.id} loading={loading} paging={false} />
         </MokaModal>
     );
 };

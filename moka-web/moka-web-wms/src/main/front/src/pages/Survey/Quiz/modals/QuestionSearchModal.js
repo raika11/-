@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { MokaModal, MokaTable, MokaInput, MokaSearchInput, MokaCard } from '@components';
 import { Form, Col, Button } from 'react-bootstrap';
-import { columnDefs } from './QuestionSearchModalGridColumns';
 import { useSelector, useDispatch } from 'react-redux';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
+import { MokaModal, MokaTable, MokaInput, MokaSearchInput, MokaCard } from '@components';
 import { initialState, GET_QUESTIONS_LIST, getQuestionsList, changeQuestionsListSearchOption } from '@store/survey/quiz';
+import { columnDefs } from './QuestionSearchModalGridColumns';
 
 /**
  * 검색 모달.
@@ -146,7 +147,7 @@ const QuestionSearchModal = (props) => {
                     className="overflow-hidden flex-fill"
                     columnDefs={columnDefs}
                     rowData={rowData}
-                    rowHeight={50}
+                    rowHeight={GRID_ROW_HEIGHT.C[0]}
                     onRowNodeId={(data) => data.seqNo}
                     onRowClicked={(e) => handleClickListRow(e)}
                     loading={loading}

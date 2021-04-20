@@ -107,7 +107,7 @@ const NewsLetterSearch = () => {
             </Form.Row>
             <Form.Row className="mb-2">
                 <Col xs={2} className="p-0 pr-2">
-                    <MokaInput as="select" name="period" value={period.join('') || ''} onChange={handleChangeValue}>
+                    <MokaInput as="select" name="period" value={period.join('')} onChange={handleChangeValue}>
                         <option value="all" data-number="0" data-date="all">
                             기간 전체
                         </option>

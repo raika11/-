@@ -38,5 +38,5 @@ public class IssueDeskingPreviewDTO {
 
     String domainId;
 
-    List<IssueDeskingComponentDTO> issueDeskgs;
+    List<IssueDeskingComponentDTO> issueDeskings;
 }

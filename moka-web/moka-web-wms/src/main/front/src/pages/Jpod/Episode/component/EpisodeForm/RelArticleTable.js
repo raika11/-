@@ -71,7 +71,7 @@ const RelArticleTable = ({ chnlSeq, epsdSeq, articles, gridInstance, setGridInst
                 rowDragManaged
                 rowHeight={92}
                 rowData={articles}
-                onRowNodeId={(data) => data.ordNo}
+                onRowNodeId={(data) => data.id.totalId}
                 columnDefs={columnDefs}
                 paging={false}
                 suppressMoveWhenRowDragging

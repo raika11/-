@@ -3,6 +3,7 @@ package jmnet.moka.web.dps.mvc.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.ApiResult;
@@ -21,6 +22,7 @@ import jmnet.moka.core.dps.mvc.forward.Forward;
 import jmnet.moka.core.dps.mvc.forward.ForwardHandler;
 import jmnet.moka.core.dps.mvc.handler.DefaultApiRequestHandler;
 import jmnet.moka.web.dps.module.membership.MembershipHelper;
+import org.infinispan.commons.util.concurrent.ConcurrentHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,7 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
     private static final String MEMBERSHIP_COOKIE_PASS = "cookiePass";
     private static final String MEMBERSHIP_API = "api";
     private static final String MEMBERSHIP_API_PASS = "apiPass";
+    private ConcurrentHashSet requestSet = new ConcurrentHashSet();
 
     public MokaApiRequestHandler(ForwardHandler forwardHandler) {
         super(forwardHandler);
@@ -161,30 +164,54 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
                     processApi(apiContext, true);
                 }
             } else {
-                ApiResult apiResult = processApi(apiContext);
-                try {
-                    Object resultObject = null;
-                    if (api.isResultWrap()) {
-                        resultObject = apiResult;
-                    } else {
-                        if (apiResult.containsKey(ApiResult.MAIN_DATA)) {
-                            resultObject = apiResult.unwrap(ApiResult.MAIN_DATA);
-                        } else { // ERROR일 경우 _DATA가 없음
+                String requestKey = ApiCacheHelper.makeCacheType(apiContext) + ":"+ApiCacheHelper.makeCacheKey(apiContext);
+                ApiResult apiResult = null;
+                if ( !this.requestSet.contains(requestKey) || api.getExpire() == 0L) {
+                    try {
+                        this.requestSet.add(requestKey);
+                        apiResult = processApi(apiContext);
+                    } catch (Exception e) {
+                        this.requestSet.remove(requestKey);
+                        throw e;
+                    } finally {
+                        this.requestSet.remove(requestKey);
+                    }
+                    try {
+                        Object resultObject = null;
+                        if (api.isResultWrap()) {
                             resultObject = apiResult;
+                        } else {
+                            if (apiResult.containsKey(ApiResult.MAIN_DATA)) {
+                                resultObject = apiResult.unwrap(ApiResult.MAIN_DATA);
+                            } else { // ERROR일 경우 _DATA가 없음
+                                resultObject = apiResult;
+                            }
                         }
+                        if (api.getContentType() != null) {
+                            responseHeaders.set("Content-Type", api.getContentType());
+                            cachedString = ApiCacheHelper.setCache(apiContext, this.cacheManager, resultObject);
+                        } else {
+                            responseHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+                            cachedString = ApiCacheHelper.setCache(apiContext, this.cacheManager, resultObject);
+                        }
+                    } catch (JsonProcessingException e) {
+                        actionLogger.error(remoteIp, ActionType.API, System.currentTimeMillis() - startTime,
+                                String.format("%s/%s : %s", apiResolver.getPath(), apiResolver.getId(), e.toString()), e);
+                        logger.error("api Request:{} {} : {}", apiContext.getApiPath(), apiContext.getApiId(), e.toString(), e);
                     }
-                    if (api.getContentType() != null) {
-                        responseHeaders.set("Content-Type", api.getContentType());
-                        cachedString = ApiCacheHelper.setCache(apiContext, this.cacheManager, resultObject);
-                    } else {
-                        responseHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
-                        cachedString = ApiCacheHelper.setCache(apiContext, this.cacheManager, resultObject);
+                } else {
+                    int retryCount = 0;
+                    while (cachedString == null && retryCount < 20) {
+                        cachedString = ApiCacheHelper.getCachedString(apiContext, this.cacheManager);
+                        try {
+                            Thread
+                                    .currentThread()
+                                    .sleep(100);
+                        } catch (InterruptedException e) {
+                            logger.warn("WAIT FAILED");
+                        }
+                        retryCount++;
                     }
-                } catch (JsonProcessingException e) {
-                    actionLogger.error(remoteIp, ActionType.API, System.currentTimeMillis() - startTime,
-                            String.format("%s/%s : %s", apiResolver.getPath(), apiResolver.getId(), e.toString()), e);
-                    logger.error("api Request:{} {} : {}", apiContext.getApiPath(), apiContext.getApiId(), e.toString(), e);
-
                 }
             }
             responseEntity = ResponseEntity

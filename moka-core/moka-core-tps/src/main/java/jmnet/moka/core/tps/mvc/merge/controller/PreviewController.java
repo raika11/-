@@ -320,7 +320,7 @@ public class PreviewController extends AbstractCommonController {
                 .findByPkgSeq(pkgSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
         try {
-            String html = mergeService.getMergeIssue(issueDeskings.getDomainId(), packageMaster, issueDeskings.getIssueDeskgs());
+            String html = mergeService.getMergeIssue(issueDeskings.getDomainId(), packageMaster, issueDeskings.getIssueDeskings());
             writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] pkgSeq: {} {}", pkgSeq, e);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
@@ -9,13 +9,15 @@ import { getDisplayedRows } from '@utils/agGridUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issue';
 import { MokaInputLabel, MokaTable, MokaLoader } from '@components';
+import StatusBadge from './StatusBadge';
 import { keywordColumnDefs } from './IssueDeskingColumns';
 
 /**
  * 패키지관리 > 관련 데이터 편집 > 키워드
  */
-const CollapseKeyword = ({ gridInstance, setGridInstance, pkgSeq, compNo, desking, deskingList, MESSAGE }) => {
+const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData }, ref) => {
     const dispatch = useDispatch();
+    const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -35,6 +37,12 @@ const CollapseKeyword = ({ gridInstance, setGridInstance, pkgSeq, compNo, deskin
                 invalidList.push({ index, message: '제목을 입력해주세요' });
                 isInvalid = true;
             }
+
+            // 키워드 검사
+            if (!data.bodyHead || data.bodyHead === '') {
+                invalidList.push({ index, message: '키워드를 입력해주세요' });
+                isInvalid = true;
+            }
         });
 
         invalidList.forEach((d) => {
@@ -48,7 +56,7 @@ const CollapseKeyword = ({ gridInstance, setGridInstance, pkgSeq, compNo, deskin
      */
     const saveDesking = () => {
         const viewYn = open ? 'Y' : 'N';
-        const displayedRows = open ? getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn })) : [];
+        const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
 
         if (!open || validate(displayedRows)) {
             setLoading(true);
@@ -90,20 +98,10 @@ const CollapseKeyword = ({ gridInstance, setGridInstance, pkgSeq, compNo, deskin
                 '전송하시겠습니까?',
                 () => {
                     setLoading(true);
-                    const viewYn = open ? 'Y' : 'N';
-                    // rowData 데이터 + viewYn 셋팅
-                    const displayedRows = getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn }));
                     dispatch(
                         publishIssueDesking({
                             compNo,
                             pkgSeq,
-                            issueDesking: {
-                                ...desking,
-                                compNo,
-                                pkgSeq,
-                                viewYn,
-                                issueDeskings: displayedRows,
-                            },
                             callback: ({ header }) => {
                                 if (header.success) {
                                     setStatus(DESK_STATUS_PUBLISH);
@@ -120,6 +118,16 @@ const CollapseKeyword = ({ gridInstance, setGridInstance, pkgSeq, compNo, deskin
             );
         }
     };
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            viewYn: open ? 'Y' : 'N',
+            gridInstance,
+            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
+        }),
+        [gridInstance, open, rowToData],
+    );
 
     useEffect(() => {
         if (gridInstance) {
@@ -160,6 +168,7 @@ const CollapseKeyword = ({ gridInstance, setGridInstance, pkgSeq, compNo, deskin
                 </Col>
                 <Col xs={4}></Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
+                    <StatusBadge desking={desking} />
                     <Button variant="positive-a" size="sm" className="mr-1" onClick={saveDesking}>
                         임시저장
                     </Button>
@@ -183,6 +192,6 @@ const CollapseKeyword = ({ gridInstance, setGridInstance, pkgSeq, compNo, deskin
             </Collapse>
         </div>
     );
-};
+});
 
 export default CollapseKeyword;

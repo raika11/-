@@ -516,6 +516,9 @@ public class IssueRestController extends AbstractCommonController {
                                             .toBuilder()
                                             .schCondi(schCondi)
                                             .keyword(kwd)
+                                            .kwdCnt(Long.valueOf(keyword
+                                                    .getKeyword()
+                                                    .split(",").length))
                                             .kwdOrd(kwdOrd.incrementAndGet())
                                             .build()));
                         }));
@@ -539,6 +542,9 @@ public class IssueRestController extends AbstractCommonController {
                                         .catDiv("C")
                                         .repMaster(Long.parseLong(category))
                                         .kwdOrd(kwdOrd.incrementAndGet())
+                                        .kwdCnt(Long.valueOf(viewDto
+                                                .getCatList()
+                                                .split(",").length))
                                         .ordNo(maxOrdNoDto.getOrdNo() + plus)
                                         .build()));
                     }
@@ -640,8 +646,9 @@ public class IssueRestController extends AbstractCommonController {
     @ApiOperation(value = "편집기사 임시저장")
     //    @PostMapping(value = "/{pkgSeq}/desking/{compNo}/save", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = "/{pkgSeq}/desking/{compNo}/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> postSaveIssueDesking(@Valid IssueDeskingComponentDTO issueDeskingComponentDTO,
-            @ApiParam(hidden = true) Principal principal)
+    public ResponseEntity<?> postSaveIssueDesking(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
+            @ApiParam(value = "컴포넌트순번", required = true) @PathVariable("compNo") Integer compNo,
+            @Valid IssueDeskingComponentDTO issueDeskingComponentDTO, @ApiParam(hidden = true) Principal principal)
             throws InvalidDataException, Exception {
         PackageMaster packageMaster = packageService
                 .findByPkgSeq(issueDeskingComponentDTO.getPkgSeq())
@@ -661,7 +668,8 @@ public class IssueRestController extends AbstractCommonController {
             }
 
             // 등록
-            IssueDeskingComponentDTO returnValue = issueDeskingService.save(packageMaster, issueDeskingComponentDTO, principal.getName());
+            issueDeskingService.save(packageMaster, issueDeskingComponentDTO, principal.getName());
+            IssueDeskingComponentDTO returnValue = issueDeskingService.findIssueDeskingComponent(packageMaster, compNo);
 
             // 결과리턴
             IssueDeskingComponentDTO dto = modelMapper.map(returnValue, IssueDeskingComponentDTO.class);
@@ -723,7 +731,9 @@ public class IssueRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
         try {
             // 등록
-            IssueDeskingComponentDTO returnValue = issueDeskingService.publish(packageMaster, compNo, principal.getName());
+            issueDeskingService.publish(packageMaster, compNo, principal.getName());
+
+            IssueDeskingComponentDTO returnValue = issueDeskingService.findIssueDeskingComponent(packageMaster, compNo);
 
             // 결과리턴
             IssueDeskingComponentDTO dto = modelMapper.map(returnValue, IssueDeskingComponentDTO.class);

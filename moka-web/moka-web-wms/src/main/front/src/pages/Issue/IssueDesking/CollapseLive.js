@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
@@ -17,8 +17,9 @@ import StatusBadge from './StatusBadge';
 /**
  * 패키지관리 > 관련 데이터 편집 > 라이브기사
  */
-const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking, deskingList, MESSAGE }) => {
+const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData }, ref) => {
     const dispatch = useDispatch();
+    const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -96,7 +97,7 @@ const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking, 
      */
     const saveDesking = () => {
         const viewYn = open ? 'Y' : 'N';
-        const displayedRows = open ? getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn })) : [];
+        const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
 
         if (open && displayedRows.length < 1) {
             messageBox.alert(MESSAGE.FAIL_SAVE_NO_DATA);
@@ -143,20 +144,10 @@ const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking, 
                 '전송하시겠습니까?',
                 () => {
                     setLoading(true);
-                    const viewYn = open ? 'Y' : 'N';
-                    // rowData 데이터 + viewYn 셋팅
-                    const displayedRows = getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn }));
                     dispatch(
                         publishIssueDesking({
                             compNo,
                             pkgSeq,
-                            issueDesking: {
-                                ...desking,
-                                compNo,
-                                pkgSeq,
-                                viewYn,
-                                issueDeskings: displayedRows,
-                            },
                             callback: ({ header }) => {
                                 if (header.success) {
                                     setStatus(DESK_STATUS_PUBLISH);
@@ -173,6 +164,16 @@ const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking, 
             );
         }
     };
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            viewYn: open ? 'Y' : 'N',
+            gridInstance,
+            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
+        }),
+        [gridInstance, open, rowToData],
+    );
 
     useEffect(() => {
         const data =
@@ -249,6 +250,6 @@ const CollapseLive = ({ pkgSeq, compNo, gridInstance, setGridInstance, desking, 
             </Collapse>
         </div>
     );
-};
+});
 
 export default CollapseLive;

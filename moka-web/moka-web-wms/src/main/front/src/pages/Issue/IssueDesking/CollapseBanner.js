@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
@@ -15,8 +15,9 @@ import { bannerColumnDefs } from './IssueDeskingColumns';
 /**
  * 패키지관리 > 관련 데이터 편집 > 배너
  */
-const CollapseBanner = ({ compNo, gridInstance, pkgSeq, setGridInstance, desking, deskingList, MESSAGE }) => {
+const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSAGE, rowToData }, ref) => {
     const dispatch = useDispatch();
+    const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -49,7 +50,7 @@ const CollapseBanner = ({ compNo, gridInstance, pkgSeq, setGridInstance, desking
      */
     const saveDesking = () => {
         const viewYn = open ? 'Y' : 'N';
-        const displayedRows = open ? getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn })) : [];
+        const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
 
         if (!open || validate(displayedRows)) {
             setLoading(true);
@@ -91,20 +92,10 @@ const CollapseBanner = ({ compNo, gridInstance, pkgSeq, setGridInstance, desking
                 '전송하시겠습니까?',
                 () => {
                     setLoading(true);
-                    const viewYn = open ? 'Y' : 'N';
-                    // rowData 데이터 + viewYn 셋팅
-                    const displayedRows = getDisplayedRows(gridInstance.api).map((d) => ({ ...d, viewYn }));
                     dispatch(
                         publishIssueDesking({
                             compNo,
                             pkgSeq,
-                            issueDesking: {
-                                ...desking,
-                                compNo,
-                                pkgSeq,
-                                viewYn,
-                                issueDeskings: displayedRows,
-                            },
                             callback: ({ header }) => {
                                 if (header.success) {
                                     setStatus(DESK_STATUS_PUBLISH);
@@ -121,6 +112,16 @@ const CollapseBanner = ({ compNo, gridInstance, pkgSeq, setGridInstance, desking
             );
         }
     };
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            viewYn: open ? 'Y' : 'N',
+            gridInstance,
+            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
+        }),
+        [gridInstance, open, rowToData],
+    );
 
     useEffect(() => {
         if (gridInstance) {
@@ -185,6 +186,6 @@ const CollapseBanner = ({ compNo, gridInstance, pkgSeq, setGridInstance, desking
             </Collapse>
         </div>
     );
-};
+});
 
 export default CollapseBanner;

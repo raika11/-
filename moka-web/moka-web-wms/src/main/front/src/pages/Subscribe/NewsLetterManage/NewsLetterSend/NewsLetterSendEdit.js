@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -8,6 +9,7 @@ import NewsLetterSendRelArticleAgGrid from './components/NewsLetterSendRelArticl
 import NewsLetterSendEditor from './NewsLetterSendEditor';
 import { EditThumbModal } from '@/pages/Desking/modals';
 import NewsLetterLayoutModal from '../NewsLetter/modals/NewLetterLayoutModal';
+import { initialState } from '@store/newsLetter';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 발송 편집
@@ -15,15 +17,37 @@ import NewsLetterLayoutModal from '../NewsLetter/modals/NewLetterLayoutModal';
 const NewsLetterSendEdit = ({ match }) => {
     const history = useHistory();
     const { sendSeq } = useParams();
-    const [temp, setTemp] = useState({
-        form: 'L',
-        recipient: 'S',
-        abTest: '',
-        editor: '',
-    });
+    const sendInfo = useSelector(({ newsLetter }) => newsLetter.send.sendInfo);
+    // const [temp, setTemp] = useState({
+    //     form: 'L',
+    //     recipient: 'S',
+    //     abVariantType: '',
+    //     editor: '',
+    // });
+    const [temp, setTemp] = useState(initialState.send.sendInfo);
+    const [nlName, setNlName] = useState([]);
+    const [letterInfo, setLetterInfo] = useState({});
+    const [sn, setSn] = useState('ja');
     const [imgModal, setImgModal] = useState(false);
     const [gridInstance, setGridInstance] = useState(null); // 기사 ag-grid instance
     const [layoutModal, setLayoutModal] = useState(false);
+
+    /**
+     * 입력값 변경
+     */
+    const handleChangeValue = (e) => {
+        const { name, value } = e.target;
+        if (name === 'sn') {
+            setSn(value);
+            if (value === 'ja') {
+                setTemp({ ...temp, senderName: '중앙일보', senderEmail: 'root@joongang.co.kr' });
+            } else {
+                setTemp({ ...temp, senderName: '', senderEmail: '' });
+            }
+        } else {
+            setTemp({ ...temp, [name]: value });
+        }
+    };
 
     /**
      * 파일 변경
@@ -47,24 +71,20 @@ const NewsLetterSendEdit = ({ match }) => {
     };
 
     /**
-     * 입력값 변경
-     */
-    const handleChangeValue = (e) => {
-        const { name, value } = e.target;
-        setTemp({ ...temp, [name]: value });
-    };
-
-    /**
      * 취소
      */
     const handleClickCancel = () => {
         history.push(match.path);
     };
 
+    useEffect(() => {
+        setTemp(sendInfo);
+    }, [sendInfo]);
+
     return (
         <MokaCard
             className="w-100"
-            title={`뉴스레터 상품 ${sendSeq ? '수정' : '등록'}`}
+            letterTitle={`뉴스레터 ${sendSeq ? '수정' : '발송'}`}
             footer
             footerButtons={[
                 sendSeq && {
@@ -94,79 +114,145 @@ const NewsLetterSendEdit = ({ match }) => {
                     as="autocomplete"
                     label="뉴스레터 명 선택"
                     className="mb-2"
-                    value={null}
-                    inputProps={{ options: [{ value: 'test', label: 'test' }], maxMenuHeight: 150, placeholder: '뉴스레터 명 선택' }}
+                    value={nlName}
+                    inputProps={{
+                        options: [
+                            { value: '001', label: '정치 언박싱' },
+                            { value: '002', label: '팩플' },
+                            { value: '003', label: '백성호의 현문우답' },
+                            { value: '004', label: '풀인 인사이트' },
+                            { value: '005', label: '뉴스다이제스트' },
+                            { value: '006', label: '기타 상품' },
+                        ],
+                        maxMenuHeight: 300,
+                        placeholder: '뉴스레터 명 선택',
+                    }}
+                    onChange={(value) => {
+                        setNlName(value);
+                        // setLetterInfo({ ...letterInfo, letterTitle: value?.value });
+                    }}
                 />
-                <MokaInputLabel label="유형" className="mb-2" inputProps={{ readOnly: true, plaintext: true }} />
-                <MokaInputLabel label="형식 구분" className="mb-2" inputProps={{ readOnly: true, plaintext: true }} />
-                <MokaInputLabel label="뉴스레터 설명" className={temp.form === 'L' && 'mb-2'} inputProps={{ readOnly: true, plaintext: true }} />
-                {temp.form === 'L' && (
+                <MokaInputLabel label="유형" className="mb-2" value={letterInfo.letterType} inputProps={{ readOnly: true, plaintext: true }} />
+                <MokaInputLabel label="형식 구분" className="mb-2" value={letterInfo.editLetterType} inputProps={{ readOnly: true, plaintext: true }} />
+                <MokaInputLabel label="뉴스레터 설명" className={letterInfo.editLetterType === 'L' && 'mb-2'} inputProps={{ readOnly: true, plaintext: true }} />
+                {letterInfo.editLetterType === 'L' && (
                     <>
                         <MokaInputLabel label="레이아웃" className="mb-2" inputProps={{ readOnly: true, plaintext: true }} />
                         <MokaInputLabel label="편집폼" inputProps={{ readOnly: true, plaintext: true }} />
                     </>
                 )}
+
                 <hr className="divider" />
-                <Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
-                        <MokaInputLabel as="select" name="abTest" label="A/B TEST" value={temp.abTest} onChange={handleChangeValue}>
-                            <option value="">테스트 안 함</option>
-                            <option value="sendDt">발송 일시</option>
-                            <option value="senderNm">발송자 명</option>
-                            <option value="title">제목</option>
-                            <option value="layout">레이아웃</option>
-                        </MokaInputLabel>
-                    </Col>
-                </Form.Row>
+
+                {/* A/B TEST 항목 선택 (A/B 테스트 지정이 없는 경우 Hidden) */}
+                {temp.abtestYN === 'Y' && (
+                    <Form.Row className="mb-2">
+                        <Col xs={6} className="p-0">
+                            <MokaInputLabel as="select" name="abVariantType" label="A/B TEST" value={temp.abVariantType} onChange={handleChangeValue}>
+                                <option value="">테스트 안 함</option>
+                                <option value="D">발송 일시</option>
+                                <option value="N">발송자 명</option>
+                                <option value="T">제목</option>
+                                <option value="L">레이아웃</option>
+                            </MokaInputLabel>
+                        </Col>
+                    </Form.Row>
+                )}
 
                 {/* 발송 일시 */}
                 <Form.Row className="mb-2 align-items-center">
-                    <MokaInputLabel as="none" label={temp.abTest === 'sendDt' ? '발송 일시(A)' : '발송 일시'} />
+                    <MokaInputLabel as="none" label={temp.abVariantType === 'D' ? '발송 일시(A)' : '발송 일시'} />
                     <Col xs={4} className="p-0 pr-2">
-                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} />
+                        <MokaInput
+                            as="dateTimePicker"
+                            value={temp.sendDt}
+                            inputProps={{ timeFormat: null }}
+                            onChange={(date) => {
+                                if (typeof date === 'object') {
+                                    setTemp({ ...temp, sendDt: date });
+                                } else {
+                                    setTemp({ ...temp, sendDt: null });
+                                }
+                            }}
+                        />
                     </Col>
                     <Col xs={3} className="p-0 pr-2">
-                        <MokaInput as="dateTimePicker" inputProps={{ dateFormat: null }} />
+                        <MokaInput
+                            as="dateTimePicker"
+                            value={temp.sendTime}
+                            inputProps={{ dateFormat: null }}
+                            onChange={(date) => {
+                                if (typeof date === 'object') {
+                                    setTemp({ ...temp, sendTime: date });
+                                } else {
+                                    setTemp({ ...temp, sendTime: null });
+                                }
+                            }}
+                        />
                     </Col>
                     <MokaInput as="checkbox" id="immediate" inputProps={{ label: '즉시', custom: true }} disabled />
                 </Form.Row>
-                {temp.abTest === 'sendDt' && (
+                {temp.abVariantType === 'D' && (
                     <Form.Row className="mb-2 align-items-center">
                         <MokaInputLabel as="none" label="발송 일시(B)" />
                         <Col xs={4} className="p-0 pr-2">
-                            <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} />
+                            <MokaInput
+                                as="dateTimePicker"
+                                value={temp.sendDt}
+                                inputProps={{ timeFormat: null }}
+                                onChange={(date) => {
+                                    if (typeof date === 'object') {
+                                        setTemp({ ...temp, sendDt: date });
+                                    } else {
+                                        setTemp({ ...temp, sendDt: null });
+                                    }
+                                }}
+                            />
                         </Col>
                         <Col xs={3} className="p-0 pr-2">
-                            <MokaInput as="dateTimePicker" inputProps={{ dateFormat: null }} />
+                            <MokaInput
+                                as="dateTimePicker"
+                                value={temp.sendTime}
+                                inputProps={{ dateFormat: null }}
+                                onChange={(date) => {
+                                    if (typeof date === 'object') {
+                                        setTemp({ ...temp, sendTime: date });
+                                    } else {
+                                        setTemp({ ...temp, sendTime: null });
+                                    }
+                                }}
+                            />
                         </Col>
                         <MokaInput as="checkbox" id="immediate" inputProps={{ label: '즉시', custom: true }} disabled />
                     </Form.Row>
                 )}
                 {/* 발송자 명 */}
                 <Form.Row className="mb-2">
-                    <MokaInputLabel as="none" label={temp.abTest === 'senderNm' ? '발송자 명(A)' : '발송자 명'} />
+                    <MokaInputLabel as="none" label={temp.abVariantType === 'N' ? '발송자 명(A)' : '발송자 명'} />
                     <Col xs={2} className="p-0 pr-2">
-                        <MokaInput as="select" disabled>
-                            <option>중앙일보</option>
+                        <MokaInput as="select" value={sn} onChange={handleChangeValue}>
+                            <option value="ja">중앙일보</option>
+                            <option value="">직접 입력</option>
                         </MokaInput>
                     </Col>
                     <Col xs={2} className="p-0 pr-2">
-                        <MokaInput disabled />
+                        <MokaInput name="senderName" value={temp.senderName} onChange={handleChangeValue} />
                     </Col>
-                    <MokaInput placeholder="root@joongang.co.kr" disabled />
+                    <MokaInput placeholder="root@joongang.co.kr" name="senderEmail" value={temp.senderEmail} onChange={handleChangeValue} />
                 </Form.Row>
-                {temp.abTest === 'senderNm' && (
+                {temp.abVariantType === 'N' && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel as="none" label="발송자 명(B)" />
                         <Col xs={2} className="p-0 pr-2">
-                            <MokaInput as="select" disabled>
-                                <option>중앙일보</option>
+                            <MokaInput as="select" value={sn} onChange={handleChangeValue}>
+                                <option value="ja">중앙일보</option>
+                                <option value="">직접 입력</option>
                             </MokaInput>
                         </Col>
                         <Col xs={2} className="p-0 pr-2">
-                            <MokaInput disabled />
+                            <MokaInput name="senderName" value={temp.senderName} onChange={handleChangeValue} />
                         </Col>
-                        <MokaInput placeholder="root@joongang.co.kr" disabled />
+                        <MokaInput placeholder="root@joongang.co.kr" name="senderEmail" value={temp.senderEmail} onChange={handleChangeValue} />
                     </Form.Row>
                 )}
                 {/* 받는 이 */}
@@ -177,56 +263,71 @@ const NewsLetterSendEdit = ({ match }) => {
                             <Col xs={3} className="p-0 pr-2">
                                 <MokaInput
                                     as="radio"
-                                    name="recipient"
-                                    value="S"
+                                    name="scbLinkYn"
+                                    value="Y"
                                     id="subscribe"
-                                    inputProps={{ label: '구독자 연동', custom: true, checked: temp.recipient === 'S' ? true : false }}
+                                    inputProps={{ label: '구독자 연동', custom: true, checked: temp.scbLinkYn === 'Y' }}
                                     onChange={handleChangeValue}
                                 />
                             </Col>
                             <Col xs={3} className="p-0 pr-2">
                                 <MokaInput
                                     as="radio"
-                                    name="recipient"
-                                    value="D"
+                                    name="scbLinkYn"
+                                    value="N"
                                     id="direct"
-                                    inputProps={{ label: '직접 등록', custom: true, checked: temp.recipient === 'D' ? true : false }}
+                                    inputProps={{ label: '직접 등록', custom: true, checked: temp.scbLinkYn === 'N' }}
                                     onChange={handleChangeValue}
                                 />
                             </Col>
-                            {temp.recipient === 'D' && (
+                            {temp.scbLinkYn === 'N' && (
                                 <Button variant="positive" size="sm" style={{ overflow: 'visible' }}>
                                     Excel 업로드
                                 </Button>
                             )}
                         </div>
-                        {temp.recipient === 'D' && <p className="mb-0 color-primary">※ 직접 등록 시 Excel 업로드는 필수입니다.</p>}
+                        {temp.scbLinkYn === 'N' && <p className="mb-0 color-primary">※ 직접 등록 시 Excel 업로드는 필수입니다.</p>}
                     </div>
                 </Form.Row>
+
                 <hr className="divider" />
+
                 <p className="mb-0 color-primary">※ [필독] 발송 전 반드시 확인해 주세요.</p>
-                <p className={temp.recipient === 'D' ? 'mb-0 color-info' : 'mb-2 color-info'}>1. 광고성 메일인 경우 메일 제목 시작 부분에 [광고]를 반드시 표기해 주세요.</p>
-                {temp.recipient === 'D' && <p className="mb-2 color-info">2. 발송 대상자가 수신 동의한 경우에만 발송해 주세요.</p>}
+                <p className={temp.scbLinkYn === 'N' ? 'mb-0 color-info' : 'mb-2 color-info'}>1. 광고성 메일인 경우 메일 제목 시작 부분에 [광고]를 반드시 표기해 주세요.</p>
+                {temp.scbLinkYn === 'N' && <p className="mb-2 color-info">2. 발송 대상자가 수신 동의한 경우에만 발송해 주세요.</p>}
 
                 {/* 레이아웃 */}
                 <Form.Row className="mb-2">
-                    <MokaInputLabel as="none" label={temp.abTest === 'layout' ? '레이아웃(A)' : '레이아웃'} />
+                    <MokaInputLabel as="none" label={temp.abVariantType === 'L' ? '레이아웃(A)' : '레이아웃'} />
                     <div>
-                        <MokaSearchInput placeholder="레이아웃을 검색해 주세요" className="flex-fill" onSearch={() => setLayoutModal(true)} />
-                        {temp.abTest !== 'layout' && <p className="mb-0 color-primary">※ 레이아웃이 미정인 경우 상품은 자동 임시 저장 상태 값으로 지정됩니다.</p>}
+                        <MokaSearchInput
+                            placeholder="레이아웃을 검색해 주세요"
+                            className="flex-fill"
+                            value={temp.containerSeq || ''}
+                            onSearch={() => setLayoutModal(true)}
+                            inputProps={{ readOnly: true }}
+                            disabled={temp.abVariantType === 'L' && true}
+                        />
+                        {temp.abVariantType !== 'L' && <p className="mb-0 color-primary">※ 레이아웃이 미정인 경우 상품은 자동 임시 저장 상태 값으로 지정됩니다.</p>}
                     </div>
                     <NewsLetterLayoutModal show={layoutModal} onHide={() => setLayoutModal(false)} />
                 </Form.Row>
-                {temp.abTest === 'layout' && (
+                {temp.abVariantType === 'L' && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel as="none" label="레이아웃(B)" />
-                        <MokaSearchInput placeholder="레이아웃을 검색해 주세요" className="flex-fill" disabled />
+                        <MokaSearchInput
+                            placeholder="레이아웃을 검색해 주세요"
+                            className="flex-fill"
+                            value={temp.containerSeq || ''}
+                            onSearch={() => setLayoutModal(true)}
+                            inputProps={{ readOnly: true }}
+                        />
                     </Form.Row>
                 )}
 
                 {/* 제목 */}
-                <MokaInputLabel label={temp.abTest === 'title' ? '제목(A)' : '제목'} className="mb-2" disabled />
-                {temp.abTest === 'title' && <MokaInputLabel label="제목(B)" className="mb-2" disabled />}
+                <MokaInputLabel label={temp.abVariantType === 'T' ? '제목(A)' : '제목'} className="mb-2" value={temp.letterTitle} onChange={handleChangeValue} />
+                {temp.abVariantType === 'T' && <MokaInputLabel label="제목(B)" className="mb-2" value={temp.letterTitle} onChange={handleChangeValue} />}
 
                 {/* 이미지 등록 */}
                 <Form.Row className="mb-2 align-items-center">

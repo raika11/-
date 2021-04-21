@@ -11,7 +11,7 @@ import SourceSelector from './SourceSelector';
  * 페이지편집 > 기사 목록 > 기사 검색
  */
 const Search = (props) => {
-    const { onChangeSearchOption, search, period, error, onSearch, onReset, onChangeGroupNumber, sourceList, suppressChangeArtGroup } = props;
+    const { onChangeSearchOption, search, period, error, onSearch, onReset, onChangeGroupNumber, sourceList, suppressChangeArtGroup, show } = props;
     const [modalShow, setModalShow] = useState(false);
 
     /**
@@ -127,7 +127,7 @@ const Search = (props) => {
                 <div className="d-flex">
                     {/* 분류 */}
                     <div style={{ width: 340 }} className="mr-2">
-                        <CodeAutocomplete name="masterCode" className="mb-0" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} />
+                        <CodeAutocomplete name="masterCode" className="mb-0" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} show={show} />
                     </div>
 
                     {/* 매체 */}

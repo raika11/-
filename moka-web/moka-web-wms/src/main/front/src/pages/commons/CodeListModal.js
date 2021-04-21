@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 import { MokaModal, MokaInput, MokaIcon } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
-import { getMasterCodeList, GET_MASTER_CODE_LIST, clearMasterCodeList } from '@store/code';
+import { getMasterCodeList, GET_MASTER_CODE_LIST } from '@store/code';
 import toast from '@utils/toastUtil';
 
 const propTypes = {
@@ -55,18 +55,24 @@ const propTypes = {
      * @default
      */
     selectable: PropTypes.arrayOf(PropTypes.string),
+    /**
+     * autocomplete 안에 있는 모달인지 체크함 (안에 있으면 리스트 조회 X)
+     * @default
+     */
+    inAutoComplete: PropTypes.bool,
 };
 const defaultProps = {
     title: '분류코드표',
     selection: 'single',
     selectable: ['service', 'section', 'content'],
+    inAutoComplete: false,
 };
 
 /**
  * 기사 분류(masterCode) 코드 선택 모달
  */
 const CodeListModal = (props) => {
-    const { show, onHide, title, onSave, onCancel, selection, value, max, selectable, ...rest } = props;
+    const { show, onHide, title, onSave, onCancel, selection, value, max, selectable, inAutoComplete, ...rest } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_MASTER_CODE_LIST]);
     const masterCodeList = useSelector(({ code }) => code.master.list);
@@ -188,10 +194,10 @@ const CodeListModal = (props) => {
 
     useEffect(() => {
         // 마스터코드 조회
-        if (show && !masterCodeList) {
+        if (!inAutoComplete && show && !masterCodeList) {
             dispatch(getMasterCodeList());
         }
-    }, [dispatch, masterCodeList, show]);
+    }, [dispatch, inAutoComplete, masterCodeList, show]);
 
     useEffect(() => {
         if (masterCodeList) {
@@ -252,13 +258,6 @@ const CodeListModal = (props) => {
             setSelectedList(ns);
         }
     }, [masterCodeList, value, show]);
-
-    useEffect(() => {
-        return () => {
-            dispatch(clearMasterCodeList());
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <MokaModal

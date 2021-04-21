@@ -81,6 +81,8 @@ export const CODETYPE_GEN_CATE = 'GEN_CATE';
 export const CODETYPE_BO_SCHJOB = 'BO_SCHJOB';
 // 시스템코드 : 필진 타입
 export const CODETYPE_JPLUS_REP = 'JPLUS_REP';
+// 시스템코드 : 기사 타입
+export const CODETYPE_AT = 'AT';
 
 // 기본 필진 코드타입 텍스트 (JPLUS_REP_DIV === null 일 때 노출하는 텍스트)
 export const JPLUS_REP_DIV_DEFAULT = '일보기자';

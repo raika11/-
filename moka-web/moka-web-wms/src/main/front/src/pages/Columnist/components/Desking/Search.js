@@ -1,13 +1,13 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { initialState } from '@store/columnist';
-import { MokaInputLabel, MokaSearchInput } from '@components';
+import { MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
 
 /**
  * 페이지편집 > 칼럼니스트 > 검색
  */
 const Search = (props) => {
-    const { onChangeSearchOption, search, onSearch, onReset } = props;
+    const { onChangeSearchOption, search, onSearch, onReset, jplusRepRows } = props;
 
     return (
         <div className="mb-14 d-flex">
@@ -20,6 +20,21 @@ const Search = (props) => {
                         </option>
                     ))}
                 </MokaInputLabel>
+            </div>
+
+            {/* 검색 타입 */}
+            <div className="flex-shrink-0 mr-2">
+                <MokaInput as="select" name="jplusRepDiv" value={search.jplusRepDiv} onChange={(e) => onChangeSearchOption({ key: e.target.name, value: e.target.value })}>
+                    <option value="">전체</option>
+                    {jplusRepRows &&
+                        jplusRepRows.map((rep) => (
+                            <option key={rep.cdOrd} value={rep.dtlCd}>
+                                {rep.cdNm}
+                            </option>
+                        ))}
+                    <option value="NL">일보기자</option>
+                    <option value="ZZ">외부</option>
+                </MokaInput>
             </div>
 
             {/* 이름 검색 */}

@@ -235,6 +235,7 @@ const ArticleList = ({
     return (
         <div className={clsx('d-flex flex-column h-100', className)} key={movie ? 'movie' : 'article'}>
             <Search
+                show={show}
                 search={search}
                 period={period}
                 error={error}

@@ -13,7 +13,7 @@ font-*,color,text-align,vertical-align, ...
 /***                                           layout                                             ***/
 /****************************************************************************************************/
 /* article */
-.article {position: relative;max-width: 540px;padding:40px 0 60px;margin:0 auto;background: #fff;zoom: 1;}
+.article {position: relative;max-width: 580px;padding:40px 0 60px;margin:0 auto;background: #fff;zoom: 1;}
 
 #cover_450h + .article{margin-top: 300px;padding:40px 30px 60px;}
 
@@ -117,7 +117,7 @@ font-*,color,text-align,vertical-align, ...
 .reply_area .new_comment::before { left: -20px; width: calc(100% + 40px);}
 
 /* layer_comment 답글 */
-.layer_comment { overflow-y: auto; z-index:100; position: fixed; top: 0; height: 100%; background-color: #fff; }
+.layer_comment { overflow-y: auto; z-index:101; position: fixed; top: 0; height: 100%; background-color: #fff; }
 .layer_comment.active { right: 0; transition: all 0.5s; }
 .layer_comment .comment_state { display: flex; align-items: center; }
 .layer_comment .comment_count { font-size: 20px; line-height: 30px; letter-spacing: -0.4px; font-weight: 700; color: #111;  }
@@ -126,11 +126,12 @@ font-*,color,text-align,vertical-align, ...
 .layer_comment .txt_outline { margin-top: 20px; }
 .layer_comment .btn_reset { width: 22px; height: 22px; margin-left: 6px; }
 .layer_comment .ico_reset { width: 22px; height: 22px; }
-.layer_comment .btn_close .ico_close { width: 22px; height: 22px; }
 .layer_comment .comment_wrap { margin-top: 40px; }
 .txt_outline { padding: 20px; border: 1px solid #e2e2e2; font-size: 14px; line-height: 20px; letter-spacing: -0.4px; color: #666;  }
 .sm_main_text_area .headline { font-size: 24px; }
 .sm_main_text_area .btn_full { margin-top: 20px; }
+.btn_close .ico_close { width: 22px; height: 22px; }
+
 /* not_comment */
 .not_comment { display: flex; flex-flow: column; align-items: center; font-size: 14px; text-align: center; color: #999; }
 .not_comment .ico_comment { width: 30px; height: 30px; margin-bottom: 6px; }
@@ -179,6 +180,15 @@ font-*,color,text-align,vertical-align, ...
 .sticky_menu .layer_fontsize li:nth-child(3) a:before { font-size: 15px;}
 .sticky_menu .layer_fontsize li:nth-child(4) a:before { font-size: 16px;}
 .sticky_menu .layer_fontsize li:nth-child(5) a:before { font-size: 17px;}
+
+/* 속보 티커 */
+.layer_ticker { display: none; z-index: 100; position: fixed; left: 0; top: 60px; width: 100%; background-color: #fff6e2; }
+.layer_ticker.active { display: block; }
+.layer_ticker .ticker_content { display: flex; position: relative; max-width: 580px; width: 100%; height: 100%; margin: 0 auto; }
+.layer_ticker .badge { height: 24px; }
+.layer_ticker .headline { margin-left: 10px; }
+.layer_ticker .date { margin-left: 10px; }
+.layer_ticker .btn_close { position: absolute; }
 
 
 .fs1 {font-size:14px;line-height:1.93;letter-spacing:normal;}
@@ -382,6 +392,12 @@ font-*,color,text-align,vertical-align, ...
 
     
 
+    /* 속보 티커 */
+    .layer_ticker .ticker_content { padding: 10px 52px 10px 20px; }
+    .layer_ticker .date { display: none; }
+    .layer_ticker .btn_close { position: absolute; right: 20px; top: 12.5px; }
+
+
     /* not_comment */
     .not_comment { padding: 20px 0; }
 
@@ -420,10 +436,15 @@ font-*,color,text-align,vertical-align, ...
     .letter_wrap .pp_letter {width:calc(100% - 86px);}
     .letter_wrap .subscription_info {padding-bottom:0;color:#111;}
 
-    
+    /* 댓글레이어 */
     .layer_comment { right: -100%; transition: all 0.8s; width: 560px; padding: 30px 40px; box-shadow: -5px 2px 7px rgba(0, 0, 0, 0.08); }
     .layer_comment .btn_close { position: absolute; right: 40px; top: 30px; }
     .sm_main_text_area { display: none; }
+    /* 속보티커 */
+    .layer_ticker { height: 52px; }
+    .layer_ticker .ticker_content { align-items: center; }
+    .layer_ticker .btn_close { left: 50%; top: 50%; transform: translate(-50%,-50%); margin-left: 590px; }
+
     /* not_comment */
     .not_comment { padding: 40px 0; }
 }

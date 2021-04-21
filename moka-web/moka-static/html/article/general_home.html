@@ -16,11 +16,15 @@
 
     <link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">
 
+    <link href="//stg-static.joongang.co.kr/css/plugin/slick.css" rel="stylesheet">
+
     <link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">
     <link href="//stg-static.joongang.co.kr/css/common/article.css" rel="stylesheet">
     
+    
     <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
     <script src="//stg-static.joongang.co.kr/js/plugin/swiper.min.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/plugin/slick.min.js"></script>
     <script src="//stg-static.joongang.co.kr/js/plugin/jquery.slimscroll.js"></script>
     <script src="//stg-static.joongang.co.kr/js/utils/scroll.js"></script>
     <script src="//stg-static.joongang.co.kr/js/utils/article.js"></script>
@@ -389,6 +393,151 @@
                         <!-- //댓글 컴포넌트 -->
                     </div>
                 </article>
+
+
+                <!-- 하단기사 -->
+                <div class="row">
+                    <div class=" col_lg9">
+                        <section class="chain_wrap">
+                            <header class="title_wrap">
+                                <h2 class="title">최신 영상</h2>
+                            </header>
+
+                            <!-- 포토리스트 -->
+                            <div class="photo_list_area">
+                                <ul class="card_group row">
+                                    <li class="card col_sm12 col_lg4">      <!-- 포토리스트에서 li 는 그리드시스템 이용 -->
+                                        <div class="card_image">
+                                            <figure>
+                                                <a href="">
+                                                    <img
+                                                        srcset="//via.placeholder.com/136x77 1x,
+                                                                //via.placeholder.com/272x154 2x, 
+                                                                //via.placeholder.com/408x231 3x"
+                                                        width="136"
+                                                        src="//via.placeholder.com/136x77"
+                                                        alt="...">
+                                                </a>
+                                            </figure>
+                                        </div>
+                                        <div class="card_body">
+                                            <h2 class="headline">
+                                                <a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a>
+                                            </h2>
+                                            <div class="meta">
+                                                <p class="date">날짜</p>
+                                                <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <!-- loop -->
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <!-- //loop -->
+                                </ul>
+                            </div>
+                        </section>
+
+                        <section class="chain_wrap">
+                            <header class="title_wrap">
+                                <h2 class="title">최신 영상</h2>
+                            </header>
+
+                            <!-- 포토리스트 -->
+                            <div class="photo_list_area">
+                                <ul class="card_group row">
+                                    <li class="card col_sm12 col_lg4">      <!-- 포토리스트에서 li 는 그리드시스템 이용 -->
+                                        <div class="card_image">
+                                            <figure>
+                                                <a href="">
+                                                    <img
+                                                        srcset="//via.placeholder.com/136x77 1x,
+                                                                //via.placeholder.com/272x154 2x, 
+                                                                //via.placeholder.com/408x231 3x"
+                                                        width="136"
+                                                        src="//via.placeholder.com/136x77"
+                                                        alt="...">
+                                                </a>
+                                            </figure>
+                                        </div>
+                                        <div class="card_body">
+                                            <h2 class="headline">
+                                                <a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a>
+                                            </h2>
+                                            <div class="meta">
+                                                <p class="date">날짜</p>
+                                                <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <!-- loop -->
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <!-- //loop -->
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+
+                    
+                    <div class="col_lg3">
+                        <section class="chain_wrap">
+                            <header class="title_wrap">
+                                <h2 class="title">북마크 후 읽지 않은 기사</h2>
+                            </header>
+                            <!-- 읽지않은북마크 -->
+                            <div class="bookmark_list_area">
+                                <ul class="card_group"  id="slider_div">
+                                    <li class="card">
+                                        <div class="card_image">
+                                            <figure>
+                                                <a href="">
+                                                    <img
+                                                        srcset="//via.placeholder.com/136x77 1x,
+                                                                //via.placeholder.com/272x154 2x, 
+                                                                //via.placeholder.com/408x231 3x"
+                                                        width="136"
+                                                        src="//via.placeholder.com/136x77"
+                                                        alt="...">
+                                                </a>
+                                            </figure>
+                                        </div>
+                                        <div class="card_body">
+                                            <h2 class="headline">
+                                                <a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a>
+                                            </h2>
+                                        </div>
+                                    </li>
+
+                                    <!-- loop -->
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <!-- //loop -->
+                                </ul>
+                            </div>
+                            <!-- 읽지않은북마크 -->
+                        </section>
+                    </div>
+
+                </div>
+
+                <!-- //하단기사 -->
             </section>
             <!-- // contents -->
         </main>
@@ -870,4 +1019,61 @@
     </div>
 </body>
 
+
+<script>
+
+// 화면 사이즈별 
+$(window).resize(function() { 
+		if($(window).width() > 768) {
+			// slick 파괴
+            $('#slider_div').slick("unslick");
+		} else {
+			$('#slider_div').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 1000,
+                responsive: [
+                    {
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1
+                    }
+                    },
+                    {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1
+                    }
+                    },
+                    {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1
+                    }
+                    }
+                ]
+            });
+		}
+	});
+
+    
+// var mql = window.matchMedia("screen and (max-width: 768px)");
+
+// if (mql.matches) {
+    
+
+// } else {
+//     console.log("화면의 너비가 768px 보다 큽니다.");
+// }
+
+
+    
+    
+    
+    
+</script>
 </html>

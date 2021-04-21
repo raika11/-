@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.exception.NoDataException;
+import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSearchDTO;
 import jmnet.moka.core.tps.mvc.abtest.entity.AbTestCase;
 import jmnet.moka.core.tps.mvc.abtest.mapper.AbTestCaseMapper;
@@ -29,6 +32,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AbTestCaseServiceImpl implements AbTestCaseService {
+
+    @Autowired
+    private MessageByLocale messageByLocale;
 
     @Autowired
     private AbTestCaseRepository abTestCaseRepository;
@@ -81,5 +87,29 @@ public class AbTestCaseServiceImpl implements AbTestCaseService {
             rtn = abTestCaseSaveVO.getAbtestSeq();
         }
         return rtn;
+    }
+
+    @Override
+    public void closeABTestCase(Long abtestSeq)
+            throws NoDataException {
+        AbTestCase abTestCase = abTestCaseRepository
+                .findById(abtestSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    return new NoDataException(message);
+                });
+        abTestCase.setStatus(MokaConstants.ABTEST_STATUS_Q);
+    }
+    
+    @Override
+    public void deleteABTestCase(Long abtestSeq)
+            throws NoDataException {
+        AbTestCase abTestCase = abTestCaseRepository
+                .findById(abtestSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    return new NoDataException(message);
+                });
+        abTestCase.setDelYn(MokaConstants.YES);
     }
 }

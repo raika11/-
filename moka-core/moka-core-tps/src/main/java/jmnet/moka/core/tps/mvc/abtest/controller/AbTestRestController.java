@@ -159,7 +159,7 @@ public class AbTestRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "A/B테스트 수정")
     @PutMapping(value = "/{abtestSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> putArea(@ApiParam("A/B테스트 일련번호 (필수)") @PathVariable("abtestSeq")
+    public ResponseEntity<?> putAbTestCase(@ApiParam("A/B테스트 일련번호 (필수)") @PathVariable("abtestSeq")
     @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq,
             @ApiParam("A/B테스트 정보") @RequestBody @Valid AbTestCaseUpdateDTO abTestCaseUpdateDTO)
             throws Exception {
@@ -218,6 +218,78 @@ public class AbTestRestController extends AbstractCommonController {
             log.error("[FAIL TO ABTest UPDATE]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO ABTest UPDATE]", e, true);
             throw new Exception(msg("tps.common.error.update"), e);
+        }
+    }
+
+    /**
+     * ABTest 종료
+     *
+     * @param abtestSeq
+     * @return ABTest 정보
+     * @throws Exception A/B테스트 오류 그외 모든 에러
+     */
+    @ApiOperation(value = "A/B테스트 종료")
+    @PutMapping(value = "/close/{abtestSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> putAbTestCaseClose(@ApiParam("A/B테스트 일련번호 (필수)") @PathVariable("abtestSeq")
+    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq)
+            throws Exception {
+
+        try {
+
+            // 유무 체크 조회(mybatis)
+            AbTestCase abtestCase = abTestCaseService
+                    .findById(abtestSeq)
+                    .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+            // 2. 종료
+            abTestCaseService.closeABTestCase(abtestSeq);
+
+            // 3. 결과리턴
+            String message = msg("tps.abTest.success.close");
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
+            tpsLogger.success(ActionType.DELETE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO CLOSE ABTest] seq: {} {}", abtestSeq, e.getMessage());
+            tpsLogger.error(ActionType.DELETE, "[FAIL TO CLOSE ABTest]", e, true);
+            throw new Exception(msg("tps.abTest.error.close"), e);
+        }
+    }
+
+    /**
+     * ABTest 삭제
+     *
+     * @param abtestSeq
+     * @return ABTest 정보
+     * @throws Exception A/B테스트 오류 그외 모든 에러
+     */
+    @ApiOperation(value = "A/B테스트 삭제")
+    @PutMapping(value = "/delete/{abtestSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> putAbTestCaseDelete(@ApiParam("A/B테스트 일련번호 (필수)") @PathVariable("abtestSeq")
+    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq)
+            throws Exception {
+
+        try {
+
+            // 유무 체크 조회(mybatis)
+            AbTestCase abtestCase = abTestCaseService
+                    .findById(abtestSeq)
+                    .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+            // 2. 삭제
+            abTestCaseService.deleteABTestCase(abtestSeq);
+
+            // 3. 결과리턴
+            String message = msg("tps.abTest.success.delete");
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
+            tpsLogger.success(ActionType.DELETE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO DELETE ABTest] seq: {} {}", abtestSeq, e.getMessage());
+            tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE ABTest]", e, true);
+            throw new Exception(msg("tps.abTest.error.delete"), e);
         }
     }
 }

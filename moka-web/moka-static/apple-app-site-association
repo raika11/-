@@ -1,0 +1,10 @@
+{
+  "applinks": {
+      "details": [
+           {
+             "appID": "4YP3LW54Q4.kr.co.ssc.UniversalLinks",
+             "paths" : ["*"]
+           }
+       ]
+   }
+}

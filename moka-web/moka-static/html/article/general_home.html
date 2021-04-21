@@ -60,7 +60,6 @@
                             <strong class="badge">NOW</strong>14 함께 읽음</span>
                         </div>
                         <h1 class="headline">백신 3종 이상 확보한 나라 벌써 12개국… <br>한국은 1종</h1>
-
                         <div class="datetime">
                             <span class="source">중앙일보</span>
                             <div class="time_bx">
@@ -157,10 +156,10 @@
                         <!-- //태그 컴포넌트 -->
                         <!-- 구독 컴포넌트 -->
                         <div class="subscription_wrap">
-                            <header class="title_wrap">
-                                <h2 class="title"><a href="" class="flex flex_align_center">코로나 백신<i class="ico_arrow_primary_right"></i></a></h2>
+                            <div class="title_wrap">
+                                <h3 class="title"><a href="" class="flex flex_align_center">코로나 백신<i class="ico_arrow_primary_right"></i></a></h3>
                                 <button type="button" class="btn btn_primary">구독</button>
-                            </header>
+                            </div>
                             <p class="subscription_info">중앙일보 ‘코로나 백신’은 코로나 바이러스로 인한 피해와 이를 줄이기 위한 백신 소식을 빠짐없이 정리하여 여러분을 찾아갑니다. 새로운 이슈, 복잡한 속사정, 흥미진진한 뒷얘기를  ‘3분 만남’으로 정리해드립니다.</p>
                         </div>
                         <!-- //구독 컴포넌트 -->
@@ -284,7 +283,7 @@
                                 </li>
                             </ul>
                             <!-- <button type="button" class="btn_gray">댓글 작성하기 <i class="ico_arrow_right"></i></button> -->
-                            <button type="button" class="btn_gray" onclick="openLayer(side_comment);">댓글 <span class="font_orange">2,346</span>개 보기 <i class="ico_arrow_right"></i></button>
+                            <button type="button" class="btn_gray" onclick="openLayer(layer_comment);">댓글 <span class="font_orange">2,346</span>개 보기 <i class="ico_arrow_right"></i></button>
                         </div>
                         <!-- //댓글 컴포넌트 -->
                     </div>
@@ -295,7 +294,11 @@
         <!-- // container -->
 
         <!-- 댓글 임시 -->
-        <div class="side_popup side_comment" id="side_comment"><!-- 여기에 개별 클래스 추가 -->
+        <div class="layer_comment" id="layer_comment"><!-- 여기에 개별 클래스 추가 -->
+            <div class="sm_main_text_area">
+                <h1 class="headline">백신 3종 이상 확보한 나라 벌써 12개국… 한국은 1종</h1>
+                <a href="#none" class="btn_gray" role="button">본문보기<i class="ico_more"></i></a>
+            </div>
             <div class="comment_header">
                 <strong class="comment_count">댓글 0개</strong>
                 <button class="btn_reset"><i class="ico_reset"></i><span class="visually_hidden">새로고침</span></button>
@@ -304,12 +307,12 @@
                 <!-- 로그인전 -->
                 <!-- <p class="txt_outline">간편 로그인 후 독자님의 소중한 의견을 더해주세요.</p> -->
                 <!-- 로그인후 -->
-                <div class="comment_form on">
+                <div class="comment_form active">
                     <fieldset>
                         <legend class="visually_hidden">댓글 입력 폼</legend>
                         <div class="comment_header">
                             <!-- 작성자 아이디 -->
-                            <span class="comment_userid h5">joongang</span>
+                            <strong class="comment_userid">joongang</strong>
                         </div>
                         <div class="comment_body">
                             <!-- 내용 입력 필드 -->
@@ -339,6 +342,10 @@
                         <button type="button" class="btn_mycomment">내댓글<i class="ico_arrow_primary_right"></i></button>
                     </div>
                     <button type="button" class="btn_new_reply">새로운 댓글 2개</button>
+                    <div class="not_comment">
+                        <i class="ico_comment desabled"></i>
+                        <p>첫번째 댓글을 남겨주세요.</p>
+                    </div>
                     <ul class="comment_list">
                         <li>
                             <!-- Comment -->
@@ -379,7 +386,7 @@
                                     <legend class="visually_hidden">댓글 입력 폼</legend>
                                     <div class="comment_header">
                                         <!-- 작성자 아이디 -->
-                                        <span class="comment_userid h5">joongang</span>
+                                        <strong class="comment_userid">joongang</strong>
                                     </div>
                                     <div class="comment_body">
                                         <!-- 내용 입력 필드 -->
@@ -504,7 +511,7 @@
                                     <legend class="visually_hidden">댓글 입력 폼</legend>
                                     <div class="comment_header">
                                         <!-- 작성자 아이디 -->
-                                        <span class="comment_userid h5">joongang</span>
+                                        <strong class="comment_userid">joongang</strong>
                                     </div>
                                     <div class="comment_body">
                                         <!-- 내용 입력 필드 -->
@@ -559,7 +566,7 @@
                                     <legend class="visually_hidden">댓글 입력 폼</legend>
                                     <div class="comment_header">
                                         <!-- 작성자 아이디 -->
-                                        <span class="comment_userid h5">joongang</span>
+                                        <strong class="comment_userid">joongang</strong>
                                     </div>
                                     <div class="comment_body">
                                         <!-- 내용 입력 필드 -->

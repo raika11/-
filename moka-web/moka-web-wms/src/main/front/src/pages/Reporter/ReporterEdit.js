@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button, Image, Col } from 'react-bootstrap';
+import { Form, Button, Image, Col, Card } from 'react-bootstrap';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { MokaInputLabel, MokaInput, MokaIcon } from '@components';
-import { clearReporter, getReporter, saveReporter } from '@store/reporter';
+import { MokaInputLabel, MokaInput, MokaIcon, MokaCard } from '@components';
+import { clearReporter, getReporter, saveReporter, GET_REPORTER } from '@store/reporter';
 import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
@@ -29,6 +29,7 @@ const ReporterEdit = ({ match }) => {
     const dispatch = useDispatch();
     const { repSeq: paramSeq } = useParams();
     const reporter = useSelector(({ reporter }) => reporter.reporter);
+    const loading = useSelector(({ loading }) => loading[GET_REPORTER]);
     const [temp, setTemp] = useState({});
 
     /**
@@ -105,7 +106,18 @@ const ReporterEdit = ({ match }) => {
     }, [dispatch]);
 
     return (
-        <>
+        <MokaCard
+            titleAs={
+                <div>
+                    <Card.Title as="h2" className="float-left">
+                        기자 정보
+                    </Card.Title>
+                    <span className="float-right">최종 수정일: {temp.modDt}</span>
+                </div>
+            }
+            className="w-100"
+            loading={loading}
+        >
             <hr className="mt-0" />
 
             <div className="d-flex align-items-center">
@@ -129,14 +141,14 @@ const ReporterEdit = ({ match }) => {
                     />
                 )}
 
-                <div className="flex-fill d-flex flex-column ml-4">
+                <div className="flex-fill d-flex flex-column justify-content-center ml-4">
                     {/* 기자 정보 */}
-                    <div className="d-flex align-items-center justify-content-center mb-14">
+                    <div className="d-flex align-items-center justify-content-between">
                         <div className="d-flex flex-column">
-                            {/*<p className="mb-2">
+                            <p className="mb-2">
                                 <span className="h3 mr-1">{temp.repName}</span>
                                 <span className="h3 font-weight-normal">기자</span>
-                            </p>*/}
+                            </p>
                             <div className="d-flex">
                                 <MokaInput
                                     className="mr-gutter"
@@ -155,9 +167,8 @@ const ReporterEdit = ({ match }) => {
                                 />
                             </div>
                         </div>
-                    </div>
-                    <div className="d-flex align-items-center justify-content-center">
-                        <div>
+
+                        <div className="flex-shrink-0">
                             <Button variant="positive" className="mr-1" onClick={handleClickSave}>
                                 저장
                             </Button>
@@ -166,9 +177,6 @@ const ReporterEdit = ({ match }) => {
                             </Button>
                         </div>
                     </div>
-
-                    {/* 최종 수정일 */}
-                    <div className="text-right">최종 수정일: {temp.modDt}</div>
                 </div>
             </div>
 
@@ -176,79 +184,63 @@ const ReporterEdit = ({ match }) => {
 
             <Form>
                 <Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pr-2">
                         <ReporterInput label="이름" value={temp.repName || '-'} />
                     </Col>
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pl-2">
                         <ReporterInput label="표시 직책" value={temp.repTitle || '-'} />
                     </Col>
                 </Form.Row>
-                {/*<Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
-                        <ReporterInput label="소속 1" value={temp.r1CdNm || '-'} />
-                    </Col>
-                    <Col xs={6} className="p-0">
-                        <ReporterInput label="소속 2" value={temp.r2CdNm || '-'} />
-                    </Col>
-                </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
-                        <ReporterInput label="소속 3" value={temp.r3CdNm || '-'} />
-                    </Col>
-                    <Col xs={6} className="p-0">
-                        <ReporterInput label="소속 4" value={temp.r4CdNm || '-'} />
-                    </Col>
-                </Form.Row>*/}
-                <Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pr-2">
                         <ReporterInput label="타입코드" value={temp.typeCode} />
                     </Col>
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pl-2">
                         <ReporterInput label="집배신 이메일" value={temp.repEmail1 || '-'} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pr-2">
                         <ReporterInput label="중앙 ID" value={temp.joinsId || '-'} />
                     </Col>
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pl-2">
                         <ReporterInput label="분야" value={temp.repField || '-'} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pr-2">
                         <ReporterInput label="페이스북" value={temp.snsFb || '-'} />
                     </Col>
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pl-2">
                         <ReporterInput label="트위터" value={temp.snsTw || '-'} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pr-2">
                         <ReporterInput label="인스타그램" value={temp.snsIn || '-'} />
                     </Col>
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pl-2">
                         <ReporterInput label="블로그" value={temp.joinsBlog || '-'} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pr-2">
                         <ReporterInput label="JNET ID" value={temp.jnetId || '-'} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pr-2">
                         <ReporterInput label="JNET 이메일1" value={temp.rMail1 || '-'} />
                     </Col>
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pl-2">
                         <ReporterInput label="JNET 이메일2" value={temp.rMail2 || '-'} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pr-2">
                         <ReporterInput label="JNET 이메일3" value={temp.rMail3 || '-'} />
                     </Col>
-                    <Col xs={6} className="p-0">
+                    <Col xs={6} className="p-0 pl-2">
                         <ReporterInput label="JNET 이메일4" value={temp.rMail4 || '-'} />
                     </Col>
                 </Form.Row>
@@ -266,7 +258,7 @@ const ReporterEdit = ({ match }) => {
                     }}
                 />
             </Form>
-        </>
+        </MokaCard>
     );
 };
 

@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.abTest.dto;
+package jmnet.moka.core.tps.mvc.abtest.dto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
@@ -36,7 +36,7 @@ import lombok.Setter;
 @Getter
 @Builder
 @ApiModel("ABTest 정의 DTO")
-public class ABTestCaseSaveDTO {
+public class AbTestCaseSaveDTO {
     public static final Type TYPE = new TypeReference<List<jmnet.moka.core.tps.mvc.board.dto.BoardInfoDTO>>() {
     }.getType();
 

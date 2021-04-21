@@ -280,7 +280,7 @@ const CodeListModal = (props) => {
                     <div className="flex-fill mr-2">
                         <div className="input-border pl-1 pr-1 pt-1 h-100">
                             {selectedList.map((s) => (
-                                <Badge key={s.masterCode} className="mr-1 mb-1 pt-1 user-select-text" variant="searching">
+                                <Badge key={s.masterCode} className="mr-1 mb-1 pt-1 user-select-text" variant="searching" style={{ height: 21, lineHeight: 1.2 }}>
                                     {s.masterCode}&nbsp;
                                     {s.masterCode.slice(-5) === '00000' ? s.serviceKorname : s.masterCode.slice(-3) === '000' ? s.sectionKorname : s.contentKorname}
                                     <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => spliceList(s.masterCode)} />
@@ -344,7 +344,6 @@ const CodeListModal = (props) => {
                                             <Col xs={3} className="p-2 h-auto border-right" style={{ backgroundColor: 'rgb(189 180 142 / 10%)' }}>
                                                 {renderCode({
                                                     as: selection === 'single' ? 'radio' : 'checkbox',
-                                                    className: 'ft-12',
                                                     selectable: selectable.indexOf('section') > -1 && exist,
                                                     id: dep2.masterCode,
                                                     usedYn: dep2.usedYn,
@@ -359,7 +358,6 @@ const CodeListModal = (props) => {
                                                         <div key={dep3.masterCode} className="float-left ml-1 mb-1">
                                                             {renderCode({
                                                                 as: selection === 'single' ? 'radio' : 'checkbox',
-                                                                className: 'ft-12',
                                                                 selectable: selectable.indexOf('content') > -1,
                                                                 id: dep3.masterCode,
                                                                 usedYn: dep3.usedYn,

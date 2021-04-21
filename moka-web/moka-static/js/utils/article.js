@@ -34,6 +34,7 @@ function openLayer(obj){
 function closeLayer($btnCk){
 	$btnCk.parents(".layer_popup.active").removeClass("active");
 	$btnCk.parents(".layer_comment.active").removeClass("active");
+	$btnCk.parents(".layer_ticker.active").removeClass("active");
 }
 function btnCloseModal(){
 	$(".btn_close").off().on("click", function(){

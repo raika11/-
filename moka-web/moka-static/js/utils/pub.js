@@ -1,6 +1,15 @@
 // JavaScript Document
 $(document).ready(function() {
 
+
+    //scrollBar 
+    $('.comment_textarea').slimScroll();
+	// $('.layer_comment').slimScroll();
+	
+
+
+
+
     //li형 select box
     $(".dropdown_toggle").on("click", function(){
         $(this).parent(".dropdown").toggleClass("open");

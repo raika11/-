@@ -42,6 +42,8 @@ span {display:inline-block;}
 /** layout **/
 #wrapper {width:100%;}
 
+.slimScrollBar {display:block !important}
+
 /** header **/
 .header {position:relative;width:100%;border-bottom: 1px solid #e2e2e2;background:#fff;z-index:100;}
 .header .uh { display: flex; align-items: center; position: relative; height: 100%; margin: 0 auto; }

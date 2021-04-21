@@ -45,49 +45,47 @@
         <main role="main" id="container">
             <!-- sticky menu -->
             <div class="sticky_menu">
-                <div class="sticky_menu">
-                    <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="sm_hidden">북마크</span></button>
-                    <button type="button" class="btn_comment"><i class="ico_comment"></i><span class="sm_hidden">댓글</span><span class="comment_cnt">12</span></button>
-                    <button type="button" class="btn_share"><i class="ico_share"></i><span class="sm_hidden">공유</span></button>
-                    <button type="button" class="btn_fontsize"><i class="ico_fontsize"></i><span class="sm_hidden">글자크기</span></button>
-                    <button type="button" class="btn_print"><i class="ico_print"></i><span class="sm_hidden">인쇄</span></button>
-                    <p class="reader_area sm_hidden"><span class="cnt">14</span><span class="sm_hidden">읽음</span></p>
-    
-                    <div class="layer_popup layer_share" style="display:block;" id=""><!-- 여기에 개별 클래스 추가 -->
-                        <div class="layer_header">
-                            <strong class="layer_title">공유</strong>
-                        </div>
-                        <div class="layer_body">
-                            <ul>
-                                <li><button type="button" class="btn_"><i class="ico_sns_ktalk">카카오톡 이미지</i><span>카카오톡</span></button></li>
-                                <li><button type="button" class="btn_"><i class="ico_facebook">f</i><span>페이스북</span></button></li>
-                                <li><button type="button" class="btn_"><i class="ico_sns_ktory">카카오스토리 이미지</i><span>카카오스토리</span></button></li>
-                                <li><button type="button" class="btn_"><i class="ico_sns_twt">트위터 이미지</i><span>트위터</span></button></li>
-                                <li><button type="button" class="btn_"><i class="ico_sns_mail">메일 이미지</i><span>메일</span></button></li>
-                                <li><button type="button" class="btn_"><i class="ico_sns_pinter">핀터레스트 이미지</i><span>핀터레스트</span></button></li>
-                                <li><button type="button" class="btn_"><i class="ico_sns_band">네이버밴드 이미지</i><span>밴드</span></button></li>
-                                <li><button type="button" class="btn_"><i class="ico_sns_url">url 이미지</i><span>URL 복사</span></button></li>
-                            </ul>
-                        </div>
-                        <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+                <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="sm_hidden">북마크</span></button>
+                <button type="button" class="btn_comment"><i class="ico_comment"></i><span class="sm_hidden">댓글</span><span class="comment_cnt">12</span></button>
+                <button type="button" class="btn_share"><i class="ico_share"></i><span class="sm_hidden">공유</span></button>
+                <button type="button" class="btn_fontsize"><i class="ico_fontsize"></i><span class="sm_hidden">글자크기</span></button>
+                <button type="button" class="btn_print"><i class="ico_print"></i><span class="sm_hidden">인쇄</span></button>
+                <p class="reader_area sm_hidden"><span class="cnt">14</span><span class="sm_hidden">읽음</span></p>
+
+                <div class="layer_popup layer_share" style="display:block;" id=""><!-- 여기에 개별 클래스 추가 -->
+                    <div class="layer_header">
+                        <strong class="layer_title">공유</strong>
                     </div>
-                    
-                    <div class="layer_popup layer_fontsize" style="display:block;" id=""><!-- 여기에 개별 클래스 추가 -->
-                        <div class="layer_header">
-                            <strong class="layer_title">글자크기 설정</strong>
-                        </div>
-                        <div class="layer_body">
-                            <p>글자크기 설정 시 다른 기사의 본문도<br> 동일하게 적용됩니다.</p>
-                            <ul>
-                                <li><a href="">1단계</a></li>
-                                <li><a href="">2단계</a></li>
-                                <li><a href="">3단계</a></li>
-                                <li><a href="">4단계</a></li>
-                                <li><a href="">5단계</a></li>
-                            </ul>
-                        </div>
-                        <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+                    <div class="layer_body">
+                        <ul>
+                            <li><button type="button" class="btn_"><i class="ico_sns_ktalk">카카오톡 이미지</i><span>카카오톡</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_facebook">f</i><span>페이스북</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_ktory">카카오스토리 이미지</i><span>카카오스토리</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_twt">트위터 이미지</i><span>트위터</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_mail">메일 이미지</i><span>메일</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_pinter">핀터레스트 이미지</i><span>핀터레스트</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_band">네이버밴드 이미지</i><span>밴드</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_url">url 이미지</i><span>URL 복사</span></button></li>
+                        </ul>
                     </div>
+                    <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+                </div>
+                
+                <div class="layer_popup layer_fontsize" style="display:block;" id=""><!-- 여기에 개별 클래스 추가 -->
+                    <div class="layer_header">
+                        <strong class="layer_title">글자크기 설정</strong>
+                    </div>
+                    <div class="layer_body">
+                        <p>글자크기 설정 시 다른 기사의 본문도<br> 동일하게 적용됩니다.</p>
+                        <ul>
+                            <li><a href="">1단계</a></li>
+                            <li><a href="">2단계</a></li>
+                            <li><a href="">3단계</a></li>
+                            <li><a href="">4단계</a></li>
+                            <li><a href="">5단계</a></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
                 </div>
             </div>
             <!-- //sticky menu -->

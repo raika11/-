@@ -155,7 +155,7 @@ const EditSnapshotModal = (props) => {
             width={700}
             height={770}
             buttons={[
-                { variant: 'positive', text: '임시저장', onClick: handleClickSave },
+                { variant: 'positive-a', text: '임시저장', onClick: handleClickSave },
                 { variant: 'outline-neutral', text: '미리보기', onClick: handleClickPreview },
                 { variant: 'negative', text: '닫기', onClick: handleClickClose },
             ]}

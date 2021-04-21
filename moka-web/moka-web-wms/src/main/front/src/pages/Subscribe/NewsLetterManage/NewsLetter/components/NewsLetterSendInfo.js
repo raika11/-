@@ -271,6 +271,7 @@ const NewsLetterSendInfo = ({ temp, setTemp, onChangeValue }) => {
                                         value="Y"
                                         id="letter-scbLinkYn-y"
                                         inputProps={{ label: '구독자 연동', custom: true, checked: temp.scbLinkYn === 'Y' }}
+                                        onChange={handleChangeValue}
                                     />
                                 </Col>
                                 <Col xs={3} className="p-0 pr-2">
@@ -280,6 +281,7 @@ const NewsLetterSendInfo = ({ temp, setTemp, onChangeValue }) => {
                                         value="N"
                                         id="letter-scbLinkYn-n"
                                         inputProps={{ label: '직접 등록', custom: true, checked: temp.scbLinkYn === 'N' }}
+                                        onChange={handleChangeValue}
                                     />
                                 </Col>
                                 {temp.scbLinkYn === 'N' && (

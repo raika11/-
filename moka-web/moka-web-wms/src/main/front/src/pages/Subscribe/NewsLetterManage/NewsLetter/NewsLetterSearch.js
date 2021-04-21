@@ -86,7 +86,7 @@ const NewsLetterSearch = () => {
                 <MokaInput as="select" name="status" className="mr-2" value={search.status} onChange={handleChangeValue}>
                     <option value="">상태 전체</option>
                     <option value="Y">활성</option>
-                    <option value="P">임시 저장</option>
+                    <option value="P">임시저장</option>
                     <option value="S">중지</option>
                     <option value="Q">종료</option>
                 </MokaInput>

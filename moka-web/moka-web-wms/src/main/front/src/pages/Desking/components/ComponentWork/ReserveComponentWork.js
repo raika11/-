@@ -161,7 +161,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
                         />
                     </div>
                     <div className="d-flex align-items-center">
-                        <Button variant="positive" className="mr-1" size="sm" onClick={handleClickSave}>
+                        <Button variant="positive" className="mr-2" size="sm" onClick={handleClickSave}>
                             전송
                         </Button>
                         <Button variant="negative" size="sm" onClick={handleClickCancle}>

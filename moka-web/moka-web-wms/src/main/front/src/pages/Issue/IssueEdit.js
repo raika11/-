@@ -150,7 +150,7 @@ const IssueEdit = ({ reporters }) => {
                     setIsDuplicatedTitle={setIsDuplicatedTitle}
                 />
                 {/* 공통 검색어 */}
-                <Form.Row className="mb-3">
+                <Form.Row className="mb-2">
                     <Col xs={3} className="p-0">
                         <MokaInputLabel
                             as="switch"
@@ -184,7 +184,7 @@ const IssueEdit = ({ reporters }) => {
                         }}
                     />
                 )}
-                <Form.Row className="mb-3">
+                <Form.Row className="mb-2">
                     <Col xs={12} className="p-0 d-flex justify-content-between">
                         <MokaInputLabel
                             as="switch"
@@ -247,7 +247,7 @@ const IssueEdit = ({ reporters }) => {
                     />
                 )}
                 {/* 섹션 */}
-                <Form.Row className="mb-3">
+                <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="switch"
@@ -276,7 +276,7 @@ const IssueEdit = ({ reporters }) => {
                     />
                 )}
                 {/* 디지털 스페셜 */}
-                <Form.Row className="mb-3">
+                <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="switch"
@@ -305,7 +305,7 @@ const IssueEdit = ({ reporters }) => {
                     />
                 )}
                 {/* 영상 OVP */}
-                <Form.Row className="mb-3">
+                <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="switch"

@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.abTest.vo;
+package jmnet.moka.core.tps.mvc.abtest.vo;
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -11,7 +11,7 @@ import org.apache.ibatis.type.Alias;
 
 /**
  * <pre>
- * ABTest목록 조회용 VO
+ * ABTest목록 등록용 VO
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.abTest.vo
  * ClassName : ABTestVO
@@ -22,19 +22,19 @@ import org.apache.ibatis.type.Alias;
  * @since 2021-04-15 09:54
  */
 
-@Alias("ABTestCaseVO")
+@Alias("ABTestCaseSaveVO")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @Builder
-public class ABTestCaseVO {
+public class AbTestCaseSaveVO {
 
     /**
-     * AB테스트일련번호
+     * ABTest 일련번호
      */
     @Column(name = "ABTEST_SEQ")
-    private Long abtestSeq = 0l;
+    private Integer abtestSeq;
 
     /**
      * AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
@@ -53,10 +53,6 @@ public class ABTestCaseVO {
      */
     @Column(name = "DOMAIN_ID")
     private String domainId;
-    /**
-     * 도메인ID명
-     */
-    private String domainIdNm;
 
     /**
      * 페이지SEQ
@@ -65,20 +61,10 @@ public class ABTestCaseVO {
     private Long pageSeq = 0l;
 
     /**
-     * 페이지명
-     */
-    private String pageNm;
-
-    /**
      * 영역일련번호(대안입력-디자인의 경우 영역으로 선택)
      */
     @Column(name = "AREA_SEQ")
     private Long areaSeq = 0l;
-
-    /**
-     * 영역명
-     */
-    private String areaNm;
 
     /**
      * 컴포넌트SEQ
@@ -87,20 +73,10 @@ public class ABTestCaseVO {
     private Long componentSeq = 0l;
 
     /**
-     * 컴포넌트명
-     */
-    private String componentNm;
-
-    /**
      * 뉴스레터SEQ
      */
     @Column(name = "LETTER_SEQ")
     private Long letterSeq = 0l;
-
-    /**
-     * 뉴스레터명
-     */
-    private String letterNm;
 
     /**
      * 시작일시
@@ -162,23 +138,83 @@ public class ABTestCaseVO {
     @Column(name = "DEL_YN")
     private String delYn;
 
-    @Column(name = "REG_DT")
-    private Date regDt;
-
     /**
-     * 생성자
+     * 등록자
      */
     @Column(name = "REG_ID")
     private String regId;
 
-    @Column(name = "MOD_DT")
-    private Date modDt;
+    /**
+     * 등록일시
+     */
+    @Column(name = "REG_DT")
+    private Date regDt;
 
     /**
      * 수정자
      */
     @Column(name = "MOD_ID")
     private String modId;
+
+    /**
+     * 수정일시
+     */
+    @Column(name = "MOD_DT")
+    private Date modDt;
+
+    /**
+     * AB테스트제목
+     */
+    @Column(name = "ABTEST_TITLE")
+    private String abtestTitle;
+
+    /**
+     * AB테스트설명
+     */
+    @Column(name = "ABTEST_DESC")
+    private String abtestDesc;
+
+    /**
+     * AB테스트 그룹생성 방식(R:랜덤, S:고정) / TB_ABTEST_GRP(AB테스트 그룹) ABTEST_GRP_METHOD
+     */
+    @Column(name = "ABTEST_GRP_METHOD")
+    private String abtestGrpMethod = "R";
+
+    /**
+     * KPI달성율(A) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
+     */
+    @Column(name = "KPI_VALUE_A")
+    private Long kpiValueA = 0L;
+
+    /**
+     * KPI달성율(B) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
+     */
+    @Column(name = "KPI_VALUE_B")
+    private Long kpiValueB = 0L;
+
+    /**
+     * 서비스기사ID(JAM설계경우) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
+     */
+    @Column(name = "TOTAL_ID")
+    private String totalId;
+    /**
+     * 화면편집파트(T:제목,L:리드문,I:이미지,R;관련기사) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
+     */
+    @Column(name = "DESKING_PART")
+    private String deskingPart;
+
+    /**
+     * 템플릿SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT)
+     */
+    @Column(name = "TEMPLATE_SEQ")
+    private Long templateSeq = 0L;
+
+    /**
+     * 데이터셋SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT)
+     */
+    @Column(name = "DATASET_SEQ")
+    private Long datasetSeq = 0L;
+
 
     /**
      * 로그인 여부(전체:`, 로그인:Y, 비로그인 : N)
@@ -265,14 +301,20 @@ public class ABTestCaseVO {
     private String utmContent;
 
     /**
-     * AB테스트제목
+     * 제목(JAM 또는 뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT)
      */
-    @Column(name = "ABTEST_TITLE")
-    private String abtestTitle;
+    @Column(name = "TITLE")
+    private String title;
 
     /**
-     * AB테스트설명
+     * 발송자명(뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT)
      */
-    @Column(name = "ABTEST_DESC")
-    private String abtestDesc;
+    @Column(name = "SENDER_NAME")
+    private String senderName;
+
+    /**
+     * 발송일시(뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT)
+     */
+    @Column(name = "SEND_DT")
+    private Date sendDt;
 }

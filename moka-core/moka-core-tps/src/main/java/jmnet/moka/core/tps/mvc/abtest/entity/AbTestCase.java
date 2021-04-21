@@ -2,7 +2,7 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.abTest.entity;
+package jmnet.moka.core.tps.mvc.abtest.entity;
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * AB테스트 정의
+ * A/B테스트 정의
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,12 +28,12 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "TB_ABTEST_CASE")
-public class ABTestCase extends BaseAudit {
+public class AbTestCase extends BaseAudit {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * AB테스트일련번호
+     * A/B테스트 일련번호
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,13 +41,13 @@ public class ABTestCase extends BaseAudit {
     private Long abtestSeq;
 
     /**
-     * AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
+     * A/B테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
     @Column(name = "ABTEST_TYPE")
     private String abtestType;
 
     /**
-     * AB테스트 목표(T:디자인 D:데이터)
+     * A/B테스트 목표(T:디자인 D:데이터)
      */
     @Column(name = "ABTEST_PURPOSE")
     private String abtestPurpose;
@@ -242,13 +242,13 @@ public class ABTestCase extends BaseAudit {
     private String utmContent;
 
     /**
-     * AB테스트제목
+     * A/B테스트 제목
      */
     @Column(name = "ABTEST_TITLE")
     private String abtestTitle;
 
     /**
-     * AB테스트설명
+     * A/B테스트 설명
      */
     @Column(name = "ABTEST_DESC")
     private String abtestDesc;

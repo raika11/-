@@ -29,5 +29,5 @@ public interface ABTestCaseService {
      * @param abTestCaseSaveVO 정보
      * @return 작업
      */
-    boolean insertABTestCase(ABTestCaseSaveVO abTestCaseSaveVO);
+    int insertABTestCase(ABTestCaseSaveVO abTestCaseSaveVO);
 }

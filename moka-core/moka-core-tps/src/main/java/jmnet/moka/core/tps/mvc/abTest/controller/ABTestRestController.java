@@ -13,6 +13,7 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseDTO;
 import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseSaveDTO;
 import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseSearchDTO;
 import jmnet.moka.core.tps.mvc.abTest.service.ABTestCaseService;
@@ -123,17 +124,22 @@ public class ABTestRestController extends AbstractCommonController {
         try {
 
             // insert
-            boolean insertOk = abTestCaseService.insertABTestCase(abTestCaseSaveVO);
+            Integer abtestSeq = abTestCaseService.insertABTestCase(abTestCaseSaveVO);
+
+            System.out.println("==================================================");
+            System.out.println("abtestSeq=" + abtestSeq);
+
+            ABTestCaseDTO dto = modelMapper.map(abTestCaseSaveVO, ABTestCaseDTO.class);
 
             String message = "";
-            if (insertOk) {
+            if (abtestSeq != 0) {
                 message = msg("tps.common.success.insert");
+                dto.setAbtestSeq(abtestSeq);
             } else {
                 message = msg("tps.common.error.insert");
             }
 
-            ABTestCaseSaveDTO dto = modelMapper.map(abTestCaseSaveVO, ABTestCaseSaveDTO.class);
-            ResultDTO<ABTestCaseSaveDTO> resultDto = new ResultDTO<>(dto, message);
+            ResultDTO<ABTestCaseDTO> resultDto = new ResultDTO<>(dto, message);
             tpsLogger.success(ActionType.SELECT);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 

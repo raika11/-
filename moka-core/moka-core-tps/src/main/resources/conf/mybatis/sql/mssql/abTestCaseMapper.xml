@@ -163,7 +163,8 @@
       #{datasetSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{title, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{senderName, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{sendDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date}
+      #{sendDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+      #{abtestSeq, mode=OUT, jdbcType=INTEGER, javaType=int}
       )}
   </insert>
 </mapper>

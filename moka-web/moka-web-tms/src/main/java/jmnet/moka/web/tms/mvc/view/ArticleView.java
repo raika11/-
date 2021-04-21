@@ -29,6 +29,7 @@ import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaFunctions;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
+import org.infinispan.commons.util.concurrent.ConcurrentHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,8 @@ public class ArticleView extends AbstractView {
     @Autowired
     private ActionLogger actionLogger;
     private MokaFunctions functions = new MokaFunctions();
+
+    private ConcurrentHashSet requestedSet = new ConcurrentHashSet();
 
     @Override
     protected boolean generatesDownloadContent() {
@@ -95,40 +98,67 @@ public class ArticleView extends AbstractView {
         String cacheType = KeyResolver.CACHE_ARTICLE_MERGE;
         String cacheKey = KeyResolver.makeArticleCacheKey(domainId, articleId);
 
-        try {
-            String cached = null;
-            if (this.cacheManager != null) {
-                cached = this.cacheManager.get(cacheType, cacheKey);
-                if (cached != null) { // cache가 있을 경우
-                    writeArticle(request, response, cached);
-                    actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE,
-                            System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), articleId);
-                    return;
+        String cached = null;
+        // 캐시된 경우
+        if (this.cacheManager != null) {
+            cached = this.cacheManager.get(cacheType, cacheKey);
+            if (cached != null) { // cache가 있을 경우
+                writeArticle(request, response, cached);
+                actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE,
+                        System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), articleId);
+                return;
+            }
+        }
+        // 캐시되지 않은 경우 request collapsing
+        if ( !this.requestedSet.contains(cacheKey)) {
+            try {
+                this.requestedSet.add(cacheKey);
+                templateMerger = this.domainTemplateMerger.getTemplateMerger(domainId);
+                DataLoader loader = templateMerger.getDataLoader();
+                Map<String, Object> paramMap = new HashMap<>();
+                paramMap.put("totalId", articleId);
+                // 기사정보 조회
+                JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE, paramMap, true);
+                Map<String, Object> articleInfo = (Map<String, Object>)jsonResult.get("article");
+                this.convertContent(articleInfo);
+                this.setEPaper(articleInfo,mergeContext);
+                mergeContext.set("article", articleInfo);
+                this.setCodesAndMenus(loader, articleInfo, mergeContext);
+                StringBuilder sb =
+                        templateMerger.merge(MokaConstants.ITEM_ARTICLE_PAGE, this.getArticlePageId(templateMerger, domainId, articleInfo), mergeContext);
+                if (this.cacheManager != null) {
+                    this.cacheManager.set(cacheType, cacheKey, sb.toString());
                 }
+                writeArticle(request, response, sb.toString());
+                actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE,
+                        System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), articleId);
+            } catch (TemplateMergeException | TemplateParseException | DataLoadException e) {
+                e.printStackTrace();
+                actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE,
+                        System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), articleId + " " + e.getMessage());
+            } finally {
+                this.requestedSet.remove(cacheKey);
             }
-            templateMerger = this.domainTemplateMerger.getTemplateMerger(domainId);
-            DataLoader loader = templateMerger.getDataLoader();
-            Map<String, Object> paramMap = new HashMap<>();
-            paramMap.put("totalId", articleId);
-            // 기사정보 조회
-            JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE, paramMap, true);
-            Map<String, Object> articleInfo = (Map<String, Object>)jsonResult.get("article");
-            this.convertContent(articleInfo);
-            this.setEPaper(articleInfo,mergeContext);
-            mergeContext.set("article", articleInfo);
-            this.setCodesAndMenus(loader, articleInfo, mergeContext);
-            StringBuilder sb =
-                    templateMerger.merge(MokaConstants.ITEM_ARTICLE_PAGE, this.getArticlePageId(templateMerger, domainId, articleInfo), mergeContext);
-            if (this.cacheManager != null) {
-                this.cacheManager.set(cacheType, cacheKey, sb.toString());
+        } else {
+            int retryCount = 0;
+            while (cached == null && retryCount < 20) {
+                cached = this.cacheManager.get(cacheType, cacheKey);
+                try {
+                    Thread
+                            .currentThread()
+                            .sleep(100);
+                } catch (InterruptedException e) {
+                    logger.error("request Collapse fail: {}",e);
+                }
+                retryCount++;
             }
-            writeArticle(request, response, sb.toString());
-            actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE,
-                    System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), articleId);
-        } catch (TemplateMergeException | TemplateParseException | DataLoadException e) {
-            e.printStackTrace();
-            actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE,
-                    System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), articleId + " " + e.getMessage());
+            if ( cached != null) {
+                writeArticle(request, response, cached);
+                actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE, System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), articleId);
+            } else {
+                actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE,
+                        System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), articleId + " request collapsing failed" );
+            }
         }
     }
 

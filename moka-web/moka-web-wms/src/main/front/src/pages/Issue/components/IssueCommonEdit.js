@@ -460,6 +460,7 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                         추천 이슈 선택
                     </Button>
                     <RecommendIssueListModal
+                        title="추천 이슈 선택"
                         show={showRecommendIssueListModal}
                         onHide={() => {
                             setShowRecommendIssueListModal(false);

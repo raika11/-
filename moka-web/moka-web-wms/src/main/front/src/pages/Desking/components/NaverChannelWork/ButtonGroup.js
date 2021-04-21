@@ -118,7 +118,7 @@ const ButtonGroup = (props) => {
 
     useEffect(() => {
         let btns = [
-            { title: '임시저장', iconName: 'Send', feather: true, onClick: handleClickSave },
+            { title: '임시저장', iconName: 'Save', feather: true, onClick: handleClickSave },
             { title: '전송', iconName: 'Send', feather: true, onClick: handleClickPublish },
         ];
         setIconButton(btns);

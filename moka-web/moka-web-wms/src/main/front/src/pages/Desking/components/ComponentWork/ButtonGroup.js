@@ -255,7 +255,7 @@ const ButtonGroup = (props) => {
                     <ComponentInfo component={component} className="pr-1" />
                 </Col>
 
-                <Col className="p-0 d-flex align-items-center justify-content-end" xs={4}>
+                <Col className="p-0 d-flex justify-content-end" xs={4}>
                     {/* 최종 전송 상태 표기 */}
                     <StatusBadge
                         lastPublishDt={component.lastPublishDt}
@@ -264,7 +264,7 @@ const ButtonGroup = (props) => {
                         lastSaveNm={component.lastSaveNm}
                         lastSaveId={component.lastSaveId}
                         lastSaveDt={component.lastSaveDt}
-                        className="mr-2"
+                        className="d-flex align-items-center mr-2"
                     />
 
                     {/* 기능 버튼 */}

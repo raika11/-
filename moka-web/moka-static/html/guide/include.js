@@ -103,7 +103,7 @@ var include = {
             document.write('                <li class="nav_item"><a class="nav_link" href="button.html">버튼</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="card.html">카드</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="list_group.html">리스트 그룹</a></li>');
-            document.write('                <li class="nav_item"><a class="nav_link" href="rank.html">많이본기사(rank)</a></li>');
+            // document.write('                <li class="nav_item"><a class="nav_link" href="rank.html">많이본기사(rank)</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="reporter.html">기자</a></li>');
             document.write('            </ul>');
             document.write('        </li>');

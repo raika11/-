@@ -395,7 +395,14 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                             handleChangeValue(e.target);
                         }}
                     />
-                    <Button variant="outline-neutral" style={{ width: 100, height: 31 }} onClick={onDuplicateCheck} disabled={!isDuplicatedTitle}>
+                    <Button
+                        variant="outline-neutral"
+                        style={{ width: 100, height: 31 }}
+                        onClick={() => {
+                            onDuplicateCheck(edit.pkgTitle);
+                        }}
+                        disabled={!isDuplicatedTitle}
+                    >
                         중복 확인
                     </Button>
                 </Col>

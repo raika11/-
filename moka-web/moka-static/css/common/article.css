@@ -360,7 +360,7 @@ font-*,color,text-align,vertical-align, ...
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
-    #scroll_indicator { top: 54px; }
+    #scroll_indicator { top: 59px; }
     /* article_header */
     .byline_bx { display: block; }
     .article_header .datetime .time_bx > .date:nth-last-of-type(2) { display: none; }

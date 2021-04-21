@@ -126,11 +126,12 @@ const ColumnistList = (props) => {
                 cntRef.current += 1;
             }
         }
-    }, [dispatch, getColumnistList, jplusRepRows, show]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [jplusRepRows, show]);
 
     return (
         <div className={clsx('d-flex flex-column h-100', className)}>
-            <Search search={search} onChangeSearchOption={handleSearchOption} onSearch={handleSearch} onReset={handleReset} />
+            <Search jplusRepRows={jplusRepRows} search={search} onChangeSearchOption={handleSearchOption} onSearch={handleSearch} onReset={handleReset} />
             <AgGrid
                 loading={loading}
                 search={search}

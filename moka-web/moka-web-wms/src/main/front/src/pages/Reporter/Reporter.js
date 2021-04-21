@@ -1,6 +1,5 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import { useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
 import clsx from 'clsx';
 import Container from 'react-bootstrap/Container';
@@ -8,7 +7,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
-import { GET_REPORTER } from '@store/reporter';
 import ReporterList from './ReporterList';
 import ReporterEdit from './ReporterEdit';
 
@@ -16,7 +14,6 @@ import ReporterEdit from './ReporterEdit';
  * 기자 관리
  */
 const Reporter = ({ match, displayName }) => {
-    const loading = useSelector(({ loading }) => loading[GET_REPORTER]);
     const matchPoints = useBreakpoint();
 
     return (
@@ -38,15 +35,7 @@ const Reporter = ({ match, displayName }) => {
                 {/* 기자 정보 */}
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
-                        <Route
-                            path={[`${match.path}/:repSeq`]}
-                            exact
-                            render={() => (
-                                <MokaCard title="기자 정보" className="w-100" loading={loading}>
-                                    <ReporterEdit match={match} />
-                                </MokaCard>
-                            )}
-                        />
+                        <Route path={[`${match.path}/:repSeq`]} exact render={() => <ReporterEdit match={match} />} />
                     </Col>
                 )}
 
@@ -56,9 +45,7 @@ const Reporter = ({ match, displayName }) => {
                         exact
                         render={() => (
                             <div className="absolute-top-right h-100 overlay-shadow" style={{ width: 640, zIndex: 2 }}>
-                                <MokaCard title="기자 정보" className="w-100" loading={loading}>
-                                    <ReporterEdit match={match} />
-                                </MokaCard>
+                                <ReporterEdit match={match} />
                             </div>
                         )}
                     />

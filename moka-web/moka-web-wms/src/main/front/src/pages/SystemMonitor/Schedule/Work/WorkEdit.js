@@ -9,7 +9,7 @@ import { MokaCard, MokaInput, MokaInputLabel } from '@/components';
 import { DB_DATEFORMAT, SCHEDULE_PERIOD } from '@/constants';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { invalidListToError } from '@/utils/convertUtil';
-import { initialState, getJob, getJobCdCheck, clearJob, saveJob, deleteJob, getDeleteJobList } from '@/store/schedule';
+import { initialState, getJob, getJobCdCheck, clearJob, saveJob, SAVE_JOB, GET_JOB, deleteJob, getDeleteJobList } from '@/store/schedule';
 import JobContentModal from '../modals/JobContentModal';
 import { REQUIRED_REGEX } from '@/utils/regexUtil';
 
@@ -20,7 +20,7 @@ const WorkEdit = ({ match }) => {
     const history = useHistory();
     const { jobSeq } = useParams();
     const dispatch = useDispatch();
-
+    const loading = useSelector(({ loading }) => loading[SAVE_JOB] || loading[GET_JOB]);
     const genCateRows = useSelector((store) => store.codeMgt.genCateRows);
     const deployServerCode = useSelector((store) => store.schedule.work.deployServerCode);
     const job = useSelector((store) => store.schedule.work.job);
@@ -241,7 +241,6 @@ const WorkEdit = ({ match }) => {
     useEffect(() => {
         // 스토어의 job 데이터를 로컬 state에 셋팅
         setData(job);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [job]);
 
     useEffect(() => {
@@ -295,6 +294,7 @@ const WorkEdit = ({ match }) => {
                     variant: 'negative',
                 },
             ].filter((a) => a)}
+            loading={loading}
         >
             <Form>
                 <Form.Row className="mb-2">

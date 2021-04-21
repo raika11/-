@@ -66,12 +66,18 @@ const propTypes = {
     selectable: PropTypes.arrayOf(PropTypes.string),
     required: PropTypes.bool,
     isInvalid: PropTypes.bool,
+    /**
+     * show일 때 데이터 호출
+     * @default
+     */
+    show: PropTypes.bool,
 };
 const defaultProps = {
     isMulti: false,
     searchIcon: true,
     labelType: 'korname',
     selectable: ['service', 'section', 'content'],
+    show: true,
 };
 
 /**
@@ -93,13 +99,12 @@ const CodeAutocomplete = forwardRef((props, ref) => {
         max,
         selectable,
         required,
+        show,
         isInvalid,
     } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_CODE_KORNAME_LIST]);
     const { search: storeSearch, list: kornameList } = useSelector(({ code }) => code.korname);
-
-    // state
     const [search, setSearch] = useState(initialState.korname.search);
     const [defaultValue, setDefaultValue] = useState(null);
     const [options, setOptions] = useState([]);
@@ -172,11 +177,11 @@ const CodeAutocomplete = forwardRef((props, ref) => {
     }, [storeSearch]);
 
     useEffect(() => {
-        if (!kornameList) {
+        if (!kornameList && show) {
             dispatch(getCodeKornameList(changeKornameSearchOption(search)));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [kornameList, show]);
 
     useEffect(() => {
         if (kornameList) {
@@ -270,6 +275,7 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                     onHide={() => setModalShow(false)}
                     onSave={handleClickSave}
                     selection={isMulti ? 'multiple' : 'single'}
+                    inAutoComplete
                 />
             )}
         </React.Fragment>

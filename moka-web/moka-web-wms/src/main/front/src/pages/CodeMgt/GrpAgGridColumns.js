@@ -14,6 +14,7 @@ export default [
         width: 120,
         tooltipField: 'grpCd',
         cellStyle,
+        cellClass: 'user-select-text',
     },
     {
         headerName: '그룹명',

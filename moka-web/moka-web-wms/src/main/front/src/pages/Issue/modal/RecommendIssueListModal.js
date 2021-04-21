@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { MokaModal } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_RECOMMEND_ISSUE_MODAL_LIST, getIssueListModal, getRecommendIssueModalList, initialState } from '@store/issue';
+import { GET_RECOMMEND_ISSUE_MODAL_LIST, getRecommendIssueModalList, initialState } from '@store/issue';
 import RecommendIssueModalAgGridComponent from '@pages/Issue/components/RecommendIssueModalAgGridComponent';
 import { toIssueListData } from '@store/issue/issueSaga';
 import { RecommedIssueModalSearch } from '@pages/Issue/components/RecommendIssueModalSearch';
@@ -10,12 +10,13 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 
 const defaultPeriod = [''];
-const RecommendIssueListModal = ({ show, onHide, onAdd }) => {
+const RecommendIssueListModal = ({ title, show, onHide, onAdd }) => {
     const loading = useSelector(({ loading }) => loading[GET_RECOMMEND_ISSUE_MODAL_LIST]);
     const [tableLoading, setTableLoading] = useState(false);
     const [search, setSearch] = useState(initialState.search);
     const [total, setTotal] = useState(0);
     const [rowData, setRowData] = useState([]);
+    const pkgDiv = useSelector(({ app }) => app.PACKAGE_DIV);
     const dispatch = useDispatch();
     //검색
     const [period, setPeriod] = useState(defaultPeriod);
@@ -104,7 +105,7 @@ const RecommendIssueListModal = ({ show, onHide, onAdd }) => {
     }, [show]);
 
     return (
-        <MokaModal show={show} onHide={onHide} size="lg" width={1000} bodyClassName="d-flex flex-column" loading={loading} draggable>
+        <MokaModal title={title} show={show} onHide={onHide} size="lg" width={1000} bodyClassName="d-flex flex-column" loading={loading} draggable>
             <RecommedIssueModalSearch
                 search={search}
                 period={period}
@@ -112,18 +113,9 @@ const RecommendIssueListModal = ({ show, onHide, onAdd }) => {
                 onSearch={handleSearch}
                 onReset={handleReset}
                 loading={loading}
-                //pkgDiv={pkgDiv}
+                pkgDiv={pkgDiv}
             />
-            <RecommendIssueModalAgGridComponent
-                total={total}
-                onRowClicked={() => {
-                    console.log('onRowClick');
-                }}
-                searchOptions={search}
-                rowData={rowData}
-                onChangeSearch={changeTableSearchOption}
-                loading={tableLoading}
-            />
+            <RecommendIssueModalAgGridComponent total={total} searchOptions={search} rowData={rowData} onChangeSearch={changeTableSearchOption} loading={tableLoading} />
         </MokaModal>
     );
 };

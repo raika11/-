@@ -55,10 +55,10 @@ const IssueEdit = ({ reporters }) => {
         );
     };
 
-    const handleClickDuplicateCheck = () => {
+    const handleClickDuplicateCheck = (title) => {
         dispatch(
             existsIssueTitle({
-                pkgTitle: edit.pkgTitle,
+                pkgTitle: title,
                 callback: (response) => {
                     const { header, body } = response;
                     if (header.success) {
@@ -74,11 +74,11 @@ const IssueEdit = ({ reporters }) => {
         );
     };
 
-    const handleChangeDebounceValue = useDebounce(handleChangeValue, 500);
-    const handleChangeArrayObjectDebounceValue = useDebounce(handleChangeArrayObjectValue, 500);
+    const handleChangeDebounceValue = useDebounce(handleChangeValue, 100);
+    const handleChangeArrayObjectDebounceValue = useDebounce(handleChangeArrayObjectValue, 100);
     const handleChangeEdit = useDebounce((value) => {
         setEdit(value);
-    }, 500);
+    }, 100);
 
     const handleClickSave = () => {
         if (isDuplicatedTitle) {

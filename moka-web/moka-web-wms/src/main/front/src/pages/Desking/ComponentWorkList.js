@@ -218,7 +218,8 @@ const ComponentWorkList = (props) => {
     useEffect(() => {
         // 네이버채널 => CHANNEL_TP 조회
         dispatch(getChannelTp());
-    }, [dispatch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <React.Fragment>

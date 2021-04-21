@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.abTest.dto;
+package jmnet.moka.core.tps.mvc.abtest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
@@ -7,7 +7,7 @@ import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
-import jmnet.moka.core.tps.mvc.abTest.vo.ABTestCaseVO;
+import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -27,7 +27,7 @@ import org.apache.ibatis.type.Alias;
 @EqualsAndHashCode(callSuper = true)
 @Alias("ABTestCaseSearchDTO")
 @ApiModel("ABTest 목록 검색 DTO")
-public class ABTestCaseSearchDTO extends SearchDTO {
+public class AbTestCaseSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1L;
 
@@ -56,7 +56,7 @@ public class ABTestCaseSearchDTO extends SearchDTO {
     private Long areaSeq = 0l;
 
     /**
-     * AB테스트 목표(T:디자인 D:데이터)
+     * A/B테스트 목표(T:디자인 D:데이터)
      */
     @ApiModelProperty("테스트대상(T:디자인 D:데이터)")
     private String abtestPurpose;
@@ -76,7 +76,7 @@ public class ABTestCaseSearchDTO extends SearchDTO {
     private String endDt;
 
     /**
-     * AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
+     * A/B테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
     @ApiModelProperty("유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)")
     private String abtestType;
@@ -93,8 +93,8 @@ public class ABTestCaseSearchDTO extends SearchDTO {
     @ApiModelProperty("설명")
     private String abtestDesc;
 
-    public ABTestCaseSearchDTO() {
-        super(ABTestCaseVO.class, "abtestSeq,desc");
+    public AbTestCaseSearchDTO() {
+        super(AbTestCaseVO.class, "abtestSeq,desc");
         super.setUseTotal(MokaConstants.YES);
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
         super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);

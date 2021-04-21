@@ -260,4 +260,13 @@ public class MokaConstants {
 
     // 푸시 유형 - 게시판 답변
     public static final String PUSH_TYPE_BOARD_REPLY = "B";
+
+
+    /**
+     * 상태(임시T/진행Y/대기P/종료Q) - AB테스트 정의
+     */
+    public static final String ABTEST_STATUS_T = "T"; //임시
+    public static final String ABTEST_STATUS_Y = "Y"; //진행
+    public static final String ABTEST_STATUS_P = "P"; //대기
+    public static final String ABTEST_STATUS_Q = "Q"; //종료
 }

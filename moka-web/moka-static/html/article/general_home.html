@@ -47,12 +47,12 @@
             <div class="sticky_menu">
                 <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="sm_hidden">북마크</span></button>
                 <button type="button" class="btn_comment"><i class="ico_comment"></i><span class="sm_hidden">댓글</span><span class="comment_cnt">12</span></button>
-                <button type="button" class="btn_share"><i class="ico_share"></i><span class="sm_hidden">공유</span></button>
-                <button type="button" class="btn_fontsize"><i class="ico_fontsize"></i><span class="sm_hidden">글자크기</span></button>
+                <button type="button" class="btn_share" onclick="openLayer(layer_share);" ><i class="ico_share"></i><span class="sm_hidden">공유</span></button>
+                <button type="button" class="btn_fontsize" onclick="openLayer(layer_fontsize);" ><i class="ico_fontsize"></i><span class="sm_hidden">글자크기</span></button>
                 <button type="button" class="btn_print"><i class="ico_print"></i><span class="sm_hidden">인쇄</span></button>
                 <p class="reader_area sm_hidden"><span class="cnt">14</span><span class="sm_hidden">읽음</span></p>
 
-                <div class="layer_popup layer_share" style="display:block;" id=""><!-- 여기에 개별 클래스 추가 -->
+                <div class="layer_popup layer_share" id="layer_share"><!-- 여기에 개별 클래스 추가 -->
                     <div class="layer_header">
                         <strong class="layer_title">공유</strong>
                     </div>
@@ -71,7 +71,7 @@
                     <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
                 </div>
                 
-                <div class="layer_popup layer_fontsize" style="display:block;" id=""><!-- 여기에 개별 클래스 추가 -->
+                <div class="layer_popup layer_fontsize" id="layer_fontsize"><!-- 여기에 개별 클래스 추가 -->
                     <div class="layer_header">
                         <strong class="layer_title">글자크기 설정</strong>
                     </div>

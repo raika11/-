@@ -92,7 +92,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                             name="status"
                             id="letter-status-p"
                             className="mr-2"
-                            inputProps={{ label: '임시 저장', custom: true, checked: temp.status === 'P' }}
+                            inputProps={{ label: '임시저장', custom: true, checked: temp.status === 'P' }}
                             disabled={storeLetter.status !== 'P' ? true : false}
                             onChange={handleChangeValue}
                         />

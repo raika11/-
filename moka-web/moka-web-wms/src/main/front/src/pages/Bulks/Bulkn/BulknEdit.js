@@ -81,13 +81,13 @@ const BulknEdit = (props) => {
 
     const [tempButton, setTempButton] = useState(false);
 
-    // 약물 수정 삭제 모달 창.
+    // 약물 수정 삭제 모달 창
     // 사용안함.
     // const handleClickSpecialCharModalButton = () => {
     //     setModalMShow(true);
     // };
 
-    // 모달창 스토어에 문구들과 상태값 전달.
+    // 모달창 스토어에 문구들과 상태값 전달
     const handlePreviewModalButton = (e) => {
         dispatch(
             showPreviewModal({
@@ -98,7 +98,7 @@ const BulknEdit = (props) => {
         );
     };
 
-    // 문구 정보들 값 변경시 state 에 저장.
+    // 문구 정보들 값 변경시 state 에 저장
     const handleChangeBulkinputBox = (e, index) => {
         const { name, value } = e.target;
 
@@ -121,12 +121,12 @@ const BulknEdit = (props) => {
         );
     };
 
-    // 문구 저장.
+    // 문구 저장
     const handleClickSaveButton = () => {
         handleSaveBulkArticle('publish');
     };
 
-    // 문구 임시 저장.
+    // 문구 임시저장
     const handleClickTempSaveButton = () => {
         handleSaveBulkArticle('save');
     };
@@ -337,7 +337,7 @@ ${bulkArticleRow
                 { text: 'W3C 검사', variant: 'outline-neutral', onClick: () => handleClickW3ccheck(), className: 'mr-1' },
                 { text: '미리보기', variant: 'outline-neutral', onClick: (e) => handlePreviewModalButton(e), className: 'mr-1' },
                 { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-1' }, // , useAuth: true
-                { text: '임시저장', variant: 'gray-900', onClick: () => handleClickTempSaveButton(), className: 'mr-1', disabled: tempButton === true ? true : false }, //useAuth: true
+                { text: '임시저장', variant: 'positive-a', onClick: () => handleClickTempSaveButton(), className: 'mr-1', disabled: tempButton === true ? true : false }, //useAuth: true
                 { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton() },
             ]}
         >

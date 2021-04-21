@@ -21,10 +21,10 @@ const AutoEdit = ({ match }) => {
     const renderFooter = useCallback(() => {
         return (
             <React.Fragment>
-                <Button variant="positive-a" className="mr-1">
+                <Button variant="positive" className="mr-1">
                     저장
                 </Button>
-                <Button variant="positive" className="mr-1">
+                <Button variant="positive-a" className="mr-1">
                     임시저장
                 </Button>
                 <Button variant="negative" onClick={() => history.push(match.path)}>

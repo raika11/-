@@ -111,7 +111,7 @@ const NewsLetterSetInfo = ({ temp, setTemp, onChangeValue }) => {
                                 />
                                 <NewsLetterLayoutModal show={layoutModal} onHide={() => setLayoutModal(false)} />
                             </div>
-                            <p className="mb-0 color-primary">※ 레이아웃이 미정인 경우 상품은 자동 임시 저장 상태 값으로 지정됩니다.</p>
+                            <p className="mb-0 color-primary">※ 레이아웃이 미정인 경우 상품은 자동 임시저장 상태 값으로 지정됩니다.</p>
                         </div>
                     </>
                 )}

@@ -598,21 +598,21 @@ body {
     &.work {
         .component-title {
             color: $positive;
-            font-weight: bold;
+            font-weight: $font-weight-bold;
         }
     }
 
     &.save {
         .component-title {
             color: $gray-900;
-            font-weight: bold;
+            font-weight: $font-weight-bold;
         }
     }
 
     &.publish {
         .component-title {
             color: $info;
-            font-weight: bold;
+            font-weight: $font-weight-bold;
         }
     }
 

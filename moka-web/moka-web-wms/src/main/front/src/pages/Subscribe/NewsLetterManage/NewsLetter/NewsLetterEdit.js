@@ -80,7 +80,7 @@ const NewsLetterEdit = ({ match }) => {
                     className: 'mr-1',
                 },
                 {
-                    text: '임시 저장',
+                    text: '임시저장',
                     variant: 'positive-a',
                     className: 'mr-1',
                 },

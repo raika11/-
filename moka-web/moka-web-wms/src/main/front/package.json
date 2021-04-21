@@ -127,7 +127,7 @@
         "react-dom": "^16.13.1",
         "react-draggable": "^4.4.3",
         "react-dropzone": "^11.2.0",
-        "react-feather": "^2.0.8",
+        "react-feather": "^2.0.9",
         "react-helmet": "^6.1.0",
         "react-hook-form": "^6.10.1",
         "react-hotkeys-hook": "^3.0.3",

@@ -3,8 +3,8 @@ import { MokaIcon } from '@components';
 
 const DropdownToggle = forwardRef(({ onClick, id }, ref) => {
     return (
-        <div ref={ref} className="px-2" onClick={onClick} id={id}>
-            <MokaIcon iconName="fal-ellipsis-v-alt" />
+        <div ref={ref} onClick={onClick} id={id} className="h-100 d-flex align-items-center">
+            <MokaIcon iconName="MoreVertical" feather width={16} height={16} />
         </div>
     );
 });

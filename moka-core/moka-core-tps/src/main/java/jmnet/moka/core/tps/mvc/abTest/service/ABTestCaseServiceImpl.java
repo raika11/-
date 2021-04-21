@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.abTest.service;
 
 import java.util.List;
 import javax.transaction.Transactional;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.abTest.dto.ABTestCaseSearchDTO;
 import jmnet.moka.core.tps.mvc.abTest.mapper.ABTestCaseMapper;
 import jmnet.moka.core.tps.mvc.abTest.vo.ABTestCaseSaveVO;
@@ -43,12 +44,18 @@ public class ABTestCaseServiceImpl implements ABTestCaseService {
 
     @Override
     @Transactional
-    public boolean insertABTestCase(ABTestCaseSaveVO abTestCaseSaveVO) {
-        int chk = abTestCaseMapper.insertABTestCase(abTestCaseSaveVO);
-        if (chk == 0) {
-            return false;
+    public int insertABTestCase(ABTestCaseSaveVO abTestCaseSaveVO) {
+        int abtestSeq = abTestCaseMapper.insertABTestCase(abTestCaseSaveVO);
+
+        int rtn;
+
+        if (abtestSeq == -1 && McpString.isEmpty(abTestCaseSaveVO.getAbtestSeq())) {
+            rtn = abtestSeq;
         } else {
-            return true;
+            rtn = abTestCaseSaveVO.getAbtestSeq();
         }
+        return rtn;
+
+
     }
 }

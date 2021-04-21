@@ -21,7 +21,7 @@ export default [
         flex: 1,
         tooltipField: 'unescapeTitle',
         cellRendererFramework: (row) => <TitleRenderer {...row} />,
-        cellStyle: { ...cellStyle, paddingTop: '4px', paddingBottom: '4px' },
+        cellStyle: { ...cellStyle, paddingTop: '6px', paddingBottom: '6px' },
     },
     {
         headerName: '등록일',

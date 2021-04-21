@@ -31,6 +31,12 @@ import org.apache.ibatis.type.Alias;
 public class ABTestCaseSaveVO {
 
     /**
+     * ABTest 일련번호
+     */
+    @Column(name = "ABTEST_SEQ")
+    private Integer abtestSeq;
+
+    /**
      * AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
     @Column(name = "ABTEST_TYPE")
@@ -157,6 +163,60 @@ public class ABTestCaseSaveVO {
     private Date modDt;
 
     /**
+     * AB테스트제목
+     */
+    @Column(name = "ABTEST_TITLE")
+    private String abtestTitle;
+
+    /**
+     * AB테스트설명
+     */
+    @Column(name = "ABTEST_DESC")
+    private String abtestDesc;
+
+    /**
+     * AB테스트 그룹생성 방식(R:랜덤, S:고정) / TB_ABTEST_GRP(AB테스트 그룹) ABTEST_GRP_METHOD
+     */
+    @Column(name = "ABTEST_GRP_METHOD")
+    private String abtestGrpMethod = "R";
+
+    /**
+     * KPI달성율(A) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
+     */
+    @Column(name = "KPI_VALUE_A")
+    private Long kpiValueA = 0L;
+
+    /**
+     * KPI달성율(B) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
+     */
+    @Column(name = "KPI_VALUE_B")
+    private Long kpiValueB = 0L;
+
+    /**
+     * 서비스기사ID(JAM설계경우) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
+     */
+    @Column(name = "TOTAL_ID")
+    private String totalId;
+    /**
+     * 화면편집파트(T:제목,L:리드문,I:이미지,R;관련기사) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
+     */
+    @Column(name = "DESKING_PART")
+    private String deskingPart;
+
+    /**
+     * 템플릿SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT)
+     */
+    @Column(name = "TEMPLATE_SEQ")
+    private Long templateSeq = 0L;
+
+    /**
+     * 데이터셋SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT)
+     */
+    @Column(name = "DATASET_SEQ")
+    private Long datasetSeq = 0L;
+
+
+    /**
      * 로그인 여부(전체:`, 로그인:Y, 비로그인 : N)
      */
     @Column(name = "LOGIN_YN")
@@ -239,60 +299,7 @@ public class ABTestCaseSaveVO {
      */
     @Column(name = "UTM_CONTENT")
     private String utmContent;
-
-    /**
-     * AB테스트제목
-     */
-    @Column(name = "ABTEST_TITLE")
-    private String abtestTitle;
-
-    /**
-     * AB테스트설명
-     */
-    @Column(name = "ABTEST_DESC")
-    private String abtestDesc;
-
-    /**
-     * AB테스트 그룹생성 방식(R:랜덤, S:고정) / TB_ABTEST_GRP(AB테스트 그룹) ABTEST_GRP_METHOD
-     */
-    @Column(name = "ABTEST_GRP_METHOD")
-    private String abtestGrpMethod = "R";
-
-    /**
-     * KPI달성율(A) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
-     */
-    @Column(name = "KPI_VALUE_A")
-    private Long kpiValueA = 0L;
-
-    /**
-     * KPI달성율(B) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
-     */
-    @Column(name = "KPI_VALUE_B")
-    private Long kpiValueB = 0L;
-
-    /**
-     * 서비스기사ID(JAM설계경우) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
-     */
-    @Column(name = "TOTAL_ID")
-    private String totalId;
-    /**
-     * 화면편집파트(T:제목,L:리드문,I:이미지,R;관련기사) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
-     */
-    @Column(name = "DESKING_PART")
-    private String deskingPart;
-
-    /**
-     * 템플릿SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT)
-     */
-    @Column(name = "TEMPLATE_SEQ")
-    private Long templateSeq = 0L;
-
-    /**
-     * 데이터셋SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT)
-     */
-    @Column(name = "DATASET_SEQ")
-    private Long datasetSeq = 0L;
-
+    
     /**
      * 제목(JAM 또는 뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT)
      */

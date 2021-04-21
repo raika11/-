@@ -35,12 +35,11 @@ export const columnDefs = [
             return params.data.rel ? 2 : 0;
         },
         cellClassRules: cellClassRules,
-        cellStyle: { fontSize: '12px' },
     },
     {
         colId: 'checkbox',
-        width: 30,
-        maxWidth: 30,
+        width: 24,
+        maxWidth: 24,
         checkboxSelection: true,
         suppressMenu: true,
         headerCheckboxSelection: true,
@@ -57,14 +56,13 @@ export const columnDefs = [
         },
         cellRenderer: 'editor',
         cellClassRules: cellClassRules,
-        cellStyle: { fontSize: '12px' },
         suppressKeyboardEvent: suppressKeyboardEvent,
     },
     {
         field: 'contentOrdEx',
-        width: 24,
+        width: 25,
+        maxWidth: 25,
         cellClassRules: cellClassRules,
-        cellStyle: { fontSize: '12px' },
     },
     {
         width: 42,
@@ -97,10 +95,9 @@ export const naverChannelColumnDefs = [
     },
     {
         field: 'contentOrdEx',
-        width: 26,
-        maxWidth: 26,
+        width: 25,
+        maxWidth: 25,
         cellClassRules: cellClassRules,
-        cellStyle: { fontSize: '12px' },
     },
     {
         width: 42,

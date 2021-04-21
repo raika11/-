@@ -409,7 +409,7 @@ const DeskingWorkAgGrid = ({
      * @param {object} params ag-grid instance
      */
     const getRowHeight = useCallback((params) => {
-        return params.data.rel ? 42 : 56;
+        return params.data.rel ? 42 : 60;
     }, []);
 
     /**

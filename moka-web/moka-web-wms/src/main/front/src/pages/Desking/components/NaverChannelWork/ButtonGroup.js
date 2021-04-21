@@ -118,8 +118,8 @@ const ButtonGroup = (props) => {
 
     useEffect(() => {
         let btns = [
-            { title: '임시저장', iconName: 'fal-save', onClick: handleClickSave },
-            { title: '전송', iconName: 'fal-share-square', onClick: handleClickPublish },
+            { title: '임시저장', iconName: 'Send', feather: true, onClick: handleClickSave },
+            { title: '전송', iconName: 'Send', feather: true, onClick: handleClickPublish },
         ];
         setIconButton(btns);
     }, [handleClickSave, handleClickPublish, viewN, component.dataType]);
@@ -145,11 +145,14 @@ const ButtonGroup = (props) => {
                     />
 
                     {/* 기능 버튼 */}
-                    {iconButton.map((icon, idx) => (
-                        <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="work-btn mr-2" onClick={icon.onClick}>
-                            <MokaIcon iconName={icon.iconName} />
-                        </MokaOverlayTooltipButton>
-                    ))}
+                    {iconButton.map((icon, idx) => {
+                        const { title, onClick, iconName, ...rest } = icon;
+                        return (
+                            <MokaOverlayTooltipButton key={idx} tooltipText={title} variant="white" className="work-btn mr-2" onClick={onClick}>
+                                <MokaIcon iconName={iconName} {...rest} />
+                            </MokaOverlayTooltipButton>
+                        );
+                    })}
 
                     {/* 드롭다운 메뉴 */}
                     <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="work-btn">

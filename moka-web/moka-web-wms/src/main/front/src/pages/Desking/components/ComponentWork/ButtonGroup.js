@@ -237,10 +237,10 @@ const ButtonGroup = (props) => {
     useEffect(() => {
         let btns = [
             // { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModalShow(true) },
-            { title: '임시저장', iconName: 'fal-save', onClick: handleClickSave },
-            { title: '전송', iconName: 'fal-share-square', onClick: handleClickPublish },
+            { title: '임시저장', iconName: 'Save', feather: true, onClick: handleClickSave },
+            { title: '전송', iconName: 'Send', feather: true, onClick: handleClickPublish },
         ];
-        if (viewN) btns = [{ title: '저장', iconName: 'fal-save', onClick: handleClickSavePublish }];
+        if (viewN) btns = [{ title: '저장', iconName: 'Save', feather: true, onClick: handleClickSavePublish }];
         if (component.dataType === DATA_TYPE_FORM) btns = [];
 
         setIconButton(btns);
@@ -268,11 +268,14 @@ const ButtonGroup = (props) => {
                     />
 
                     {/* 기능 버튼 */}
-                    {iconButton.map((icon, idx) => (
-                        <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="work-btn mr-2" onClick={icon.onClick}>
-                            <MokaIcon iconName={icon.iconName} />
-                        </MokaOverlayTooltipButton>
-                    ))}
+                    {iconButton.map((icon, idx) => {
+                        const { title, onClick, iconName, ...rest } = icon;
+                        return (
+                            <MokaOverlayTooltipButton key={idx} tooltipText={title} variant="white" className="work-btn mr-2" onClick={onClick}>
+                                <MokaIcon iconName={iconName} {...rest} />
+                            </MokaOverlayTooltipButton>
+                        );
+                    })}
 
                     {/* 폼일 경우 폼 편집 버튼 노출 2020.12.08 폼관련 주석처리, 추후 진행 */}
                     {/* {component.dataType === DATA_TYPE_FORM && (
@@ -283,7 +286,7 @@ const ButtonGroup = (props) => {
 
                     {/* 드롭다운 메뉴 */}
                     <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="work-btn">
-                        <Dropdown style={{ position: 'unset' }}>
+                        <Dropdown className="h-100 d-flex align-items-center" style={{ position: 'unset' }}>
                             <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
                             <Dropdown.Menu>{createDropdownItem()}</Dropdown.Menu>
                         </Dropdown>

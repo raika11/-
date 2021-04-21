@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import * as Icon from 'react-feather';
 
 import {
     faAngleDoubleLeft as falAngleDoubleLeft,
@@ -184,37 +185,48 @@ const propTypes = {
      * className
      */
     className: PropTypes.string,
+    /**
+     * feather 아이콘인지, feather 아이콘이면 react-reather에서 그림
+     * @default
+     */
+    feather: PropTypes.bool,
 };
-const defaultProps = {};
+const defaultProps = {
+    feather: false,
+};
 
 /**
  * fontawesome 아이콘 라이브러리
  */
 const MokaIcon = (props) => {
-    const { iconName, className, ...rest } = props;
+    const { iconName, className, feather, ...rest } = props;
 
-    if (typeof iconName === 'string') {
-        const prefix = iconName.slice(0, 4);
-        const rIconName = iconName.slice(4, iconName.length);
-        let iconArray = ['fal', iconName];
+    if (!feather) {
+        if (typeof iconName === 'string') {
+            const prefix = iconName.slice(0, 4);
+            const rIconName = iconName.slice(4, iconName.length);
+            let iconArray = ['fal', iconName];
 
-        if (prefix === 'fal-') {
-            iconArray = ['fal', rIconName];
-        } else if (prefix === 'fas-') {
-            iconArray = ['fas', rIconName];
-        } else if (prefix === 'far-') {
-            iconArray = ['far', rIconName];
-        } else if (prefix === 'fab-') {
-            iconArray = ['fab', rIconName];
-        } else if (prefix === 'fad-') {
-            iconArray = ['fad', rIconName];
+            if (prefix === 'fal-') {
+                iconArray = ['fal', rIconName];
+            } else if (prefix === 'fas-') {
+                iconArray = ['fas', rIconName];
+            } else if (prefix === 'far-') {
+                iconArray = ['far', rIconName];
+            } else if (prefix === 'fab-') {
+                iconArray = ['fab', rIconName];
+            } else if (prefix === 'fad-') {
+                iconArray = ['fad', rIconName];
+            }
+
+            return <FontAwesomeIcon icon={iconArray} className={className} {...rest} />;
+        } else if (Array.isArray(iconName)) {
+            return <FontAwesomeIcon icon={iconName} {...rest} />;
         }
-
-        return <FontAwesomeIcon icon={iconArray} className={className} {...rest} />;
-    } else if (Array.isArray(iconName)) {
-        return <FontAwesomeIcon icon={iconName} {...rest} />;
+    } else {
+        const FeatherIcon = Icon[iconName];
+        return <FeatherIcon className={className} strokeWidth={1.5} {...rest} />;
     }
-
     return null;
 };
 

@@ -85,8 +85,6 @@
       #{parentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{content, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string}

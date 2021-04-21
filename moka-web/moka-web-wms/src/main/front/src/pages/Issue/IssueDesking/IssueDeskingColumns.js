@@ -5,10 +5,11 @@ const suppressKeyboardEvent = () => true;
 const artColumnDefs = [
     {
         rowDrag: true,
-        width: 24,
-        maxWidth: 24,
+        width: 28,
+        maxWidth: 28,
         suppressMenu: true,
         rowDragText: (params) => params.rowNode.data.title,
+        cellClass: 'ag-content-center-cell',
     },
     {
         field: 'title',
@@ -34,11 +35,15 @@ const packetColumnDefs = [
         maxWidth: 24,
         suppressMenu: true,
         rowDragText: (params) => params.rowNode.data.title,
+        cellClass: 'ag-content-center-cell',
     },
     {
         field: 'title',
         flex: 1,
         cellRendererFramework: PacketRenderer,
+        cellStyle: {
+            paddingLeft: '8px',
+        },
         suppressKeyboardEvent,
     },
 ];
@@ -50,6 +55,7 @@ const moviePhotoColumnDefs = [
         maxWidth: 24,
         suppressMenu: true,
         rowDragText: (params) => params.rowNode.data.title,
+        cellClass: 'ag-content-center-cell',
     },
     {
         field: 'title',

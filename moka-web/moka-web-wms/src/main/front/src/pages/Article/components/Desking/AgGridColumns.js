@@ -15,6 +15,7 @@ export default [
             }
             return params.rowNode.data.artTitle;
         },
+        cellClass: 'ag-content-center-cell',
     },
     {
         colId: 'checkbox',

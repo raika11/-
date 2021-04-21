@@ -268,21 +268,4 @@
     </keys>
   </api>
 
-  <!--더오래 인기있는 기사 조회
-  https://static.joins.com/joongang_15re/scripts/data/sonagi/xml/article_right_sonagi_retirement.xml
-  -->
-  <api id="stat.retirement" method="get" expire="5s">
-    <description>더오래 인기 많은 기사를 조회한다.</description>
-    <parameter>
-      <url desc="URL">^.{0,1000}$</url>
-    </parameter>
-    <request type="module" methodName="getXmlLoad">
-      jmnet.moka.web.dps.module.UrlModule
-    </request>
-    <keys>
-      url
-      #paging
-    </keys>
-  </api>
-
 </apiConfig>

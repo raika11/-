@@ -32,13 +32,23 @@ public class ModuleRequestHandler implements RequestHandler {
 
     private HashMap<String, ModuleInterface> moduleMap = new HashMap<String, ModuleInterface>(16);
 
+    private HttpProxy httpProxy;
+
     @Autowired
     public ModuleRequestHandler(GenericApplicationContext appContext) {
         this.appContext = appContext;
     }
 
     public HttpProxy getHttpProxy() {
-        return (HttpProxy) appContext.getBean(HttpProxyConfiguration.HTTP_PROXY);
+        if (this.httpProxy == null) {
+            synchronized (this) {
+                if (this.httpProxy != null) {
+                    return this.httpProxy;
+                }
+                this.httpProxy = (HttpProxy) appContext.getBean(HttpProxyConfiguration.HTTP_PROXY);
+            }
+        }
+        return this.httpProxy;
     }
 
     @Override

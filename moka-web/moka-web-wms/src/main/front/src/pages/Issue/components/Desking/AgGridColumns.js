@@ -13,7 +13,7 @@ export default [
         rowDragText: (params) => {
             return params.rowNode.data.pkgTitle;
         },
-        cellStyle,
+        cellClass: 'ag-content-center-cell',
     },
     {
         headerName: 'ID',

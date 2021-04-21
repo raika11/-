@@ -1,17 +1,17 @@
 import React from 'react';
 import RelationPollSortItemRenderer from '@pages/Survey/Poll/components/RelationPollSortItemRenderer';
 
-const suppressKeyboardEvent = (params) => true;
+const suppressKeyboardEvent = () => true;
 
 export const columnDefs = [
     {
         rowDrag: true,
-        width: 24,
+        width: 28,
+        maxWidth: 28,
         suppressMenu: true,
+        rowDragText: (params) => params.rowNode.data.item.title,
         cellStyle: { lineHeight: 'normal' },
-        rowDragText: (params) => {
-            return params.rowNode.data.item.title;
-        },
+        cellClass: 'ag-content-center-cell',
     },
     {
         field: 'item',

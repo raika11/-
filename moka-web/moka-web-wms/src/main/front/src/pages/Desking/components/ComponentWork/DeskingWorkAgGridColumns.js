@@ -13,7 +13,8 @@ const suppressKeyboardEvent = () => true;
 export const columnDefs = [
     {
         rowDrag: true,
-        width: 24,
+        width: 30,
+        maxWidth: 30,
         suppressMenu: true,
         rowDragText: (params, dragItemCount) => {
             if (dragItemCount > 1) {
@@ -22,10 +23,10 @@ export const columnDefs = [
             }
             return params.rowNode.data.title;
         },
-        cellStyle: {
-            paddingLeft: '8px',
+        cellClassRules: {
+            ...cellClassRules,
+            'ag-content-center-cell': () => true,
         },
-        cellClassRules: cellClassRules,
     },
     {
         field: 'relOrdEx',
@@ -34,7 +35,6 @@ export const columnDefs = [
             return params.data.rel ? 2 : 0;
         },
         cellClassRules: cellClassRules,
-        cellStyle: { fontSize: '12px' },
     },
     {
         colId: 'checkbox',
@@ -56,14 +56,13 @@ export const columnDefs = [
         },
         cellRenderer: 'editor',
         cellClassRules: cellClassRules,
-        cellStyle: { fontSize: '12px' },
         suppressKeyboardEvent: suppressKeyboardEvent,
     },
     {
         field: 'contentOrdEx',
-        width: 24,
+        width: 25,
+        maxWidth: 25,
         cellClassRules: cellClassRules,
-        cellStyle: { fontSize: '12px' },
     },
     {
         width: 42,
@@ -88,18 +87,17 @@ export const columnDefs = [
 export const naverChannelColumnDefs = [
     {
         rowDrag: true,
-        width: 24,
+        width: 28,
+        maxWidth: 28,
         suppressMenu: true,
         rowDragText: (params) => params.rowNode.data.title,
-        cellStyle: {
-            paddingLeft: '8px',
-        },
+        cellClass: 'ag-content-center-cell',
     },
     {
         field: 'contentOrdEx',
-        width: 24,
+        width: 25,
+        maxWidth: 25,
         cellClassRules: cellClassRules,
-        cellStyle: { fontSize: '12px' },
     },
     {
         width: 42,

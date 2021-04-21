@@ -1,12 +1,13 @@
 export const columnDefs = [
     {
         rowDrag: true,
-        width: 24,
-        minWidth: 24,
+        width: 28,
+        minWidth: 28,
         suppressMenu: true,
         rowDragText: (params) => {
             return params.rowNode.data.menuDisplayNm;
         },
+        cellClass: 'ag-content-center-cell',
     },
     {
         headerName: '번호',

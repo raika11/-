@@ -4,9 +4,10 @@ export default [
     {
         headerName: '',
         rowDrag: true,
-        width: 24,
-        maxWidth: 24,
+        width: 28,
+        maxWidth: 28,
         rowDragText: (params) => params.rowNode.data.catNm,
+        cellClass: 'ag-content-center-cell',
     },
     {
         headerName: '',

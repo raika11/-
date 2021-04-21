@@ -34,7 +34,12 @@ public class EditFormRepositorySupportImpl extends TpsQueryDslRepositorySupport 
     @EntityGraph(attributePaths = {"editFormParts"}, type = EntityGraph.EntityGraphType.LOAD)
     public Page<EditForm> findAllEditForm(SearchDTO searchDTO) {
         QEditForm qEditForm = QEditForm.editForm;
-        JPQLQuery<EditForm> query = from(qEditForm);
+        JPQLQuery<EditForm> query = from(qEditForm).distinct();
+
+        // 검색어
+        if (McpString.isNotEmpty(searchDTO.getKeyword())) {
+            query.where(qEditForm.formName.contains(searchDTO.getKeyword()));
+        }
 
         if (McpString.isYes(searchDTO.getUseTotal())) {
             query = Objects

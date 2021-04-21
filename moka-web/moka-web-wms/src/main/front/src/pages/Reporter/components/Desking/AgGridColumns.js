@@ -10,12 +10,12 @@ export default [
     {
         headerName: '',
         rowDrag: true,
-        width: 24,
-        minWidth: 24,
+        width: 28,
+        minWidth: 28,
         rowDragText: (params) => {
             return params.rowNode.data.repName;
         },
-        cellStyle,
+        cellClass: 'ag-content-center-cell',
     },
     {
         headerName: '번호',

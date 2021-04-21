@@ -15,9 +15,12 @@ import jmnet.moka.common.template.merge.Functions;
 import jmnet.moka.common.utils.KoreanCalender;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.merge.element.AdMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -29,6 +32,7 @@ import jmnet.moka.core.tms.merge.item.PageItem;
  * @author kspark
  */
 public class MokaFunctions extends Functions {
+	private static final Logger logger = LoggerFactory.getLogger(MokaFunctions.class);
 	/**
 	 * cloc 코드를 생성한다.
 	 * @param urlObj
@@ -246,6 +250,23 @@ public class MokaFunctions extends Functions {
 		String day = splits[0].substring(6,8);
 		return "음력 " + (month.startsWith("0")? month.substring(1): month) +". "
 				+ (day.startsWith("0")? day.substring(1): day) + (splits[1].equals("0")?"":"[윤]");
+	}
+
+	public String ovpTime(String duration) {
+		try {
+			int totalMs = Integer.parseInt(duration);
+			int totalSeconds = (int)totalMs/1000;
+			int seconds = totalSeconds % 60;
+			int totalMinutes = (int)(totalSeconds / 60);
+			if (totalMinutes < 60) {
+				return String.format("%d:%02d",totalMinutes, seconds);
+			} else {
+				return String.format("%d:%02d:%02d",(int)(totalMinutes / 60), totalMinutes % 60, seconds);
+			}
+		} catch (NumberFormatException e) {
+			logger.error("ovpTime number Exception:{}",duration);
+		}
+		return "";
 	}
 
 }

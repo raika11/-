@@ -6,14 +6,13 @@ const cellStyle = {
 
 export default [
     {
-        headerName: '',
         rowDrag: true,
-        width: 24,
-        minWidth: 24,
+        width: 28,
+        maxWidth: 28,
         rowDragText: (params) => {
             return params.rowNode.data.columnistNm;
         },
-        cellStyle,
+        cellClass: 'ag-content-center-cell',
     },
     {
         headerName: '기자번호',

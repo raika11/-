@@ -505,7 +505,9 @@ dl.date dd { margin-left: 6px; }
 
 /* 상태 */
 .btn_default {border-color:rgba(202,202,202,.8);}
+.btn_default_bg {background-color:#999;color:#fff;font-weight:700;}
 .btn_primary {border-color:#ff3c14;color:#ff3c14;font-weight:700;}
+.btn_primary_bg {background-color:#ff3c14;color:#fff;font-weight:700;}
 
 /* 모양 */
 .btn.btn_square {padding:5px 16px;border-radius:0;}

@@ -12,8 +12,8 @@ export const GRID_HEADER_HEIGHT = [34, 46];
 
 // AgGrid의 rowHeight
 export const GRID_ROW_HEIGHT = {
-    T: [34, 46, 62], // text
-    C: [38, 54, 66], // 복합형 (텍스트 + 사진, 버튼, input)
+    T: [34, 46, 66], // text
+    C: [38, 54, 70], // 복합형 (텍스트 + 사진, 버튼, input)
 };
 
 // AgGrid의 lineHeight

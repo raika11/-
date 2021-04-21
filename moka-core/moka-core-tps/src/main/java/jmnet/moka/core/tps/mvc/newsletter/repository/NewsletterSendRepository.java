@@ -17,5 +17,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 2021-04-20 오전 11:10
  */
 public interface NewsletterSendRepository
-        extends JpaRepository<NewsletterSend, Long>, JpaSpecificationExecutor<NewsletterSend>/* , NewsletterInfoRepositorySupport */ {
+        extends JpaRepository<NewsletterSend, Long>, JpaSpecificationExecutor<NewsletterSend>, NewsletterSendRepositorySupport {
 }

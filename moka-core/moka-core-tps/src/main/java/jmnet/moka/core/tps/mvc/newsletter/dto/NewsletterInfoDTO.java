@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.newsletter.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -110,6 +112,10 @@ public class NewsletterInfoDTO implements Serializable {
 
     @ApiModelProperty("상단이미지(자동, 수동 직접등록형)")
     private String headerImg;
+
+    @ApiModelProperty("이미지파일")
+    @JsonIgnore
+    private MultipartFile headerImgFile;
 
     @ApiModelProperty("수동형식 - 지정형(S), 자유형(F)")
     private String editLetterType;

@@ -44,8 +44,8 @@ public class NewsletterSend extends RegAudit {
     @Column(name = "SEND_SEQ")
     private Long sendSeq;
 
-    //    @Column(name = "LETTER_SEQ")
-    //    private Long letterSeq;
+    @Column(name = "LETTER_SEQ")
+    private Long letterSeq;
 
     @Column(name = "ABTEST_YN")
     private String abtestYn;
@@ -93,6 +93,6 @@ public class NewsletterSend extends RegAudit {
     private String letterBody;
 
     @ManyToOne
-    @JoinColumn(name = "LETTER_SEQ", referencedColumnName = "LETTER_SEQ", nullable = false)
+    @JoinColumn(name = "LETTER_SEQ", referencedColumnName = "LETTER_SEQ", nullable = false, insertable = false, updatable = false)
     private NewsletterInfo newsletterInfo;
 }

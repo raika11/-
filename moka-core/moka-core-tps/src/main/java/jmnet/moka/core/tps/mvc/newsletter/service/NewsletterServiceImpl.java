@@ -56,6 +56,11 @@ public class NewsletterServiceImpl implements NewsletterService {
     }
 
     @Override
+    public Page<NewsletterSend> findAllNewsletterSend(NewsletterSearchDTO search) {
+        return newsletterSendRepository.findAllNewsletterSend(search);
+    }
+
+    @Override
     public NewsletterSend insertNewsletterSend(NewsletterSend newsletterSend) {
         return newsletterSendRepository.save(newsletterSend);
     }

@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -70,6 +71,7 @@ public class NewsletterSendDTO implements Serializable {
     private String reserveYn;
 
     @ApiModelProperty("발송일시")
+    @DTODateTimeFormat
     private Date sendDt;
 
     @ApiModelProperty("구독자연동여부(Y/N-excel업로드)")
@@ -83,6 +85,7 @@ public class NewsletterSendDTO implements Serializable {
     private String headerImg;
 
     @ApiModelProperty("등록일시")
+    @DTODateTimeFormat
     private Date regDt;
 
     @ApiModelProperty("등록자")

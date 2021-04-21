@@ -65,8 +65,8 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
                     .eq(searchDTO.getSendType()));
         }
         if (McpString.isNotEmpty(searchDTO.getLetterType())) {
-            // 유형
-            query.where(qNewsletterInfo.letterType
+            // A/B TEST 유무
+            query.where(qNewsletterInfo.abtestYn
                     .toUpperCase()
                     .eq(searchDTO.getLetterType()));
         }
@@ -76,7 +76,11 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
         }
         if (searchDTO.getEndDt() != null) {
             // 검색 종료일
-            query.where(qNewsletterInfo.regDt.before(searchDTO.getStartDt()));
+            query.where(qNewsletterInfo.regDt.before(searchDTO.getEndDt()));
+        }
+        if (McpString.isNotEmpty(searchDTO.getLetterName())) {
+            // 뉴스레터명
+            query.where(qNewsletterInfo.letterName.contains(searchDTO.getLetterName()));
         }
         if (McpString.isYes(searchDTO.getUseTotal())) {
             query = getQuerydsl().applyPagination(pageable, query);

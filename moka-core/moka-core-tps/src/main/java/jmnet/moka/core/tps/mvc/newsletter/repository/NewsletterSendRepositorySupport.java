@@ -1,7 +1,7 @@
 package jmnet.moka.core.tps.mvc.newsletter.repository;
 
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
-import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
+import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterSend;
 import org.springframework.data.domain.Page;
 
 /**
@@ -9,19 +9,19 @@ import org.springframework.data.domain.Page;
  *
  * Project : moka-springboot-parent
  * Package : jmnet.moka.core.tps.mvc.newsletter.repository
- * ClassName : NewsletterInfoRepositorySupport
- * Created : 2021-04-16 New
+ * ClassName : NewsletterSendRepositorySupport
+ * Created : 2021-04-20 New
  * </pre>
  *
  * @author stsoon
- * @since 2021-04-16 오후 4:11
+ * @since 2021-04-20 오후 3:12
  */
-public interface NewsletterInfoRepositorySupport {
+public interface NewsletterSendRepositorySupport {
     /**
-     * 조회
+     * 뉴스레터 발송 조회
      *
      * @param search 조회조건
      * @return
      */
-    Page<NewsletterInfo> findAllNewsletterInfo(NewsletterSearchDTO search);
+    Page<NewsletterSend> findAllNewsletterSend(NewsletterSearchDTO search);
 }

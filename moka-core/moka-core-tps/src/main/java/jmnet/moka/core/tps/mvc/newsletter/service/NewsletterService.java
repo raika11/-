@@ -52,6 +52,14 @@ public interface NewsletterService {
     NewsletterInfo updateNewsletterInfo(NewsletterInfo newsletterInfo);
 
     /**
+     * 뉴스레터 발송 조회
+     *
+     * @param search
+     * @return
+     */
+    Page<NewsletterSend> findAllNewsletterSend(NewsletterSearchDTO search);
+
+    /**
      * 뉴스레터 방송(수동) 등록
      *
      * @param newsletterSend

@@ -164,8 +164,8 @@ public class IssueRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "패키지 조회")
     @GetMapping("/{pkgSeq}")
-    public ResponseEntity<?> getPackage(
-            @ApiParam("패키지 일련번호") @PathVariable("pkgSeq") /* @Min(value = 0, message = "{tps.article.error.min.totalId}") */ Long pkgSeq)
+    public ResponseEntity<?> getPackage(@ApiParam(value = "패키지 일련번호", required = true)
+    @PathVariable("pkgSeq") /* @Min(value = 0, message = "{tps.article.error.min.totalId}") */ Long pkgSeq)
             throws NoDataException {
         // 조회
         PackageMaster packageMaster = packageService
@@ -190,8 +190,8 @@ public class IssueRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "패키지 조회 (화면기준)")
     @GetMapping("/{pkgSeq}/group-by-ordno")
-    public ResponseEntity<?> getPackageGroupByOrdno(
-            @ApiParam("패키지 일련번호") @PathVariable("pkgSeq") /* @Min(value = 0, message = "{tps.article.error.min.totalId}") */ Long pkgSeq)
+    public ResponseEntity<?> getPackageGroupByOrdno(@ApiParam(value = "패키지 일련번호", required = true)
+    @PathVariable("pkgSeq") /* @Min(value = 0, message = "{tps.article.error.min.totalId}") */ Long pkgSeq)
             throws NoDataException {
         // 조회
         PackageMaster packageMaster = packageService
@@ -398,8 +398,8 @@ public class IssueRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "패키지 타이틀 중복 여부")
     @GetMapping("/{pkgTitle}/exists")
-    public ResponseEntity<?> duplicatePkgTitle(
-            @ApiParam("패키지 타이틀") @PathVariable("pkgTitle") @Size(min = 1, max = 100, message = "{tps.issue.error.length.pkgTitle}") String pkgTitle) {
+    public ResponseEntity<?> duplicatePkgTitle(@ApiParam(value = "패키지 타이틀", required = true) @PathVariable("pkgTitle")
+    @Size(min = 1, max = 100, message = "{tps.issue.error.length.pkgTitle}") String pkgTitle) {
 
         boolean duplicated = packageService
                 .findByPkgTitle(pkgTitle)

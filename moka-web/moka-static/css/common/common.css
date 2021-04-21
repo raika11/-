@@ -489,7 +489,7 @@ dl.date dd { margin-left: 6px; }
 
 
 /****************************************************************************************************/
-/***                                            button                                            ***/
+/***                                         button 버튼                                          ***/
 /****************************************************************************************************/
 /* group */
 .button_wrap {display:flex;align-items:center;justify-content:center;width:fit-content;}
@@ -504,14 +504,13 @@ dl.date dd { margin-left: 6px; }
 
 
 /* 상태 */
-.btn_default {border-color:#cacaca;}
+.btn_default {border-color:rgba(202,202,202,.8);}
 .btn_primary {border-color:#ff3c14;color:#ff3c14;font-weight:700;}
 
+/* 모양 */
+.btn.btn_square {padding:5px 16px;border-radius:0;}
 
-
-/* type */
-.btn_round {width:auto;padding:8px 20px;border:1px solid #cacaca;border-radius:50px;color:#111;font-size:14px;line-height:20px;}
-.btn_square {border-radius:0px;}
+/* .btn_round {width:auto;padding:8px 20px;border:1px solid #cacaca;border-radius:50px;color:#111;font-size:14px;line-height:20px;} */
 
 /* outline */
 .btn_outline_default {border:1px solid #333;}

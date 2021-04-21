@@ -97,6 +97,7 @@ const DtlAgGrid = ({ grpCd }) => {
                 size={search.size}
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={selectedSeqNo}
+                preventRowClickCell={['dtlCd']}
             />
 
             {/* 상세코드 수정 모달 */}

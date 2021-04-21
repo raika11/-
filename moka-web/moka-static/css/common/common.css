@@ -518,7 +518,7 @@ dl.date dd { margin-left: 6px; }
 
 /* outline */
 .btn_outline_default {border:1px solid #333;}
-.btn_outline_gray {border:1px solid #d5d5d5;}
+.btn_outline_gray {border:1px solid #d5d5d5; background-color: #fff; }
 .btn_outline_orange {border:1px solid #f0320a !important;color:#f0320a;}
 
 /* background */

@@ -99,7 +99,7 @@ const GrpAgGrid = ({ match }) => {
                 total={total}
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={dtlSearch.grpCd}
-                preventRowClickCell={['edit']}
+                preventRowClickCell={['grpCd', 'edit']}
             />
 
             {/* 그룹 수정 모달 */}

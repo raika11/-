@@ -80,11 +80,12 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
             setRecommendPackages(pkgSeqs);
             handleChangeValue({ name: 'recommPkg', value: pkgSeqs.join(',') });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [recommendPkgSeq]);
 
     return (
         <>
-            <Form.Row className="mb-3 align-items-center">
+            <Form.Row className="mb-2 align-items-center">
                 <Col xs={3} className="p-0">
                     <MokaInputLabel
                         as="switch"
@@ -151,7 +152,7 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                     )}
                 </Col>
             </Form.Row>
-            <Form.Row className="mb-3 align-items-center">
+            <Form.Row className="mb-2 align-items-center">
                 <Col xs={3} className="p-0">
                     <MokaInputLabel as="none" label="유형 선택" required />
                 </Col>
@@ -194,11 +195,11 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                     </div>
                 </Col>
             </Form.Row>
-            <Form.Row className="mb-3 align-items-center">
+            <Form.Row className="mb-2 align-items-center">
                 <Col xs={3} className="p-0 d-flex">
                     <MokaInputLabel as="none" label="시즌/회차 표시" />
                     <div>
-                        <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                        <div style={{ height: 31 }} className="mb-2 d-flex align-items-center">
                             <MokaInputLabel as="none" label="시즌" />
                         </div>
                         <div style={{ height: 31 }} className="d-flex align-items-center">
@@ -207,7 +208,7 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                     </div>
                 </Col>
                 <Col xs={9} className="p-0">
-                    <div className="mb-3 d-flex align-items-center">
+                    <div className="mb-2 d-flex align-items-center">
                         <div className="pr-3 d-flex align-items-center">
                             <MokaInput
                                 as="checkbox"
@@ -336,7 +337,7 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                     </div>
                 </Col>
             </Form.Row>
-            <Form.Row className="mb-3 align-items-center">
+            <Form.Row className="mb-2 align-items-center">
                 <Col xs={3} className="p-0">
                     <MokaInputLabel as="none" label="카테고리 선택(N개)" required />
                 </Col>
@@ -356,7 +357,7 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                     />
                 </Col>
             </Form.Row>
-            <Form.Row className="mb-3 align-items-center">
+            <Form.Row className="mb-2 align-items-center">
                 <Col xs={3} className="p-0">
                     <MokaInputLabel
                         as="switch"
@@ -380,7 +381,7 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                     <p className="mb-0">※ 구독 상품으로 등록되면, 구독 상품명이 자동으로 노출됩니다.</p>
                 </Col>
             </Form.Row>
-            <Form.Row className="mb-3 align-items-center">
+            <Form.Row className="mb-2 align-items-center">
                 <Col xs={3} className="p-0">
                     <MokaInputLabel as="none" label="패키지명" required />
                     <p className="mb-0 color-primary ft-12">※ 중복 등록 불가/수정 불가</p>
@@ -399,7 +400,7 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                     </Button>
                 </Col>
             </Form.Row>
-            <Form.Row className="mb-3 align-items-center">
+            <Form.Row className="mb-2 align-items-center">
                 <Col xs={3} className="p-0">
                     <MokaInputLabel as="none" label="패키지 설명" />
                 </Col>
@@ -415,7 +416,7 @@ const IssueCommonEdit = ({ data, onChange, onDuplicateCheck, isDuplicatedTitle, 
                 </Col>
             </Form.Row>
 
-            <Form.Row className="mb-3">
+            <Form.Row className="mb-2">
                 <Col xs={3} className="p-0">
                     <MokaInputLabel
                         as="switch"

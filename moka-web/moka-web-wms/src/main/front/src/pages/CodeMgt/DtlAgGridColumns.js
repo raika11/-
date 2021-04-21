@@ -11,6 +11,7 @@ export default [
         width: 180,
         tooltipField: 'dtlCd',
         cellStyle,
+        cellClass: 'user-select-text',
     },
     {
         headerName: '코드명',

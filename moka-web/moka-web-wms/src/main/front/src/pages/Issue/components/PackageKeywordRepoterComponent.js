@@ -59,7 +59,7 @@ const PackageKeywordReporterComponent = ({ keyword, onChange, reporters }) => {
         <>
             {editKeyword.reporter.length > 0 && (
                 <>
-                    <Form.Row className="mb-3">
+                    <Form.Row className="mb-2">
                         <Col xs={3} className="p-0 d-flex align-items-center">
                             <MokaInputLabel as="none" label="검색 범위" />
                         </Col>
@@ -95,7 +95,7 @@ const PackageKeywordReporterComponent = ({ keyword, onChange, reporters }) => {
                     </Form.Row>
                     {editKeyword.reporter.map((reporter, idx) => {
                         return (
-                            <Form.Row className="mb-3" key={idx}>
+                            <Form.Row className="mb-2" key={idx}>
                                 <Col xs={3} className="p-0 d-flex">
                                     <div style={{ width: 30 }} className="d-flex flex-column justify-content-center align-items-center">
                                         <p className="mb-0">{idx + 1}</p>
@@ -109,10 +109,10 @@ const PackageKeywordReporterComponent = ({ keyword, onChange, reporters }) => {
                                         </Button>
                                     </div>
                                     <div>
-                                        <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                        <div style={{ height: 31 }} className="mb-2 d-flex align-items-center">
                                             <MokaInputLabel as="none" label="검색 기간" />
                                         </div>
-                                        <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                        <div style={{ height: 31 }} className="mb-2 d-flex align-items-center">
                                             <MokaInputLabel as="none" label="기자명" />
                                         </div>
                                         <div style={{ height: 31 }} className="d-flex align-items-center">
@@ -155,7 +155,7 @@ const PackageKeywordReporterComponent = ({ keyword, onChange, reporters }) => {
                                     </div>
                                 </Col>
                                 <Col xs={9} className="p-0">
-                                    <div className="mb-3 d-flex align-items-center">
+                                    <div className="mb-2 d-flex align-items-center">
                                         <div style={{ width: 228 }} className="pr-3 d-flex align-items-center">
                                             <MokaInputLabel
                                                 as="dateTimePicker"
@@ -213,7 +213,7 @@ const PackageKeywordReporterComponent = ({ keyword, onChange, reporters }) => {
                                             />
                                         </div>
                                     </div>
-                                    <MokaInput name="reporterName" className="mb-3" value="2000" value={reporter.reporterName} disabled={true} />
+                                    <MokaInput name="reporterName" className="mb-2" value="2000" value={reporter.reporterName} disabled={true} />
                                     <MokaInput
                                         name="keyword"
                                         value={reporter.keyword}

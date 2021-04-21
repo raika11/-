@@ -41,6 +41,9 @@ const packetColumnDefs = [
         field: 'title',
         flex: 1,
         cellRendererFramework: PacketRenderer,
+        cellStyle: {
+            paddingLeft: '8px',
+        },
         suppressKeyboardEvent,
     },
 ];

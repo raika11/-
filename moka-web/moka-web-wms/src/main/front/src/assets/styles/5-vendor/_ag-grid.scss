@@ -257,8 +257,7 @@ $row-hover-color: darken($desking-row-color, 5);
 }
 
 
-// desking-grid
-// only 페이지편집
+// desking-grid (only 페이지편집)
 // .ag-theme-moka-dnd-grid와 함께 사용
 $rel-row-color:  #ededed;
 $rel-row-hover-color: darken($rel-row-color, 5);
@@ -271,7 +270,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
                 z-index: 50;
                 position: absolute;
                 top: -2px;
-                bottom: 52px;
+                bottom: 56px;
                 left: 0px;
                 right: 0px;
                 background: $positive;
@@ -281,7 +280,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
                 content: "";
                 z-index: 50;
                 position: absolute;
-                top: 52px;
+                top: 56px;
                 bottom: -2px;
                 left: 0px;
                 right: 0px;
@@ -337,6 +336,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
     }
     .ag-cell[col-id="title"] {
         left: 131px !important;
+        width: calc(100% - 131px) !important;
     }
 
     // 관련기사 left 조정
@@ -352,6 +352,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         &[col-id="relTitle"] {
             display: flex !important;
             left: 54px !important;
+            width: calc(100% - 54px) !important;
         }
     }
 
@@ -420,7 +421,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         }
         .ag-cell[col-id="title"] {
             left: 106px !important;
-            width: 69% !important;
+            width: calc(100% - 106px) !important;
         }
     }
 }

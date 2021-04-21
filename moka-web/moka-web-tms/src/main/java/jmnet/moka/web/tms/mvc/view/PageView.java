@@ -39,8 +39,8 @@ import org.springframework.web.servlet.view.AbstractView;
  * @author kspark
  * @since 2019. 9. 10. 오후 3:54:35
  */
-public class DefaultView extends AbstractView {
-    private static final Logger logger = LoggerFactory.getLogger(DefaultView.class);
+public class PageView extends AbstractView {
+    private static final Logger logger = LoggerFactory.getLogger(PageView.class);
 
     @Value("${tms.mte.debug}")
     private boolean templateMergeDebug;

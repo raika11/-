@@ -41,8 +41,8 @@ import org.springframework.web.method.HandlerMethod;
  * @author kspark
  * @since 2020. 3. 20. 오후 4:06:12
  */
-public class DefaultHandler extends AbstractHandler {
-    private static final Logger logger = LoggerFactory.getLogger(DefaultHandler.class);
+public class PageHandler extends AbstractHandler {
+    private static final Logger logger = LoggerFactory.getLogger(PageHandler.class);
 
     @Autowired
     private HttpParamFactory httpParamFactory;
@@ -58,8 +58,8 @@ public class DefaultHandler extends AbstractHandler {
 
     private List<String> mergeItemList;
 
-    public DefaultHandler() {
-        this.handlerMethod = new HandlerMethod(this, this.findMethod(DefaultHandler.class));
+    public PageHandler() {
+        this.handlerMethod = new HandlerMethod(this, this.findMethod(PageHandler.class));
         String[] partialMergeItems =
                 {MokaConstants.ITEM_PAGE, MokaConstants.ITEM_COMPONENT, MokaConstants.ITEM_CONTAINER, MokaConstants.ITEM_TEMPLATE};
         this.mergeItemList = Arrays.asList(partialMergeItems);

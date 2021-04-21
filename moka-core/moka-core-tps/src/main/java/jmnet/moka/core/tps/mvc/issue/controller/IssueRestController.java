@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -52,12 +53,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -669,7 +672,7 @@ public class IssueRestController extends AbstractCommonController {
 
             // 등록
             issueDeskingService.save(packageMaster, issueDeskingComponentDTO, principal.getName());
-            IssueDeskingComponentDTO returnValue = issueDeskingService.findIssueDeskingComponent(packageMaster, compNo);
+            IssueDeskingComponentDTO returnValue = issueDeskingService.findSaveIssueDeskingComponent(packageMaster, compNo);
 
             // 결과리턴
             IssueDeskingComponentDTO dto = modelMapper.map(returnValue, IssueDeskingComponentDTO.class);
@@ -733,7 +736,7 @@ public class IssueRestController extends AbstractCommonController {
             // 등록
             issueDeskingService.publish(packageMaster, compNo, principal.getName());
 
-            IssueDeskingComponentDTO returnValue = issueDeskingService.findIssueDeskingComponent(packageMaster, compNo);
+            IssueDeskingComponentDTO returnValue = issueDeskingService.findSaveIssueDeskingComponent(packageMaster, compNo);
 
             // 결과리턴
             IssueDeskingComponentDTO dto = modelMapper.map(returnValue, IssueDeskingComponentDTO.class);
@@ -744,6 +747,61 @@ public class IssueRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO PUBLISH ISSUE DESKING]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO PUBLISH ISSUE DESKING]", e, true);
+            throw new Exception(msg("tps.common.error.insert"), e);
+        }
+    }
+
+    @ApiOperation(value = "편집기사 예약")
+    @PostMapping("/{pkgSeq}/desking/{compNo}/reserve")
+    public ResponseEntity<?> postReserveIssueDesking(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
+            @ApiParam(value = "컴포넌트순번", required = true) @PathVariable("compNo") Integer compNo,
+            @ApiParam(value = "예약시간", required = true) @RequestParam("reserveDt") Date reserveDt, @ApiParam(hidden = true) Principal principal)
+            throws Exception {
+        PackageMaster packageMaster = packageService
+                .findByPkgSeq(pkgSeq)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+        try {
+            // 예약
+            issueDeskingService.reserve(packageMaster, compNo, principal.getName(), reserveDt);
+
+            IssueDeskingComponentDTO returnValue = issueDeskingService.findSaveIssueDeskingComponent(packageMaster, compNo);
+
+            // 결과리턴
+            IssueDeskingComponentDTO dto = modelMapper.map(returnValue, IssueDeskingComponentDTO.class);
+            ResultDTO<IssueDeskingComponentDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.insert"));
+
+            tpsLogger.success(ActionType.INSERT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO RESERVE ISSUE DESKING]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO RESERVE ISSUE DESKING]", e, true);
+            throw new Exception(msg("tps.common.error.insert"), e);
+        }
+    }
+
+    @ApiOperation(value = "편집기사 예약 삭제")
+    @DeleteMapping("/{pkgSeq}/desking/{compNo}/reserve")
+    public ResponseEntity<?> deleteReserveIssueDesking(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
+            @ApiParam(value = "컴포넌트순번", required = true) @PathVariable("compNo") Integer compNo, @ApiParam(hidden = true) Principal principal)
+            throws Exception {
+        PackageMaster packageMaster = packageService
+                .findByPkgSeq(pkgSeq)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+        try {
+            // 예약삭제
+            issueDeskingService.deleteReserve(packageMaster, compNo);
+
+            IssueDeskingComponentDTO returnValue = issueDeskingService.findSaveIssueDeskingComponent(packageMaster, compNo);
+
+            // 결과리턴
+            IssueDeskingComponentDTO dto = modelMapper.map(returnValue, IssueDeskingComponentDTO.class);
+            ResultDTO<IssueDeskingComponentDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.insert"));
+
+            tpsLogger.success(ActionType.INSERT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO RESERVE ISSUE DESKING]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO RESERVE ISSUE DESKING]", e, true);
             throw new Exception(msg("tps.common.error.insert"), e);
         }
     }

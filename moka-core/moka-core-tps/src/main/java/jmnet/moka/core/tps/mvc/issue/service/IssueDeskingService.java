@@ -4,7 +4,9 @@
 
 package jmnet.moka.core.tps.mvc.issue.service;
 
+import java.util.Date;
 import java.util.List;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistDTO;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
@@ -31,7 +33,18 @@ public interface IssueDeskingService {
      * @param compNo        컴포넌트순번
      * @return 편집목록
      */
-    IssueDeskingComponentDTO findIssueDeskingComponent(PackageMaster packageMaster, Integer compNo);
+    IssueDeskingComponentDTO findSaveIssueDeskingComponent(PackageMaster packageMaster, Integer compNo);
+
+    /**
+     * 패키지의 컴포넌트의 편집목록조회
+     *
+     * @param packageMaster 패키지
+     * @param compNo        컴포넌트순번
+     * @param status        상태(SAVE,PUBLISH)
+     * @param approvalYn    배포여부(Y,N)
+     * @return
+     */
+    IssueDeskingComponentDTO findIssueDeskingComponent(PackageMaster packageMaster, Integer compNo, EditStatusCode status, String approvalYn);
 
     /**
      * 편집기사 임시저장
@@ -49,7 +62,19 @@ public interface IssueDeskingService {
      * @param compNo        컴포넌트 순번
      * @param regId         작업자ID
      */
-    void publish(PackageMaster packageMaster, Integer compNo, String regId);
+    void publish(PackageMaster packageMaster, Integer compNo, String regId)
+            throws Exception;
+
+    /**
+     * 예약
+     *
+     * @param packageMaster 패키지
+     * @param compNo        컴포넌트순번
+     * @param regId         작업자ID
+     * @param reserveDt     예약시간
+     */
+    void reserve(PackageMaster packageMaster, Integer compNo, String regId, Date reserveDt)
+            throws Exception;
 
     /**
      * 자동컴포넌트의 편집기사 저장
@@ -66,4 +91,22 @@ public interface IssueDeskingService {
      */
     void escapeHtml(IssueDeskingHistDTO dto);
 
+    /**
+     * 예약삭제
+     *
+     * @param packageMaster 패키지
+     * @param compNo        컴포넌트순번
+     */
+    void deleteReserve(PackageMaster packageMaster, Integer compNo)
+            throws Exception;
+
+    /**
+     * 예약편집기사를 서비스에 등록
+     *
+     * @param packageMaster 패키지
+     * @param compNo        컴포넌트순번
+     * @throws Exception
+     */
+    void excuteReserve(PackageMaster packageMaster, Integer compNo)
+            throws Exception;
 }

@@ -1,4 +1,7 @@
 $(function(){
+    if ($(this).scrollTop() > 10) {
+        $('.header').addClass('sticky_top');
+    }
     $(window).scroll(function () {
         if ($(this).scrollTop() > 10) {
             $('.header').addClass('sticky_top');

@@ -89,7 +89,7 @@ const NewsLetterEdit = ({ match }) => {
                 },
                 {
                     text: '임시저장',
-                    variant: 'positive-a',
+                    variant: 'temp',
                     className: 'mr-1',
                 },
                 {

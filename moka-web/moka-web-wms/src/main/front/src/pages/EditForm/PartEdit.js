@@ -76,7 +76,7 @@ const PartEdit = (props) => {
             <Card.Footer>
                 <Form.Group className="mb-3 d-flex justify-content-between">
                     <div className="d-flex">
-                        <Button className="float-left mr-10 pr-20 pl-20" variant="positive-a" onClick={handleClickSave}>
+                        <Button className="float-left mr-10 pr-20 pl-20" variant="temp" onClick={handleClickSave}>
                             임시저장
                         </Button>
                         <Button variant="outline-neutral" className="mr-05" onClick={handleClickHistoryOpen}>

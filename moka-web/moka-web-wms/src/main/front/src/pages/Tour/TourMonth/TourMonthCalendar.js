@@ -54,8 +54,6 @@ const TourMonthCalendar = () => {
     }, [dispatch, tourSetup]);
 
     useEffect(() => {
-        // console.log(calendarRef.current);
-        // console.log(`year: ${year}, month: ${month}`);
         if (year !== '' && month !== '') {
             dispatch(
                 getTourDenyMonthList({
@@ -74,7 +72,6 @@ const TourMonthCalendar = () => {
 
     useEffect(() => {
         // 휴일 목록
-        // let holiday = {};
         if (holidayList.length > 0) {
             setHolidayEvents(
                 holidayList.map((data) => {
@@ -190,14 +187,6 @@ const TourMonthCalendar = () => {
                 themeSystem="bootstrap"
                 initialView="dayGridMonth"
                 initialDate={moment().format(DB_DATEFORMAT)}
-                customButtons={{
-                    customPrev: {
-                        text: 'prev',
-                        click: () => {
-                            alert('clicked the custom button!');
-                        },
-                    },
-                }}
                 // 달력 상단의 버튼, 제목을 정의
                 headerToolbar={{
                     left: 'prev',

@@ -33,10 +33,10 @@ import org.apache.ibatis.type.Alias;
 @Getter
 @ToString
 @Builder(toBuilder = true)
-@Alias("IssueDeskingComponentDTO")
-public class IssueDeskingComponentDTO implements Serializable {
+@Alias("IssueDeskingHistCompDTO")
+public class IssueDeskingHistCompDTO implements Serializable {
 
-    public static final Type TYPE = new TypeReference<List<IssueDeskingComponentDTO>>() {
+    public static final Type TYPE = new TypeReference<List<IssueDeskingHistCompDTO>>() {
     }.getType();
 
 
@@ -80,6 +80,11 @@ public class IssueDeskingComponentDTO implements Serializable {
     @ApiModelProperty("전송 최종작업자명")
     @Column(name = "LAST_PUBLISH_NM")
     private String lastPublishNm;
+
+    @ApiModelProperty("서버기준 예약일자")
+    @DTODateTimeFormat
+    @Column(name = "RESERVE_DT")
+    private Date reserveDt;
 
     @ApiModelProperty("편집정보")
     @Builder.Default

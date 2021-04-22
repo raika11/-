@@ -24,7 +24,7 @@ const AutoEdit = ({ match }) => {
                 <Button variant="positive" className="mr-1">
                     저장
                 </Button>
-                <Button variant="positive-a" className="mr-1">
+                <Button variant="temp" className="mr-1">
                     임시저장
                 </Button>
                 <Button variant="negative" onClick={() => history.push(match.path)}>

@@ -14,8 +14,7 @@ const HistoryTitleRenderer = forwardRef((props, ref) => {
 
     return (
         <div className="h-100 d-flex flex-column justify-content-center">
-            <MokaInput value={unescapeHtmlArticle(data.artTitle)} className="bg-white flex-grow-0" disabled />
-            <hr className="divider my-1" />
+            <MokaInput value={unescapeHtmlArticle(data.artTitle)} className="bg-white mb-1 flex-grow-0" disabled />
             <MokaInput as="textarea" inputProps={{ rows: 3 }} value={unescapeHtmlArticle(data.artSubTitle)} className="bg-white" disabled />
         </div>
     );

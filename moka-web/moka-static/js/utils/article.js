@@ -51,8 +51,9 @@ $(document).ready(function() {
                 $(".byline > a").removeClass("hide");
                 $this.addClass("hide");
             } else {
-                $(".layer_byline").addClass("active");
                 setBylinePopPos();
+                $(".layer_byline").addClass("active");
+                
             }
         }
     });

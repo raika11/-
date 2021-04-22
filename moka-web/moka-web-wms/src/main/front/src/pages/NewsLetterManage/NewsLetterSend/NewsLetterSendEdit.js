@@ -134,7 +134,7 @@ const NewsLetterSendEdit = ({ match }) => {
                 />
                 <MokaInputLabel label="유형" className="mb-2" value={letterInfo.letterType} inputProps={{ readOnly: true, plaintext: true }} />
                 <MokaInputLabel label="형식 구분" className="mb-2" value={letterInfo.editLetterType} inputProps={{ readOnly: true, plaintext: true }} />
-                <MokaInputLabel label="뉴스레터 설명" className={letterInfo.editLetterType === 'L' && 'mb-2'} inputProps={{ readOnly: true, plaintext: true }} />
+                <MokaInputLabel label="뉴스레터 설명" className={letterInfo.editLetterType === 'L' ? 'mb-2' : ''} inputProps={{ readOnly: true, plaintext: true }} />
                 {letterInfo.editLetterType === 'L' && (
                     <>
                         <MokaInputLabel label="레이아웃" className="mb-2" inputProps={{ readOnly: true, plaintext: true }} />

@@ -93,6 +93,18 @@ public class AbTestCaseSearchDTO extends SearchDTO {
     @ApiModelProperty("설명")
     private String abtestDesc;
 
+    /**
+     * 작성자
+     */
+    @ApiModelProperty("작성자")
+    private String regId;
+
+    /**
+     * 작성자명
+     */
+    @ApiModelProperty("작성자명")
+    private String regNm;
+
     public AbTestCaseSearchDTO() {
         super(AbTestCaseVO.class, "abtestSeq,desc");
         super.setUseTotal(MokaConstants.YES);

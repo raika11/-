@@ -17,7 +17,7 @@ import StatusBadge from './StatusBadge';
 /**
  * 패키지관리 > 관련 데이터 편집 > 라이브기사
  */
-const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData }, ref) => {
+const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
@@ -207,9 +207,9 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
     }, [desking.viewYn]);
 
     return (
-        <div className="position-relative">
+        <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
-            <Row className="py-2 mt-2 d-flex border-bottom" noGutters>
+            <Row className="d-flex" noGutters>
                 <Col xs={3}>
                     <MokaInputLabel
                         as="switch"
@@ -238,7 +238,7 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
             <Collapse in={open}>
                 <div id={controls} className="mt-2">
                     <MokaTable
-                        rowHeight={90}
+                        rowHeight={rowHeight}
                         header={false}
                         paging={false}
                         columnDefs={liveColumnDefs}

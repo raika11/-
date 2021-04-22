@@ -36,7 +36,7 @@ export default [
     },
     {
         headerName: '시작일시\n종료일시',
-        field: 'test3',
+        field: 'periodInfo',
         width: 170,
         wrapText: true,
         cellClassRules: {
@@ -46,7 +46,7 @@ export default [
     },
     {
         headerName: '작성자\n작성일시',
-        field: 'test4',
+        field: 'regInfo',
         width: 170,
         wrapText: true,
         cellClassRules: {

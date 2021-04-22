@@ -5,9 +5,9 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
-import { initialState } from '@store/newsLetter';
+import { initialState, getNewsLetterList, changeNewsLetterSearchOption } from '@store/newsLetter';
 import toast from '@/utils/toastUtil';
-// import { DB_DATEFORMAT } from '@/constants';
+import { DB_DATEFORMAT } from '@/constants';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 상품 검색
@@ -57,6 +57,13 @@ const NewsLetterSearch = () => {
             toast.warning('종료일은 시작일 보다 작을 수 없습니다.');
             return;
         }
+
+        let ns = {
+            ...search,
+            startDt: search.startDt ? moment(search.startDt).format(DB_DATEFORMAT) : null,
+            endDt: search.endDt ? moment(search.endDt).format(DB_DATEFORMAT) : null,
+        };
+        dispatch(getNewsLetterList(changeNewsLetterSearchOption(ns)));
     };
 
     /**
@@ -72,6 +79,10 @@ const NewsLetterSearch = () => {
         // 스토어 데이터 로컬에 셋팅
         setSearch(storeSearch);
     }, [storeSearch]);
+
+    useEffect(() => {
+        dispatch(getNewsLetterList());
+    }, [dispatch]);
 
     return (
         <Form className="mb-14">

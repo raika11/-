@@ -189,6 +189,7 @@ const IssueDesking = () => {
                 preview={preview}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
+                rowHeight={198}
             />
             {/* 메인기사(자동) */}
             <CollapseArticleAuto ref={artAutoRef} pkgSeq={pkgSeq} compNo={2} desking={deskingByCompNo.comp2 || {}} MESSAGE={MESSAGE} />
@@ -201,6 +202,7 @@ const IssueDesking = () => {
                 deskingList={deskingByCompNo.comp3?.issueDeskings || []}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
+                rowHeight={86}
             />
             {/* 관련기사꾸러미 */}
             <CollapsePacket
@@ -211,6 +213,7 @@ const IssueDesking = () => {
                 deskingList={deskingByCompNo.comp4?.issueDeskings || []}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
+                rowHeight={86}
             />
             {/* 영상/포토 */}
             <CollapseMoviePhoto

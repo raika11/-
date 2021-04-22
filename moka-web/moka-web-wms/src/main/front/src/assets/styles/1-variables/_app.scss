@@ -122,7 +122,8 @@ $danger:    $brand-1;
 $light:     $gray-100;
 $dark:      $gray-900;
 $positive:  $primary;
-$positive-a: #272c3f;
+$positive-a:$brand-additional-5;
+$temp:      $gray-900;
 $neutral:   $secondary;
 $negative:  #6C78A0;
 $searching: $gray-800;
@@ -139,6 +140,7 @@ $theme-colors: (
 	"dark": $dark,
 	"positive": $positive,
 	"positive-a": $positive-a,
+	"temp": $temp,
 	"neutral": $neutral,
 	"negative": $negative,
 	"searching": $searching,

@@ -49,22 +49,32 @@
                     <div class="code_wrap">
 <pre><code class="css">
 /* 인덱스 제외 분기별 max-width */
-@media (max-width:767px){
-    .header_wrap,.footer_wrap{max-width:100%;padding-left:20px;padding-right:20px;}
-    .contents{max-width:100%;margin-left:20px;margin-right:20px;}
-}
+/* Mobile devices (mobile, 767px and down) */
+@media (max-width:767px){    }
 
-@media (min-width:768px) and (max-width:1023px){
-    .header_wrap,.contents,.footer_wrap{max-width:580px;}
-}
+/* Medium devices (tablet + pc, 768px and up) */
+@media (min-width:768px) {    }
 
-@media (min-width:1024px) and (max-width:1279px){
-    .header_wrap,.contents,.footer_wrap{max-width:980px;}
-}
+/* Medium devices (only tablet, 768px and 1023px) */
+@media (min-width:768px) and (max-width:1023px){    }
 
-@media (min-width:1280px){
-    .header_wrap,.contents,.footer_wrap{max-width:1200px;}
-}
+/* Large devices (desktops, 1024px and up) */
+@media (min-width:1024px) {    }
+
+/* Large devices (desktops + laptap, 1024px and 1279px) */
+@media (min-width:1024px) and (max-width:1279px){    }
+
+/* XLarge devices (desktops only, 1280px and up) */
+@media (min-width:1280px){    }
+
+
+/* 태블릿 디자인 나올때 까지는 아래 분기만 사용 - 2021.04.22 */
+/* Large devices (mobile + tablet, 1023px and down) */
+@media (max-width:1023px) {    }
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width:1024px) {    }
+
 </code></pre>
                     </div>
 

@@ -51,6 +51,7 @@ import mic from '@store/mic/micReducer';
 import schedule from '@store/schedule/scheduleReducer';
 import issue from '@store/issue/issueReducer';
 import newsLetter from '@store/newsLetter/newsLetterReducer';
+import ab from '@store/ab/abReducer';
 
 export default combineReducers({
     toastr,
@@ -104,4 +105,5 @@ export default combineReducers({
     schedule,
     issue,
     newsLetter,
+    ab,
 });

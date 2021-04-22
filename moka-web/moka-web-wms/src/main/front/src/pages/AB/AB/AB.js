@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
 import ABList from './ABList';
 import ABTab from './ABTab';
+import { clearStore, getAbTestList } from '@store/ab/abAction';
 
 /**
  * A/B 테스트 > 전체 목록
  */
 const AB = ({ match }) => {
     const currentMenu = useSelector(({ auth }) => auth.currentMenu);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
 
     return (
         <Row className="d-flex" noGutters>

@@ -69,7 +69,7 @@ const RelArticleTable = ({ chnlSeq, epsdSeq, articles, gridInstance, setGridInst
                 header={false}
                 animateRows
                 rowDragManaged
-                rowHeight={92}
+                rowHeight={90}
                 rowData={articles}
                 onRowNodeId={(data) => data.id.totalId}
                 columnDefs={columnDefs}

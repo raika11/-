@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
+import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,16 +23,16 @@ import org.hibernate.annotations.Nationalized;
 /**
  * 이슈확장형 편집히스토리
  */
-@Alias("IssueDeskingVO")
+@Alias("IssueDeskingHistVO")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class IssueDeskingVO implements Serializable {
+public class IssueDeskingHistVO implements Serializable {
 
-    public static final Type TYPE = new TypeReference<List<IssueDeskingVO>>() {
+    public static final Type TYPE = new TypeReference<List<IssueDeskingHistVO>>() {
     }.getType();
 
 
@@ -66,6 +67,19 @@ public class IssueDeskingVO implements Serializable {
      */
     @Column(name = "STATUS")
     private String status;
+
+    /**
+     * 예약일시
+     */
+    @Column(name = "RESERVE_DT", updatable = false)
+    private Date reserveDt;
+
+    /**
+     * 승인여부 예약일시가 설정되어 있을 경우 예약된 작업이 완료되면 Y로 처리
+     */
+    @Column(name = "APPROVAL_YN", updatable = false)
+    @Builder.Default
+    private String approvalYn = MokaConstants.NO;
 
     /**
      * 콘텐츠ID

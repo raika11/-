@@ -1,5 +1,5 @@
 import React from 'react';
-import { ABSearch, ABTestAgGrid } from '../components';
+import { ABSearch, ABAgGrid } from '../components';
 import ResultAgGridColumns from '@pages/AB/Result/ResultAgGridColumns';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -16,7 +16,7 @@ const ResultList = (props) => {
                     다운로드
                 </Button>
             </Row>
-            <ABTestAgGrid columnDefs={ResultAgGridColumns} />
+            <ABAgGrid columnDefs={ResultAgGridColumns} />
         </React.Fragment>
     );
 };

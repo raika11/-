@@ -8,16 +8,14 @@ import { MokaModal, MokaTable, MokaInput, MokaSearchInput } from '@components';
 import { columnDefs } from './QuizSearchModalGridColumns';
 
 /**
- * 검색 모달.
+ * 퀴즈 모달
  */
 const QuizSearchModal = (props) => {
     const { show, onHide } = props;
     const [selectQuizSeq, setSelectQuizSeq] = useState(null);
-
     const [searchData, setSearchData] = useState(initialState.quizSearchList.search);
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
-
     const { list, total, search, loading } = useSelector((store) => ({
         list: store.quiz.quizSearchList.list,
         total: store.quiz.quizSearchList.total,
@@ -25,17 +23,23 @@ const QuizSearchModal = (props) => {
         loading: store.loading[GET_QUIZ_SEARCH_MODAL_LIST],
     }));
 
-    // 닫기
+    /**
+     * 닫기
+     */
     const handleClickHide = () => {
         onHide();
     };
 
-    // row 클릭시 처리.
+    /**
+     * row 클릭 이벤트
+     */
     const handleOnRowClicked = (e) => {
         setSelectQuizSeq(e.quizSeq);
     };
 
-    // 검색 정보 변경 처리.
+    /**
+     * 검색 정보 변경 처리
+     */
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
         setSearchData({
@@ -44,13 +48,17 @@ const QuizSearchModal = (props) => {
         });
     };
 
-    // 검색 버튼
+    /**
+     * 검색 버튼
+     */
     const handleClickSearchButton = () => {
         dispatch(changeQuizListSearchOption(searchData));
         dispatch(getQuizSearchModalList());
     };
 
-    // 검색
+    /**
+     * 검색
+     */
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
             let temp = { ...search, [key]: value };
@@ -64,8 +72,8 @@ const QuizSearchModal = (props) => {
         [dispatch, search],
     );
 
-    // store list 가 변경 되면 그리드에 념겨줄 데이터 설정.
     useEffect(() => {
+        // store -> rowData
         const setListToRowData = (data) => {
             setRowData(
                 data.map(function (element, index) {
@@ -94,8 +102,8 @@ const QuizSearchModal = (props) => {
         }
     }, [list, loading]);
 
-    // 모달창이 열리면 목록 가져오기.
     useEffect(() => {
+        // 목록 조회 (show일 때)
         if (show === true) {
             dispatch(getQuizSearchModalList());
         } else {
@@ -113,7 +121,6 @@ const QuizSearchModal = (props) => {
             size="xl"
             bodyClassName="overflow-x-hidden custom-scroll"
             footerClassName="d-flex justify-content-center"
-            // buttons={[{ text: '닫기', variant: 'negative', onClick: handleClickHide }]}
             draggable
         >
             <Form className="pb-2">

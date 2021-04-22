@@ -89,7 +89,7 @@ const customStyles = {
     multiValueLabel: (provided, state) => ({
         ...provided,
         fontSize: '12px',
-        fontWeight: 'bold',
+        fontWeight: 500,
     }),
 };
 

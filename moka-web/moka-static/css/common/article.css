@@ -290,26 +290,6 @@ font-*,color,text-align,vertical-align, ...
 
 
 
-@media (max-width: 1023px) {
-    .row.sm_gutter0 {margin-left: 0;margin-right: 0;}
-    .row.sm_gutter0 > * {padding-left: 0;padding-right: 0;}
-}
-@media (min-width: 1024px) {
-    .row.lg_gutter0 {margin-left: 0;margin-right: 0;}
-    .row.lg_gutter0 > * {padding-left: 0;padding-right: 0;}
-}
-
-@media (min-width: 1024px) {
-    .related_link .card_image {margin-right:15px;}
-
-}
-
-
-/* Mobile devices (mobile, 767px and down) */
-@media (max-width:767px) {
-
-}
-
 
 /* Medium devices (mobile ~ tablet, 1023px and down) */
 @media (max-width:1023px) {
@@ -391,6 +371,11 @@ font-*,color,text-align,vertical-align, ...
     /****************************************************************************************************/
     .subscription_info {line-height:normal;}
 
+
+    /****************************************************************************************************/
+    /***                                           content                                            ***/
+    /****************************************************************************************************/
+
     /*** 팩플레터 ***/
     .subscription_wrap.letter_wrap {padding:18px 16px;}
     .letter_wrap .thum {width:70px;margin-top:0;}
@@ -416,6 +401,8 @@ font-*,color,text-align,vertical-align, ...
     .ab_photo.photo_center {position:relative;max-width:99vw !important;left:50%;transform:translateX(-50%);}
 
     .layer_ticker .btn_close { position: absolute; right: 20px; top: 12.5px; }
+
+    .related_link .card_image {margin-right:15px;}
 
 }
 

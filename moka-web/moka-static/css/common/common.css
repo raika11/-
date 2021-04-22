@@ -272,7 +272,7 @@ textarea {resize:none;}
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width:1023px) {
     .pc {display:none;}
-    
+    .sm_hidden {display:none;}
 
     
 
@@ -485,7 +485,7 @@ html, body {overflow-x: hidden;}
 
 
 /** footer **/
-.footer {display:block;width:100%;min-height:100px;background:#e8e8e8;}
+.footer {display:block;width:100%;min-height:100px;margin-top:40px;background:#e8e8e8;}
 .foot {width:100%;height:inherit;margin:0 auto;padding:20px 0;text-align:center;}
 
 /** content **/
@@ -552,9 +552,9 @@ section {width:100%;}
     * -----------------------------------------------------
     */
 /* 기존도트 숨기고 li를 css로 디자인. button:after로도 디자인 가능 */
-.slick-dots {position: absolute; bottom:20px; left:50%; transform: translateX(-50%);}
-.slick-dots li {float: left; margin:0 8px; width:11px; height: 11px; border-radius: 50%; background:#999; opacity: 0.3; cursor: pointer;}
-.slick-dots li.slick-active {opacity: 1;}
+.slick-dots {position: absolute; bottom:0px; left:50%; transform: translateX(-50%);}
+.slick-dots li {float: left; margin:0 5px 0 6px; width:7px; height:7px; border-radius: 50%; background:#999; opacity: 0.3; cursor: pointer;}
+.slick-dots li.slick-active {opacity: 1;background-color:#fd3c18;}
 .slick-dots li button {font-size:0; opacity:0;}
 
 
@@ -653,9 +653,9 @@ section {width:100%;}
 .form_check {margin-right:20px;}
 .check_type_1 input[type="checkbox"] + label {color:#666;font-size:14px;font-weight:500;}
 .radio_type_1 input[type="radio"] + label {font-size:14px;font-weight:500;}
-.radio_type_1 input[type="radio"] + label span {width:18px;height:18px;border:1px solid #999;border-radius:50%;vertical-align:text-bottom;margin-right:8px;}
-.radio_type_1 input[type="radio"]:checked + label span {position:relative;width:18px;height:18px;border:1px solid #fb502f;}
-.radio_type_1 input[type="radio"]:checked + label span::after {content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background-color:#fb502f;background-size:100%;}
+.radio_type_1 input[type="radio"] + label::before {content:'';width:18px;height:18px;border:1px solid #999;border-radius:50%;vertical-align:text-bottom;margin-right:8px;}
+.radio_type_1 input[type="radio"]:checked + label::before {position:relative;width:18px;height:18px;border:1px solid #fb502f;}
+.radio_type_1 input[type="radio"]:checked + label::after {content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background-color:#fb502f;background-size:100%;}
 
 
 
@@ -993,10 +993,17 @@ dl.date dd { margin-left: 6px; }
 .bookmark_list_area .card {padding:20px 0;}
 .bookmark_list_area .card::before{width:100%;height:1px;bottom:0;}
 .bookmark_list_area .card_group {margin-top:-20px;}
+.bookmark_list_area .slick-dots {display: flex;flex-wrap:wrap;justify-content:center;width: 100%;max-width:100%;left:0;transform: translateX(0);}
+.bookmark_list_area .slick-dots li{flex:0 0 auto;}
 
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width:1023px) {
-    /* .bookmark_list_area .card:nth-child(n+4) {display:none;} */
+
+    .bookmark_list_area .slick-initialized .card{padding-bottom:26px;}
+    .bookmark_list_area .slick-list.draggable{margin:0 -5px;}
+    .bookmark_list_area .slick-slide{margin:0 5px;}
+    .bookmark_list_area .card::before {display: none;}
+    .bookmark_list_area .headline {margin-top:12px;font-size:20px;line-height: 1.5;letter-spacing: -0.4px;}
 }
 
 

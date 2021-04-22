@@ -521,10 +521,6 @@
                                     <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
                                     <!-- //loop -->
                                 </ul>
-                                <div class="btn_area">
-                                    <button type="button" class="btn_prev btn btn-info slick-arrow" style="display: block;">prev</button>
-                                    <button type="button" class="btn_next btn btn-info slick-arrow" style="display: block;">next</button>
-                                </div>
                             </div>
                             <!-- 읽지않은북마크 -->
                             
@@ -997,15 +993,10 @@
         <!-- // footer -->
     </div>
 </body>
-<style>
-/* 기존도트 숨기고 li를 css로 디자인. button:after로도 디자인 가능 */
-.bookmark_list_area .slick-dots {position: absolute; bottom:20px; left:50%; transform: translateX(-50%);}
-.bookmark_list_area .slick-dots li {float: left; margin:0 8px; width:11px; height: 11px; border-radius: 50%; background:#999; opacity: 0.3; cursor: pointer;}
-.bookmark_list_area .slick-dots li.slick-active {opacity: 1;}
-.bookmark_list_area .slick-dots li button {font-size:0; opacity:0;}
-</style>
 
 <script>
+
+
 
 
 var slider = $('#slider_div');
@@ -1015,16 +1006,14 @@ var slickOptions = {
     slidesToShow: 1,
     slidesToScroll: 1,
     dots:true,
-    prevArrow : $('.btn_prev'),
-    nextArrow : $('.btn_next')
+    arrows:false
 };
 
 $(window).on('load resize', function() {
+    slider.not('.slick-initialized').slick(slickOptions);
     if($(window).width() > 1023) {
         slider.slick('unslick');
-    }else{
-        slider.not('.slick-initialized').slick(slickOptions);
-    }
+    };
 });
 
 </script>

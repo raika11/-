@@ -353,10 +353,8 @@ font-*,color,text-align,vertical-align, ...
     /****************************************************************************************************/
     /***                                           content                                            ***/
     /****************************************************************************************************/
-    .ab_photo.photo_center {max-width:100vw !important;margin-left:-20px;}
-    .ab_photo.photo_center .image {max-width:100vw;}
-    .ab_photo.photo_center .caption {max-width:100vw;}
-    .ab_photo.photo_center .image img {max-width:100%;}
+    .ab_photo.photo_center {width:100vw !important;max-width:100vw !important;margin-left: 50%;transform: translateX(-50%);}
+    .ab_photo.photo_center .image {width:100%;max-width:100vw;}
 
     /* 댓글레이어 */
     .layer_comment { display: none; width: 100%; padding: 54px 20px; }

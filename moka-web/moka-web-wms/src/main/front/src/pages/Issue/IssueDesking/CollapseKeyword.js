@@ -160,9 +160,9 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
     }, [desking.viewYn]);
 
     return (
-        <div className="position-relative">
+        <div className="position-relative border-bottom pb-24">
             {loading && <MokaLoader />}
-            <Row className="py-2 mt-2 d-flex border-bottom" noGutters>
+            <Row className="d-flex" noGutters>
                 <Col xs={3}>
                     <MokaInputLabel as="switch" label="키워드" id={controls} inputProps={{ checked: open }} onChange={(e) => setOpen(e.target.checked)} />
                 </Col>

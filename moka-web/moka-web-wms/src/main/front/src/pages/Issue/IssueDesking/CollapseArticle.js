@@ -17,7 +17,7 @@ import { artColumnDefs } from './IssueDeskingColumns';
 /**
  * 패키지관리 > 관련 데이터 편집 > 기사 (편집)
  */
-const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, preview, MESSAGE, rowToData }, ref) => {
+const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, preview, MESSAGE, rowToData, rowHeight }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
@@ -255,9 +255,9 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
     }, [gridInstance, pkgSeq, deskingList]);
 
     return (
-        <div className="position-relative">
+        <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
-            <Row className="py-2 d-flex border-bottom" noGutters>
+            <Row className="d-flex" noGutters>
                 <Col xs={3}>
                     <MokaInputLabel
                         as="switch"
@@ -289,7 +289,7 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
             <Collapse in={open}>
                 <div id={controls} className="mt-2">
                     <MokaTable
-                        rowHeight={210}
+                        rowHeight={rowHeight}
                         header={false}
                         paging={false}
                         columnDefs={artColumnDefs}

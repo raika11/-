@@ -178,11 +178,11 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
             footerButtons={[
                 { text: '재전송', variant: 'outline-neutral', onClick: () => handleClickResendButton(), className: 'mr-1' },
                 { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton('publish'), className: 'mr-1' },
-                { text: '임시저장', variant: 'positive-a', onClick: () => handleClickSaveButton('save') },
+                { text: '임시저장', variant: 'temp', onClick: () => handleClickSaveButton('save') },
             ]}
         >
             <div
-                className={clsx('component-work component-hot-click border-top pt-0', {
+                className={clsx('component-work component-hot-click pt-0', {
                     disabled: false,
                 })}
                 id={`agGrid-0`}

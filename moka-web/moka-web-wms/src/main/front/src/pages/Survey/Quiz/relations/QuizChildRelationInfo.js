@@ -24,15 +24,13 @@ const QuizChildRelationInfo = ({ HandleSave }) => {
         <MokaCard
             title="관련 정보"
             className="w-100"
-            footer
             footerButtons={[
                 { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: () => history.push('/quiz') },
             ]}
-            width={750}
         >
             <div>
-                <Form.Row>
+                <Form.Row className="mb-2">
                     <MokaInputLabel as="none" label="관련 퀴즈" />
                     <Button variant="searching" size="s" onClick={() => setQuizSearchModalState(true)}>
                         퀴즈 검색
@@ -45,12 +43,7 @@ const QuizChildRelationInfo = ({ HandleSave }) => {
 
                 <SortAgGrid />
 
-                <QuizSearchModal
-                    show={quizSearchModalState}
-                    onHide={() => {
-                        setQuizSearchModalState(false);
-                    }}
-                />
+                <QuizSearchModal show={quizSearchModalState} onHide={() => setQuizSearchModalState(false)} />
             </div>
         </MokaCard>
     );

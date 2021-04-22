@@ -1,6 +1,7 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
 import { MokaTableEditCancleButton, MokaPrependLinkInput } from '@components';
+
+const replaceNo = (t) => ('00' + t).slice(-2);
 
 const RelationPollSortItemRenderer = ({ item, onDelete }) => {
     const handleClickDelete = () => {
@@ -10,25 +11,22 @@ const RelationPollSortItemRenderer = ({ item, onDelete }) => {
     };
 
     return (
-        <Row className="d-flex flex-fill align-items-center h-100">
-            <Col className="justify-content-start mb-0 pr-0 w-100" xs={1}>
-                {item.ordNo}
-            </Col>
-            <Col xs={10}>
-                <MokaPrependLinkInput
-                    linkText={`ID: ${item.contentId}`}
-                    inputList={{
-                        value: item.title || '',
-                        disabled: true,
-                        name: 'title',
-                        className: 'bg-white',
-                    }}
-                />
-            </Col>
-            <Col className="d-felx align-self-center text-left mb-0 pl-0">
+        <div className="h-100 d-flex align-items-center">
+            <div className="flex-shrink-0 d-flex align-items-center mr-12">{replaceNo(item.ordNo)}</div>
+            <MokaPrependLinkInput
+                linkText={`ID: ${item.contentId}`}
+                className="flex-fill"
+                inputList={{
+                    value: item.title || '',
+                    disabled: true,
+                    name: 'title',
+                    className: 'bg-white',
+                }}
+            />
+            <div className="mr-12 ml-10" style={{ width: 13 }}>
                 <MokaTableEditCancleButton onClick={handleClickDelete} />
-            </Col>
-        </Row>
+            </div>
+        </div>
     );
 };
 

@@ -8,8 +8,8 @@ const cellClassRules = {
 
 const cellStyle = {
     lineHeight: `${GRID_LINE_HEIGHT.M}px`,
-    paddingTop: '4px',
-    paddingBottom: '4px',
+    paddingTop: '6px',
+    paddingBottom: '6px',
 };
 
 export default [

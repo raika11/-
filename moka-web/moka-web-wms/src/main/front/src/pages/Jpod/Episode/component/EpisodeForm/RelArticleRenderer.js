@@ -38,9 +38,9 @@ const RelArticleRenderer = forwardRef((params, ref) => {
         <div key={article.totalId} className="py-2 pl-1 pr-2 d-flex align-items-center">
             {/* 기사 ID, 제목 노출 */}
             <div className="flex-fill">
-                <MokaInputLabel label="제목" className="mb-2" labelWidth={40} name="relTitle" onChange={handleChange} value={article.relTitle} />
+                <MokaInputLabel label="제목" className="mb-1" labelWidth={40} name="relTitle" onChange={handleChange} value={article.relTitle} />
                 <div className="d-flex">
-                    <MokaInputLabel label="URL" className="mr-2 flex-fill" labelWidth={40} name="relLink" value={article.relLink} onChange={handleChange} />
+                    <MokaInputLabel label="URL" className="mr-1 flex-fill" labelWidth={40} name="relLink" value={article.relLink} onChange={handleChange} />
                     <Form.Row className="flex-shrink-0">
                         <MokaInput as="select" name="relLinkTarget" value={article.relLinkTarget} onChange={handleChange}>
                             <option value="S">본창</option>
@@ -50,7 +50,7 @@ const RelArticleRenderer = forwardRef((params, ref) => {
                 </div>
             </div>
             {/* 기사 삭제버튼 */}
-            <div className="ml-2 flex-shrink-0">
+            <div className="ml-10 flex-shrink-0">
                 <Button variant="white" className="border-0 p-0 bg-transparent" onClick={handleDeleteArticle}>
                     <MokaIcon iconName="fas-minus-circle" />
                 </Button>

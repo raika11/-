@@ -16,8 +16,6 @@
     }
 
     .react-select__value-container {
-        padding: 3px $input-padding-x 1px $input-padding-x;
-
         .react-select__placeholder {
             @include font-size($font-size-base);
             color: $gray-500;

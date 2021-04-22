@@ -13,6 +13,7 @@
       <type name="tp.merge" expire="1m"/>
       <type name="ad.merge" expire="1m"/>
       -->
+				<type name="article.flag" expire="2m"/>
 		</cache>
 		<cache expire="1m" enable="false">
 			<instance class="jmnet.moka.common.cache.MemoryCache" name="memory"/>

@@ -7,7 +7,7 @@ import DeskingStatusBadge from '@pages/Desking/components/ComponentWork/StatusBa
 const StatusBadge = ({ desking }) => {
     if (desking?.lastSaveDt) {
         return (
-            <div style={{ height: 26 }} className="h3 mr-1 mb-0">
+            <div className="mr-2">
                 <DeskingStatusBadge
                     lastPublishDt={desking?.lastPublishDt}
                     lastPublishNm={desking?.lastPublishNm}
@@ -15,7 +15,7 @@ const StatusBadge = ({ desking }) => {
                     lastSaveNm={desking?.lastSaveNm}
                     lastSaveId={desking?.lastSaveId}
                     lastSaveDt={desking?.lastSaveDt}
-                    className="h-100 d-flex align-items-center px-2"
+                    className="h-100 d-flex align-items-center"
                 />
             </div>
         );

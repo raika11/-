@@ -14,16 +14,6 @@ button {
   border-radius: 0;
 }
 
-.btn .feather {
-  width: 14px;
-  height: 14px;
-}
-
-.btn-lg .feather {
-  width: 15px;
-  height: 15px;
-}
-
 @each $color, $value in $theme-colors {
   .btn-#{$color} {
     @include button-color($white);

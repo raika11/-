@@ -40,6 +40,13 @@ public class InternalMyRestController extends AbstractCommonController {
         this.myService = myService;
     }
 
+    /**
+     * 이메일변경
+     *
+     * @param myEmail 회원정보
+     * @return 성공여부
+     * @throws Exception
+     */
     @ApiOperation(value = "이메일변경")
     @PutMapping("/email")
     public ResponseEntity<?> putMyEmail(@ApiParam(value = "회원정보", required = true) @Valid MyEmailDTO myEmail)

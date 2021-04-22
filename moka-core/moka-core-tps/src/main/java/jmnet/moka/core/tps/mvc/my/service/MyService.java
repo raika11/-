@@ -13,10 +13,12 @@ import jmnet.moka.core.tps.mvc.my.dto.MyEmailDTO;
  * @since 2021-04-22
  */
 public interface MyService {
+
     /**
      * 회원이메일수정
      *
      * @param myEmail 수정정보
+     * @return 성공여부
      */
-    void updateEmail(MyEmailDTO myEmail);
+    boolean updateEmail(MyEmailDTO myEmail);
 }

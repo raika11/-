@@ -63,7 +63,7 @@ button {
 
 /* -----------------------
 * .btn-outline-neutral의 text 컬러만 변경
-* .btn-outline-table-btn, .bn-outline-table-btn2 .disabled 변경
+* .btn-outline-table-btn, .bn-outline-table-btn2
 * ---------------------- */
 .btn-outline-neutral {
   @include button-color($primary);
@@ -74,7 +74,6 @@ button {
   color: $gray-900;
   font-weight: $font-weight-normal;
   background-color: $white;
-  @include button-disabled($white, $gray-400);
 }
 
 .btn-outline-table-btn2 {
@@ -82,5 +81,11 @@ button {
   color: $black;
   font-weight: $font-weight-bold;
   background-color: $white;
-  @include button-disabled($white, $gray-400);
+}
+
+/* -----------------------
+* .btn.disabled, .btn:disabled 변경
+* ---------------------- */
+.btn {
+	@include button-disabled($white, $gray-400);
 }

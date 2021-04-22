@@ -49,7 +49,7 @@ const QuizSortAgGrid = () => {
             rowHeight={46}
             onRowDragEnd={handleRowDragEnd}
             localeText={{ noRowsToShow: '관련 퀴즈가 없습니다', loadingOoo: '조회 중입니다' }}
-            onRowNodeId={(data) => data.quizSeq}
+            onRowNodeId={(data) => data.contentId}
             dragStyle
             rowDragManaged
             animateRows

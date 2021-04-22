@@ -14,7 +14,7 @@ const ItemRenderer = forwardRef((params, ref) => {
      * 삭제
      */
     const handleClickDelete = () => {
-        const newList = selectQuiz.filter((quiz) => quiz.quizSeq !== item.quizSeq);
+        const newList = selectQuiz.filter((quiz) => String(quiz.quizSeq) !== String(item.contentId));
         dispatch(selectQuizChange(newList));
     };
 
@@ -28,7 +28,7 @@ const ItemRenderer = forwardRef((params, ref) => {
     return (
         <div className="d-flex h-100">
             <div className="flex-shrink-0 d-flex align-items-center mr-12">{replaceNo(item.ordNo)}</div>
-            <MokaInputLabel name="title" id={`title-${item.ordNo}`} inputClassName="bg-white" labelWidth={30} value={item.title} className="flex-fill" disabled />
+            <MokaInputLabel name="title" id={`title-${item.contentId}`} inputClassName="bg-white" labelWidth={30} value={item.title} className="flex-fill" disabled />
             <div className="mr-12 ml-10" style={{ width: 13 }}>
                 <MokaTableEditCancleButton onClick={handleClickDelete} />
             </div>

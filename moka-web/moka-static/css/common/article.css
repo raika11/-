@@ -301,6 +301,7 @@ font-*,color,text-align,vertical-align, ...
 
 @media (min-width: 1024px) {
     .related_link .card_image {margin-right:15px;}
+
 }
 
 
@@ -329,9 +330,7 @@ font-*,color,text-align,vertical-align, ...
     
 
     /* 속보 티커 */
-    .layer_ticker .ticker_content { padding: 10px 52px 10px 20px; }
     .layer_ticker .date { display: none; }
-    .layer_ticker .btn_close { position: absolute; right: 20px; top: 12.5px; }
 
 
     /* not_comment */
@@ -373,7 +372,6 @@ font-*,color,text-align,vertical-align, ...
     /* 속보티커 */
     .layer_ticker { height: 52px; }
     .layer_ticker .ticker_content { align-items: center; }
-    .layer_ticker .btn_close { left: 50%; top: 50%; transform: translate(-50%,-50%); margin-left: 590px; }
 
     /* not_comment */
     .not_comment { padding: 40px 0; }
@@ -400,6 +398,11 @@ font-*,color,text-align,vertical-align, ...
     .sticky_menu .layer_fontsize { top: 73px; right: 20px; left: auto; }
     /* Medium devices (only tablet, 768px and 1023px) */
 
+
+    /* 속보 티커 */
+    .layer_ticker .ticker_content { max-width: 100%; padding: 10px 52px 10px 20px; }
+    .layer_ticker .btn_close { right: 20px; }
+
 }
 
 @media (min-width:768px) and (max-width:1023px) {
@@ -416,8 +419,14 @@ font-*,color,text-align,vertical-align, ...
     .article_footer {max-width:580px;}
     .ab_photo.photo_center {position:relative;max-width:99vw !important;left:50%;transform:translateX(-50%);}
 
+    .layer_ticker .btn_close { position: absolute; right: 20px; top: 12.5px; }
+
 }
 
+@media (min-width:1200px) {
+    .layer_ticker .btn_close { left: 50%; top: 50%; transform: translate(-50%,-50%); margin-left: 590px; }
+
+}
 
 /* Unique devices (large desktops, 1280px and up) */
 @media (min-width:1280px) {

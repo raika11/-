@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Description: 설명
+ * Description: 내부 연동 시스템 이슈편집 API
  *
  * @author ssc
  * @since 2021-03-02

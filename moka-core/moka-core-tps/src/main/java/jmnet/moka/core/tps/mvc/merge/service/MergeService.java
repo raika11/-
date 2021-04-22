@@ -11,7 +11,7 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
-import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
+import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistCompDTO;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 import jmnet.moka.core.tps.mvc.rcvarticle.dto.RcvArticleBasicUpdateDTO;
@@ -53,6 +53,6 @@ public interface MergeService {
     String getMergeArticle(Long totalId, String domainId)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException;
 
-    String getMergeIssue(String domainId, PackageMaster packageMaster, List<IssueDeskingComponentDTO> deskingDTOList)
+    String getMergeIssue(String domainId, PackageMaster packageMaster, List<IssueDeskingHistCompDTO> deskingDTOList)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException;
 }

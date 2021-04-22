@@ -1,16 +1,26 @@
-import React from 'react';
-import { ABSearch, ABTestAgGrid, StatusBar } from '../components';
+import React, { useEffect } from 'react';
+import { ABSearch, ABAgGrid, StatusBar } from '../components';
 import EditAgGridColumns from '@pages/AB/Edit/EditAgGridColumns';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAbTestList } from '@store/ab/abAction';
+import { ABTEST_TYPE } from '@store/ab/abReducer';
 
 /**
  * A/B 테스트 > 대안 설계 > 리스트
  */
 const EditList = (props) => {
-    const { match } = props;
+    const dispatch = useDispatch();
     const history = useHistory();
+    const { match } = props;
+
+    const { search, list } = useSelector(({ ab }) => ab);
+
+    useEffect(() => {
+        dispatch(getAbTestList({ ...search, abtestType: ABTEST_TYPE.ALTERNATIVE_INPUT }));
+    }, [search, dispatch]);
     return (
         <React.Fragment>
             <ABSearch {...props} />
@@ -20,7 +30,7 @@ const EditList = (props) => {
                     설계 등록
                 </Button>
             </Row>
-            <ABTestAgGrid columnDefs={EditAgGridColumns} />
+            <ABAgGrid rowData={list} searchOptions={search} columnDefs={EditAgGridColumns} />
         </React.Fragment>
     );
 };

@@ -7,7 +7,7 @@ package jmnet.moka.core.tps.mvc.merge.dto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.lang.reflect.Type;
 import java.util.List;
-import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
+import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistCompDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,5 +38,5 @@ public class IssueDeskingPreviewDTO {
 
     String domainId;
 
-    List<IssueDeskingComponentDTO> issueDeskings;
+    List<IssueDeskingHistCompDTO> issueDeskings;
 }

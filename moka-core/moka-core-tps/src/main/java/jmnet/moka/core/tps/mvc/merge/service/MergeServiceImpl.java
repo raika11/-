@@ -50,7 +50,7 @@ import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
-import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
+import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistCompDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistDTO;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
@@ -782,7 +782,7 @@ public class MergeServiceImpl implements MergeService {
     }
 
     @Override
-    public String getMergeIssue(String domainId, PackageMaster packageMaster, List<IssueDeskingComponentDTO> deskingDTOList)
+    public String getMergeIssue(String domainId, PackageMaster packageMaster, List<IssueDeskingHistCompDTO> deskingDTOList)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
         // 도메인Id조회
         Domain domainInfo = domainService
@@ -826,7 +826,7 @@ public class MergeServiceImpl implements MergeService {
         // 편집정보 변환
         String compYn = "";
         List<Map<String, Object>> deskingList = new LinkedList<>();
-        for (IssueDeskingComponentDTO dto : deskingDTOList) {
+        for (IssueDeskingHistCompDTO dto : deskingDTOList) {
             if (dto.getIssueDeskings() != null && dto
                     .getIssueDeskings()
                     .size() > 0) {

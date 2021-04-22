@@ -16,5 +16,9 @@ export const columnDefs = [
         flex: 1,
         suppressKeyboardEvent: suppressKeyboardEvent,
         cellRendererFramework: ItemRenderer,
+        cellStyle: {
+            paddingLeft: '0px',
+            paddingRight: '0px',
+        },
     },
 ];

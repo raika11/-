@@ -61,7 +61,7 @@ export const QuizSearchAddButtonRenderer = ({ quizInfo }) => {
      * 등록
      */
     const handleClickButton = () => {
-        if (selectQuiz.findIndex((q) => q.quizSeq === quizInfo.quizSeq) < 0) {
+        if (selectQuiz.findIndex((q) => String(q.contentId) === String(quizInfo.quizSeq)) < 0) {
             dispatch(
                 selectQuizChange([
                     ...selectQuiz,

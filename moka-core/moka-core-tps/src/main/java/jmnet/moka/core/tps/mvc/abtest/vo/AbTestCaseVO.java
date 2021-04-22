@@ -171,6 +171,12 @@ public class AbTestCaseVO {
     @Column(name = "REG_ID")
     private String regId;
 
+    /**
+     * 생성자명
+     */
+    @Column(name = "REG_NM")
+    private String regNm;
+
     @Column(name = "MOD_DT")
     private Date modDt;
 

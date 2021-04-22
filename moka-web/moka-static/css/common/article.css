@@ -144,15 +144,14 @@ font-*,color,text-align,vertical-align, ...
 /* sticky_menu */
 .sticky_menu { z-index: 200; position: fixed; top: 344px;  left:calc(100vw / 2 + 485px * -1); /*left: 50%; transform: translateX(-50%);*/ width: 80px; /* margin-left: -500px;*/ padding: 30px 0; border: 1px solid #e2e2e2; border-radius: 40px; background-color: #fff;  }
 .sticky_menu > button { display: block; position: relative; width: 100%; font-size: 0; text-align: center; }
-.sticky_menu > button:nth-child(n+2) { margin-top: 16px;}
+.sticky_menu > button:nth-child(n+2) { padding-top: 16px;}
 .sticky_menu span.sm_hidden { display: block; font-size: 13px; line-height: 22px; color: #999; letter-spacing: -0.5px; }
 .sticky_menu .ico_bookmark { width: 26px; height: 26px; }
-.sticky_menu .comment_cnt { position: absolute; top: -4px; right: 20px; min-width: 20px; height: 14px; padding: 0 4px 1px; border-radius: 7px; background: #f6330a; font-size: 9px; line-height: 14px; color: #fff; }
+.sticky_menu .comment_cnt { position: absolute; top: 12px; right: 20px; min-width: 20px; height: 14px; padding: 0 4px 1px; border-radius: 7px; background: #f6330a; font-size: 9px; line-height: 14px; color: #fff; }
 .sticky_menu .ico_comment { width: 26px; height: 26px; }
 .sticky_menu .ico_share { width: 26px; height: 26px; }
-.sticky_menu .btn_fontsize { padding-top: 17px; }
-.sticky_menu .btn_fontsize:before { content: ''; position: absolute; top: 0; left: 50%; width: 33px; height: 1px; transform: translateX(-50%); background: #e2e2e2;}
-.sticky_menu .ico_fontsize { top: 17px; width: 18px; height: 24px; background: #ddd; }
+.sticky_menu .btn_fontsize:before { content: ''; position: absolute; top: 16px; left: 50%; width: 33px; height: 1px; transform: translateX(-50%); background: #e2e2e2;}
+.sticky_menu .ico_fontsize { top: 17px; width: 18px; height: 24px; margin-top: 17px; background: #ddd; }
 .sticky_menu .ico_print { width: 23px; height: 24px; background: #ddd; }
 .sticky_menu .reader_area { position: relative; margin-top: 16px; padding-top: 16px; text-align: center; }
 .sticky_menu .reader_area:before { content: ''; position: absolute; top: 0; left: 50%; width: 33px; height: 1px; transform: translateX(-50%); background: #e2e2e2;}

@@ -135,6 +135,6 @@ function bylineControl(width){
 function setBylinePopPos(){
     var $bylinePop = $(".layer_byline");
     var $bylineMore = $(".btn_byline_more");
-    var bylinePopleft = $bylineMore.position().left+$bylineMore.width() - $bylinePop.outerWidth();
+    var bylinePopleft = $bylineMore.position().left+$bylineMore.width() - $bylinePop.outerWidth() +5;
     $bylinePop.css("left",bylinePopleft+"px");
 }

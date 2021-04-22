@@ -307,40 +307,74 @@ font-*,color,text-align,vertical-align, ...
 
 /* Mobile devices (mobile, 767px and down) */
 @media (max-width:767px) {
+
+}
+
+
+/* Medium devices (mobile ~ tablet, 1023px and down) */
+@media (max-width:1023px) {
+
+/****************************************************************************************************/
+/***                                           layout                                             ***/
+/****************************************************************************************************/
     #scroll_indicator { top: 59px; }
-    /* article_header */
+
     .byline_bx { display: block; }
     .article_header .datetime .time_bx > .date:nth-last-of-type(2) { display: none; }
     .article_header .datetime .time_bx .btn_datetime::before { content: ''; position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
     .article_header .datetime .time_bx .btn_datetime .ico_arrow_down { width: 16px; height: 16px; }
 
+    /* sticky_menu */
+    .sticky_menu { position: fixed; top: 0; left: 0; transform: none; width: 100%; height: 59px; padding: 19px 0 0; margin: 0; border: none; border-radius: 0; }
+    .sticky_menu > button { position: absolute; top: 19px; width: auto; vertical-align: top; }
+    .sticky_menu > button:nth-child(n+2) { margin-top: 0;}
+    .sticky_menu > button [class*="ico_"] { height: 26px; }
+    .sticky_menu span.sm_hidden { display: none; }
+    .sticky_menu .btn_comment { left: 20px; }
+    .sticky_menu .comment_cnt { right: 0; transform: translateX(50%); }
+    .sticky_menu .btn_share { left: 58px; }
+    .sticky_menu .btn_bookmark { left: 96px; }
+    .sticky_menu .btn_fontsize { right: 20px; padding: 0;}
+    .sticky_menu .btn_fontsize:before { display: none; }
+    .sticky_menu .btn_print { display: none; }
+    .sticky_menu .reader_area { display: none; }
+    .sticky_menu .layer_share { top: 73px; left: 52px;}
+    .sticky_menu .layer_fontsize { top: 73px; right: 20px; left: auto; }
+    /* Medium devices (only tablet, 768px and 1023px) */
+
+    /* 속보 티커 */
+    .layer_ticker .date { display: none; }
+    .layer_ticker .ticker_content { max-width: 100%; padding: 10px 52px 10px 20px; }
+    .layer_ticker .btn_close { right: 20px; }
+
+    /* not_comment */
+    .not_comment { padding: 20px 0; }
+
+    /****************************************************************************************************/
+    /***                                           content                                            ***/
+    /****************************************************************************************************/
     .ab_photo.photo_center {max-width:100vw !important;margin-left:-20px;}
     .ab_photo.photo_center .image {max-width:100vw;}
     .ab_photo.photo_center .caption {max-width:100vw;}
     .ab_photo.photo_center .image img {max-width:100%;}
 
-
+    /* 댓글레이어 */
     .layer_comment { display: none; width: 100%; padding: 54px 20px; }
     .layer_comment::before { content: ''; z-index: 101; position: fixed; right: 0; top: 0; width: 100%; height: 54px; background-color: #fff; }
     .layer_comment.active { display: block; }
     .layer_comment .btn_close { z-index: 101; position: fixed; right: 20px; top: 20px; }
-    
     .sm_main_text_area + .comment_state { margin-top: 20px; padding-top: 30px; border-top: 1px solid #d8d8d8; }
 
-    
-
-    /* 속보 티커 */
-    .layer_ticker .date { display: none; }
-
-
-    /* not_comment */
-    .not_comment { padding: 20px 0; }
 
 }
 
 
-/* Medium devices (tablet + pc, 768px and up) */
-@media (min-width:768px) {
+/* Large devices (desktops, 1024px and up) */
+@media (min-width:1024px) {
+    /****************************************************************************************************/
+    /***                                           layout                                             ***/
+    /****************************************************************************************************/
+
     /* .ab_photo.photo_center .image {max-width:100vw;} */
     .ab_photo.photo_center .image img {max-width:100%;}
 
@@ -375,43 +409,7 @@ font-*,color,text-align,vertical-align, ...
 
     /* not_comment */
     .not_comment { padding: 40px 0; }
-}
 
-/* Medium devices (mobile ~ tablet, 1023px and down) */
-@media (max-width:1023px) {
-
-    /* sticky_menu */
-    .sticky_menu { position: fixed; top: 0; left: 0; transform: none; width: 100%; height: 59px; padding: 19px 0 0; margin: 0; border: none; border-radius: 0; }
-    .sticky_menu > button { position: absolute; top: 19px; width: auto; vertical-align: top; }
-    .sticky_menu > button:nth-child(n+2) { margin-top: 0;}
-    .sticky_menu > button [class*="ico_"] { height: 26px; }
-    .sticky_menu span.sm_hidden { display: none; }
-    .sticky_menu .btn_comment { left: 20px; }
-    .sticky_menu .comment_cnt { right: 0; transform: translateX(50%); }
-    .sticky_menu .btn_share { left: 58px; }
-    .sticky_menu .btn_bookmark { left: 96px; }
-    .sticky_menu .btn_fontsize { right: 20px; padding: 0;}
-    .sticky_menu .btn_fontsize:before { display: none; }
-    .sticky_menu .btn_print { display: none; }
-    .sticky_menu .reader_area { display: none; }
-    .sticky_menu .layer_share { top: 73px; left: 52px;}
-    .sticky_menu .layer_fontsize { top: 73px; right: 20px; left: auto; }
-    /* Medium devices (only tablet, 768px and 1023px) */
-
-
-    /* 속보 티커 */
-    .layer_ticker .ticker_content { max-width: 100%; padding: 10px 52px 10px 20px; }
-    .layer_ticker .btn_close { right: 20px; }
-
-}
-
-@media (min-width:768px) and (max-width:1023px) {
-    
-}
-
-
-/* Large devices (desktops, 1024px and up) */
-@media (min-width:1024px) {
     #scroll_indicator { top: 60px; }
     .article {max-width: 580px;padding:40px 0 60px;margin:0 auto;background: #fff;zoom: 1;}
     .article_header,

@@ -5,7 +5,7 @@ import common from '@utils/commonUtil';
 
 // Edit Form목록 조회
 export const getEditFormList = ({ search }) => {
-    return instance.get(`/api/edit-forms`).catch((err) => {
+    return instance.get(`/api/edit-forms?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };

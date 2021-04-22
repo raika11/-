@@ -579,17 +579,17 @@ body {
 }
 
 // 페이지편집
+.work-btn {
+	height: 18px;
+	width: 18px;
+	padding: 0px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 .component-work {
     position: relative;
-
-    .work-btn {
-        height: 18px;
-        width: 18px;
-        padding: 0px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
 
     .ag-theme-moka-dnd-grid .ag-root-wrapper .ag-body-viewport {
         padding-top: 0px;

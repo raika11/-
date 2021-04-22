@@ -5,12 +5,11 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
 import jmnet.moka.core.tps.mvc.newsletter.entity.QNewsletterInfo;
-import jmnet.moka.core.tps.mvc.newsletter.entity.QNewsletterLog;
 import jmnet.moka.core.tps.mvc.newsletter.entity.QNewsletterSend;
-import jmnet.moka.core.tps.mvc.newsletter.entity.QNewsletterSubscribe;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -39,11 +38,12 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
     @Override
     public Page<NewsletterInfo> findAllNewsletterInfo(NewsletterSearchDTO searchDTO) {
         QNewsletterInfo qNewsletterInfo = QNewsletterInfo.newsletterInfo;
-        QNewsletterSubscribe qNewsletterSubscribe = QNewsletterSubscribe.newsletterSubscribe;
-        QNewsletterLog qNewsletterLog = QNewsletterLog.newsletterLog;
+        //        QNewsletterSubscribe qNewsletterSubscribe = QNewsletterSubscribe.newsletterSubscribe;
+        //        QNewsletterLog qNewsletterLog = QNewsletterLog.newsletterLog;
+        QMemberInfo qMemberInfo = QMemberInfo.memberInfo;
         QNewsletterSend qNewsletterSend = QNewsletterSend.newsletterSend;
 
-        JPQLQuery<NewsletterInfo> query = from(qNewsletterInfo);
+        JPQLQuery<NewsletterInfo> query = from(qNewsletterInfo).distinct();
         Pageable pageable = searchDTO.getPageable();
 
         if (McpString.isNotEmpty(searchDTO.getLetterType())) {
@@ -64,11 +64,11 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
                     .toUpperCase()
                     .eq(searchDTO.getSendType()));
         }
-        if (McpString.isNotEmpty(searchDTO.getLetterType())) {
+        if (McpString.isNotEmpty(searchDTO.getAbtestYn())) {
             // A/B TEST 유무
             query.where(qNewsletterInfo.abtestYn
                     .toUpperCase()
-                    .eq(searchDTO.getLetterType()));
+                    .eq(searchDTO.getAbtestYn()));
         }
         if (searchDTO.getStartDt() != null) {
             // 검색 시작일
@@ -84,14 +84,36 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
         }
         if (McpString.isYes(searchDTO.getUseTotal())) {
             query = getQuerydsl().applyPagination(pageable, query);
+
+            //            query
+            //                    .orderBy(new CaseBuilder()
+            //                            .when(qNewsletterInfo.letterType.eq("O"))
+            //                            .then("오리지널")
+            //                            .when(qNewsletterInfo.letterType.eq("B"))
+            //                            .then("브리핑")
+            //                            .when(qNewsletterInfo.letterType.eq("N"))
+            //                            .then("알림")
+            //                            .otherwise("기타")
+            //                            .asc())
+            //                    .offset(pageable.getOffset())
+            //                    .limit(pageable.getPageSize());
+            //            searchDTO
+            //                    .getPageable()
+            //                    .getSort()
+            //                    .stream()
+            //                    .forEach((order) -> {
+            //                        System.out.println(order.getProperty() + "," + order.getDirection());
+            //                    });
         }
 
         QueryResults<NewsletterInfo> list = query
-                .leftJoin(qNewsletterInfo.newsletterSubscribes, qNewsletterSubscribe)
-                .fetchJoin()
-                .leftJoin(qNewsletterInfo.newsletterLogs, qNewsletterLog)
-                .fetchJoin()
+                //                .leftJoin(qNewsletterInfo.newsletterSubscribes, qNewsletterSubscribe)
+                //                .fetchJoin()
+                //                .leftJoin(qNewsletterInfo.newsletterLogs, qNewsletterLog)
+                //                .fetchJoin()
                 .leftJoin(qNewsletterInfo.newsletterSends, qNewsletterSend)
+                .fetchJoin()
+                .leftJoin(qNewsletterInfo.regMember, qMemberInfo)
                 .fetchJoin()
                 .fetchResults();
 

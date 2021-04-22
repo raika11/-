@@ -53,6 +53,9 @@ public class NewsletterSend extends RegAudit {
     @Column(name = "AB_DIV")
     private String abDiv;
 
+    @Column(name = "AB_VARIANT_TYPE")
+    private String abVariantType;
+
     @Column(name = "SEND_STATUS")
     private String sendStatus;
 
@@ -86,11 +89,14 @@ public class NewsletterSend extends RegAudit {
     @Column(name = "LETTER_TITLE")
     private String letterTitle;
 
-    @Column(name = "UPLOAD_EMAIL")
-    private String uploadEmail;
+    @Column(name = "LETTER_URL")
+    private String letterUrl;
 
     @Column(name = "LETTER_BODY")
     private String letterBody;
+
+    @Column(name = "LETTER_HTML")
+    private String letterHtml;
 
     @ManyToOne
     @JoinColumn(name = "LETTER_SEQ", referencedColumnName = "LETTER_SEQ", nullable = false, insertable = false, updatable = false)

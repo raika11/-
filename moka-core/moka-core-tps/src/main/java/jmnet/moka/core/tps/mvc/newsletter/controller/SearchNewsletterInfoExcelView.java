@@ -3,7 +3,7 @@ package jmnet.moka.core.tps.mvc.newsletter.controller;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import jmnet.moka.core.common.util.AbstractExcelView;
-import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterProductDTO;
+import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSimpleDTO;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Cell;
@@ -27,7 +27,7 @@ public class SearchNewsletterInfoExcelView extends AbstractExcelView {
 
     @Override
     protected void makeColumnValue(HSSFSheet worksheet, Object resultList) {
-        List<NewsletterProductDTO> newsletters = (List<NewsletterProductDTO>) resultList;
+        List<NewsletterSimpleDTO> newsletters = (List<NewsletterSimpleDTO>) resultList;
 
         AtomicInteger rowIdx = new AtomicInteger(0);
         Workbook wb = worksheet.getWorkbook();
@@ -36,7 +36,7 @@ public class SearchNewsletterInfoExcelView extends AbstractExcelView {
         cellStyle.setDataFormat(createHelper
                 .createDataFormat()
                 .getFormat("yyyy-mm-dd"));
-        for (NewsletterProductDTO newsletter : newsletters) {
+        for (NewsletterSimpleDTO newsletter : newsletters) {
             HSSFRow row = worksheet.createRow(rowIdx.addAndGet(1));
             AtomicInteger cellNum = new AtomicInteger(0);
 
@@ -67,7 +67,8 @@ public class SearchNewsletterInfoExcelView extends AbstractExcelView {
                     .setCellValue(newsletter.getSendTime());
             row
                     .createCell(cellNum.getAndAdd(1))
-                    .setCellValue(newsletter.getSendBaseCnt());
+                    .setCellValue(0);
+            //.setCellValue(newsletter.getSendBaseCnt());
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter.getStatus());
@@ -78,7 +79,11 @@ public class SearchNewsletterInfoExcelView extends AbstractExcelView {
             }
             row
                     .createCell(cellNum.getAndAdd(1))
-                    .setCellValue(newsletter.getRegId());
+                    .setCellValue(newsletter
+                            .getRegMember()
+                            .getMemberNm() + newsletter
+                            .getRegMember()
+                            .getMemberId());
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter.getAbtestYn());

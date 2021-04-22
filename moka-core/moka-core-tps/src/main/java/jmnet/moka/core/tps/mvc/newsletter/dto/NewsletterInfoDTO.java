@@ -11,6 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -83,8 +84,17 @@ public class NewsletterInfoDTO implements Serializable {
     @Pattern(regexp = "^[0-9]{2}:[0-9]{2}$", message = "TODO")
     private String sendTime;
 
-    @ApiModelProperty("신규콘텐트기준개수")
-    private Long sendBaseCnt;
+    @ApiModelProperty("신규콘텐트 최소개수")
+    private Long sendMinCnt;
+
+    @ApiModelProperty("신규콘텐트 최대개수")
+    private Long sendMaxCnt;
+
+    @ApiModelProperty("콘텐트 정렬조건(최신순:N/인기순:H)")
+    private String sendOrder;
+
+    @ApiModelProperty("구독상품여부(자동인경우 디폴트Y)")
+    private String scbYn;
 
     @ApiModelProperty("발송자명")
     @Length(max = 100, message = "TODO")
@@ -128,6 +138,10 @@ public class NewsletterInfoDTO implements Serializable {
     @Length(max = 200, message = "TODO")
     private String memo;
 
+    @ApiModelProperty("최근발송일시")
+    @DTODateTimeFormat
+    private Date lastSendDt;
+
     @ApiModelProperty("카테고리")
     @Length(max = 100, message = "TODO")
     private String category;
@@ -143,7 +157,20 @@ public class NewsletterInfoDTO implements Serializable {
     @Length(max = 100, message = "TODO")
     private String letterName;
 
+    @ApiModelProperty("레터영문명")
+    @Length(max = 100, message = "TODO")
+    private String letterEngName;
+
+    @ApiModelProperty("레터이미지")
+    @Length(max = 200, message = "TODO")
+    private String letterImg;
+
     @ApiModelProperty("레터설명")
     @Length(max = 1000, message = "TODO")
     private String letterDesc;
+
+    /**
+     * 등록자
+     */
+    private MemberSimpleDTO regMember;
 }

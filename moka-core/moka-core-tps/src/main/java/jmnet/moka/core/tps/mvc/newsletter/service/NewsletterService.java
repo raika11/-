@@ -1,7 +1,9 @@
 package jmnet.moka.core.tps.mvc.newsletter.service;
 
+import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
+import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterExcel;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterSend;
 import org.springframework.data.domain.Page;
@@ -65,7 +67,7 @@ public interface NewsletterService {
      * @param newsletterSend
      * @return
      */
-    NewsletterSend insertNewsletterSend(NewsletterSend newsletterSend);
+    NewsletterSend insertNewsletterSend(NewsletterSend newsletterSend, List<NewsletterExcel> emailList);
 
     /**
      * 뉴스레터 방송(수동) 수정
@@ -73,5 +75,5 @@ public interface NewsletterService {
      * @param newsletterSend
      * @return
      */
-    NewsletterSend updateNewsletterSend(NewsletterSend newsletterSend);
+    NewsletterSend updateNewsletterSend(NewsletterSend newsletterSend, List<NewsletterExcel> emailList);
 }

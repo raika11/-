@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,17 +31,21 @@ import org.apache.ibatis.type.Alias;
 @Getter
 @Builder(toBuilder = true)
 @Alias("NewsletterProductDTO")
-public class NewsletterProductDTO implements Serializable {
+public class NewsletterSimpleDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static final Type TYPE = new TypeReference<List<NewsletterProductDTO>>() {
+    public static final Type TYPE = new TypeReference<List<NewsletterSimpleDTO>>() {
     }.getType();
 
     private Long letterSeq;
 
     private String sendType;
 
+    private String sendTypeName;
+
     private String letterType;
+
+    private String letterTypeName;
 
     private String letterName;
 
@@ -50,7 +55,9 @@ public class NewsletterProductDTO implements Serializable {
 
     private String sendDay;
 
-    private String sendBaseCnt;
+    private String sendMinCnt;
+
+    private String sendMaxCnt;
 
     private String sendTime;
 
@@ -58,9 +65,14 @@ public class NewsletterProductDTO implements Serializable {
 
     private String status;
 
+    private String statusName;
+
     private Date regDt;
 
-    private String regId;
+    /**
+     * 등록자
+     */
+    private MemberSimpleDTO regMember;
 
     private String abtestYn;
 }

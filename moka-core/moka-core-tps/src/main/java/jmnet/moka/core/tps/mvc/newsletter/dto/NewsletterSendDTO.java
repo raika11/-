@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.newsletter.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -103,5 +105,9 @@ public class NewsletterSendDTO implements Serializable {
 
     @ApiModelProperty("수동레터본문")
     private String letterBody;
+
+    @ApiModelProperty("엑셀파일 업로드")
+    @JsonIgnore
+    private MultipartFile emailExcelFile;
 
 }

@@ -52,7 +52,7 @@ $(document).ready(function() {
                 $this.addClass("hide");
             } else {
                 setBylinePopPos();
-                $(".layer_byline").addClass("active");
+                $(".layer_byline").toggleClass("active");
                 
             }
         }
@@ -61,7 +61,7 @@ $(document).ready(function() {
     /* byline popup close event */
     $(".layer_byline .btn_close").click(function(){
         $(".btn_byline_more").removeClass("active");
-        reporterControl(window.innerWidth);
+        bylineControl(window.innerWidth);
     });
 });
 
@@ -128,22 +128,13 @@ function bylineControl(width){
     } else {
         $bylineMore.addClass("hide")
     }
+    setBylinePopPos();
 }
 
 /* set byline popup position */
 function setBylinePopPos(){
-    var $byline = $(".byline > a");
-    var $bylineMore = $(".btn_byline_more");
     var $bylinePop = $(".layer_byline");
-    var bylineWidth= 0;
-
-    $byline.each(function(index, item){
-        var $item = $(item);
-        if(!$item.hasClass("hide")){
-            bylineWidth = $(item).width()+4;
-        }
-    });
-
-    var bylinePopRight = bylineWidth + $bylineMore.width();
-    $bylinePop.css("left",bylinePopRight+"px");
+    var $bylineMore = $(".btn_byline_more");
+    var bylinePopleft = $bylineMore.position().left+$bylineMore.width() - $bylinePop.outerWidth();
+    $bylinePop.css("left",bylinePopleft+"px");
 }

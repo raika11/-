@@ -41,10 +41,6 @@ $(document).ready(function() {
         bylineControl(window.innerWidth);
     })
 
-    setTimeout(function() {
-        setBylinePopPos()
-    }, 500);
-
     /* 기자 더보기(외○명) 클릭 */
     $(".btn_byline_more").click(function(){
         $this = $(this);
@@ -53,9 +49,10 @@ $(document).ready(function() {
         if($this.hasClass("active")){
             if(width >= BREAKPOINT_LARGE){
                 $(".byline > a").removeClass("hide");
-                $this.toggleClass("hide");
+                $this.addClass("hide");
             } else {
                 $(".layer_byline").addClass("active");
+                setBylinePopPos();
             }
         }
     });
@@ -142,10 +139,10 @@ function setBylinePopPos(){
     $byline.each(function(index, item){
         var $item = $(item);
         if(!$item.hasClass("hide")){
-            bylineWidth = $(item).width();
+            bylineWidth = $(item).width()+4;
         }
     });
 
     var bylinePopRight = bylineWidth + $bylineMore.width();
-    $bylinePop.css("left",bylinePopRight+12+"px");
+    $bylinePop.css("left",bylinePopRight+"px");
 }

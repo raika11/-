@@ -254,6 +254,7 @@ html, body {overflow-x: hidden;}
 .header .uh .header_right_area {position:absolute;top:50%;transform:translateY(-50%);}
 
 .header.sticky_top {
+    position: fixed;
     top:0;
     opacity:1;
     -webkit-animation-name:fadeIn;

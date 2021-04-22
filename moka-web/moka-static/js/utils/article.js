@@ -20,6 +20,21 @@ $(document).ready(function() {
         scrollIndicator.style.transform = `translateX(-${100 - percentage}%)`; // -100% ~ 0%
         scrollIndicator.style.transition = `transform 0.5 ease-out`; // 부드러운 애니메이션
     });
+
+    /* article mobile sticky_menu */
+    $(window).scroll(function(){
+        var scrollT = $(this).scrollTop();
+        var bodyTop = $('.article_body').offset().top;
+        var bodyH = $('.article_body').outerHeight(true);
+        var bodyBottom = $('.article_body').position().top + $('.article_body').outerHeight(true);
+        
+        if( scrollT > bodyTop && scrollT < bodyBottom) {
+            $('.sticky_menu').addClass('fixed');
+        } else {
+            $('.sticky_menu').removeClass('fixed');
+        }
+    });
+
 });
 /* 임시 레이어팝업 */
 function toggleOpenLayer(obj){

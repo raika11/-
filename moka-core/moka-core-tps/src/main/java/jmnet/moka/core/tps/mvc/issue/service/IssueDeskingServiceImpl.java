@@ -8,10 +8,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jmnet.moka.common.utils.MapBuilder;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.common.utils.dto.ResultHeaderDTO;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.rest.RestTemplateHelper;
+import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
+import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistDTO;
 import jmnet.moka.core.tps.mvc.issue.entity.IssueDesking;
@@ -24,7 +33,9 @@ import jmnet.moka.core.tps.mvc.issue.repository.PackageRepository;
 import jmnet.moka.core.tps.mvc.issue.vo.IssueDeskingVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +63,18 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
     private String packageCompYn;
 
     private final int AUTO_COMPONENT_NO = 2;
+
+    @Autowired
+    private PurgeHelper purgeHelper;
+
+    @Value("${moka.schedule-server.reserved-task.url}")
+    private String reservedTaskUrl;
+
+    /**
+     * 외부 API URL 호출용
+     */
+    @Autowired
+    protected RestTemplateHelper restTemplateHelper;
 
     public IssueDeskingServiceImpl(IssueMapper issueMapper, IssueDeskingRepository issueDeskingRepository,
             IssueDeskingHistRepository issueDeskingHistRepository, ModelMapper modelMapper, PackageRepository packageRepository) {
@@ -127,7 +150,12 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
     }
 
     @Override
-    public IssueDeskingComponentDTO findIssueDeskingComponent(PackageMaster packageMaster, Integer compNo) {
+    public IssueDeskingComponentDTO findSaveIssueDeskingComponent(PackageMaster packageMaster, Integer compNo) {
+        return findIssueDeskingComponent(packageMaster, compNo, EditStatusCode.SAVE, MokaConstants.NO);
+    }
+
+    @Override
+    public IssueDeskingComponentDTO findIssueDeskingComponent(PackageMaster packageMaster, Integer compNo, EditStatusCode status, String approvalYn) {
         IssueDeskingComponentDTO dto = IssueDeskingComponentDTO
                 .builder()
                 .pkgSeq(packageMaster.getPkgSeq())
@@ -138,7 +166,8 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
         Map<String, Object> param = new HashMap<>();
         param.put("pkgSeq", packageMaster.getPkgSeq());
         param.put("compNo", compNo);
-        param.put("status", EditStatusCode.SAVE.getCode());
+        param.put("status", status.getCode());
+        param.put("approvalYn", approvalYn);
         List<List<Object>> listMap = issueMapper.findAllIssueDesking(param);
 
         //컴포넌트
@@ -200,21 +229,86 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
         }
 
         // 히스토리등록
-        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, EditStatusCode.SAVE);
+        HistPublishDTO histPublishDTO = HistPublishDTO
+                .builder()
+                .status(EditStatusCode.SAVE)
+                .approvalYn(MokaConstants.NO)
+                .build();
+        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, histPublishDTO);
     }
 
     @Override
     @Transactional
-    public void publish(PackageMaster packageMaster, Integer compNo, String regId) {
+    public void publish(PackageMaster packageMaster, Integer compNo, String regId)
+            throws Exception {
 
-        IssueDeskingComponentDTO issueDeskingComponentDTO = findIssueDeskingComponent(packageMaster, compNo);
+        IssueDeskingComponentDTO issueDeskingComponentDTO = findSaveIssueDeskingComponent(packageMaster, compNo);
 
         // 히스토리등록
-        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, EditStatusCode.PUBLISH);
+        HistPublishDTO histPublishDTO = HistPublishDTO
+                .builder()
+                .status(EditStatusCode.PUBLISH)
+                .approvalYn(MokaConstants.YES)
+                .build();
+        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, histPublishDTO);
 
         // 등록
         this.insertDesking(packageMaster, issueDeskingComponentDTO);
+
+        // purge
+        this.purge(packageMaster.getPkgSeq());
     }
+
+    @Override
+    @Transactional
+    public void reserve(PackageMaster packageMaster, Integer compNo, String regId, Date reserveDt)
+            throws Exception {
+        HistPublishDTO histPublishDTO = HistPublishDTO
+                .builder()
+                .status(EditStatusCode.PUBLISH)
+                .approvalYn(MokaConstants.NO)
+                .reserveDt(reserveDt)
+                .build();
+
+        // 기존예약 삭제
+        issueDeskingHistRepository.deleteReserveHist(packageMaster, compNo);
+
+        // 히스토리등록
+        IssueDeskingComponentDTO issueDeskingComponentDTO = findSaveIssueDeskingComponent(packageMaster, compNo);
+        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, histPublishDTO);
+
+        // 스케줄링(R) 추가
+        ResponseEntity<String> responseEntity = restTemplateHelper.post(reservedTaskUrl, MapBuilder
+                .getInstance()
+                .add("jobCd", TpsConstants.ISSUE_JOB_CD)
+                .add("jobTaskId", TpsConstants.ISSUE_JOB_CD + "_" + packageMaster.getPkgSeq() + "_" + compNo)
+                .add("reserveDt", McpDate.dateTimeStr(reserveDt))
+                .getMultiValueMap());
+        ResultHeaderDTO resultHeader = this.parseResultHeaderDTO(responseEntity);
+        if (!resultHeader.isSuccess()) {
+            throw new Exception("ISSUE DESK RESERVE FAILED");
+        }
+    }
+
+    private ResultHeaderDTO parseResultHeaderDTO(ResponseEntity responseEntity) {
+        ResultDTO<Object> resultDTO = null;
+        if (responseEntity.hasBody()) {
+            String body = responseEntity
+                    .getBody()
+                    .toString();
+            try {
+                resultDTO = ResourceMapper
+                        .getDefaultObjectMapper()
+                        .readValue(body, ResultDTO.class);
+                return resultDTO.getHeader();
+            } catch (Exception e) {
+                return new ResultHeaderDTO(false, 500, 500, e.getMessage());
+            }
+        } else {
+            return new ResultHeaderDTO(false, 500, 500, "결과를 알 수 없음");
+        }
+    }
+
 
     @Override
     public void insertAutoComponentDeskingHist(PackageMaster packageMaster, String regId) {
@@ -229,8 +323,19 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
                 .compNo(AUTO_COMPONENT_NO)
                 .viewYn(viewYn)
                 .build();
-        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, EditStatusCode.SAVE);
-        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, EditStatusCode.PUBLISH);
+
+        HistPublishDTO savehistPublishDTO = HistPublishDTO
+                .builder()
+                .status(EditStatusCode.SAVE)
+                .approvalYn(MokaConstants.NO)
+                .build();
+        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, savehistPublishDTO);
+        HistPublishDTO publishhistPublishDTO = HistPublishDTO
+                .builder()
+                .status(EditStatusCode.PUBLISH)
+                .approvalYn(MokaConstants.YES)
+                .build();
+        this.insertDeskingHist(packageMaster, issueDeskingComponentDTO, regId, publishhistPublishDTO);
     }
 
     @Override
@@ -242,6 +347,52 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
         if (McpString.isNotEmpty(dto.getBodyHead())) {
             dto.setBodyHead(ArticleEscapeUtil.htmlEscape(dto.getBodyHead()));
         }
+    }
+
+    @Override
+    public void deleteReserve(PackageMaster packageMaster, Integer compNo)
+            throws Exception {
+        // 기존예약 삭제
+        issueDeskingHistRepository.deleteReserveHist(packageMaster, compNo);
+
+        // 스케줄링(R) 삭제
+        ResponseEntity<String> responseEntity = restTemplateHelper.delete(reservedTaskUrl, MapBuilder
+                .getInstance()
+                .add("jobCd", TpsConstants.ISSUE_JOB_CD)
+                .add("jobTaskId", TpsConstants.ISSUE_JOB_CD + "_" + packageMaster.getPkgSeq() + "_" + compNo)
+                .getMultiValueMap());
+        ResultHeaderDTO resultHeader = this.parseResultHeaderDTO(responseEntity);
+        if (!resultHeader.isSuccess()) {
+            throw new Exception("ISSUE DESK RESERVE DELETE FAILED");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void excuteReserve(PackageMaster packageMaster, Integer compNo)
+            throws Exception {
+        // 편집기사 등록.
+        IssueDeskingComponentDTO issueDeskingComponentDTO =
+                findIssueDeskingComponent(packageMaster, compNo, EditStatusCode.PUBLISH, MokaConstants.NO);
+        this.insertDesking(packageMaster, issueDeskingComponentDTO);
+
+        // 편집기사 히스토리 업데이트
+        issueDeskingHistRepository.excuteReserveDeskingHist(packageMaster, compNo);
+
+        // purge
+        this.purge(packageMaster.getPkgSeq());
+    }
+
+    private String purge(Long pkgSeq)
+            throws Exception {
+        // dps purge
+        String returnValue = "";
+        String retDataset = purgeHelper.dpsPurge("moka_api", "issue_info", pkgSeq.toString() + "_");
+        if (McpString.isNotEmpty(retDataset)) {
+            log.error("[FAIL TO PURGE ISSUE DESKING] pkgSeq: {}", pkgSeq);
+            returnValue = String.join("\r\n", retDataset);
+        }
+        return returnValue;
     }
 
     private void insertDesking(PackageMaster packageMaster, IssueDeskingComponentDTO issueDeskingComponentDTO) {
@@ -276,7 +427,7 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
     }
 
     private void insertDeskingHist(PackageMaster packageMaster, IssueDeskingComponentDTO issueDeskingComponentDTO, String regId,
-            EditStatusCode status) {
+            HistPublishDTO histPublishDTO) {
         if (issueDeskingComponentDTO.getIssueDeskings() != null && issueDeskingComponentDTO
                 .getIssueDeskings()
                 .size() > 0) {
@@ -285,10 +436,10 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
                 IssueDeskingHist hist = modelMapper.map(dto, IssueDeskingHist.class);
                 hist.setSeqNo(null);
                 hist.setPackageMaster(packageMaster);
-                hist.setStatus(status.getCode());
-                if (regId != null) {
-                    hist.setRegId(regId);
-                }
+                hist.setStatus(histPublishDTO.getStatus());
+                hist.setApprovalYn(histPublishDTO.getApprovalYn());
+                hist.setReserveDt(histPublishDTO.getReserveDt());
+                hist.setRegId(regId);
                 hist.setRegDt(today);
                 issueDeskingHistRepository.save(hist);
             }

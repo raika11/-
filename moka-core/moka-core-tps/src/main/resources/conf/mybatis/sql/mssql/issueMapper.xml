@@ -72,8 +72,9 @@
     statementType="CALLABLE">
     { call UPA_ISSUE_DESKING_HIST_LIST_SEL(
       #{pkgSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{compNo, mode=IN, jdbcType=INTEGER, javaType=integer},
       #{status, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{compNo, mode=IN, jdbcType=INTEGER, javaType=integer}
+      #{approvalYn, mode=IN, jdbcType=VARCHAR, javaType=string}
       ) }
   </select>
 

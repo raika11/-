@@ -7,7 +7,7 @@
     * 4.공통클래스
     * 5.레이아웃
     * 6.플러그인
-    * 7.컴포넌트
+    * 7.컴포넌트+폼
     * -----------------------------------------------------
     */
 
@@ -192,7 +192,7 @@ textarea {resize:none;}
 .position_right_def {right:0;}
 .position_ab_l {position:absolute;left:0;}
 .position_ab_r {position:absolute;right:0;}
-.sticky_top {position:fixed;}
+.sticky_top {position:fixed !important;}
 
 /** flex **/
 .flex {display:flex;}
@@ -471,19 +471,18 @@ html, body {overflow-x: hidden;}
 }
 @-webkit-keyframes fadeIn {
     0% {opacity:0}
-
     50% {opacity:0}
-
     100% {opacity:1}
 }
 
 @keyframes fadeIn {
     0% {opacity:0}
-
     50% {opacity:0}
-
     100% {opacity:1}
 }
+
+
+
 
 /** footer **/
 .footer {display:block;width:100%;min-height:100px;background:#e8e8e8;}
@@ -540,19 +539,34 @@ section {width:100%;}
 /* ==========================================================================
     6.플러그인
     ========================================================================= */
-/*** swiper ***/
+/****
+    * swiper
+    * -----------------------------------------------------
+    */
 :root {--swiper-theme-color:#000;}
 .swiper-scrollbar {background:transparent;}
 
+
+/****
+    * slick
+    * -----------------------------------------------------
+    */
+/* 기존도트 숨기고 li를 css로 디자인. button:after로도 디자인 가능 */
+.slick-dots {position: absolute; bottom:20px; left:50%; transform: translateX(-50%);}
+.slick-dots li {float: left; margin:0 8px; width:11px; height: 11px; border-radius: 50%; background:#999; opacity: 0.3; cursor: pointer;}
+.slick-dots li.slick-active {opacity: 1;}
+.slick-dots li button {font-size:0; opacity:0;}
+
+
+
+
 /* ==========================================================================
-    7.컴포넌트
+    7.컴포넌트+폼
     ========================================================================= */
 
 /** component 영역 **/
-/* component */
-.component {position:relative;width:100%;}
-/* template */
-.template {width:100%;}
+
+
 
 
 
@@ -560,10 +574,17 @@ section {width:100%;}
 /****************************************************************************************************/
 /***                                            인풋                                              ***/
 /****************************************************************************************************/
+
 /* custom */
 .form_select {display:block;width:100%;padding:6px 36px 6px 12px;line-height:1.5;color:#212529;background-color:#fff;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 12px center;background-size:16px 12px;border:1px solid #ced4da;border-radius:4px;-webkit-appearance:none;-moz-appearance:none;appearance:none;}
 .select {display:block;width:auto;padding-right:36px;line-height:1.5;color:#212529;background-color:#fff;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 12px center;background-size:16px 12px; border: 0;-webkit-appearance:none;-moz-appearance:none;appearance:none;  }
 .form {width:100%;}
+/****
+    * input
+    * -----------------------------------------------------
+    */
+
+
 
 
 .input_group {position:relative;display:flex;flex-wrap:wrap;align-items:stretch;width:100%;}
@@ -580,7 +601,10 @@ section {width:100%;}
 .input_comment {margin-top:2px;line-height:22px;color:#999;font-size:13px;font-weight:500;}
 
 
-
+/****
+* select
+* -----------------------------------------------------
+*/
 /****************************************************************************************************/
 /***                                           셀렉트                                             ***/
 /****************************************************************************************************/
@@ -615,12 +639,15 @@ section {width:100%;}
 .dropdown_menu .dropdown_item { display: block; padding:5px 0; color: #111; font-size: 13px; line-height: 1.69;}
 .dropdown_menu .dropdown_item .active { font-weight: 700; }
 
-/** 라디오, 체크박스 custom **/
+
+
+/****
+* radio&checkBox
+* -----------------------------------------------------
+*/
 input[type="radio"],
 input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padding:0;margin:-1px;border:0;clip:rect(0,0,0,0);white-space:nowrap;}
 .check_type_1 input[type="checkbox"] + label {color:#666;font-size:14px;font-weight:500;}
-/* .check_type_1 input[type="checkbox"] + label span {width:18px;height:18px;border:1px solid #999;vertical-align:middle;margin-right:8px;}
-.check_type_1 input[type="checkbox"]:checked + label span {position:relative;width:18px;height:18px;} */
 .radio_type_1 input[type="radio"] + label {font-size:14px;font-weight:500;}
 .radio_type_1 input[type="radio"] + label span {width:18px;height:18px;border:1px solid #999;border-radius:50%;vertical-align:text-bottom;margin-right:8px;}
 .radio_type_1 input[type="radio"]:checked + label span {position:relative;width:18px;height:18px;border:1px solid #fb502f;}
@@ -1050,7 +1077,7 @@ dl.date dd { margin-left: 6px; }
 .layer_datetime .date { line-height: 20px; }
 .layer_datetime .date:nth-child(n+2) { margin-top: 6px; }
 .layer_datetime .btn_close { top: 10px; right: 10px; }
-.layer_byline { right: 0; width: 160px; padding: 14px 20px 5px; }
+.layer_byline { width: 160px; padding: 14px 20px 5px; }
 .layer_byline .layer_body { margin-top: 12px; }
 .layer_byline .layer_body li:nth-child(n+2) { border-top: 1px solid #e2e2e2; }
 .layer_byline .layer_body a { display: flex; justify-content: space-between; align-items: center; height: 42px; }
@@ -1059,7 +1086,6 @@ dl.date dd { margin-left: 6px; }
 
 .layer_comment { position: fixed; right: 0; top: 0; height: 100%; background-color: #fff; }
 
-.layer_comment {  }
 
 
 /* Mobile devices (mobile + tablet, 1023px and down) */

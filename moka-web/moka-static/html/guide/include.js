@@ -92,7 +92,7 @@ var include = {
             document.write('            <ul class="nav">');
             document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">폼컨트롤</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="form_select.html">셀렉트</a></li>');
-            document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">체크&라디오</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="form_ckRd.html">체크&라디오</a></li>');
             document.write('            </ul>');
             document.write('        </li>');
             document.write('        <li class="nav_item">');

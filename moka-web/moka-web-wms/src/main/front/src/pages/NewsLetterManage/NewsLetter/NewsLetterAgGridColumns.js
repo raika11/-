@@ -33,25 +33,25 @@ export default [
     },
     {
         headerName: '발송 시작일',
-        field: 'sendDt',
+        field: 'sendStartDt',
         width: 78,
     },
     {
         headerName: '최근 발송일',
-        field: 'recentSendDt',
+        field: 'lastSendDt',
         width: 78,
     },
     {
         headerName: '발송 주기',
         field: 'sendPriod',
         children: [
-            { headerName: '일정/콘텐츠', field: 'ct', width: 80 },
-            { headerName: '시간', field: 'time', width: 35 },
+            { headerName: '일정/콘텐츠', field: 'sendInfo', width: 80 },
+            { headerName: '시간', field: 'sendTime', width: 35 },
         ],
     },
     {
         headerName: '구독자 수',
-        field: 'subscriber',
+        field: 'subscribeCount',
         width: 65,
     },
     {
@@ -74,7 +74,7 @@ export default [
     },
     {
         headerName: '등록자',
-        field: 'regMember',
+        field: 'regId',
         width: 60,
     },
     {

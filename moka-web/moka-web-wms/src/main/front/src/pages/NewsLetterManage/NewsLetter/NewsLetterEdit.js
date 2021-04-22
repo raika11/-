@@ -5,7 +5,7 @@ import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import { MokaCard } from '@/components';
 import { DATE_FORMAT } from '@/constants';
-import { initialState } from '@store/newsLetter';
+import { initialState, getNewsLetter, clearNewsLetter } from '@store/newsLetter';
 import NewsLetterBasicInfo from './components/NewsLetterBasicInfo';
 import NewsLetterSendInfo from './components/NewsLetterSendInfo';
 import NewsLetterSetInfo from './components/NewsLetterSetInfo';
@@ -67,6 +67,14 @@ const NewsLetterEdit = ({ match }) => {
     useEffect(() => {
         setTemp(storeLetter);
     }, [storeLetter]);
+
+    useEffect(() => {
+        if (letterSeq) {
+            dispatch(getNewsLetter(letterSeq));
+        } else {
+            dispatch(clearNewsLetter());
+        }
+    }, [letterSeq, dispatch]);
 
     return (
         <MokaCard

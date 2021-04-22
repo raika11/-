@@ -26,6 +26,34 @@ const ThemeEx = () => {
 
             <Form.Row className="mb-3 align-items-center">
                 <Col className="p-0 pr-3" xs={4}>
+                    <Button variant="positive-a" size="lg" className="w-100">
+                        positive-a
+                    </Button>
+                </Col>
+                <Col className="p-0" xs={8}>
+                    <div className="d-flex flex-column">
+                        <p className="mb-0 mr-2 h5">variant="positive"</p>
+                        <p className="mb-0">확인,등록,저장이 중첩되는 경우 먼저 사용한다</p>
+                    </div>
+                </Col>
+            </Form.Row>
+
+            <Form.Row className="mb-3 align-items-center">
+                <Col className="p-0 pr-3" xs={4}>
+                    <Button variant="temp" size="lg" className="w-100">
+                        temp
+                    </Button>
+                </Col>
+                <Col className="p-0" xs={8}>
+                    <div className="d-flex flex-column">
+                        <p className="mb-0 mr-2 h5">variant="temp"</p>
+                        <p className="mb-0">임시저장에 사용한다</p>
+                    </div>
+                </Col>
+            </Form.Row>
+
+            <Form.Row className="mb-3 align-items-center">
+                <Col className="p-0 pr-3" xs={4}>
                     <Button variant="negative" size="lg" className="w-100">
                         negative
                     </Button>
@@ -108,6 +136,34 @@ const ThemeEx = () => {
 
             <Form.Row className="mb-3 align-items-center">
                 <Col className="p-0 pr-3" xs={4}>
+                    <Button variant="gray-200" size="lg" className="w-100">
+                        gray-200
+                    </Button>
+                </Col>
+                <Col className="p-0" xs={8}>
+                    <div className="d-flex flex-column">
+                        <p className="mb-0 mr-2 h5">variant="gray-200"</p>
+                        <p className="mb-0">gray-200</p>
+                    </div>
+                </Col>
+            </Form.Row>
+
+            <Form.Row className="mb-3 align-items-center">
+                <Col className="p-0 pr-3" xs={4}>
+                    <Button variant="gray-600" size="lg" className="w-100">
+                        gray-600
+                    </Button>
+                </Col>
+                <Col className="p-0" xs={8}>
+                    <div className="d-flex flex-column">
+                        <p className="mb-0 mr-2 h5">variant="gray-600"</p>
+                        <p className="mb-0">gray-600</p>
+                    </div>
+                </Col>
+            </Form.Row>
+
+            <Form.Row className="mb-3 align-items-center">
+                <Col className="p-0 pr-3" xs={4}>
                     <Button variant="gray-700" size="lg" className="w-100">
                         gray-700
                     </Button>
@@ -137,7 +193,7 @@ const ThemeEx = () => {
             <hr className="divider" />
 
             <Form.Row className="mb-1">
-                <Form.Label className="h4">4) 그 외 Button</Form.Label>
+                <Form.Label className="h4">4) 부트스트랩 테마 Button</Form.Label>
             </Form.Row>
 
             <Form.Row className="mb-3 align-items-center">

@@ -99,6 +99,15 @@
         NULL,
       </otherwise>
     </choose>
+
+    <choose>
+      <when test="searchType == 'regId' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
     #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},

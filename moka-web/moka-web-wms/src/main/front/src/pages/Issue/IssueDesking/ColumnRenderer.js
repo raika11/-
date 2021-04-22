@@ -130,7 +130,7 @@ const ArticleRenderer = forwardRef((params, ref) => {
                             labelWidth={labelWidth}
                             value={contents.linkUrl}
                             onChange={handleChangeValue}
-                            className="flex-fill mr-2"
+                            className="flex-fill mr-1"
                             required
                         />
                         <div className="flex-shrink-0 d-flex">
@@ -151,7 +151,7 @@ const ArticleRenderer = forwardRef((params, ref) => {
                         inputProps={{ rows: 3 }}
                     />
                     <div className="d-flex">
-                        <MokaInputLabel label="영상 URL" labelWidth={labelWidth} name="vodUrl" value={contents.vodUrl} onChange={handleChangeValue} className="flex-fill mr-2" />
+                        <MokaInputLabel label="영상 URL" labelWidth={labelWidth} name="vodUrl" value={contents.vodUrl} onChange={handleChangeValue} className="flex-fill mr-1" />
                         <Button variant="searching" className="flex-shrink-0" onClick={() => setVodShow(true)}>
                             영상검색
                         </Button>
@@ -208,7 +208,7 @@ const LiveRenderer = forwardRef((params, ref) => {
             <div className="flex-fill d-flex flex-column pl-3">
                 <MokaInputLabel label="제목" labelWidth={labelWidth} name="title" value={contents.title} onChange={handleChangeValue} className="mb-1" required />
                 <div className="d-flex">
-                    <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" required />
+                    <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-1" required />
                     <div className="flex-shrink-0 d-flex">
                         <MokaInput name="linkTarget" value={contents.linkTarget} as="select" onChange={handleChangeValue}>
                             <option value="_self">본창</option>
@@ -266,7 +266,7 @@ const PacketRenderer = forwardRef((params, ref) => {
             <div className="flex-fill d-flex flex-column">
                 <MokaInputLabel label="제목" labelWidth={labelWidth} name="title" value={contents.title} onChange={handleChangeValue} className="mb-1" required />
                 <div className="d-flex">
-                    <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" required />
+                    <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-1" required />
                     <div className="flex-shrink-0 d-flex">
                         <MokaInput name="linkTarget" value={contents.linkTarget} as="select" onChange={handleChangeValue}>
                             <option value="_self">본창</option>
@@ -401,7 +401,7 @@ const BannerRenderer = forwardRef((params, ref) => {
                 </Col>
                 <Col xs={8} className="d-flex flex-column pl-4">
                     <div className="d-flex mb-1">
-                        <MokaInputLabel label="제목" name="title" labelWidth={35} value={content.title} onChange={handleChangeValue} className="flex-fill mr-2" required />
+                        <MokaInputLabel label="제목" name="title" labelWidth={35} value={content.title} onChange={handleChangeValue} className="flex-fill mr-1" required />
                         <MokaInputLabel
                             label="배경컬러"
                             name="bgColor"
@@ -412,7 +412,7 @@ const BannerRenderer = forwardRef((params, ref) => {
                         />
                     </div>
                     <div className="d-flex">
-                        <MokaInputLabel label="URL" name="linkUrl" labelWidth={35} value={content.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" />
+                        <MokaInputLabel label="URL" name="linkUrl" labelWidth={35} value={content.linkUrl} onChange={handleChangeValue} className="flex-fill mr-1" />
                         <div className="flex-shrink-0 d-flex">
                             <MokaInput as="select" name="linkTarget" value={content.linkTarget} onChange={handleChangeValue}>
                                 <option value="_self">본창</option>

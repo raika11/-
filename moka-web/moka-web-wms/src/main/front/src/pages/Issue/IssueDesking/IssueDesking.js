@@ -184,8 +184,8 @@ const IssueDesking = () => {
                 pkgSeq={pkgSeq}
                 compNo={1}
                 ref={artRef}
-                desking={deskingByCompNo.comp1 || {}}
-                deskingList={deskingByCompNo.comp1?.issueDeskings || []}
+                desking={deskingByCompNo.comp1}
+                deskingList={deskingByCompNo.comp1?.issueDeskings}
                 preview={preview}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
@@ -198,32 +198,33 @@ const IssueDesking = () => {
                 pkgSeq={pkgSeq}
                 compNo={3}
                 ref={liveRef}
-                desking={deskingByCompNo.comp3 || {}}
-                deskingList={deskingByCompNo.comp3?.issueDeskings || []}
+                desking={deskingByCompNo.comp3}
+                deskingList={deskingByCompNo.comp3?.issueDeskings}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
-                rowHeight={86}
+                rowHeight={90}
             />
             {/* 관련기사꾸러미 */}
             <CollapsePacket
                 pkgSeq={pkgSeq}
                 compNo={4}
                 ref={packetRef}
-                desking={deskingByCompNo.comp4 || {}}
-                deskingList={deskingByCompNo.comp4?.issueDeskings || []}
+                desking={deskingByCompNo.comp4}
+                deskingList={deskingByCompNo.comp4?.issueDeskings}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
-                rowHeight={86}
+                rowHeight={90}
             />
             {/* 영상/포토 */}
             <CollapseMoviePhoto
                 pkgSeq={pkgSeq}
                 compNo={5}
                 ref={mpRef}
-                desking={deskingByCompNo.comp5 || {}}
-                deskingList={deskingByCompNo.comp5?.issueDeskings || []}
+                desking={deskingByCompNo.comp5}
+                deskingList={deskingByCompNo.comp5?.issueDeskings}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
+                rowHeight={46}
             />
             {/* 그래프가 6번 */}
             {/* 배너 */}
@@ -231,20 +232,22 @@ const IssueDesking = () => {
                 pkgSeq={pkgSeq}
                 compNo={7}
                 ref={bannerRef}
-                desking={deskingByCompNo.comp7 || {}}
-                deskingList={deskingByCompNo.comp7?.issueDeskings || []}
+                desking={deskingByCompNo.comp7}
+                deskingList={deskingByCompNo.comp7?.issueDeskings}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
+                rowHeight={90}
             />
             {/* 키워드 */}
             <CollapseKeyword
                 pkgSeq={pkgSeq}
                 compNo={8}
                 ref={keywordRef}
-                desking={deskingByCompNo.comp8 || {}}
-                deskingList={deskingByCompNo.comp8?.issueDeskings || []}
+                desking={deskingByCompNo.comp8}
+                deskingList={deskingByCompNo.comp8?.issueDeskings}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
+                rowHeight={90}
             />
         </MokaCard>
     );

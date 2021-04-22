@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH, CHANNEL_TYPE, ISSUE_CHANNEL_TYPE, ARTICLE_URL, ISSUE_URL } from '@/constants';
-import { MokaInputLabel, MokaTable, MokaLoader } from '@components';
+import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
@@ -13,6 +13,11 @@ import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issu
 import { ArticleTabModal } from '@pages/Article/modals';
 import StatusBadge from './StatusBadge';
 import { artColumnDefs } from './IssueDeskingColumns';
+
+const defaultProps = {
+    desking: {},
+    deskingList: [],
+};
 
 /**
  * 패키지관리 > 관련 데이터 편집 > 기사 (편집)
@@ -33,9 +38,14 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
      */
     const addArticle = (channelType, data) => {
         const cnt = gridInstance.api.getDisplayedRowCount();
+        const existsData = getDisplayedRows(gridInstance.api);
 
         // 기사모달에서 넘어오는 데이터 unescapeHtmlArticle 처리 되어있음
         if (channelType === CHANNEL_TYPE.A.code) {
+            if (existsData.findIndex((a) => a.contentsId === data.totalId) > -1) {
+                messageBox.alert('등록된 기사입니다');
+                return;
+            }
             gridInstance.api.applyTransaction({
                 add: [
                     {
@@ -56,6 +66,10 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
                 ],
             });
         } else if (channelType === CHANNEL_TYPE.M.code) {
+            if (existsData.findIndex((a) => a.contentsId === data.totalId) > -1) {
+                messageBox.alert('등록된 기사입니다');
+                return;
+            }
             gridInstance.api.applyTransaction({
                 add: [
                     {
@@ -76,6 +90,10 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
                 ],
             });
         } else if (channelType === CHANNEL_TYPE.I.code) {
+            if (existsData.findIndex((a) => a.contentsId === data.pkgSeq) > -1) {
+                messageBox.alert('등록된 패키지입니다');
+                return;
+            }
             gridInstance.api.applyTransaction({
                 add: [
                     {
@@ -274,16 +292,18 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
                     <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
-                    <StatusBadge desking={desking} />
-                    <Button variant="outline-neutral" size="sm" className="mr-1" onClick={preview}>
-                        미리보기
-                    </Button>
-                    <Button variant="positive-a" size="sm" className="mr-1" onClick={saveDesking}>
-                        임시저장
-                    </Button>
-                    <Button variant="positive" size="sm" onClick={publishDesking}>
-                        전송
-                    </Button>
+                    <div className="d-flex">
+                        <StatusBadge desking={desking} />
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="미리보기" variant="white" onClick={preview}>
+                            <MokaIcon iconName="Save" feather />
+                        </MokaOverlayTooltipButton>
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
+                            <MokaIcon iconName="Save" feather />
+                        </MokaOverlayTooltipButton>
+                        <MokaOverlayTooltipButton className="work-btn" tooltipText="전송" variant="white" onClick={publishDesking}>
+                            <MokaIcon iconName="Send" feather />
+                        </MokaOverlayTooltipButton>
+                    </div>
                 </Col>
             </Row>
             <Collapse in={open}>
@@ -307,5 +327,7 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
         </div>
     );
 });
+
+CollapseArticle.defaultProps = defaultProps;
 
 export default CollapseArticle;

@@ -60,6 +60,7 @@ import {
     faLink as falLink,
     faUnlink as falUnlink,
     faMoneyCheckEdit as falMoneyCheckEdit,
+    faTimes as falTimes,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import {
     faThList as fasThList,
@@ -140,6 +141,7 @@ library.add(falFileExcel);
 library.add(falLink);
 library.add(falUnlink);
 library.add(falMoneyCheckEdit);
+library.add(falTimes);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);

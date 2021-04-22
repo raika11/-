@@ -212,71 +212,63 @@ const FbArtEdit = () => {
                     <span>1줄 25자 기준</span>
                 </div>
 
-                <Form.Row>
-                    <Col xs={6} className="p-0">
-                        <div className="d-flex w-100">
-                            <MokaInputLabel
-                                as="none"
-                                label={
-                                    <React.Fragment>
-                                        <p className="mb-2">
-                                            SNS 이미지
-                                            <br />
-                                            850*350px
-                                        </p>
-                                        <Button variant="gray-700" size="sm" onClick={() => setShowEditThumbModal(true)} className="w-100 mb-1">
-                                            신규등록
-                                        </Button>
-                                        <Button variant="outline-gray-700" size="sm" className="w-100" onClick={handleEditClick}>
-                                            편집
-                                        </Button>
+                <Form.Row className="align-items-end">
+                    <MokaInputLabel
+                        as="none"
+                        label={
+                            <div style={{ paddingBottom: '6px' }}>
+                                <p className="mb-2">
+                                    SNS 이미지
+                                    <br />
+                                    850*350px
+                                </p>
+                                <Button variant="gray-700" size="sm" onClick={() => setShowEditThumbModal(true)} className="w-100 mb-1">
+                                    신규등록
+                                </Button>
+                                <Button variant="outline-gray-700" size="sm" className="w-100" onClick={handleEditClick}>
+                                    편집
+                                </Button>
 
-                                        <EditThumbModal
-                                            show={showEditThumbModal}
-                                            cropHeight={300}
-                                            cropWidth={300}
-                                            onHide={() => setShowEditThumbModal(false)}
-                                            totalId={totalId}
-                                            thumbFileName={edit.fb.imgUrl}
-                                            saveFileName={moment().format('YYYYMMDDsss')}
-                                            apply={handleThumbFileApply}
-                                            accept="image/jpeg, image/gif"
-                                        />
-                                    </React.Fragment>
-                                }
-                            />
-                            <MokaImageInput className="mb-1" img={edit.fb.imgUrl} width={192} deleteButton />
-                        </div>
-                    </Col>
-                    <Col xs={6} className="p-0 align-items-center pt-3">
-                        <Form.Row className="align-items-center">
-                            <MokaInputLabel as="none" label="예약" />
-                            <MokaInput
-                                as="checkbox"
-                                name="isReserve"
-                                id="fb-isReserve"
-                                className="p-0"
-                                onChange={(e) => handleChangeEditValue(e, true)}
-                                inputProps={{ label: '예약 노출', checked: edit.fb.isReserve, custom: true }}
-                            />
-                        </Form.Row>
-                        <Col xs={9} className="p-0">
-                            <MokaInput
-                                as="dateTimePicker"
-                                name="reserveDt"
-                                className="right top"
-                                value={edit.fb.reserveDt}
-                                onChange={(e) => {
-                                    handleChangeEditValue({ target: { name: 'reserveDt', value: new Date(moment(e._d).format(DB_DATEFORMAT)) } });
-                                }}
-                                inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm' }}
-                                disabled={!edit.fb.isReserve}
-                            />
-                        </Col>
+                                <EditThumbModal
+                                    show={showEditThumbModal}
+                                    cropHeight={300}
+                                    cropWidth={300}
+                                    onHide={() => setShowEditThumbModal(false)}
+                                    totalId={totalId}
+                                    thumbFileName={edit.fb.imgUrl}
+                                    saveFileName={moment().format('YYYYMMDDsss')}
+                                    apply={handleThumbFileApply}
+                                    accept="image/jpeg, image/gif"
+                                />
+                            </div>
+                        }
+                    />
+                    <MokaImageInput className="mr-2" img={edit.fb.imgUrl} width={192} deleteButton />
+                    <Col xs={6} className="p-0 d-flex flex-column justify-content-end">
+                        <MokaInput
+                            as="checkbox"
+                            name="isReserve"
+                            id="fb-isReserve"
+                            className="mb-2"
+                            onChange={(e) => handleChangeEditValue(e, true)}
+                            style={{ left: '0px' }}
+                            inputProps={{ label: '예약 노출', checked: edit.fb.isReserve, custom: true }}
+                        />
+                        <MokaInput
+                            as="dateTimePicker"
+                            name="reserveDt"
+                            className="right top"
+                            value={edit.fb.reserveDt}
+                            onChange={(e) => {
+                                handleChangeEditValue({ target: { name: 'reserveDt', value: new Date(moment(e._d).format(DB_DATEFORMAT)) } });
+                            }}
+                            inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm', width: 180 }}
+                            disabled={!edit.fb.isReserve}
+                        />
                     </Col>
                 </Form.Row>
 
-                <div className="mb-2 d-flex">
+                <div className="mt-1 d-flex">
                     <MokaInputLabel as="none" label=" " />
                     <p className="text-danger mb-0">1200*628 이미지 용량 제한: 1MB.</p>
                 </div>

@@ -645,8 +645,12 @@ section {width:100%;}
 * radio&checkBox
 * -----------------------------------------------------
 */
-input[type="radio"],
-input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padding:0;margin:-1px;border:0;clip:rect(0,0,0,0);white-space:nowrap;}
+
+.form_tit{width: 130px;}
+.form_radio_wrap {display: flex;}
+.form_radio_wrap input[type="radio"],
+.form_radio_wrap input[type="file"] { position:absolute;overflow:hidden;width:1px;height:1px;padding:0;margin:-1px;border:0;clip:rect(0,0,0,0);white-space:nowrap;}
+.form_check {margin-right:20px;}
 .check_type_1 input[type="checkbox"] + label {color:#666;font-size:14px;font-weight:500;}
 .radio_type_1 input[type="radio"] + label {font-size:14px;font-weight:500;}
 .radio_type_1 input[type="radio"] + label span {width:18px;height:18px;border:1px solid #999;border-radius:50%;vertical-align:text-bottom;margin-right:8px;}

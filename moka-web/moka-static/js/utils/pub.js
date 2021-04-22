@@ -2,9 +2,7 @@
 $(document).ready(function() {
 
 
-    //scrollBar 
-    $('.comment_textarea').slimScroll();
-	// $('.layer_comment').slimScroll();
+
 	
 
 

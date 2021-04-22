@@ -1,4 +1,3 @@
-import React from 'react';
 import ItemRenderer from './ItemRenderer';
 
 const suppressKeyboardEvent = () => true;
@@ -13,16 +12,9 @@ export const columnDefs = [
         cellClass: 'ag-content-center-cell',
     },
     {
-        field: 'relOrdEx',
-        width: 0,
-    },
-    {
         field: 'item',
-        width: 400,
         flex: 1,
         suppressKeyboardEvent: suppressKeyboardEvent,
-        cellRendererFramework: ({ data }) => {
-            return <ItemRenderer {...data} />;
-        },
+        cellRendererFramework: ItemRenderer,
     },
 ];

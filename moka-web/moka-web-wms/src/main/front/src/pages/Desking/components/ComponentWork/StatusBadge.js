@@ -39,7 +39,7 @@ const StatusBadge = (props) => {
 
     return (
         <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={popover}>
-            <Badge variant={published ? 'info' : 'gray-900'} className={className}>
+            <Badge variant={published ? 'info' : 'temp'} className={className}>
                 {published ? '전송' : '임시'}
             </Badge>
         </OverlayTrigger>

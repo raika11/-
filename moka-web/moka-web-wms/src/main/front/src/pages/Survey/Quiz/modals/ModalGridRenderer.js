@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Col } from 'react-bootstrap';
-import { selectQuestions, selectQuizChange } from '@store/survey/quiz';
 import { useDispatch, useSelector } from 'react-redux';
+import { messageBox } from '@utils/toastUtil';
+import { selectQuestions, selectQuizChange } from '@store/survey/quiz';
 import QuestionsPreviewModal from './QuestionsPreviewModal';
 
 export const QuestionsInfoAddButtonRenderer = ({ questionsInfo }) => {
@@ -49,36 +50,37 @@ export const QuestionsPreviewRenderer = ({ questionsPriviewInfo }) => {
     );
 };
 
+/**
+ * 퀴즈 모달 > 등록 버튼
+ */
 export const QuizSearchAddButtonRenderer = ({ quizInfo }) => {
     const dispatch = useDispatch();
-    const { selectQuiz } = useSelector((store) => ({
-        selectQuiz: store.quiz.selectQuiz,
-    }));
+    const selectQuiz = useSelector(({ quiz }) => quiz.selectQuiz);
 
+    /**
+     * 등록
+     */
     const handleClickButton = () => {
-        dispatch(
-            selectQuizChange([
-                ...selectQuiz,
-                {
-                    contentId: quizInfo.quizSeq,
-                    title: quizInfo.title,
-                },
-            ]),
-        );
+        if (selectQuiz.findIndex((q) => q.quizSeq === quizInfo.quizSeq) < 0) {
+            dispatch(
+                selectQuizChange([
+                    ...selectQuiz,
+                    {
+                        ...quizInfo,
+                        contentId: quizInfo.quizSeq,
+                    },
+                ]),
+            );
+        } else {
+            messageBox.alert('등록된 퀴즈입니다');
+        }
     };
 
     return (
-        <>
-            {/* <Col>
-                <Button variant="negative" onClick={() => handleClickButton()}>
-                    등록
-                </Button>
-            </Col> */}
-            <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-                <Button variant="outline-table-btn" onClick={() => handleClickButton()} size="sm">
-                    등록
-                </Button>
-            </div>
-        </>
+        <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+            <Button variant="outline-table-btn" onClick={() => handleClickButton()} size="sm">
+                등록
+            </Button>
+        </div>
     );
 };

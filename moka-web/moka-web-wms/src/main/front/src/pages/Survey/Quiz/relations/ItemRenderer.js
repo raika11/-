@@ -1,54 +1,39 @@
-import React from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { MokaInputLabel } from '@components';
-import { MokaTableEditCancleButton } from '@components';
-import { selectQuizChange, clearSelectQuiz } from '@store/survey/quiz';
+import React, { useImperativeHandle, forwardRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { MokaTableEditCancleButton, MokaInputLabel } from '@components';
+import { selectQuizChange } from '@store/survey/quiz';
 
-const ItemRenderer = ({ item }) => {
+const replaceNo = (t) => ('00' + t).slice(-2);
+
+const ItemRenderer = forwardRef((params, ref) => {
+    const [item, setItem] = React.useState(params.data);
     const dispatch = useDispatch();
-    const { selectQuiz } = useSelector((store) => ({
-        selectQuiz: store.quiz.selectQuiz,
-        selectArticle: store.quiz.selectArticle,
-        quizInfo: store.quiz.quizInfo,
-        questionsList: store.quiz.quizQuestions.questionsList,
-    }));
+    const selectQuiz = useSelector(({ quiz }) => quiz.selectQuiz);
 
-    // 정보 변경 처리. ( 기능 없음. )
-    const handleChangeinputBox = () => {};
-
-    // 삭제 버튼 처리.
+    /**
+     * 삭제
+     */
     const handleClickDelete = () => {
-        const itemIndex = item.index;
-        const newList = selectQuiz.filter((e, index) => index !== itemIndex);
-        dispatch(clearSelectQuiz());
-        setTimeout(function () {
-            dispatch(selectQuizChange(newList));
-        }, 10);
+        const newList = selectQuiz.filter((quiz) => quiz.quizSeq !== item.quizSeq);
+        dispatch(selectQuizChange(newList));
     };
 
+    useImperativeHandle(ref, () => ({
+        refresh: (params) => {
+            setItem(params.data);
+            return true;
+        },
+    }));
+
     return (
-        <>
-            <Row>
-                <Col className="align-self-center justify-content-start mb-0 pr-0 pl-3 w-100">{Number(item.index) + 1}</Col>
-                <Col className="d-felx" xs={10}>
-                    <Row className="d-felx">
-                        <MokaInputLabel
-                            name="title"
-                            id={`title-${item.ordNo}`}
-                            onChange={(e) => handleChangeinputBox(e)}
-                            labelWidth={30}
-                            value={item.title}
-                            className="col mb-0 pl-0 pr-0 pt-1"
-                        />
-                    </Row>
-                </Col>
-                <Col className="d-felx align-self-center text-left mb-0 pl-0">
-                    <MokaTableEditCancleButton onClick={handleClickDelete} />
-                </Col>
-            </Row>
-        </>
+        <div className="d-flex h-100">
+            <div className="flex-shrink-0 d-flex align-items-center mr-12">{replaceNo(item.ordNo)}</div>
+            <MokaInputLabel name="title" id={`title-${item.ordNo}`} inputClassName="bg-white" labelWidth={30} value={item.title} className="flex-fill" disabled />
+            <div className="flex-shrink-0 ml-1 d-flex align-items-center">
+                <MokaTableEditCancleButton onClick={handleClickDelete} />
+            </div>
+        </div>
     );
-};
+});
 
 export default ItemRenderer;

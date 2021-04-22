@@ -19,6 +19,11 @@ export default [
         field: 'imgLink',
         width: 240,
         cellRenderer: 'imageRenderer',
+        cellRendererParams: { autoRatio: false },
+        cellStyle: {
+            paddingTop: '6px',
+            paddingBottom: '6px',
+        },
     },
     {
         headerName: '사용',

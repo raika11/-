@@ -33,6 +33,7 @@ public class KeyResolver {
     public static final String CACHE_CT_MERGE = "ct" + CACHE_MERGE_POSTFIX;
     public static final String CACHE_TP_MERGE = "tp" + CACHE_MERGE_POSTFIX;
     public static final String CACHE_AD_MERGE = "ad" + CACHE_MERGE_POSTFIX;
+    public static final String CACHE_ARTICLE_FLAG = "article.flag";
 
     public static String getCacheType(String itemType) {
         // 기사페이지(AP)는 article.merge와 ampArticle.merge에 별도로 처리됨

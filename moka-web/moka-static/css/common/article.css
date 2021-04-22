@@ -442,14 +442,14 @@ font-*,color,text-align,vertical-align, ...
     .sm_main_text_area { display: none; }
     /* 속보티커 */
     .layer_ticker { height: 52px; }
-    .layer_ticker .ticker_content { align-items: center; }
-    .layer_ticker .btn_close { left: 50%; top: 50%; transform: translate(-50%,-50%); margin-left: 590px; }
+    .layer_ticker .ticker_content {  align-items: center; }
+    .layer_ticker .btn_close { right: 0; }
 
     /* not_comment */
     .not_comment { padding: 40px 0; }
 }
 
-/* Medium devices (mobile ~ tablet, 1023px and down) */
+/* Medium devices (mobile ~ tablet, 1023px and down)  */
 @media (max-width:1023px) {
 
     /* sticky_menu */
@@ -475,7 +475,10 @@ font-*,color,text-align,vertical-align, ...
     
 }
 
+@media (min-width:1200px) {
+    .layer_ticker .ticker_content { max-width: 1200px; width: 100%; padding: 0 310px; }
 
+}
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
 

@@ -252,7 +252,6 @@ font-*,color,text-align,vertical-align, ...
 .ab_box_article {clear:both;position:relative;padding-top:17px;padding-bottom:16px;*zoom:1;}
 .article_body > div.ab_box_article:first-child{padding-top:17px !important;padding-bottom:16px !important;}
 .ab_box_article .ab_photo {max-width:538px;padding-top:8px;padding-bottom:12px;}
-.ab_box_article .ab_photo.photo_center {}
 .ab_box_article .ab_photo.photo_left {margin-right:20px;}
 .ab_box_inner {padding:42px 20px 24px;border:1px solid #dddddd;overflow:hidden;}
 .ab_box_title {margin-bottom:17px;color:#5d81c3;font-size:20px;line-height:1.5;}

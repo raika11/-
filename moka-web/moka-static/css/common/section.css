@@ -82,9 +82,9 @@
 
 
 
-.card_group.row.catalog_card > .card::before{display:none;}
+/* .card_group.row.catalog_card > .card::before{display:none;}
 .card_group.catalog_card{margin-top:-8px;}
-.card_group.catalog_card .card {padding-top: 8px;padding-bottom: 8px;}
+.card_group.catalog_card .card {padding-top: 8px;padding-bottom: 8px;} */
 
 
 /* 광고영역 */
@@ -178,12 +178,7 @@
     /* 컴포넌트 */
     .chain_wrap {margin-bottom:30px;}
 
-    /* card*/
-    .card_body .headline {color:#000; font-size:14px;}
-    .card_body .description {color:#555; font-size:13px;}
-    .card_body .byline {font-size:12px;}
-
-    .card_more { height: 53px; padding-top:16px; padding-bottom: 16px; }
+    
     
 
     /***************************************    general     ************************************/

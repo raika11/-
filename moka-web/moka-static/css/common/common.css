@@ -8,6 +8,27 @@
 @font-face {font-family:'Noto Sans KR';font-style:normal;font-weight:700;src:url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Bold.woff2) format('woff2'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Bold.woff) format('woff'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Bold.otf) format('opentype');} 
 @font-face {font-family:'Noto Sans KR';font-style:normal;font-weight:900;src:url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Black.woff2) format('woff2'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Black.woff) format('woff'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Black.otf) format('opentype');} 
 
+
+
+/* 인덱스 제외 분기별 max-width */
+@media (max-width:767px){
+    /* .header_wrap,.contents,.footer_wrap{max-width:100%;margin-left:20px;margin-right:20px;} */
+}
+
+@media (min-width:768px) and (max-width:1023px){
+    /* .header_wrap,.contents,.footer_wrap{max-width:580px;} */
+}
+
+@media (min-width:1024px) and (max-width:1279px){
+    /* .header_wrap,.contents,.footer_wrap{max-width:980px;} */
+}
+
+@media (min-width:1280px){
+    /* .header_wrap,.contents,.footer_wrap{max-width:1200px;} */
+}
+
+
+
 /** reset **/
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,textarea,p,blockquote,th,td,input,select,button,figure {margin:0;padding:0;}
 body * {box-sizing:border-box;forced-color-adjust:#fb502f;}
@@ -571,21 +592,36 @@ dl.date dd { margin-left: 6px; }
 .card.border {border:1px solid #b3b3b3}
 .card.border .card_body {padding:16px 16px;}
 
-
-
 /*** meta ***/
 .meta {display:flex;margin-top: 10px;}
 .meta .btn_bookmark {margin-left:auto;}
-/* .meta * {margin:0;padding:0;}
-.meta {display:flex;}
-.meta > :nth-child(n + 2) {position:relative;margin-left:16px;padding-left:16px;}
-.meta > p:nth-child(n + 2)::before {content:'';display:block;position:absolute;top:50%;left:0;width:1px;height:12px;background-color:#888;transform:translateY(-50%);}
-.meta .play_count {padding-top:0;} */
 
-/* .card .meta {display:flex;width:100%;}
-.meta .btn_bookmark {margin-left:auto;} */
 
-/* .card .meta {border: 1px solid red;} */
+@media (min-width:768px) {
+    /* card*/
+    .card_body .headline {color:#000; font-size:14px;}
+    .card_body .description {color:#555; font-size:13px;}
+    .card_body .byline {font-size:12px;}
+
+    .card_more { height: 53px; padding-top:16px; padding-bottom: 16px; }
+}
+
+/* 인덱스 제외 분기별 max-width */
+@media (max-width:767px){
+
+}
+
+@media (min-width:768px) and (max-width:1023px){
+
+}
+
+@media (min-width:1024px) and (max-width:1279px){
+
+}
+
+@media (min-width:1280px){
+
+}
 
 
 

@@ -70,12 +70,12 @@ const ItemRenderer = ({ value }) => {
     }, [selectArticleItem]);
 
     return (
-        <div className="h-100 w-100 d-flex align-items-center py-10">
+        <div className="h-100 w-100 d-flex py-10">
             <div className="flex-fill">
                 <MokaInputLabel name="title" label="타이틀" labelWidth={labelWidth} onChange={(e) => handleChangeValue(e)} value={editData.title} className="mb-1" />
                 <div className="d-flex align-items-center">
                     <MokaInputLabel name="linkUrl" label="URL" labelWidth={labelWidth} onChange={(e) => handleChangeValue(e)} value={editData.linkUrl} className="mr-1 flex-fill" />
-                    <div className="flex-shrink-0">
+                    <div className="flex-shrink-0 d-flex align-items-center">
                         <MokaInput as="select" name="linkTarget" value={editData.linkTarget} onChange={(e) => handleChangeValue(e)}>
                             <option value="S">본창</option>
                             <option value="N">새창</option>

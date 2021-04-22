@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cacheConfig>
 	<cacheGroup name="default" gcInterval="1m" >
-		<cache expire="5s" enable="true">
+		<cache expire="10s" enable="true">
 			<instance class="jmnet.moka.common.cache.HazelcastCache" name="hazelcast"/>
 		    <property name="config" value="classpath:tms-hazelcast-stg.xml"/>
 				<type name="pg.merge" expire="1m"/>
-				<!--
-				<type name="article.merge" expire="3m"/>
-				<type name="ampArticle.merge" expire="3m"/>
-				<type name="ct.merge" expire="1m"/>
-				<type name="cp.merge" expire="1m"/>
-				<type name="tp.merge" expire="1m"/>
-				<type name="ad.merge" expire="1m"/>
-				-->
+				<type name="article.merge" expire="2m"/>
+			<!--
+      <type name="ampArticle.merge" expire="3m"/>
+      <type name="ct.merge" expire="1m"/>
+      <type name="cp.merge" expire="1m"/>
+      <type name="tp.merge" expire="1m"/>
+      <type name="ad.merge" expire="1m"/>
+      -->
 		</cache>
 		<cache expire="1m" enable="false">
 			<instance class="jmnet.moka.common.cache.MemoryCache" name="memory"/>

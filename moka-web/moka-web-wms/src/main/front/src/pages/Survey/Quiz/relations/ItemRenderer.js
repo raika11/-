@@ -29,7 +29,7 @@ const ItemRenderer = forwardRef((params, ref) => {
         <div className="d-flex h-100">
             <div className="flex-shrink-0 d-flex align-items-center mr-12">{replaceNo(item.ordNo)}</div>
             <MokaInputLabel name="title" id={`title-${item.ordNo}`} inputClassName="bg-white" labelWidth={30} value={item.title} className="flex-fill" disabled />
-            <div className="flex-shrink-0 ml-1 d-flex align-items-center">
+            <div className="mr-12 ml-10" style={{ width: 13 }}>
                 <MokaTableEditCancleButton onClick={handleClickDelete} />
             </div>
         </div>

@@ -8,8 +8,7 @@
 <mapper namespace="jmnet.moka.core.tps.mvc.my.mapper.MyMapper">
 
   <!--이메일수정-->
-  <select id="updateEmail" parameterType="MyEmailDTO" resultType="java.lang.Long"
-    statementType="CALLABLE">
+  <select id="updateEmail" parameterType="MyEmailDTO" statementType="CALLABLE">
     {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_NEWSLETTER_SUBSCRIBE_UPD_BY_ACCOUNT(
       #{memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{loginType, mode=IN, jdbcType=VARCHAR, javaType=string},

@@ -41,7 +41,7 @@ public class Membership extends HashMap {
     //    private String loginYn;
 
     @JsonIgnore
-    private final static String[] names = {"loginTime", "memSeq", "loginSeq", "loginType", "memState", "loginYn"};
+    private final static String[] names = {"loginTime", "memSeq", "loginSeq", "loginType", "memState", "loginYn", "selfYn", "adultYn", "nick"};
 
     public static Membership getMembershipFromCookie(String decoded) {
         Map<String, String> valueMap = new HashMap<>();
@@ -54,6 +54,9 @@ public class Membership extends HashMap {
         membership.put("memSeq", Integer.parseInt(valueMap.get("memSeq")));
         membership.put("loginSeq", Integer.parseInt(valueMap.get("loginSeq")));
         membership.put("loginTime", new Date(Long.parseLong(valueMap.get("loginTime"))));
+        membership.put("selfYn", valueMap.get("selfYn"));
+        membership.put("adultYn", valueMap.get("adultYn"));
+        membership.put("nick", valueMap.get("nick"));
         return membership;
     }
 

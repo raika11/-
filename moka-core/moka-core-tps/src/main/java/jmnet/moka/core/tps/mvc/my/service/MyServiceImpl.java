@@ -26,7 +26,8 @@ public class MyServiceImpl implements MyService {
     }
 
     @Override
-    public void updateEmail(MyEmailDTO myEmail) {
+    public boolean updateEmail(MyEmailDTO myEmail) {
         myMapper.updateEmail(myEmail);
+        return myEmail.getReturnValue() != 0 || myEmail.getReturnValue() == null ? false : true;
     }
 }

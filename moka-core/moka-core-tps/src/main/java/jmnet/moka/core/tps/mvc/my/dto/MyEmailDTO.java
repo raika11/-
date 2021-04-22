@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,11 +39,12 @@ public class MyEmailDTO implements Serializable {
 
     @ApiModelProperty("기존이메일")
     @NotNull(message = "{tps.my.error.notnull.fromEmail}")
-    @Pattern(regexp = "^[-a-zA-Z0-9_.@]{0,512}$", message = "{tps.my.error.pattern.email}")
     private String fromEmail;
 
     @ApiModelProperty("변경이메일")
     @NotNull(message = "{tps.my.error.notnull.toEmail}")
-    @Pattern(regexp = "^[-a-zA-Z0-9_.@]{0,512}$", message = "{tps.my.error.pattern.email}")
     private String toEmail;
+
+    @ApiModelProperty(value = "실행결과", hidden = true)
+    private Integer returnValue;
 }

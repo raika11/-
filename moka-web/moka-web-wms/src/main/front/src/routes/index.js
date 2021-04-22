@@ -125,6 +125,7 @@ const NewsLetterResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLe
 const NewsLetterMResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterResult/NewsLetterMethodResult'));
 const NewsLetterTResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterResult/NewsLetterTypeResult'));
 const NewsLetterPResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterResult/NewsLetterPeriodResult'));
+const ArticlePackage = React.lazy(() => import('@pages/ArticlePackage'));
 
 const routes = [
     {
@@ -839,6 +840,16 @@ const routes = [
         name: 'newsLetterPResult',
         displayName: '뉴스레터 발송 주기별(요일) 결과',
         component: NewsLetterPResult,
+        side: true,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/article-package',
+        name: 'articlePackage',
+        displayName: '기사 패키지',
+        component: ArticlePackage,
         side: true,
         nonResponsive: true,
         exact: false,

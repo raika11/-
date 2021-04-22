@@ -21,5 +21,5 @@ public interface MyMapper extends BaseMapper<MyEmailDTO, SearchDTO> {
      * @param myEmail 변경이메일정보
      * @return 성공여부
      */
-    int updateEmail(MyEmailDTO myEmail);
+    void updateEmail(MyEmailDTO myEmail);
 }

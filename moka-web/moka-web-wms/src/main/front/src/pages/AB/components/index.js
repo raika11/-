@@ -4,4 +4,4 @@ export { default as ABStatusRow } from './ABStatusRow';
 export { default as StatusBar } from './StatusBar';
 export { default as StatusRenderer } from './StatusRenderer';
 export { default as ABSearch } from './ABSearch';
-export { default as ABTestAgGrid } from './ABAgGrid';
+export { default as ABAgGrid } from './ABAgGrid';

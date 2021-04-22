@@ -1,5 +1,3 @@
-import { GRID_LINE_HEIGHT } from '@/style_constants';
-
 export default [
     {
         headerName: '상태',
@@ -10,9 +8,10 @@ export default [
         cellClassRules: {
             'ag-center-cell': () => true,
         },
+        cellRendererParams: { cellClass: 'ag-preline-cell justify-content-center' },
     },
     {
-        headerName: '설계명',
+        headerName: '테스트 명',
         field: 'abtestTitle',
         tooltipField: 'abtestTitle',
         width: 130,
@@ -21,9 +20,10 @@ export default [
         cellClassRules: {
             'ag-center-cell': () => true,
         },
+        cellRendererParams: { cellClass: 'ag-preline-cell justify-content-center' },
     },
     {
-        headerName: '유형\n테스트대상',
+        headerName: '유형\n테스트 대상',
         field: 'typeAndPurpose',
         tooltipField: 'typeAndPurpose',
         width: 100,
@@ -31,6 +31,7 @@ export default [
         cellClassRules: {
             'ag-center-cell': () => true,
         },
+        cellRendererParams: { cellClass: 'ag-preline-cell justify-content-center' },
     },
     {
         headerName: '페이지\n영역',
@@ -38,15 +39,6 @@ export default [
         tooltipField: 'pageAndArea',
         width: 170,
         cellRenderer: 'longTextRenderer',
-        cellClassRules: {
-            'text-center': () => true,
-        },
-        cellRendererParams: { style: { display: 'block' } },
-        /*wrapText: true,
-        cellClassRules: {
-            'ag-pre-cell': () => true,
-        },
-        cellStyle: { lineHeight: `${GRID_LINE_HEIGHT.M}px` },*/
     },
     {
         headerName: '시작일시\n종료일시',
@@ -54,6 +46,7 @@ export default [
         tooltipField: 'periodInfo',
         width: 150,
         cellRenderer: 'longTextRenderer',
+        cellRendererParams: { cellClass: 'ag-preline-cell justify-content-center' },
     },
     {
         headerName: '작성자\n작성일시',
@@ -61,5 +54,6 @@ export default [
         tooltipField: 'regInfo',
         width: 150,
         cellRenderer: 'longTextRenderer',
+        cellRendererParams: { cellClass: 'ag-preline-cell justify-content-center' },
     },
 ];

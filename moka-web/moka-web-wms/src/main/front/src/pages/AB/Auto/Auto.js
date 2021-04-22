@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
 import AutoList from './AutoList';
 import AutoEdit from './AutoEdit';
+import { clearStore } from '@store/ab/abAction';
 
 /**
  * A/B 테스트 > 직접 설계
  */
 const Auto = ({ match }) => {
     const currentMenu = useSelector(({ auth }) => auth.currentMenu);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
 
     return (
         <Row className="d-flex" noGutters>

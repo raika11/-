@@ -29,7 +29,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @Entity
 @Table(name = "TB_NEWSLETTER_EXCEL")
 public class NewsletterExcel implements Serializable {
@@ -58,4 +58,5 @@ public class NewsletterExcel implements Serializable {
 
     @Column(name = "EMAIL")
     private String email;
+    
 }

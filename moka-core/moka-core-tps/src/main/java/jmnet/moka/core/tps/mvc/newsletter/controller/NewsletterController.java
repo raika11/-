@@ -5,11 +5,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.models.Response;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import javax.validation.Valid;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -19,6 +22,7 @@ import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.mail.mvc.dto.EmsSendDTO;
 import jmnet.moka.core.mail.mvc.service.EmsService;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
@@ -32,6 +36,9 @@ import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterSend;
 import jmnet.moka.core.tps.mvc.newsletter.service.NewsletterService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -370,20 +377,65 @@ public class NewsletterController extends AbstractCommonController {
             throw new MokaException(msg("tps.common.error.duplicated.key"));
         }
 
-        //        parseExcelFile(newsletterSendDTO.getEmailExcelFile());
-        //
-        //        return new ResponseEntity<>(null, HttpStatus.OK);
-
         NewsletterSend newsletterSend = modelMapper.map(newsletterSendDTO, NewsletterSend.class);
 
         // 등록
-        NewsletterSend returnValue = newsletterService.insertNewsletterSend(newsletterSend, null);
+        NewsletterSend returnValue = newsletterService.insertNewsletterSend(newsletterSend, parseExcelFile(newsletterSendDTO.getEmailExcelFile()));
 
         // 결과리턴
         NewsletterSendDTO dto = modelMapper.map(returnValue, NewsletterSendDTO.class);
         ResultDTO<NewsletterSendDTO> resultDto = new ResultDTO<NewsletterSendDTO>(dto, msg("tps.common.success.insert"));
 
         tpsLogger.success(ActionType.INSERT);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 뉴스레터 발송 (수동) 테스트 발송
+     *
+     * @param newsletterSendDTO 뉴스레터 발송(수동)
+     * @return
+     * @throws InvalidDataException
+     * @throws Exception
+     */
+    @ApiOperation(value = "뉴스레터 발송 (수동) 테스트 발송")
+    @PostMapping(value = "/newsletterSend/test", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<?> postNewsletterSendTest(@Valid NewsletterSendDTO newsletterSendDTO)
+            throws InvalidDataException, Exception {
+        if (newsletterSendDTO.getSendSeq() != null) {
+            throw new MokaException(msg("tps.common.error.duplicated.key"));
+        } else if (McpString.isNotEmpty(newsletterSendDTO.getTestEmails()) && newsletterSendDTO
+                .getTestEmails()
+                .split(";").length > 0) {
+            throw new MokaException(msg("tps.newsletter.error.test-emails"));
+        }
+
+        Arrays
+                .stream(newsletterSendDTO
+                        .getTestEmails()
+                        .split(";"))
+                .forEach(to -> {
+                    EmsSendDTO test = emsService.send(EmsSendDTO
+                            .builder()
+                            .legacyid("newsletter_email_test") // TODO: 발송키값
+                            .mailtype("01") // TODO: 메일타입
+                            .email(to)
+                            .name(to)
+                            .sendtime(McpDate.now())
+                            .fromaddress("noreply@joongang.co.kr") // TODO: 발송이메일
+                            .fromname("중앙일보") // TODO: 발송자명
+                            .title(newsletterSendDTO.getLetterTitle())
+                            .tag1(newsletterSendDTO
+                                    .getLetterHtml()
+                                    .substring(0, Math.min(256, newsletterSendDTO
+                                            .getLetterHtml()
+                                            .length())))
+                            .build());
+
+                });
+
+        // 결과리턴
+        ResultDTO resultDto = new ResultDTO("TODO: ems send success");
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -438,14 +490,51 @@ public class NewsletterController extends AbstractCommonController {
         return imageUrl;
     }
 
+    /**
+     * Email 목록 엑셀 파일 파싱
+     *
+     * @param emailExcelFile 이메일 엑셀 파일
+     * @return
+     * @throws Exception
+     */
     public List<NewsletterExcel> parseExcelFile(MultipartFile emailExcelFile)
             throws Exception {
-        String ext = McpFile.getExtension(emailExcelFile.getOriginalFilename());
+        List<NewsletterExcel> list = new LinkedList<>();
         // excel 파싱
         Workbook wb = WorkbookFactory.create(emailExcelFile.getInputStream());
-        // 암호화
-        String value = mokaCrypt.encrypt("test");
-        log.debug("encrypt {}", value);
-        return null;
+        // Sheet 탐색 for문
+        for (int sheetIndex = 0; sheetIndex < wb.getNumberOfSheets(); sheetIndex++) {
+            // 현재 Sheet 반환
+            Sheet curSheet = wb.getSheetAt(sheetIndex);
+            // row 탐색
+            for (int rowIndex = 0; rowIndex < curSheet.getPhysicalNumberOfRows(); rowIndex++) {
+                // row 0은 헤더정보이기 때문에 무시
+                if (rowIndex != 0) {
+                    Row curRow = curSheet.getRow(rowIndex);
+                    if (curRow != null) {
+                        // email
+                        Cell cellEmail = curRow.getCell(0);
+                        String email = cellEmail.getStringCellValue();
+                        if (McpString.isNullOrEmpty(email)) {
+                            continue;
+                        }
+                        // 이름
+                        Cell cellUserName = curRow.getCell(1);
+                        String userName = cellUserName != null ? cellUserName.getStringCellValue() : null;
+                        // 회원ID
+                        Cell cellUserId = curRow.getCell(2);
+                        String userId = cellUserId != null ? cellUserId.getStringCellValue() : null;
+                        // 추가
+                        list.add(NewsletterExcel
+                                .builder()
+                                .email(mokaCrypt.encrypt(email))
+                                .memId(userId)
+                                .memNm(userName)
+                                .build());
+                    }
+                }
+            }
+        }
+        return list;
     }
 }

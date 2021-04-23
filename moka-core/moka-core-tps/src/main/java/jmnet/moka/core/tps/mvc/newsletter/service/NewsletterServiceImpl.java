@@ -73,12 +73,38 @@ public class NewsletterServiceImpl implements NewsletterService {
     @Transactional
     @Override
     public NewsletterSend insertNewsletterSend(NewsletterSend newsletterSend, List<NewsletterExcel> emailList) {
-        return newsletterSendRepository.save(newsletterSend);
+        NewsletterSend result = newsletterSendRepository.save(newsletterSend);
+        // 추가
+        emailList
+                .stream()
+                .map(email -> email
+                        .toBuilder()
+                        .letterSeq(result.getLetterSeq())
+                        .sendSeq(result.getSendSeq())
+                        .memSeq(0L)
+                        .build())
+                .forEach(newsletterExcelRepository::save);
+        return result;
     }
 
     @Transactional
     @Override
     public NewsletterSend updateNewsletterSend(NewsletterSend newsletterSend, List<NewsletterExcel> emailList) {
-        return newsletterSendRepository.save(newsletterSend);
+        NewsletterSend result = newsletterSendRepository.save(newsletterSend);
+        // 삭제
+        newsletterExcelRepository
+                .findBySendSeq(result.getSendSeq())
+                .forEach(newsletterExcelRepository::delete);
+        // 추가
+        emailList
+                .stream()
+                .map(email -> email
+                        .toBuilder()
+                        .letterSeq(result.getLetterSeq())
+                        .sendSeq(result.getSendSeq())
+                        .memSeq(0L)
+                        .build())
+                .forEach(newsletterExcelRepository::save);
+        return result;
     }
 }

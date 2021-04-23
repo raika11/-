@@ -106,8 +106,19 @@ public class NewsletterSendDTO implements Serializable {
     @ApiModelProperty("수동레터본문")
     private String letterBody;
 
+    @ApiModelProperty("수동레터 전체 HTML")
+    private String letterHtml;
+
+    @ApiModelProperty("발송할 이메일 리스트 (;) 구분자")
+    private String testEmails;
+
+
     @ApiModelProperty("엑셀파일 업로드")
     @JsonIgnore
     private MultipartFile emailExcelFile;
+
+    @ApiModelProperty("이미지파일")
+    @JsonIgnore
+    private MultipartFile headerImgFile;
 
 }

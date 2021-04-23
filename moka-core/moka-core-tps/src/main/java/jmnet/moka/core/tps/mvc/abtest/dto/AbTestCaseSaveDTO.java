@@ -22,7 +22,7 @@ import lombok.Setter;
  * <pre>
  *
  * Project : moka
- * Package : jmnet.moka.core.tps.mvc.abTest.dto
+ * Package : jmnet.moka.core.tps.mvc.abtest.dto
  * ClassName : ABTestCaseSaveDTO
  * Created : 2021-04-15
  * </pre>

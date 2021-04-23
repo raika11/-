@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  * <pre>
  * ABTest 서비스
  * Project : moka
- * Package : jmnet.moka.core.tps.mvc.abTest.service
+ * Package : jmnet.moka.core.tps.mvc.abtest.service
  * ClassName : ABTestCaseServiceImpl
  * Created : 2021-04-15
  * </pre>
@@ -100,7 +100,7 @@ public class AbTestCaseServiceImpl implements AbTestCaseService {
                 });
         abTestCase.setStatus(MokaConstants.ABTEST_STATUS_Q);
     }
-    
+
     @Override
     public void deleteABTestCase(Long abtestSeq)
             throws NoDataException {

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { MokaInputLabel, MokaCard } from '@components';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { clearMenu, getMenu, saveMenu, changeMenu, duplicateCheckId, changeSearchOption, changeInvalidList, GET_MENU, SAVE_MENU } from '@store/menu';
-import toast from '@/utils/toastUtil';
+import { MokaInputLabel, MokaCard } from '@components';
+import toast from '@utils/toastUtil';
 
 const labelWidth = 101;
 const MenuEditContainerEdit = (props) => {
@@ -289,194 +288,178 @@ const MenuEditContainerEdit = (props) => {
 
     return (
         <MokaCard
-            className="w-100"
+            className="flex-fill"
             title="메뉴정보"
-            footerClassName="justify-content-center"
-            footer
+            loading={loading}
             footerButtons={[
                 { text: menuSeq ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
                 menuSeq && { text: '삭제', variant: 'negative', onClick: handleClickDelete },
-            ].filter((a) => a)}
+            ].filter(Boolean)}
         >
-            {loading && <div className="opacity-box"></div>}
-            <Form>
+            <Form.Row className="mb-2">
+                <Col xs={12} className="p-0">
+                    <MokaInputLabel
+                        className="mb-0"
+                        label="사용여부"
+                        labelWidth={labelWidth}
+                        as="switch"
+                        placeholder="사용여부를 입력하세요"
+                        id="usedYn"
+                        name="usedYn"
+                        inputProps={{ checked: usedYn === 'Y' }}
+                        onChange={handleChangeValue}
+                    />
+                </Col>
+            </Form.Row>
+            {menuSeq ? (
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel
                             className="mb-0"
-                            label="사용여부"
+                            label="메뉴ID"
                             labelWidth={labelWidth}
-                            as="switch"
-                            placeholder="사용여부를 입력하세요"
-                            id="usedYn"
-                            name="usedYn"
-                            inputProps={{ checked: usedYn === 'Y' }}
-                            onChange={handleChangeValue}
+                            inputClassName="bg-white"
+                            inputProps={{ plaintext: true }}
+                            value={menuId}
+                            disabled
                         />
                     </Col>
                 </Form.Row>
-                {menuSeq ? (
+            ) : (
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel
+                            className="mb-0"
+                            label="메뉴ID"
+                            labelWidth={labelWidth}
+                            name="menuId"
+                            value={menuId}
+                            isInvalid={menuIdError}
+                            onChange={handleChangeValue}
+                            placeholder="메뉴ID를 2~8자리 숫자로 입력하세요."
+                            inputProps={{ autoComplete: 'off' }}
+                        />
+                    </Col>
+                </Form.Row>
+            )}
+            <Form.Row className="mb-2">
+                <Col xs={12} className="p-0">
+                    <MokaInputLabel
+                        className="mb-0"
+                        label="메뉴명"
+                        labelWidth={labelWidth}
+                        name="menuNm"
+                        value={menuNm}
+                        isInvalid={menuNmError}
+                        onChange={handleChangeValue}
+                        placeholder="메뉴명를 입력하세요."
+                        inputProps={{ autoComplete: 'off' }}
+                    />
+                </Col>
+            </Form.Row>
+            <Form.Row className="mb-2">
+                <Col xs={12} className="p-0">
+                    <MokaInputLabel
+                        className="mb-0"
+                        label="메뉴노출명"
+                        labelWidth={labelWidth}
+                        name="menuDisplayNm"
+                        value={menuDisplayNm}
+                        isInvalid={menuDisplayNmError}
+                        onChange={handleChangeValue}
+                        placeholder="메뉴 노출명을 입력하세요."
+                        inputProps={{ autoComplete: 'off' }}
+                    />
+                </Col>
+            </Form.Row>
+            <Form.Row className="mb-2">
+                <Col xs={12} className="p-0">
+                    <MokaInputLabel
+                        className="mb-0"
+                        label="메뉴ICON"
+                        labelWidth={labelWidth}
+                        name="iconNm"
+                        value={iconNm}
+                        isInvalid={iconNmError}
+                        onChange={handleChangeValue}
+                        placeholder="메뉴 ICON을 입력하세요."
+                        inputProps={{ autoComplete: 'off' }}
+                    />
+                </Col>
+            </Form.Row>
+            <Form.Row className="mb-2">
+                <Col xs={12} className="p-0">
+                    <MokaInputLabel
+                        className="mb-0"
+                        label="메뉴페이지 URL"
+                        labelWidth={labelWidth}
+                        name="menuUrl"
+                        value={menuUrl}
+                        isInvalid={menuUrlError}
+                        onChange={handleChangeValue}
+                        placeholder="메뉴페이지 URL을 입력하세요."
+                        inputProps={{ autoComplete: 'off' }}
+                    />
+                </Col>
+            </Form.Row>
+            {menuSeq ? (
+                <>
                     <Form.Row className="mb-2">
                         <Col xs={12} className="p-0">
                             <MokaInputLabel
                                 className="mb-0"
-                                label="메뉴ID"
+                                label="등록자"
                                 labelWidth={labelWidth}
                                 inputClassName="bg-white"
                                 inputProps={{ plaintext: true }}
-                                value={menuId}
+                                value={regId}
                                 disabled
                             />
                         </Col>
                     </Form.Row>
-                ) : (
                     <Form.Row className="mb-2">
                         <Col xs={12} className="p-0">
                             <MokaInputLabel
                                 className="mb-0"
-                                label="메뉴ID"
+                                label="등록일시"
                                 labelWidth={labelWidth}
-                                name="menuId"
-                                value={menuId}
-                                isInvalid={menuIdError}
-                                onChange={handleChangeValue}
-                                placeholder="메뉴ID를 2~8자리 숫자로 입력하세요."
-                                inputProps={{ autoComplete: 'off' }}
+                                inputClassName="bg-white"
+                                inputProps={{ plaintext: true }}
+                                value={regDt}
+                                disabled
                             />
                         </Col>
                     </Form.Row>
-                )}
-                <Form.Row className="mb-2">
-                    <Col xs={12} className="p-0">
-                        <MokaInputLabel
-                            className="mb-0"
-                            label="메뉴명"
-                            labelWidth={labelWidth}
-                            name="menuNm"
-                            value={menuNm}
-                            isInvalid={menuNmError}
-                            onChange={handleChangeValue}
-                            placeholder="메뉴명를 입력하세요."
-                            inputProps={{ autoComplete: 'off' }}
-                        />
-                    </Col>
-                </Form.Row>
-                <Form.Row className="mb-2">
-                    <Col xs={12} className="p-0">
-                        <MokaInputLabel
-                            className="mb-0"
-                            label="메뉴노출명"
-                            labelWidth={labelWidth}
-                            name="menuDisplayNm"
-                            value={menuDisplayNm}
-                            isInvalid={menuDisplayNmError}
-                            onChange={handleChangeValue}
-                            placeholder="메뉴 노출명을 입력하세요."
-                            inputProps={{ autoComplete: 'off' }}
-                        />
-                    </Col>
-                </Form.Row>
-                <Form.Row className="mb-2">
-                    <Col xs={12} className="p-0">
-                        <MokaInputLabel
-                            className="mb-0"
-                            label="메뉴ICON"
-                            labelWidth={labelWidth}
-                            name="iconNm"
-                            value={iconNm}
-                            isInvalid={iconNmError}
-                            onChange={handleChangeValue}
-                            placeholder="메뉴 ICON을 입력하세요."
-                            inputProps={{ autoComplete: 'off' }}
-                        />
-                    </Col>
-                </Form.Row>
-                <Form.Row className="mb-2">
-                    <Col xs={12} className="p-0">
-                        <MokaInputLabel
-                            className="mb-0"
-                            label="메뉴페이지 URL"
-                            labelWidth={labelWidth}
-                            name="menuUrl"
-                            value={menuUrl}
-                            isInvalid={menuUrlError}
-                            onChange={handleChangeValue}
-                            placeholder="메뉴페이지 URL을 입력하세요."
-                            inputProps={{ autoComplete: 'off' }}
-                        />
-                    </Col>
-                </Form.Row>
-                {menuSeq ? (
-                    <>
-                        <Form.Row className="mb-2">
-                            <Col xs={12} className="p-0">
-                                <MokaInputLabel
-                                    className="mb-0"
-                                    label="등록자"
-                                    labelWidth={labelWidth}
-                                    inputClassName="bg-white"
-                                    inputProps={{ plaintext: true }}
-                                    value={regId}
-                                    disabled
-                                />
-                            </Col>
-                        </Form.Row>
-                        <Form.Row className="mb-2">
-                            <Col xs={12} className="p-0">
-                                <MokaInputLabel
-                                    className="mb-0"
-                                    label="등록일시"
-                                    labelWidth={labelWidth}
-                                    inputClassName="bg-white"
-                                    inputProps={{ plaintext: true }}
-                                    value={regDt}
-                                    disabled
-                                />
-                            </Col>
-                        </Form.Row>
-                        <Form.Row className="mb-2">
-                            <Col xs={12} className="p-0">
-                                <MokaInputLabel
-                                    className="mb-0"
-                                    label="수정자"
-                                    labelWidth={labelWidth}
-                                    inputClassName="bg-white"
-                                    inputProps={{ plaintext: true }}
-                                    value={modId}
-                                    disabled
-                                />
-                            </Col>
-                        </Form.Row>
-                        <Form.Row className="mb-2">
-                            <Col xs={12} className="p-0">
-                                <MokaInputLabel
-                                    className="mb-0"
-                                    label="수정일시"
-                                    labelWidth={labelWidth}
-                                    inputClassName="bg-white"
-                                    inputProps={{ plaintext: true }}
-                                    value={modDt}
-                                    disabled
-                                />
-                            </Col>
-                        </Form.Row>
-                    </>
-                ) : (
-                    ''
-                )}
-                {/*<Form.Group className="d-flex pt-20 justify-content-center">
-                    <Button type="submit" className="float-left mr-1" variant="positive" onClick={handleClickSave}>
-                        {menuSeq ? '수정' : '저장'}
-                    </Button>
-                    {menuSeq ? (
-                        <Button className="float-left mr-0" variant="negative" onClick={handleClickDelete}>
-                            삭제
-                        </Button>
-                    ) : (
-                        ''
-                    )}
-                </Form.Group>*/}
-            </Form>
+                    <Form.Row className="mb-2">
+                        <Col xs={12} className="p-0">
+                            <MokaInputLabel
+                                className="mb-0"
+                                label="수정자"
+                                labelWidth={labelWidth}
+                                inputClassName="bg-white"
+                                inputProps={{ plaintext: true }}
+                                value={modId}
+                                disabled
+                            />
+                        </Col>
+                    </Form.Row>
+                    <Form.Row className="mb-2">
+                        <Col xs={12} className="p-0">
+                            <MokaInputLabel
+                                className="mb-0"
+                                label="수정일시"
+                                labelWidth={labelWidth}
+                                inputClassName="bg-white"
+                                inputProps={{ plaintext: true }}
+                                value={modDt}
+                                disabled
+                            />
+                        </Col>
+                    </Form.Row>
+                </>
+            ) : (
+                ''
+            )}
         </MokaCard>
     );
 };

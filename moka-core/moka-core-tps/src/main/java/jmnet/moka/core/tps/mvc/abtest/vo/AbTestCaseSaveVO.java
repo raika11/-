@@ -13,7 +13,7 @@ import org.apache.ibatis.type.Alias;
  * <pre>
  * ABTest목록 등록용 VO
  * Project : moka
- * Package : jmnet.moka.core.tps.mvc.abTest.vo
+ * Package : jmnet.moka.core.tps.mvc.abtest.vo
  * ClassName : ABTestVO
  * Created : 2021-04-15
  * </pre>

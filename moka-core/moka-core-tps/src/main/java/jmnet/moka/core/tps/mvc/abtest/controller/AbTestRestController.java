@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
  * <pre>
  * ABTest API Controller
  * Project : moka
- * Package : jmnet.moka.core.tps.mvc.abTest.controller
+ * Package : jmnet.moka.core.tps.mvc.abtest.controller
  * ClassName : ABTestRestController
  * Created : 2021-04-15
  * </pre>

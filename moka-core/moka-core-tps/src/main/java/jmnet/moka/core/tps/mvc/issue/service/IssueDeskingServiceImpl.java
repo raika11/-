@@ -281,11 +281,15 @@ public class IssueDeskingServiceImpl implements IssueDeskingService {
         this.insertDeskingHist(packageMaster, issueDeskingHistCompDTO, regId, histPublishDTO);
 
         // 스케줄링(R) 추가
+        String paramDesc = "{\"pkgSeq\":" + packageMaster
+                .getPkgSeq()
+                .toString() + ",\"compNo\":" + compNo.toString() + "}";
         ResponseEntity<String> responseEntity = restTemplateHelper.post(reservedTaskUrl, MapBuilder
                 .getInstance()
                 .add("jobCd", TpsConstants.ISSUE_JOB_CD)
                 .add("jobTaskId", TpsConstants.ISSUE_JOB_CD + "_" + packageMaster.getPkgSeq() + "_" + compNo)
                 .add("reserveDt", McpDate.dateTimeStr(reserveDt))
+                .add("paramDesc", paramDesc)
                 .getMultiValueMap());
         ResultHeaderDTO resultHeader = this.parseResultHeaderDTO(responseEntity);
         if (!resultHeader.isSuccess()) {

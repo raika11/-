@@ -442,11 +442,15 @@ public class DeskingServiceImpl implements DeskingService {
         insertDeskingHist(componentHist, componentWorkVO.getDeskingWorks(), regId);
 
         // 스케줄링(R) 추가
+        String paramDesc = "{\"componentSeq\":" + componentWorkVO
+                .getComponentSeq()
+                .toString() + "}";
         ResponseEntity<String> responseEntity = restTemplateHelper.post(reservedTaskUrl, MapBuilder
                 .getInstance()
                 .add("jobCd", TpsConstants.DESKING_JOB_CD)
                 .add("jobTaskId", TpsConstants.DESKING_JOB_CD + "_" + componentWorkVO.getComponentSeq())
                 .add("reserveDt", McpDate.dateTimeStr(reserveDt))
+                .add("paramDesc", paramDesc)
                 .getMultiValueMap());
         ResultHeaderDTO resultHeader = this.parseResultHeaderDTO(responseEntity);
         if (!resultHeader.isSuccess()) {

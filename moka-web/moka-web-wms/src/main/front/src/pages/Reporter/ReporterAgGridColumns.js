@@ -25,6 +25,10 @@ export const columnDefs = [
         width: 50,
         cellRenderer: 'imageRenderer',
         cellRendererParams: { roundedCircle: true, autoRatio: false },
+        cellStyle: {
+            paddingTop: '4px',
+            paddingBottom: '4px',
+        },
     },
     {
         headerName: '이름',

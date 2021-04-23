@@ -17,7 +17,6 @@ export const columnDefs = [
     {
         headerName: '메뉴명',
         field: 'menuDisplayNm',
-        width: 140,
         flex: 1,
         cellStyle: { cursor: 'pointer' },
     },

@@ -168,7 +168,7 @@ const SignIn = () => {
                                                     <div className="user-info">
                                                         <MokaInput as="checkbox" id="idSave" name="idSave" label="Save ID" onChange={handleChangeValue} checked={idSave} />
                                                         {passwordErrorCount ? (
-                                                            <label class="password-error">
+                                                            <label className="password-error">
                                                                 비밀번호 오류 <span>{passwordErrorCount}</span> 회
                                                             </label>
                                                         ) : (

@@ -39,7 +39,7 @@ import java.util.Date;
 public class IssueDeskingReserveJob extends AbstractReserveJob {
 
     //@Value("http://172.29.58.94:8100")  //로컬 BO API 주소
-    @Value("https://stg-backoffice.joongang.co.kr") //스테이징 BO API 주소
+    @Value("${stg.backoffice.staging-api-url}") //스테이징 BO API 주소
     private String backOfficeServer;
 
     @Autowired
@@ -75,8 +75,8 @@ public class IssueDeskingReserveJob extends AbstractReserveJob {
             headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
 
             if(checkJobTaskID(history.getJobTaskId())) {
-                params.add("pkgSeq", parseJobTarkID(JOB_TASK_ID_PKGSEQ, history.getJobTaskId()));
-                params.add("compNo", parseJobTarkID(JOB_TASK_ID_COMPNO, history.getJobTaskId()));
+                params.add("pkgSeq", parseJobTaskIDPkgSeq(history.getJobTaskId()));
+                params.add("compNo", parseJobTaskIDCompNo(history.getJobTaskId()));
 
                 desingResult.setSendExecTime((new Date()).getTime());
 
@@ -138,9 +138,17 @@ public class IssueDeskingReserveJob extends AbstractReserveJob {
         return retValue;
     }
 
-    private String parseJobTarkID(int type, String strJobTaskID) {
-        String[] strSplit =  strJobTaskID.split("_");
-        return strSplit[type];
+    private long parseJobTaskIDPkgSeq(String strJobTaskID)
+    {
+        String[] split =  strJobTaskID.split("_");
+        return Long.parseLong(split[JOB_TASK_ID_PKGSEQ]);
     }
+
+    private int parseJobTaskIDCompNo(String strJobTaskID)
+    {
+        String[] split =  strJobTaskID.split("_");
+        return Integer.parseInt(split[JOB_TASK_ID_COMPNO]);
+    }
+
 
 }

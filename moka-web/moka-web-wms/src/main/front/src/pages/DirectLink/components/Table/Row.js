@@ -67,7 +67,7 @@ const Row = ({ data, onRowClicked, selected, lastRow }) => {
                         <MokaIcon
                             iconName="fas-circle"
                             className={clsx('mr-1', {
-                                'color-primary': data.usedYn === 'Y',
+                                'color-secondary': data.usedYn === 'Y',
                                 'color-gray-200': data.usedYn === 'N',
                             })}
                         />

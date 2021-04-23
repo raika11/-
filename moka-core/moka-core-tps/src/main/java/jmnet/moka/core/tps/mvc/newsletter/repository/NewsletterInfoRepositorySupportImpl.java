@@ -5,7 +5,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
-import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberSimpleInfo;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
 import jmnet.moka.core.tps.mvc.newsletter.entity.QNewsletterInfo;
@@ -40,7 +40,7 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
         QNewsletterInfo qNewsletterInfo = QNewsletterInfo.newsletterInfo;
         //        QNewsletterSubscribe qNewsletterSubscribe = QNewsletterSubscribe.newsletterSubscribe;
         //        QNewsletterLog qNewsletterLog = QNewsletterLog.newsletterLog;
-        QMemberInfo qMemberInfo = QMemberInfo.memberInfo;
+        QMemberSimpleInfo qMemberSimpleInfo = QMemberSimpleInfo.memberSimpleInfo;
         QNewsletterSend qNewsletterSend = QNewsletterSend.newsletterSend;
 
         JPQLQuery<NewsletterInfo> query = from(qNewsletterInfo).distinct();
@@ -113,7 +113,7 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
                 //                .fetchJoin()
                 .leftJoin(qNewsletterInfo.newsletterSends, qNewsletterSend)
                 .fetchJoin()
-                .leftJoin(qNewsletterInfo.regMember, qMemberInfo)
+                .leftJoin(qNewsletterInfo.regMember, qMemberSimpleInfo)
                 .fetchJoin()
                 .fetchResults();
 

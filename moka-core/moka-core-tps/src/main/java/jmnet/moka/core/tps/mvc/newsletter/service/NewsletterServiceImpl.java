@@ -1,9 +1,13 @@
 package jmnet.moka.core.tps.mvc.newsletter.service;
 
+import java.util.List;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
+import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterExcel;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterSend;
+import jmnet.moka.core.tps.mvc.newsletter.repository.NewsletterExcelRepository;
 import jmnet.moka.core.tps.mvc.newsletter.repository.NewsletterInfoRepository;
 import jmnet.moka.core.tps.mvc.newsletter.repository.NewsletterSendRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +34,13 @@ public class NewsletterServiceImpl implements NewsletterService {
 
     private final NewsletterSendRepository newsletterSendRepository;
 
-    public NewsletterServiceImpl(NewsletterInfoRepository newsletterInfoRepository, NewsletterSendRepository newsletterSendRepository) {
+    private final NewsletterExcelRepository newsletterExcelRepository;
+
+    public NewsletterServiceImpl(NewsletterInfoRepository newsletterInfoRepository, NewsletterSendRepository newsletterSendRepository,
+            NewsletterExcelRepository newsletterExcelRepository) {
         this.newsletterInfoRepository = newsletterInfoRepository;
         this.newsletterSendRepository = newsletterSendRepository;
+        this.newsletterExcelRepository = newsletterExcelRepository;
     }
 
     @Override
@@ -46,10 +54,17 @@ public class NewsletterServiceImpl implements NewsletterService {
     }
 
     @Override
+    public List<Long> findChannelIdByChannelType(String channelType) {
+        return newsletterInfoRepository.findAllChannelIdByChannelType(channelType);
+    }
+
+    @Transactional
+    @Override
     public NewsletterInfo insertNewsletterInfo(NewsletterInfo newsletterInfo) {
         return newsletterInfoRepository.save(newsletterInfo);
     }
 
+    @Transactional
     @Override
     public NewsletterInfo updateNewsletterInfo(NewsletterInfo newsletterInfo) {
         return newsletterInfoRepository.save(newsletterInfo);
@@ -61,12 +76,45 @@ public class NewsletterServiceImpl implements NewsletterService {
     }
 
     @Override
-    public NewsletterSend insertNewsletterSend(NewsletterSend newsletterSend) {
-        return newsletterSendRepository.save(newsletterSend);
+    public Optional<NewsletterSend> findNewsletterSendBySendSeq(Long sendSeq) {
+        return newsletterSendRepository.findById(sendSeq);
     }
 
+    @Transactional
     @Override
-    public NewsletterSend updateNewsletterSend(NewsletterSend newsletterSend) {
-        return newsletterSendRepository.save(newsletterSend);
+    public NewsletterSend insertNewsletterSend(NewsletterSend newsletterSend, List<NewsletterExcel> emailList) {
+        NewsletterSend result = newsletterSendRepository.save(newsletterSend);
+        // 추가
+        emailList
+                .stream()
+                .map(email -> email
+                        .toBuilder()
+                        .letterSeq(result.getLetterSeq())
+                        .sendSeq(result.getSendSeq())
+                        .memSeq(0L)
+                        .build())
+                .forEach(newsletterExcelRepository::save);
+        return result;
+    }
+
+    @Transactional
+    @Override
+    public NewsletterSend updateNewsletterSend(NewsletterSend newsletterSend, List<NewsletterExcel> emailList) {
+        NewsletterSend result = newsletterSendRepository.save(newsletterSend);
+        // 삭제
+        newsletterExcelRepository
+                .findBySendSeq(result.getSendSeq())
+                .forEach(newsletterExcelRepository::delete);
+        // 추가
+        emailList
+                .stream()
+                .map(email -> email
+                        .toBuilder()
+                        .letterSeq(result.getLetterSeq())
+                        .sendSeq(result.getSendSeq())
+                        .memSeq(0L)
+                        .build())
+                .forEach(newsletterExcelRepository::save);
+        return result;
     }
 }

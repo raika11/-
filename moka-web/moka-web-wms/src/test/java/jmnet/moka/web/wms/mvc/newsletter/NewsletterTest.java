@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Date;
 import java.util.Set;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterInfoDTO;
-import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterProductDTO;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
+import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSimpleDTO;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterSend;
 import jmnet.moka.core.tps.mvc.newsletter.repository.NewsletterInfoRepository;
@@ -77,14 +77,14 @@ public class NewsletterTest {
                         .max(Date::compareTo)
                         .get();
         ModelMapper countModelMapper = new ModelMapper();
-        countModelMapper
-                .typeMap(NewsletterInfo.class, NewsletterProductDTO.class)
-                .addMappings(mapper -> mapper
-                        .using(getSubscribeCount)
-                        .map(NewsletterInfo::getNewsletterSubscribes, NewsletterProductDTO::setSubscribeCount))
-                .addMappings(mapping -> mapping
-                        .using(getLastSendDt)
-                        .map(NewsletterInfo::getNewsletterSends, NewsletterProductDTO::setLastSendDt));
+        //        countModelMapper
+        //                .typeMap(NewsletterInfo.class, NewsletterProductDTO.class)
+        //                .addMappings(mapper -> mapper
+        //                        .using(getSubscribeCount)
+        //                        .map(NewsletterInfo::getNewsletterSubscribes, NewsletterProductDTO::setSubscribeCount))
+        //                .addMappings(mapping -> mapping
+        //                        .using(getLastSendDt)
+        //                        .map(NewsletterInfo::getNewsletterSends, NewsletterProductDTO::setLastSendDt));
 
         //        result
         //                .getContent()
@@ -94,7 +94,7 @@ public class NewsletterTest {
 
         log.debug("{}", objectMapper
                 .writerWithDefaultPrettyPrinter()
-                .writeValueAsString(countModelMapper.map(result.getContent(), NewsletterProductDTO.TYPE)));
+                .writeValueAsString(countModelMapper.map(result.getContent(), NewsletterSimpleDTO.TYPE)));
     }
 
     @Test
@@ -108,7 +108,6 @@ public class NewsletterTest {
                 .channelId(1000L)
                 .channelDateId(2L)
                 .sendPeriod("C")
-                .sendBaseCnt(1L)
                 .senderName("test")
                 .senderEmail("test@test.com")
                 .letterTitle("Test letter title")

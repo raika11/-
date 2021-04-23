@@ -375,6 +375,10 @@ public class MemberJoinRestController extends AbstractCommonController {
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
+        MemberSms memberSms = memberService
+                .findFirstByMemberIdOrderByRegDtDesc(memberId)
+                .orElseThrow(() -> new NoDataException(noDataMsg));
+
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
         if (MemberStatusCode.N == member.getStatus()) {
@@ -385,7 +389,7 @@ public class MemberJoinRestController extends AbstractCommonController {
 
             if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS
                     || memberRequestDTO.getRequestType() == MemberRequestCode.NEW_SMS) {// SMS 인증문자로 잠김해제 요청 또는 신규 등록 신청
-                if (McpString.isEmpty(member.getSmsAuth())) {
+                if (McpString.isEmpty(memberSms.getSmsAuth())) {
                     throw new InvalidDataException(msg("wms.login.error.notempty.smsAuth"));
                 }
                 //            if (!member

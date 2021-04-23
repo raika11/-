@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
 import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.core.common.encrypt.MokaCrypt;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.my.dto.MyEmailDTO;
@@ -36,8 +37,11 @@ public class InternalMyRestController extends AbstractCommonController {
 
     private final MyService myService;
 
-    public InternalMyRestController(MyService myService) {
+    private final MokaCrypt mokaCrypt;
+
+    public InternalMyRestController(MyService myService, MokaCrypt mokaCrypt) {
         this.myService = myService;
+        this.mokaCrypt = mokaCrypt;
     }
 
     /**
@@ -53,6 +57,7 @@ public class InternalMyRestController extends AbstractCommonController {
             throws Exception {
 
         try {
+            setEncrypt(myEmail);
             myService.updateEmail(myEmail);
 
             String message = messageByLocale.get("tps.common.success.update");
@@ -64,6 +69,12 @@ public class InternalMyRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.INSERT, "[FAIL TO UPDATE MEMBER EMAIL]", e, true);
             throw new Exception(msg("tps.common.error.update"), e);
         }
+    }
+
+    private void setEncrypt(MyEmailDTO myEmail)
+            throws Exception {
+        String toEmail = mokaCrypt.encrypt(myEmail.getToEmail());
+        myEmail.setToEmail(toEmail);
     }
 
 }

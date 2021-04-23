@@ -1,5 +1,6 @@
 package jmnet.moka.web.schedule.mvc.reserve.service;
 
+import java.util.Date;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
@@ -19,14 +20,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.Date;
-
 @Slf4j
 @Component
 public class DeskingReserveJob extends AbstractReserveJob {
 
-    //@Value("http://172.29.58.94:8100")  //로컬 BO API 주소
-    @Value("https://stg-backoffice.joongang.co.kr") //스테이징 BO API 주소
+    @Value("${stg.backoffice.staging-api-url}") //스테이징 BO API 주소
     private String backOfficeServer;
 
     @Autowired
@@ -35,7 +33,9 @@ public class DeskingReserveJob extends AbstractReserveJob {
     @Override
     public GenContentHistory invoke(GenContentHistory history) {
         log.debug("비동기 예약 작업 처리 : {}", history.getJobSeq());
-        GenStatus desingResult = history.getGenContent().getGenStatus();
+        GenStatus desingResult = history
+                .getGenContent()
+                .getGenStatus();
         /**
          * todo 1. 작업 테이블에서 조회하여 이미 완료 되었거나, 삭제 된 작업이 아닌 경우 진행 시작
          * - AbstractReserveJob에 공통 메소드 생성하여 사용할 수 있도록 조치 필요

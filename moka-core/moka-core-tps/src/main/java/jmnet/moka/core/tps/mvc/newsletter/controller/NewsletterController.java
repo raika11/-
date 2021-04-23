@@ -5,34 +5,44 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.models.Response;
 import java.io.IOException;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.encrypt.MokaCrypt;
 import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.mail.mvc.dto.EmsSendDTO;
+import jmnet.moka.core.mail.mvc.service.EmsService;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterInfoDTO;
-import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterProductDTO;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSendDTO;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSendSimpleDTO;
+import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSimpleDTO;
+import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterExcel;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterSend;
-import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterSubscribe;
 import jmnet.moka.core.tps.mvc.newsletter.service.NewsletterService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.Converter;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -71,9 +81,13 @@ public class NewsletterController extends AbstractCommonController {
 
     private final NewsletterService newsletterService;
 
+    private final EmsService emsService;
+
     private final FtpHelper ftpHelper;
 
     private final UploadFileHelper uploadFileHelper;
+
+    private final MokaCrypt mokaCrypt;
 
     @Value("${newsletter.image.save.filepath}")
     private String newsletterSaveFilepath;
@@ -81,9 +95,12 @@ public class NewsletterController extends AbstractCommonController {
     @Value("${pds.url}")
     private String pdsUrl;
 
-    public NewsletterController(NewsletterService newsletterService, FtpHelper ftpHelper, UploadFileHelper uploadFileHelper) {
-        this.newsletterService = newsletterService;
+    public NewsletterController(NewsletterService newsletterService, EmsService emsService, FtpHelper ftpHelper, UploadFileHelper uploadFileHelper,
+            MokaCrypt mokaCrypt) {
+        this.mokaCrypt = mokaCrypt;
         this.ftpHelper = ftpHelper;
+        this.emsService = emsService;
+        this.newsletterService = newsletterService;
         this.uploadFileHelper = uploadFileHelper;
     }
 
@@ -99,39 +116,38 @@ public class NewsletterController extends AbstractCommonController {
             throws Exception {
         Page<NewsletterInfo> returnValue = newsletterService.findAll(search);
 
-        Converter<Set, Long> getSubscribeCount = ctx -> ctx.getSource() == null
-                ? null
-                : (long) ctx
-                        .getSource()
-                        .size();
-        Converter<Set<NewsletterSend>, Date> getLastSendDt = ctx -> ctx.getSource() == null || ctx
-                .getSource()
-                .size() == 0
-                ? null
-                : ctx
-                        .getSource()
-                        .stream()
-                        .map(NewsletterSend::getSendDt)
-                        .max(Date::compareTo)
-                        .get();
+        //        Converter<Set, Long> getSubscribeCount = ctx -> ctx.getSource() == null
+        //                ? null
+        //                : (long) ctx
+        //                        .getSource()
+        //                        .size();
+        //        Converter<Set<NewsletterSend>, Date> getLastSendDt = ctx -> ctx.getSource() == null || ctx
+        //                .getSource()
+        //                .size() == 0
+        //                ? null
+        //                : ctx
+        //                        .getSource()
+        //                        .stream()
+        //                        .map(NewsletterSend::getSendDt)
+        //                        .max(Date::compareTo)
+        //                        .get();
 
         //        ModelMapper countModelMapper = new ModelMapper();
         //        countModelMapper
-        modelMapper
-                .typeMap(NewsletterInfo.class, NewsletterProductDTO.class)
-                .addMappings(mapper -> mapper
-                        .using(getSubscribeCount)
-                        .map(NewsletterInfo::getNewsletterSubscribes, NewsletterProductDTO::setSubscribeCount))
-                .addMappings(mapping -> mapping
-                        .using(getLastSendDt)
-                        .map(NewsletterInfo::getNewsletterSends, NewsletterProductDTO::setLastSendDt));
+        //        modelMapper.typeMap(NewsletterInfo.class, NewsletterProductDTO.class)
+        //                   //                .addMappings(mapper -> mapper
+        //                   //                        .using(getSubscribeCount)
+        //                   //                        .map(NewsletterInfo::getNewsletterSubscribes, NewsletterProductDTO::setSubscribeCount))
+        //                   .addMappings(mapping -> mapping
+        //                           .using(getLastSendDt)
+        //                           .map(NewsletterInfo::getNewsletterSends, NewsletterProductDTO::setLastSendDt));
 
         // 리턴값 설정
-        ResultListDTO<NewsletterProductDTO> resultListMessage = new ResultListDTO<>();
+        ResultListDTO<NewsletterSimpleDTO> resultListMessage = new ResultListDTO<>();
         resultListMessage.setTotalCnt(returnValue.getTotalElements());
-        resultListMessage.setList(modelMapper.map(returnValue.getContent(), NewsletterProductDTO.TYPE));
+        resultListMessage.setList(modelMapper.map(returnValue.getContent(), NewsletterSimpleDTO.TYPE));
 
-        ResultDTO<ResultListDTO<NewsletterProductDTO>> resultDto = new ResultDTO<>(resultListMessage);
+        ResultDTO<ResultListDTO<NewsletterSimpleDTO>> resultDto = new ResultDTO<>(resultListMessage);
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -151,34 +167,33 @@ public class NewsletterController extends AbstractCommonController {
         SearchNewsletterInfoExcelView excelView = new SearchNewsletterInfoExcelView();
 
         Page<NewsletterInfo> returnValue = newsletterService.findAll(search);
-        Converter<Set<NewsletterSubscribe>, Long> getSubscribeCount = ctx -> ctx.getSource() == null
-                ? null
-                : (long) ctx
-                        .getSource()
-                        .size();
-        Converter<Set<NewsletterSend>, Date> getLastSendDt = ctx -> ctx.getSource() == null || ctx
-                .getSource()
-                .size() == 0
-                ? null
-                : ctx
-                        .getSource()
-                        .stream()
-                        .map(NewsletterSend::getSendDt)
-                        .max(Date::compareTo)
-                        .get();
+        //        Converter<Set<NewsletterSubscribe>, Long> getSubscribeCount = ctx -> ctx.getSource() == null
+        //                ? null
+        //                : (long) ctx
+        //                        .getSource()
+        //                        .size();
+        //        Converter<Set<NewsletterSend>, Date> getLastSendDt = ctx -> ctx.getSource() == null || ctx
+        //                .getSource()
+        //                .size() == 0
+        //                ? null
+        //                : ctx
+        //                        .getSource()
+        //                        .stream()
+        //                        .map(NewsletterSend::getSendDt)
+        //                        .max(Date::compareTo)
+        //                        .get();
+        //
+        //        //        ModelMapper countModelMapper = new ModelMapper();
+        //        //        countModelMapper
+        //        modelMapper.typeMap(NewsletterInfo.class, NewsletterProductDTO.class)
+        //                   //                .addMappings(mapper -> mapper
+        //                   //                        .using(getSubscribeCount)
+        //                   //                        .map(NewsletterInfo::getNewsletterSubscribes, NewsletterProductDTO::setSubscribeCount))
+        //                   .addMappings(mapping -> mapping
+        //                           .using(getLastSendDt)
+        //                           .map(NewsletterInfo::getNewsletterSends, NewsletterProductDTO::setLastSendDt));
 
-        //        ModelMapper countModelMapper = new ModelMapper();
-        //        countModelMapper
-        modelMapper
-                .typeMap(NewsletterInfo.class, NewsletterProductDTO.class)
-                .addMappings(mapper -> mapper
-                        .using(getSubscribeCount)
-                        .map(NewsletterInfo::getNewsletterSubscribes, NewsletterProductDTO::setSubscribeCount))
-                .addMappings(mapping -> mapping
-                        .using(getLastSendDt)
-                        .map(NewsletterInfo::getNewsletterSends, NewsletterProductDTO::setLastSendDt));
-
-        List<NewsletterProductDTO> result = modelMapper.map(returnValue.getContent(), NewsletterProductDTO.TYPE);
+        List<NewsletterSimpleDTO> result = modelMapper.map(returnValue.getContent(), NewsletterSimpleDTO.TYPE);
 
         String[] columns = new String[] {"방법", "유형", "뉴스레터 명", "발송 시작일", "최근 발송일", "일정/콘텐츠", "시간", "구독자 수", "상태", "등록일", "등록자", "A/B TEST"};
 
@@ -194,8 +209,8 @@ public class NewsletterController extends AbstractCommonController {
 
     @ApiOperation(value = "뉴스레터 상품")
     @GetMapping(value = "/{letterSeq}")
-    public ResponseEntity<?> getNewsletterInfoByLetterSeq(@ApiParam(value = "뉴스레터상품 일련번호", required = true)
-    @PathVariable("letterSeq") /* @Min(value = 0, message = "{tps.article.error.min.totalId}") */ Long letterSeq)
+    public ResponseEntity<?> getNewsletterInfoByLetterSeq(@ApiParam(value = "뉴스레터상품 일련번호", required = true) @PathVariable("letterSeq")
+    @Min(value = 0, message = "{tps.common.error.min.seqNo}") Long letterSeq)
             throws NoDataException {
         // 조회
         NewsletterInfo newsletterInfo = newsletterService
@@ -280,6 +295,22 @@ public class NewsletterController extends AbstractCommonController {
         }
     }
 
+    @ApiOperation(value = "뉴스레터 채널별 등록된 컨텐츠 조회")
+    @GetMapping(value = "/channelType/{channelType}")
+    public ResponseEntity<?> getNewsletterInfoByLetterSeq(@ApiParam(value = "뉴스레터 채널별 등록된 컨텐츠 조회", required = true) @PathVariable("channelType")
+    @Pattern(regexp = "^()|(TOPIC)|(ISSUE)|(SERIES)|(JPOD)|(REPORTER)|(TREND)|(ARTICLE)|(STAR)|(DIJEST)$", message = "{tps.newsletter.error.pattern.channelType}") String channelType)
+            throws NoDataException {
+        // 조회
+        List<Long> channelIds = newsletterService.findChannelIdByChannelType(channelType);
+
+        // 리턴값 설정
+        ResultDTO<List<Long>> resultDto = new ResultDTO<>(channelIds);
+        //
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
     /**
      * 뉴스레터 발송 조회
      *
@@ -299,7 +330,7 @@ public class NewsletterController extends AbstractCommonController {
                         .getLetterName(), (destination, value) -> destination.setLetterName(String.valueOf(value)))
                 .addMapping(source -> source
                         .getNewsletterInfo()
-                        .getLetterType(), (destination, value) -> destination.setLetterType(String.valueOf(value)));
+                        .getLetterTypeName(), (destination, value) -> destination.setLetterTypeName(String.valueOf(value)));
 
         // 리턴값 설정
         ResultListDTO<NewsletterSendSimpleDTO> resultListMessage = new ResultListDTO<>();
@@ -311,6 +342,63 @@ public class NewsletterController extends AbstractCommonController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "뉴스레터 발송 상세")
+    @GetMapping(value = "/newsletterSend/{sendSeq}")
+    public ResponseEntity<?> getNewsletterSendByLetterSeq(@ApiParam(value = "발송 일련번호", required = true) @PathVariable("sendSeq")
+    @Min(value = 0, message = "{tps.common.error.min.seqNo}") Long sendSeq)
+            throws NoDataException {
+        // 조회
+        //        NewsletterInfo newsletterInfo = newsletterService
+        //                .findByletterSeq(sendSeq)
+        //                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+        //
+        //        NewsletterInfoDTO newsletterInfoDTO = modelMapper.map(newsletterInfo, NewsletterInfoDTO.class);
+        //
+        //        // 리턴값 설정
+        //        ResultDTO<NewsletterInfoDTO> resultDto = new ResultDTO<>(newsletterInfoDTO);
+        //
+        //        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(null/* resultDto */, HttpStatus.OK);
+    }
+
+    /**
+     * 뉴스레터 발송 조회 엑셀 출력
+     *
+     * @param search 조회조건
+     * @param map
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "뉴스레터 발송 조회 엑셀 출력", response = Response.class)
+    @GetMapping(value = "/newsletterSend/excel", produces = {"application/vnd.ms-excel"})
+    public SearchNewsletterSendExcelView getNewsletterSendExcel(@Valid @SearchParam NewsletterSearchDTO search, @ApiParam(hidden = true) ModelMap map)
+            throws Exception {
+        SearchNewsletterSendExcelView excelView = new SearchNewsletterSendExcelView();
+
+        Page<NewsletterSend> returnValue = newsletterService.findAllNewsletterSend(search);
+
+        modelMapper
+                .typeMap(NewsletterSend.class, NewsletterSendSimpleDTO.class)
+                .addMapping(source -> source
+                        .getNewsletterInfo()
+                        .getLetterName(), (destination, value) -> destination.setLetterName(String.valueOf(value)))
+                .addMapping(source -> source
+                        .getNewsletterInfo()
+                        .getLetterType(), (destination, value) -> destination.setLetterType(String.valueOf(value)));
+
+        List<NewsletterSendSimpleDTO> result = modelMapper.map(returnValue.getContent(), NewsletterSendSimpleDTO.TYPE);
+
+        String[] columns = new String[] {"유형", "뉴스레터 명", "제목", "발송일", "A/B Test"};
+
+        map.addAttribute("title", "뉴스레터 상품관리");
+        map.addAttribute("columnList", CollectionUtils.arrayToList(columns));
+        map.addAttribute("resultList", result);
+        excelView.setAttributesMap(map);
+
+        return excelView;
+    }
+
     /**
      * 뉴스레터 발송 (수동)등록
      *
@@ -320,23 +408,73 @@ public class NewsletterController extends AbstractCommonController {
      * @throws Exception
      */
     @ApiOperation(value = "뉴스레터 발송 (수동)등록")
-    @PostMapping(value = "/newsletterSend")
-    public ResponseEntity<?> postNewsletterSend(@RequestBody @Valid NewsletterSendDTO newsletterSendDTO)
+    @PostMapping(value = "/newsletterSend", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> postNewsletterSend(@Valid NewsletterSendDTO newsletterSendDTO)
             throws InvalidDataException, Exception {
         if (newsletterSendDTO.getSendSeq() != null) {
             throw new MokaException(msg("tps.common.error.duplicated.key"));
         }
-
+        // 상단 이미지 저장
+        newsletterSendDTO.setHeaderImg(uploadImage(newsletterSendDTO.getHeaderImgFile()));
         NewsletterSend newsletterSend = modelMapper.map(newsletterSendDTO, NewsletterSend.class);
 
         // 등록
-        NewsletterSend returnValue = newsletterService.insertNewsletterSend(newsletterSend);
+        NewsletterSend returnValue = newsletterService.insertNewsletterSend(newsletterSend, parseExcelFile(newsletterSendDTO.getEmailExcelFile()));
 
         // 결과리턴
         NewsletterSendDTO dto = modelMapper.map(returnValue, NewsletterSendDTO.class);
         ResultDTO<NewsletterSendDTO> resultDto = new ResultDTO<NewsletterSendDTO>(dto, msg("tps.common.success.insert"));
 
         tpsLogger.success(ActionType.INSERT);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 뉴스레터 발송 (수동) 테스트 발송
+     *
+     * @param newsletterSendDTO 뉴스레터 발송(수동)
+     * @return
+     * @throws InvalidDataException
+     * @throws Exception
+     */
+    @ApiOperation(value = "뉴스레터 발송 (수동) 테스트 발송")
+    @PostMapping(value = "/newsletterSend/test", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<?> postNewsletterSendTest(@Valid NewsletterSendDTO newsletterSendDTO)
+            throws InvalidDataException, Exception {
+        if (newsletterSendDTO.getSendSeq() != null) {
+            throw new MokaException(msg("tps.common.error.duplicated.key"));
+        } else if (McpString.isNullOrEmpty(newsletterSendDTO.getTestEmails()) && newsletterSendDTO
+                .getTestEmails()
+                .split(";").length == 0) {
+            throw new MokaException(msg("tps.newsletter.error.test-emails"));
+        }
+
+        Arrays
+                .stream(newsletterSendDTO
+                        .getTestEmails()
+                        .split(";"))
+                .forEach(to -> {
+                    EmsSendDTO test = emsService.send(EmsSendDTO
+                            .builder()
+                            .legacyid("newsletter_email_test") // TODO: 발송키값
+                            .mailtype("01") // TODO: 메일타입
+                            .email(to)
+                            .name(to)
+                            .sendtime(McpDate.now())
+                            .fromaddress("noreply@joongang.co.kr") // TODO: 발송이메일
+                            .fromname("중앙일보") // TODO: 발송자명
+                            .title(newsletterSendDTO.getLetterTitle())
+                            .tag1(newsletterSendDTO
+                                    .getLetterHtml()
+                                    .substring(0, Math.min(256, newsletterSendDTO
+                                            .getLetterHtml()
+                                            .length())))
+                            .build());
+
+                });
+
+        // 결과리턴
+        ResultDTO resultDto = new ResultDTO(msg("{tps.newsletter.success.test.publish}"));
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -356,11 +494,12 @@ public class NewsletterController extends AbstractCommonController {
         if (newsletterSendDTO.getLetterSeq() == null) {
             throw new MokaException(msg("tps.common.error.no-data"));
         }
-
+        // 상단 이미지 저장
+        newsletterSendDTO.setHeaderImg(uploadImage(newsletterSendDTO.getHeaderImgFile()));
         NewsletterSend newsletterSend = modelMapper.map(newsletterSendDTO, NewsletterSend.class);
 
         // 수정
-        NewsletterSend returnValue = newsletterService.updateNewsletterSend(newsletterSend);
+        NewsletterSend returnValue = newsletterService.updateNewsletterSend(newsletterSend, null);
 
         // 결과리턴
         NewsletterSendDTO dto = modelMapper.map(returnValue, NewsletterSendDTO.class);
@@ -389,5 +528,53 @@ public class NewsletterController extends AbstractCommonController {
         tpsLogger.success(ActionType.UPLOAD, message);
 
         return imageUrl;
+    }
+
+    /**
+     * Email 목록 엑셀 파일 파싱
+     *
+     * @param emailExcelFile 이메일 엑셀 파일
+     * @return
+     * @throws Exception
+     */
+    public List<NewsletterExcel> parseExcelFile(MultipartFile emailExcelFile)
+            throws Exception {
+        List<NewsletterExcel> list = new LinkedList<>();
+        // excel 파싱
+        Workbook wb = WorkbookFactory.create(emailExcelFile.getInputStream());
+        // Sheet 탐색 for문
+        for (int sheetIndex = 0; sheetIndex < wb.getNumberOfSheets(); sheetIndex++) {
+            // 현재 Sheet 반환
+            Sheet curSheet = wb.getSheetAt(sheetIndex);
+            // row 탐색
+            for (int rowIndex = 0; rowIndex < curSheet.getPhysicalNumberOfRows(); rowIndex++) {
+                // row 0은 헤더정보이기 때문에 무시
+                if (rowIndex != 0) {
+                    Row curRow = curSheet.getRow(rowIndex);
+                    if (curRow != null) {
+                        // email
+                        Cell cellEmail = curRow.getCell(0);
+                        String email = cellEmail.getStringCellValue();
+                        if (McpString.isNullOrEmpty(email)) {
+                            continue;
+                        }
+                        // 이름
+                        Cell cellUserName = curRow.getCell(1);
+                        String userName = cellUserName != null ? cellUserName.getStringCellValue() : null;
+                        // 회원ID
+                        Cell cellUserId = curRow.getCell(2);
+                        String userId = cellUserId != null ? cellUserId.getStringCellValue() : null;
+                        // 추가
+                        list.add(NewsletterExcel
+                                .builder()
+                                .email(mokaCrypt.encrypt(email))
+                                .memId(userId)
+                                .memNm(userName)
+                                .build());
+                    }
+                }
+            }
+        }
+        return list;
     }
 }

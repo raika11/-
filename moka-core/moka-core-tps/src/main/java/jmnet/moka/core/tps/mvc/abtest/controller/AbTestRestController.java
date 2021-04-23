@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
  * <pre>
  * ABTest API Controller
  * Project : moka
- * Package : jmnet.moka.core.tps.mvc.abTest.controller
+ * Package : jmnet.moka.core.tps.mvc.abtest.controller
  * ClassName : ABTestRestController
  * Created : 2021-04-15
  * </pre>
@@ -62,7 +62,7 @@ public class AbTestRestController extends AbstractCommonController {
      * ABTest 목록 조회
      *
      * @param search 검색조건
-     * @return API목록
+     * @return API목록 정보
      */
     @ApiOperation(value = "A/B테스트 목록 조회")
     @GetMapping

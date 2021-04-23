@@ -38,7 +38,12 @@ public class NewsletterSendSimpleDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<NewsletterSendSimpleDTO>>() {
     }.getType();
 
+    /**
+     * 유형
+     */
     private String letterType;
+
+    private String letterTypeName;
 
     @ApiModelProperty("발송일련번호")
     private Long sendSeq;
@@ -46,10 +51,16 @@ public class NewsletterSendSimpleDTO implements Serializable {
     @ApiModelProperty("레터일련번호")
     private Long letterSeq;
 
-    @ApiModelProperty("레터제목")
+    /**
+     * 제목
+     */
+    @ApiModelProperty("레터 타이틀")
     private String letterTitle;
 
-    @ApiModelProperty("레터제목")
+    /**
+     * 뉴스레터 명
+     */
+    @ApiModelProperty("뉴스레터 명")
     private String letterName;
 
     @ApiModelProperty("발송일시")

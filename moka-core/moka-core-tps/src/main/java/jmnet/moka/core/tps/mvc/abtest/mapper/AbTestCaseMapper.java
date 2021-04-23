@@ -10,7 +10,7 @@ import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseVO;
  * <pre>
  *
  * Project : moka
- * Package : jmnet.moka.core.tps.mvc.abTest.mapper
+ * Package : jmnet.moka.core.tps.mvc.abtest.mapper
  * ClassName : ABTestCaseMapper
  * Created : 2021-04-15
  * </pre>

@@ -1,7 +1,9 @@
 package jmnet.moka.core.tps.mvc.newsletter.service;
 
+import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
+import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterExcel;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterSend;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,14 @@ public interface NewsletterService {
     Optional<NewsletterInfo> findByletterSeq(Long letterSeq);
 
     /**
+     * 뉴스레터 채널별 등록된 컨텐츠 조회 조회
+     *
+     * @param channelType 채널 타입
+     * @return
+     */
+    List<Long> findChannelIdByChannelType(String channelType);
+
+    /**
      * 뉴스레터 상품 등록
      *
      * @param newsletterInfo
@@ -60,12 +70,20 @@ public interface NewsletterService {
     Page<NewsletterSend> findAllNewsletterSend(NewsletterSearchDTO search);
 
     /**
+     * 뉴스레터 발송 상세
+     *
+     * @param sendSeq
+     * @return
+     */
+    Optional<NewsletterSend> findNewsletterSendBySendSeq(Long sendSeq);
+
+    /**
      * 뉴스레터 방송(수동) 등록
      *
      * @param newsletterSend
      * @return
      */
-    NewsletterSend insertNewsletterSend(NewsletterSend newsletterSend);
+    NewsletterSend insertNewsletterSend(NewsletterSend newsletterSend, List<NewsletterExcel> emailList);
 
     /**
      * 뉴스레터 방송(수동) 수정
@@ -73,5 +91,5 @@ public interface NewsletterService {
      * @param newsletterSend
      * @return
      */
-    NewsletterSend updateNewsletterSend(NewsletterSend newsletterSend);
+    NewsletterSend updateNewsletterSend(NewsletterSend newsletterSend, List<NewsletterExcel> emailList);
 }

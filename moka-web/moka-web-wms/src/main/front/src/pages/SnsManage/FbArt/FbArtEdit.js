@@ -243,7 +243,7 @@ const FbArtEdit = () => {
                             </div>
                         }
                     />
-                    <MokaImageInput className="mr-2" img={edit.fb.imgUrl} width={192} deleteButton />
+                    <MokaImageInput className="mr-20" img={edit.fb.imgUrl} width={192} deleteButton />
                     <Col xs={6} className="p-0 d-flex flex-column justify-content-end">
                         <MokaInput
                             as="checkbox"

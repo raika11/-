@@ -1,5 +1,6 @@
 import React from 'react';
 import { GRID_LINE_HEIGHT } from '@/style_constants';
+import none_img from '@assets/images/none_photo.png';
 import ReporterPageButton from '../ReporterPageButton';
 
 const cellStyle = {
@@ -34,7 +35,11 @@ export default [
         field: 'repImg',
         width: 50,
         cellRenderer: 'imageRenderer',
-        cellRendererParams: { roundedCircle: true, autoRatio: false },
+        cellRendererParams: { roundedCircle: true, autoRatio: false, defaultImg: none_img },
+        cellStyle: {
+            paddingTop: '4px',
+            paddingBottom: '4px',
+        },
     },
     {
         headerName: '이름',

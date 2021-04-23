@@ -1,5 +1,6 @@
 package jmnet.moka.web.schedule.mvc.reserve.service;
 
+import java.util.Date;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
@@ -20,8 +21,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.Date;
-
 /**
  * <pre>
  * 이슈편집기사 스케줄링
@@ -38,8 +37,7 @@ import java.util.Date;
 @Component
 public class IssueDeskingReserveJob extends AbstractReserveJob {
 
-    //@Value("http://172.29.58.94:8100")  //로컬 BO API 주소
-    @Value("https://stg-backoffice.joongang.co.kr") //스테이징 BO API 주소
+    @Value("${stg.backoffice.staging-api-url}") //스테이징 BO API 주소
     private String backOfficeServer;
 
     @Autowired
@@ -51,7 +49,9 @@ public class IssueDeskingReserveJob extends AbstractReserveJob {
     @Override
     public GenContentHistory invoke(GenContentHistory history) {
         log.debug("비동기 예약 작업 처리 : {}", history.getJobSeq());
-        GenStatus desingResult = history.getGenContent().getGenStatus();
+        GenStatus desingResult = history
+                .getGenContent()
+                .getGenStatus();
         /**
          * todo 1. 작업 테이블에서 조회하여 이미 완료 되었거나, 삭제 된 작업이 아닌 경우 진행 시작
          * - AbstractReserveJob에 공통 메소드 생성하여 사용할 수 있도록 조치 필요
@@ -74,9 +74,9 @@ public class IssueDeskingReserveJob extends AbstractReserveJob {
             headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
             headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
 
-            if(checkJobTaskID(history.getJobTaskId())) {
-                params.add("pkgSeq", parseJobTarkID(JOB_TASK_ID_PKGSEQ, history.getJobTaskId()));
-                params.add("compNo", parseJobTarkID(JOB_TASK_ID_COMPNO, history.getJobTaskId()));
+            if (checkJobTaskID(history.getJobTaskId())) {
+                params.add("pkgSeq", parseJobTaskIDPkgSeq(history.getJobTaskId()));
+                params.add("compNo", parseJobTaskIDCompNo(history.getJobTaskId()));
 
                 desingResult.setSendExecTime((new Date()).getTime());
 
@@ -100,8 +100,7 @@ public class IssueDeskingReserveJob extends AbstractReserveJob {
                     history.setStatus(StatusFlagType.FAILED_TASK);
                     throw new MokaException("API 실행이 실패했습니다.");
                 }
-            }
-            else {
+            } else {
                 desingResult.setSendExecTime(0l);
                 desingResult.setSendResult(StatusResultType.FAILED_JOB.getCode());
                 history.setStatus(StatusFlagType.FAILED_TASK);
@@ -121,26 +120,29 @@ public class IssueDeskingReserveJob extends AbstractReserveJob {
         return history;
     }
 
-    private boolean checkJobTaskID(String strJobTaskID)
-    {
+    private boolean checkJobTaskID(String strJobTaskID) {
         boolean retValue = true;
-        if(StringUtils.countMatches(strJobTaskID, "_") == 3) {
-            String[] strSplit =  strJobTaskID.split("_");
-            if( StringUtils.isNumeric(strSplit[JOB_TASK_ID_PKGSEQ]) == false ||
-                StringUtils.isNumeric(strSplit[JOB_TASK_ID_COMPNO]) == false) {
+        if (StringUtils.countMatches(strJobTaskID, "_") == 3) {
+            String[] strSplit = strJobTaskID.split("_");
+            if (StringUtils.isNumeric(strSplit[JOB_TASK_ID_PKGSEQ]) == false || StringUtils.isNumeric(strSplit[JOB_TASK_ID_COMPNO]) == false) {
                 retValue = false;
             }
-        }
-        else {
+        } else {
             retValue = false;
         }
 
         return retValue;
     }
 
-    private String parseJobTarkID(int type, String strJobTaskID) {
-        String[] strSplit =  strJobTaskID.split("_");
-        return strSplit[type];
+    private long parseJobTaskIDPkgSeq(String strJobTaskID) {
+        String[] split = strJobTaskID.split("_");
+        return Long.parseLong(split[JOB_TASK_ID_PKGSEQ]);
     }
+
+    private int parseJobTaskIDCompNo(String strJobTaskID) {
+        String[] split = strJobTaskID.split("_");
+        return Integer.parseInt(split[JOB_TASK_ID_COMPNO]);
+    }
+
 
 }

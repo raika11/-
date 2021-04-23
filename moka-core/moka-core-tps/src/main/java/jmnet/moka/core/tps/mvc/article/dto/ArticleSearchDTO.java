@@ -77,6 +77,10 @@ public class ArticleSearchDTO extends SearchDTO {
     @ApiModelProperty("서비스여부")
     private String serviceFlag;
 
+    @ApiModelProperty("기사타입목록 (구분자,)")
+    @JsonIgnore
+    private String artTypeList;
+
     public ArticleSearchDTO() {
         super(ArticleBasicVO.class, "totalId,desc");
         super.setUseTotal(MokaConstants.YES);

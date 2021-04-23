@@ -42,17 +42,12 @@
     1.폰트
     ========================================================================= */
 /** font face **/
-@font-face {font-family: "Noto Sans KR";font-style: normal;font-weight: 100;src: url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Thin.woff2)format("woff2"),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Thin.woff)format("woff"),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Thin.otf)format("opentype");}
-
-@font-face {font-family: "Noto Sans KR";font-style: normal;font-weight: 300;src: url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Light.woff2)format("woff2"),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Light.woff)format("woff"),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Light.otf)format("opentype");}
-
-@font-face {font-family: "Noto Sans KR";font-style: normal;font-weight: 400;src: url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Regular.woff2)format("woff2"),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Regular.woff)format("woff"),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Regular.otf)format("opentype");}
-
-@font-face{font-family:"Noto Sans KR";font-style:normal;font-weight:500;src:url('//stg-static.joongang.co.kr/css/font/NotoSansKR-Medium.woff2') format("woff2"),url('//stg-static.joongang.co.kr/css/font/NotoSansKR-Medium.woff') format("woff"),url('//stg-static.joongang.co.kr/css/font/NotoSansKR-Medium.otf') format("opentype");}
-
-@font-face{font-family:"Noto Sans KR";font-style:normal;font-weight:700;src:url('//stg-static.joongang.co.kr/css/font/NotoSansKR-Bold.woff2') format("woff2"),url('//stg-static.joongang.co.kr/css/font/NotoSansKR-Bold.woff') format("woff"),url('//stg-static.joongang.co.kr/css/font/NotoSansKR-Bold.otf') format("opentype");}
-
-@font-face{font-family:"Noto Sans KR";font-style:normal;font-weight:900;src:url('//stg-static.joongang.co.kr/css/font/NotoSansKR-Black.woff2') format("woff2"),url('//stg-static.joongang.co.kr/css/font/NotoSansKR-Black.woff') format("woff"),url('//stg-static.joongang.co.kr/css/font/NotoSansKR-Black.otf') format("opentype");}
+@font-face {font-family:'Noto Sans KR';font-style:normal;font-weight:100;src:url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Thin.woff2) format('woff2'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Thin.woff) format('woff'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Thin.otf) format('opentype');} 
+@font-face {font-family:'Noto Sans KR';font-style:normal;font-weight:300;src:url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Light.woff2) format('woff2'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Light.woff) format('woff'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Light.otf) format('opentype');} 
+@font-face {font-family:'Noto Sans KR';font-style:normal;font-weight:400;src:url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Regular.woff2) format('woff2'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Regular.woff) format('woff'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Regular.otf) format('opentype');} 
+@font-face {font-family:'Noto Sans KR';font-style:normal;font-weight:500;src:url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Medium.woff2) format('woff2'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Medium.woff) format('woff'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Medium.otf) format('opentype');} 
+@font-face {font-family:'Noto Sans KR';font-style:normal;font-weight:700;src:url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Bold.woff2) format('woff2'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Bold.woff) format('woff'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Bold.otf) format('opentype');} 
+@font-face {font-family:'Noto Sans KR';font-style:normal;font-weight:900;src:url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Black.woff2) format('woff2'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Black.woff) format('woff'),url(//stg-static.joongang.co.kr/css/font/NotoSansKR-Black.otf) format('opentype');} 
 
 
 /* ==========================================================================

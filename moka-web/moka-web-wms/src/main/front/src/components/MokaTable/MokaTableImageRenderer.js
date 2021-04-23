@@ -5,6 +5,7 @@ import img_logo from '@assets/images/img_logo.png';
 const defaultProps = {
     roundedCircle: false,
     autoRatio: true,
+    defaultImg: img_logo,
 };
 
 /**
@@ -18,7 +19,6 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
     const [data, setData] = useState(params.node.data);
     const [roundedCircle] = useState(params.roundedCircle);
     const [autoRatio] = useState(params.autoRatio);
-
     const boxRef = useRef(null);
     const imgRef = useRef(null);
 
@@ -27,7 +27,7 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
      * @param {object} e 이벤트
      */
     const onError = (e) => {
-        e.target.src = img_logo;
+        e.target.src = params.defaultImg;
         boxRef.current.classList.add('onerror-image-wrap');
         e.target.classList.add('onerror-image');
     };
@@ -37,7 +37,7 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
      * @param {object} e 이벤트
      */
     const onLoad = (e) => {
-        if (e.target.src.replace(window.location.origin, '') !== img_logo) {
+        if (e.target.src.replace(window.location.origin, '') !== params.defaultImg) {
             boxRef.current.classList.remove('onerror-image-wrap');
             e.target.classList.remove('onerror-image');
         }
@@ -56,12 +56,12 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
     useEffect(() => {
         if (!data?.[field] && boxRef.current && imgRef.current) {
             boxRef.current.classList.add('onerror-image-wrap');
-            imgRef.current.src = img_logo;
+            imgRef.current.src = params.defaultImg;
             imgRef.current.classList.add('onerror-image');
         } else {
             imgRef.current.src = data?.[field];
         }
-    }, [data, field]);
+    }, [data, field, params.defaultImg]);
 
     useEffect(() => {
         if (boxRef.current) {

@@ -9,6 +9,7 @@ import jmnet.moka.web.schedule.support.StatusFlagType;
 import jmnet.moka.web.schedule.support.StatusResultType;
 import jmnet.moka.web.schedule.support.reserve.AbstractReserveJob;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,21 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.Date;
 
+/**
+ * <pre>
+ * 이슈편집기사 스케줄링
+ * Project : moka
+ * Package : jjmnet.moka.web.schedule.mvc.reserve.service
+ * ClassName : IssueArticleReserveJob
+ * </pre>
+ *
+ * @author 유영제
+ * @since 2021-04-23
+ */
+
 @Slf4j
 @Component
-public class DeskingReserveJob extends AbstractReserveJob {
+public class IssueDeskingReserveJob extends AbstractReserveJob {
 
     //@Value("http://172.29.58.94:8100")  //로컬 BO API 주소
     @Value("https://stg-backoffice.joongang.co.kr") //스테이징 BO API 주소
@@ -31,6 +44,9 @@ public class DeskingReserveJob extends AbstractReserveJob {
 
     @Autowired
     private RestTemplateHelper restTemplateHelper;
+
+    private final int JOB_TASK_ID_PKGSEQ = 0x02;
+    private final int JOB_TASK_ID_COMPNO = 0x03;
 
     @Override
     public GenContentHistory invoke(GenContentHistory history) {
@@ -52,43 +68,48 @@ public class DeskingReserveJob extends AbstractReserveJob {
              * - 각 업무 담당자가 해당 영역 코딩은 구현할 예정
              */
             //실행할 API url
-            url = backOfficeServer + "/api/internal/desking";
+            url = backOfficeServer + "/api/internal/issue";
             //BackOffice 접근을 위한 session 더미입력
             headers.add("MOKA_SERVER", "");
             headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
             headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
-            //history 파라미터 정보를 parsing
-            JSONObject historyParam = (JSONObject) jsonParser.parse(history.getParamDesc());
-            //api 필수 파라미터 입력
-            params.add("componentSeq", historyParam.get("componentSeq"));
 
+            if(checkJobTaskID(history.getJobTaskId())) {
+                params.add("pkgSeq", parseJobTarkID(JOB_TASK_ID_PKGSEQ, history.getJobTaskId()));
+                params.add("compNo", parseJobTarkID(JOB_TASK_ID_COMPNO, history.getJobTaskId()));
 
-            desingResult.setSendExecTime((new Date()).getTime());
+                desingResult.setSendExecTime((new Date()).getTime());
 
-            //api 실행
-            ResponseEntity<String> responseEntity = restTemplateHelper.post(url, params, headers);
+                //api 실행
+                ResponseEntity<String> responseEntity = restTemplateHelper.post(url, params, headers);
 
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(responseEntity.getBody());
-            JSONObject header = (JSONObject) jsonObject.get("header");
-            log.debug("DeskingReserveJob response : {}", header.get("success"));
-            log.debug("DeskingReserveJob response : {}", header.get("resultCode"));
-            log.debug("DeskingReserveJob response : {}", header.get("message"));
+                JSONObject jsonObject = (JSONObject) jsonParser.parse(responseEntity.getBody());
+                JSONObject header = (JSONObject) jsonObject.get("header");
 
+                log.debug("DeskingReserveJob response : {}", header.get("success"));
+                log.debug("DeskingReserveJob response : {}", header.get("resultCode"));
+                log.debug("DeskingReserveJob response : {}", header.get("message"));
 
-            desingResult.setSendResult(StatusResultType.SUCCESS.getCode());
-            desingResult.setSendExecTime(((new Date()).getTime() - desingResult.getSendExecTime()) / 1000);
+                desingResult.setSendResult(StatusResultType.SUCCESS.getCode());
+                desingResult.setSendExecTime(((new Date()).getTime() - desingResult.getSendExecTime()) / 1000);
 
-            //실행결과 false 인 경우 실패처리
-            if (!(boolean) header.get("success")) {
+                //실행결과 false 인 경우 실패처리
+                if (!(boolean) header.get("success")) {
+                    desingResult.setSendExecTime(0l);
+                    desingResult.setSendResult(StatusResultType.FAILED_JOB.getCode());
+                    history.setStatus(StatusFlagType.FAILED_TASK);
+                    throw new MokaException("API 실행이 실패했습니다.");
+                }
+            }
+            else {
                 desingResult.setSendExecTime(0l);
                 desingResult.setSendResult(StatusResultType.FAILED_JOB.getCode());
                 history.setStatus(StatusFlagType.FAILED_TASK);
-                throw new MokaException("API 실행이 실패했습니다.");
+                throw new MokaException("유효하지 않은 JOB_TASK_ID 입니다.");
             }
         } catch (Exception ex) {
             log.error("[GEN STATUS HISTORY ERROR] : {}", ex.getMessage());
             desingResult.setSendExecTime(0l);
-            desingResult.setSendResult(StatusResultType.FAILED_JOB.getCode());
             history.setStatus(StatusFlagType.FAILED_TASK);
             history
                     .getGenContent()
@@ -99,4 +120,27 @@ public class DeskingReserveJob extends AbstractReserveJob {
         history.setStatus(StatusFlagType.DONE);
         return history;
     }
+
+    private boolean checkJobTaskID(String strJobTaskID)
+    {
+        boolean retValue = true;
+        if(StringUtils.countMatches(strJobTaskID, "_") == 3) {
+            String[] strSplit =  strJobTaskID.split("_");
+            if( StringUtils.isNumeric(strSplit[JOB_TASK_ID_PKGSEQ]) == false ||
+                StringUtils.isNumeric(strSplit[JOB_TASK_ID_COMPNO]) == false) {
+                retValue = false;
+            }
+        }
+        else {
+            retValue = false;
+        }
+
+        return retValue;
+    }
+
+    private String parseJobTarkID(int type, String strJobTaskID) {
+        String[] strSplit =  strJobTaskID.split("_");
+        return strSplit[type];
+    }
+
 }

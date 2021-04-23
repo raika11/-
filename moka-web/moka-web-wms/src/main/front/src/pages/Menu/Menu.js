@@ -29,10 +29,6 @@ const Menu = () => {
     const [middleOrderList, setMiddleOrderList] = useState(null);
     const [smallOrderList, setSmallOrderList] = useState(null);
 
-    const handleRowClicked = (rowData) => {
-        setMenuSearchInfo(rowData.menuSeq, rowData.depth, rowData.menuId, rowData.parentMenuId);
-    };
-
     const handleSaveOrder = (parentId, menus, init) => {
         if (commonUtil.isEmpty(menus)) {
             toast.warning('변경된 사항이 없습니다.');
@@ -83,6 +79,10 @@ const Menu = () => {
                 setSmallMenuId(menuId);
                 break;
         }
+    };
+
+    const handleRowClicked = (rowData) => {
+        setMenuSearchInfo(rowData.menuSeq, rowData.depth, rowData.menuId, rowData.parentMenuId);
     };
 
     /**
@@ -167,7 +167,7 @@ const Menu = () => {
                 <meta name="description" content="메뉴 관리 페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
-            {/* 리스트 */}
+
             <MokaCard
                 className="mr-gutter"
                 headerClassName="d-flex justify-content-between align-items-center"
@@ -197,9 +197,7 @@ const Menu = () => {
                     menuId={largeMenuId}
                     parentMenuId={rootParentMenuId}
                     depth="1"
-                    onChange={(data) => {
-                        setLargeOrderList(data);
-                    }}
+                    onChange={(data) => setLargeOrderList(data)}
                     list={listLarge}
                 />
             </MokaCard>
@@ -215,6 +213,7 @@ const Menu = () => {
                         parentmenuid: largeMenuId,
                         variant: 'positive-a',
                         className: 'mr-1',
+                        disabled: depth === '',
                         onClick: handleNewMenu,
                     },
                     {
@@ -222,6 +221,7 @@ const Menu = () => {
                         depth: 2,
                         parentmenuid: largeMenuId,
                         variant: 'positive',
+                        disabled: depth === '',
                         onClick: () => handleSaveOrder(largeMenuId, middleOrderList, setMiddleOrderList),
                     },
                 ]}
@@ -250,6 +250,7 @@ const Menu = () => {
                         parentmenuid: middleMenuId,
                         variant: 'positive-a',
                         className: 'mr-1',
+                        disabled: depth === '' || Number(depth) < 2,
                         onClick: handleNewMenu,
                     },
                     {
@@ -257,6 +258,7 @@ const Menu = () => {
                         depth: 3,
                         parentmenuid: middleMenuId,
                         variant: 'positive',
+                        disabled: depth === '' || Number(depth) < 2,
                         onClick: () => handleSaveOrder(middleMenuId, smallOrderList, setSmallOrderList),
                     },
                 ]}

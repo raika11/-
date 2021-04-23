@@ -1,39 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { AgGridReact } from 'ag-grid-react';
-import { columnDefs } from '@pages/Menu/MenuAgGridColumns';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { changeSearchOption, getMenuList } from '@store/menu';
-import { MokaLoader, MokaTableDefaultProps } from '@components';
 import { getDisplayedRows } from '@utils/agGridUtil';
 import commonUtil from '@utils/commonUtil';
+import { MokaTable } from '@components';
+import { columnDefs } from './MenuDraggableAgGridColumns';
 
+/**
+ * 메뉴 관리 > AgGrid
+ */
 const MenuDraggableAgGrid = ({ onRowClicked, depth, menuId, parentMenuId, onChange, list }) => {
-    const [, setInstance] = useState(null);
     const dispatch = useDispatch();
-    const { loading } = useSelector(
-        (store) => ({
-            list: store.menu.listLarge,
-        }),
-        shallowEqual,
-    );
-
-    useEffect(() => {
-        if (!commonUtil.isEmpty(parentMenuId)) {
-            dispatch(
-                getMenuList(
-                    changeSearchOption({
-                        depth: depth,
-                        parentMenuId: parentMenuId,
-                        useTotal: false,
-                    }),
-                ),
-            );
-        }
-    }, [depth, dispatch, parentMenuId, menuId]);
-
-    const handleGridReady = (api) => {
-        setInstance(api);
-    };
+    const [selected, setSelected] = useState({});
 
     const handleRowDragEnd = (params) => {
         const displayedRows = getDisplayedRows(params.api);
@@ -48,32 +26,47 @@ const MenuDraggableAgGrid = ({ onRowClicked, depth, menuId, parentMenuId, onChan
         }
     };
 
-    const handleSelectionChanged = (param) => {
-        param.api.getSelectedNodes();
-        if (commonUtil.isEmpty(menuId)) {
-            param.api.deselectAll();
+    useEffect(() => {
+        if (!commonUtil.isEmpty(parentMenuId)) {
+            dispatch(
+                getMenuList(
+                    changeSearchOption({
+                        depth: depth,
+                        parentMenuId: parentMenuId,
+                        useTotal: false,
+                    }),
+                ),
+            );
+        } else {
+            setSelected({});
         }
-    };
+    }, [depth, dispatch, parentMenuId, menuId]);
+
+    useEffect(() => {
+        return () => {
+            setSelected({});
+        };
+    }, []);
 
     return (
-        <div className="ag-theme-moka-dnd-grid position-relative overflow-hidden flex-fill">
-            {loading && <MokaLoader />}
-            <AgGridReact
-                onGridReady={handleGridReady}
-                onRowDragEnd={handleRowDragEnd}
-                onSelectionChanged={handleSelectionChanged}
-                immutableData
-                rowData={list}
-                getRowNodeId={(params) => params.menuId}
-                columnDefs={columnDefs}
-                localeText={MokaTableDefaultProps.localeText}
-                animateRows
-                rowDragManaged
-                onRowClicked={(data) => {
-                    onRowClicked(data.data);
-                }}
-            />
-        </div>
+        <MokaTable
+            rowData={list}
+            columnDefs={columnDefs}
+            onRowClicked={(data) => {
+                onRowClicked(data);
+                setSelected(data);
+            }}
+            className="overflow-hidden flex-fill"
+            paging={false}
+            onRowDragEnd={handleRowDragEnd}
+            onRowNodeId={(params) => params.menuId}
+            selected={selected?.menuId}
+            suppressRowClickSelection
+            suppressMoveWhenRowDragging
+            rowDragManaged
+            animateRows
+            dragStyle
+        />
     );
 };
 

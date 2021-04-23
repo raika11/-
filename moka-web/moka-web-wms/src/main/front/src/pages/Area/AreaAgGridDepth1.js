@@ -12,7 +12,7 @@ import columnDefs from './AreaAgGridColumns';
  * 영역편집정보 관리 > depth1 AgGrid
  */
 const AreaAgGridDepth1 = (props) => {
-    const { areaDepth1, setAreaDepth1, sourceCode, setSourceCode, flag, listDepth1, setListDepth1, setListDepth2, setListDepth3 } = props;
+    const { areaDepth1, setAreaDepth1, sourceCode, setSourceCode, flag, listDepth1, setListDepth1, setListDepth2, setListDepth3, initArea } = props;
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [gridInstance, setGridInstance] = useState(null);
@@ -75,6 +75,7 @@ const AreaAgGridDepth1 = (props) => {
         // depth2, 3 리스트 초기화
         setListDepth2([]);
         setListDepth3([]);
+        initArea();
     };
 
     /**

@@ -116,6 +116,11 @@ const Area = () => {
                 sourceCode={sourceCode}
                 setSourceCode={setSourceCode}
                 areaDepth1={areaDepth1}
+                initArea={() => {
+                    setAreaDepth1(initialState.initData);
+                    setAreaDepth2(initialState.initData);
+                    setAreaDepth3(initialState.initData);
+                }}
                 setAreaDepth1={(data) => {
                     setAreaDepth1(data);
                     setAreaDepth2(initialState.initData);

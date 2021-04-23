@@ -26,6 +26,11 @@ const propTypes = {
      */
     img: PropTypes.string,
     /**
+     * 기본 이미지
+     * @default
+     */
+    defaultImg: PropTypes.any,
+    /**
      * 이미지 alt
      */
     alt: PropTypes.string,
@@ -45,25 +50,25 @@ const defaultProps = {
     alt: '',
     inputBorder: true,
     ratio: [16, 9],
+    defaultImg: img_logo,
 };
 
 /**
  * 이미지 컴포넌트(Figure)
  */
-const MokaImage = (props) => {
-    const { width, height, img, className, alt, imgClassName, inputBorder, ratio } = props;
+const MokaImage = ({ width, height, img, className, alt, imgClassName, inputBorder, ratio, defaultImg }) => {
     const wrapRef = useRef(null);
     const imgRef = useRef(null);
     const [src, setImgSrc] = useState(null);
 
     const onError = (e) => {
-        e.target.src = img_logo;
+        e.target.src = defaultImg;
         wrapRef.current.classList.add('onerror-image-wrap');
         e.target.classList.add('onerror-image');
     };
 
     const onLoad = (e) => {
-        if (e.target.src.replace(window.location.origin, '') !== img_logo) {
+        if (e.target.src.replace(window.location.origin, '') !== defaultImg) {
             wrapRef.current.classList.remove('onerror-image-wrap');
             e.target.classList.remove('onerror-image');
         }
@@ -73,11 +78,11 @@ const MokaImage = (props) => {
         if (img) {
             setImgSrc(img);
         } else {
-            setImgSrc(img_logo);
+            setImgSrc(defaultImg);
             wrapRef.current.classList.add('onerror-image-wrap');
             imgRef.current.classList.add('onerror-image');
         }
-    }, [img]);
+    }, [defaultImg, img]);
 
     return (
         <div

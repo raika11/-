@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { initialState, clearMicAgenda, getMicAgenda, saveMicAgenda, GET_MIC_AGENDA, SAVE_MIC_AGENDA, changeInvalidList } from '@store/mic';
-import { MokaCard } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
+import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import { getDisplayedRows } from '@utils/agGridUtil';
+import { MokaCard } from '@components';
 import MicAgendaForm from './components/MicAgendaForm/index';
 
 moment.locale('ko');
@@ -38,7 +38,7 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
         let errList = [];
 
         // 제목 체크
-        if (!save.agndTitle || !REQUIRED_REGEX.test(save.agndTitle)) {
+        if (util.isEmpty(save.agndTitle)) {
             errList.push({
                 field: 'agndTitle',
                 reason: '',
@@ -46,7 +46,7 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
             isInvalid = isInvalid || true;
         }
         // 본문 체크
-        if (!save.agndMemo || !REQUIRED_REGEX.test(save.agndMemo)) {
+        if (util.isEmpty(save.agndMemo)) {
             errList.push({
                 field: 'agndMemo',
                 reason: '',
@@ -99,7 +99,6 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
     const handleChangeValue = useCallback(
         (newData) => {
             setTemp({ ...temp, ...newData });
-            // setTemp(temp)
             Object.keys(newData).forEach((key) => {
                 if (error[key]) {
                     setError({ ...error, [key]: false });
@@ -145,8 +144,7 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
         return () => {
             dispatch(clearMicAgenda());
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
         <MokaCard

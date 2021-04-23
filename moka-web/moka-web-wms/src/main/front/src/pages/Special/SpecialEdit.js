@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import moment from 'moment';
-import { useParams } from 'react-router-dom';
+import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import { MokaCard } from '@components';
 import { GET_SPECIAL, getSpecial, clearSpecial, getSpecialDeptList, saveSpecial, changeInvalidList, deleteSpecial, DELETE_SPECIAL, SAVE_SPECIAL } from '@store/special';
@@ -14,7 +13,7 @@ moment.locale('ko');
 const textReg = /[\*'"\<\>]+/;
 
 /**
- * 디지털스페셜 등록/수정
+ * 디지털스페셜 관리 > 디지털스페셜 등록/수정
  */
 const SpecialEdit = ({ match }) => {
     const dispatch = useDispatch();
@@ -69,7 +68,7 @@ const SpecialEdit = ({ match }) => {
                 errList = [];
 
             // 페이지코드 체크
-            if (!saveObj.pageCd || !REQUIRED_REGEX.test(saveObj.pageCd)) {
+            if (util.isEmpty(saveObj.pageCd)) {
                 errList.push({
                     field: 'pageCd',
                     reason: '페이지 코드를 선택하세요',
@@ -77,7 +76,7 @@ const SpecialEdit = ({ match }) => {
                 isInvalid = isInvalid || true;
             }
             // 회차 체크
-            if (!REQUIRED_REGEX.test(saveObj.ordinal)) {
+            if (util.isEmpty(saveObj.ordinal)) {
                 errList.push({
                     field: 'ordinal',
                     reason: '회차를 입력하세요',
@@ -85,7 +84,7 @@ const SpecialEdit = ({ match }) => {
                 isInvalid = isInvalid || true;
             }
             // 제목 체크
-            if (!saveObj.pageTitle || !REQUIRED_REGEX.test(saveObj.pageTitle)) {
+            if (util.isEmpty(saveObj.pageTitle)) {
                 errList.push({
                     field: 'pageTitle',
                     reason: '제목을 입력하세요',
@@ -115,7 +114,7 @@ const SpecialEdit = ({ match }) => {
                 isInvalid = isInvalid || true;
             }
             // pcUrl 체크
-            if (!REQUIRED_REGEX.test(saveObj.pcUrl)) {
+            if (util.isEmpty(saveObj.pcUrl)) {
                 errList.push({
                     field: 'pcUrl',
                     reason: 'PC URL을 입력하세요',
@@ -123,7 +122,7 @@ const SpecialEdit = ({ match }) => {
                 isInvalid = isInvalid || true;
             }
             // mobUrl 체크
-            if (!REQUIRED_REGEX.test(saveObj.mobUrl)) {
+            if (util.isEmpty(saveObj.mobUrl)) {
                 errList.push({
                     field: 'mobUrl',
                     reason: 'Mobile URL을 입력하세요',
@@ -215,8 +214,7 @@ const SpecialEdit = ({ match }) => {
             dispatch(changeInvalidList([]));
             dispatch(clearSpecial());
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
         <MokaCard

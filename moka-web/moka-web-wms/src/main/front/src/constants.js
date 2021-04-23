@@ -1,6 +1,9 @@
 // 서버 api 경로
 export const API_BASE_URL = process.env.REACT_APP_API_URL;
 
+// 브라우저 스토리지명
+export const STORAGE_NAME = 'moka';
+
 // DB 날짜 포맷
 export const DB_DATEFORMAT = 'YYYY-MM-DD HH:mm:ss';
 

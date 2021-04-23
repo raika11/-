@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import produce from 'immer';
-import { MokaCard, MokaInputLabel } from '@/components';
 import {
     initialState,
     getInternalApi,
@@ -17,9 +16,10 @@ import {
     SAVE_INTERNAL_API,
 } from '@store/internalApi';
 import { getApiType } from '@store/codeMgt';
-import toast, { messageBox } from '@/utils/toastUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
+import util from '@utils/commonUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
+import { MokaCard, MokaInputLabel } from '@components';
 import ParamDesc from './components/ParamDesc';
 
 /**
@@ -30,14 +30,8 @@ const InternalApiEdit = ({ match }) => {
     const dispatch = useDispatch();
     const { seqNo } = useParams();
     const loading = useSelector(({ loading }) => loading[GET_INTERNAL_API] || loading[SAVE_INTERNAL_API] || loading[DELETE_INTERNAL_API]);
-    const { internalApi, invalidList } = useSelector(({ internalApi }) => ({
-        internalApi: internalApi.internalApi,
-        invalidList: internalApi.invalidList,
-    }));
-    const { httpMethodRows, apiTypeRows } = useSelector(({ codeMgt }) => ({
-        httpMethodRows: codeMgt.httpMethodRows,
-        apiTypeRows: codeMgt.apiTypeRows,
-    }));
+    const { internalApi, invalidList } = useSelector(({ internalApi }) => internalApi);
+    const { httpMethodRows, apiTypeRows } = useSelector(({ codeMgt }) => codeMgt);
     const [temp, setTemp] = useState(initialState.internalApi);
     const [error, setError] = useState({});
     const [paramList, setParamList] = useState([initialState.defaultParam]);
@@ -81,7 +75,7 @@ const InternalApiEdit = ({ match }) => {
             let isInvalid = errList.length > 0 ? true : false;
 
             // API명 체크
-            if (!REQUIRED_REGEX.test(save.apiName)) {
+            if (util.isEmpty(save.apiName)) {
                 errList.push({
                     field: 'apiName',
                     reason: '',
@@ -90,7 +84,7 @@ const InternalApiEdit = ({ match }) => {
             }
 
             // API 경로 체크
-            if (!REQUIRED_REGEX.test(save.apiPath)) {
+            if (util.isEmpty(save.apiPath)) {
                 errList.push({
                     field: 'apiPath',
                     reason: '',
@@ -99,7 +93,7 @@ const InternalApiEdit = ({ match }) => {
             }
 
             // HTTP메소드 체크
-            if (!save.apiMethod || !REQUIRED_REGEX.test(save.apiMethod)) {
+            if (util.isEmpty(save.apiMethod)) {
                 errList.push({
                     field: 'apiMethod',
                     reason: '',

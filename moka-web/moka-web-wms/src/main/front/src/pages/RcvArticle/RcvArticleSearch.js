@@ -7,11 +7,9 @@ import { DB_DATEFORMAT, RCV_ARTICLE_SOURCE_LIST_KEY } from '@/constants';
 import { initialState, getRcvArticleList, changeSearchOption } from '@store/rcvArticle';
 import { MokaInput, MokaSearchInput } from '@components';
 import ArticleSourceSelector from '@pages/Article/components/ArticleSourceSelector';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { getLocalItem, setLocalItem } from '@utils/storageUtil';
+import util from '@utils/commonUtil';
 
 moment.locale('ko');
-
 const defaultPeriod = [0, 'days'];
 
 /**
@@ -22,7 +20,7 @@ const RcvArticleSearch = () => {
     const storeSearch = useSelector(({ rcvArticle }) => rcvArticle.search);
     const [search, setSearch] = useState(initialState.search);
     const [sourceOn, setSourceOn] = useState(false);
-    const [sourceList, setSourceList] = useState(getLocalItem(RCV_ARTICLE_SOURCE_LIST_KEY));
+    const [sourceList, setSourceList] = useState(util.getLocalItem(RCV_ARTICLE_SOURCE_LIST_KEY));
     const [error, setError] = useState({});
     const [period, setPeriod] = useState(defaultPeriod);
 
@@ -103,7 +101,7 @@ const RcvArticleSearch = () => {
         let isInvalid = false;
         let ne = {};
 
-        if (!REQUIRED_REGEX.test(ns.sourceList)) {
+        if (util.isEmpty(ns.sourceList)) {
             isInvalid = isInvalid || true;
             ne.sourceList = true;
         }
@@ -256,10 +254,8 @@ const RcvArticleSearch = () => {
                     onChange={(value) => {
                         setSourceList(value);
                         setError({ ...error, sourceList: false });
-                        if (value !== '') {
-                            // 로컬스토리지에 저장
-                            setLocalItem({ key: RCV_ARTICLE_SOURCE_LIST_KEY, value });
-                        }
+                        // 로컬스토리지에 저장
+                        if (value !== '') util.setLocalItem({ key: RCV_ARTICLE_SOURCE_LIST_KEY, value });
                     }}
                 />
             </Form.Row>

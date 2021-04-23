@@ -6,11 +6,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { API_BASE_URL } from '@/constants';
-import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
-import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
+import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { invalidListToError } from '@utils/convertUtil';
+import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
+import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import CopyModal from './modals/CopyModal';
 import AddComponentModal from './modals/AddComponentModal';
 
@@ -20,10 +20,10 @@ import AddComponentModal from './modals/AddComponentModal';
 const TemplateEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const loading = useSelector((store) => store.loading[GET_TEMPLATE] || store.loading[DELETE_TEMPLATE] || store.loading[SAVE_TEMPLATE]);
-    const UPLOAD_PATH_URL = useSelector((store) => store.app.UPLOAD_PATH_URL);
-    const tpZoneRows = useSelector((store) => store.codeMgt.tpZoneRows);
-    const latestDomainId = useSelector((store) => store.auth.latestDomainId);
+    const loading = useSelector(({ loading }) => loading[GET_TEMPLATE] || loading[DELETE_TEMPLATE] || loading[SAVE_TEMPLATE]);
+    const UPLOAD_PATH_URL = useSelector(({ app }) => app.UPLOAD_PATH_URL);
+    const tpZoneRows = useSelector(({ codeMgt }) => codeMgt.tpZoneRows);
+    const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const { template, inputTag, invalidList } = useSelector(({ template }) => template);
     const [temp, setTemp] = useState({});
     const [thumbSrc, setThumbSrc] = useState();
@@ -38,13 +38,11 @@ const TemplateEdit = ({ onDelete, match }) => {
      */
     const handleChangeValue = ({ target }) => {
         const { name, value } = target;
-
         if (name === 'templateName') {
-            if (REQUIRED_REGEX.test(value)) {
+            if (util.isEmpty(value)) {
                 setError({ ...error, templateName: false });
             }
         }
-
         setTemp({ ...temp, [name]: value });
     };
 
@@ -68,7 +66,7 @@ const TemplateEdit = ({ onDelete, match }) => {
         let errList = [];
 
         // 템플릿명 체크
-        if (!template.templateName || !REQUIRED_REGEX.test(template.templateName)) {
+        if (util.isEmpty(template.templateName)) {
             errList.push({
                 field: 'templateName',
                 reason: '',

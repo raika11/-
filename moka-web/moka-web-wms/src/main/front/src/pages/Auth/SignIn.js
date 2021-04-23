@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
-import { loginJwt } from '@store/auth';
+import { useDispatch } from 'react-redux';
 import { call, delay } from 'redux-saga/effects';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import Main from '@/layout/components/Main';
-import { getLocalItem } from '@/utils/storageUtil';
 import { SIGNIN_MEMBER_ID, SIGNIN_MEMBER_ID_SAVE } from '@/constants';
-import logo from '@assets/images/img_logo@2x.png';
-import loginBg from '@assets/images/login_bg.png';
-import { MokaIcon, MokaInput } from '@components';
+import Main from '@layout/components/Main';
+import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
+import { loginJwt } from '@store/auth';
+import { MokaIcon, MokaInput } from '@components';
 import UnlockModal from './modals/UnlockModal';
 import RegisterModal from './modals/RegisterModal';
+import logo from '@assets/images/img_logo@2x.png';
+import loginBg from '@assets/images/login_bg.png';
 
 const SignIn = () => {
     const dispatch = useDispatch();
-    const [userId, setUserId] = useState(getLocalItem(SIGNIN_MEMBER_ID) || '');
+    const [userId, setUserId] = useState(util.getLocalItem(SIGNIN_MEMBER_ID) || '');
     const [showUnlockModal, setShowUnlockModal] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
     const [password, setPassword] = useState('');
-    const [idSave, setIdSave] = useState(getLocalItem(SIGNIN_MEMBER_ID_SAVE));
+    const [idSave, setIdSave] = useState(util.getLocalItem(SIGNIN_MEMBER_ID_SAVE));
     const [passwordErrorCount, setPasswordErrorCount] = useState(0);
     const handleSubmit = (e) => {
         e.preventDefault();

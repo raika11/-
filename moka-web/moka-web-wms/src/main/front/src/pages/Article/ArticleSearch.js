@@ -10,12 +10,10 @@ import { getPressCate1 } from '@store/codeMgt';
 import { MokaInput, MokaIcon } from '@components';
 import { CodeAutocomplete } from '@pages/commons';
 import ArticleSourceSelector from '@pages/Article/components/ArticleSourceSelector';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
+import util from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
-import { getLocalItem, setLocalItem } from '@utils/storageUtil';
 
 moment.locale('ko');
-
 const defaultPeriod = [0, 'days'];
 
 /**
@@ -26,7 +24,7 @@ const ArticleSearch = ({ ja, sun }) => {
     const storeSearch = useSelector((store) => store.article.search);
     const pressCate1Rows = useSelector((store) => store.codeMgt.pressCate1Rows);
     const [search, setSearch] = useState(initialState.search);
-    const [sourceList, setSourceList] = useState(ja ? '1,3' : sun ? '61' : getLocalItem(ARTICLE_SOURCE_LIST_KEY));
+    const [sourceList, setSourceList] = useState(ja ? '1,3' : sun ? '61' : util.getLocalItem(ARTICLE_SOURCE_LIST_KEY));
     const [sourceOn, setSourceOn] = useState(false);
     const [error, setError] = useState({});
     const [period, setPeriod] = useState(defaultPeriod);
@@ -116,7 +114,7 @@ const ArticleSearch = ({ ja, sun }) => {
         let isInvalid = false;
         let ne = {};
 
-        if (!REQUIRED_REGEX.test(ns.sourceList)) {
+        if (util.isEmpty(ns.sourceList)) {
             isInvalid = isInvalid || true;
             ne.sourceList = true;
             toast.warning('매체를 하나 이상 선택하세요');
@@ -326,10 +324,8 @@ const ArticleSearch = ({ ja, sun }) => {
                             onChange={(value) => {
                                 setSourceList(value);
                                 setError({ ...error, sourceList: false });
-                                if (value !== '') {
-                                    // 로컬스토리지에 저장
-                                    setLocalItem({ key: ARTICLE_SOURCE_LIST_KEY, value });
-                                }
+                                // 로컬 스토리지 저장
+                                if (value !== '') util.setLocalItem({ key: ARTICLE_SOURCE_LIST_KEY, value });
                             }}
                         />
                     )}

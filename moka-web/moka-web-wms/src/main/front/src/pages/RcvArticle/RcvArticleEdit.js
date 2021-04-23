@@ -7,11 +7,13 @@ import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvA
 import ArticleForm from '@pages/Article/components/ArticleForm/index';
 import RctArticleForm from './components/RcvArticleForm';
 import toast, { messageBox } from '@utils/toastUtil';
-import commonUtil from '@utils/commonUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
+import util from '@utils/commonUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { API_BASE_URL } from '@/constants';
 
+/**
+ * 등록기사 > 등록기사 상세
+ */
 const RcvArticleEdit = ({ match }) => {
     const { rid, registerable } = useParams();
     const history = useHistory();
@@ -46,7 +48,7 @@ const RcvArticleEdit = ({ match }) => {
      * 수신기사 등록
      */
     const handleRegister = () => {
-        if (!REQUIRED_REGEX.test(temp.categoryList.join(''))) {
+        if (util.isEmpty(temp.categoryList.join(''))) {
             setError({ ...error, categoryList: true });
         } else {
             dispatch(
@@ -137,8 +139,7 @@ const RcvArticleEdit = ({ match }) => {
             dispatch(clearRcvArticle());
             setRegisted(false);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         setTemp({
@@ -152,9 +153,7 @@ const RcvArticleEdit = ({ match }) => {
     /**
      * 미리보기 팝업
      */
-    const handleClickPreviewOpen = (domainId) => {
-        commonUtil.winOpenPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, domainId });
-    };
+    const handleClickPreviewOpen = (domainId) => util.winOpenPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, domainId });
 
     if (!rcvArticle.rid) return null;
 

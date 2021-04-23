@@ -12,7 +12,7 @@ import { initialState as componentState, getComponentListModal } from '@store/co
 import { initialState as containerState, getContainerListModal } from '@store/container';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
+import util from '@utils/commonUtil';
 import ComponentSelector from './ComponentSelector';
 import ContainerSelector from './ContainerSelector';
 import AreaComp from './AreaComp';
@@ -66,7 +66,7 @@ const AreaFormDepth2 = (props) => {
         const isCmp = saveObj.compYn === 'Y';
 
         // 영역명 체크
-        if (!REQUIRED_REGEX.test(saveObj.areaNm)) {
+        if (util.isEmpty(saveObj.areaNm)) {
             errList.push({
                 field: 'areaNm',
                 reason: '',

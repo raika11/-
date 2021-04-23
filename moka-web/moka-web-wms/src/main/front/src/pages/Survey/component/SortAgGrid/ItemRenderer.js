@@ -5,7 +5,6 @@ import { MokaTableEditCancleButton, MokaInputLabel, MokaInput } from '@component
 import { selectArticleItemChange, selectArticleListChange, clearSelectArticleList } from '@store/survey/quiz';
 
 const labelWidth = 45;
-const replaceNo = (t) => ('00' + t).slice(-2);
 
 /**
  * 관련 기사 렌더러

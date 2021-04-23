@@ -1,7 +1,7 @@
 import axios from './axios';
-import { getLocalItem } from '@utils/storageUtil';
-import toast, { messageBox } from '@utils/toastUtil';
 import { AUTHORIZATION } from '@/constants';
+import util from '@utils/commonUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { logout } from '@store/auth';
 
 /**
@@ -28,7 +28,7 @@ export default {
         /** 요청 인터셉터 */
         const onRequest = (config) => {
             if (config.url !== '/loginJwt' && config.url.indexOf('/member-join') < 0) {
-                const token = getLocalItem(AUTHORIZATION);
+                const token = util.getLocalItem(AUTHORIZATION);
                 if (!token) {
                     // 인증 토큰 없음
                     messageBox.alert('로그인 정보가 없습니다.\n로그인 페이지로 이동합니다.', () => {
@@ -55,16 +55,19 @@ export default {
 
         /** 응답 실패 */
         const onFail = (error) => {
+            const queue = [];
+
             if (typeof error.response !== 'undefined') {
-                const header = error.response.data.header;
-                toast.error(header.message);
+                // const header = error.response.data.header;
+                // toast.error(header.message);
                 const errorCode = error.response.status;
+
                 switch (errorCode) {
                     case 401:
                         store.dispatch(logout());
                         break;
                     default:
-                        window.location = `/${errorCode}`;
+                        if (window.location !== `/${errorCode}`) window.location = `/${errorCode}`;
                         break;
                 }
             }

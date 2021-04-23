@@ -5,13 +5,13 @@ import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaCard, MokaInput, MokaInputLabel } from '@/components';
 import { DB_DATEFORMAT, SCHEDULE_PERIOD } from '@/constants';
-import toast, { messageBox } from '@/utils/toastUtil';
-import { invalidListToError } from '@/utils/convertUtil';
-import { initialState, getJob, getJobCdCheck, clearJob, saveJob, SAVE_JOB, GET_JOB, deleteJob, getDeleteJobList } from '@/store/schedule';
+import util from '@utils/commonUtil';
+import toast, { messageBox } from '@utils/toastUtil';
+import { invalidListToError } from '@utils/convertUtil';
+import { initialState, getJob, getJobCdCheck, clearJob, saveJob, SAVE_JOB, GET_JOB, deleteJob, getDeleteJobList } from '@store/schedule';
+import { MokaCard, MokaInput, MokaInputLabel } from '@components';
 import JobContentModal from '../modals/JobContentModal';
-import { REQUIRED_REGEX } from '@/utils/regexUtil';
 
 /**
  * 스케줄 서버 관리 > 작업 목록 편집(등록, 수정)
@@ -71,7 +71,7 @@ const WorkEdit = ({ match }) => {
         //     isInvalid = isInvalid || true;
         // }
 
-        if (!obj.pkgNm || !REQUIRED_REGEX.test(obj.pkgNm)) {
+        if (util.isEmpty(obj.pkgNm)) {
             errList.push({
                 field: 'pkgNm',
                 reason: '패키지 명을 입력하세요',
@@ -80,7 +80,7 @@ const WorkEdit = ({ match }) => {
         }
 
         if (obj.jobType === 'R') {
-            if (!obj.jobCd || !REQUIRED_REGEX.test(obj.jobCd)) {
+            if (util.isEmpty(obj.jobCd)) {
                 errList.push({
                     field: 'jobCd',
                     reason: '백오피스 업무 코드를 입력하세요',
@@ -88,7 +88,7 @@ const WorkEdit = ({ match }) => {
                 isInvalid = isInvalid || true;
             }
 
-            if (!obj.jobNm || !REQUIRED_REGEX.test(obj.jobNm)) {
+            if (util.isEmpty(obj.jobNm)) {
                 errList.push({
                     field: 'jobNm',
                     reason: '작업명을 입력하세요',

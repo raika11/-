@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { DB_DATEFORMAT } from '@/constants';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
+import util from '@utils/commonUtil';
 import { messageBox } from '@utils/toastUtil';
 import { initialState, GET_ARTICLE_LIST_MODAL, getArticleListModal } from '@store/article';
 import Search from './Search';
@@ -182,7 +182,7 @@ const ArticleList = ({
     const validate = useCallback(() => {
         let isInvalid = false;
 
-        if (!search.sourceList || !REQUIRED_REGEX.test(search.sourceList)) {
+        if (util.isEmpty(search.sourceList)) {
             isInvalid = isInvalid || true;
             setError({ ...error, sourceList: true });
         }

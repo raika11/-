@@ -289,6 +289,11 @@ font-*,color,text-align,vertical-align, ...
 /*************************************************************************************************************************/
 
 
+/****************************************************************************************************/
+/***                                           파티클                                             ***/
+/****************************************************************************************************/
+.ab_photo.photo_center {position:relative;max-width:100vw !important;}
+.ab_photo.photo_center .image {width:100%;max-width:100vw !important;}
 
 
 
@@ -335,8 +340,9 @@ font-*,color,text-align,vertical-align, ...
     /****************************************************************************************************/
     /***                                           content                                            ***/
     /****************************************************************************************************/
-    .ab_photo.photo_center {width:100vw !important;max-width:100vw !important;margin-left: 50%;transform: translateX(-50%);}
-    .ab_photo.photo_center .image {width:100%;max-width:100vw;}
+    .ab_photo.photo_center {width:100vw !important;margin-left:-20px;}
+    .ab_photo.photo_center img{width:100vw !important;}
+    .ab_photo.photo_center .caption {padding:0 20px;}
 
     /* 댓글레이어 */
     .layer_comment { display: none; width: 100%; padding: 54px 20px; }
@@ -355,8 +361,9 @@ font-*,color,text-align,vertical-align, ...
     /***                                           layout                                             ***/
     /****************************************************************************************************/
 
+    .ab_photo.photo_center {left: 50%;transform: translateX(-50%);}
     /* .ab_photo.photo_center .image {max-width:100vw;} */
-    .ab_photo.photo_center .image img {max-width:100%;}
+    .ab_photo.photo_center .image img {width:100%;max-width:100%;}
     .datetime > .date:nth-of-type(n+2) { margin-left: 10px; }
 
     /****************************************************************************************************/
@@ -396,7 +403,7 @@ font-*,color,text-align,vertical-align, ...
     .article_header,
     .article_body,
     .article_footer {max-width:580px;}
-    .ab_photo.photo_center {position:relative;max-width:99vw !important;left:50%;transform:translateX(-50%);}
+    /* .ab_photo.photo_center {position:relative;max-width:100vw !important;left:50%;transform:translateX(-50%);} */
 
     .layer_ticker .btn_close { position: absolute; right: 20px; top: 12.5px; }
 

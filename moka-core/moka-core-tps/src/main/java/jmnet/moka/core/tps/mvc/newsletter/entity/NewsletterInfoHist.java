@@ -72,11 +72,20 @@ public class NewsletterInfoHist extends RegAudit {
     @Column(name = "SEND_TIME")
     private String sendTime;
 
-    @Column(name = "SEND_BASE_CNT")
-    private String sendBaseCnt;
+    @Column(name = "SEND_MIN_CNT")
+    private String sendMinCnt;
+
+    @Column(name = "SEND_MAX_CNT")
+    private String sendMaxCnt;
+
+    @Column(name = "SEND_ORDER")
+    private String sendOrder;
 
     @Column(name = "SENDER_NAME")
     private String senderName;
+
+    @Column(name = "SCB_YN")
+    private String scbYn;
 
     @Column(name = "SENDER_EMAIL")
     private String senderEmail;
@@ -105,6 +114,9 @@ public class NewsletterInfoHist extends RegAudit {
     @Column(name = "MEMO")
     private String memo;
 
+    @Column(name = "LAST_SEND_DT")
+    private Date lastSendDt;
+
     @Column(name = "CATEGORY")
     private String category;
 
@@ -116,6 +128,12 @@ public class NewsletterInfoHist extends RegAudit {
 
     @Column(name = "LETTER_NAME")
     private String letterName;
+
+    @Column(name = "LETTER_ENG_NAME")
+    private String letterEngName;
+
+    @Column(name = "LETTER_IMG")
+    private String letterImg;
 
     @Column(name = "LETTER_DESC")
     private String letterDesc;

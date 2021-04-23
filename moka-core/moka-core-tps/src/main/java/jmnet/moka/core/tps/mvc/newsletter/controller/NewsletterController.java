@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
@@ -207,8 +209,8 @@ public class NewsletterController extends AbstractCommonController {
 
     @ApiOperation(value = "뉴스레터 상품")
     @GetMapping(value = "/{letterSeq}")
-    public ResponseEntity<?> getNewsletterInfoByLetterSeq(@ApiParam(value = "뉴스레터상품 일련번호", required = true)
-    @PathVariable("letterSeq") /* @Min(value = 0, message = "{tps.article.error.min.totalId}") */ Long letterSeq)
+    public ResponseEntity<?> getNewsletterInfoByLetterSeq(@ApiParam(value = "뉴스레터상품 일련번호", required = true) @PathVariable("letterSeq")
+    @Min(value = 0, message = "{tps.common.error.min.seqNo}") Long letterSeq)
             throws NoDataException {
         // 조회
         NewsletterInfo newsletterInfo = newsletterService
@@ -293,6 +295,22 @@ public class NewsletterController extends AbstractCommonController {
         }
     }
 
+    @ApiOperation(value = "뉴스레터 채널별 등록된 컨텐츠 조회")
+    @GetMapping(value = "/channelType/{channelType}")
+    public ResponseEntity<?> getNewsletterInfoByLetterSeq(@ApiParam(value = "뉴스레터 채널별 등록된 컨텐츠 조회", required = true) @PathVariable("channelType")
+    @Pattern(regexp = "^()|(TOPIC)|(ISSUE)|(SERIES)|(JPOD)|(REPORTER)|(TREND)|(ARTICLE)|(STAR)|(DIJEST)$", message = "{tps.newsletter.error.pattern.channelType}") String channelType)
+            throws NoDataException {
+        // 조회
+        List<Long> channelIds = newsletterService.findChannelIdByChannelType(channelType);
+
+        // 리턴값 설정
+        ResultDTO<List<Long>> resultDto = new ResultDTO<>(channelIds);
+        //
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
     /**
      * 뉴스레터 발송 조회
      *
@@ -322,6 +340,26 @@ public class NewsletterController extends AbstractCommonController {
         ResultDTO<ResultListDTO<NewsletterSendSimpleDTO>> resultDto = new ResultDTO<>(resultListMessage);
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "뉴스레터 발송 상세")
+    @GetMapping(value = "/newsletterSend/{sendSeq}")
+    public ResponseEntity<?> getNewsletterSendByLetterSeq(@ApiParam(value = "발송 일련번호", required = true) @PathVariable("sendSeq")
+    @Min(value = 0, message = "{tps.common.error.min.seqNo}") Long sendSeq)
+            throws NoDataException {
+        // 조회
+        //        NewsletterInfo newsletterInfo = newsletterService
+        //                .findByletterSeq(sendSeq)
+        //                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+        //
+        //        NewsletterInfoDTO newsletterInfoDTO = modelMapper.map(newsletterInfo, NewsletterInfoDTO.class);
+        //
+        //        // 리턴값 설정
+        //        ResultDTO<NewsletterInfoDTO> resultDto = new ResultDTO<>(newsletterInfoDTO);
+        //
+        //        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(null/* resultDto */, HttpStatus.OK);
     }
 
     /**
@@ -376,7 +414,8 @@ public class NewsletterController extends AbstractCommonController {
         if (newsletterSendDTO.getSendSeq() != null) {
             throw new MokaException(msg("tps.common.error.duplicated.key"));
         }
-
+        // 상단 이미지 저장
+        newsletterSendDTO.setHeaderImg(uploadImage(newsletterSendDTO.getHeaderImgFile()));
         NewsletterSend newsletterSend = modelMapper.map(newsletterSendDTO, NewsletterSend.class);
 
         // 등록
@@ -404,9 +443,9 @@ public class NewsletterController extends AbstractCommonController {
             throws InvalidDataException, Exception {
         if (newsletterSendDTO.getSendSeq() != null) {
             throw new MokaException(msg("tps.common.error.duplicated.key"));
-        } else if (McpString.isNotEmpty(newsletterSendDTO.getTestEmails()) && newsletterSendDTO
+        } else if (McpString.isNullOrEmpty(newsletterSendDTO.getTestEmails()) && newsletterSendDTO
                 .getTestEmails()
-                .split(";").length > 0) {
+                .split(";").length == 0) {
             throw new MokaException(msg("tps.newsletter.error.test-emails"));
         }
 
@@ -435,7 +474,7 @@ public class NewsletterController extends AbstractCommonController {
                 });
 
         // 결과리턴
-        ResultDTO resultDto = new ResultDTO("TODO: ems send success");
+        ResultDTO resultDto = new ResultDTO(msg("{tps.newsletter.success.test.publish}"));
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -455,7 +494,8 @@ public class NewsletterController extends AbstractCommonController {
         if (newsletterSendDTO.getLetterSeq() == null) {
             throw new MokaException(msg("tps.common.error.no-data"));
         }
-
+        // 상단 이미지 저장
+        newsletterSendDTO.setHeaderImg(uploadImage(newsletterSendDTO.getHeaderImgFile()));
         NewsletterSend newsletterSend = modelMapper.map(newsletterSendDTO, NewsletterSend.class);
 
         // 수정

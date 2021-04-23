@@ -38,6 +38,14 @@ public interface NewsletterService {
     Optional<NewsletterInfo> findByletterSeq(Long letterSeq);
 
     /**
+     * 뉴스레터 채널별 등록된 컨텐츠 조회 조회
+     *
+     * @param channelType 채널 타입
+     * @return
+     */
+    List<Long> findChannelIdByChannelType(String channelType);
+
+    /**
      * 뉴스레터 상품 등록
      *
      * @param newsletterInfo
@@ -60,6 +68,14 @@ public interface NewsletterService {
      * @return
      */
     Page<NewsletterSend> findAllNewsletterSend(NewsletterSearchDTO search);
+
+    /**
+     * 뉴스레터 발송 상세
+     *
+     * @param sendSeq
+     * @return
+     */
+    Optional<NewsletterSend> findNewsletterSendBySendSeq(Long sendSeq);
 
     /**
      * 뉴스레터 방송(수동) 등록

@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.newsletter.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * <pre>
@@ -39,18 +41,21 @@ public class NewsletterSearchDTO extends SearchDTO {
      * 유형
      */
     @ApiModelProperty("레터유형")
+    @Pattern(regexp = "^(O)|(B)|(N)|(E)$", message = "{tps.newsletter.error.pattern.letterType}")
     private String letterType;
 
     /**
      * 상태
      */
     @ApiModelProperty("상태")
+    @Pattern(regexp = "^(Y)|(P)|(S)|(Q)$", message = "{tps.newsletter.error.pattern.status}")
     private String status;
 
     /**
      * 방송방법
      */
     @ApiModelProperty("발송유형")
+    @Pattern(regexp = "^(A)|(E)$", message = "{tps.newsletter.error.pattern.sendType}")
     private String sendType;
 
     @ApiModelProperty(value = "시작일시 검색")
@@ -65,11 +70,13 @@ public class NewsletterSearchDTO extends SearchDTO {
      * A/B 테스트 여부
      */
     @ApiModelProperty(value = "A/B 테스트여부")
+    @Pattern(regexp = "^(Y)|(N)$", message = "{tps.newsletter.error.pattern.abtestYn}")
     private String abtestYn;
 
     /**
      * 뉴스레터 명
      */
     @ApiModelProperty(value = "레터명")
+    @Length(max = 100, message = "{tps.newsletter.error.size.letterName}")
     private String letterName;
 }

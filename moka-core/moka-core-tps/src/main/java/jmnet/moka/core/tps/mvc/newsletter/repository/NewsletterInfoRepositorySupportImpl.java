@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.newsletter.repository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.member.entity.QMemberSimpleInfo;
@@ -118,5 +119,18 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
                 .fetchResults();
 
         return new PageImpl<NewsletterInfo>(list.getResults(), pageable, list.getTotal());
+    }
+
+    @Override
+    public List<Long> findAllChannelIdByChannelType(String ChannelType) {
+        QNewsletterInfo qNewsletterInfo = QNewsletterInfo.newsletterInfo;
+        QueryResults<Long> results = from(qNewsletterInfo)
+                .select(qNewsletterInfo.channelId)
+                .distinct()
+                .where(qNewsletterInfo.channelType
+                        .toUpperCase()
+                        .eq(ChannelType))
+                .fetchResults();
+        return results.getResults();
     }
 }

@@ -53,6 +53,11 @@ public class NewsletterServiceImpl implements NewsletterService {
         return newsletterInfoRepository.findById(letterSeq);
     }
 
+    @Override
+    public List<Long> findChannelIdByChannelType(String channelType) {
+        return newsletterInfoRepository.findAllChannelIdByChannelType(channelType);
+    }
+
     @Transactional
     @Override
     public NewsletterInfo insertNewsletterInfo(NewsletterInfo newsletterInfo) {
@@ -68,6 +73,11 @@ public class NewsletterServiceImpl implements NewsletterService {
     @Override
     public Page<NewsletterSend> findAllNewsletterSend(NewsletterSearchDTO search) {
         return newsletterSendRepository.findAllNewsletterSend(search);
+    }
+
+    @Override
+    public Optional<NewsletterSend> findNewsletterSendBySendSeq(Long sendSeq) {
+        return newsletterSendRepository.findById(sendSeq);
     }
 
     @Transactional

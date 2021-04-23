@@ -28,7 +28,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     const history = useHistory();
     const loading = useSelector(({ loading }) => loading[GET_ARTICLE_PAGE] || loading[SAVE_ARTICLE_PAGE] || loading[DELETE_ARTICLE_PAGE]);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
-    const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
+    const atRows = useSelector((store) => store.codeMgt.atRows);
     const { articlePage, artPageBody, invalidList } = useSelector(({ articlePage }) => articlePage);
     const [temp, setTemp] = useState(initialState.articlePage); // 입력값 state
     const [error, setError] = useState({}); // 에러 state
@@ -324,8 +324,8 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                 placeholder="기사타입을 선택하세요"
                 required
             >
-                {articleTypeRows &&
-                    articleTypeRows.map((type) => (
+                {atRows &&
+                    atRows.map((type) => (
                         <option key={type.dtlCd} value={type.dtlCd}>
                             {type.cdNm}
                         </option>

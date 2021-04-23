@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReporterAllList } from '@store/reporter';
-import { getArticleType } from '@store/codeMgt';
+import { getAt } from '@store/codeMgt';
 import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvArticle, POST_RCV_ARTICLE, getRcvArticleList } from '@store/rcvArticle';
 import ArticleForm from '@pages/Article/components/ArticleForm/index';
 import RctArticleForm from './components/RcvArticleForm';
@@ -20,7 +20,7 @@ const RcvArticleEdit = ({ match }) => {
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE] || store.loading[POST_RCV_ARTICLE]);
     const { search, rcvArticle } = useSelector(({ rcvArticle }) => rcvArticle);
-    const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
+    const atRows = useSelector((store) => store.codeMgt.atRows);
     const allReporter = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
     const [registed, setRegisted] = useState(false); // 등록된 기사이면 등록폼으로 연결
     const [reporterList, setReporterList] = useState([]);
@@ -80,10 +80,10 @@ const RcvArticleEdit = ({ match }) => {
 
     useEffect(() => {
         // 기사타입 조회
-        if (!articleTypeRows) {
-            dispatch(getArticleType());
+        if (!atRows) {
+            dispatch(getAt());
         }
-    }, [articleTypeRows, dispatch]);
+    }, [atRows, dispatch]);
 
     useEffect(() => {
         // 수신 => 등록 간의 시간 차이가 존재...
@@ -164,7 +164,7 @@ const RcvArticleEdit = ({ match }) => {
                 <ArticleForm
                     totalId={rcvArticle.totalId}
                     returnUrl="/rcv-article"
-                    articleTypeRows={articleTypeRows}
+                    atRows={atRows}
                     reporterList={reporterList || []}
                     onCancle={handleCancle}
                     onSave={reloadList}
@@ -176,7 +176,7 @@ const RcvArticleEdit = ({ match }) => {
                     error={error}
                     setError={setError}
                     onChange={handleChangeValue}
-                    articleTypeRows={articleTypeRows}
+                    atRows={atRows}
                     reporterList={reporterList || []}
                     loading={loading}
                     onCancle={handleCancle}

@@ -276,7 +276,6 @@ function* putSpecialCharCode({ payload: { grpCd, dtlCd, cdNm, callback } }) {
 const getTpSize = createReadOnlySaga(act.GET_TP_SIZE, 'tpSizeRows', constants.CODETYPE_TP_SIZE);
 const getTpZone = createReadOnlySaga(act.GET_TP_ZONE, 'tpZoneRows', constants.CODETYPE_TP_ZONE);
 const getLang = createReadOnlySaga(act.GET_LANG, 'langRows', constants.CODETYPE_LANG);
-const getServiceType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'serviceTypeRows', constants.CODETYPE_SERVICE_TYPE);
 const getPageType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'pageTypeRows', constants.CODETYPE_PAGE_TYPE);
 const getApi = createReadOnlySaga(act.GET_API, 'apiRows', constants.CODETYPE_API);
 const getArtGroup = createReadOnlySaga(act.GET_ART_GROUP, 'artGroupRows', constants.CODETYPE_ART_GROUP);
@@ -288,7 +287,7 @@ const getDsTitleLoc = createReadOnlySaga(act.GET_DS_TITLE_LOC, 'dsTitleLocRows',
 const getDsPre = createReadOnlySaga(act.GET_DS_PRE, 'dsPreRows', constants.CODETYPE_DS_PRE);
 const getDsPreLoc = createReadOnlySaga(act.GET_DS_PRE_LOC, 'dsPreLocRows', constants.CODETYPE_DS_PRE_LOC);
 const getDsIcon = createReadOnlySaga(act.GET_DS_ICON, 'dsIconRows', constants.CODETYPE_DS_ICON);
-const getArticleType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'articleTypeRows', constants.CODETYPE_ARTICLE_TYPE);
+const getAt = createReadOnlySaga(act.GET_SERVICE_TYPE, 'atRows', constants.CODETYPE_AT);
 const getPt = createReadOnlySaga(act.GET_PT, 'ptRows', constants.CODETYPE_PT);
 const getChannelTp = createReadOnlySaga(act.GET_CHANNEL_TP, 'channelTpRows', constants.CODETYPE_CHANNEL_TP);
 const getPressCate1 = createReadOnlySaga(act.GET_PRESS_CATE1, 'pressCate1Rows', constants.CODETYPE_PRESS_CATE1);
@@ -321,7 +320,6 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_TP_SIZE, getTpSize);
     yield takeLatest(act.GET_TP_ZONE, getTpZone);
     yield takeLatest(act.GET_LANG, getLang);
-    yield takeLatest(act.GET_SERVICE_TYPE, getServiceType);
     yield takeLatest(act.GET_PAGE_TYPE, getPageType);
     yield takeLatest(act.GET_API, getApi);
     yield takeLatest(act.GET_ART_GROUP, getArtGroup);
@@ -333,7 +331,7 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_DS_PRE, getDsPre);
     yield takeLatest(act.GET_DS_PRE_LOC, getDsPreLoc);
     yield takeLatest(act.GET_DS_ICON, getDsIcon);
-    yield takeLatest(act.GET_ARTICLE_TYPE, getArticleType);
+    yield takeLatest(act.GET_AT, getAt);
     yield takeLatest(act.GET_PT, getPt);
     yield takeLatest(act.GET_CHANNEL_TP, getChannelTp);
     yield takeLatest(act.GET_PRESS_CATE1, getPressCate1);

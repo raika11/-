@@ -36,15 +36,11 @@ export const ITEM_DS = 'DS';
 export const CODETYPE_API = 'API';
 // 시스템코드 : 페이지타입
 export const CODETYPE_PAGE_TYPE = 'PAGE_TYPE';
-// 시스템코드 : 기사타입
-export const CODETYPE_ARTICLE_TYPE = 'AT';
 // 시스템코드 : 템플릿사이즈, 템플릿위치그룹
 export const CODETYPE_TP_SIZE = 'TP_SIZE';
 export const CODETYPE_TP_ZONE = 'TP_ZONE';
 // 시스템코드 : 언어
 export const CODETYPE_LANG = 'LANG';
-// 시스템코드 : 서비스타입
-export const CODETYPE_SERVICE_TYPE = 'SERVICE_TYPE';
 // 시스템코드 : 등록기사그룹
 export const CODETYPE_ART_GROUP = 'ART_GROUP';
 export const CODETYPE_ART_GROUP_NAME = 'ART_GROUP_NUM';

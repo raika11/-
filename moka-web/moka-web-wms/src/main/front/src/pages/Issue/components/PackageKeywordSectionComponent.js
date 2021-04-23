@@ -42,15 +42,15 @@ const PackageKeywordSectionComponent = ({ keyword, onChange, target }) => {
     }, [keyword]);
 
     return (
-        <Form.Row className="mb-3">
+        <Form.Row className="mb-2">
             <Col xs={3} className="p-0">
-                <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                <div style={{ height: 31 }} className="mb-2 d-flex align-items-center">
                     <MokaInputLabel as="none" label="검색 범위" />
                 </div>
-                <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                <div style={{ height: 31 }} className="mb-2 d-flex align-items-center">
                     <MokaInputLabel as="none" label="검색 기간" />
                 </div>
-                <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                <div style={{ height: 31 }} className="mb-2 d-flex align-items-center">
                     <MokaInputLabel as="none" label="대상 섹션" />
                 </div>
                 <div style={{ height: 31 }} className="d-flex align-items-center">
@@ -82,7 +82,7 @@ const PackageKeywordSectionComponent = ({ keyword, onChange, target }) => {
                 />
             </Col>
             <Col xs={9} className="p-0">
-                <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                <div style={{ height: 31 }} className="mb-2 d-flex align-items-center">
                     <div style={{ width: 100 }} className="pr-3">
                         <MokaInput
                             as="checkbox"
@@ -108,7 +108,7 @@ const PackageKeywordSectionComponent = ({ keyword, onChange, target }) => {
                         />
                     </div>
                 </div>
-                <div className="mb-3 d-flex align-items-center">
+                <div className="mb-2 d-flex align-items-center">
                     <div style={{ width: 228 }} className="pr-3">
                         <MokaInputLabel
                             as="dateTimePicker"
@@ -150,7 +150,7 @@ const PackageKeywordSectionComponent = ({ keyword, onChange, target }) => {
                         />
                     </div>
                 </div>
-                <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                <div style={{ height: 31 }} className="mb-2 d-flex align-items-center">
                     <Button
                         variant="outline-neutral"
                         onClick={() => {

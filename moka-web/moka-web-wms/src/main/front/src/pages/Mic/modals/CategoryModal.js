@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { MokaModal, MokaSearchInput } from '@/components';
 import { AgGridReact } from 'ag-grid-react';
 import { SAVE_MIC_CATEGORY, saveMicCategory } from '@store/mic';
+import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { getDisplayedRows } from '@utils/agGridUtil';
+import { MokaModal, MokaSearchInput } from '@components';
 import columnDefs from './CategoryModalAgGridColumns';
 import InputRenderer from '../components/InputRenderer';
 import CategorySelectRenderer from '../components/CategorySelectRenderer';
@@ -57,7 +57,7 @@ const CategoryModal = (props) => {
      * 등록
      */
     const handleAdd = () => {
-        if (!REQUIRED_REGEX.test(keyword)) {
+        if (util.isEmpty(keyword)) {
             setError(true);
             return;
         }

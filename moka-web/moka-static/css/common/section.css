@@ -14,22 +14,7 @@
 
 
 
-/** card **/
-.card {position:relative;}
-.card_body {flex: 1 1 auto;}
-.card_body .title {width:100%;}
-.card_body .headline {width:100%; color:#111; font-size:16px; font-weight:700; line-height:1.46; word-break:break-all;}
-.card_body .description {color:#777; font-size:15px; line-height:1.5; word-break:break-all;}
-.card_body .byline { color:#aaa; font-size:13px; line-height:1.5;}
-.card_body .play_count { padding-top:8px; color:#aaa; font-size:12px; line-height:1.5;}
-.card_image img {width:100%; height:auto;}
 
-.card_more { display:flex; align-items:center; justify-content:center; width:100%; border-top:1px solid #ddd; color:#999; font-size: 14px; line-height: 20px;}
-.card_more .fa_arrow_down_g { margin-left:8px;}
-
-/* card border */
-.card.border {border:1px solid #b3b3b3}
-.card.border .card_body {padding:16px 16px;}
 
 
 
@@ -97,9 +82,9 @@
 
 
 
-.card_group.row.catalog_card > .card::before{display:none;}
+/* .card_group.row.catalog_card > .card::before{display:none;}
 .card_group.catalog_card{margin-top:-8px;}
-.card_group.catalog_card .card {padding-top: 8px;padding-bottom: 8px;}
+.card_group.catalog_card .card {padding-top: 8px;padding-bottom: 8px;} */
 
 
 /* 광고영역 */
@@ -193,12 +178,7 @@
     /* 컴포넌트 */
     .chain_wrap {margin-bottom:30px;}
 
-    /* card*/
-    .card_body .headline {color:#000; font-size:14px;}
-    .card_body .description {color:#555; font-size:13px;}
-    .card_body .byline {font-size:12px;}
-
-    .card_more { height: 53px; padding-top:16px; padding-bottom: 16px; }
+    
     
 
     /***************************************    general     ************************************/

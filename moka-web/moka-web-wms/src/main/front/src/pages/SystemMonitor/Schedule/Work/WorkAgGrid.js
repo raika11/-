@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { MokaTable } from '@/components';
-import columnDefs from './WorkAgGridColumns';
 import { SCHEDULE_PERIOD } from '@/constants';
-import { GET_JOB_LIST, getJobList, changeWorkSearchOption } from '@/store/schedule';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
+import columnDefs from './WorkAgGridColumns';
+import { MokaTable } from '@components';
+import { GET_JOB_LIST, getJobList, changeWorkSearchOption } from '@store/schedule';
 
 /**
  * 스케줄 서버 관리 > 작업 목록 AgGri
@@ -70,6 +71,7 @@ const WorkAgGrid = ({ match }) => {
             agGridHeight={544}
             columnDefs={columnDefs}
             rowData={rowData}
+            rowHeight={GRID_ROW_HEIGHT.T[2]}
             onRowNodeId={(row) => row.jobSeq}
             onRowClicked={handleRowClicked}
             loading={loading}

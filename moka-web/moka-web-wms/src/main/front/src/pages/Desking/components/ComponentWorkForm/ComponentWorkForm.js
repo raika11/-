@@ -19,8 +19,8 @@ const ComponentWorkForm = (props) => {
             headerClassName="border-bottom"
             footer
             footerButtons={[
-                { text: '저장', variant: 'positive', className: 'mr-2' },
-                { text: '임시저장', variant: 'positive', className: 'mr-2' },
+                { text: '저장', variant: 'positive', className: 'mr-1' },
+                { text: '임시저장', variant: 'positive-a', className: 'mr-1' },
                 { text: '닫기', variant: 'negative', onClick: onHide },
             ]}
         >

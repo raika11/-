@@ -40,8 +40,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: $white;
-    opacity: 0.5;
+    background-color: rgba($white, 0.5);
     z-index: 2;
     display: flex;
     align-items: center;
@@ -579,17 +578,17 @@ body {
 }
 
 // 페이지편집
+.work-btn {
+	height: 18px;
+	width: 18px;
+	padding: 0px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 .component-work {
     position: relative;
-
-    .work-btn {
-        height: 18px;
-        width: 18px;
-        padding: 0px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
 
     .ag-theme-moka-dnd-grid .ag-root-wrapper .ag-body-viewport {
         padding-top: 0px;
@@ -598,21 +597,21 @@ body {
     &.work {
         .component-title {
             color: $positive;
-            font-weight: bold;
+            font-weight: $font-weight-bold;
         }
     }
 
     &.save {
         .component-title {
             color: $gray-900;
-            font-weight: bold;
+            font-weight: $font-weight-bold;
         }
     }
 
     &.publish {
         .component-title {
             color: $info;
-            font-weight: bold;
+            font-weight: $font-weight-bold;
         }
     }
 

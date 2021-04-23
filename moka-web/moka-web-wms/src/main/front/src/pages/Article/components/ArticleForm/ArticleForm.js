@@ -13,8 +13,7 @@ import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaInput, MokaCard, MokaIcon, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
 import toast, { messageBox } from '@utils/toastUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
-import commonUtil from '@utils/commonUtil';
+import util from '@utils/commonUtil';
 import { unescapeHtmlArticle, invalidListToError } from '@utils/convertUtil';
 import { ARTICLE_URL, API_BASE_URL, PREVIEW_DOMAIN_ID } from '@/constants';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
@@ -186,12 +185,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
     /**
      * PC 미리보기
      */
-    const handlePCPreview = () => commonUtil.winOpenPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, domainId: PREVIEW_DOMAIN_ID });
+    const handlePCPreview = () => util.winOpenPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, domainId: PREVIEW_DOMAIN_ID });
 
     /**
      * 모바일 미리보기
      */
-    // const handleMobilePreview = () => commonUtil.winOpenPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, domainId: PREVIEW_DOMAIN_ID });
+    // const handleMobilePreview = () => util.winOpenPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, domainId: PREVIEW_DOMAIN_ID });
 
     /**
      * validate
@@ -202,7 +201,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
         let errList = [];
 
         // 제목 체크
-        if (!articleData.artTitle || !REQUIRED_REGEX.test(articleData.artTitle)) {
+        if (util.isEmpty(articleData.artTitle)) {
             errList.push({
                 field: 'artTitle',
                 reason: '',
@@ -210,7 +209,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
             isInvalid = isInvalid || true;
         }
         // 마스터코드 체크
-        if (!REQUIRED_REGEX.test(articleData.categoryList.join(''))) {
+        if (util.isEmpty(articleData.categoryList.join(''))) {
             errList.push({
                 field: 'categoryList',
                 reason: '',

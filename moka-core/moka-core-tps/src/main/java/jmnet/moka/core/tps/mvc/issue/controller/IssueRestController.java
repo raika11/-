@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +32,12 @@ import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
-import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingComponentDTO;
+import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistCompDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistDTO;
+import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistGroupSearchDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageKeywordDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageListDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageListSearchDTO;
@@ -44,6 +47,7 @@ import jmnet.moka.core.tps.mvc.issue.entity.PackageList;
 import jmnet.moka.core.tps.mvc.issue.entity.PackageMaster;
 import jmnet.moka.core.tps.mvc.issue.service.IssueDeskingService;
 import jmnet.moka.core.tps.mvc.issue.service.PackageService;
+import jmnet.moka.core.tps.mvc.issue.vo.IssueDeskingHistGroupVO;
 import jmnet.moka.core.tps.mvc.issue.vo.PackageVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,12 +56,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -596,14 +602,14 @@ public class IssueRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
         try {
-            List<IssueDeskingComponentDTO> returnValue = issueDeskingService.findAllIssueDesking(packageMaster);
+            List<IssueDeskingHistCompDTO> returnValue = issueDeskingService.findAllIssueDeskingHist(packageMaster);
 
             // 리턴값 설정
-            ResultListDTO<IssueDeskingComponentDTO> resultListMessage = new ResultListDTO<>();
+            ResultListDTO<IssueDeskingHistCompDTO> resultListMessage = new ResultListDTO<>();
             resultListMessage.setTotalCnt(returnValue.size());
             resultListMessage.setList(returnValue);
 
-            ResultDTO<ResultListDTO<IssueDeskingComponentDTO>> resultDto = new ResultDTO<>(resultListMessage);
+            ResultDTO<ResultListDTO<IssueDeskingHistCompDTO>> resultDto = new ResultDTO<>(resultListMessage);
             tpsLogger.success(ActionType.SELECT);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
@@ -613,77 +619,64 @@ public class IssueRestController extends AbstractCommonController {
         }
     }
 
-    //    /**
-    //     * 컴포넌트의 편집목록조회
-    //     *
-    //     * @param pkgSeq 패키지순번
-    //     * @param compNo 컴포넌트순번
-    //     * @return
-    //     * @throws Exception
-    //     */
-    //    @ApiOperation(value = "컴포넌트의 편집목록조회")
-    //    @GetMapping("/{pkgSeq}/desking/{compNo}")
-    //    public ResponseEntity<?> getDeskingComponentList(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
-    //            @ApiParam(value = "컴포넌트번호", required = true) @PathVariable("compNo") Integer compNo)
-    //            throws Exception {
-    //        PackageMaster packageMaster = packageService
-    //                .findByPkgSeq(pkgSeq)
-    //                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
-    //
-    //        try {
-    //            IssueDeskingComponentDTO returnValue = issueDeskingService.findIssueDeskingComponent(packageMaster, compNo);
-    //
-    //            ResultDTO<IssueDeskingComponentDTO> resultDto = new ResultDTO<>(returnValue);
-    //            tpsLogger.success(ActionType.SELECT);
-    //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    //        } catch (Exception e) {
-    //            log.error("[FAIL TO LOAD PACKAGE DESKING LIST]", e);
-    //            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD PACKAGE DESKING LIST]", e, true);
-    //            throw new Exception(msg("tps.common.error.select"), e);
-    //        }
-    //    }
-
+    /**
+     * 편집기사 임시저장
+     *
+     * @param pkgSeq                  패키지 일련번호
+     * @param compNo                  컴포넌트순번
+     * @param issueDeskingHistCompDTO 컴포넌트정보
+     * @param principal               작업자정보
+     * @return
+     * @throws InvalidDataException 예외
+     * @throws Exception            오류
+     */
     @ApiOperation(value = "편집기사 임시저장")
-    //    @PostMapping(value = "/{pkgSeq}/desking/{compNo}/save", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = "/{pkgSeq}/desking/{compNo}/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> postSaveIssueDesking(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
             @ApiParam(value = "컴포넌트순번", required = true) @PathVariable("compNo") Integer compNo,
-            @Valid IssueDeskingComponentDTO issueDeskingComponentDTO, @ApiParam(hidden = true) Principal principal)
+            @Valid IssueDeskingHistCompDTO issueDeskingHistCompDTO, @ApiParam(hidden = true) Principal principal)
             throws InvalidDataException, Exception {
         PackageMaster packageMaster = packageService
-                .findByPkgSeq(issueDeskingComponentDTO.getPkgSeq())
+                .findByPkgSeq(issueDeskingHistCompDTO.getPkgSeq())
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
         try {
-            if (issueDeskingComponentDTO.getIssueDeskings() != null && issueDeskingComponentDTO
+            if (issueDeskingHistCompDTO.getIssueDeskings() != null && issueDeskingHistCompDTO
                     .getIssueDeskings()
                     .size() > 0) {
                 // escape
-                issueDeskingComponentDTO
+                issueDeskingHistCompDTO
                         .getIssueDeskings()
                         .stream()
                         .forEach((dto -> issueDeskingService.escapeHtml(dto)));
 
                 // 썸네일 파일 저장
-                uploadThumbfile(issueDeskingComponentDTO.getIssueDeskings());
+                uploadThumbfile(issueDeskingHistCompDTO.getIssueDeskings());
             }
 
             // 등록
-            issueDeskingService.save(packageMaster, issueDeskingComponentDTO, principal.getName());
-            IssueDeskingComponentDTO returnValue = issueDeskingService.findIssueDeskingComponent(packageMaster, compNo);
+            issueDeskingService.save(packageMaster, issueDeskingHistCompDTO, principal.getName());
+            IssueDeskingHistCompDTO returnValue = issueDeskingService.findIssueDeskingHistBySaveComponent(packageMaster, compNo);
 
             // 결과리턴
-            IssueDeskingComponentDTO dto = modelMapper.map(returnValue, IssueDeskingComponentDTO.class);
-            ResultDTO<IssueDeskingComponentDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.insert"));
+            IssueDeskingHistCompDTO dto = modelMapper.map(returnValue, IssueDeskingHistCompDTO.class);
+            ResultDTO<IssueDeskingHistCompDTO> resultDto = new ResultDTO<>(dto, msg("tps.issue.success.save"));
 
             tpsLogger.success(ActionType.INSERT);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO SAVE ISSUE DESKING]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO SAVE ISSUE DESKING]", e, true);
-            throw new Exception(msg("tps.common.error.insert"), e);
+            throw new Exception(msg("tps.issue.error.save"), e);
         }
     }
 
+    /**
+     * 이미지업로드
+     *
+     * @param issueDeskings 이슈편집기사목록
+     * @throws InvalidDataException 예외
+     * @throws IOException          파일읽기오류
+     */
     private void uploadThumbfile(List<IssueDeskingHistDTO> issueDeskings)
             throws InvalidDataException, IOException {
         for (IssueDeskingHistDTO dto : issueDeskings) {
@@ -700,6 +693,14 @@ public class IssueRestController extends AbstractCommonController {
         }
     }
 
+    /**
+     * 이미지업로드
+     *
+     * @param imgFile 이미지파일
+     * @return
+     * @throws InvalidDataException 예외
+     * @throws IOException          오류
+     */
     public String uploadImage(MultipartFile imgFile)
             throws InvalidDataException, IOException {
 
@@ -721,6 +722,15 @@ public class IssueRestController extends AbstractCommonController {
         return imageUrl;
     }
 
+    /**
+     * 편집기사 전송
+     *
+     * @param pkgSeq    패키지 일련번호
+     * @param compNo    컴포넌트순번
+     * @param principal 작업자정보
+     * @return
+     * @throws Exception 오류
+     */
     @ApiOperation(value = "편집기사 전송")
     @PostMapping("/{pkgSeq}/desking/{compNo}/publish")
     public ResponseEntity<?> postPublishIssueDesking(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
@@ -733,18 +743,163 @@ public class IssueRestController extends AbstractCommonController {
             // 등록
             issueDeskingService.publish(packageMaster, compNo, principal.getName());
 
-            IssueDeskingComponentDTO returnValue = issueDeskingService.findIssueDeskingComponent(packageMaster, compNo);
+            IssueDeskingHistCompDTO returnValue = issueDeskingService.findIssueDeskingHistBySaveComponent(packageMaster, compNo);
 
             // 결과리턴
-            IssueDeskingComponentDTO dto = modelMapper.map(returnValue, IssueDeskingComponentDTO.class);
-            ResultDTO<IssueDeskingComponentDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.insert"));
+            IssueDeskingHistCompDTO dto = modelMapper.map(returnValue, IssueDeskingHistCompDTO.class);
+            ResultDTO<IssueDeskingHistCompDTO> resultDto = new ResultDTO<>(dto, msg("tps.issue.success.publish"));
 
             tpsLogger.success(ActionType.INSERT);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO PUBLISH ISSUE DESKING]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO PUBLISH ISSUE DESKING]", e, true);
-            throw new Exception(msg("tps.common.error.insert"), e);
+            throw new Exception(msg("tps.issue.error.publish"), e);
+        }
+    }
+
+    /**
+     * 편집기사 예약
+     *
+     * @param pkgSeq    패키지 일련번호
+     * @param compNo    컴포넌트순번
+     * @param reserveDt 예약시간
+     * @param principal 작업자정보
+     * @return
+     * @throws Exception 오류
+     */
+    @ApiOperation(value = "편집기사 예약")
+    @PostMapping("/{pkgSeq}/desking/{compNo}/reserve")
+    public ResponseEntity<?> postReserveIssueDesking(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
+            @ApiParam(value = "컴포넌트순번", required = true) @PathVariable("compNo") Integer compNo,
+            @ApiParam(value = "예약시간", required = true) @RequestParam("reserveDt") Date reserveDt, @ApiParam(hidden = true) Principal principal)
+            throws Exception {
+        PackageMaster packageMaster = packageService
+                .findByPkgSeq(pkgSeq)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+        try {
+            // 예약
+            issueDeskingService.reserve(packageMaster, compNo, principal.getName(), reserveDt);
+
+            IssueDeskingHistCompDTO returnValue = issueDeskingService.findIssueDeskingHistBySaveComponent(packageMaster, compNo);
+
+            // 결과리턴
+            IssueDeskingHistCompDTO dto = modelMapper.map(returnValue, IssueDeskingHistCompDTO.class);
+            ResultDTO<IssueDeskingHistCompDTO> resultDto = new ResultDTO<>(dto, msg("tps.issue.success.reserve"));
+
+            tpsLogger.success(ActionType.INSERT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO RESERVE ISSUE DESKING]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO RESERVE ISSUE DESKING]", e, true);
+            throw new Exception(msg("tps.issue.error.reserve"), e);
+        }
+    }
+
+    /**
+     * 편집기사 예약 삭제
+     *
+     * @param pkgSeq    패키지 일련번호
+     * @param compNo    컴포넌트순번
+     * @param principal 작업자정보
+     * @return
+     * @throws Exception 오류
+     */
+    @ApiOperation(value = "편집기사 예약 삭제")
+    @DeleteMapping("/{pkgSeq}/desking/{compNo}/reserve")
+    public ResponseEntity<?> deleteReserveIssueDesking(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
+            @ApiParam(value = "컴포넌트순번", required = true) @PathVariable("compNo") Integer compNo, @ApiParam(hidden = true) Principal principal)
+            throws Exception {
+        PackageMaster packageMaster = packageService
+                .findByPkgSeq(pkgSeq)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+        try {
+            // 예약삭제
+            issueDeskingService.deleteReserve(packageMaster, compNo);
+
+            IssueDeskingHistCompDTO returnValue = issueDeskingService.findIssueDeskingHistBySaveComponent(packageMaster, compNo);
+
+            // 결과리턴
+            IssueDeskingHistCompDTO dto = modelMapper.map(returnValue, IssueDeskingHistCompDTO.class);
+            ResultDTO<IssueDeskingHistCompDTO> resultDto = new ResultDTO<>(dto, msg("tps.issue.success.delete-reserve"));
+
+            tpsLogger.success(ActionType.INSERT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO RESERVE ISSUE DESKING]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO RESERVE ISSUE DESKING]", e, true);
+            throw new Exception(msg("tps.issue.error.delete-reserve"), e);
+        }
+    }
+
+    @ApiOperation(value = "히스토리 조회(컴포넌트별)")
+    @GetMapping("/{pkgSeq}/desking/{compNo}/histories")
+    public ResponseEntity<?> getComponentHistoryList(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
+            @ApiParam(value = "컴포넌트순번", required = true) @PathVariable("compNo") Integer compNo,
+            @Valid @SearchParam IssueDeskingHistGroupSearchDTO search)
+            throws NoDataException, Exception {
+
+        PackageMaster packageMaster = packageService
+                .findByPkgSeq(pkgSeq)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        search.setPkgSeq(pkgSeq);
+        search.setCompNo(compNo);
+
+        try {
+            // 그룹 데이터 조회(mybatis)
+            List<IssueDeskingHistGroupVO> returnValue = issueDeskingService.findIssueDeskingHistGroupByComp(search);
+
+            // 리턴 DTO 생성
+            ResultListDTO<IssueDeskingHistGroupVO> resultList = new ResultListDTO<IssueDeskingHistGroupVO>();
+            resultList.setList(returnValue);
+            resultList.setTotalCnt(search.getTotal());
+
+            ResultDTO<ResultListDTO<IssueDeskingHistGroupVO>> resultDTO = new ResultDTO<ResultListDTO<IssueDeskingHistGroupVO>>(resultList);
+            tpsLogger.success(true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD ISSUE DESKING HIST ]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD ISSUE  DESKING HIST]", e, true);
+            throw new Exception(msg("tps.issue.error.hist"), e);
+        }
+    }
+
+    @ApiOperation(value = "히스토리 상세조회")
+    @GetMapping("/{pkgSeq}/desking/{compNo}/histories/{regDt}")
+    public ResponseEntity<?> getComponentHistory(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
+            @ApiParam(value = "컴포넌트순번", required = true) @PathVariable("compNo") Integer compNo,
+            @ApiParam(value = "작업일자", required = true) @PathVariable("regDt") Date regDt,
+            @ApiParam(value = "작업상태", defaultValue = "SAVE", required = true) @RequestParam("status") EditStatusCode status,
+            @ApiParam(value = "승인여부", defaultValue = "N", required = true) @RequestParam("approvalYn") String approvalYn)
+            throws NoDataException, Exception {
+
+        PackageMaster packageMaster = packageService
+                .findByPkgSeq(pkgSeq)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        IssueDeskingHistGroupSearchDTO search = IssueDeskingHistGroupSearchDTO
+                .builder()
+                .pkgSeq(pkgSeq)
+                .compNo(compNo)
+                .searchDt(regDt)
+                .status(status)
+                .approvalYn(approvalYn)
+                .build();
+        try {
+            // 편집기사 목록 조회(mybatis)
+            IssueDeskingHistCompDTO returnValue = issueDeskingService.findIssueDeskingHistByGroup(packageMaster, search);
+
+            // 결과리턴
+            IssueDeskingHistCompDTO dto = modelMapper.map(returnValue, IssueDeskingHistCompDTO.class);
+            ResultDTO<IssueDeskingHistCompDTO> resultDto = new ResultDTO<>(dto);
+
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD ISSUE DESKING HIST DETAIL]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD ISSUE  DESKING HIST DETAIL]", e, true);
+            throw new Exception(msg("tps.issue.error.hist"), e);
         }
     }
 }

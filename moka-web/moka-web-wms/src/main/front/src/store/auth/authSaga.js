@@ -1,11 +1,10 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { setLocalItem } from '@utils/storageUtil';
 import * as api from './authApi';
 import * as domainApi from '../domain/domainApi';
 import * as authAction from './authAction';
 import { AUTHORIZATION, SIGNIN_MEMBER_ID, SIGNIN_MEMBER_ID_SAVE } from '@/constants';
-import commonUtil from '@utils/commonUtil';
+import util from '@utils/commonUtil';
 
 /**
  * 로그인
@@ -16,12 +15,12 @@ export function* loginJwtSaga({ payload: { userId, userPassword, idSave, callbac
         const response = yield call(api.loginJwt, userId, userPassword);
         const { headers } = response;
         if (headers.authorization) {
-            yield call(setLocalItem, { key: AUTHORIZATION, value: headers.authorization });
-            yield call(setLocalItem, { key: SIGNIN_MEMBER_ID_SAVE, value: idSave });
+            yield call(util.setLocalItem, { key: AUTHORIZATION, value: headers.authorization });
+            yield call(util.setLocalItem, { key: SIGNIN_MEMBER_ID_SAVE, value: idSave });
             if (idSave) {
-                yield call(setLocalItem, { key: SIGNIN_MEMBER_ID, value: userId });
+                yield call(util.setLocalItem, { key: SIGNIN_MEMBER_ID, value: userId });
             } else {
-                yield call(setLocalItem, { key: SIGNIN_MEMBER_ID, value: undefined });
+                yield call(util.setLocalItem, { key: SIGNIN_MEMBER_ID, value: undefined });
             }
         }
         callback(response);
@@ -37,7 +36,7 @@ export function* logout() {
         const { data } = response;
 
         if (data.header.success) {
-            yield call(setLocalItem, { key: AUTHORIZATION, value: undefined });
+            yield call(util.setLocalItem, { key: AUTHORIZATION, value: undefined });
             yield call(window.location.reload());
         }
     } catch (err) {}
@@ -47,7 +46,6 @@ export function* logout() {
  * BackOffice 사용자 조회
  * @param {object} param0.payload
  */
-
 export function* getBackOfficeUser({ payload: { memberId, callback } }) {
     try {
         const response = yield call(api.getBackOfficeUser, memberId);
@@ -59,13 +57,13 @@ export function* getBackOfficeUser({ payload: { memberId, callback } }) {
  * 그룹웨어 사용자 조회
  * @param {object} param0.payload
  */
-
 export function* getGroupWareUser({ payload: { groupWareUserId, callback } }) {
     try {
         const response = yield call(api.getGroupWareUser, groupWareUserId);
         callback(response.data);
     } catch (err) {}
 }
+
 /**
  * SMS 인증 요청
  * @param {object} param0.payload
@@ -128,7 +126,7 @@ export function* getUserMenuTree({ payload: { pathName } }) {
             menuPaths['/404'] = '';
             menuPaths['/403'] = '';
             menuPaths['/mypage'] = '';
-            if (commonUtil.isEmpty(response.data.body)) {
+            if (util.isEmpty(response.data.body)) {
                 response.data.body = {};
             } else {
                 getOpenMenuParentMenuId(response.data.body.children, pathName, menuById, menuOpens, menuPaths);

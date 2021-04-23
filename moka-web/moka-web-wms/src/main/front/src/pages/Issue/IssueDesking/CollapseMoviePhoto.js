@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH, CHANNEL_TYPE, ISSUE_CHANNEL_TYPE } from '@/constants';
-import { MokaInputLabel, MokaTable, MokaLoader } from '@components';
+import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -15,10 +15,15 @@ import { VodModal } from '@pages/Desking/modals';
 import { moviePhotoColumnDefs } from './IssueDeskingColumns';
 import StatusBadge from './StatusBadge';
 
+const defaultProps = {
+    desking: {},
+    deskingList: [],
+};
+
 /**
  * 패키지관리 > 관련 데이터 편집 > 영상/포토
  */
-const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData }, ref) => {
+const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
@@ -241,16 +246,16 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
             );
             setStatus(DESK_STATUS_SAVE);
         }
-    }, [gridInstance, deskingList]);
+    }, [gridInstance, pkgSeq, deskingList]);
 
     useEffect(() => {
         setOpen(desking.viewYn === 'Y');
     }, [desking.viewYn]);
 
     return (
-        <div className="position-relative">
+        <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
-            <Row className="py-2 mt-2 d-flex border-bottom" noGutters>
+            <Row className="d-flex" noGutters>
                 <Col xs={3}>
                     <MokaInputLabel
                         as="switch"
@@ -272,19 +277,21 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                     <VodModal show={vodShow} onHide={() => setVodShow(false)} onSave={addMovie} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
-                    <StatusBadge desking={desking} />
-                    <Button variant="positive-a" size="sm" className="mr-1" onClick={saveDesking}>
-                        임시저장
-                    </Button>
-                    <Button variant="positive" size="sm" onClick={publishDesking}>
-                        전송
-                    </Button>
+                    <div className="d-flex">
+                        <StatusBadge desking={desking} />
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
+                            <MokaIcon iconName="Save" feather />
+                        </MokaOverlayTooltipButton>
+                        <MokaOverlayTooltipButton className="work-btn" tooltipText="전송" variant="white" onClick={publishDesking}>
+                            <MokaIcon iconName="Send" feather />
+                        </MokaOverlayTooltipButton>
+                    </div>
                 </Col>
             </Row>
             <Collapse in={open}>
                 <div id={controls} className="mt-2">
                     <MokaTable
-                        rowHeight={46}
+                        rowHeight={rowHeight}
                         header={false}
                         paging={false}
                         columnDefs={moviePhotoColumnDefs}
@@ -302,5 +309,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
         </div>
     );
 });
+
+CollapseMoviePhoto.defaultProps = defaultProps;
 
 export default CollapseMoviePhoto;

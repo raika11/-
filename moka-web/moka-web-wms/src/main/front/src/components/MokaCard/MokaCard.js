@@ -231,13 +231,15 @@ const MokaCard = forwardRef((props, ref) => {
                             {renderTitleIconButtons(folded)}
                         </React.Fragment>
                     )}
-                    <div>
-                        {titleButtons.map((btnProps, idx) => (
-                            <Button key={`title-btns-${idx}`} {...btnProps}>
-                                {btnProps.text}
-                            </Button>
-                        ))}
-                    </div>
+                    {titleButtons.length > 0 && (
+                        <div>
+                            {titleButtons.map((btnProps, idx) => (
+                                <Button key={`title-btns-${idx}`} {...btnProps}>
+                                    {btnProps.text}
+                                </Button>
+                            ))}
+                        </div>
+                    )}
                 </Card.Header>
             )}
 

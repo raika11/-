@@ -10,9 +10,8 @@ import { getPageType } from '@store/codeMgt';
 import { checkSyntax, w3cPage, CHECK_SYNTAX, W3C_PAGE } from '@store/merge';
 import { initialState, changePage, savePage, GET_PAGE, DELETE_PAGE, SAVE_PAGE, changeInvalidList } from '@store/page';
 import toast, { messageBox } from '@utils/toastUtil';
-import commonUtil from '@utils/commonUtil';
+import util from '@utils/commonUtil';
 import { invalidListToError } from '@utils/convertUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 import { PageListModal } from '@pages/Page/modals';
 
@@ -27,8 +26,6 @@ const PageEdit = ({ onDelete }) => {
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const pageTypeRows = useSelector(({ codeMgt }) => codeMgt.pageTypeRows);
     const { page, pageBody, invalidList } = useSelector(({ page }) => page);
-
-    // state
     const [temp, setTemp] = useState(initialState.page);
     const [error, setError] = useState({});
     const [btnDisabled, setBtnDisabled] = useState(true);
@@ -39,12 +36,12 @@ const PageEdit = ({ onDelete }) => {
             let url = '';
             if (name === 'pageServiceName') {
                 url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${value}`;
-                if (REQUIRED_REGEX.test(temp.urlParam)) {
+                if (util.isEmpty(temp.urlParam)) {
                     url = `${url}/*`;
                 }
             } else if (name === 'urlParam') {
                 url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${temp.pageServiceName}`;
-                if (REQUIRED_REGEX.test(value)) {
+                if (util.isEmpty(value)) {
                     url = `${url}/*`;
                 }
             } else {
@@ -100,10 +97,10 @@ const PageEdit = ({ onDelete }) => {
         (page) => {
             let isInvalid = false;
             let errList = [];
-            const bRoot = !(page.parent && page.parent.pageSeq);
+            const isRoot = !(page.parent && page.parent.pageSeq);
 
             // 페이지명 체크
-            if (!REQUIRED_REGEX.test(page.pageName)) {
+            if (util.isEmpty(page.pageName)) {
                 errList.push({
                     field: 'pageName',
                     reason: '페이지명을 입력하세요',
@@ -112,20 +109,20 @@ const PageEdit = ({ onDelete }) => {
             }
 
             // 서비스명 입력체크
-            if (!bRoot && !REQUIRED_REGEX.test(page.pageServiceName)) {
+            if (!isRoot && util.isEmpty(page.pageServiceName)) {
                 errList.push({
                     field: 'pageServiceName',
                     reason: '서비스명을 입력하세요.',
                 });
                 isInvalid = isInvalid | true;
-            } else if (!bRoot && !/^[a-zA-Z0-9_-]+$/.test(page.pageServiceName)) {
+            } else if (!isRoot && !/^[a-zA-Z0-9_-]+$/.test(page.pageServiceName)) {
                 // 서비스명 문자체크
                 errList.push({
                     field: 'pageServiceName',
                     reason: '영문, 숫자, _, -만 입력할 수 있습니다',
                 });
                 isInvalid = isInvalid | true;
-            } else if (!bRoot && EXCLUDE_PAGE_SERVICE_NAME_LIST.includes(page.pageServiceName)) {
+            } else if (!isRoot && EXCLUDE_PAGE_SERVICE_NAME_LIST.includes(page.pageServiceName)) {
                 // 서비스명 불가 문자체크
                 errList.push({
                     field: 'pageServiceName',
@@ -135,7 +132,7 @@ const PageEdit = ({ onDelete }) => {
             }
 
             // 페이지순서 체크
-            if (!REQUIRED_REGEX.test(page.pageOrd)) {
+            if (util.isEmpty(page.pageOrd)) {
                 errList.push({
                     field: 'pageOrd',
                     reason: '페이지순서를 입력하세요',
@@ -151,7 +148,7 @@ const PageEdit = ({ onDelete }) => {
             }
 
             // 이동URL 체크
-            if (page.moveYn === 'Y' && !REQUIRED_REGEX.test(page.moveUrl)) {
+            if (page.moveYn === 'Y' && util.isEmpty(page.moveUrl)) {
                 errList.push({
                     field: 'moveUrl',
                     reason: '이동URL을 입력하세요',
@@ -160,7 +157,7 @@ const PageEdit = ({ onDelete }) => {
             }
 
             // 경로파라미터 문자체크
-            if (!bRoot && !/^[a-zA-Z0-9_-]*$/.test(page.urlParam)) {
+            if (!isRoot && !/^[a-zA-Z0-9_-]*$/.test(page.urlParam)) {
                 errList.push({
                     field: 'urlParam',
                     reason: '영문, 숫자, _, -만 입력할 수 있습니다',
@@ -247,7 +244,7 @@ const PageEdit = ({ onDelete }) => {
                         const item = produce(temp, (draft) => {
                             draft.pageBody = pageBody;
                         });
-                        commonUtil.newTabPreview(`${API_BASE_URL}/preview/page`, item);
+                        util.newTabPreview(`${API_BASE_URL}/preview/page`, item);
                     } else {
                         toast.fail(header.message || '미리보기에 실패하였습니다');
                     }
@@ -269,7 +266,7 @@ const PageEdit = ({ onDelete }) => {
             page: tempPage,
             callback: ({ header, body }) => {
                 if (header.success) {
-                    commonUtil.newTabPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
+                    util.newTabPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
                 } else {
                     toast.fail(header.message || 'W3C검사에 실패했습니다');
                 }

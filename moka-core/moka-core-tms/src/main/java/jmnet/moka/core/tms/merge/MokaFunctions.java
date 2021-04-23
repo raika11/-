@@ -259,7 +259,7 @@ public class MokaFunctions extends Functions {
 			int seconds = totalSeconds % 60;
 			int totalMinutes = (int)(totalSeconds / 60);
 			if (totalMinutes < 60) {
-				return String.format("%d:%02d",totalMinutes, seconds);
+				return String.format("%02d:%02d",totalMinutes, seconds);
 			} else {
 				return String.format("%d:%02d:%02d",(int)(totalMinutes / 60), totalMinutes % 60, seconds);
 			}

@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_AP, ITEM_CT, ITEM_CP, ITEM_TP, TEMS_PREFIX } from '@/constants';
-import { getArticleType } from '@store/codeMgt';
+import { getAt } from '@store/codeMgt';
 import { clearStore, deleteArticlePage, appendTag, changeArticlePageBody } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
 import ArticlePageEditor from './ArticlePageEditor';
@@ -29,10 +29,8 @@ const ArticlePage = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const articlePage = useSelector(({ articlePage }) => articlePage.articlePage);
-    const articleTypeRows = useSelector(({ codeMgt }) => codeMgt.articleTypeRows);
+    const atRows = useSelector(({ codeMgt }) => codeMgt.atRows);
     const currentMenu = useSelector(({ auth }) => auth.currentMenu);
-
-    // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
@@ -116,10 +114,10 @@ const ArticlePage = ({ match }) => {
     }, [dispatch]);
 
     React.useEffect(() => {
-        if (!articleTypeRows) {
-            dispatch(getArticleType());
+        if (!atRows) {
+            dispatch(getAt());
         }
-    }, [articleTypeRows, dispatch]);
+    }, [atRows, dispatch]);
 
     /**
      * 히스토리 로드 버튼 이벤트

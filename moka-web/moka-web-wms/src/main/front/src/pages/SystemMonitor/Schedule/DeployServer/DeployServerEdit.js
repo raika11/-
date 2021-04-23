@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { MokaCard, MokaInputLabel } from '@/components';
 import { DB_DATEFORMAT } from '@/constants';
-import { invalidListToError } from '@/utils/convertUtil';
-import { REQUIRED_REGEX } from '@/utils/regexUtil';
-import toast, { messageBox } from '@/utils/toastUtil';
-import { getDistributeServer, clearServer, saveDistributeServer, deleteServer } from '@/store/schedule';
+import util from '@utils/commonUtil';
+import { invalidListToError } from '@utils/convertUtil';
+import toast, { messageBox } from '@utils/toastUtil';
+import { MokaCard, MokaInputLabel } from '@components';
+import { getDistributeServer, clearServer, saveDistributeServer, deleteServer } from '@store/schedule';
 
 /**
  * 스케줄 서버 관리 > 배포 서버 관리 편집
@@ -40,7 +40,7 @@ const DeployServerEdit = ({ match }) => {
             errList = [];
 
         // 별칭 체크
-        if (!obj.serverNm || !REQUIRED_REGEX.test(obj.serverNm)) {
+        if (util.isEmpty(obj.serverNm)) {
             errList.push({
                 field: 'serverNm',
                 reason: '별칭을 입력하세요',
@@ -48,7 +48,7 @@ const DeployServerEdit = ({ match }) => {
             isInvalid = isInvalid || true;
         }
         // IP 체크
-        if (!obj.serverIp || !REQUIRED_REGEX.test(obj.serverIp)) {
+        if (util.isEmpty(obj.serverIp)) {
             errList.push({
                 field: 'serverIp',
                 reason: '서버 IP를 입력하세요',
@@ -56,7 +56,7 @@ const DeployServerEdit = ({ match }) => {
             isInvalid = isInvalid || true;
         }
         // 계정 체크
-        if (!obj.accessId || !REQUIRED_REGEX.test(obj.accessId)) {
+        if (util.isEmpty(obj.accessId)) {
             errList.push({
                 field: 'accessId',
                 reason: '로그인 계정을 입력하세요',
@@ -65,7 +65,7 @@ const DeployServerEdit = ({ match }) => {
         }
         // 암호 체크
         if (!serverSeq) {
-            if (!obj.accessPwd || !REQUIRED_REGEX.test(obj.accessPwd)) {
+            if (util.isEmpty(obj.accessPwd)) {
                 errList.push({
                     field: 'accessPwd',
                     reason: '로그인 암호를 입력하세요',

@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 import { MokaModal, MokaInput, MokaIcon } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
-import { getMasterCodeList, GET_MASTER_CODE_LIST, clearMasterCodeList } from '@store/code';
+import { getMasterCodeList, GET_MASTER_CODE_LIST } from '@store/code';
 import toast from '@utils/toastUtil';
 
 const propTypes = {
@@ -55,18 +55,24 @@ const propTypes = {
      * @default
      */
     selectable: PropTypes.arrayOf(PropTypes.string),
+    /**
+     * autocomplete 안에 있는 모달인지 체크함 (안에 있으면 리스트 조회 X)
+     * @default
+     */
+    inAutoComplete: PropTypes.bool,
 };
 const defaultProps = {
     title: '분류코드표',
     selection: 'single',
     selectable: ['service', 'section', 'content'],
+    inAutoComplete: false,
 };
 
 /**
  * 기사 분류(masterCode) 코드 선택 모달
  */
 const CodeListModal = (props) => {
-    const { show, onHide, title, onSave, onCancel, selection, value, max, selectable, ...rest } = props;
+    const { show, onHide, title, onSave, onCancel, selection, value, max, selectable, inAutoComplete, ...rest } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_MASTER_CODE_LIST]);
     const masterCodeList = useSelector(({ code }) => code.master.list);
@@ -188,10 +194,10 @@ const CodeListModal = (props) => {
 
     useEffect(() => {
         // 마스터코드 조회
-        if (show && !masterCodeList) {
+        if (!inAutoComplete && show && !masterCodeList) {
             dispatch(getMasterCodeList());
         }
-    }, [dispatch, masterCodeList, show]);
+    }, [dispatch, inAutoComplete, masterCodeList, show]);
 
     useEffect(() => {
         if (masterCodeList) {
@@ -253,13 +259,6 @@ const CodeListModal = (props) => {
         }
     }, [masterCodeList, value, show]);
 
-    useEffect(() => {
-        return () => {
-            dispatch(clearMasterCodeList());
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     return (
         <MokaModal
             width={1200}
@@ -280,7 +279,7 @@ const CodeListModal = (props) => {
                     <div className="flex-fill mr-2">
                         <div className="input-border pl-1 pr-1 pt-1 h-100">
                             {selectedList.map((s) => (
-                                <Badge key={s.masterCode} className="mr-1 mb-1 pt-1 user-select-text" variant="searching">
+                                <Badge key={s.masterCode} className="mr-1 mb-1 pt-1 user-select-text" variant="searching" style={{ height: 21, lineHeight: 1.2 }}>
                                     {s.masterCode}&nbsp;
                                     {s.masterCode.slice(-5) === '00000' ? s.serviceKorname : s.masterCode.slice(-3) === '000' ? s.sectionKorname : s.contentKorname}
                                     <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => spliceList(s.masterCode)} />
@@ -344,7 +343,6 @@ const CodeListModal = (props) => {
                                             <Col xs={3} className="p-2 h-auto border-right" style={{ backgroundColor: 'rgb(189 180 142 / 10%)' }}>
                                                 {renderCode({
                                                     as: selection === 'single' ? 'radio' : 'checkbox',
-                                                    className: 'ft-12',
                                                     selectable: selectable.indexOf('section') > -1 && exist,
                                                     id: dep2.masterCode,
                                                     usedYn: dep2.usedYn,
@@ -359,7 +357,6 @@ const CodeListModal = (props) => {
                                                         <div key={dep3.masterCode} className="float-left ml-1 mb-1">
                                                             {renderCode({
                                                                 as: selection === 'single' ? 'radio' : 'checkbox',
-                                                                className: 'ft-12',
                                                                 selectable: selectable.indexOf('content') > -1,
                                                                 id: dep3.masterCode,
                                                                 usedYn: dep3.usedYn,

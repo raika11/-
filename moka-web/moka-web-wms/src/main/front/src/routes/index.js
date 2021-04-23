@@ -117,14 +117,15 @@ const ABAuto = React.lazy(() => import('@pages/AB/Auto')); // 직접설계
 const ABEdit = React.lazy(() => import('@pages/AB/Edit')); // 대안입력
 const ABJam = React.lazy(() => import('@pages/AB/Jam')); // JAM 설계
 const ABResult = React.lazy(() => import('@pages/AB/Result')); // 테스트 결과
-const NewsLetter = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetter'));
-const NewsLetterCalendar = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterCalendar'));
-const NewsLetterSend = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterSend'));
-const NewsLetterSendArchive = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterSend/NewsLetterSendArchive'));
-const NewsLetterResult = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterResult'));
-const NewsLetterMResult = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterResult/NewsLetterMethodResult'));
-const NewsLetterTResult = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterResult/NewsLetterTypeResult'));
-const NewsLetterPResult = React.lazy(() => import('@pages/Subscribe/NewsLetterManage/NewsLetterResult/NewsLetterPeriodResult'));
+const NewsLetter = React.lazy(() => import('@pages/NewsLetterManage/NewsLetter'));
+const NewsLetterCalendar = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterCalendar'));
+const NewsLetterSend = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterSend'));
+const NewsLetterSendArchive = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterSend/NewsLetterSendArchive'));
+const NewsLetterResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterResult'));
+const NewsLetterMResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterResult/NewsLetterMethodResult'));
+const NewsLetterTResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterResult/NewsLetterTypeResult'));
+const NewsLetterPResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterResult/NewsLetterPeriodResult'));
+const ArticlePackage = React.lazy(() => import('@pages/ArticlePackage'));
 
 const routes = [
     {
@@ -839,6 +840,16 @@ const routes = [
         name: 'newsLetterPResult',
         displayName: '뉴스레터 발송 주기별(요일) 결과',
         component: NewsLetterPResult,
+        side: true,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/article-package',
+        name: 'articlePackage',
+        displayName: '기사 패키지',
+        component: ArticlePackage,
         side: true,
         nonResponsive: true,
         exact: false,

@@ -2,23 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReporterAllList } from '@store/reporter';
-import { getArticleType } from '@store/codeMgt';
+import { getAt } from '@store/codeMgt';
 import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvArticle, POST_RCV_ARTICLE, getRcvArticleList } from '@store/rcvArticle';
 import ArticleForm from '@pages/Article/components/ArticleForm/index';
 import RctArticleForm from './components/RcvArticleForm';
 import toast, { messageBox } from '@utils/toastUtil';
-import commonUtil from '@utils/commonUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
+import util from '@utils/commonUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { API_BASE_URL } from '@/constants';
 
+/**
+ * 등록기사 > 등록기사 상세
+ */
 const RcvArticleEdit = ({ match }) => {
     const { rid, registerable } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE] || store.loading[POST_RCV_ARTICLE]);
     const { search, rcvArticle } = useSelector(({ rcvArticle }) => rcvArticle);
-    const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
+    const atRows = useSelector((store) => store.codeMgt.atRows);
     const allReporter = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
     const [registed, setRegisted] = useState(false); // 등록된 기사이면 등록폼으로 연결
     const [reporterList, setReporterList] = useState([]);
@@ -46,7 +48,7 @@ const RcvArticleEdit = ({ match }) => {
      * 수신기사 등록
      */
     const handleRegister = () => {
-        if (!REQUIRED_REGEX.test(temp.categoryList.join(''))) {
+        if (util.isEmpty(temp.categoryList.join(''))) {
             setError({ ...error, categoryList: true });
         } else {
             dispatch(
@@ -78,10 +80,10 @@ const RcvArticleEdit = ({ match }) => {
 
     useEffect(() => {
         // 기사타입 조회
-        if (!articleTypeRows) {
-            dispatch(getArticleType());
+        if (!atRows) {
+            dispatch(getAt());
         }
-    }, [articleTypeRows, dispatch]);
+    }, [atRows, dispatch]);
 
     useEffect(() => {
         // 수신 => 등록 간의 시간 차이가 존재...
@@ -137,8 +139,7 @@ const RcvArticleEdit = ({ match }) => {
             dispatch(clearRcvArticle());
             setRegisted(false);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         setTemp({
@@ -152,9 +153,7 @@ const RcvArticleEdit = ({ match }) => {
     /**
      * 미리보기 팝업
      */
-    const handleClickPreviewOpen = (domainId) => {
-        commonUtil.winOpenPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, domainId });
-    };
+    const handleClickPreviewOpen = (domainId) => util.winOpenPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, domainId });
 
     if (!rcvArticle.rid) return null;
 
@@ -165,7 +164,7 @@ const RcvArticleEdit = ({ match }) => {
                 <ArticleForm
                     totalId={rcvArticle.totalId}
                     returnUrl="/rcv-article"
-                    articleTypeRows={articleTypeRows}
+                    atRows={atRows}
                     reporterList={reporterList || []}
                     onCancle={handleCancle}
                     onSave={reloadList}
@@ -177,7 +176,7 @@ const RcvArticleEdit = ({ match }) => {
                     error={error}
                     setError={setError}
                     onChange={handleChangeValue}
-                    articleTypeRows={articleTypeRows}
+                    atRows={atRows}
                     reporterList={reporterList || []}
                     loading={loading}
                     onCancle={handleCancle}

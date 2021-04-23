@@ -10,9 +10,9 @@ import { MokaEditorCore } from '@components/MokaEditor';
 import { initialState, SAVE_AREA, DELETE_AREA, GET_AREA_MODAL, saveArea, changeInvalidList } from '@store/area';
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
+import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import ComponentSelector from './ComponentSelector';
 import ContainerSelector from './ContainerSelector';
 import AreaComp from './AreaComp';
@@ -65,7 +65,7 @@ const AreaFormDepth3 = (props) => {
         let errList = [];
 
         // 영역명 체크
-        if (!REQUIRED_REGEX.test(saveObj.areaNm)) {
+        if (util.isEmpty(saveObj.areaNm)) {
             errList.push({
                 field: 'areaNm',
                 reason: '',

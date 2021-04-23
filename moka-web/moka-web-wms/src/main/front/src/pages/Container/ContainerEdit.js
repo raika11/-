@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { MokaCard, MokaInputLabel, MokaInputGroup, MokaCopyTextButton } from '@components';
+import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { invalidListToError } from '@utils/convertUtil';
+import { MokaCard, MokaInputLabel, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
 
 /**
@@ -16,9 +16,6 @@ const ContainerEdit = ({ onDelete, match }) => {
     const loading = useSelector(({ loading }) => loading[GET_CONTAINER] || loading[DELETE_CONTAINER] || loading[SAVE_CONTAINER]);
     const latestDomainId = useSelector((store) => store.auth.latestDomainId);
     const { container, inputTag, invalidList } = useSelector(({ container }) => container);
-
-    // state
-    const [btnDisabled, setBtnDisabled] = useState(true);
     const [containerSeq, setContainerSeq] = useState('');
     const [containerName, setContainerName] = useState('');
     const [error, setError] = useState({});
@@ -28,10 +25,9 @@ const ContainerEdit = ({ onDelete, match }) => {
      */
     const handleChangeValue = ({ target }) => {
         const { name, value } = target;
-
         if (name === 'containerName') {
             setContainerName(value);
-            if (REQUIRED_REGEX.test(value)) {
+            if (util.isEmpty(value)) {
                 setError({ ...error, [name]: false });
             }
         }
@@ -46,7 +42,7 @@ const ContainerEdit = ({ onDelete, match }) => {
         let errList = [];
 
         // 컨테이너명 체크
-        if (!REQUIRED_REGEX.test(container.containerName)) {
+        if (util.isEmpty(container.containerName)) {
             errList.push({
                 field: 'containerName',
                 reason: '',
@@ -149,7 +145,6 @@ const ContainerEdit = ({ onDelete, match }) => {
     const handleClickCancle = () => history.push(match.path);
 
     useEffect(() => {
-        container.containerSeq ? setBtnDisabled(false) : setBtnDisabled(true);
         setError({});
     }, [container.containerSeq]);
 

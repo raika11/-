@@ -6,9 +6,9 @@ import { MokaCard } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { initialState, getComponent, clearComponent, saveComponent, hasRelationList, changeInvalidList, GET_COMPONENT, SAVE_COMPONENT, DELETE_COMPONENT } from '@store/component';
 import { DB_DATEFORMAT, DATA_TYPE_AUTO } from '@/constants';
+import util from '@utils/commonUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import BasicForm from './components/BasicForm';
 import DetailRelationForm from './components/DetailRelationForm';
 import DetailPeriodForm from './components/DetailPeriodForm';
@@ -26,8 +26,6 @@ const ComponentEdit = ({ onDelete, match }) => {
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const { MORE_COUNT, DISP_PAGE_COUNT, PER_PAGE_COUNT, MAX_PAGE_COUNT } = useSelector(({ app }) => app);
     const { component, inputTag, invalidList } = useSelector(({ component }) => component);
-
-    // state
     const [temp, setTemp] = useState(initialState.component);
     const [error, setError] = useState({});
     const [addMode, setAddMode] = useState(false);
@@ -49,7 +47,7 @@ const ComponentEdit = ({ onDelete, match }) => {
         }
 
         // 컴포넌트명 체크
-        if (!temp.componentName || !REQUIRED_REGEX.test(temp.componentName)) {
+        if (util.isEmpty(temp.componentName)) {
             errList.push({
                 field: 'componentName',
                 reason: '',
@@ -238,7 +236,7 @@ const ComponentEdit = ({ onDelete, match }) => {
             <BasicForm
                 component={temp}
                 setComponent={setTemp}
-                componentNameRegex={REQUIRED_REGEX}
+                componentNameRegex={util.REGEX.REQUIRED_REGEX}
                 onClickSave={handleClickSave}
                 onClickDelete={() => onDelete(component)}
                 onClickCancle={handleClickCancle}

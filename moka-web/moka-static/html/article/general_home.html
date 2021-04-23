@@ -16,13 +16,20 @@
 
     <link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">
 
+    <link href="//stg-static.joongang.co.kr/css/plugin/slick.css" rel="stylesheet">
+
     <link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">
     <link href="//stg-static.joongang.co.kr/css/common/article.css" rel="stylesheet">
     
+    
     <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
     <script src="//stg-static.joongang.co.kr/js/plugin/swiper.min.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/plugin/slick.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/plugin/jquery.slimscroll.js"></script>
     <script src="//stg-static.joongang.co.kr/js/utils/scroll.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/resource.js"></script>
     <script src="//stg-static.joongang.co.kr/js/utils/article.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/utils/pub.js"></script>
 </head>
 <body>
     <div id="wrapper">
@@ -46,10 +53,47 @@
             <!-- sticky menu -->
             <div class="sticky_menu">
                 <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="sm_hidden">북마크</span></button>
-                <button type="button" class="btn_comment"><i class="ico_comment"></i><span class="sm_hidden">댓글</span></button>
-                <button type="button" class="btn_share"><i class="ico_share"></i><span class="sm_hidden">공유</span></button>
-                <button type="button" class="btn_fontsize"><i class="ico_fontsize"></i><span class="sm_hidden">글자크기</span></button>
-                <button type="button" class="btn_print sm_hidden"><i class="ico_print"></i><span class="sm_hidden">인쇄</span></button>
+                <button type="button" class="btn_comment"><i class="ico_comment"></i><span class="sm_hidden">댓글</span><span class="comment_cnt">12</span></button>
+                <button type="button" class="btn_share" onclick="openLayer(layer_share);" ><i class="ico_share"></i><span class="sm_hidden">공유</span></button>
+                <button type="button" class="btn_fontsize" onclick="openLayer(layer_fontsize);" ><i class="ico_fontsize"></i><span class="sm_hidden">글자크기</span></button>
+                <button type="button" class="btn_print"><i class="ico_print"></i><span class="sm_hidden">인쇄</span></button>
+                <p class="reader_area sm_hidden"><span class="cnt">14</span><span class="sm_hidden">읽음</span></p>
+
+                <div class="layer_popup layer_share" id="layer_share"><!-- 여기에 개별 클래스 추가 -->
+                    <div class="layer_header">
+                        <strong class="layer_title">공유</strong>
+                    </div>
+                    <div class="layer_body">
+                        <ul>
+                            <li><button type="button" class="btn_"><i class="ico_sns_ktalk">카카오톡 이미지</i><span>카카오톡</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_facebook">f</i><span>페이스북</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_ktory">카카오스토리 이미지</i><span>카카오스토리</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_twt">트위터 이미지</i><span>트위터</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_mail">메일 이미지</i><span>메일</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_pinter">핀터레스트 이미지</i><span>핀터레스트</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_band">네이버밴드 이미지</i><span>밴드</span></button></li>
+                            <li><button type="button" class="btn_"><i class="ico_sns_url">url 이미지</i><span>URL 복사</span></button></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+                </div>
+                
+                <div class="layer_popup layer_fontsize" id="layer_fontsize"><!-- 여기에 개별 클래스 추가 -->
+                    <div class="layer_header">
+                        <strong class="layer_title">글자크기 설정</strong>
+                    </div>
+                    <div class="layer_body">
+                        <p>글자크기 설정 시 다른 기사의 본문도<br> 동일하게 적용됩니다.</p>
+                        <ul>
+                            <li><a href="">1단계</a></li>
+                            <li><a href="">2단계</a></li>
+                            <li><a href="">3단계</a></li>
+                            <li><a href="">4단계</a></li>
+                            <li><a href="">5단계</a></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+                </div>
             </div>
             <!-- //sticky menu -->
             <!-- contents -->
@@ -60,7 +104,6 @@
                             <strong class="badge">NOW</strong>14 함께 읽음</span>
                         </div>
                         <h1 class="headline">백신 3종 이상 확보한 나라 벌써 12개국… <br>한국은 1종</h1>
-
                         <div class="datetime">
                             <span class="source">중앙일보</span>
                             <div class="time_bx">
@@ -77,28 +120,32 @@
                             </div>
                             <a href="" class="epaper" title="지면 구독신청">지면보기</a>
                         </div>
-
                         <div class="byline">
                             <a href="">정혜정 기자</a>
                             <a href="">김중앙 기자</a>
                             <a href="">김유미 기자</a>
-                            <div class="byline_bx">
-                                <button type="button" class="byline" onclick="toggleOpenLayer(modal_byline);">외 3명</button>
-                                <div class="layer_popup layer_byline" id="modal_byline"><!-- 여기에 개별 클래스 추가 -->
-                                    <div class="layer_header">
-                                        <strong class="layer_title">작성한 기자</strong>
-                                    </div>
-                                    <div class="layer_body">
-                                        <ul>
-                                            <li><a href="">김중앙 기자 <i class="ico_arrow_right"></i></a></li>
-                                            <li><a href="">김중앙 기자 <i class="ico_arrow_right"></i></a></li>
-                                            <li><a href="">김중앙 기자 <i class="ico_arrow_right"></i></a></li>
-                                            <li><a href="">김중앙 기자 <i class="ico_arrow_right"></i></a></li>
-                                            <li><a href="">김중앙 기자 <i class="ico_arrow_right"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+                            <a href="">김아무개 기자</a>
+                            <a href="">이중앙 기자</a>
+                            <a href="">최중앙 기자</a>
+                            <a href="">박중앙 기자</a>
+                            <button type="button" id="byline_more" class="btn_byline_more">외 <span></span>명</button>
+                            <div class="layer_popup layer_byline" id="modal_byline"><!-- 여기에 개별 클래스 추가 -->
+                                <div class="layer_header">
+                                    <strong class="layer_title">작성한 기자</strong>
                                 </div>
+                                <div class="layer_body">
+                                    <ul>
+                                        <li><a href="">정혜정 기자 <i class="ico_arrow_right"></i></a></li>
+                                        <li><a href="">김중앙 기자 <i class="ico_arrow_right"></i></a></li>
+                                        <li><a href="">김유미 기자 <i class="ico_arrow_right"></i></a></li>
+                                        <li><a href="">홍길동 기자 <i class="ico_arrow_right"></i></a></li>
+                                        <li><a href="">김아무개 기자 <i class="ico_arrow_right"></i></a></li>
+                                        <li><a href="">이중앙 기자 <i class="ico_arrow_right"></i></a></li>
+                                        <li><a href="">최중앙 기자 <i class="ico_arrow_right"></i></a></li>
+                                        <li><a href="">박중앙 기자 <i class="ico_arrow_right"></i></a></li>
+                                    </ul>
+                                </div>
+                                <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
                             </div>
                         </div>
                     </header>
@@ -116,7 +163,7 @@
                         정부는 그간 코로나19 백신 확보를 위해 투트랙으로 접근했다. 세계보건기구(WHO) 중심으로 마련된 다국가 연합체인 ‘코박스 퍼실러티’(COVAX Facility)에 가입해 1000만 명분을 확보하고, 임상 3상 시험에 돌입한 글로벌 제약사와 개별 협상을 통해 선구매하는 것이다. 
                         <div class="ab_photo photo_center" contenteditable="false" style="width: 540px;">
                             <div class="image">
-                                <img alt="기사 이미지" src="http://pds.joins.com/news/component/htmlphoto_mmdata/201610/19/htm_2016101914258636551.jpg" />
+                                <img alt="기사 이미지" src="https://pds.joins.com/news/component/htmlphoto_mmdata/201610/19/htm_2016101914258636551.jpg" />
                                 <span class="mask"></span>
                             </div>
                             <p class="caption">이미지설명</p><span title="크기 조절"></span>
@@ -125,17 +172,21 @@
                         정부는 그간 코로나19 백신 확보를 위해 투트랙으로 접근했다. 세계보건기구(WHO) 중심으로 마련된 다국가 연합체인 ‘코박스 퍼실러티’(COVAX Facility)에 가입해 1000만 명분을 확보하고, 임상 3상 시험에 돌입한 글로벌 제약사와 개별 협상을 통해 선구매하는 것이다. 
                         
                         <!-- 팩플 레터 -->
-                        <div class="pp_letter_wrap">
+                        <div class="subscription_wrap letter_wrap">
                             <span class="thum">
-                                <img src="" alt="팩플 레터 대표이미지">
+                                <img srcset="//via.placeholder.com/70x70 1x,
+                                            //via.placeholder.com/140x140 2x,
+                                            //via.placeholder.com/210x210 3x" width="70" src="//via.placeholder.com/86x86" alt="...">
                             </span>
-                            <div class="">
-                                <p class="title">팩플 레터</p><button class="btn btn_primary fw_b">구독</button>
-                                <p class="headline">IT 이슈 견적서, IT 해설 가이드 ‘팩플의 뉴스레터 서비스’ 팩플 레터</p>
+                            <div class="pp_letter">
+                                <header class="title_wrap">
+                                    <h2 class="title">팩플 레터</h2>
+                                    <button type="button" class="btn btn_primary">구독</button>
+                                </header>
+                                <p class="subscription_info">IT 이슈 견적서, IT 해설 가이드 ‘팩플의 뉴스레터 서비스’ 팩플 레터</p>
                             </div>
                         </div>
                         <!-- //팩플 레터 -->
-
                     </div>
                     <div class="article_footer">
                         <!-- 태그 컴포넌트 -->
@@ -157,10 +208,10 @@
                         <!-- //태그 컴포넌트 -->
                         <!-- 구독 컴포넌트 -->
                         <div class="subscription_wrap">
-                            <header class="title_wrap">
-                                <h2 class="title"><a href="" class="flex flex_align_center">코로나 백신<i class="ico_arrow_primary_right"></i></a></h2>
+                            <div class="title_wrap">
+                                <h3 class="title"><a href="" class="flex flex_align_center">코로나 백신<i class="ico_arrow_primary_right"></i></a></h3>
                                 <button type="button" class="btn btn_primary">구독</button>
-                            </header>
+                            </div>
                             <p class="subscription_info">중앙일보 ‘코로나 백신’은 코로나 바이러스로 인한 피해와 이를 줄이기 위한 백신 소식을 빠짐없이 정리하여 여러분을 찾아갑니다. 새로운 이슈, 복잡한 속사정, 흥미진진한 뒷얘기를  ‘3분 만남’으로 정리해드립니다.</p>
                         </div>
                         <!-- //구독 컴포넌트 -->
@@ -194,7 +245,7 @@
                                             <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!</p>
                                         </div>
                                         <div class="comment_footer">
-                                            <button type="button" class="btn_reply_cnt">답글 <span>2</span></button>
+                                            <button type="button" class="btn_reply_cnt" onclick="toggleOpenLayer(replyArea_1);">답글 <span>2</span></button>
                                             <div class="comment_recomm">
                                                 <button type="button" class="btn_like active">
                                                     <i class="ico_face_like"></i>
@@ -208,13 +259,83 @@
                                                 </button>
                                             </div>
                                             <div class="more_option_area">
-                                                <button type="button" class="btn_toggle" onclick="toggleOpen(this);" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
-                                                <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
-                                                <button type="button" class="btn_outline_gray">신고</button>
+                                                <button type="button" class="btn_toggle" onclick="toggleOpen(this);" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                                <button type="button" class="btn btn_outline_gray btn_square">신고</button>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- //Comment -->
+                                    <!-- Reply Area -->
+                                    <div class="reply_area" id="replyArea_1" >
+                                        <ul>
+                                            <li>
+                                                <!-- Comment -->
+                                                <div class="comment new_comment">
+                                                    <div class="comment_header">
+                                                        <span class="comment_userid">good****</span>
+                                                        <span class="comment_date">2021.03.09 12:30</span>
+                                                    </div>
+                                                    <div class="comment_content">
+                                                        <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!믿기지않지만드디어디지털화폐가새하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                                    </div>
+                                                    <div class="comment_footer">
+                                                        <div class="comment_recomm">
+                                                            <button type="button" class="btn_like active">
+                                                                <i class="ico_face_like"></i>
+                                                                <span class="visually_hidden">좋아요</span>
+                                                                <span class="count">536</span>
+                                                            </button>
+                                                            <button type="button" class="btn_dislike">
+                                                                <i class="ico_face_hate"></i>
+                                                                <span class="visually_hidden">화나요</span>
+                                                                <span class="count">3</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="more_option_area">
+                                                            <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                            <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                                            <button type="button" class="btn btn_outline_gray btn_square">신고</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- //Comment -->
+                                            </li>
+                                            <li>
+                                                <!-- Comment -->
+                                                <div class="comment">
+                                                    <div class="comment_header">
+                                                        <span class="comment_userid">good****</span>
+                                                        <span class="comment_date">2021.03.09 12:30</span>
+                                                    </div>
+                                                    <div class="comment_content">
+                                                        <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!믿기지않지만드디어디지털화폐가새하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                                    </div>
+                                                    <div class="comment_footer">
+                                                        <div class="comment_recomm">
+                                                            <button type="button" class="btn_like active">
+                                                                <i class="ico_face_like"></i>
+                                                                <span class="visually_hidden">좋아요</span>
+                                                                <span class="count">536</span>
+                                                            </button>
+                                                            <button type="button" class="btn_dislike">
+                                                                <i class="ico_face_hate"></i>
+                                                                <span class="visually_hidden">화나요</span>
+                                                                <span class="count">3</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="more_option_area">
+                                                            <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                            <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                                            <button type="button" class="btn btn_outline_gray btn_square">신고</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- //Comment -->
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- //Reply Area -->
                                 </li>
                                 <li>
                                     <!-- Comment -->
@@ -228,22 +349,10 @@
                                             <p class="report_text"><i class="ico_bang"></i>내가 신고한 댓글입니다.</p>
                                         </div>
                                         <div class="comment_footer">
-                                            <div class="comment_recomm">
-                                                <button type="button" class="btn_like">
-                                                    <i class="ico_face_like"></i>
-                                                    <span class="visually_hidden">좋아요</span>
-                                                    <span class="count">536</span>
-                                                </button>
-                                                <button type="button" class="btn_dislike">
-                                                    <i class="ico_face_hate"></i>
-                                                    <span class="visually_hidden">화나요</span>
-                                                    <span class="count">3</span>
-                                                </button>
-                                            </div>
                                             <div class="more_option_area">
-                                                <button type="button" class="btn_toggle" onclick="toggleOpen(this);" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
-                                                <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
-                                                <button type="button" class="btn_outline_gray">신고</button>
+                                                <button type="button" class="btn_toggle" onclick="toggleOpen(this);" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                                <button type="button" class="btn btn_outline_gray btn_square">신고</button>
                                             </div>
                                         </div>
                                     </div>
@@ -274,42 +383,192 @@
                                                 </button>
                                             </div>
                                             <div class="more_option_area">
-                                                <button type="button" class="btn_toggle" onclick="toggleOpen(this);" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
-                                                <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
-                                                <button type="button" class="btn_outline_gray">신고</button>
+                                                <button type="button" class="btn_toggle" onclick="toggleOpen(this);" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                                <button type="button" class="btn btn_outline_gray btn_square">신고</button>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- //Comment -->
                                 </li>
                             </ul>
-                            <!-- <button type="button" class="btn_gray">댓글 작성하기 <i class="ico_arrow_right"></i></button> -->
-                            <button type="button" class="btn_gray" onclick="openLayer(side_comment);">댓글 <span class="font_orange">2,346</span>개 보기 <i class="ico_arrow_right"></i></button>
+                            <!-- <button type="button" class="btn btn_full">댓글 작성하기 <i class="ico_arrow_right"></i></button> -->
+                            <button type="button" class="btn btn_full" onclick="openLayer(layer_comment);">댓글 <span class="font_orange">2,346</span>개 보기 <i class="ico_arrow_right"></i></button>
                         </div>
                         <!-- //댓글 컴포넌트 -->
                     </div>
                 </article>
+
+
+                <!-- 하단기사 -->
+                <div class="row">
+                    <div class=" col_lg9">
+                        <section class="chain_wrap">
+                            <header class="title_wrap">
+                                <h2 class="title">최신 영상</h2>
+                            </header>
+
+                            <!-- 포토리스트 -->
+                            <div class="photo_list_area">
+                                <ul class="card_group row">
+                                    <li class="card col_sm12 col_lg4">      <!-- 포토리스트에서 li 는 그리드시스템 이용 -->
+                                        <div class="card_image">
+                                            <figure>
+                                                <a href="">
+                                                    <img
+                                                        srcset="//via.placeholder.com/136x77 1x,
+                                                                //via.placeholder.com/272x154 2x, 
+                                                                //via.placeholder.com/408x231 3x"
+                                                        width="136"
+                                                        src="//via.placeholder.com/136x77"
+                                                        alt="...">
+                                                </a>
+                                            </figure>
+                                        </div>
+                                        <div class="card_body">
+                                            <h2 class="headline">
+                                                <a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a>
+                                            </h2>
+                                            <div class="meta">
+                                                <p class="date">날짜</p>
+                                                <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <!-- loop -->
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <!-- //loop -->
+                                </ul>
+                            </div>
+                        </section>
+
+                        <section class="chain_wrap">
+                            <header class="title_wrap">
+                                <h2 class="title">최신 영상</h2>
+                            </header>
+
+                            <!-- 포토리스트 -->
+                            <div class="photo_list_area">
+                                <ul class="card_group row">
+                                    <li class="card col_sm12 col_lg4">      <!-- 포토리스트에서 li 는 그리드시스템 이용 -->
+                                        <div class="card_image">
+                                            <figure>
+                                                <a href="">
+                                                    <img
+                                                        srcset="//via.placeholder.com/136x77 1x,
+                                                                //via.placeholder.com/272x154 2x, 
+                                                                //via.placeholder.com/408x231 3x"
+                                                        width="136"
+                                                        src="//via.placeholder.com/136x77"
+                                                        alt="...">
+                                                </a>
+                                            </figure>
+                                        </div>
+                                        <div class="card_body">
+                                            <h2 class="headline">
+                                                <a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a>
+                                            </h2>
+                                            <div class="meta">
+                                                <p class="date">날짜</p>
+                                                <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <!-- loop -->
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <li class="card col_sm12 col_lg4"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href="">헤드라인</a></h2><div class="meta"><p class="date">날짜</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                    <!-- //loop -->
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+
+                    
+                    <div class="col_lg3">
+                        <section class="chain_wrap">
+                            <header class="title_wrap">
+                                <h2 class="title">북마크 후 읽지 않은 기사</h2>
+                            </header>
+                            <!-- 읽지않은북마크 -->
+                            <div class="bookmark_list_area">
+                                <ul class="card_group"  id="slider_div">
+                                    <li class="card">
+                                        <div class="card_image">
+                                            <figure>
+                                                <a href="">
+                                                    <img
+                                                        srcset="//via.placeholder.com/136x77 1x,
+                                                                //via.placeholder.com/272x154 2x, 
+                                                                //via.placeholder.com/408x231 3x"
+                                                        width="136"
+                                                        src="//via.placeholder.com/136x77"
+                                                        alt="...">
+                                                </a>
+                                            </figure>
+                                        </div>
+                                        <div class="card_body">
+                                            <h2 class="headline">
+                                                <a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a>
+                                            </h2>
+                                        </div>
+                                    </li>
+
+                                    <!-- loop -->
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <li class="card"><div class="card_image"><figure><a href=""><img srcset="//via.placeholder.com/136x77 1x, //via.placeholder.com/272x154 2x, //via.placeholder.com/408x231 3x" width="136" src="//via.placeholder.com/136x77" alt="..."> </a></figure></div><div class="card_body"><h2 class="headline"><a href=""> “죽기 전에 한번은…” 꿈꾸는 황혼을 위한 송가 ‘나빌레라’</a></h2></div></li></li>
+                                    <!-- //loop -->
+                                </ul>
+                            </div>
+                            <!-- 읽지않은북마크 -->
+                            
+                        </section>
+                    </div>
+
+                </div>
+
+                <!-- //하단기사 -->
             </section>
             <!-- // contents -->
         </main>
         <!-- // container -->
 
-        <!-- 댓글 임시 -->
-        <div class="side_popup side_comment" id="side_comment"><!-- 여기에 개별 클래스 추가 -->
+        <!-- 댓글 레이어 -->
+        <div class="layer_comment" id="layer_comment"><!-- 여기에 개별 클래스 추가 -->
             <div class="comment_header">
-                <strong class="comment_count">댓글 0개</strong>
-                <button class="btn_reset"><i class="ico_reset"></i><span class="visually_hidden">새로고침</span></button>
-            </div>
-            <div class="comment_content">
+                <div class="sm_main_text_area">
+                    <h1 class="headline">백신 3종 이상 확보한 나라 벌써 12개국… 한국은 1종</h1>
+                    <a href="#none" class="btn btn_full" role="button">본문보기<i class="ico_more"></i></a>
+                </div>
+                <div class="comment_state">
+                    <strong class="comment_count">댓글 0개</strong>
+                    <button class="btn_reset"><i class="ico_reset"></i><span class="visually_hidden">새로고침</span></button>
+                </div>
                 <!-- 로그인전 -->
-                <!-- <p class="txt_outline">간편 로그인 후 독자님의 소중한 의견을 더해주세요.</p> -->
+                <p class="txt_outline">간편 로그인 후 독자님의 소중한 의견을 더해주세요.</p>
                 <!-- 로그인후 -->
-                <div class="comment_form on">
+                <div class="comment_form">
                     <fieldset>
                         <legend class="visually_hidden">댓글 입력 폼</legend>
                         <div class="comment_header">
                             <!-- 작성자 아이디 -->
-                            <span class="comment_userid h5">joongang</span>
+                            <strong class="comment_userid">joongang</strong>
                         </div>
                         <div class="comment_body">
                             <!-- 내용 입력 필드 -->
@@ -323,6 +582,8 @@
                         </div>
                     </fieldset>
                 </div>
+            </div>
+            <div class="comment_content">
                 <div class="comment_wrap">
                     <div class="comment_area">
                         <div class="dropdown type_down">
@@ -339,6 +600,10 @@
                         <button type="button" class="btn_mycomment">내댓글<i class="ico_arrow_primary_right"></i></button>
                     </div>
                     <button type="button" class="btn_new_reply">새로운 댓글 2개</button>
+                    <div class="not_comment">
+                        <i class="ico_comment desabled"></i>
+                        <p>첫번째 댓글을 남겨주세요.</p>
+                    </div>
                     <ul class="comment_list">
                         <li>
                             <!-- Comment -->
@@ -351,8 +616,8 @@
                                     <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!믿기지않지만드디어디지털화폐가새하축하!이제진짜지갑들고다닐일은없겠어요!</p>
                                 </div>
                                 <div class="comment_footer">
-                                    <button type="button" class="btn_reply" onclick="toggleOpenLayer(commentForm1);"> 답글작성</button>
-                                    <button type="button" class="btn_reply_cnt">답글 <span>2</span></button>
+                                    <button type="button" class="btn_reply" onclick="toggleOpenLayer(commentForm1);">답글 작성</button>
+                                    <button type="button" class="btn_reply_cnt" onclick="toggleOpenLayer(replyArea1);">답글 <span>2</span></button>
                                     <div class="comment_recomm">
                                         <button type="button" class="btn_like active">
                                             <i class="ico_face_like"></i>
@@ -366,9 +631,9 @@
                                         </button>
                                     </div>
                                     <div class="more_option_area">
-                                        <button type="button" class="btn_toggle" onclick="toggleOpen(this);" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
-                                        <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
-                                        <button type="button" class="btn_outline_gray">신고</button>
+                                        <button type="button" class="btn_toggle" onclick="toggleOpen(this);" ><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                        <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                        <button type="button" class="btn btn_outline_gray btn_square">신고</button>
                                     </div>
                                 </div>
                             </div>
@@ -379,7 +644,7 @@
                                     <legend class="visually_hidden">댓글 입력 폼</legend>
                                     <div class="comment_header">
                                         <!-- 작성자 아이디 -->
-                                        <span class="comment_userid h5">joongang</span>
+                                        <strong class="comment_userid">joongang</strong>
                                     </div>
                                     <div class="comment_body">
                                         <!-- 내용 입력 필드 -->
@@ -395,9 +660,9 @@
                             </div>
                             <!-- //Comment Input Area -->
                             <!-- Reply Area -->
-                            <div class="reply_area">
+                            <div class="reply_area" id="replyArea1" >
                                 <ul>
-                                    <li class="">
+                                    <li>
                                         <!-- Comment -->
                                         <div class="comment new_comment">
                                             <div class="comment_header">
@@ -421,9 +686,9 @@
                                                     </button>
                                                 </div>
                                                 <div class="more_option_area">
-                                                    <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
-                                                    <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
-                                                    <button type="button" class="btn_outline_gray">신고</button>
+                                                    <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                    <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                                    <button type="button" class="btn btn_outline_gray btn_square">신고</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -453,9 +718,9 @@
                                                     </button>
                                                 </div>
                                                 <div class="more_option_area">
-                                                    <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
-                                                    <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
-                                                    <button type="button" class="btn_outline_gray">신고</button>
+                                                    <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                    <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                                    <button type="button" class="btn btn_outline_gray btn_square">신고</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -476,8 +741,8 @@
                                     <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!믿기지않지만드디어디지털화폐가새하축하!이제진짜지갑들고다닐일은없겠어요!</p>
                                 </div>
                                 <div class="comment_footer">
-                                    <button type="button" class="btn_reply" onclick="toggleOpenLayer(commentForm2);"> 답글작성</button>
-                                    <button type="button" class="btn_reply_cnt">답글 <span>2</span></button>
+                                    <button type="button" class="btn_reply" onclick="toggleOpenLayer(commentForm2);">답글 작성</button>
+                                    <button type="button" class="btn_reply_cnt" onclick="toggleOpenLayer(replyArea2);">답글 <span>2</span></button>
                                     <div class="comment_recomm">
                                         <button type="button" class="btn_like active">
                                             <i class="ico_face_like"></i>
@@ -491,9 +756,9 @@
                                         </button>
                                     </div>
                                     <div class="more_option_area">
-                                        <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
-                                        <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
-                                        <button type="button" class="btn_outline_gray">신고</button>
+                                        <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                        <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                        <button type="button" class="btn btn_outline_gray btn_square">신고</button>
                                     </div>
                                 </div>
                             </div>
@@ -504,7 +769,7 @@
                                     <legend class="visually_hidden">댓글 입력 폼</legend>
                                     <div class="comment_header">
                                         <!-- 작성자 아이디 -->
-                                        <span class="comment_userid h5">joongang</span>
+                                        <strong class="comment_userid">joongang</strong>
                                     </div>
                                     <div class="comment_body">
                                         <!-- 내용 입력 필드 -->
@@ -519,6 +784,76 @@
                                 </fieldset>
                             </div>
                             <!-- //Comment Input Area -->
+                            <!-- Reply Area -->
+                            <div class="reply_area" id="replyArea2" >
+                                <ul>
+                                    <li>
+                                        <!-- Comment -->
+                                        <div class="comment">
+                                            <div class="comment_header">
+                                                <span class="comment_userid">good****</span>
+                                                <span class="comment_date">2021.03.09 12:30</span>
+                                            </div>
+                                            <div class="comment_content">
+                                                <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!믿기지않지만드디어디지털화폐가새하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                            </div>
+                                            <div class="comment_footer">
+                                                <div class="comment_recomm">
+                                                    <button type="button" class="btn_like active">
+                                                        <i class="ico_face_like"></i>
+                                                        <span class="visually_hidden">좋아요</span>
+                                                        <span class="count">536</span>
+                                                    </button>
+                                                    <button type="button" class="btn_dislike">
+                                                        <i class="ico_face_hate"></i>
+                                                        <span class="visually_hidden">화나요</span>
+                                                        <span class="count">3</span>
+                                                    </button>
+                                                </div>
+                                                <div class="more_option_area">
+                                                    <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                    <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                                    <button type="button" class="btn btn_outline_gray btn_square">신고</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- //Comment -->
+                                    </li>
+                                    <li>
+                                        <!-- Comment -->
+                                        <div class="comment">
+                                            <div class="comment_header">
+                                                <span class="comment_userid">good****</span>
+                                                <span class="comment_date">2021.03.09 12:30</span>
+                                            </div>
+                                            <div class="comment_content">
+                                                <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!믿기지않지만드디어디지털화폐가새하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                            </div>
+                                            <div class="comment_footer">
+                                                <div class="comment_recomm">
+                                                    <button type="button" class="btn_like active">
+                                                        <i class="ico_face_like"></i>
+                                                        <span class="visually_hidden">좋아요</span>
+                                                        <span class="count">536</span>
+                                                    </button>
+                                                    <button type="button" class="btn_dislike">
+                                                        <i class="ico_face_hate"></i>
+                                                        <span class="visually_hidden">화나요</span>
+                                                        <span class="count">3</span>
+                                                    </button>
+                                                </div>
+                                                <div class="more_option_area">
+                                                    <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                    <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                                    <button type="button" class="btn btn_outline_gray btn_square">신고</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- //Comment -->
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- //Reply Area -->
                         </li>
                         <li>
                             <!-- Comment -->
@@ -531,8 +866,8 @@
                                     <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!믿기지않지만드디어디지털화폐가새하축하!이제진짜지갑들고다닐일은없겠어요!</p>
                                 </div>
                                 <div class="comment_footer">
-                                    <button type="button" class="btn_reply" onclick="toggleOpenLayer(commentForm3);"> 답글작성</button>
-                                    <button type="button" class="btn_reply_cnt">답글 <span>2</span></button>
+                                    <button type="button" class="btn_reply" onclick="toggleOpenLayer(commentForm3);">답글 작성</button>
+                                    <button type="button" class="btn_reply_cnt" onclick="toggleOpenLayer(replyArea3);">답글 <span>2</span></button>
                                     <div class="comment_recomm">
                                         <button type="button" class="btn_like active">
                                             <i class="ico_face_like"></i>
@@ -546,9 +881,9 @@
                                         </button>
                                     </div>
                                     <div class="more_option_area">
-                                        <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button></i></button>
-                                        <!-- <button type="button" class="btn_outline_gray">삭제</button> -->
-                                        <button type="button" class="btn_outline_gray">신고</button>
+                                        <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                        <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                        <button type="button" class="btn btn_outline_gray btn_square">신고</button>
                                     </div>
                                 </div>
                             </div>
@@ -559,7 +894,7 @@
                                     <legend class="visually_hidden">댓글 입력 폼</legend>
                                     <div class="comment_header">
                                         <!-- 작성자 아이디 -->
-                                        <span class="comment_userid h5">joongang</span>
+                                        <strong class="comment_userid">joongang</strong>
                                     </div>
                                     <div class="comment_body">
                                         <!-- 내용 입력 필드 -->
@@ -574,13 +909,94 @@
                                 </fieldset>
                             </div>
                             <!-- //Comment Input Area -->
+                            <!-- Reply Area -->
+                            <div class="reply_area" id="replyArea3" >
+                                <ul>
+                                    <li>
+                                        <!-- Comment -->
+                                        <div class="comment">
+                                            <div class="comment_header">
+                                                <span class="comment_userid">good****</span>
+                                                <span class="comment_date">2021.03.09 12:30</span>
+                                            </div>
+                                            <div class="comment_content">
+                                                <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!믿기지않지만드디어디지털화폐가새하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                            </div>
+                                            <div class="comment_footer">
+                                                <div class="comment_recomm">
+                                                    <button type="button" class="btn_like active">
+                                                        <i class="ico_face_like"></i>
+                                                        <span class="visually_hidden">좋아요</span>
+                                                        <span class="count">536</span>
+                                                    </button>
+                                                    <button type="button" class="btn_dislike">
+                                                        <i class="ico_face_hate"></i>
+                                                        <span class="visually_hidden">화나요</span>
+                                                        <span class="count">3</span>
+                                                    </button>
+                                                </div>
+                                                <div class="more_option_area">
+                                                    <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                    <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                                    <button type="button" class="btn btn_outline_gray btn_square">신고</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- //Comment -->
+                                    </li>
+                                    <li>
+                                        <!-- Comment -->
+                                        <div class="comment">
+                                            <div class="comment_header">
+                                                <span class="comment_userid">good****</span>
+                                                <span class="comment_date">2021.03.09 12:30</span>
+                                            </div>
+                                            <div class="comment_content">
+                                                <p class="comment_text">믿기지않지만드디어디지털화폐가새로운결제수단이 되었군요~ 축하축하!이제진짜지갑들고다닐일은없겠어요!믿기지않지만드디어디지털화폐가새하축하!이제진짜지갑들고다닐일은없겠어요!</p>
+                                            </div>
+                                            <div class="comment_footer">
+                                                <div class="comment_recomm">
+                                                    <button type="button" class="btn_like active">
+                                                        <i class="ico_face_like"></i>
+                                                        <span class="visually_hidden">좋아요</span>
+                                                        <span class="count">536</span>
+                                                    </button>
+                                                    <button type="button" class="btn_dislike">
+                                                        <i class="ico_face_hate"></i>
+                                                        <span class="visually_hidden">화나요</span>
+                                                        <span class="count">3</span>
+                                                    </button>
+                                                </div>
+                                                <div class="more_option_area">
+                                                    <button type="button" class="btn_toggle" onclick="toggleOpen(this);"><i class="ico_more_option"></i><span class="visually_hidden">댓글 옵션 버튼 펼치기/닫기</span></button>
+                                                    <!-- <button type="button" class="btn btn_outline_gray btn_square">삭제</button> -->
+                                                    <button type="button" class="btn btn_outline_gray btn_square">신고</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- //Comment -->
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- //Reply Area -->
                         </li>
                     </ul>
                 </div>
             </div>
             <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
         </div>
-        <!-- //댓글 임시 -->
+        <!-- //댓글 레이어 -->
+
+        <!-- 속보 티커 -->
+        <div class="layer_ticker active">
+            <div class="ticker_content">
+                <strong class="badge bg_orange">속보</strong>
+                <h3 class="headline">신규확진 첫 1000명대 ‘역대 최다’ … 진짜 대유행 시작됐다</h3>
+                <p class="date">1분전</p>
+                <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+            </div>
+        </div>
+        <!-- //속보 티커 -->
 
         <!-- footer -->
         <footer id="footer" class="footer">
@@ -592,4 +1008,27 @@
     </div>
 </body>
 
+<script>
+
+
+
+
+var slider = $('#slider_div');
+
+var slickOptions = {
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    dots:true,
+    arrows:false
+};
+
+$(window).on('load resize', function() {
+    slider.not('.slick-initialized').slick(slickOptions);
+    if($(window).width() > 1006) {
+        slider.slick('unslick');
+    };
+});
+
+</script>
 </html>

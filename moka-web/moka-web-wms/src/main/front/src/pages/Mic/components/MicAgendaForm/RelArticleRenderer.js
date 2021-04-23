@@ -15,17 +15,7 @@ const RelArticleRenderer = forwardRef((params, ref) => {
      * @param {object} e 이벤트
      */
     const handleChangeTitle = (e) => {
-        setArticle({
-            ...article,
-            artTitle: e.target.value,
-        });
-    };
-
-    /**
-     * 제목 변경 blur
-     * @param {object} e 이벤트
-     */
-    const handleChangeBlur = (e) => {
+        setArticle({ ...article, artTitle: e.target.value });
         params.api.applyTransaction({ update: [{ ...params.node.data, artTitle: e.target.value }] });
     };
 
@@ -106,10 +96,10 @@ const RelArticleRenderer = forwardRef((params, ref) => {
             {/* 기사 ID, 제목 노출 */}
             <div className="flex-fill ml-3">
                 <MokaInputLabel label="기사ID" className="mb-1" labelWidth={40} name="totalId" value={article.totalId} disabled />
-                <MokaInputLabel label="제목" labelWidth={40} name="artTitle" value={article.artTitle} onChange={handleChangeTitle} inputProps={{ onBlur: handleChangeBlur }} />
+                <MokaInputLabel label="제목" labelWidth={40} name="artTitle" value={article.artTitle} onChange={handleChangeTitle} />
             </div>
             {/* 기사 삭제버튼 */}
-            <div className="ml-3 flex-shrink-0">
+            <div className="ml-10 flex-shrink-0">
                 <Button variant="white" className="border-0 p-0 bg-transparent" onClick={handleDeleteArticle}>
                     <MokaIcon iconName="fas-minus-circle" />
                 </Button>

@@ -196,27 +196,6 @@ const PollChildRelation = () => {
 
                 <SortAgGrid />
                 <ArticleListModal show={isArticleModalShow} onHide={() => setIsArticleModalShow(false)} onRowClicked={handleClickRelationArticleAdd} />
-
-                {/* <Form.Group>
-                <Form.Row>
-                    <Col xs={12}>
-                        <Form.Group>
-                            <Form.Label className="pr-2 mb-0">관련 정보</Form.Label>
-                            <Button variant="positive" onClick={handleClickArticleModalShow} className="mr-2">
-                                기사 검색
-                            </Button>
-                            <Button
-                                variant="positive"
-                                onClick={() => {
-                                    handleClickRelationArticleAdd({ title: '', linkUrl: '', totalId: null, ordNo: relationArticles.length + 1 });
-                                }}
-                            >
-                                추가
-                            </Button>
-                        </Form.Group>
-                    </Col>
-                </Form.Row>
-            </Form.Group> */}
             </Form>
         </MokaCard>
     );

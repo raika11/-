@@ -1,34 +1,20 @@
 import axios from './axios';
-import { getLocalItem } from '@utils/storageUtil';
-import toast, { messageBox } from '@utils/toastUtil';
 import { AUTHORIZATION } from '@/constants';
+import util from '@utils/commonUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { logout } from '@store/auth';
 
+let queue = [];
+
 /**
- * axios를 사용하여 api 호출 전 interceptor
+ * axios interceptor
  */
 export default {
     setupInterceptors: (store) => {
-        // const goToLogin = (message) => {
-        //     setLocalItem({ key: AUTHORIZATION, value: undefined });
-        //     store.dispatch(
-        //         enqueueToast({
-        //             key: 'loginAuthorization',
-        //             message,
-        //             callback: () => {
-        //                 window.location.reload();
-        //             },
-        //             options: {
-        //                 persist: true,
-        //             },
-        //         }),
-        //     );
-        // };
-
         /** 요청 인터셉터 */
         const onRequest = (config) => {
             if (config.url !== '/loginJwt' && config.url.indexOf('/member-join') < 0) {
-                const token = getLocalItem(AUTHORIZATION);
+                const token = util.getLocalItem(AUTHORIZATION);
                 if (!token) {
                     // 인증 토큰 없음
                     messageBox.alert('로그인 정보가 없습니다.\n로그인 페이지로 이동합니다.', () => {
@@ -46,36 +32,41 @@ export default {
         };
 
         /** 응답 성공 */
-        const onSuccess = (response) => {
-            // const { config, data } = response;
-            // const { header: resultHeader } = data;
-
-            return response;
-        };
+        const onSuccess = (response) => response;
 
         /** 응답 실패 */
         const onFail = (error) => {
             if (typeof error.response !== 'undefined') {
                 const header = error.response.data.header;
-                toast.error(header.message);
                 const errorCode = error.response.status;
-                switch (errorCode) {
-                    case 401:
-                        store.dispatch(logout());
-                        break;
-                    default:
-                        window.location = `/${errorCode}`;
-                        break;
+
+                if (queue.findIndex((q) => String(q) === String(errorCode)) < 0) {
+                    queue.push(errorCode);
+                    console.log('queue push', queue);
+                    toast.error(header.message);
+
+                    util.delay(500).then(() => {
+                        switch (errorCode) {
+                            case 401:
+                                store.dispatch(logout());
+                                break;
+                            default:
+                                if (window.lcation !== `/${errorCode}`) window.location = `/${errorCode}`;
+                                break;
+                        }
+                        queue = queue.filter((q) => q !== errorCode);
+                    });
+                } else {
+                    console.log('in queue', queue);
                 }
             }
-
             return Promise.reject(error);
         };
 
-        // request 인터셉터
-        axios.interceptors.request.use(onRequest, onFail);
+        // request interceptor
+        axios.interceptors.request.use(onRequest, (error) => Promise.reject(error));
 
-        // response 인터셉터
+        // response interceptor
         axios.interceptors.response.use(onSuccess, onFail);
     },
 };

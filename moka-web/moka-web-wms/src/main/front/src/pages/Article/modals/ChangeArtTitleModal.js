@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaInput } from '@components';
+import util from '@utils/commonUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { putArticleEditTitle, PUT_ARTICLE_EDIT_TITLE } from '@store/article';
 
 /**
@@ -26,18 +26,17 @@ const ChangeArtGroupModal = (props) => {
      * validate
      */
     const validate = () => {
-        const regex = REQUIRED_REGEX;
         let invalid = false,
             ne = {};
 
-        if (!regex.test(artEditTitle)) {
+        if (util.isEmpty(artEditTitle)) {
             ne.artEditTitle = true;
             invalid = invalid || true;
         } else {
             ne.artEditTitle = false;
         }
 
-        if (!regex.test(artEditMobTitle)) {
+        if (util.isEmpty(artEditMobTitle)) {
             ne.artEditMobTitle = true;
             invalid = invalid || true;
         } else {

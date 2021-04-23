@@ -15,13 +15,7 @@ const Page403 = ({ defaultLink }) => {
                 {/*<h1 className="display-1 font-weight-bold">403</h1>*/}
                 <p className="h1">권한이 없습니다.</p>
                 <p className="h2 font-weight-normal mt-3 mb-4">페이지에 대한 접근권한이 존재하지 않습니다.</p>
-                <Button
-                    color="primary"
-                    size="lg"
-                    onClick={() => {
-                        dispatch(logout());
-                    }}
-                >
+                <Button color="primary" size="lg" onClick={() => dispatch(logout())}>
                     로그인 페이지로
                 </Button>
                 {/*</Link>*/}

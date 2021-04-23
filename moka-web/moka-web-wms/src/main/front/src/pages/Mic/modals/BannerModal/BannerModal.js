@@ -2,8 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { GRID_ROW_HEIGHT } from '@/style_constants';
+import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import { initialState, getMicBannerListModal, putMicBannerToggle, saveMicBanner, GET_MIC_BANNER_LIST_MODAL, SAVE_MIC_BANNER } from '@store/mic';
 import { MokaModal, MokaTable } from '@components';
@@ -132,7 +132,7 @@ const BannerModal = (props) => {
         let errList = [];
 
         // 이미지 필수
-        if ((!banner.imgLink || !REQUIRED_REGEX.test(banner.imgLink)) && !banner.imgFile) {
+        if (util.isEmpty(banner.imgLink) && !banner.imgFile) {
             errList.push({
                 field: 'imgLink',
                 reason: '',
@@ -140,7 +140,7 @@ const BannerModal = (props) => {
             isInvalid = isInvalid || true;
         }
         // 링크 필수
-        if (!banner.linkUrl || !REQUIRED_REGEX.test(banner.linkUrl)) {
+        if (util.isEmpty(banner.linkUrl)) {
             errList.push({
                 field: 'linkUrl',
                 reason: '',

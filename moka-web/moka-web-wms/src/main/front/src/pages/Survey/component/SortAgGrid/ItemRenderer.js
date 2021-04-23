@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { MokaInputLabel, MokaInput } from '@components';
-import { MokaTableEditCancleButton } from '@components';
-import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { MokaTableEditCancleButton, MokaInputLabel, MokaInput } from '@components';
 import { selectArticleItemChange, selectArticleListChange, clearSelectArticleList } from '@store/survey/quiz';
 
+const labelWidth = 45;
+
+/**
+ * 관련 기사 렌더러
+ */
 const ItemRenderer = ({ value }) => {
     const selectId = useRef(null);
     const dispatch = useDispatch();
@@ -66,132 +68,25 @@ const ItemRenderer = ({ value }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectArticleItem]);
 
-    useEffect(() => {
-        // console.log(value);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value]);
-    useEffect(() => {
-        // console.log(editData);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [editData]);
-
     return (
-        <Row>
-            {!isNaN(Number(editData.id)) && (
-                <>
-                    <Col className="align-self-center justify-content-start mb-0 pr-0 pl-3 w-100">{!isNaN(Number(editData.id)) && Number(editData.id) + 1}</Col>
-                    <Col className="d-felx" xs={10}>
-                        <Row className="d-felx">
-                            <MokaInputLabel
-                                name="title"
-                                id={`title-${editData.id}`}
-                                label="타이틀"
-                                onChange={(e) => handleChangeValue(e)}
-                                labelWidth={30}
-                                value={editData.title}
-                                className="col mb-0 pl-0 pr-0"
-                            />
-                        </Row>
-                        <Row className="d-felx">
-                            <MokaInputLabel
-                                name="linkUrl"
-                                id={`linkUrl-${editData.id}`}
-                                label="url"
-                                onChange={(e) => handleChangeValue(e)}
-                                labelWidth={30}
-                                value={editData.linkUrl}
-                                className="col mb-0 pl-0 pr-0"
-                            />
-                            <Col className="d-felx mb-0 pl-1 pr-0" xs={2}>
-                                <MokaInput as="select" name="linkTarget" id={`linkTarget-${editData.id}`} value={editData.linkTarget} onChange={(e) => handleChangeValue(e)}>
-                                    <option value="S">본창</option>
-                                    <option value="N">새창</option>
-                                </MokaInput>
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col className="d-felx align-self-center text-left mb-0 pl-0">
-                        <MokaTableEditCancleButton onClick={() => handleClickDelete()} />
-                    </Col>
-                </>
-            )}
-        </Row>
+        <div className="h-100 w-100 d-flex py-10">
+            <div className="flex-fill">
+                <MokaInputLabel name="title" label="타이틀" labelWidth={labelWidth} onChange={(e) => handleChangeValue(e)} value={editData.title} className="mb-1" />
+                <div className="d-flex align-items-center">
+                    <MokaInputLabel name="linkUrl" label="URL" labelWidth={labelWidth} onChange={(e) => handleChangeValue(e)} value={editData.linkUrl} className="mr-1 flex-fill" />
+                    <div className="flex-shrink-0 d-flex align-items-center">
+                        <MokaInput as="select" name="linkTarget" value={editData.linkTarget} onChange={(e) => handleChangeValue(e)}>
+                            <option value="S">본창</option>
+                            <option value="N">새창</option>
+                        </MokaInput>
+                    </div>
+                </div>
+            </div>
+            <div className="mr-12 ml-10" style={{ width: 13 }}>
+                <MokaTableEditCancleButton onClick={handleClickDelete} />
+            </div>
+        </div>
     );
 };
 
 export default ItemRenderer;
-// const ItemRenderer = ({ value }) => {
-//     const [itemData, setItemData] = useState({
-//         contentId: '',
-//         index: '',
-//         title: '',
-//         linkUrl: '',
-//         targetType: '',
-//     });
-
-//     const handleChangeValue = () => {};
-
-//     const handleClickDelete = () => {};
-
-//     useEffect(() => {
-//         setItemData({
-//             contentId: value.contentId,
-//             index: value.index,
-//             title: value.title,
-//             linkUrl: value.linkUrl,
-//             targetType: value.targetType,
-//         });
-//     }, [value]);
-
-//     return (
-//         <>
-//             <Row>
-//                 <Col className="align-self-center justify-content-start mb-0 pr-0 pl-3 w-100">{Number(itemData.index) + 1}</Col>
-//                 <Col className="d-felx" xs={10}>
-//                     <Row className="d-felx">
-//                         <MokaInputLabel
-//                             name="title"
-//                             label="타이틀"
-//                             onChange={(e) => {
-//                                 handleChangeValue(e.target);
-//                             }}
-//                             labelWidth={30}
-//                             value={itemData.title}
-//                             className="col mb-0 pl-0 pr-0"
-//                         />
-//                     </Row>
-//                     <Row className="d-felx">
-//                         <MokaInputLabel
-//                             name="linkUrl"
-//                             label="url"
-//                             onChange={(e) => {
-//                                 handleChangeValue(e.target);
-//                             }}
-//                             labelWidth={30}
-//                             value={itemData.linkUrl}
-//                             className="col mb-0 pl-0 pr-0"
-//                         />
-//                         <Col className="d-felx mb-0 pl-1 pr-0" xs={3}>
-//                             <MokaInput
-//                                 as="select"
-//                                 name="targetType"
-//                                 value={itemData.targetType}
-//                                 onChange={(e) => {
-//                                     handleChangeValue(e.target);
-//                                 }}
-//                             >
-//                                 <option value="one">본창</option>
-//                                 <option value="two">새창</option>
-//                             </MokaInput>
-//                         </Col>
-//                     </Row>
-//                 </Col>
-//                 <Col className="d-felx align-self-center text-left mb-0 pl-0">
-//                     <MokaTableEditCancleButton onClick={() => handleClickDelete()} />
-//                 </Col>
-//             </Row>
-//         </>
-//     );
-// };
-
-// export default ItemRenderer;

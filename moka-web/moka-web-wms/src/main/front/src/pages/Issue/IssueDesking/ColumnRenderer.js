@@ -12,8 +12,8 @@ import { VodModal, EditThumbModal } from '@pages/Desking/modals';
 import { MokaIcon, MokaImage, MokaInput, MokaInputLabel } from '@components';
 
 const labelWidth = 50;
-const cropWidth = '500px';
-const cropHeight = '300px';
+const cropWidth = 500;
+const cropHeight = 300;
 
 /**
  * 기사 렌더러
@@ -122,15 +122,15 @@ const ArticleRenderer = forwardRef((params, ref) => {
                     </div>
                 </div>
                 <div className="d-flex flex-fill flex-column">
-                    <MokaInputLabel label="제목" name="title" labelWidth={labelWidth} value={contents.title} onChange={handleChangeValue} className="mb-2" required />
-                    <div className="d-flex mb-2">
+                    <MokaInputLabel label="제목" name="title" labelWidth={labelWidth} value={contents.title} onChange={handleChangeValue} className="mb-1" required />
+                    <div className="d-flex mb-1">
                         <MokaInputLabel
                             label="URL"
                             name="linkUrl"
                             labelWidth={labelWidth}
                             value={contents.linkUrl}
                             onChange={handleChangeValue}
-                            className="flex-fill mr-2"
+                            className="flex-fill mr-1"
                             required
                         />
                         <div className="flex-shrink-0 d-flex">
@@ -147,11 +147,11 @@ const ArticleRenderer = forwardRef((params, ref) => {
                         name="bodyHead"
                         value={contents.bodyHead}
                         onChange={handleChangeValue}
-                        className="mb-2"
+                        className="mb-1"
                         inputProps={{ rows: 3 }}
                     />
                     <div className="d-flex">
-                        <MokaInputLabel label="영상 URL" labelWidth={labelWidth} name="vodUrl" value={contents.vodUrl} onChange={handleChangeValue} className="flex-fill mr-2" />
+                        <MokaInputLabel label="영상 URL" labelWidth={labelWidth} name="vodUrl" value={contents.vodUrl} onChange={handleChangeValue} className="flex-fill mr-1" />
                         <Button variant="searching" className="flex-shrink-0" onClick={() => setVodShow(true)}>
                             영상검색
                         </Button>
@@ -206,9 +206,9 @@ const LiveRenderer = forwardRef((params, ref) => {
     return (
         <div className="w-100 h-100 d-flex align-items-center">
             <div className="flex-fill d-flex flex-column pl-3">
-                <MokaInputLabel label="제목" labelWidth={labelWidth} name="title" value={contents.title} onChange={handleChangeValue} className="mb-2" required />
+                <MokaInputLabel label="제목" labelWidth={labelWidth} name="title" value={contents.title} onChange={handleChangeValue} className="mb-1" required />
                 <div className="d-flex">
-                    <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" required />
+                    <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-1" required />
                     <div className="flex-shrink-0 d-flex">
                         <MokaInput name="linkTarget" value={contents.linkTarget} as="select" onChange={handleChangeValue}>
                             <option value="_self">본창</option>
@@ -264,9 +264,9 @@ const PacketRenderer = forwardRef((params, ref) => {
     return (
         <div className="w-100 h-100 d-flex align-items-center">
             <div className="flex-fill d-flex flex-column">
-                <MokaInputLabel label="제목" labelWidth={labelWidth} name="title" value={contents.title} onChange={handleChangeValue} className="mb-2" required />
+                <MokaInputLabel label="제목" labelWidth={labelWidth} name="title" value={contents.title} onChange={handleChangeValue} className="mb-1" required />
                 <div className="d-flex">
-                    <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" required />
+                    <MokaInputLabel label="URL" labelWidth={labelWidth} name="linkUrl" value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-1" required />
                     <div className="flex-shrink-0 d-flex">
                         <MokaInput name="linkTarget" value={contents.linkTarget} as="select" onChange={handleChangeValue}>
                             <option value="_self">본창</option>
@@ -385,7 +385,7 @@ const BannerRenderer = forwardRef((params, ref) => {
             <Row className="flex-fill align-items-center" noGutters>
                 <Col xs={4} className="d-flex">
                     <div className="pl-1 mr-2">
-                        <Button size="sm" variant="gray-700" className="mb-2" onClick={() => setShow(true)}>
+                        <Button size="sm" variant="gray-700" className="mb-1" onClick={() => setShow(true)}>
                             신규 등록
                         </Button>
                         <EditThumbModal
@@ -400,8 +400,8 @@ const BannerRenderer = forwardRef((params, ref) => {
                     <MokaImage width={105} className="flex-shrink-0" img={content.thumbFileName} ratio={[6, 4]} />
                 </Col>
                 <Col xs={8} className="d-flex flex-column pl-4">
-                    <div className="d-flex mb-2">
-                        <MokaInputLabel label="제목" name="title" labelWidth={35} value={content.title} onChange={handleChangeValue} className="flex-fill mr-2" required />
+                    <div className="d-flex mb-1">
+                        <MokaInputLabel label="제목" name="title" labelWidth={35} value={content.title} onChange={handleChangeValue} className="flex-fill mr-1" required />
                         <MokaInputLabel
                             label="배경컬러"
                             name="bgColor"
@@ -412,7 +412,7 @@ const BannerRenderer = forwardRef((params, ref) => {
                         />
                     </div>
                     <div className="d-flex">
-                        <MokaInputLabel label="URL" name="linkUrl" labelWidth={35} value={content.linkUrl} onChange={handleChangeValue} className="flex-fill mr-2" />
+                        <MokaInputLabel label="URL" name="linkUrl" labelWidth={35} value={content.linkUrl} onChange={handleChangeValue} className="flex-fill mr-1" />
                         <div className="flex-shrink-0 d-flex">
                             <MokaInput as="select" name="linkTarget" value={content.linkTarget} onChange={handleChangeValue}>
                                 <option value="_self">본창</option>
@@ -469,7 +469,7 @@ const KeywordRenderer = forwardRef((params, ref) => {
     return (
         <div className="w-100 h-100 d-flex align-items-center">
             <div className="flex-fill d-flex flex-column pl-3">
-                <MokaInputLabel label="제목" name="title" labelWidth={labelWidth} value={content.title} className="mb-2" onChange={handleChangeValue} required />
+                <MokaInputLabel label="제목" name="title" labelWidth={labelWidth} value={content.title} className="mb-1" onChange={handleChangeValue} required />
                 <MokaInputLabel
                     label="키워드"
                     name="bodyHead"

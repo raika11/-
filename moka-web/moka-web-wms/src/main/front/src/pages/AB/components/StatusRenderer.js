@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { MokaIcon } from '@components';
 
 /**
@@ -18,9 +18,29 @@ const StatusRenderer = forwardRef((params, ref) => {
         },
     }));
 
+    //상태(임시T/진행Y/대기P/종료Q)
+    const getClassName = (status) => {
+        let clazzName = 'color-gray-400';
+        switch (status) {
+            case 'Q':
+                clazzName = 'color-searching';
+                break;
+            case 'Y':
+                clazzName = 'color-brand-a6';
+                break;
+            case 'P':
+                clazzName = 'color-neutral';
+                break;
+            default:
+                break;
+        }
+
+        return clazzName;
+    };
+
     return (
         <div className="d-flex align-items-center justify-content-center h-100">
-            <MokaIcon iconName="fas-circle" fixedWidth className={data[field] === 'Y' ? 'color-neutral' : 'color-gray-400'} />
+            <MokaIcon iconName="fas-circle" fixedWidth className={getClassName(data[field])} />
         </div>
     );
 });

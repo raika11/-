@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.JSONResult;
+import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
@@ -17,6 +18,8 @@ import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.util.HttpHelper;
+import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
@@ -26,6 +29,7 @@ import jmnet.moka.core.tms.mvc.HttpParamMap;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.domain.ReservedMap;
 import jmnet.moka.core.tms.mvc.handler.AbstractHandler;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +60,10 @@ public class ArticleHandler extends AbstractHandler {
 
     @Autowired
     private MokaDomainTemplateMerger domainTemplateMerger;
+
+    @Autowired(required = false)
+    private CacheManager cacheManager;
+
 
     public ArticleHandler() {
         this.handlerMethod = new HandlerMethod(this, this.findMethod(ArticleHandler.class));
@@ -112,8 +120,28 @@ public class ArticleHandler extends AbstractHandler {
         DataLoader loader = templateMerger.getDataLoader();
         // 기사조건 조회
         Map<String, Object> paramMap = Collections.singletonMap("totalId", articleId);
-        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE_FLAG, paramMap, true);
-        Map<String, Object> flagMap = jsonResult.getDataListFirst();
+
+        // 기사 플래그 캐시를 확인
+        Map<String, Object> flagMap = null;
+        if ( this.cacheManager != null) {
+            String cached = this.cacheManager.get(KeyResolver.CACHE_ARTICLE_FLAG, articleId);
+            JSONResult jsonResult = null;
+            if ( cached == null ) {
+                jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE_FLAG, paramMap, true);
+                this.cacheManager.set(KeyResolver.CACHE_ARTICLE_FLAG, articleId, jsonResult.toString());
+                flagMap = jsonResult.getDataListFirst();
+            } else {
+                try {
+                    jsonResult = JSONResult.parseJSON(cached);
+                    flagMap = jsonResult.getDataListFirst();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+//        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE_FLAG, paramMap, true);
+//        Map<String, Object> flagMap = jsonResult.getDataListFirst();
         if ( flagMap == null ) {  // flag가 없으면...
             return null;
         }

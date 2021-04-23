@@ -5,25 +5,21 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import toast from '@utils/toastUtil';
-import { MokaInputLabel } from '@/components';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
+import util from '@utils/commonUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import { messageBox } from '@utils/toastUtil';
+import { MokaInputLabel } from '@components';
 import CodeMappingModal from './modals/CodeMappingModal';
 import { getArticleSource, clearArticleSource, saveArticleSource, changeInvalidList, getSourceDuplicateCheck } from '@store/articleSource';
 
 /**
  * 수신 매체 편집
  */
-const ArticleSourceEdit = forwardRef((props, ref) => {
-    const { match } = props;
+const ArticleSourceEdit = forwardRef(({ match }, ref) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { sourceCode } = useParams();
-
-    const source = useSelector((store) => store.articleSource.source);
-    const invalidList = useSelector((store) => store.articleSource.invalidList);
-
+    const { source, invalidList } = useSelector(({ articleSource }) => articleSource);
     const [temp, setTemp] = useState({});
     const [disabledBtn, setDisabledBtn] = useState(false);
     const [error, setError] = useState({});
@@ -39,7 +35,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                 errList = [];
 
             // 매체명 체크
-            if (!obj.sourceName || !REQUIRED_REGEX.test(obj.sourceName)) {
+            if (util.isEmpty(obj.sourceName)) {
                 errList.push({
                     field: 'sourceName',
                     reason: '매체명은 필수 입력값입니다.',

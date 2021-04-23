@@ -6,9 +6,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { GET_MIC_POST, SAVE_MIC_POST } from '@store/mic';
 import { MokaModal, MokaInputLabel, MokaImage } from '@components';
-import commonUtil from '@utils/commonUtil';
+import util from '@utils/commonUtil';
 import { messageBox } from '@utils/toastUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import imageEditer from '@utils/imageEditorUtil';
 import { EditThumbModal } from '@pages/Desking/modals';
 
@@ -105,7 +104,7 @@ const EditPostModal = (props) => {
                         await fetch(editImageSrc)
                             .then((r) => r.blob())
                             .then((blobFile) => {
-                                const file = commonUtil.blobToFile(blobFile, new Date().getTime());
+                                const file = util.blobToFile(blobFile, new Date().getTime());
                                 onChange({
                                     key: 'answerRel',
                                     value: {
@@ -156,17 +155,17 @@ const EditPostModal = (props) => {
             }
         } else if (post.answerRel?.relDiv === 'M') {
             // 동영상일 때, 소스코드(relUrl) 필수
-            if (!post.answerRel?.relUrl || !REQUIRED_REGEX.test(post.answerRel?.relUrl)) {
+            if (util.isEmpty(post.answerRel?.relUrl)) {
                 setError({ ...error, relUrl: true });
                 isInvalid = isInvalid || true;
             }
         } else if (post.answerRel?.relDiv === 'A') {
             // 기사일 때, 페이지URL(relUrl), 페이지제목 필수
             let ne = {};
-            if (!post.answerRel?.relUrl || !REQUIRED_REGEX.test(post.answerRel?.relUrl)) {
+            if (util.isEmpty(post.answerRel?.relUrl)) {
                 ne = { relUrl: true };
             }
-            if (!post.answerRel?.artTitle || !REQUIRED_REGEX.test(post.answerRel?.artTitle)) {
+            if (util.isEmpty(post.answerRel?.artTitle)) {
                 ne = { ...ne, artTitle: true };
             }
 
@@ -190,7 +189,6 @@ const EditPostModal = (props) => {
 
     useEffect(() => {
         setError({});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [post.answSeq]);
 
     return (

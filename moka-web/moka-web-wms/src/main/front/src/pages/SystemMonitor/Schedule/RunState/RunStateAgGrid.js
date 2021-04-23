@@ -62,10 +62,10 @@ const RunStateAgGrid = ({ show }) => {
 
     return (
         <MokaTable
-            agGridHeight={681}
+            className="h-100"
             columnDefs={columnDefs}
             rowData={rowData}
-            onRowNodeId={(row) => row.serverSeq}
+            onRowNodeId={(row) => row.category}
             onRowClicked={handleRowClicked}
             loading={loading}
             paging={false}

@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +18,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,10 +68,24 @@ public class IssueDeskingHist {
     private String viewYn;
 
     /**
-     * 상태 SAVE(임시) / PUBLISH(전송)
+     * 상태 - SAVE(임시) / PUBLISH(전송)
      */
-    @Column(name = "STATUS")
-    private String status;
+    @Column(name = "STATUS", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private EditStatusCode status = EditStatusCode.SAVE;
+
+    /**
+     * 예약일시
+     */
+    @Column(name = "RESERVE_DT", updatable = false)
+    private Date reserveDt;
+
+    /**
+     * 승인여부 예약일시가 설정되어 있을 경우 예약된 작업이 완료되면 Y로 처리
+     */
+    @Column(name = "APPROVAL_YN", updatable = false)
+    @Builder.Default
+    private String approvalYn = MokaConstants.NO;
 
     /**
      * 콘텐츠ID
@@ -179,5 +198,7 @@ public class IssueDeskingHist {
         this.thumbSize = this.thumbSize == null ? 0 : this.thumbSize;
         this.thumbWidth = this.thumbWidth == null ? 0 : this.thumbWidth;
         this.thumbHeight = this.thumbHeight == null ? 0 : this.thumbHeight;
+        this.status = this.status == null ? EditStatusCode.SAVE : this.status;
+        this.approvalYn = McpString.defaultValue(this.approvalYn, MokaConstants.NO);
     }
 }

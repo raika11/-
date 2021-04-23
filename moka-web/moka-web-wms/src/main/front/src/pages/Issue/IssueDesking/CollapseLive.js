@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH, CHANNEL_TYPE, ISSUE_CHANNEL_TYPE, ARTICLE_URL } from '@/constants';
 import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issue';
-import { MokaInputLabel, MokaTable, MokaLoader } from '@components';
+import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import { getDisplayedRows } from '@utils/agGridUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
@@ -14,10 +14,15 @@ import { ArticleTabModal } from '@pages/Article/modals';
 import { liveColumnDefs } from './IssueDeskingColumns';
 import StatusBadge from './StatusBadge';
 
+const defaultProps = {
+    desking: {},
+    deskingList: [],
+};
+
 /**
  * 패키지관리 > 관련 데이터 편집 > 라이브기사
  */
-const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData }, ref) => {
+const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
     const [status, setStatus] = useState(DESK_STATUS_WORK);
@@ -207,9 +212,9 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
     }, [desking.viewYn]);
 
     return (
-        <div className="position-relative">
+        <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
-            <Row className="py-2 mt-2 d-flex border-bottom" noGutters>
+            <Row className="d-flex" noGutters>
                 <Col xs={3}>
                     <MokaInputLabel
                         as="switch"
@@ -226,19 +231,21 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
                     <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
-                    <StatusBadge desking={desking} />
-                    <Button variant="positive-a" size="sm" className="mr-1" onClick={saveDesking}>
-                        임시저장
-                    </Button>
-                    <Button variant="positive" size="sm" onClick={publishDesking}>
-                        전송
-                    </Button>
+                    <div className="d-flex">
+                        <StatusBadge desking={desking} />
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
+                            <MokaIcon iconName="Save" feather />
+                        </MokaOverlayTooltipButton>
+                        <MokaOverlayTooltipButton className="work-btn" tooltipText="전송" variant="white" onClick={publishDesking}>
+                            <MokaIcon iconName="Send" feather />
+                        </MokaOverlayTooltipButton>
+                    </div>
                 </Col>
             </Row>
             <Collapse in={open}>
                 <div id={controls} className="mt-2">
                     <MokaTable
-                        rowHeight={90}
+                        rowHeight={rowHeight}
                         header={false}
                         paging={false}
                         columnDefs={liveColumnDefs}
@@ -251,5 +258,7 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
         </div>
     );
 });
+
+CollapseLive.defaultProps = defaultProps;
 
 export default CollapseLive;

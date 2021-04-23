@@ -2,9 +2,9 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { MokaCard } from '@components';
+import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
-import { REQUIRED_REGEX } from '@/utils/regexUtil';
 import { initialState, clearSetmenuBoardInfo, GET_SET_MENU_BOARD_INFO, getBoardInfo, getSetMenuBoardsList, saveBoardInfo, deleteBoard } from '@store/board';
 import BoardsForm from './BoardsForm';
 
@@ -15,7 +15,6 @@ const BoardsEdit = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { boardId } = useParams();
-    // 공통 구분값 URL
     const { boardType, boardInfo, loading, channelTypeList } = useSelector(
         (store) => ({
             boardType: store.board.boardType,
@@ -25,7 +24,6 @@ const BoardsEdit = ({ match }) => {
         }),
         shallowEqual,
     );
-
     const [boardInfoData, setBoardInfoData] = useState(initialState.setMenu.boardInfo);
     const [error, setError] = useState({});
 
@@ -48,7 +46,7 @@ const BoardsEdit = ({ match }) => {
         let errList = [];
 
         // 타이틀
-        if (!save.boardName || !REQUIRED_REGEX.test(save.boardName)) {
+        if (util.isEmpty(save.boardName)) {
             errList.push({
                 field: 'boardName',
                 reason: '게시판 명을 입력해 주세요',
@@ -66,7 +64,7 @@ const BoardsEdit = ({ match }) => {
         }
 
         // 이메일 수신여부 true 선택 후 이메일을 입력 안했을 때
-        if (save.answYn === 'Y' && save.emailReceiveYn === 'Y' && !REQUIRED_REGEX.test(save.receiveEmail)) {
+        if (save.answYn === 'Y' && save.emailReceiveYn === 'Y' && util.isEmpty(save.receiveEmail)) {
             errList.push({
                 field: 'receiveEmail',
                 reason: '이메일을 입력해 주세요',
@@ -75,7 +73,7 @@ const BoardsEdit = ({ match }) => {
         }
 
         // 이메일 발신여부 true 선택 후 이메일을 입력 안했을 때
-        if (save.emailSendYn === 'Y' && !REQUIRED_REGEX.test(save.sendEmail)) {
+        if (save.emailSendYn === 'Y' && util.isEmpty(save.sendEmail)) {
             errList.push({
                 field: 'sendEmail',
                 reason: '이메일을 입력해 주세요',
@@ -102,7 +100,7 @@ const BoardsEdit = ({ match }) => {
         }
 
         // 파일 true 선택 후 확장자를 입력 안했을 때
-        if (save.fileYn === 'Y' && !REQUIRED_REGEX.test(save.allowFileExt)) {
+        if (save.fileYn === 'Y' && util.isEmpty(save.allowFileExt)) {
             errList.push({
                 field: 'allowFileExt',
                 reason: '확장자를 선택해 주세요',
@@ -241,7 +239,7 @@ const BoardsEdit = ({ match }) => {
                 { text: boardId ? '수정' : '저장', variant: 'positive', onClick: handleClickSaveButton, className: 'mr-1' },
                 boardId && { text: '삭제', variant: 'negative', onClick: handleClickDeleteButton, className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancleButton },
-            ].filter((a) => a)}
+            ].filter(Boolean)}
         >
             <BoardsForm
                 channelTypeList={channelTypeList}

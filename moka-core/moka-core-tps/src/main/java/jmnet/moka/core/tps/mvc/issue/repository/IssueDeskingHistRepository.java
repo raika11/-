@@ -19,7 +19,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author ssc
  * @since 2021-03-19 오후 3:24
  */
-public interface IssueDeskingHistRepository extends JpaRepository<IssueDeskingHist, Long> {
+public interface IssueDeskingHistRepository extends JpaRepository<IssueDeskingHist, Long>, IssueDeskingHistRepositorySupport {
     /**
      * 편집컴포넌트의 편집기사삭제
      *

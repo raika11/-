@@ -72,32 +72,33 @@ const defaultProps = {
     isInvalid: false,
 };
 
+const customStyles = {
+    option: (provided, state) => ({
+        ...provided,
+    }),
+    control: (provided, state) => ({
+        ...provided,
+    }),
+    singleValue: (provided, state) => ({
+        ...provided,
+    }),
+    valueContainer: (provided, state) => ({
+        ...provided,
+        padding: state.isMulti ? '2px 8px 0px 8px' : '0px 8px',
+    }),
+    multiValueLabel: (provided, state) => ({
+        ...provided,
+        fontSize: '12px',
+        fontWeight: 500,
+    }),
+};
+
 /**
  * 자동완성 컴포넌트
- * https://react-select.com/home
+ * @see https://react-select.com/home
  */
 const MokaAutocomplete = forwardRef((props, ref) => {
     const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, defaultValue, value, onChange, className, isInvalid, maxMenuHeight, ...rest } = props;
-
-    const customStyles = {
-        option: (provided, state) => ({
-            ...provided,
-            fontSize: '12px',
-        }),
-        control: (provided, state) => ({
-            ...provided,
-            fontSize: '12px',
-        }),
-        singleValue: (provided, state) => ({
-            ...provided,
-            fontSize: '12px',
-        }),
-        multiValueLabel: (provided, state) => ({
-            ...provided,
-            fontSize: '12px',
-            fontWeight: 'bold',
-        }),
-    };
 
     // 검색 아이콘
     const IndicatorsContainer = (props) => {

@@ -1,9 +1,8 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
-import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaInputLabel, MokaLoader } from '@components';
+import { MokaInputLabel, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { DESK_STATUS_SAVE, DESK_STATUS_PUBLISH } from '@/constants';
 import { saveIssueDesking, publishIssueDesking } from '@store/issue';
@@ -93,9 +92,9 @@ const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE }, re
     );
 
     return (
-        <div className="position-relative">
+        <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
-            <Row className="py-2 mt-2 d-flex border-bottom" noGutters>
+            <Row className="d-flex" noGutters>
                 <Col xs={3}>
                     <MokaInputLabel as="switch" label="메인기사" id={controls} inputProps={{ checked: open }} onChange={(e) => setOpen(e.target.checked)} />
                 </Col>
@@ -103,13 +102,15 @@ const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE }, re
                     <span>조회수가 가장 높은 기사가 자동으로 노출됩니다</span>
                 </Col>
                 <Col xs={3} className="d-flex justify-content-end align-items-center">
-                    <StatusBadge desking={desking} />
-                    <Button variant="positive-a" size="sm" className="flex-shrink-0 mr-1" onClick={saveDesking}>
-                        임시저장
-                    </Button>
-                    <Button variant="positive" size="sm" className="flex-shrink-0" onClick={publishDesking}>
-                        전송
-                    </Button>
+                    <div className="d-flex">
+                        <StatusBadge desking={desking} />
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
+                            <MokaIcon iconName="Save" feather />
+                        </MokaOverlayTooltipButton>
+                        <MokaOverlayTooltipButton className="work-btn" tooltipText="전송" variant="white" onClick={publishDesking}>
+                            <MokaIcon iconName="Send" feather />
+                        </MokaOverlayTooltipButton>
+                    </div>
                 </Col>
             </Row>
         </div>

@@ -2,11 +2,11 @@
 $font-family-sans-serif: "Noto Sans KR", sans-serif, -apple-system, "맑은 고딕", "Malgun Gothic", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial !default;
 $font-weight-light: 200 !default;
 $font-weight-normal: 400 !default;
-$font-weight-bold: 600 !default;
+$font-weight-bold: 500 !default;
 $font-size-base: 0.8125rem !default;
 $font-size-lg: 1.25rem !default;
 $font-size-sm: 0.75rem !default;
-$headings-font-weight: 600 !default;
+$headings-font-weight: 500 !default;
 $h1-font-size: 1.25rem !default;
 $h2-font-size: 1rem !default;
 $h3-font-size: 0.9375rem !default;
@@ -122,7 +122,8 @@ $danger:    $brand-1;
 $light:     $gray-100;
 $dark:      $gray-900;
 $positive:  $primary;
-$positive-a: $brand-additional-5;
+$positive-a:$brand-additional-5;
+$temp:      $gray-900;
 $neutral:   $secondary;
 $negative:  #6C78A0;
 $searching: $gray-800;
@@ -139,6 +140,7 @@ $theme-colors: (
 	"dark": $dark,
 	"positive": $positive,
 	"positive-a": $positive-a,
+	"temp": $temp,
 	"neutral": $neutral,
 	"negative": $negative,
 	"searching": $searching,
@@ -147,7 +149,6 @@ $theme-colors: (
 	"gray-200": $gray-200,
 	"gray-600": $gray-600,
 	"gray-700": $gray-700,
-	"gray-900": $gray-900,
 	"table-btn": $gray-500,
 	"table-btn2": $gray-900,
 ) !default;
@@ -256,8 +257,9 @@ $alert-bg-level: 0 !default;
 $btn-active-box-shadow: none !default;
 $btn-focus-box-shadow: none !default;
 $btn-focus-width: 0 !default; // focus, active box-shadow에 사용되는 width 값임
+$btn-disabled-opacity: 1 !default;
 
-// Buttons default (md)
+// Buttons (md)
 $btn-padding-y: 4px !default;
 $btn-padding-x: 11px !default;
 $btn-font-size: $h5-font-size !default;
@@ -265,14 +267,14 @@ $btn-font-weight: $font-weight-bold !default;
 $btn-line-height: 21px !default;
 $btn-border-radius: 3px !default;
 
-// Buttons default (sm)
+// Buttons (sm)
 $btn-padding-y-sm: 2px !default;
 $btn-padding-x-sm: 8px !default;
 $btn-font-size-sm: $h6-font-size !default;
 $btn-line-height-sm: 20px !default;
 $btn-border-radius-sm: 2px !default;
 
-// Buttons default (lg)
+// Buttons (lg)
 $btn-padding-y-lg: 5px !default;
 $btn-padding-x-lg: 16px !default;
 $btn-font-size-lg: $h3-font-size !default;

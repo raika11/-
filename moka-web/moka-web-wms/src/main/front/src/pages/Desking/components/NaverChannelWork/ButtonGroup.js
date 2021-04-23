@@ -118,8 +118,8 @@ const ButtonGroup = (props) => {
 
     useEffect(() => {
         let btns = [
-            { title: '임시저장', iconName: 'fal-save', onClick: handleClickSave },
-            { title: '전송', iconName: 'fal-share-square', onClick: handleClickPublish },
+            { title: '임시저장', iconName: 'Save', feather: true, onClick: handleClickSave },
+            { title: '전송', iconName: 'Send', feather: true, onClick: handleClickPublish },
         ];
         setIconButton(btns);
     }, [handleClickSave, handleClickPublish, viewN, component.dataType]);
@@ -132,7 +132,7 @@ const ButtonGroup = (props) => {
                     <ComponentInfo component={component} />
                 </Col>
 
-                <Col className="p-0 d-flex align-items-center justify-content-end" xs={4}>
+                <Col className="p-0 d-flex justify-content-end" xs={4}>
                     {/* 최종 전송 상태 표기 */}
                     <StatusBadge
                         lastPublishDt={component.lastPublishDt}
@@ -141,15 +141,18 @@ const ButtonGroup = (props) => {
                         lastSaveNm={component.lastSaveNm}
                         lastSaveId={component.lastSaveId}
                         lastSaveDt={component.lastSaveDt}
-                        className="mr-2"
+                        className="d-flex align-items-center mr-2"
                     />
 
                     {/* 기능 버튼 */}
-                    {iconButton.map((icon, idx) => (
-                        <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="work-btn mr-2" onClick={icon.onClick}>
-                            <MokaIcon iconName={icon.iconName} />
-                        </MokaOverlayTooltipButton>
-                    ))}
+                    {iconButton.map((icon, idx) => {
+                        const { title, onClick, iconName, ...rest } = icon;
+                        return (
+                            <MokaOverlayTooltipButton key={idx} tooltipText={title} variant="white" className="work-btn mr-2" onClick={onClick}>
+                                <MokaIcon iconName={iconName} {...rest} />
+                            </MokaOverlayTooltipButton>
+                        );
+                    })}
 
                     {/* 드롭다운 메뉴 */}
                     <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="work-btn">

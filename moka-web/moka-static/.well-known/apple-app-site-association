@@ -1,0 +1,21 @@
+{
+  "applinks": {
+      "details": [
+           {
+             "appIDs": [ "4YP3LW54Q4.kr.co.ssc.UniversalLinks", "4YP3LW54Q4.kr.co.ssc.UniversalLinks" ],
+             "components": [
+               {
+                  "/": "*",
+                  "comment": "Matches any URL whose path starts with /buy/"
+               }
+             ]
+           }
+       ]
+   },
+   "webcredentials": {
+      "apps": [ "4YP3LW54Q4.kr.co.ssc.UniversalLinks" ]
+   },
+    "appclips": {
+        "apps": ["4YP3LW54Q4.kr.co.ssc.UniversalLinks"]
+    }
+}

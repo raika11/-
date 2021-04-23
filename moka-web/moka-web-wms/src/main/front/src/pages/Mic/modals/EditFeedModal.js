@@ -5,8 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { GET_MIC_FEED, SAVE_MIC_FEED } from '@store/mic';
 import { MokaModal, MokaInputLabel, MokaImage } from '@components';
-import commonUtil from '@utils/commonUtil';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
+import util from '@utils/commonUtil';
 import imageEditer from '@utils/imageEditorUtil';
 import { messageBox } from '@utils/toastUtil';
 import { EditThumbModal } from '@pages/Desking/modals';
@@ -119,7 +118,7 @@ const EditFeedModal = (props) => {
                         await fetch(editImageSrc)
                             .then((r) => r.blob())
                             .then((blobFile) => {
-                                const file = commonUtil.blobToFile(blobFile, new Date().getTime());
+                                const file = util.blobToFile(blobFile, new Date().getTime());
                                 onChange({
                                     key: 'answerRel',
                                     value: {
@@ -154,17 +153,17 @@ const EditFeedModal = (props) => {
             }
         } else if (feed.answerRel?.relDiv === 'M') {
             // 동영상일 때, 소스코드(relUrl) 필수
-            if (!feed.answerRel?.relUrl || !REQUIRED_REGEX.test(feed.answerRel?.relUrl)) {
+            if (util.isEmpty(feed.answerRel?.relUrl)) {
                 setError({ ...error, relUrl: true });
                 isInvalid = isInvalid || true;
             }
         } else if (feed.answerRel?.relDiv === 'A') {
             // 기사일 때, 페이지URL(relUrl), 페이지제목 필수
             let ne = {};
-            if (!feed.answerRel?.relUrl || !REQUIRED_REGEX.test(feed.answerRel?.relUrl)) {
+            if (util.isEmpty(feed.answerRel?.relUrl)) {
                 ne = { relUrl: true };
             }
-            if (!feed.answerRel?.artTitle || !REQUIRED_REGEX.test(feed.answerRel?.artTitle)) {
+            if (util.isEmpty(feed.answerRel?.artTitle)) {
                 ne = { ...ne, artTitle: true };
             }
 
@@ -181,7 +180,6 @@ const EditFeedModal = (props) => {
      * 저장
      */
     const handleSave = () => {
-        // validate
         if (validate(feed)) {
             onSave(feed);
         }
@@ -189,7 +187,6 @@ const EditFeedModal = (props) => {
 
     useEffect(() => {
         setError({});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [feed.answSeq]);
 
     return (

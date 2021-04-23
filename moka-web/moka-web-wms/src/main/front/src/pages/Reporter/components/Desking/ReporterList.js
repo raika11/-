@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { messageBox } from '@utils/toastUtil';
 import { initialState, GET_REPORTER_LIST_MODAL, getReporterListModal } from '@store/reporter';
+import { getJplusRep } from '@store/codeMgt';
 import Search from './Search';
 import AgGrid from './AgGrid';
 
@@ -41,6 +42,7 @@ const ReporterList = (props) => {
     const { show, className, dropTargetAgGrid, onDragStop } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_REPORTER_LIST_MODAL]);
+    const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
     const [total, setTotal] = useState(0);
@@ -110,19 +112,31 @@ const ReporterList = (props) => {
         getReporterList({ search: ns });
     }, [getReporterList]);
 
+    /**
+     * 초기화
+     */
+    const handleReset = useCallback(() => {
+        setSearch(initialState.search);
+    }, []);
+
     useEffect(() => {
         if (show) {
+            if (!jplusRepRows) {
+                dispatch(getJplusRep());
+            }
+
             // 기자 처음 로드
             if (cntRef.current === 0) {
                 getReporterList({});
                 cntRef.current += 1;
             }
         }
-    }, [getReporterList, show]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [jplusRepRows, show]);
 
     return (
         <div className={clsx('d-flex flex-column h-100', className)}>
-            <Search search={search} onChangeSearchOption={handleSearchOption} onSearch={handleSearch} />
+            <Search jplusRepRows={jplusRepRows} search={search} onChangeSearchOption={handleSearchOption} onSearch={handleSearch} onReset={handleReset} />
             <AgGrid
                 loading={loading}
                 search={search}

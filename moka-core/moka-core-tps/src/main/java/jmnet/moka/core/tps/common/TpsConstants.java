@@ -214,6 +214,9 @@ public class TpsConstants extends MokaConstants {
     // 편집예약 JOB_CD
     public static final String DESKING_JOB_CD = "DESKING_PUBLISH";
 
+    // 이슈예약 JOB_CD
+    public static final String ISSUE_JOB_CD = "ISSUE_PUBLISH";
+
     // 게시판 서비스 유형
     public static final String BOARD_DIVS_CD = "BOARD_DIVS";
 

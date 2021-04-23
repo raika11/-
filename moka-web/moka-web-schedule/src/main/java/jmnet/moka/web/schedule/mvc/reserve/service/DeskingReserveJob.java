@@ -80,11 +80,15 @@ public class DeskingReserveJob extends AbstractReserveJob {
 
             //실행결과 false 인 경우 실패처리
             if (!(boolean) header.get("success")) {
+                desingResult.setSendExecTime(0l);
+                desingResult.setSendResult(StatusResultType.FAILED_JOB.getCode());
+                history.setStatus(StatusFlagType.FAILED_TASK);
                 throw new MokaException("API 실행이 실패했습니다.");
             }
         } catch (Exception ex) {
             log.error("[GEN STATUS HISTORY ERROR] : {}", ex.getMessage());
             desingResult.setSendExecTime(0l);
+            desingResult.setSendResult(StatusResultType.FAILED_JOB.getCode());
             history.setStatus(StatusFlagType.FAILED_TASK);
             history
                     .getGenContent()

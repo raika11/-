@@ -1,18 +1,21 @@
 import { call, put, select } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { NETWORK_ERROR_MESSAGE } from '@/constants';
 
 /**
- * 통신에러 response 처리
- * @param {any} body 본문
+ * try에서 실패한 에러를 response 형태로 리턴
+ * @param {*} error
  */
-export const errorResponse = (body) => ({
-    header: {
-        success: false,
-        message: NETWORK_ERROR_MESSAGE,
-    },
-    body,
-});
+export const errorResponse = (error) => {
+    const { name, message } = error;
+    const headerMessage = `${name} :  ${message}`;
+    return {
+        header: {
+            success: false,
+            message: headerMessage,
+        },
+        error,
+    };
+};
 
 /**
  * 성공/삭제 액션명 생성

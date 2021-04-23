@@ -48,6 +48,7 @@ import micSaga from '@store/mic/micSaga';
 import scheduleSaga from '@store/schedule/scheduleSaga';
 import issueSaga from '@store/issue/issueSaga';
 import newsLetterSaga from '@store/newsLetter/newsLetterSaga';
+import abSaga from '@store/ab/abSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -99,5 +100,6 @@ export default function* rootSaga() {
         scheduleSaga(),
         issueSaga(),
         newsLetterSaga(),
+        abSaga(),
     ]);
 }

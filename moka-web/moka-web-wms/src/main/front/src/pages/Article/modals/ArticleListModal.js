@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { DB_DATEFORMAT } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
+import util from '@utils/commonUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { messageBox } from '@utils/toastUtil';
 import { CodeAutocomplete } from '@pages/commons';
-import { DB_DATEFORMAT } from '@/constants';
-import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { MokaModal, MokaInput, MokaTable } from '@/components';
-import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { GET_ARTICLE_LIST_MODAL, initialState, getArticleListModal } from '@store/article';
 import SourceSelector from '@pages/Article/components/Desking/SourceSelector';
 import columnDefs from './ArticleListModalAgGridCoulmns';
@@ -87,7 +87,7 @@ const ArticleListModal = (props) => {
     const validate = useCallback(() => {
         let isInvalid = false;
 
-        if (!search.sourceList || !REQUIRED_REGEX.test(search.sourceList)) {
+        if (util.isEmpty(search.sourceList)) {
             isInvalid = isInvalid || true;
             setValError({ ...valError, sourceList: true });
         }

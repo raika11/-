@@ -1,6 +1,9 @@
 // 서버 api 경로
 export const API_BASE_URL = process.env.REACT_APP_API_URL;
 
+// 브라우저 스토리지명
+export const STORAGE_NAME = 'moka';
+
 // DB 날짜 포맷
 export const DB_DATEFORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -33,15 +36,11 @@ export const ITEM_DS = 'DS';
 export const CODETYPE_API = 'API';
 // 시스템코드 : 페이지타입
 export const CODETYPE_PAGE_TYPE = 'PAGE_TYPE';
-// 시스템코드 : 기사타입
-export const CODETYPE_ARTICLE_TYPE = 'AT';
 // 시스템코드 : 템플릿사이즈, 템플릿위치그룹
 export const CODETYPE_TP_SIZE = 'TP_SIZE';
 export const CODETYPE_TP_ZONE = 'TP_ZONE';
 // 시스템코드 : 언어
 export const CODETYPE_LANG = 'LANG';
-// 시스템코드 : 서비스타입
-export const CODETYPE_SERVICE_TYPE = 'SERVICE_TYPE';
 // 시스템코드 : 등록기사그룹
 export const CODETYPE_ART_GROUP = 'ART_GROUP';
 export const CODETYPE_ART_GROUP_NAME = 'ART_GROUP_NUM';
@@ -81,6 +80,8 @@ export const CODETYPE_GEN_CATE = 'GEN_CATE';
 export const CODETYPE_BO_SCHJOB = 'BO_SCHJOB';
 // 시스템코드 : 필진 타입
 export const CODETYPE_JPLUS_REP = 'JPLUS_REP';
+// 시스템코드 : 기사 타입
+export const CODETYPE_AT = 'AT';
 
 // 기본 필진 코드타입 텍스트 (JPLUS_REP_DIV === null 일 때 노출하는 텍스트)
 export const JPLUS_REP_DIV_DEFAULT = '일보기자';

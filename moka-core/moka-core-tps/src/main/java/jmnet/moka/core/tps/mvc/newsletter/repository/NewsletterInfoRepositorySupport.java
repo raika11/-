@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.newsletter.repository;
 
+import java.util.List;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
 import org.springframework.data.domain.Page;
@@ -24,4 +25,10 @@ public interface NewsletterInfoRepositorySupport {
      * @return
      */
     Page<NewsletterInfo> findAllNewsletterInfo(NewsletterSearchDTO search);
+
+    /**
+     * @param ChannelType
+     * @return
+     */
+    List<Long> findAllChannelIdByChannelType(String ChannelType);
 }

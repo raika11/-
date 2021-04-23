@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button, Image, Col, Card } from 'react-bootstrap';
+import { Form, Button, Col, Card } from 'react-bootstrap';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { MokaInputLabel, MokaInput, MokaIcon, MokaCard } from '@components';
+import { MokaInputLabel, MokaInput, MokaCard, MokaImage } from '@components';
 import { clearReporter, getReporter, saveReporter, GET_REPORTER } from '@store/reporter';
 import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
+import none_photo from '@assets/images/none_photo.png';
 
 const ReporterInput = ({ label, value }) => (
     <div className="d-flex align-items-center h-100">
@@ -122,24 +123,7 @@ const ReporterEdit = ({ match }) => {
 
             <div className="d-flex align-items-center">
                 {/* 기자 이미지 */}
-                {temp.repImg ? (
-                    <Image width="100" height="100" src={temp.repImg} className="flex-shrink-0" roundedCircle />
-                ) : (
-                    <MokaIcon
-                        iconName="fal-user"
-                        style={{
-                            color: '#fff',
-                            background: '#CED1DB',
-                            width: '100px',
-                            height: '100px',
-                            borderRadius: '50%',
-                            textAlign: 'center',
-                            lineHeight: '10px',
-                            verticalAlign: 'middle',
-                            padding: '20px',
-                        }}
-                    />
-                )}
+                <MokaImage defaultImg={none_photo} img={temp.repImg} width={100} height={100} inputBorder={false} className="rounded-circle" imgClassName="rounded-circle" />
 
                 <div className="flex-fill d-flex flex-column justify-content-center ml-4">
                     {/* 기자 정보 */}

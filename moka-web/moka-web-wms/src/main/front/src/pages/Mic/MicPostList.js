@@ -177,7 +177,7 @@ const MicPostList = ({ show: currentTab }) => {
 
     return (
         <MokaCard title={` ❛ ${agenda.agndKwd} ❜ 관리자 포스트 목록`} className="w-100" bodyClassName="d-flex flex-column">
-            <h1 className="color-primary mb-3">❛ {agenda.agndTitle} ❜</h1>
+            <h1 className="mb-14">❛ {agenda.agndTitle} ❜</h1>
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}

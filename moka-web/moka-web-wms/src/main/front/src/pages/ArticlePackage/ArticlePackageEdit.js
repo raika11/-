@@ -54,8 +54,6 @@ const ArticlePackageEdit = ({ match }) => {
         });
     };
 
-    console.log(temp.tags);
-
     return (
         <MokaCard
             className="w-100"

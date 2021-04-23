@@ -257,8 +257,9 @@ $alert-bg-level: 0 !default;
 $btn-active-box-shadow: none !default;
 $btn-focus-box-shadow: none !default;
 $btn-focus-width: 0 !default; // focus, active box-shadow에 사용되는 width 값임
+$btn-disabled-opacity: 1 !default;
 
-// Buttons default (md)
+// Buttons (md)
 $btn-padding-y: 4px !default;
 $btn-padding-x: 11px !default;
 $btn-font-size: $h5-font-size !default;
@@ -266,14 +267,14 @@ $btn-font-weight: $font-weight-bold !default;
 $btn-line-height: 21px !default;
 $btn-border-radius: 3px !default;
 
-// Buttons default (sm)
+// Buttons (sm)
 $btn-padding-y-sm: 2px !default;
 $btn-padding-x-sm: 8px !default;
 $btn-font-size-sm: $h6-font-size !default;
 $btn-line-height-sm: 20px !default;
 $btn-border-radius-sm: 2px !default;
 
-// Buttons default (lg)
+// Buttons (lg)
 $btn-padding-y-lg: 5px !default;
 $btn-padding-x-lg: 16px !default;
 $btn-font-size-lg: $h3-font-size !default;

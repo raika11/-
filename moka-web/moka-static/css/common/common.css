@@ -1162,7 +1162,7 @@ body {
   width: 100%;
   border-bottom: 1px solid #e2e2e2;
   background: #fff;
-  z-index: 100;
+  z-index: 300;
 }
 .header .uh {
   display: flex;
@@ -2821,6 +2821,7 @@ dl.date dd {
 .layer_popup {
   display: none;
   position: absolute;
+  z-index: 200;
   border: 1px solid #e2e2e2;
   background-color: #fff;
 }

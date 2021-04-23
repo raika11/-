@@ -67,18 +67,26 @@ const ArticlePackageSearch = ({ match }) => {
     return (
         <Form className="mb-14">
             <Form.Row className="mb-2">
-                <MokaInput as="select" className="mr-2" value={search.type} onChange={handleChangeValue}>
+                <MokaInput as="select" name="type" className="mr-2" value={search.type} onChange={handleChangeValue}>
                     <option value="">구분 전체</option>
                     <option value="section">섹션</option>
                     <option value="tag">태그</option>
                     <option value="release">출고일 분류</option>
                 </MokaInput>
-                <MokaInput as="select" style={{ width: 150 }} className="mr-2" value={search.subscribeYn} onChange={handleChangeValue} inputProps={{ width: 120 }}>
+                <MokaInput
+                    as="select"
+                    name="subscribeYn"
+                    style={{ width: 150 }}
+                    className="mr-2"
+                    value={search.subscribeYn}
+                    onChange={handleChangeValue}
+                    inputProps={{ width: 120 }}
+                >
                     <option value="">구독 가능 여부 전체</option>
                     <option value="Y">가능</option>
                     <option value="N">불가능</option>
                 </MokaInput>
-                <MokaInput as="select" className="mr-2" value={search.date} onChange={handleChangeValue}>
+                <MokaInput as="select" name="date" className="mr-2" value={search.date} onChange={handleChangeValue}>
                     <option value="regDt">등록일</option>
                     <option value="offDt">종료일</option>
                 </MokaInput>
@@ -133,6 +141,7 @@ const ArticlePackageSearch = ({ match }) => {
                 <MokaSearchInput
                     placeholder="패키지 명을 입력해주세요"
                     className="mr-1 flex-fill"
+                    name="keyword"
                     value={search.keyword}
                     onSearch={handleClickSearch}
                     onChange={handleChangeValue}

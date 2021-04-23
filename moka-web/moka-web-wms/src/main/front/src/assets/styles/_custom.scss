@@ -710,3 +710,45 @@ body {
         background:url('http://images.joins.com/ui_joongang/newsgo/i_sns.png') no-repeat 0 -109px;
     }
 }
+
+// 공통 태그
+.moka-tags-input {
+    width: 100%;
+    height: auto;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    &:focus-within {
+        border: 1px solid #6c779e;
+    }
+    input {
+        flex: 1;
+        border: none;
+        &:focus {
+            outline: transparent;
+        }
+    }
+}
+
+.moka-tag {
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $white;
+    padding: 0 8px;
+    margin: 4px;
+    border-radius: 6px;
+    background-color: $gray-500;
+    // .tag-title {}
+    .tag-close-icon {
+        display: block;
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
+        text-align: center;
+        margin-left: 8px;
+        cursor: pointer;
+    }
+}

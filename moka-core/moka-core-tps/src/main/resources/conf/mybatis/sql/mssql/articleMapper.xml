@@ -91,6 +91,15 @@
       </otherwise>
     </choose>
 
+    <choose>
+      <when test="artTypeList != null and artTypeList != ''">
+        #{artTypeList},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
     #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
@@ -295,6 +304,15 @@
     <choose>
       <when test="pressPan != 'all' and pressPan != null and pressPan != ''">
         #{pressPan},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="artTypeList != null and artTypeList != ''">
+        #{artTypeList},
       </when>
       <otherwise>
         NULL,

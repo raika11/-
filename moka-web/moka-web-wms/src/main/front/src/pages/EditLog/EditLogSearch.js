@@ -155,7 +155,7 @@ const EditLogSearch = () => {
 
             <div className="d-flex justify-content-end">
                 <p className="mb-0 mr-3">
-                    <MokaIcon iconName="fas-circle" className="mr-1 color-primary" />
+                    <MokaIcon iconName="fas-circle" className="mr-1 color-secondary " />
                     성공
                 </p>
                 <p className="mb-0">

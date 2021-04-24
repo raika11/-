@@ -5,24 +5,10 @@ $(document).ready(function() {
     });
 
     btnCloseModal();
-    /* 스크롤 인디케이터 */
-    const scrollIndicator = document.getElementById("scroll_indicator");
-    window.addEventListener("scroll", (e) => {
-        // clientHeight : 웹 브라우저 창의 높이
-        // scrollTop : 현재 스크롤된 부분의 맨 위의 높이
-        // scrollHeight : 문서의 총 높이 (= 스크롤의 총 높이)
-        // contentHeight : 전체 총 높이에서 클라이언트 높이를 뺀 것
-        
-        const { scrollTop, scrollHeight, clientHeight } = e.target.scrollingElement;
-        const contentHeight = scrollHeight - clientHeight;
-        const percentage = (scrollTop / contentHeight) * 100;
-
-        scrollIndicator.style.transform = `translateX(-${100 - percentage}%)`; // -100% ~ 0%
-        scrollIndicator.style.transition = `transform 0.5 ease-out`; // 부드러운 애니메이션
-    });
-
-    /* article mobile sticky_menu */
-    $(window).scroll(function(){
+    
+    
+    $(window).scroll(function(event){
+        /* article mobile sticky_menu */
         var scrollT = $(this).scrollTop();
         var bodyTop = $('.article_body').offset().top;
         var bodyH = $('.article_body').outerHeight(true);
@@ -33,12 +19,16 @@ $(document).ready(function() {
         } else {
             $('.sticky_menu').removeClass('fixed');
         }
+        /* scroll indicator */
+        scrollIndicator();
     });
 
     /* 화면 크기에 따른 기자 목록 */
     bylineControl(window.innerWidth);
     $(window).resize(function(e){
         bylineControl(window.innerWidth);
+        /* scroll indicator */
+        scrollIndicator();
     })
 
     /* 기자 더보기(외○명) 클릭 */
@@ -91,6 +81,13 @@ function btnCloseModal(){
     });
 }
 
+function scrollIndicator(){
+    var articleHeight = $(".article").height() - $(".article_footer").height();
+    var percentage = ($(window).scrollTop() / articleHeight) * 100;  
+    percentage = (percentage > 100 ? 100 : percentage);
+    $(".scroll_indicator span").css("width",percentage + "%");
+}
+
 /* 화면 크기에 따른 기자 노출 수 조정*/
 function bylineControl(width){
     var maxReporterNum = MAX_MEDIUM_REPORTER_NUM;
@@ -135,6 +132,6 @@ function bylineControl(width){
 function setBylinePopPos(){
     var $bylinePop = $(".layer_byline");
     var $bylineMore = $(".btn_byline_more");
-    var bylinePopleft = $bylineMore.position().left+$bylineMore.width() - $bylinePop.outerWidth() +5;
+    var bylinePopleft = $bylineMore.position().left + $bylineMore.width() - $bylinePop.outerWidth() + 5;
     $bylinePop.css("left",bylinePopleft+"px");
 }

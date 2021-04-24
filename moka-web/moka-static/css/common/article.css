@@ -85,8 +85,8 @@ font-*,color,text-align,vertical-align, ...
 .sticky_menu .layer_fontsize li:nth-child(5) a:before { font-size: 17px;}
 
 /* 스크롤 인디케이터 */
-#scroll_indicator { position: fixed; left: 0; top: 60px; width: 100%; height: 4px; transform: translateX(-100%); background-color: #f6330a;  }
-#scroll_indicator::before { content: ''; position: fixed; left: 0; top: 0; width: 100%; height: 4px; transform: translateX(100%); background-color: #e2e2e2; }
+.scroll_indicator { position: fixed; left: 0; top: 60px; width: 100%; height: 4px;  background-color: #e2e2e2;  }
+.scroll_indicator span { position: absolute;  height: 4px; background-color: #f6330a; }
 
 /* 속보 티커 */
 .layer_ticker { display: none; z-index: 100; position: fixed; left: 0; width: 100%; background-color: #fff6e2; }
@@ -303,7 +303,7 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 /***                                           layout                                             ***/
 /****************************************************************************************************/
-    #scroll_indicator { top: 58px; }
+    .scroll_indicator { top: 58px; }
 
     .article_header .datetime .time_bx > .date:nth-last-of-type(2) { display: none; }
     .article_header .datetime .time_bx .btn_datetime::before { content: ''; position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
@@ -398,7 +398,7 @@ font-*,color,text-align,vertical-align, ...
     /* not_comment */
     .not_comment { padding: 40px 0; }
 
-    #scroll_indicator { top: 60px; }
+    .scroll_indicator { top: 60px; }
     .article {max-width: 580px;padding:40px 0 60px;margin:0 auto;background: #fff;zoom: 1;}
     .article_header,
     .article_body,

@@ -12,6 +12,7 @@ import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
 import jmnet.moka.core.dps.api.handler.module.ModuleInterface;
 import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
+import jmnet.moka.web.dps.module.menu.SearchParameter;
 import jmnet.moka.web.dps.module.searchEngine.Collection;
 import jmnet.moka.web.dps.module.searchEngine.SearchCategoryType;
 import jmnet.moka.web.dps.module.searchEngine.SearchCondition;
@@ -135,10 +136,10 @@ public class SearchEngineModule implements ModuleInterface {
             throws Exception {
         jmnet.moka.web.dps.module.MenuModule menuModule =
                 (jmnet.moka.web.dps.module.MenuModule) moduleRequestHandler.getModule(MenuModule.class.getName());
-        Map<String, Object> paramMapFromMenu = menuModule.getSearchParmeterByCategory(categoryKey);
+        SearchParameter paramMapFromMenu = menuModule.getSearchParmeterByCategory(categoryKey);
         Map<String, Object> resultMap = new HashMap<>();
         if (paramMapFromMenu != null) {
-            for (Entry<String, Object> entry : paramMapFromMenu.entrySet()) {
+            for (Entry<String, String> entry : paramMapFromMenu.entrySet()) {
                 if (entry
                         .getKey()
                         .equals(PARAM_SCOPE_TYPE)) {

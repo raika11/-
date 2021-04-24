@@ -49,6 +49,8 @@
   <!--      mergeContext.set("a",1);-->
   <!--      var templateText = "<tems:case if=\"a==1\">1111</tems:case>";-->
   <!--      merger.merge(templateText, mergeContext);-->
+
+  <!--
   <api id="category" expire="5s">
     <description>Category정보를 반환한다.</description>
     <parameter>
@@ -76,5 +78,6 @@
       category
     </keys>
   </api>
+  -->
 
 </apiConfig>

@@ -188,6 +188,11 @@ public class MokaConstants {
     public static final String CATEGORY_SOURCE_CODE_LIST = "sourceCode";
     public static final String CATEGORY_EXCEPT_SOURCE_CODE_LIST = "exSourceCode";
     public static final String CATEGORY_TERM = "term";
+    public static final String CATEGORY_START_DATE = "startDate";
+    public static final String CATEGORY_SUB_CATEGORY_ENTRY = "subCategory";
+    public static final String CATEGORY_FILTER_ONLY_JOONGANG = "FilterOnlyJoongang";
+    public static final String CATEGORY_FILTER_DATE = "FilterDate";
+    public static final String CATEGORY_SEARCH_PARAMETER = "SearchParameters";
 
     /* page service name regx */
     public static final String DIRECT_LINK_SERVICE_NAME_PATTERN = "/(http(s)?:\\/\\/)([a-z0-9\\w]+\\.*)+[a-z0-9]{2,4}/gi";

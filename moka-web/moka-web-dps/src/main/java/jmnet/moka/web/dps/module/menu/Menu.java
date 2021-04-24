@@ -3,7 +3,6 @@ package jmnet.moka.web.dps.module.menu;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
@@ -37,38 +36,20 @@ public class Menu {
     @JsonProperty("Key")
     private String key;
 
-    @JsonProperty("SubKey")
-    private String subKey;
-
     @JsonProperty("Display")
     private String display;
 
-    @JsonProperty("DisplayTitle")
-    private String displayTitle;
+    @JsonProperty("Dummy")
+    private boolean dummy;
+
+    @JsonProperty("MegaMenu")
+    private boolean MegaMenu;
+
+    @JsonProperty("TopMenu")
+    private boolean TopMenu;
 
     @JsonProperty("LogoImage")
     private String logoImage;
-
-    @JsonProperty("Url")
-    private Url url;
-
-    @JsonProperty("PartialUrl")
-    private String partialUrl;
-
-    @JsonProperty("IsTrackable")
-    private boolean IsTrackable;
-
-    @JsonProperty("Children")
-    private List<Menu> children;
-
-    @JsonProperty("IsShowMegaMenu")
-    private boolean IsShowMegaMenu;
-
-    @JsonProperty("IsShowTopMenu")
-    private boolean IsShowTopMenu;
-
-    @JsonProperty("IsDummy")
-    private boolean isDummy;
 
     @JsonProperty("Width")
     private String width;
@@ -76,26 +57,31 @@ public class Menu {
     @JsonProperty("Height")
     private String height;
 
-    @JsonProperty("HeadingTag")
-    private String headingTag;
+    @JsonProperty("Url")
+    private String url;
 
-    @JsonProperty("IconType")
-    private String iconType;
+    @JsonProperty("New")
+    private String New;
 
-    @JsonProperty("IsDisplayTitle")
-    private boolean IsDisplayTitle;
+    @JsonProperty("FilterOnlyJoongang")
+    private boolean filterOnlyJoongang = false;
 
-    @JsonProperty("IconHtml")
-    private String iconHtml;
+    @JsonProperty("FilterDate")
+    private boolean filterDate = false;
 
-    @JsonProperty("CategoryKey")
-    private String categoryKey;
+    @JsonProperty("Children")
+    private List<Menu> children;
+
+    @JsonIgnore
+    @JsonProperty("Category")
+    private Category category;
+
+    @JsonIgnore
+    @JsonProperty("SearchParameter")
+    private SearchParameter searchParameter;
 
     @JsonIgnore
     private Menu parentMenu;
-
-    @JsonIgnore
-    private Map<String,Object> searchParamMap;
 
     public Menu(Menu parentMenu, Node menuNode, MenuParser menuParser)
             throws XPathExpressionException {
@@ -104,41 +90,34 @@ public class Menu {
 
         // Key
         this.setKey(decideString(menuEl,"Key", ""));
-        // SubKey
-            this.setSubKey("");
+
         // Display
         this.setDisplay(decideString(menuEl,"Display"));
-        // DisplayTitle
-        this.setDisplayTitle(decideString(menuEl,"DisplayTitle"));
+
+        // Dummy
+        this.setDummy(decideBoolean(menuEl,"Dummy",false));
+
+        // MegaMenu
+        this.setMegaMenu(decideBoolean(menuEl,"MegaMenu",true));
+
+        // IsShowTopMenu
+        this.setTopMenu(decideBoolean(menuEl,"TopMenu",true));
+
         // LogoImage
         this.setLogoImage(decideString(menuEl,"LogoImage"));
+
+        // New
+        this.setNew(decideString(menuEl,"New"));
+
         // Url
-        this.setUrl(this.getUrl(menuEl, menuParser));
-        // PartialUrl
+        this.setUrl(menuEl, menuParser);
 
-        // IsTrackable
-            this.setIsTrackable(false);
-        // Children : recursive하게 append 함
-
-        // IsShowMegaMenu
-        this.setIsShowMegaMenu(decideBoolean(menuEl,"IsShowMegaMenu",true));
-        // IsShowTopMenu
-        this.setIsShowTopMenu(decideBoolean(menuEl,"IsShowTopMenu",true));
-        // IsDummy
-        this.setDummy(decideBoolean(menuEl,"IsDummy",false));
         // Width
         this.setWidth(decideString(menuEl,"Width"));
+
         // Hight
         this.setHeight(decideString(menuEl,"Hight"));
-        // HeadingTag
-            this.setHeadingTag("h2");
-        // IconType
-        this.setIconType(decideString(menuEl,"IconType"));
-        // IsDisplayTitle
-            this.setIsDisplayTitle(false);
-        // IconHtml
-            this.setIconHtml("");
-        // CategoryKeys
+
         this.setCategoryAndSearchParamter(menuEl, menuParser);
     }
 
@@ -146,60 +125,52 @@ public class Menu {
         return this.children.size() > 0;
     }
 
-    public Url getUrl(Element menuNode, MenuParser menuParser)
+    public boolean matchedSubCategory(String key) {
+        if ( this.category != null && this.category.getSubCategoryList() != null) {
+            for ( Category subCategory:this.category.getSubCategoryList()) {
+                if ( subCategory.getKey().equalsIgnoreCase(key)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void setUrl(Element menuNode, MenuParser menuParser)
             throws XPathExpressionException {
         Node urlNode = menuParser.getNode(menuNode,"Url");
         if ( urlNode != null) {
             Element urlEl = (Element)urlNode;
             if ( urlEl.hasAttribute("Link")) {
-                String link = urlEl.getAttribute("Link");
-                return new Url(link,link);
-            } else if (urlEl.hasAttribute("Controller")) {
-                String uri = "";
-                String controller = urlEl.getAttribute("Controller");
-                String action = urlEl.getAttribute("Action");
-                if ( action.equalsIgnoreCase("List")) {
-                    String key = menuParser.getKeyFromParameter(urlEl);
-                    if ( controller.equalsIgnoreCase("Find")) {
-                        uri = "find/list"+ (key== null?"":"?key="+key);
-                    } else {
-                        uri = controller.toLowerCase()+ (key == null?"/":"/"+key.toLowerCase()+"/") + "list";
-                    }
-                } else {
-                    uri = controller.toLowerCase() + (action.equalsIgnoreCase("Index")?"":"/"+action.toLowerCase());
-                }
-
-                String url = URL_PREFIX + uri;
-                return new Url(url,url);
+                this.url = urlEl.getAttribute("Link");
             }
         }
-        return null;
+    }
+
+    public void setFilter(Element menuNode, MenuParser menuParser)
+            throws XPathExpressionException {
+        Node listNode = menuParser.getNode(menuNode,"List");
+        if ( listNode != null) {
+            Element listEl = (Element)listNode;
+            this.setFilterOnlyJoongang(decideBoolean(listEl,"FilterOnlyJoongang",false));
+            this.setFilterDate(decideBoolean(listEl,"FilterDate",false));
+        }
     }
 
     public void setCategoryAndSearchParamter(Element menuNode, MenuParser menuParser)
             throws XPathExpressionException {
-        String categoryKey = null;
-        Node categoryNode = menuParser.getNode(menuNode,"Section/CategoryKeys/string");
+        Node categoryNode = menuParser.getNode(menuNode,"Category");
         if ( categoryNode != null) {
-            categoryKey = categoryNode.getTextContent().trim();
+            Category category = new Category(this.key, categoryNode, menuParser);
+            this.setCategory(category);
         }
-        Node listNode = menuParser.getNode(menuNode,"List");
-        if ( listNode != null) {
-            Element listEl = (Element)listNode;
-            categoryKey = listEl.getAttribute("CategoryKey");
-            String type = listEl.getAttribute("Type");
-            if ( type.equals("Search")) {
-                NodeList nodeList = menuParser.getNodeList(menuNode,"Url/Parameters/Parameter");
-                if ( nodeList != null) {
-                    this.searchParamMap = new HashMap<>();
-                    for (int i = 0; i < nodeList.getLength(); i++) {
-                        Element parameterEl = (Element)nodeList.item(i);
-                        this.searchParamMap.put(parameterEl.getAttribute("Name"), parameterEl.getAttribute("Value"));
-                    }
-                }
+        Node searchParameterNode = menuParser.getNode(menuNode,"SearchParameters");
+        if ( searchParameterNode != null) {
+            NodeList nodeList = menuParser.getNodeList(searchParameterNode,"Parameter");
+            if ( nodeList != null) {
+                this.searchParameter = new SearchParameter(nodeList);
             }
         }
-        this.setCategoryKey(categoryKey);
     }
 
     public void addChildMenu(Menu childMenu) {
@@ -219,6 +190,7 @@ public class Menu {
             return false;
         }
     }
+
     private String decideString(Element element, String attribute, String... defaultValues) {
         String defaultValue;
         if (defaultValues.length == 0) {

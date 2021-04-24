@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Menu/@IsDummy -> Dummy : default = false
+  Menu/@IsShowTopMenu ->  TopMenu : default = true
+  Menu/@IsShowMegaMenu -> MegaMenu : default = true
+  List/@IsDisplayFilterByOnlyJoongang -> FilterOnlyJoongang : default = false
+  List/@IsDisplayFilterByDate -> FilterDate : default = false
+-->
+<MenuConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Menu Dummy="true">
+    <Children>
+      <!-- 뉴스 그룹 -->
+      <Menu Key="NewsGroup" Display="뉴스" Dummy="true" TopMenu="false">
+        <Children>
+
+          <!-- 오피니언 -->
+          <Menu Key="Opinion" Display="오피니언">
+            <Url Link="/opinion"/>
+            <Category Term="15">
+              <MasterCodes>2000000 2901002 2000002 2000001 2000005 2000007</MasterCodes>
+            </Category>
+            <Children>
+              <Menu Key="EditorialColumn" Display="사설칼럼">
+                <Url Link="/opinion/editorialcolumn" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>2000002 2000001 2000005 2000007</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="SatiricalCartoon" Display="만평">
+                <Url Link="/opinion/satiricalCartoon" />
+                <SearchParameters>
+                  <Parameter Name="Key" Value="SatiricalCartoon" />
+                  <Parameter Name="Keyword" Value="박용석 만평|김회룡 만평" />
+                  <Parameter Name="ListType" Value="Cartoon" />
+                </SearchParameters>
+              </Menu>
+              <Menu Key="DebatePolllist" Display="Hot Poll">
+                <Url Link="/opinion/debatePollList" />
+              </Menu>
+							<Menu Key="eTextCenter" Display="e글중심">
+								<Url Link="/opinion/eTextCenter"/>
+                <SearchParameters>
+                  <Parameter Name="Key" Value="eTextCenter" />
+                  <Parameter Name="Keyword" Value="e글중심" />
+                  <Parameter Name="SourceCode" Value="1,3,61" />
+                  <Parameter Name="ListType" Value="General" />
+                  <Parameter Name="ScopeType" Value="Keyword" />
+                </SearchParameters>
+							</Menu>
+            </Children>
+          </Menu>
+
+          <!-- 정치 -->
+          <Menu Key="Politics" Display="정치">
+            <Url Link="/politics"/>
+            <Category Term="15">
+              <MasterCodes>1004001 1001001 1003001 1006004 1006001 1006005 1005001 1005004</MasterCodes>
+            </Category>
+            <Children>
+              <Menu Key="AssemGov" Display="국회정당">
+                <Url Link="/politics/assemGov"/>
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1003001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="BlueHouse" Display="청와대">
+                <Url Link="/politics/blueHouse"/>
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1005001 1005004</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Diplomacy" Display="외교">
+                <Url Link="/politics/diplomacy"/>
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1006001 1006005</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="NK" Display="국방">
+                <Url Link="/politics/nk"/>
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1004001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="NorthKorea" Display="북한">
+                <Url Link="/politics/northKorea"/>
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1006004</MasterCodes>
+                </Category>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <!-- 경제 -->
+					<Menu Key="Money" Display="경제">
+            <Url Link="/money" />
+            <Category Term="15">
+              <MasterCodes>
+                1508001 1601001 1603001 1101001 1102001 1105001 1105002 1105003
+                1105004 1105005 1105006 1105007 1106001 1107002 1108001 1109001
+                1103013 1104001 9902001 9902002 9902003 9902004
+              </MasterCodes>
+            </Category>
+            <Children>
+							<Menu Key="EconomicPolicy" Display="경제정책">
+                <Url Link="/money/economicPolicy" />
+                <SearchParameters>
+                  <Parameter Name="Key" Value="EconomicPolicy" />
+                  <Parameter Name="Keyword" Value="경제정책" />
+                  <Parameter Name="SourceCode" Value="1,3,61" />
+                  <Parameter Name="ListType" Value="General" />
+                  <Parameter Name="ScopeType" Value="Keyword" />
+                </SearchParameters>
+              </Menu>
+              <Menu Key="Industry" Display="산업">
+                <Url Link="/money/industry" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1206012 1107002 1108001 1109001 1601001 1508001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Finance" Display="금융증권">
+                <Url Link="/money/finance" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1103013 1104001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="RealEstate" Display="부동산">
+                <Url Link="http://realestate.joins.com/" />
+              </Menu>
+              <Menu Key="Science" Display="과학미래">
+                <Url Link="/money/science" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1603001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="GlobalEconomy" Display="글로벌경제">
+                <Url Link="/money/globalEconomy" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1102001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Labor" Display="고용노동">
+                <Url Link="/money/labor" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1203001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Gmoney" Display="고용노동">
+                <Url Link="/money/gmoney" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>9902001 9902002 9902003 9902004</MasterCodes>
+                </Category>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <!-- 사회 -->
+          <Menu Key="Society" Display="사회">
+            <Url Link="/society" />
+            <Category Term="15">
+              <MasterCodes>
+                1207002 1205006 1202001 1202007 1202014 1202015 1202016 1206002
+                1204001 1205001 1210007 1206004 1004003 1201001 1201006 1206003
+                1206005 1206012 1206020 2100001 2100002 2100004 2100005 2100006
+                2100007 2100011 2100012
+              </MasterCodes>
+            </Category>
+            <Children>
+              <Menu Key="Law" Display="검찰·법원">
+                <Url Link="/society/law" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1205006</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Education" Display="교육">
+                <Url Link="/society/education" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1202001 1202007 1202014 1202015 1202016</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Accident" Display="사건사고">
+                <Url Link="/society/accident" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1205001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Welfare" Display="복지">
+                <Url Link="/society/welfare" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1204001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Traffic" Display="교통">
+                <Url Link="/society/traffic" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1206002</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Environment" Display="환경">
+                <Url Link="/society/environment" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1206004</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Region" Display="지역">
+                <Url Link="/society/region" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1210007</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Health" Display="건강">
+                <Url Link="/society/health" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1207002</MasterCodes>
+                </Category>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <!-- 국제 -->
+          <Menu Key="World" Display="국제">
+            <Url Link="/world"/>
+            <Category Term="15">
+              <MasterCodes>
+                1301004 1301005 1301007 1301008 1301009 1301001 1301006 1301002
+                1301003 1313001 1302001
+              </MasterCodes>
+            </Category>
+            <Children>
+              <Menu Key="NorthAme" Display="미국">
+                <Url Link="/world/northAme"/>
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="180">
+                  <MasterCodes>1301001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="China" Display="중국">
+                <Url Link="/world/china"/>
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="180">
+                  <MasterCodes>1301003</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Eu" Display="유럽">
+                <Url Link="/world/eu"/>
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="180">
+                  <MasterCodes>1301006</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Etc" Display="기타">
+                <Url Link="/world/etc"/>
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="180">
+                  <MasterCodes>1301004 1301005 1301007 1301008 1301009</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Topic" Display="토픽월드">
+                <Url Link="/world/topic"/>
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="180">
+                  <MasterCodes>1313001</MasterCodes>
+                </Category>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <!-- 문화 -->
+          <Menu Key="Culture" Display="문화">
+            <Url Link="/culture"/>
+            <Category Term="90">
+              <MasterCodes>
+                1504001 1507003 1503001 1506002 1507007 1208001 1501001 2901013 3410015
+              </MasterCodes>
+            </Category>
+            <Children>
+              <Menu Key="Book" Display="책">
+                <Url Link="/culture/health" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="90">
+                  <MasterCodes>1506002 3410015</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Perfomance" Display="공연">
+                <Url Link="/culture/perfomance" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="90">
+                  <MasterCodes>1506002 3410015</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Art" Display="미술">
+                <Url Link="/culture/art" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="90">
+                  <MasterCodes>1507006</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Classic" Display="클래식">
+                <Url Link="/culture/classic" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="90">
+                  <MasterCodes>1507007</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Song" Display="가요">
+                <Url Link="/culture/song" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="90">
+                  <MasterCodes>1504001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Broadcast" Display="방송">
+                <Url Link="/culture/broadcast" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="90">
+                  <MasterCodes>1503001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Movie" Display="영화">
+                <Url Link="/culture/movie" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="90">
+                  <MasterCodes>1502001</MasterCodes>
+                </Category>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <!-- 스포츠 -->
+          <Menu Key="Sports" Display="스포츠">
+            <Url Link="/sports"/>
+            <Category Term="15">
+              <MasterCodes>
+                1403001 1403002 1403003 1404001 1401001 1401003 1402001 1402002
+                1402009 1401004 1401005 1402006 1400000 1405001 1405002 1405005
+                1405006 1407001 1409004 1901002 1901022
+              </MasterCodes>
+              <ExceptSourceCodes>d5</ExceptSourceCodes>
+            </Category>
+            <Children>
+              <Menu Key="Baseball" Display="야구">
+                <Url Link="/sports/baseball" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1401001 1401003</MasterCodes>
+                  <ExceptSourceCodes>d5</ExceptSourceCodes>
+                </Category>
+              </Menu>
+              <Menu Key="WorldBaseball" Display="해외야구">
+                <Url Link="/sports/worldBaseball" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1402001 1402002 1402009</MasterCodes>
+                  <ExceptSourceCodes>d5</ExceptSourceCodes>
+                </Category>
+              </Menu>
+              <Menu Key="WorldSoccer" Display="해외축구">
+                <Url Link="/sports/worldSoccer" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1402006</MasterCodes>
+                  <ExceptSourceCodes>d5</ExceptSourceCodes>
+                </Category>
+              </Menu>
+              <Menu Key="BasketVolley" Display="농구/배구">
+                <Url Link="/sports/basketVolley" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category Term="15">
+                  <MasterCodes>1403001 1403002 1403003 1404001</MasterCodes>
+                  <ExceptSourceCodes>d5</ExceptSourceCodes>
+                </Category>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <!-- 피플 -->
+          <Menu Key="People" Display="피플" TopMenu="false">
+            <Url Link="/people"/>
+            <Category>
+              <MasterCodes>1209004 1209002 1209003 1209001 1209005</MasterCodes>
+            </Category>
+            <Children>
+              <Menu Key="Room" Display="사랑방">
+                <Url Link="/people/room" />
+                <List FilterOnlyJoongang="true" FilterDate="false"/>
+                <Category>
+                  <MasterCodes>1209002</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Personnel" Display="인사">
+                <Url Link="/people/personnel" />
+                <List FilterOnlyJoongang="true" FilterDate="false"/>
+                <Category>
+                  <MasterCodes>1209003</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Death" Display="부음">
+                <Url Link="/people/death" />
+                <List FilterOnlyJoongang="true" FilterDate="false"/>
+                <Category>
+                  <MasterCodes>1209004</MasterCodes>
+                </Category>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <!-- 라이프 스타일 -->
+          <Menu Key="LifeStyle" Display="라이프 스타일" TopMenu="false">
+            <Url Link="/lifestyle"/>
+            <Category>
+              <MasterCodes>3502001 3501001 3503001 3505001 3504001</MasterCodes>
+              <SourceCodes>1,3,61</SourceCodes>
+            </Category>
+            <Children>
+              <Menu Key="Fashion" Display="패션">
+                <Url Link="/lifestyle/fashion" />
+                <List FilterOnlyJoongang="false" FilterDate="false"/>
+                <Category>
+                  <MasterCodes>3501001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Taste" Display="맛">
+                <Url Link="/lifestyle/taste" />
+                <List FilterOnlyJoongang="false" FilterDate="false"/>
+                <Category>
+                  <MasterCodes>3502001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Luxury" Display="럭셔리">
+                <Url Link="/lifestyle/luxury" />
+                <List FilterOnlyJoongang="false" FilterDate="false"/>
+                <Category>
+                  <MasterCodes>3503001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Beauty" Display="뷰티">
+                <Url Link="/lifestyle/beauty" />
+                <List FilterOnlyJoongang="false" FilterDate="false"/>
+                <Category>
+                  <MasterCodes>3504001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Living" Display="리빙">
+                <Url Link="/lifestyle/living" />
+                <List FilterOnlyJoongang="false" FilterDate="false"/>
+                <Category>
+                  <MasterCodes>3505001</MasterCodes>
+                </Category>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <!-- 여행레저 -->
+          <Menu Key="Travel" Display="여행레저" TopMenu="false">
+            <Url Link="/travel"/>
+            <Category>
+              <MasterCodes>2705001 2704001 2701031 2703001 2702001</MasterCodes>
+            </Category>
+            <Children>
+              <Menu Key="Domestic" Display="국내여행">
+                <Url Link="/travel/domestic" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category>
+                  <MasterCodes>2701031</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Abroad" Display="해외여행">
+                <Url Link="/travel/abroad" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category>
+                  <MasterCodes>2702001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="News" Display="여행뉴스">
+                <Url Link="/travel/abroad" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category>
+                  <MasterCodes>2703001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="Week" Display="week&#38;">
+                <Url Link="/travel/abroad" />
+                <List FilterOnlyJoongang="true" FilterDate="true"/>
+                <Category>
+                  <MasterCodes>2704001</MasterCodes>
+                </Category>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <!-- 포토영상 -->
+          <Menu Key="Pic" Display="포토 &#183; 영상" TopMenu="false">
+            <Url Link="/pic"/>
+            <Children>
+              <Menu Key="PhotoGallery" Display="포토">
+                <Url Link="/pic/photogallery" />
+              </Menu>
+              <Menu Key="PhotoGallery" Display="영상">
+                <Url Link="/pic/vod" />
+              </Menu>
+            </Children>
+          </Menu>
+
+        </Children>
+      </Menu>
+
+      <!-- 섹션 그룹 -->
+      <Menu Key="SectionGroup" Display="섹션" Dummy="true" TopMenu="false">
+        <Children>
+					<Menu Key="DigitalSpecial" Display="디지털 스페셜" TopMenu="false">
+						<Url Link="/digitalspecial"/>
+					</Menu>
+
+          <Menu Key="FutureJob" Display="퓨처앤잡" LogoImage="https://images.joins.com/ui_joongang/news/pc/list/t_futurejob.png" MegaMenu="false" Width="300" Height="30">
+            <Url Link="/digitalspecial"/>
+          </Menu>
+
+          <Menu Key="TokTokEdu" Display="톡톡에듀" LogoImage="https://images.joins.com/ui_joongang/news/pc/list/t_talktalkedu.png" MegaMenu="false" Width="300" Height="30">
+            <Url Link="/toktokedu"/>
+            <!--  toktokedu 키테고리 없음
+            <Category>
+              <MasterCodes></MasterCodes>
+            </Category>
+            -->
+          </Menu>
+
+          <Menu Key="Trand" Display="Tran:D" LogoImage="https://images.joins.com/ui_joongang/news/pc/list/t_tran_d.png" MegaMenu="false" Width="300" Height="30">
+            <Url Link="/tran_d"/>
+            <!--  Trand 키테고리 없음
+            <Category>
+              <MasterCodes></MasterCodes>
+            </Category>
+            -->
+            <SearchParameters>
+              <Parameter Name="Key" Value="tran_d" />
+              <Parameter Name="Keyword" Value="트랜D|인공지능|빅데이터|AI|클라우드" />
+              <Parameter Name="ListType" Value="General" />
+              <Parameter Name="ScopeType" Value="Keyword" />
+              <Parameter Name="SourceCode" Value="1,3,61" />
+              <Parameter Name="StartSearchDate" Value="2019-07-01" />
+            </SearchParameters>
+          </Menu>
+
+          <Menu Key="Sunday" Display="중앙SUNDAY" LogoImage="https://images.joins.com/ui_joongang/news/pc/jsunday/sunday_logo.png" Width="237" Height="32">
+            <Url Link="/sunday"/>
+            <Children>
+              <Menu Key="SundayNews" Display="뉴스">
+                <Url Link="/sunday/sundayNews"/>
+                <Category>
+                  <SourceCodes>61</SourceCodes>
+                  <SubCategory Key="SundayFocus" Display="FOCUS" >
+                    <MasterCodes>3410007</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundaySubNews" Display="NEWS" >
+                    <MasterCodes>3410001 2301001 2306001 2308001 2308002</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundaySports" Display="SPORTS" >
+                    <MasterCodes>3410003</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundayHealth" Display="HEALTH PLUS" >
+                    <MasterCodes>3410002 2308003</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SpecialReport" Display="SPECIAL REPORT" >
+                    <MasterCodes>3410008</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundayWideShot" Display="WIDE SHOT" >
+                    <MasterCodes>3410006</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundayInterview" Display="INTERVIEW" >
+                    <MasterCodes>3410004</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundayPeople" Display="PEOPLE" >
+                    <MasterCodes>3410005</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundayLeisure" Display="LEISURE" >
+                    <MasterCodes>3410009 2304001 2308004</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundayFoodTravel" Display="FOOD&amp;TRAVEL" >
+                    <MasterCodes>3410010 3410011</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundayLife" Display="LIFE" >
+                    <MasterCodes>3410012 2303003 2305001 2308005 2308007</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundayCulture" Display="CULTURE" >
+                    <MasterCodes>3410013 2308006 2308008 2309001 2309002 2309003</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundayBooks" Display="BOOKS" >
+                    <MasterCodes>3410015 2307002</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                </Category>
+              </Menu>
+              <Menu Key="SundayMoney" Display="머니">
+                <Url Link="/sunday/sundaymoney"/>
+                <Category>
+                  <MasterCodes>3420001 2302002</MasterCodes>
+                  <SourceCodes>61</SourceCodes>
+                </Category>
+              </Menu>
+              <Menu Key="SundayOpinion" Display="오피니언">
+                <Url Link="/sunday/sundayOpinion"/>
+                <Category>
+                  <SourceCodes>61</SourceCodes>
+                  <SubCategory Key="SundayColumn" Display="COLUMN" >
+                    <MasterCodes>3430002</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="SundayViewOpinion" Display="VIEW &amp; OPINION" >
+                    <MasterCodes>3430001</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                  <SubCategory Key="ForeignCartoon" Display="해외만평" >
+                    <MasterCodes>3430003</MasterCodes>
+                    <SourceCodes>61</SourceCodes>
+                  </SubCategory>
+                </Category>
+              </Menu>
+              <Menu Key="SundayMagazine" Display="S MAGAZINE">
+                <Url Link="/sunday/sundaymagazine"/>
+                <Category>
+                  <ServiceCodes>3440</ServiceCodes>
+                  <SourceCodes>61</SourceCodes>
+                </Category>
+              </Menu>
+              <Menu Key="SundayVolume" Display="호별보기">
+                <Url Link="/sunday/sundayvolume"/>
+                <Category>
+                  <ServiceCodes>34</ServiceCodes>
+                  <SourceCodes>61</SourceCodes>
+                </Category>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="ResetKorea" Display="리셋 코리아" >
+            <Url Link="/resetkorea"/>
+            <Category>
+              <SourceCodes>1 3 61</SourceCodes>
+            </Category>
+            <Children>
+              <Menu Key="AboutResetKorea" Display="리셋코리아 소개">
+                <Url Link="/article/21209278" />
+              </Menu>
+              <Menu Key="ResetKoreaNews" Display="뉴스">
+                <Url Link="/resetkorea/news" />
+                <SearchParameters>
+                  <Parameter Name="Key" Value="ResetKoreaNews" />
+                  <Parameter Name="Keyword" Value="리셋 코리아" />
+                  <Parameter Name="SourceCode" Value="1,3,61" />
+                  <Parameter Name="ListType" Value="General" />
+                  <Parameter Name="ScopeType" Value="Keyword" />
+                </SearchParameters>
+              </Menu>
+            </Children>
+          </Menu>
+
+					<!-- 메뉴로고 -->
+          <Menu Key="Retirement" Display="더,오래" LogoImage="https://images.joins.com/ui_joongang/news/pc/senior/t_senior.png" Width="105" Height="39">
+            <Url Link="/retirement" />
+            <Category Term="15">
+              <MasterCodes>
+                1111005 1111003 1111006 1111001 1111004 1111007 1111002
+              </MasterCodes>
+              <SourceCodes> <!-- UsageType = Retirement -->
+                1 3 7 d5
+              </SourceCodes>
+            </Category>
+            <Children>
+            </Children>
+          </Menu>
+        </Children>
+      </Menu>
+
+      <!-- NewsGroup, SectionGroup에 속하지 않는 경우 -->
+      <Menu Key="NewsLetter" Display="뉴스레터" TopMenu="false">
+        <Url Link="/newsletter" />
+      </Menu>
+
+      <Menu Key="User" Display="독자 서비스" Dummy="true">
+        <Url Link="/customercenter"/>
+        <Children>
+          <!-- 보도자료, 중앙선데이와 같이 한페이지에 여러개의 카테고리를 가지는 경우 -->
+          <Menu Key="BrandNews" Display="보도 자료">
+            <Url Link="/brandnews"/>
+            <Category Term="15">
+              <!-- 전체는 제외, 하위 카테고리의 정보를 모아 BrandNews 카테고리로 설정
+              <SubCategory Key="ReportMeterial">
+                <ServiceCodes>2300</ServiceCodes>
+              </SubCategory>
+              -->
+              <SubCategory Key="ReportMeterialBook" Display="도서" > <!-- UageType = Joongang -->
+                <MasterCodes>2307002</MasterCodes>
+              </SubCategory>
+              <SubCategory Key="ReportMeterialEducation" Display="교육" > <!-- UageType = Joongang -->
+                <MasterCodes>2301001</MasterCodes>
+              </SubCategory>
+            </Category>
+          </Menu>
+
+        </Children>
+      </Menu>
+    </Children>
+  </Menu>
+</MenuConfig>

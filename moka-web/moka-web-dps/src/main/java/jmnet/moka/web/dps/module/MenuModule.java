@@ -2,6 +2,7 @@ package jmnet.moka.web.dps.module;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.core.common.MokaConstants;
@@ -10,34 +11,34 @@ import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
 import jmnet.moka.core.dps.api.handler.module.ModuleInterface;
 import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
-import jmnet.moka.web.dps.module.category.Category;
-import jmnet.moka.web.dps.module.category.CategoryParser;
+import jmnet.moka.web.dps.module.menu.Category;
 import jmnet.moka.web.dps.module.menu.Menu;
 import jmnet.moka.web.dps.module.menu.MenuParser;
+import jmnet.moka.web.dps.module.menu.PeriodicMenuLoader;
+import jmnet.moka.web.dps.module.menu.SearchParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 public class MenuModule implements ModuleInterface {
-    private final static String KEY = "Key";
-    private final static String DISPLAY = "Display";
-    private final static String URL = "Url";
-    private final static String CHILDREN = "Children";
-    private final static String CODES = "codes";
-    private final static String MENUS = "menus";
-    private final static String MEGA_MENU = "megaMenu";
-    private final static String GNB_MENU = "gnbMenu";
-    private final static String SECTION_MENU = "sectionMenu";
-    private final static String SECTION_MENU_SECTION = "section";
-    private final static String SECTION_MENU_SUB_MENU = "subMenu";
-    private final static String SECTION_MENU_HIGHLIGHT = "highlight";
-    private final static String GNB_ROOT_MENU = "NewsGroup";
-    @Autowired
-    @Qualifier("pcMenuParser")
-    private MenuParser pcMenuParser;
+    private static final  String KEY = "Key";
+    private static final String DISPLAY = "Display";
+    private static final String URL = "Url";
+    private static final String LOGO_IMAGE = "LogoImage";
+    private static final String WIDTH = "Width";
+    private static final String HEIGHT = "Height";
+    private static final String CHILDREN = "Children";
+    private static final String CODES = "codes";
+    private static final String MENUS = "menus";
+    private static final String MEGA_MENU = "megaMenu";
+    private static final String GNB_MENU = "gnbMenu";
+    private static final String SECTION_MENU = "sectionMenu";
+    private static final String SECTION_MENU_SECTION = "section";
+    private static final String SECTION_MENU_SUB_MENU = "subMenu";
+    private static final String SECTION_MENU_HIGHLIGHT = "highlight";
+    private static final String GNB_ROOT_MENU = "NewsGroup";
 
     @Autowired
-    @Qualifier("categoryParser")
-    private CategoryParser categoryParser;
+    private PeriodicMenuLoader periodicMenuLoader;
 
     private String[][] megaMenuKeys = {{"NewsGroup"}, {"SectionGroup"}, {"NewsLetter", "NewsDigest", "Issue", "Trend", "Reporter"}, {"User"}};
 
@@ -54,17 +55,15 @@ public class MenuModule implements ModuleInterface {
     @Override
     public Object invoke(ApiContext apiContext)
             throws Exception {
-        return this.pcMenuParser.getRootMenu();
+        return this.periodicMenuLoader.getMenuParser().getRootMenu();
     }
 
     public Object getMenuByCategory(ApiContext apiContext) throws Exception {
         Map<String, Object> paramMap = apiContext.getCheckedParamMap();
         String categoryKey = (String) paramMap.get(MokaConstants.PARAM_CATEGORY);
-        CategoryModule
-                categoryModule = (CategoryModule) moduleRequestHandler.getModule(
-                CategoryModule.class.getName());
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put(CODES, categoryModule.getCodes(categoryKey));
+        Menu menu = findMenu(this.periodicMenuLoader.getMenuParser().getRootMenu(), categoryKey);
+        returnMap.put(CODES, getCodes(menu, categoryKey));
         returnMap.put(MENUS, getFullMenu(categoryKey));
         return returnMap;
     }
@@ -74,22 +73,21 @@ public class MenuModule implements ModuleInterface {
         String masterCodes = (String)paramMap.get(MokaConstants.CATEGORY_MASTER_CODE_LIST);
         String serviceCodes = (String)paramMap.get(MokaConstants.CATEGORY_SERVICE_CODE_LIST);
         String sourceCodes = (String)paramMap.get(MokaConstants.CATEGORY_SOURCE_CODE_LIST);
-        CategoryModule
-                categoryModule = (CategoryModule) moduleRequestHandler.getModule(CategoryModule.class.getName());
-        List<Category> categoryList = categoryModule.getCategoryList(masterCodes,serviceCodes, sourceCodes);
+        List<Category> categoryList = this.periodicMenuLoader.getMenuParser().getCategoryList(masterCodes,serviceCodes, sourceCodes);
         Map<String, Object> returnMap = new HashMap<>();
         if ( categoryList.size() > 0) {
             Category category = categoryList.get(0);
-            returnMap.put(CODES, categoryModule.getCodes(category));
+            Menu menu = findMenu(this.periodicMenuLoader.getMenuParser().getRootMenu(), category.getKey());
+            returnMap.put(CODES, getCodes(menu, category));
             returnMap.put(MENUS, getFullMenu(category.getKey()));
             return returnMap;
         }
         return returnMap;
     }
 
-    public  Map<String, Object> getSearchParmeterByCategory(String categoryKey) throws Exception {
-        Menu foundMenu = findMenuByCategory(this.pcMenuParser.getRootMenu(), categoryKey);
-        return foundMenu != null ? foundMenu.getSearchParamMap() : null;
+    public SearchParameter getSearchParmeterByCategory(String categoryKey) throws Exception {
+        Menu foundMenu = findMenuByCategory(this.periodicMenuLoader.getMenuParser().getRootMenu(), categoryKey);
+        return foundMenu != null ? foundMenu.getSearchParameter() : null;
     }
 
     private Map<String, Object> getFullMenu(String categoryKey) {
@@ -103,7 +101,7 @@ public class MenuModule implements ModuleInterface {
     private Object getGnbMenu() {
         List<Map<String, Object>> resultList = new ArrayList<>();
         for (Menu menu : this.getChildrenMenu(GNB_ROOT_MENU)) {
-            if (menu.isIsShowTopMenu()) {
+            if (menu.isTopMenu()) {
                 resultList.add(convert(menu));
             }
         }
@@ -111,7 +109,7 @@ public class MenuModule implements ModuleInterface {
     }
 
     private Object getSectionMenu(String categoryKey) {
-        Menu foundMenu = findMenuByCategory(this.pcMenuParser.getRootMenu(), categoryKey);
+        Menu foundMenu = findMenuByCategory(this.periodicMenuLoader.getMenuParser().getRootMenu(), categoryKey);
         if (foundMenu == null) {
             return MenuParser.EMPTY_CHILDREN;
         }
@@ -131,7 +129,7 @@ public class MenuModule implements ModuleInterface {
         resultMap.put(SECTION_MENU_HIGHLIGHT, highlightMenu == null ? "" : highlightMenu.getKey());
         List<Map<String, Object>> resultList = new ArrayList<>();
         for (Menu menu : sectionMenu.getChildren()) {
-            if (menu.isIsShowTopMenu()) {
+            if (menu.isTopMenu()) {
                 resultList.add(convert(menu));
             }
         }
@@ -152,18 +150,18 @@ public class MenuModule implements ModuleInterface {
     }
 
     private void collectMegaMap(List<Map<String, Object>> resultList, String key) {
-        Menu rootMenu = this.pcMenuParser.getRootMenu();
+        Menu rootMenu = this.periodicMenuLoader.getMenuParser().getRootMenu();
         Menu foundMenu = findMenu(rootMenu, key);
         if (foundMenu == null) {
             return;
         }
         if (foundMenu.isDummy()) { // dummy 일경우
             for (Menu menu : this.getChildrenMenu(key)) {
-                if (menu.isIsShowMegaMenu()) {
+                if (menu.isMegaMenu()) {
                     Map<String, Object> map = convert(menu);
                     List<Map<String, Object>> subMenu = new ArrayList<>();
                     for (Menu childMenu : menu.getChildren()) {
-                        if (childMenu.isIsShowMegaMenu()) {
+                        if (childMenu.isMegaMenu()) {
                             subMenu.add(convert(childMenu));
                         }
                     }
@@ -172,11 +170,11 @@ public class MenuModule implements ModuleInterface {
                 }
             }
         } else { // dummy가 아닐 경우
-            if (foundMenu.isIsShowMegaMenu()) {
+            if (foundMenu.isMegaMenu()) {
                 Map<String, Object> map = convert(foundMenu);
                 List<Map<String, Object>> subMenu = new ArrayList<>();
                 for (Menu childMenu : foundMenu.getChildren()) {
-                    if (childMenu.isIsShowMegaMenu()) {
+                    if (childMenu.isMegaMenu()) {
                         subMenu.add(convert(childMenu));
                     }
                 }
@@ -187,17 +185,18 @@ public class MenuModule implements ModuleInterface {
     }
 
     private Map<String, Object> convert(Menu menu) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put(KEY, menu.getKey());
         map.put(DISPLAY, menu.getDisplay());
-        map.put(URL, menu
-                .getUrl()
-                .getPath());
+        map.put(URL, menu.getUrl());
+        map.put(LOGO_IMAGE, menu.getLogoImage());
+        map.put(WIDTH, menu.getWidth());
+        map.put(HEIGHT, menu.getHeight());
         return map;
     }
 
     public List<Menu> getChildrenMenu(String parentKey) {
-        Menu rootMenu = this.pcMenuParser.getRootMenu();
+        Menu rootMenu = this.periodicMenuLoader.getMenuParser().getRootMenu();
         Menu foundMenu = findMenu(rootMenu, parentKey);
         if (foundMenu != null) {
             return foundMenu.getChildren();
@@ -210,7 +209,7 @@ public class MenuModule implements ModuleInterface {
             return null;
         }
         Menu foundMenu = null;
-        // 상위레벨부터 조회하도록 루프를 두번 수행한다.
+        // child menu를 조사한다.
         for (Menu menu : parentMenu.getChildren()) {
             if (menu
                     .getKey()
@@ -218,6 +217,7 @@ public class MenuModule implements ModuleInterface {
                 return menu;
             }
         }
+        // 각 child의 child menu를 조사한다.
         for (Menu menu : parentMenu.getChildren()) {
             foundMenu = findMenu(menu, key);
             if (foundMenu != null) {
@@ -232,20 +232,17 @@ public class MenuModule implements ModuleInterface {
             return null;
         }
         Menu foundMenu = null;
-        // 상위레벨부터 조회하도록 루프를 두번 수행한다.
+        // child menu를 조사한다.
         for (Menu menu : parentMenu.getChildren()) {
-//            if (menu.getCategoryKey() != null) {
-//                if (menu
-//                        .getCategoryKey()
-//                        .equalsIgnoreCase(categoryKey)) {
-//                    return menu;
-//                }
-//            }
-
             if (menu.getKey().equalsIgnoreCase(categoryKey)) {
                 return menu;
             }
+            // subCategory와 key일치할 경우도 조사
+            if ( menu.matchedSubCategory(categoryKey)) {
+                return menu;
+            }
         }
+        // child menu의 child를 조사한다.
         for (Menu menu : parentMenu.getChildren()) {
             foundMenu = findMenuByCategory(menu, categoryKey);
             if (foundMenu != null) {
@@ -255,4 +252,40 @@ public class MenuModule implements ModuleInterface {
         return foundMenu;
     }
 
+    public Object getCodes(Menu menu, String categoryKey)
+            throws Exception {
+        Map<String,String> result = new HashMap<>();
+        Category category = this.periodicMenuLoader.getMenuParser().getCategory(categoryKey);
+        return getCodes(menu, category);
+    }
+
+    public Object getCodes(Menu menu, Category category)
+            throws Exception {
+        Map<String,Object> result = new LinkedHashMap<>();
+        if ( category != null) {
+            result.put(MokaConstants.PARAM_CATEGORY, category.getKey());
+            result.put(MokaConstants.CATEGORY_MASTER_CODE_LIST, String.join(",", category.getMasterCodeList()));
+            result.put(MokaConstants.CATEGORY_SERVICE_CODE_LIST, String.join(",", category.getServiceCodeList()));
+            result.put(MokaConstants.CATEGORY_SOURCE_CODE_LIST, String.join(",", category.getSourceCodeList()));
+            result.put(MokaConstants.CATEGORY_EXCEPT_SOURCE_CODE_LIST, String.join(",", category.getExceptSourceCodeList()));
+            result.put(MokaConstants.CATEGORY_TERM, category.getTerm());
+            result.put(MokaConstants.CATEGORY_TERM, category.getStartDate());
+            result.put(MokaConstants.CATEGORY_SUB_CATEGORY_ENTRY, category.getSubCategoryEntry());
+        } else {
+            result.put(MokaConstants.PARAM_CATEGORY, "");
+            result.put(MokaConstants.CATEGORY_MASTER_CODE_LIST, "");
+            result.put(MokaConstants.CATEGORY_SERVICE_CODE_LIST, "");
+            result.put(MokaConstants.CATEGORY_SOURCE_CODE_LIST, "");
+            result.put(MokaConstants.CATEGORY_EXCEPT_SOURCE_CODE_LIST, "");
+            result.put(MokaConstants.CATEGORY_TERM, "");
+            result.put(MokaConstants.CATEGORY_START_DATE, "");
+            result.put(MokaConstants.CATEGORY_SUB_CATEGORY_ENTRY, "");
+        }
+        if ( menu != null) {
+            result.put(MokaConstants.CATEGORY_FILTER_ONLY_JOONGANG, menu.isFilterOnlyJoongang());
+            result.put(MokaConstants.CATEGORY_FILTER_DATE, menu.isFilterDate());
+            result.put(MokaConstants.CATEGORY_SEARCH_PARAMETER, menu.getSearchParameter());
+        }
+        return result;
+    }
 }

@@ -4,17 +4,14 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.core.common.aspect.CommandControllerIpAllowAspect;
-import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.web.dps.module.category.CategoryParser;
 import jmnet.moka.web.dps.module.membership.MembershipHelper;
-import jmnet.moka.web.dps.module.menu.MenuParser;
+import jmnet.moka.web.dps.module.menu.PeriodicMenuLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @Configuration
 public class CustomDpsConfiguration {
@@ -31,8 +28,11 @@ public class CustomDpsConfiguration {
     @Value("${membership.api}")
     private String api;
 
-    //    @Autowired
-    //    private GenericApplicationContext appContext;
+    @Value("${menu.load.location}")
+    private String menuLocation;
+
+    @Value("${menu.load.interval.minutes}")
+    private int menuLoadIntervalMinutes;
 
     /**
      * <pre>
@@ -46,21 +46,12 @@ public class CustomDpsConfiguration {
         return new CommandControllerIpAllowAspect(commandAllowIps);
     }
 
-    @Bean(name = "pcMenuParser")
-    public MenuParser pcMenuParser()
+    @Bean(name = "periodicMenuLoader" , destroyMethod = "shutdown")
+    public PeriodicMenuLoader periodicMenuLoader(ThreadPoolTaskScheduler scheduler)
             throws ParserConfigurationException, XPathExpressionException, IOException {
-        ResourcePatternResolver patternResolver = ResourceMapper.getResouerceResolver();
-        Resource resource = patternResolver.getResource("classpath:/Menu.xml");
-        return new MenuParser(resource);
+        return new PeriodicMenuLoader(this.menuLocation, scheduler, menuLoadIntervalMinutes);
     }
 
-    @Bean(name = "categoryParser")
-    public CategoryParser categoryParser()
-            throws ParserConfigurationException, XPathExpressionException, IOException {
-        ResourcePatternResolver patternResolver = ResourceMapper.getResouerceResolver();
-        Resource resource = patternResolver.getResource("classpath:/CategoryDefinition.xml");
-        return new CategoryParser(resource);
-    }
 
     @Bean(name = "membershipHelper")
     public MembershipHelper membershipHelper() {

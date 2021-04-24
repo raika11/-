@@ -5,8 +5,7 @@ $(document).ready(function() {
     });
 
     btnCloseModal();
-    
-    
+
     $(window).scroll(function(event){
         /* article mobile sticky_menu */
         var scrollT = $(this).scrollTop();
@@ -25,10 +24,17 @@ $(document).ready(function() {
 
     /* 화면 크기에 따른 기자 목록 */
     bylineControl(window.innerWidth);
+
+    /* list to slider  */
+    var $slider = $('#slider_div');
+    changeToSlid($slider);
+
     $(window).resize(function(e){
         bylineControl(window.innerWidth);
         /* scroll indicator */
         scrollIndicator();
+        /* list to slider */
+        changeToSlid($slider);
     })
 
     /* 기자 더보기(외○명) 클릭 */
@@ -81,6 +87,7 @@ function btnCloseModal(){
     });
 }
 
+/* scroll indicator */
 function scrollIndicator(){
     var articleHeight = $(".article").height() - $(".article_footer").height();
     var percentage = ($(window).scrollTop() / articleHeight) * 100;  
@@ -134,4 +141,19 @@ function setBylinePopPos(){
     var $bylineMore = $(".btn_byline_more");
     var bylinePopleft = $bylineMore.position().left + $bylineMore.width() - $bylinePop.outerWidth() + 5;
     $bylinePop.css("left",bylinePopleft+"px");
+}
+
+function changeToSlid($target){
+    var slickOptions = {
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        dots:true,
+        arrows:false
+    };
+
+    $target.not('.slick-initialized').slick(slickOptions);
+    if(window.innerWidth >= BREAKPOINT_LARGE) {
+        $target.slick('unslick');
+    };
 }

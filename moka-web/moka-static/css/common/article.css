@@ -32,7 +32,7 @@ font-*,color,text-align,vertical-align, ...
 .article_header .datetime .time_bx > .date:nth-of-type(1):nth-last-of-type(2) { margin-right: 10px; }
 .article_header .datetime .date .ico_arrow_down { width: 8px; height: 7px; }
 .article_header .datetime .epaper {position:absolute;right:0;top:0;font-size:13px;line-height:22px;color:#999;}
-.article_header > .byline {display:flex; flex-wrap: wrap; align-items:center; position: relative; min-height: 52px;margin:0 -5px; padding: 4px 0; }
+.article_header > .byline {display:flex; flex-wrap: wrap; align-items:center; position: relative; height: 21px; min-height: 52px; margin:0 -5px; padding: 4px 0; }
 .article_header > .byline > a {padding:0 5px; font-size: 14px; font-weight: 700; }
 .article_header > .byline .btn_byline_more { margin-left: 5px; font-size: 13px; }
 .article_header + .subscription_wrap {margin-top:30px;}

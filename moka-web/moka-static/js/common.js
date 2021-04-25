@@ -1,12 +1,14 @@
-// JavaScript Document
 $(document).ready(function() {
-
-
-
-	
-
-
-
+    if ($(this).scrollTop() > 10) {
+        $('.header').addClass('sticky_top');
+    }
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 10) {
+            $('.header').addClass('sticky_top');
+        } else {
+            $('.header').removeClass('sticky_top');
+        }
+    });
 
     //li형 select box
     $(".dropdown_toggle").on("click", function(){
@@ -25,6 +27,4 @@ $(document).ready(function() {
         }
     });
     
-    
-
 });

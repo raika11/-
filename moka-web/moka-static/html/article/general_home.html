@@ -18,18 +18,17 @@
 
     <link href="//stg-static.joongang.co.kr/css/plugin/slick.css" rel="stylesheet">
 
-    <link href="//stg-static.joongang.co.kr/css/common/common.css" rel="stylesheet">
-    <link href="//stg-static.joongang.co.kr/css/common/article.css" rel="stylesheet">
+    <link href="//stg-static.joongang.co.kr/css/common.css" rel="stylesheet">
+    <link href="//stg-static.joongang.co.kr/css/article.css" rel="stylesheet">
     
     
     <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
     <script src="//stg-static.joongang.co.kr/js/plugin/swiper.min.js"></script>
     <script src="//stg-static.joongang.co.kr/js/plugin/slick.js"></script>
     <!-- <script src="//stg-static.joongang.co.kr/js/plugin/jquery.slimscroll.js"></script> -->
-    <script src="//stg-static.joongang.co.kr/js/utils/scroll.js"></script>
     <script src="//stg-static.joongang.co.kr/js/resource.js"></script>
-    <script src="//stg-static.joongang.co.kr/js/utils/article.js"></script>
-    <script src="//stg-static.joongang.co.kr/js/utils/pub.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/common.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/article.js"></script>
 </head>
 <body>
     <div id="wrapper">
@@ -500,7 +499,7 @@
                             </header>
                             <!-- 읽지않은북마크 -->
                             <div class="bookmark_list_area">
-                                <ul class="card_group"  id="slider_div">
+                                <ul class="card_group" id="slider_div">
                                     <li class="card">
                                         <div class="card_image">
                                             <figure>
@@ -1007,28 +1006,4 @@
         <!-- // footer -->
     </div>
 </body>
-
-<script>
-
-
-
-
-var slider = $('#slider_div');
-
-var slickOptions = {
-    infinite: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    dots:true,
-    arrows:false
-};
-
-$(window).on('load resize', function() {
-    slider.not('.slick-initialized').slick(slickOptions);
-    if($(window).width() > 1006) {
-        slider.slick('unslick');
-    };
-});
-
-</script>
 </html>

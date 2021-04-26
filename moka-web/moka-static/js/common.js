@@ -1,4 +1,6 @@
 $(document).ready(function() {
+
+    //header stiky
     if ($(this).scrollTop() > 10) {
         $('.header').addClass('sticky_top');
     }
@@ -26,5 +28,24 @@ $(document).ready(function() {
             LayerPopup.removeClass("open");
         }
     });
+
+
+
+
+    /****
+        * slick  group
+        * -----------------------------------------------------
+        */
+    /* list to slider  */
+    var $slider = $('#slider_div');
+    changeToSlid($slider);
+
+    $(window).resize(function(e){
+        bylineControl(window.innerWidth);
+        /* scroll indicator */
+        scrollIndicator();
+        /* list to slider */
+        changeToSlid($slider);
+    })
     
 });

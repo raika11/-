@@ -42,10 +42,10 @@ public class SearchNewsletterInfoExcelView extends AbstractExcelView {
 
             row
                     .createCell(cellNum.getAndAdd(1))
-                    .setCellValue(newsletter.getSendType());
+                    .setCellValue(newsletter.getSendTypeName());
             row
                     .createCell(cellNum.getAndAdd(1))
-                    .setCellValue(newsletter.getLetterType());
+                    .setCellValue(newsletter.getLetterTypeName());
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter.getLetterName());
@@ -81,9 +81,9 @@ public class SearchNewsletterInfoExcelView extends AbstractExcelView {
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter
                             .getRegMember()
-                            .getMemberNm() + newsletter
+                            .getMemberNm() + "(" + newsletter
                             .getRegMember()
-                            .getMemberId());
+                            .getMemberId() + ")");
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter.getAbtestYn());

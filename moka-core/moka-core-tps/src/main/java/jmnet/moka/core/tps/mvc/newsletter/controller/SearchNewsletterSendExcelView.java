@@ -42,7 +42,7 @@ public class SearchNewsletterSendExcelView extends AbstractExcelView {
 
             row
                     .createCell(cellNum.getAndAdd(1))
-                    .setCellValue(newsletterSend.getLetterType());
+                    .setCellValue(newsletterSend.getLetterTypeName());
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletterSend.getLetterName());

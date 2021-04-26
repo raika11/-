@@ -53,8 +53,8 @@ const Row = ({ data, onRowClicked, selected, lastRow }) => {
                     </a>
                     &nbsp;)
                 </h3>
-                <p className="text-truncate w-100">{data.linkContent}</p>
-                <div className="d-flex justify-content-between w-100">
+                <p className="text-truncate w-100 ft-13">{data.linkContent}</p>
+                <div className="d-flex justify-content-between w-100 ft-13">
                     <div className="d-flex flex-fill">
                         <div style={{ width: 272 }}>
                             <p className="mb-0">시작일&nbsp;{data.viewSdate}</p>
@@ -74,7 +74,7 @@ const Row = ({ data, onRowClicked, selected, lastRow }) => {
                         {data.usedYn === 'Y' ? '사용 중' : '미사용'}&nbsp;/&nbsp;{data.fixYn === 'Y' ? '항상 노출' : '검색시만 노출'}
                     </p>
                 </div>
-                <div className="d-flex">
+                <div className="d-flex ft-13">
                     <div style={{ width: 272 }}>
                         <p className="mb-0">
                             등록일&nbsp;{(data.regDt || '').slice(0, -3)}&nbsp;{regInfo}

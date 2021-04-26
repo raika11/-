@@ -29,5 +29,6 @@ export default [
         flex: 1,
         cellRendererFramework: RelArticleRenderer,
         suppressKeyboardEvent,
+        cellStyle: { paddingRight: '0px' },
     },
 ];

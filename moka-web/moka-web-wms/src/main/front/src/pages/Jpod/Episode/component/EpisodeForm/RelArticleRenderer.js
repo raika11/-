@@ -35,7 +35,7 @@ const RelArticleRenderer = forwardRef((params, ref) => {
     );
 
     return (
-        <div key={article.totalId} className="py-2 pl-1 pr-2 d-flex align-items-center">
+        <div key={article.totalId} className="py-2 pl-1 pr-12 d-flex align-items-center">
             {/* 기사 ID, 제목 노출 */}
             <div className="flex-fill">
                 <MokaInputLabel label="제목" className="mb-1" labelWidth={40} name="relTitle" onChange={handleChange} value={article.relTitle} />

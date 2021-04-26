@@ -29,23 +29,29 @@ $(document).ready(function() {
         }
     });
 
-
-
-
     /****
         * slick  group
         * -----------------------------------------------------
         */
     /* list to slider  */
     var $slider = $('#slider_div');
-    changeToSlid($slider);
-
+    changeToSlide($slider);
     $(window).resize(function(e){
-        bylineControl(window.innerWidth);
-        /* scroll indicator */
-        scrollIndicator();
-        /* list to slider */
-        changeToSlid($slider);
-    })
-    
+        changeToSlide($slider);
+    });
 });
+
+function changeToSlide($target){
+    var slickOptions = {
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        dots:true,
+        arrows:false
+    };
+
+    $target.not('.slick-initialized').slick(slickOptions);
+    if(window.innerWidth >= BREAKPOINT_LARGE) {
+        $target.slick('unslick');
+    };
+}

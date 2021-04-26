@@ -133,17 +133,3 @@ function setBylinePopPos(){
     $bylinePop.css("left",bylinePopleft+"px");
 }
 
-function changeToSlid($target){
-    var slickOptions = {
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        dots:true,
-        arrows:false
-    };
-
-    $target.not('.slick-initialized').slick(slickOptions);
-    if(window.innerWidth >= BREAKPOINT_LARGE) {
-        $target.slick('unslick');
-    };
-}

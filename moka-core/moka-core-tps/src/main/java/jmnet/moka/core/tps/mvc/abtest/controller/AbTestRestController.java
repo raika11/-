@@ -101,10 +101,13 @@ public class AbTestRestController extends AbstractCommonController {
 
         // 조회
         AbTestCaseVO returnValue = abTestCaseService.findABTestById(abtestSeq);
- 
+
+        AbTestCaseDTO dto = modelMapper.map(returnValue, AbTestCaseDTO.class);
+
         tpsLogger.success(ActionType.SELECT);
 
-        return new ResponseEntity<>(returnValue, HttpStatus.OK);
+        ResultDTO<AbTestCaseDTO> resultDto = new ResultDTO<>(dto);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**

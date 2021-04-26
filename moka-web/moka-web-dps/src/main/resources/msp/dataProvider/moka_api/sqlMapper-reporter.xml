@@ -65,4 +65,16 @@
       ) }
   </select>
 
+  <!--더 오래 필진 목록-->
+  <select id="retirement" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_15RE_REPORTER_RETIRENENT_LIST_SEL(
+      #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
 </mapper>

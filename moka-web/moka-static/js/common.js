@@ -28,28 +28,20 @@ $(document).ready(function() {
             LayerPopup.removeClass("open");
         }
     });
-
-    /****
-        * slick  group
-        * -----------------------------------------------------
-        */
-    /* list to slider  */
-    var $slider = $('#slider_div');
-    changeToSlide($slider);
-    $(window).resize(function(e){
-        changeToSlide($slider);
-    });
 });
 
-function changeToSlide($target){
-    var slickOptions = {
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        dots:true,
-        arrows:false
-    };
-
+/* list to slider  */
+function changeToSlider($target, slickOptions){
+    if(typeof slickOptions === "undefined"){
+        slickOptions = {
+            infinite: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            dots:true,
+            arrows:false
+        };
+    }
+    
     $target.not('.slick-initialized').slick(slickOptions);
     if(window.innerWidth >= BREAKPOINT_LARGE) {
         $target.slick('unslick');

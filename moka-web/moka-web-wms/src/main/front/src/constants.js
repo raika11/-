@@ -258,3 +258,25 @@ export const ISSUE_CHANNEL_TYPE = {
     G: { code: 'G', name: '차트' },
     B: { code: 'B', name: '배너' },
 };
+
+// 뉴스레터 관리 발송 유형
+export const NEWS_LETTER_SEND_TYPE = {
+    A: '자동',
+    E: '수동',
+};
+
+// 뉴스레터 관리 유형
+export const NEWS_LETTER_TYPE = {
+    O: '오리지널',
+    B: '브리핑',
+    N: '알림',
+    E: '기타',
+};
+
+// 뉴스레터 관리 상태
+export const NEWS_LETTER_STATUS = {
+    Y: '활성',
+    P: '임시저장',
+    S: '중지',
+    Q: '종료',
+};

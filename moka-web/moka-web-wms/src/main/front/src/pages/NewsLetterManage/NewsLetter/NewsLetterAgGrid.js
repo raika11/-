@@ -6,7 +6,8 @@ import { MokaTable } from '@/components';
 import columnDefs from './NewsLetterAgGridColumns';
 import { GET_NEWS_LETTER_LIST, getNewsLetterList, changeNewsLetterSearchOption } from '@store/newsLetter';
 import moment from 'moment';
-import { DATE_FORMAT } from '@/constants';
+import { DATE_FORMAT, NEWS_LETTER_SEND_TYPE, NEWS_LETTER_TYPE, NEWS_LETTER_STATUS } from '@/constants';
+import { GRID_ROW_HEIGHT } from '@/style_constants';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 상품 목록
@@ -46,16 +47,18 @@ const NewsLetterAgGrid = ({ match }) => {
         setRowData(
             list.map((l) => ({
                 ...l,
+                sendType: NEWS_LETTER_SEND_TYPE[l.sendType] || l.sendType,
+                letterType: NEWS_LETTER_TYPE[l.letterType] || l.letterType,
                 sendStartDt: l.sendStartDt ? moment(l.sendStartDt).format(DATE_FORMAT) : '',
                 lastSendDt: l.lastSendDt ? moment(l.lastSendDt).format(DATE_FORMAT) : '',
                 sendInfo: l.sendDay || l.sendBaseCnt,
+                status: NEWS_LETTER_STATUS[l.status] || l.status,
                 regDt: l.regDt ? moment(l.regDt).format(DATE_FORMAT) : '',
+                regInfo: l.regMember.memberId ? `${l.regMember.memberNm} (${l.regMember.memberId})` : '',
                 abtestYn: l.abtestYn || 'N',
             })),
         );
     }, [list]);
-
-    console.log(rowData);
 
     return (
         <>
@@ -67,6 +70,7 @@ const NewsLetterAgGrid = ({ match }) => {
             </div>
             <MokaTable
                 suppressMultiSort // 다중 정렬 비활성
+                rowHeight={GRID_ROW_HEIGHT.T[1]}
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}

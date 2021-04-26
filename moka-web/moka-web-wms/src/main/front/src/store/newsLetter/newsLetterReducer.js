@@ -19,6 +19,7 @@ export const initialState = {
             keyword: '',
             useTotal: '',
             letterType: '',
+            // category: '',
             status: '',
             sendType: '',
             startDt: null,

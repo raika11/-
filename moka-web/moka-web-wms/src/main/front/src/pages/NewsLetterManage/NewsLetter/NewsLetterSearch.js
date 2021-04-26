@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@/components';
 import { initialState, getNewsLetterList, changeNewsLetterSearchOption } from '@store/newsLetter';
 import toast from '@/utils/toastUtil';
-import { DB_DATEFORMAT } from '@/constants';
+import { DB_DATEFORMAT, NEWS_LETTER_TYPE, NEWS_LETTER_SEND_TYPE, NEWS_LETTER_STATUS } from '@/constants';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 상품 검색
@@ -29,14 +29,10 @@ const NewsLetterSearch = () => {
             setPeriod([Number(number), date]);
 
             // 기간 설정
-            if (number === 0 && date === 'all') {
-                setSearch({ ...search, startDt: null, endDt: null });
-            } else {
-                const nd = new Date();
-                const startDt = moment(nd).subtract(Number(number), date).startOf('day');
-                const endDt = moment(nd).endOf('day');
-                setSearch({ ...search, startDt, endDt });
-            }
+            const nd = new Date();
+            const startDt = moment(nd).subtract(Number(number), date).startOf('day');
+            const endDt = moment(nd).endOf('day');
+            setSearch({ ...search, startDt, endDt });
         } else {
             setSearch({ ...search, [name]: value });
         }
@@ -89,22 +85,33 @@ const NewsLetterSearch = () => {
             <Form.Row className="mb-2">
                 <MokaInput as="select" name="letterType" className="mr-2" value={search.letterType} onChange={handleChangeValue}>
                     <option value="">유형 전체</option>
-                    <option value="O">오리지널</option>
-                    <option value="B">브리핑</option>
-                    <option value="N">알림</option>
-                    <option value="E">기타</option>
+                    {Object.keys(NEWS_LETTER_TYPE).map((lt) => (
+                        <option key={lt} value={lt}>
+                            {NEWS_LETTER_TYPE[lt]}
+                        </option>
+                    ))}
+                </MokaInput>
+                <MokaInput as="select" name="category" className="mr-2" value={search.category} onChange={handleChangeValue}>
+                    <option value="">분야 전체</option>
+                    <option value="1">분야1</option>
+                    <option value="2">분야2</option>
+                    <option value="3">분야3</option>
                 </MokaInput>
                 <MokaInput as="select" name="status" className="mr-2" value={search.status} onChange={handleChangeValue}>
                     <option value="">상태 전체</option>
-                    <option value="Y">활성</option>
-                    <option value="P">임시저장</option>
-                    <option value="S">중지</option>
-                    <option value="Q">종료</option>
+                    {Object.keys(NEWS_LETTER_STATUS).map((s) => (
+                        <option key={s} value={s}>
+                            {NEWS_LETTER_STATUS[s]}
+                        </option>
+                    ))}
                 </MokaInput>
                 <MokaInput as="select" name="sendType" className="mr-2" value={search.sendType} onChange={handleChangeValue}>
                     <option value="">발송 방법 전체</option>
-                    <option value="A">자동</option>
-                    <option value="E">수동</option>
+                    {Object.keys(NEWS_LETTER_SEND_TYPE).map((st) => (
+                        <option key={st} value={st}>
+                            {NEWS_LETTER_SEND_TYPE[st]}
+                        </option>
+                    ))}
                 </MokaInput>
                 <MokaInput as="select" name="abtestYn" className="mr-2" value={search.abtestYn} onChange={handleChangeValue}>
                     <option>A/B TEST 여부 전체</option>
@@ -118,9 +125,6 @@ const NewsLetterSearch = () => {
             <Form.Row className="mb-2">
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="period" value={period.join('')} onChange={handleChangeValue}>
-                        <option value="0all" data-number="0" data-date="all">
-                            기간 전체
-                        </option>
                         <option value="7days" data-number="7" data-date="days">
                             1주
                         </option>

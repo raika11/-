@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import img_logo from '@assets/images/img_logo@3x.png';
@@ -44,6 +44,14 @@ const propTypes = {
      * @default
      */
     ratio: PropTypes.array,
+    /**
+     * error시 추가 로직 실행
+     */
+    onError: PropTypes.func,
+    /**
+     * load시 추가 로직 실행
+     */
+    onLoad: PropTypes.func,
 };
 const defaultProps = {
     width: 171,
@@ -56,7 +64,7 @@ const defaultProps = {
 /**
  * 이미지 컴포넌트(Figure)
  */
-const MokaImage = ({ width, height, img, className, alt, imgClassName, inputBorder, ratio, defaultImg }) => {
+const MokaImage = forwardRef(({ width, height, img, className, alt, imgClassName, onError: handleError, onLoad: handleLoad, inputBorder, ratio, defaultImg }, ref) => {
     const wrapRef = useRef(null);
     const imgRef = useRef(null);
     const [src, setImgSrc] = useState(null);
@@ -65,12 +73,18 @@ const MokaImage = ({ width, height, img, className, alt, imgClassName, inputBord
         e.target.src = defaultImg;
         wrapRef.current.classList.add('onerror-image-wrap');
         e.target.classList.add('onerror-image');
+        if (handleError) {
+            handleError(imgRef.current);
+        }
     };
 
     const onLoad = (e) => {
         if (e.target.src.replace(window.location.origin, '') !== defaultImg) {
             wrapRef.current.classList.remove('onerror-image-wrap');
             e.target.classList.remove('onerror-image');
+            if (handleLoad) {
+                handleLoad(imgRef.current);
+            }
         }
     };
 
@@ -84,6 +98,14 @@ const MokaImage = ({ width, height, img, className, alt, imgClassName, inputBord
         }
     }, [defaultImg, img]);
 
+    useImperativeHandle(
+        ref,
+        () => ({
+            img: imgRef.current,
+        }),
+        [],
+    );
+
     return (
         <div
             className={clsx('d-inline-flex align-items-center justify-content-center position-relative bg-white', className, { 'input-border': inputBorder })}
@@ -94,7 +116,7 @@ const MokaImage = ({ width, height, img, className, alt, imgClassName, inputBord
             <img alt={alt} src={src} ref={imgRef} className={clsx('center-image', imgClassName)} loading="lazy" onError={onError} onLoad={onLoad} />
         </div>
     );
-};
+});
 
 MokaImage.propTypes = propTypes;
 MokaImage.defaultProps = defaultProps;

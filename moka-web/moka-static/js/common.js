@@ -1,4 +1,6 @@
 $(document).ready(function() {
+
+    //header stiky
     if ($(this).scrollTop() > 10) {
         $('.header').addClass('sticky_top');
     }
@@ -26,5 +28,22 @@ $(document).ready(function() {
             LayerPopup.removeClass("open");
         }
     });
-    
 });
+
+/* list to slider  */
+function changeToSlider($target, slickOptions){
+    if(typeof slickOptions === "undefined"){
+        slickOptions = {
+            infinite: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            dots:true,
+            arrows:false
+        };
+    }
+    
+    $target.not('.slick-initialized').slick(slickOptions);
+    if(window.innerWidth >= BREAKPOINT_LARGE) {
+        $target.slick('unslick');
+    };
+}

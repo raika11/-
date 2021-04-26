@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_AP, ITEM_CT, ITEM_CP, ITEM_TP, TEMS_PREFIX } from '@/constants';
-import { getAt } from '@store/codeMgt';
+import { getSvcAt } from '@store/codeMgt';
 import { clearStore, deleteArticlePage, appendTag, changeArticlePageBody } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
 import ArticlePageEditor from './ArticlePageEditor';
@@ -115,7 +115,7 @@ const ArticlePage = ({ match }) => {
 
     React.useEffect(() => {
         if (!atRows) {
-            dispatch(getAt());
+            dispatch(getSvcAt());
         }
     }, [atRows, dispatch]);
 

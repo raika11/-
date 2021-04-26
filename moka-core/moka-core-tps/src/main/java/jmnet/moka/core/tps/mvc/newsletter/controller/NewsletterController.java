@@ -385,13 +385,13 @@ public class NewsletterController extends AbstractCommonController {
                         .getLetterName(), (destination, value) -> destination.setLetterName(String.valueOf(value)))
                 .addMapping(source -> source
                         .getNewsletterInfo()
-                        .getLetterType(), (destination, value) -> destination.setLetterType(String.valueOf(value)));
+                        .getLetterTypeName(), (destination, value) -> destination.setLetterTypeName(String.valueOf(value)));
 
         List<NewsletterSendSimpleDTO> result = modelMapper.map(returnValue.getContent(), NewsletterSendSimpleDTO.TYPE);
 
         String[] columns = new String[] {"유형", "뉴스레터 명", "제목", "발송일", "A/B Test"};
 
-        map.addAttribute("title", "뉴스레터 상품관리");
+        map.addAttribute("title", "뉴스레터 발송관리");
         map.addAttribute("columnList", CollectionUtils.arrayToList(columns));
         map.addAttribute("resultList", result);
         excelView.setAttributesMap(map);

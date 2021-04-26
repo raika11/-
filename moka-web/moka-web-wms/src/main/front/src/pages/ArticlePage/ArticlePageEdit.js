@@ -28,7 +28,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     const history = useHistory();
     const loading = useSelector(({ loading }) => loading[GET_ARTICLE_PAGE] || loading[SAVE_ARTICLE_PAGE] || loading[DELETE_ARTICLE_PAGE]);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
-    const atRows = useSelector((store) => store.codeMgt.atRows);
+    const svcAtRows = useSelector(({ codeMgt }) => codeMgt.svcAtRows);
     const { articlePage, artPageBody, invalidList } = useSelector(({ articlePage }) => articlePage);
     const [temp, setTemp] = useState(initialState.articlePage); // 입력값 state
     const [error, setError] = useState({}); // 에러 state
@@ -39,16 +39,16 @@ const ArticlePageEdit = ({ onDelete, match }) => {
      * 기사타입별 최신 totalId 조회
      */
     const getTotalId = useCallback(
-        (artType) => {
+        (artTypeList) => {
             dispatch(
                 getPreviewTotalId({
-                    artType: artType,
+                    artTypeList,
                     callback: ({ header, body }) => {
                         if (header.success) {
                             !body && toast.warning('미리보기용 기사ID가 존재하지 않습니다.');
                             setPreviewTotalId(body || '');
                         } else {
-                            messageBox.alert('미리보기용 기사ID 조회에 실패하였습니다.');
+                            toast.warning('미리보기용 기사ID 조회에 실패하였습니다.');
                         }
                     },
                 }),
@@ -324,12 +324,15 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                 placeholder="기사타입을 선택하세요"
                 required
             >
-                {atRows &&
-                    atRows.map((type) => (
-                        <option key={type.dtlCd} value={type.dtlCd}>
+                {svcAtRows &&
+                    svcAtRows.map((type) => (
+                        <option key={type.dtlCd} value={type.cdNmEtc1}>
                             {type.cdNm}
                         </option>
                     ))}
+                <option key="AMP" value="A">
+                    AMP
+                </option>
             </MokaInputLabel>
 
             {/* 미리보기용 기사ID */}

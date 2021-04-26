@@ -7,6 +7,7 @@ import { DB_DATEFORMAT } from '@/constants';
 import util from '@utils/commonUtil';
 import { messageBox } from '@utils/toastUtil';
 import { initialState, GET_ARTICLE_LIST_MODAL, getArticleListModal } from '@store/article';
+import { getSvcAt } from '@store/codeMgt';
 import Search from './Search';
 import AgGrid from './AgGrid';
 
@@ -93,6 +94,7 @@ const ArticleList = ({
 }) => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_ARTICLE_LIST_MODAL]);
+    const svcAtRows = useSelector(({ codeMgt }) => codeMgt.svcAtRows);
 
     // initial setting
     const sourceList = useSelector(({ articleSource }) => (isNaverChannel ? articleSource.typeSourceList.BULK : articleSource.deskingSourceList));
@@ -219,6 +221,10 @@ const ArticleList = ({
     );
 
     useEffect(() => {
+        if (show && !svcAtRows) dispatch(getSvcAt());
+    }, [show, dispatch, svcAtRows]);
+
+    useEffect(() => {
         if (show) {
             const type = !!isNaverChannel ? 'BULK' : 'DESKING';
             const masterCode = selectedComponent.schCodeId || null;
@@ -256,6 +262,7 @@ const ArticleList = ({
                 suppressChangeArtGroup={suppressChangeArtGroup || isNaverChannel || movie}
                 // 면판 검색 막기
                 suppressSearchMyunPan={suppressSearchMyunPan}
+                svcAtRows={svcAtRows}
             />
 
             <AgGrid

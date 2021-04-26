@@ -18,6 +18,43 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 /***                                           content                                            ***/
 /****************************************************************************************************/
+.highlight_wrap { border-top: 4px solid #f6330a; }
+.swiper_highlight_list { position: relative; margin-top: 16px; padding-bottom: 40px; }
+.swiper_highlight_list .swiper-button-prev, 
+.swiper_highlight_list .swiper-button-next { top: auto; bottom: 0; }
+.swiper_highlight_list .btn_prev,
+.swiper_highlight_list .btn_next { width: 25px; height: 25px; border: 1px solid #e2e2e2; border-radius: 50%; background-size: 13px 13px; }
+.swiper_highlight_list .swiper-button-disabled { background-color: #F7F7F7; }
+.swiper_highlight_list .btn_prev { left: 50%; transform: translateX(-53.5px); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M15 0v15H0V0z'/%3E%3Cpath fill='%231D1D1D' d='M9.75 2.284l.53.53-4.684 4.687 4.683 4.683-.53.53L4.534 7.5 9.75 2.285z'/%3E%3C/g%3E%3C/svg%3E"); }
+.swiper_highlight_list .btn_next { right: 50%; transform: translateX(53.5px); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0v15h15V0z'/%3E%3Cpath fill='%231D1D1D' d='M5.25 2.284l-.53.53 4.684 4.687-4.683 4.683.53.53L10.466 7.5 5.25 2.285z'/%3E%3C/g%3E%3C/svg%3E"); }
+.swiper-pagination-fraction { bottom: 0; font-size: 12px; line-height: 25px; }
+.swiper_highlight_list .swiper-pagination-current { color: #333; }
+.swiper_highlight_list .swiper-pagination-total { position: relative; margin-left: 4px; font-weight: 700; color: #999; }
+.swiper_highlight_list .swiper-pagination-total::before { content: '/'; position: absolute; left: -5px; top: 0;  }
+
+.swiper_highlight_list .list_item { padding: 26px 24px 28px; background-color: #fff6e2; }
+.swiper_highlight_list .list_item .title { margin-top: 20px; padding-top: 12px; border-top: 1px solid #999; font-size: 12px; color: #999; }
+.swiper_highlight_list .list_item .headline { margin-top: 2px; font-size: 12px; font-weight: 400; color: #999; }
+.swiper_highlight_list .list_item .date { margin-top: 2px; color: #999; }
+.swiper_highlight_inner { padding-bottom: 25px; }
+.swiper_highlight_inner .pagination_bullet { bottom: 0px; line-height: 5px; }
+.swiper_highlight_inner .swiper-pagination-bullet { width: 5px; height: 5px; line-height: 5px; }
+.swiper_highlight_inner .swiper-pagination-bullet-active { background-color: #f6330a; }
+.highlight_wrap .highlight_text { font-size: 16px; line-height: 24px; letter-spacing: -.4px; color: #f6330a; }
+.highlight_wrap .highlight_text .ico_quotes { display: block; width: 20px; height: 14px; margin-bottom: 8px; background-position: 1px 0; }
+.col_lg9 > .chain_wrap:nth-child(n+2) { margin-top: 60px; }
+
+/* icon */
+.ico_quotes { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='13'%3E%3Cpath d='M12.602 4.811c.746-.204 1.458-.27 2.17-.105 1.17.27 2.044.912 2.702 1.946 1.35 2.123.312 5.543-2.799 6.157-2.252.445-4.38-1.057-4.852-3.434-.716-3.615.734-6.998 3.854-8.99a1.932 1.932 0 011.401-.282c.333.055.414.248.206.513a2.984 2.984 0 01-.447.43c-1.037.863-1.94 2.363-2.235 3.765m-9.643 0c.746-.204 1.457-.27 2.17-.105 1.17.27 2.044.912 2.701 1.946 1.35 2.123.313 5.543-2.798 6.157C2.78 13.254.652 11.752.18 9.375-.537 5.76.914 2.377 4.034.385A1.93 1.93 0 015.435.103c.333.055.414.248.205.513a2.93 2.93 0 01-.446.43c-1.037.863-1.94 2.363-2.235 3.765' fill='%23FD3C18' fill-rule='evenodd'/%3E%3C/svg%3E"); }
+
+/* 공통탭 */
+.title_wrap { height: auto; padding: 0; }
+.tab_nav { width: 100%;  }
+.tab_nav .nav { display: flex; border-bottom: 1px solid #e2e2e2; }
+.tab_nav .nav_item { position: relative; padding: 10px 6px; }
+.tab_nav .nav_item:nth-child(n+2) { margin-left: 16px; }
+.tab_nav .nav_item .nav_link {  font-weight: 400; }
+.tab_nav .nav_item .nav_link.active::before { content: ''; position: absolute; left: 0; bottom: -1px; width: 100%; height: 1px; background-color: #f6330a; }
 
 
 /****************************************************************************************************/

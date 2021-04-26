@@ -6,6 +6,10 @@ package jmnet.moka.web.dps.module;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.common.ApiResult;
@@ -72,22 +76,21 @@ public class EditFormModule implements ModuleInterface {
 
                 if (resultList.size() > 0) {
                     for (Map<String, Object> groupInfo : resultList) {
-                        String temp = groupInfo
-                                .get("fields")
-                                .toString();
-                        System.out.println(temp);
-                        //                        List<Object> itemList = ResourceMapper
-                        //                                .getDefaultObjectMapper()
-                        //                                .readValue(temp, new TypeReference<List<Object>>() {
-                        //                                });
-                        //                        for (Map<String, Object> item : itemList) {
-                        //                            System.out.println(item.get("name"));
-                        //                        }
-
+                        List list = convertList(groupInfo.get("fields"));
+                        Map<String, Object> map = new HashMap<>();
+                        for (Object obj : list) {
+                            String name = ((LinkedHashMap) obj)
+                                    .get("name")
+                                    .toString();
+                            Object value = ((LinkedHashMap) obj).get("value");
+                            map.put(name, value);
+                        }
+                        returnList.add(map);
                     }
                 }
 
-                apiResult.put(ApiResult.MAIN_DATA, resultList);
+                apiResult.put(ApiResult.MAIN_DATA, returnList);
+
 
             }
             return apiResult;
@@ -96,6 +99,18 @@ public class EditFormModule implements ModuleInterface {
             return apiResult;
         }
 
+    }
+
+    private List<?> convertList(Object obj) {
+        List<?> list = new ArrayList<>();
+        if (obj
+                .getClass()
+                .isArray()) {
+            list = Arrays.asList((Object[]) obj);
+        } else if (obj instanceof Collection) {
+            list = new ArrayList<>((Collection<?>) obj);
+        }
+        return list;
     }
 
     /**

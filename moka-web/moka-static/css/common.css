@@ -449,37 +449,12 @@ html,body {overflow-x: hidden;}
 
 /** footer **/
 .footer {display: block;width: 100%;min-height: 100px;margin-top: 40px;background: #e8e8e8;}
-.foot {width: 100%;height: inherit;margin: 0 auto;padding: 20px 0;text-align: center;}
 
 /** content **/
 section {width: 100%;}
 .contents {position: relative;width: 100%;margin: 0 auto;padding-left: 20px;padding-right: 20px;}
 
 /** nav **/
-
-/* side nav */
-.side_nav {width: 100%;margin-top: 16px;}
-.side_nav .nav {width: 100%;}
-.side_nav .nav .nav_item {display: inline-block;width: 100%;border-bottom: 1px solid #e2e2e2;}
-.side_nav .nav .nav_item .nav_link {display: inline-block;width: 100%;padding: 18px 0 22px;font-size: 18px;line-height: 1.22;letter-spacing: -0.4px;color: #666;}
-.side_nav .nav .nav_item .nav_link:hover,
-.side_nav .nav .nav_item .nav_link.active {color: #111;font-weight: 900;}
-
-/* tab - a link */
-.tab_box{font-size:0;padding:10px 0 6px;}
-.tab_box a{display:inline-block;padding:0 28px;border-left:1px solid #e2e2e2;}
-.tab_box a:first-child{border:none;}
-.tab_box a:hover,.tab_box a.active{font-weight:900;}
-
-/* tab - li*/
-.tab_nav{display:flex;flex-wrap:wrap;clear:both;float:none;width:max-content;padding-left:0;margin-bottom:0;list-style:none;}
-.tab_nav .nav_item{display:inline-block;padding:0 5px;}
-.tab_nav .nav_item:first-child{border:none;}
-.tab_nav .nav_item .nav_link{font-size:16px;}
-.tab_nav .nav_item .nav_link:hover,.tab_nav .nav_item .nav_link.active{font-weight:900;}
-.tab_content{width:100%;}
-.tab_content .tab_pane{display:none;width:100%;}
-.tab_content .tab_pane.active{display:block;}
 
 /* 태블릿 디자인 나올때 까지는 아래 분기만 사용 - 2021.04.22 */
 /* Mobile devices (mobile + tablet, 1023px and down) */

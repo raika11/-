@@ -1,5 +1,8 @@
 $(document).ready(function() {
     var swiper_highlight = new Swiper('.swiper-container.swiper_highlight_list', {
+        autoHeight: true,
+        spaceBetween: 1,
+        touchRatio: 1,
         pagination: {
             el: '.swiper-pagination',
             type: 'fraction',
@@ -8,12 +11,10 @@ $(document).ready(function() {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
         },
+        breakpointsInverse: true,
         breakpoints: {
-            320: {
-                touchRatio: 0
-            },
             1024: {
-                touchRatio: 1
+                touchRatio: 0
             }
         }
     });

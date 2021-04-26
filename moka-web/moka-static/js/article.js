@@ -25,17 +25,7 @@ $(document).ready(function() {
     /* 화면 크기에 따른 기자 목록 */
     bylineControl(window.innerWidth);
 
-    /* list to slider  */
-    var $slider = $('#slider_div');
-    changeToSlid($slider);
-
-    $(window).resize(function(e){
-        bylineControl(window.innerWidth);
-        /* scroll indicator */
-        scrollIndicator();
-        /* list to slider */
-        changeToSlid($slider);
-    })
+    
 
     /* 기자 더보기(외○명) 클릭 */
     $(".btn_byline_more").click(function(){

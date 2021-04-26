@@ -263,7 +263,7 @@
     
     /* card*/
     .card_body .headline {font-size:16px;}
-    .card_body .description {color:#444; font-size:14px;}
+    /* .card_body .description {color:#444; font-size:14px;} */
     .card_more { height: 61px; padding-top:20px; padding-bottom: 20px; }
 
     /***************************************    general     ************************************/

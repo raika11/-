@@ -68,7 +68,7 @@ public class AbTestCaseDTO {
      */
     @ApiModelProperty("AB테스트 페이지(메인:M, 기사:A, 뉴스레터:L)")
     @NotNull(message = "{tps.abtest.error.notnull.pageType}")
-    @Pattern(regexp = "[A|E|J|B|L]{1}$", message = "{tps.abtest.error.pattern.pageType}")
+    @Pattern(regexp = "[M|A|L]{1}$", message = "{tps.abtest.error.pattern.pageType}")
     private String pageType;
 
     /**
@@ -91,22 +91,20 @@ public class AbTestCaseDTO {
      */
     @ApiModelProperty("영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)")
     @NotNull(message = "{tps.abtest.error.notnull.zoneDiv}")
-    @Pattern(regexp = "[A|E|J|B|L]{1}$", message = "{tps.abtest.error.pattern.zoneDiv}")
+    @Pattern(regexp = "[A|C|L|P]{1}$", message = "{tps.abtest.error.pattern.zoneDiv}")
     private String zoneDiv;
 
     /**
      * 영역일련번호(AREA_SEQ,COMPONENT_SEQ,LETTER_SEQ,파티클구분(기타코드MC))
      */
     @ApiModelProperty("영역일련번호(AREA_SEQ,COMPONENT_SEQ,LETTER_SEQ,파티클구분(기타코드MC))")
-    @Min(value = 0, message = "{tps.page.error.min.zoneSeq}")
-    private Long zoneSeq = 0l;
+    private String zoneSeq;
 
     /**
-     * A/B테스트 목표(T:디자인 D:데이터)
+     * AB테스트 목표(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
      */
-    @ApiModelProperty("A/B테스트 목표(T:디자인 D:데이터)-필수")
+    @ApiModelProperty("AB테스트 목표(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)")
     @NotNull(message = "{tps.abtest.error.notnull.abtestPurpose}")
-    @Pattern(regexp = "[T|D]{1}$", message = "{tps.abtest.error.pattern.abtestPurpose}")
     private String abtestPurpose;
 
     /**
@@ -368,13 +366,20 @@ public class AbTestCaseDTO {
      * 서비스기사ID(JAM설계경우) / TB_ABTEST_INSTANCE(A/B테스트 인스턴스) TOTAL_ID
      */
     @ApiModelProperty("서비스기사ID(JAM설계경우)")
-    private String totalId;
+    private Long totalId;
     /**
      * 화면편집파트(T:제목,L:리드문,I:이미지,R;관련기사) / TB_ABTEST_INSTANCE(A/B테스트 인스턴스) DESKING_PART
      */
     @ApiModelProperty("화면편집파트(T:제목,L:리드문,I:이미지,R;관련기사) : 텍스트 Comma(,)로 여러 개 입력")
     @Size(max = 10, message = "{tps.abtest.error.size.deskingPart}")
     private String deskingPart;
+
+    /**
+     * 컴포넌트SEQ(본문외 영역 테스트시) / TB_ABTEST_VARIANT(A/B테스트 VARIANT) COMPONENT_SEQ
+     */
+    @ApiModelProperty("템플릿SEQ")
+    @Builder.Default
+    private Long componentSeq = 0L;
 
     /**
      * 템플릿SEQ / TB_ABTEST_VARIANT(A/B테스트 VARIANT) TEMPLATE_SEQ

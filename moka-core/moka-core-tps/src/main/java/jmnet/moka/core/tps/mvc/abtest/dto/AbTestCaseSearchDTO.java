@@ -71,12 +71,12 @@ public class AbTestCaseSearchDTO extends SearchDTO {
      * 영역일련번호(AREA_SEQ,COMPONENT_SEQ,LETTER_SEQ,파티클구분(기타코드MC))
      */
     @ApiModelProperty("영역일련번호(AREA_SEQ,COMPONENT_SEQ,LETTER_SEQ,파티클구분(기타코드MC))")
-    private Long zoneSeq = 0l;
+    private String zoneSeq;
 
     /**
-     * A/B테스트 목표(T:디자인 D:데이터)
+     * AB테스트 목표(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
      */
-    @ApiModelProperty("테스트대상(T:디자인 D:데이터)")
+    @ApiModelProperty("테스트대상(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)")
     private String abtestPurpose;
 
     /**

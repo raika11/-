@@ -49,9 +49,8 @@ public class AbTestCaseServiceImpl implements AbTestCaseService {
     }
 
     @Override
-    public List<AbTestCaseVO> findABTestById(Long abTestSeq) {
-        List<AbTestCaseVO> list = abTestCaseMapper.findABTestById(abTestSeq);
-        return list;
+    public AbTestCaseVO findABTestById(Long abTestSeq) {
+        return abTestCaseMapper.findABTestById(abTestSeq);
     }
 
     @Override

@@ -9,7 +9,6 @@ export const DB_DATEFORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 // BASIC 날짜 포맷
 export const BASIC_DATEFORMAT = 'YYYY-MM-DD HH:mm';
-
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
 // image 확장자
@@ -82,6 +81,8 @@ export const CODETYPE_BO_SCHJOB = 'BO_SCHJOB';
 export const CODETYPE_JPLUS_REP = 'JPLUS_REP';
 // 시스템코드 : 기사 타입
 export const CODETYPE_AT = 'AT';
+// 시스템코드 : 서비스 기사 타입
+export const CODETYPE_SVC_AT = 'SVC_AT';
 
 // 기본 필진 코드타입 텍스트 (JPLUS_REP_DIV === null 일 때 노출하는 텍스트)
 export const JPLUS_REP_DIV_DEFAULT = '일보기자';

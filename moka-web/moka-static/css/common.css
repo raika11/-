@@ -782,7 +782,7 @@ dl.date dd {margin-left: 6px;}
     /* 카드 아이템 간격 */
     .card .headline + .description,.card .headline ~ .meta,.card .headline ~ .date,.card .headline ~ .byline{padding-top:6px;}
     /* card*/
-    .card_body .headline{color:#000;font-size:14px;}
+    .card_body .headline{font-size:14px;}
     .card_body .description{color:#555;font-size:15px;}
     .card_body .byline{font-size:12px;}
     .card_more{height:53px;padding-top:16px;padding-bottom:16px;}
@@ -836,10 +836,10 @@ dl.date dd {margin-left: 6px;}
 /***                                          story_list                                          ***/
 /****************************************************************************************************/
 .story_list {width: 100%;}
-.story_list .card {display: flex;align-items: end;}
+.story_list .card {display: flex;align-items: end;padding-top: 20px; padding-bottom: 20px;}
 .story_list .card::before {content: "";position: absolute;top: unset;bottom: 0;left: 0;display: block;width: 100%;height: 1px;background: #e2e2e2;}
 
-.story_list .card_body .headline {font-size: 18px;line-height: 1.5;letter-spacing: -0.4px;}
+.story_list .headline {font-size: 18px;line-height: 1.5;letter-spacing: -0.4px;}
 .story_list .card_image figure {max-width:100%;}
 
 
@@ -855,12 +855,13 @@ dl.date dd {margin-left: 6px;}
     /* story_list */
     .story_list .card {display:block;}
     .story_list .card_body{display:block;width: auto;max-width: 100%;overflow: inherit;}
-    .story_list .card_body .headline {min-height:81px;padding-right:12px;}
+    .story_list .headline {min-height:81px;padding-right:12px;}
     .story_list .none_photo .card_body .headline{min-height: unset;}
     .story_list .card_image{float:right;}
     .story_list .card_image img{width:132px;}
 
     /* 기자기사랭크 */
+    .journalist_story_list.headline{font-size:16px;}
     .journalist_story_list .rank_count {width:23px !important;}
     .journalist_story_list .card_body {padding-left:23px;}
 
@@ -871,12 +872,14 @@ dl.date dd {margin-left: 6px;}
 @media (min-width: 1024px) {
 
     /* story_list */
-    .story_list .card {align-items : stretch;}
+    .story_list .card {align-items : stretch;padding-top: 16px; padding-bottom: 16px;}
     .story_list .card_image img{width:205px;}
     .story_list .card_body {display:flex;padding-left:30px;flex-wrap: wrap;flex-grow: 1 !important;}
     .story_list .none_photo .card_body {padding-left:0;}
     .story_list .card_body >  *{width:100%;flex: 0 0 auto;}
+    .story_list .headline {font-size:20px;}
     .story_list .meta{margin-top:auto;}
+    
     
 
     /* 기자기사랭크 */
@@ -925,13 +928,20 @@ dl.date dd {margin-left: 6px;}
 /***                                            layout                                            ***/
 /****************************************************************************************************/
 
-.chain_wrap {border-top: 4px solid #f6330a;}
+.chain_wrap {}
+
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width:1024px) {
+    .chain_wrap {margin-bottom:50px;}
+
+}
 
 /****************************************************************************************************/
 /***                                            title                                             ***/
 /****************************************************************************************************/
 /* sub title 영역-필요시 */
-.title_wrap{display:flex;align-items:center;justify-content:space-between;padding:12px 0;height:60px;}
+.title_wrap{display:flex;align-items:center;justify-content:space-between;padding:12px 0;height:60px;border-top: 4px solid #f6330a;}
 .title_wrap .title_area{display:flex;align-items:center;}
 .title_wrap .title{color:#ff3c14;font-size:16px;font-weight:700;}
 .title_wrap .title [class*="ico_"]{margin-left:6px;}

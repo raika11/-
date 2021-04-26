@@ -123,7 +123,7 @@ const ReporterEdit = ({ match }) => {
 
             <div className="d-flex align-items-center">
                 {/* 기자 이미지 */}
-                <MokaImage defaultImg={none_photo} img={temp.repImg} width={100} height={100} inputBorder={false} className="rounded-circle" imgClassName="rounded-circle" />
+                <MokaImage defaultImg={none_photo} img={temp.repImg} width={100} height={100} inputBorder={false} className="rounded-circle overflow-hidden" />
 
                 <div className="flex-fill d-flex flex-column justify-content-center ml-4">
                     {/* 기자 정보 */}

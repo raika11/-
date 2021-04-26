@@ -11,7 +11,7 @@ import SourceSelector from './SourceSelector';
  * 페이지편집 > 기사 목록 > 기사 검색
  */
 const Search = (props) => {
-    const { onChangeSearchOption, search, period, error, onSearch, onReset, onChangeGroupNumber, sourceList, suppressChangeArtGroup, show } = props;
+    const { onChangeSearchOption, search, period, error, onSearch, onReset, onChangeGroupNumber, sourceList, suppressChangeArtGroup, show, suppressSearchMyunPan } = props;
     const [modalShow, setModalShow] = useState(false);
 
     /**
@@ -104,63 +104,90 @@ const Search = (props) => {
                     <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'end', width: 140 }} onChange={handleChangeEDate} value={search.endServiceDay} />
                 </div>
 
-                {/* 검색 조건 */}
-                <div style={{ width: 110 }} className="mr-2">
-                    <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                        {initialState.searchTypeList.map((searchType) => (
-                            <option key={searchType.id} value={searchType.id}>
-                                {searchType.name}
-                            </option>
-                        ))}
-                    </MokaInput>
+                {/* 분류 */}
+                <div className="flex-fill mr-2" style={{ width: 340 }}>
+                    <CodeAutocomplete name="masterCode" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} show={show} />
                 </div>
 
-                {/* 키워드 */}
-                <MokaSearchInput className="flex-fill mr-1" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={onSearch} />
-
-                {/* 초기화 */}
-                <Button variant="negative" className="flex-shrink-0" onClick={onReset}>
-                    초기화
+                <Button variant="searching" className="flex-shrink-0" onClick={onSearch}>
+                    검색
                 </Button>
             </Form.Row>
             <Form.Row className="d-flex mb-14 justify-content-between">
-                <div className="d-flex">
-                    {/* 분류 */}
-                    <div style={{ width: 340 }} className="mr-2">
-                        <CodeAutocomplete name="masterCode" className="mb-0" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} show={show} />
+                <div className="d-flex flex-fill">
+                    {/* 기사타입 조건 */}
+                    <div style={{ width: 110 }} className="flex-shrink-0 mr-2">
+                        <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                            {initialState.searchTypeList.map((searchType) => (
+                                <option key={searchType.id} value={searchType.id}>
+                                    {searchType.name}
+                                </option>
+                            ))}
+                        </MokaInput>
                     </div>
 
                     {/* 매체 */}
-                    <SourceSelector sourceList={sourceList} className="mr-2" value={search.sourceList} onChange={handleChangeSourceList} isInvalid={error.sourceList} />
+                    <SourceSelector
+                        sourceList={sourceList}
+                        className="flex-shrink-0 mr-2"
+                        value={search.sourceList}
+                        onChange={handleChangeSourceList}
+                        isInvalid={error.sourceList}
+                    />
 
-                    {/* 면 */}
-                    <div style={{ width: 60 }} className="mr-2">
-                        <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} />
+                    {/* 검색 조건 */}
+                    <div style={{ width: 110 }} className="flex-shrink-0 mr-2">
+                        <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                            {initialState.searchTypeList.map((searchType) => (
+                                <option key={searchType.id} value={searchType.id}>
+                                    {searchType.name}
+                                </option>
+                            ))}
+                        </MokaInput>
                     </div>
 
-                    {/* 판 */}
-                    <div style={{ width: 60 }} className="mr-2">
-                        <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} />
-                    </div>
+                    {/* 키워드 */}
+                    <MokaInput name="keyword" value={search.keyword} className="mr-2" onChange={handleChangeValue} placeholder="검색어를 입력하세요" />
+
+                    {!suppressSearchMyunPan && (
+                        <React.Fragment>
+                            {/* 면 */}
+                            <div style={{ width: 60 }} className="flex-shrink-0 mr-2">
+                                <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} />
+                            </div>
+
+                            {/* 판 */}
+                            <div style={{ width: 60 }} className="flex-shrink-0 mr-2">
+                                <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} />
+                            </div>
+                        </React.Fragment>
+                    )}
                 </div>
 
-                {!suppressChangeArtGroup && (
-                    <React.Fragment>
-                        <Button variant="outline-neutral" className="flex-shrink-0" onClick={() => setModalShow(true)}>
-                            그룹지정
-                        </Button>
+                <div className="d-flex">
+                    {!suppressChangeArtGroup && (
+                        <React.Fragment>
+                            <Button variant="outline-neutral" className="mr-1 flex-shrink-0" onClick={() => setModalShow(true)}>
+                                그룹지정
+                            </Button>
 
-                        {/* 편집그룹 변경 모달 */}
-                        <ChangeArtGroupModal
-                            show={modalShow}
-                            onHide={() => setModalShow(false)}
-                            onSave={() => {
-                                onChangeGroupNumber();
-                                setModalShow(false);
-                            }}
-                        />
-                    </React.Fragment>
-                )}
+                            {/* 편집그룹 변경 모달 */}
+                            <ChangeArtGroupModal
+                                show={modalShow}
+                                onHide={() => setModalShow(false)}
+                                onSave={() => {
+                                    onChangeGroupNumber();
+                                    setModalShow(false);
+                                }}
+                            />
+                        </React.Fragment>
+                    )}
+
+                    {/* 초기화 */}
+                    <Button variant="negative" className="flex-shrink-0" onClick={onReset}>
+                        초기화
+                    </Button>
+                </div>
             </Form.Row>
         </Form>
     );

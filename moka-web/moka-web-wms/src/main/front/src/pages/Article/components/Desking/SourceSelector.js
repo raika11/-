@@ -192,7 +192,7 @@ const SourceSelector = forwardRef(({ className, isInvalid, value, onChange, widt
             <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll w-100 pb-0">
                 {/* 매체 전체 옵션 */}
                 {renderSc({
-                    label: '카테고리 전체',
+                    label: '매체 전체',
                     id: 'all',
                     checked: isAllChecked,
                     onChange: handleChangeValue,

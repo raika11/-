@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReporterAllList } from '@store/reporter';
-import { getAt } from '@store/codeMgt';
 import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvArticle, POST_RCV_ARTICLE, getRcvArticleList } from '@store/rcvArticle';
 import ArticleForm from '@pages/Article/components/ArticleForm/index';
 import RctArticleForm from './components/RcvArticleForm';
@@ -20,7 +19,6 @@ const RcvArticleEdit = ({ match }) => {
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE] || store.loading[POST_RCV_ARTICLE]);
     const { search, rcvArticle } = useSelector(({ rcvArticle }) => rcvArticle);
-    const atRows = useSelector((store) => store.codeMgt.atRows);
     const allReporter = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
     const [registed, setRegisted] = useState(false); // 등록된 기사이면 등록폼으로 연결
     const [reporterList, setReporterList] = useState([]);
@@ -77,13 +75,6 @@ const RcvArticleEdit = ({ match }) => {
      * 등록기사 수정 후
      */
     const reloadList = () => dispatch(getRcvArticleList({ search }));
-
-    useEffect(() => {
-        // 기사타입 조회
-        if (!atRows) {
-            dispatch(getAt());
-        }
-    }, [atRows, dispatch]);
 
     useEffect(() => {
         // 수신 => 등록 간의 시간 차이가 존재...
@@ -161,22 +152,13 @@ const RcvArticleEdit = ({ match }) => {
         <React.Fragment>
             {/* 등록된 기사이면 등록기사 폼으로 연결한다 */}
             {registed ? (
-                <ArticleForm
-                    totalId={rcvArticle.totalId}
-                    returnUrl="/rcv-article"
-                    atRows={atRows}
-                    reporterList={reporterList || []}
-                    onCancle={handleCancle}
-                    onSave={reloadList}
-                    inRcv
-                />
+                <ArticleForm totalId={rcvArticle.totalId} returnUrl="/rcv-article" reporterList={reporterList || []} onCancle={handleCancle} onSave={reloadList} inRcv />
             ) : (
                 <RctArticleForm
                     article={temp}
                     error={error}
                     setError={setError}
                     onChange={handleChangeValue}
-                    atRows={atRows}
                     reporterList={reporterList || []}
                     loading={loading}
                     onCancle={handleCancle}

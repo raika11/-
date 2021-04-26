@@ -65,6 +65,7 @@ const DeskingArticleTab = (props) => {
                         onDragStop={handleDragStop}
                         show={navIdx === idx && show}
                         isNaverChannel={isNaverChannel}
+                        suppressSearchMyunPan={false}
                     />
                 );
             }

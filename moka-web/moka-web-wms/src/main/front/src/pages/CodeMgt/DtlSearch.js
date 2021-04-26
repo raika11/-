@@ -70,7 +70,7 @@ const DtlSearch = ({ grpCd, grp }) => {
                 </MokaInput>
             </div>
             <div className="w-25 mr-1">
-                <MokaSearchInput value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
+                <MokaSearchInput value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={() => handleSearch()} />
             </div>
             <Button variant="positive" onClick={handleAdd} className="h-100">
                 코드 등록

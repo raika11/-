@@ -224,7 +224,7 @@ const IssueDesking = () => {
                 deskingList={deskingByCompNo.comp5?.issueDeskings}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
-                rowHeight={46}
+                rowHeight={165}
             />
             {/* 그래프가 6번 */}
             {/* 배너 */}

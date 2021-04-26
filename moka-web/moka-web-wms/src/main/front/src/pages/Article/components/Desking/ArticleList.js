@@ -36,6 +36,10 @@ const propTypes = {
      */
     isNaverChannel: PropTypes.bool,
     /**
+     * 면판 검색 막기
+     */
+    suppressSearchMyunPan: PropTypes.bool,
+    /**
      * 편집그룹 변경 기능 막기 (네이버채널, 영상탭일 경우 막음)
      * @default
      */
@@ -66,6 +70,7 @@ const defaultProps = {
     isNaverChannel: false,
     suppressChangeArtGroup: false,
     suppressChangeArtTitle: false,
+    suppressSearchMyunPan: true,
 };
 
 /**
@@ -83,6 +88,7 @@ const ArticleList = ({
     movie,
     suppressChangeArtGroup,
     suppressChangeArtTitle,
+    suppressSearchMyunPan,
     addColumnDefs,
 }) => {
     const dispatch = useDispatch();
@@ -248,6 +254,8 @@ const ArticleList = ({
                 sourceList={sourceList}
                 // 편집그룹 변경 막기
                 suppressChangeArtGroup={suppressChangeArtGroup || isNaverChannel || movie}
+                // 면판 검색 막기
+                suppressSearchMyunPan={suppressSearchMyunPan}
             />
 
             <AgGrid

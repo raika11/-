@@ -16,19 +16,18 @@
 
     <link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">
 
-    <link href="//stg-static.joongang.co.kr/css/plugin/slick.css" rel="stylesheet">
+    <link href="//stg-static.joongang.co.kr/css/plugin/swiper.css" rel="stylesheet">
 
     <link href="//stg-static.joongang.co.kr/css/common.css" rel="stylesheet">
-    <link href="//stg-static.joongang.co.kr/css/reporter.css" rel="stylesheet">
+    <link href="//stg-static.joongang.co.kr/css/journalist.css" rel="stylesheet">
     
     
     <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
     <script src="//stg-static.joongang.co.kr/js/plugin/swiper.min.js"></script>
-    <script src="//stg-static.joongang.co.kr/js/plugin/slick.js"></script>
     <!-- <script src="//stg-static.joongang.co.kr/js/plugin/jquery.slimscroll.js"></script> -->
     <script src="//stg-static.joongang.co.kr/js/resource.js"></script>
     <script src="//stg-static.joongang.co.kr/js/common.js"></script>
-    <script src="//stg-static.joongang.co.kr/js/reporter.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/journalist.js"></script>
 </head>
 <body>
     <div id="wrapper">
@@ -51,7 +50,82 @@
         <main role="main" id="container">
             <!-- contents -->
             <section class="contents">
-                
+
+
+
+                <div class="row ">
+                    <div class="col_lg9">
+                        <section class="chain_wrap">
+                            <header class="title_wrap">
+                                <nav class="tab_nav">
+                                    <ul class="nav">
+                                        <li class="nav_item" role="presentation">
+                                            <h3><a class="nav_link active" id="tabPanel1" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">많이 본</a></h3>
+                                        </li>
+                                        <li class="nav_item" role="presentation">
+                                            <h3><a class="nav_link" id="tabPanel2" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">반응 높은</a></h3>
+                                        </li>
+                                        <li class="nav_item" role="presentation">
+                                            <h3><a class="nav_link" id="tabPanel3" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">꼼꼼히 본</a></h3>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </header>
+                            <ul class=""></ul>
+                        </section>
+                    </div>
+                    <div class="col_lg3">
+                        <section class="highlight_wrap">
+                            <header class="title_wrap">
+                                <h3 class="title">최근 하이라이트</h3>
+                            </header>
+                            <!-- Swiper -->
+                            <div class="swiper-container swiper_highlight_list">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide list_item">
+                                        <h2 class="highlight_text">
+                                            <i class="ico_quotes"></i>
+                                            <a href="">빙애여울엔 지난날 28일 부부와 새끼로 구성된 재두루미 2 가족 7 마리가 월동을 위해 날아왔다며 다음달까지 지켜보기로 하였다.</a>
+                                        </h2>
+                                        <h3 class="title">출처</h3>
+                                        <h3 class="headline">당신의 집은 어디인가요? 살고 있는 집, 살아갈 집에 대하여…</h3>
+                                        <p class="date">2021. 2. 23</p>
+                                    </div>
+                                    <div class="swiper-slide list_item">
+                                        <!-- Swiper -->
+                                        <div class="swiper-container swiper_highlight_inner">
+                                            <div class="swiper-wrapper">
+                                                <div class="swiper-slide highlight_item">
+                                                    <h2 class="highlight_text">
+                                                        <i class="ico_quotes"></i>
+                                                        <a href="">빙애여울엔 지난날 28일 부부와 새끼로 구성된 재두루미 2 가족 7 마리가 월동을 위해 날아왔다며 다음달까지 지켜보기로 하였다.</a>
+                                                    </h2>
+                                                </div>
+                                                <div class="swiper-slide highlight_item">
+                                                    <h2 class="highlight_text">
+                                                        <i class="ico_quotes"></i>
+                                                        <a href="">빙애여울엔 지난날 28일 부부와 새끼로 구성된 재두루미 2 가족 7 마리가 월동을 위해 날아왔다며 다음달까지 지켜보기로 하였다.</a>
+                                                    </h2>
+                                                </div>
+                                            </div>
+                                            <!-- Pagination -->
+                                            <div class="swiper-pagination pagination_bullet"></div>
+                                        </div>
+                                        <h3 class="title">출처</h3>
+                                        <h3 class="headline">당신의 집은 어디인가요? 살고 있는 집, 살아갈 집에 대하여…</h3>
+                                        <p class="date">2021. 2. 23</p>
+                                    </div>
+                                </div>
+                                <!-- Pagination -->
+                                <div class="swiper-pagination pagination_fraction"></div>
+                                <!-- Arrows -->
+                                <div class="swiper-button-prev btn_prev"></div>
+                                <div class="swiper-button-next btn_next"></div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
             </section>
             <!-- // contents -->
         </main>

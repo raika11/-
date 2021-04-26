@@ -76,8 +76,7 @@ public class AbTestCaseSaveVO {
      * 영역일련번호(AREA_SEQ,COMPONENT_SEQ,LETTER_SEQ,파티클구분(기타코드MC))
      */
     @Column(name = "ZONE_SEQ")
-    @Builder.Default
-    private Long zoneSeq = 0l;
+    private String zoneSeq;
 
     /**
      * AB테스트 목표(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
@@ -188,6 +187,12 @@ public class AbTestCaseSaveVO {
     private String abtestGrpMethod = "R";
 
     /**
+     * AB테스트 그룹(랜덤:비율 / 고정:0~9숫자) / TB_ABTEST_GRP(AB테스트 그룹) ABTEST_GRP
+     */
+    @Column(name = "ABTEST_GRP")
+    private String abtestGrp;
+
+    /**
      * KPI달성율(A) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
      */
     @Column(name = "KPI_VALUE_A")
@@ -203,7 +208,7 @@ public class AbTestCaseSaveVO {
      * 서비스기사ID(JAM설계경우) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
      */
     @Column(name = "TOTAL_ID")
-    private String totalId;
+    private Long totalId;
 
     /**
      * 화면편집파트(T:제목,L:리드문,I:이미지,R;관련기사) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
@@ -212,13 +217,19 @@ public class AbTestCaseSaveVO {
     private String deskingPart;
 
     /**
+     * 템컴포넌트SEQ(본문외 영역 테스트시) / TB_ABTEST_VARIANT(AB테스트 VARIANT)
+     */
+    @Column(name = "COMPONENT_SEQ")
+    private Long componentSeq = 0L;
+
+    /**
      * 템플릿SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT)
      */
     @Column(name = "TEMPLATE_SEQ")
     private Long templateSeq = 0L;
 
     /**
-     * 데이터셋SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT)
+     * 데이터셋SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT) 데이터셋SEQ (대안설계 데이터형은 TB_WMS_DESKING.DATASET_SEQ 와 조인)
      */
     @Column(name = "DATASET_SEQ")
     private Long datasetSeq = 0L;

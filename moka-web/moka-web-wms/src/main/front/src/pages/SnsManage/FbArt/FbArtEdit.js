@@ -251,7 +251,6 @@ const FbArtEdit = () => {
                             id="fb-isReserve"
                             className="mb-2"
                             onChange={(e) => handleChangeEditValue(e, true)}
-                            style={{ left: '0px' }}
                             inputProps={{ label: '예약 노출', checked: edit.fb.isReserve, custom: true }}
                         />
                         <MokaInput

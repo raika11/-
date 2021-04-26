@@ -36,12 +36,12 @@ const PageEdit = ({ onDelete }) => {
             let url = '';
             if (name === 'pageServiceName') {
                 url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${value}`;
-                if (util.isEmpty(temp.urlParam)) {
+                if (!util.isEmpty(temp.urlParam)) {
                     url = `${url}/*`;
                 }
             } else if (name === 'urlParam') {
                 url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${temp.pageServiceName}`;
-                if (util.isEmpty(value)) {
+                if (!util.isEmpty(value)) {
                     url = `${url}/*`;
                 }
             } else {

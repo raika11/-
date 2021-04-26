@@ -3,7 +3,6 @@ package jmnet.moka.core.tps.mvc.abtest.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
@@ -101,13 +100,13 @@ public class AbTestRestController extends AbstractCommonController {
         ResultListDTO<AbTestCaseVO> resultListMessage = new ResultListDTO<>();
 
         // 조회
-        List<AbTestCaseVO> returnValue = abTestCaseService.findABTestById(abtestSeq);
-        resultListMessage.setList(returnValue);
+        AbTestCaseVO returnValue = abTestCaseService.findABTestById(abtestSeq);
 
-        ResultDTO<ResultListDTO<AbTestCaseVO>> resultDto = new ResultDTO<>(resultListMessage);
+        AbTestCaseDTO dto = modelMapper.map(returnValue, AbTestCaseDTO.class);
 
         tpsLogger.success(ActionType.SELECT);
 
+        ResultDTO<AbTestCaseDTO> resultDto = new ResultDTO<>(dto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -119,9 +118,10 @@ public class AbTestRestController extends AbstractCommonController {
      * @throws Exception 예외처리
      */
     @ApiOperation(value = "A/B테스트 등록")
-    @PostMapping
+    @PostMapping(headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postABTest(@ApiParam("A/B테스트 등록") @RequestBody @Valid AbTestCaseSaveDTO abTestCaseSaveDTO)
             throws Exception {
+
         AbTestCaseSaveVO abTestCaseSaveVO = modelMapper.map(abTestCaseSaveDTO, AbTestCaseSaveVO.class);
 
         try {

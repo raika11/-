@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { MokaInput, MokaSearchInput } from '@components';
+import { MokaInput } from '@components';
 import { CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
 import { initialState } from '@store/article';
@@ -10,8 +10,20 @@ import SourceSelector from './SourceSelector';
 /**
  * 페이지편집 > 기사 목록 > 기사 검색
  */
-const Search = (props) => {
-    const { onChangeSearchOption, search, period, error, onSearch, onReset, onChangeGroupNumber, sourceList, suppressChangeArtGroup, show, suppressSearchMyunPan } = props;
+const Search = ({
+    onChangeSearchOption,
+    search,
+    period,
+    error,
+    onSearch,
+    onReset,
+    onChangeGroupNumber,
+    sourceList,
+    suppressChangeArtGroup,
+    show,
+    suppressSearchMyunPan,
+    svcAtRows,
+}) => {
     const [modalShow, setModalShow] = useState(false);
 
     /**
@@ -117,12 +129,14 @@ const Search = (props) => {
                 <div className="d-flex flex-fill">
                     {/* 기사타입 조건 */}
                     <div style={{ width: 110 }} className="flex-shrink-0 mr-2">
-                        <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                            {initialState.searchTypeList.map((searchType) => (
-                                <option key={searchType.id} value={searchType.id}>
-                                    {searchType.name}
-                                </option>
-                            ))}
+                        <MokaInput as="select" name="artTypeList" value={search.artTypeList} onChange={handleChangeValue}>
+                            <option value="">유형 전체</option>
+                            {svcAtRows &&
+                                svcAtRows.map((code) => (
+                                    <option key={code.dtlCd} value={code.cdNmEtc1}>
+                                        {code.cdNm}
+                                    </option>
+                                ))}
                         </MokaInput>
                     </div>
 

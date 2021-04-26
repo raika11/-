@@ -34,7 +34,7 @@ public interface AbTestCaseMapper extends BaseMapper<AbTestCaseVO, AbTestCaseSea
      * @param abtestSeq 검색 조건
      * @return 조회 결과
      */
-    List<AbTestCaseVO> findABTestById(Long abtestSeq);
+    AbTestCaseVO findABTestById(Long abtestSeq);
 
     /**
      * ABTest 등록

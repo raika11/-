@@ -69,14 +69,17 @@ const MokaImage = forwardRef(({ width, height, img, className, alt, imgClassName
     const imgRef = useRef(null);
     const [src, setImgSrc] = useState(null);
 
-    const onError = (e) => {
-        e.target.src = defaultImg;
-        wrapRef.current.classList.add('onerror-image-wrap');
-        e.target.classList.add('onerror-image');
-        if (handleError) {
-            handleError(imgRef.current);
-        }
-    };
+    const onError = React.useCallback(
+        (e) => {
+            e.target.src = defaultImg;
+            wrapRef.current.classList.add('onerror-image-wrap');
+            e.target.classList.add('onerror-image');
+            if (handleError) {
+                handleError(imgRef.current);
+            }
+        },
+        [defaultImg, handleError],
+    );
 
     const onLoad = (e) => {
         if (e.target.src.replace(window.location.origin, '') !== defaultImg) {
@@ -93,10 +96,9 @@ const MokaImage = forwardRef(({ width, height, img, className, alt, imgClassName
             setImgSrc(img);
         } else {
             setImgSrc(defaultImg);
-            wrapRef.current.classList.add('onerror-image-wrap');
-            imgRef.current.classList.add('onerror-image');
+            onError({ target: imgRef.current });
         }
-    }, [defaultImg, img]);
+    }, [defaultImg, img, onError]);
 
     useImperativeHandle(
         ref,

@@ -134,11 +134,13 @@ const ReporterEdit = ({ match }) => {
                         ele.style.padding = '0';
                         ele.style.width = '60px';
                         ele.style.height = '60px';
+                        ele.classList.remove('rounded-circle');
                     }}
                     onLoad={(ele) => {
                         ele.style.removeProperty('width');
                         ele.style.removeProperty('height');
                         ele.style.removeProperty('padding');
+                        ele.classList.add('rounded-circle');
                     }}
                 />
 

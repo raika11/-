@@ -41,21 +41,21 @@ public class NewsletterSearchDTO extends SearchDTO {
      * 유형
      */
     @ApiModelProperty("레터유형")
-    @Pattern(regexp = "^(O)|(B)|(N)|(E)$", message = "{tps.newsletter.error.pattern.letterType}")
+    @Pattern(regexp = "^()|(O)|(B)|(N)|(E)$", message = "{tps.newsletter.error.pattern.letterType}")
     private String letterType;
 
     /**
      * 상태
      */
     @ApiModelProperty("상태")
-    @Pattern(regexp = "^(Y)|(P)|(S)|(Q)$", message = "{tps.newsletter.error.pattern.status}")
+    @Pattern(regexp = "^()|(Y)|(P)|(S)|(Q)$", message = "{tps.newsletter.error.pattern.status}")
     private String status;
 
     /**
      * 방송방법
      */
     @ApiModelProperty("발송유형")
-    @Pattern(regexp = "^(A)|(E)$", message = "{tps.newsletter.error.pattern.sendType}")
+    @Pattern(regexp = "^()|(A)|(E)$", message = "{tps.newsletter.error.pattern.sendType}")
     private String sendType;
 
     @ApiModelProperty(value = "시작일시 검색")
@@ -70,7 +70,7 @@ public class NewsletterSearchDTO extends SearchDTO {
      * A/B 테스트 여부
      */
     @ApiModelProperty(value = "A/B 테스트여부")
-    @Pattern(regexp = "^(Y)|(N)$", message = "{tps.newsletter.error.pattern.abtestYn}")
+    @Pattern(regexp = "^()|(Y)|(N)$", message = "{tps.newsletter.error.pattern.abtestYn}")
     private String abtestYn;
 
     /**

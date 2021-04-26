@@ -176,7 +176,7 @@ public class NewsletterInfo extends BaseAudit {
     private MemberSimpleInfo regMember;
 
     /**
-     * 등록자
+     * 수정자
      */
     @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne(fetch = FetchType.EAGER, optional = true)

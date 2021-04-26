@@ -95,7 +95,7 @@ public class AbTestRestController extends AbstractCommonController {
     @ApiOperation(value = "A/B테스트 상세 조회")
     @GetMapping("/{abtestSeq}")
     public ResponseEntity<?> getABTest(@ApiParam("A/B테스트 일련번호(필수)") @PathVariable("abtestSeq")
-    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq)
+    @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq)
             throws NoDataException {
 
         ResultListDTO<AbTestCaseVO> resultListMessage = new ResultListDTO<>();
@@ -160,7 +160,7 @@ public class AbTestRestController extends AbstractCommonController {
     @ApiOperation(value = "A/B테스트 수정")
     @PutMapping(value = "/{abtestSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putAbTestCase(@ApiParam("A/B테스트 일련번호 (필수)") @PathVariable("abtestSeq")
-    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq,
+    @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq,
             @ApiParam("A/B테스트 정보") @RequestBody @Valid AbTestCaseUpdateDTO abTestCaseUpdateDTO)
             throws Exception {
 
@@ -177,16 +177,17 @@ public class AbTestRestController extends AbstractCommonController {
 
             // 조회 한 STEP 1 주요설정 값 가져와 셋팅
             abTestCaseSaveVO.setAbtestType(abtestCase.getAbtestType());
-            abTestCaseSaveVO.setAbtestPurpose(abtestCase.getAbtestPurpose());
             abTestCaseSaveVO.setDomainId(abtestCase.getDomainId());
+            abTestCaseSaveVO.setPageType(abtestCase.getPageType());
             abTestCaseSaveVO.setPageSeq(abtestCase.getPageSeq());
-            abTestCaseSaveVO.setAreaSeq(abtestCase.getAreaSeq());
-            abTestCaseSaveVO.setComponentSeq(abtestCase.getComponentSeq());
-            abTestCaseSaveVO.setLetterSeq(abtestCase.getLetterSeq());
+            abTestCaseSaveVO.setArtType(abtestCase.getArtType());
+            abTestCaseSaveVO.setZoneDiv(abtestCase.getZoneDiv());
+            abTestCaseSaveVO.setZoneSeq(abtestCase.getZoneSeq());
+            abTestCaseSaveVO.setAbtestPurpose(abtestCase.getAbtestPurpose());
             abTestCaseSaveVO.setStartDt(abtestCase.getStartDt());
             abTestCaseSaveVO.setEndDt(abtestCase.getEndDt());
-            abTestCaseSaveVO.setEndCondi(abtestCase.getEndCondi());
             abTestCaseSaveVO.setEndPeriod(abtestCase.getEndPeriod());
+            abTestCaseSaveVO.setEndCondi(abtestCase.getEndCondi());
             abTestCaseSaveVO.setEndKpi(abtestCase.getEndKpi());
             abTestCaseSaveVO.setKpiClickCondi(abtestCase.getKpiClickCondi());
             abTestCaseSaveVO.setKpiPeriodCondi(abtestCase.getKpiPeriodCondi());
@@ -195,6 +196,8 @@ public class AbTestRestController extends AbstractCommonController {
             abTestCaseSaveVO.setDelYn(abtestCase.getDelYn());
             abTestCaseSaveVO.setRegId(abtestCase.getRegId());
             abTestCaseSaveVO.setRegDt(abtestCase.getRegDt());
+            abTestCaseSaveVO.setModId(abtestCase.getModId());
+
             abTestCaseSaveVO.setAbtestTitle(abtestCase.getAbtestTitle());
             abTestCaseSaveVO.setAbtestDesc(abtestCase.getAbtestDesc());
 
@@ -231,7 +234,7 @@ public class AbTestRestController extends AbstractCommonController {
     @ApiOperation(value = "A/B테스트 종료")
     @PutMapping(value = "/close/{abtestSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putAbTestCaseClose(@ApiParam("A/B테스트 일련번호 (필수)") @PathVariable("abtestSeq")
-    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq)
+    @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq)
             throws Exception {
 
         try {
@@ -245,15 +248,15 @@ public class AbTestRestController extends AbstractCommonController {
             abTestCaseService.closeABTestCase(abtestSeq);
 
             // 3. 결과리턴
-            String message = msg("tps.abTest.success.close");
+            String message = msg("tps.abtest.success.close");
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
-            tpsLogger.success(ActionType.DELETE, true);
+            tpsLogger.success(ActionType.SHUTDOWN, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO CLOSE ABTest] seq: {} {}", abtestSeq, e.getMessage());
-            tpsLogger.error(ActionType.DELETE, "[FAIL TO CLOSE ABTest]", e, true);
-            throw new Exception(msg("tps.abTest.error.close"), e);
+            tpsLogger.error(ActionType.SHUTDOWN, "[FAIL TO CLOSE ABTest]", e, true);
+            throw new Exception(msg("tps.abtest.error.close"), e);
         }
     }
 
@@ -267,7 +270,7 @@ public class AbTestRestController extends AbstractCommonController {
     @ApiOperation(value = "A/B테스트 삭제")
     @PutMapping(value = "/delete/{abtestSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putAbTestCaseDelete(@ApiParam("A/B테스트 일련번호 (필수)") @PathVariable("abtestSeq")
-    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq)
+    @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq)
             throws Exception {
 
         try {
@@ -281,7 +284,7 @@ public class AbTestRestController extends AbstractCommonController {
             abTestCaseService.deleteABTestCase(abtestSeq);
 
             // 3. 결과리턴
-            String message = msg("tps.abTest.success.delete");
+            String message = msg("tps.abtest.success.delete");
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
             tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -289,7 +292,7 @@ public class AbTestRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO DELETE ABTest] seq: {} {}", abtestSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE ABTest]", e, true);
-            throw new Exception(msg("tps.abTest.error.delete"), e);
+            throw new Exception(msg("tps.abtest.error.delete"), e);
         }
     }
 }

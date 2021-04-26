@@ -41,22 +41,22 @@ public class AbTestCase extends BaseAudit {
     private Long abtestSeq;
 
     /**
-     * A/B테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
+     * AB테스트 유형(A:직접설계 / E:대안설계 / J:JAM)
      */
     @Column(name = "ABTEST_TYPE")
     private String abtestType;
-
-    /**
-     * A/B테스트 목표(T:디자인 D:데이터)
-     */
-    @Column(name = "ABTEST_PURPOSE")
-    private String abtestPurpose;
 
     /**
      * 도메인ID
      */
     @Column(name = "DOMAIN_ID")
     private String domainId;
+
+    /**
+     * AB테스트 페이지(메인:M, 기사:A, 뉴스레터:L)
+     */
+    @Column(name = "PAGE_TYPE")
+    private String pageType;
 
     /**
      * 페이지SEQ
@@ -66,25 +66,29 @@ public class AbTestCase extends BaseAudit {
     private Long pageSeq = 0l;
 
     /**
-     * 영역일련번호(대안입력-디자인의 경우 영역으로 선택)
+     * 기사타입(직접-기사-본문외) - 기본형:B, 연재형:CWYZ, QA형:X, 특집형:S, 이슈라이브:TG
      */
-    @Column(name = "AREA_SEQ")
-    @Builder.Default
-    private Long areaSeq = 0l;
+    @Column(name = "ART_TYPE")
+    private String artType;
 
     /**
-     * 컴포넌트SEQ
+     * 영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)
      */
-    @Column(name = "COMPONENT_SEQ")
-    @Builder.Default
-    private Long componentSeq = 0l;
+    @Column(name = "ZONE_DIV")
+    private String zoneDiv;
 
     /**
-     * 뉴스레터SEQ
+     * 영역일련번호(AREA_SEQ,COMPONENT_SEQ,LETTER_SEQ,파티클구분(기타코드MC))
      */
-    @Column(name = "LETTER_SEQ")
+    @Column(name = "ZONE_SEQ")
     @Builder.Default
-    private Long letterSeq = 0l;
+    private Long zoneSeq = 0l;
+
+    /**
+     * AB테스트 목표(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
+     */
+    @Column(name = "ABTEST_PURPOSE")
+    private String abtestPurpose;
 
     /**
      * 시작일시
@@ -99,17 +103,17 @@ public class AbTestCase extends BaseAudit {
     private Date endDt;
 
     /**
-     * 목표달성기준(P:기간 K:KPI A:모두)
-     */
-    @Column(name = "END_CONDI")
-    private String endCondi;
-
-    /**
      * 목표달성주기(JAM 수신기사의 경우 - 분단위)
      */
     @Column(name = "END_PERIOD")
     @Builder.Default
     private Long endPeriod = 0l;
+
+    /**
+     * 목표달성기준(P:기간 K:KPI A:모두)
+     */
+    @Column(name = "END_CONDI")
+    private String endCondi;
 
     /**
      * KPI달성 목표치(백분률(%))
@@ -153,6 +157,18 @@ public class AbTestCase extends BaseAudit {
     private String delYn = "N";
 
     /**
+     * A/B테스트 제목
+     */
+    @Column(name = "ABTEST_TITLE")
+    private String abtestTitle;
+
+    /**
+     * A/B테스트 설명
+     */
+    @Column(name = "ABTEST_DESC")
+    private String abtestDesc;
+
+    /**
      * 로그인 여부(전체:`, 로그인:Y, 비로그인 : N)
      */
     @Column(name = "LOGIN_YN")
@@ -162,16 +178,16 @@ public class AbTestCase extends BaseAudit {
     /**
      * 구독여부
      */
-    @Column(name = "SUBSCRIBE_YN")
+    @Column(name = "SCB_YN")
     @Builder.Default
-    private String subscribeYn = "N";
+    private String scbYn = "N";
 
     /**
      * 구독상품SEQ
      */
-    @Column(name = "SUBSCRIBE_SEQ")
+    @Column(name = "SCB_NO")
     @Builder.Default
-    private Long subscribeSeq = 0l;
+    private Long scbNo = 0l;
 
     /**
      * 디바이스 구분(PC:P/Mobile:M/App:A/전체`) - 구분자콤마
@@ -240,17 +256,5 @@ public class AbTestCase extends BaseAudit {
      */
     @Column(name = "UTM_CONTENT")
     private String utmContent;
-
-    /**
-     * A/B테스트 제목
-     */
-    @Column(name = "ABTEST_TITLE")
-    private String abtestTitle;
-
-    /**
-     * A/B테스트 설명
-     */
-    @Column(name = "ABTEST_DESC")
-    private String abtestDesc;
 
 }

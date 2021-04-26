@@ -379,7 +379,7 @@ const SnsMetaEdit = () => {
                                     </div>
                                 }
                             />
-                            <MokaImageInput className="mr-20 input-border" img={edit.fb.imgUrl} width={192} height={108} deleteButton={true} />
+                            <MokaImageInput className="mr-20" img={edit.fb.imgUrl} width={192} height={108} deleteButton={true} />
                             <div>
                                 <MokaInput
                                     as="checkbox"
@@ -497,7 +497,7 @@ const SnsMetaEdit = () => {
                                     </div>
                                 }
                             />
-                            <MokaImageInput className="mr-20 input-border" img={edit.tw.imgUrl} width={192} height={108} deleteButton />
+                            <MokaImageInput className="mr-20" img={edit.tw.imgUrl} width={192} height={108} deleteButton />
                             <div>
                                 <MokaInput
                                     as="checkbox"

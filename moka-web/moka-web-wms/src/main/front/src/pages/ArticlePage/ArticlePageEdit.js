@@ -48,7 +48,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                             !body && toast.warning('미리보기용 기사ID가 존재하지 않습니다.');
                             setPreviewTotalId(body || '');
                         } else {
-                            messageBox.alert('미리보기용 기사ID 조회에 실패하였습니다.');
+                            toast.warning('미리보기용 기사ID 조회에 실패하였습니다.');
                         }
                     },
                 }),

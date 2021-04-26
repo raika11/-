@@ -37,7 +37,7 @@ const columnDefs = [
         headerName: '사용',
         field: 'usedYn',
         width: 40,
-        cellRenderer: 'usedYnRenderer',
+        cellRenderer: 'usedYnSecondRenderer',
     },
 ];
 

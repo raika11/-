@@ -73,10 +73,10 @@ public class NewsletterInfoHist extends RegAudit {
     private String sendTime;
 
     @Column(name = "SEND_MIN_CNT")
-    private String sendMinCnt;
+    private Long sendMinCnt;
 
     @Column(name = "SEND_MAX_CNT")
-    private String sendMaxCnt;
+    private Long sendMaxCnt;
 
     @Column(name = "SEND_ORDER")
     private String sendOrder;

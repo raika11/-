@@ -90,10 +90,10 @@ public class NewsletterInfo extends BaseAudit {
     private String sendTime;
 
     @Column(name = "SEND_MIN_CNT")
-    private Long sendMinCnt;
+    private Long sendMinCnt = 0L;
 
     @Column(name = "SEND_MAX_CNT")
-    private Long sendMaxCnt;
+    private Long sendMaxCnt = 0L;
 
     @Column(name = "SEND_ORDER")
     private String sendOrder;

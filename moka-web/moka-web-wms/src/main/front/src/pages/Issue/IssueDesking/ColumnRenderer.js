@@ -381,7 +381,6 @@ const MPRenderer = forwardRef((params, ref) => {
                             cropHeight={cropHeight}
                             cropWidth={cropWidth}
                             onHide={() => setShow(false)}
-                            totalId={contents.channelType === ISSUE_CHANNEL_TYPE.A.code || contents.channelType === ISSUE_CHANNEL_TYPE.M.code ? contents.contentsId : undefined}
                             thumbFileName={contents.thumbFileName}
                             apply={handleThumbFileApply}
                         />
@@ -393,15 +392,7 @@ const MPRenderer = forwardRef((params, ref) => {
                 <div className="d-flex flex-fill flex-column">
                     <MokaInputLabel label="제목" name="title" labelWidth={labelWidth} value={contents.title} onChange={handleChangeValue} className="mb-1" required />
                     <div className="d-flex mb-1">
-                        <MokaInputLabel
-                            label="URL"
-                            name="linkUrl"
-                            labelWidth={labelWidth}
-                            value={contents.linkUrl}
-                            onChange={handleChangeValue}
-                            className="flex-fill mr-1"
-                            required
-                        />
+                        <MokaInputLabel label="URL" name="linkUrl" labelWidth={labelWidth} value={contents.linkUrl} onChange={handleChangeValue} className="flex-fill mr-1" />
                         <div className="flex-shrink-0 d-flex">
                             <MokaInput as="select" name="linkTarget" value={contents.linkTarget} onChange={handleChangeValue}>
                                 <option value="_self">본창</option>

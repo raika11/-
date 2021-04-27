@@ -5,6 +5,7 @@ import java.util.Optional;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterExcel;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
+import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfoHist;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterSend;
 import org.springframework.data.domain.Page;
 
@@ -35,10 +36,27 @@ public interface NewsletterService {
      * @param letterSeq 뉴스레터상품 일련번호
      * @return
      */
-    Optional<NewsletterInfo> findByletterSeq(Long letterSeq);
+    Optional<NewsletterInfo> findByLetterSeq(Long letterSeq);
 
     /**
-     * 뉴스레터 채널별 등록된 컨텐츠 조회 조회
+     * 뉴스레터 일련번호별 히스토리 조회
+     *
+     * @param letterSeq
+     * @param search
+     * @return
+     */
+    Page<NewsletterInfoHist> findAllNewsletterInfoHistByLetterSeq(Long letterSeq, NewsletterSearchDTO search);
+
+    /**
+     * 뉴스레터 일련번호별 히스토리 상세 비교
+     *
+     * @param histSeq 히스토리 일련번호
+     * @return
+     */
+    List<NewsletterInfoHist> findTop2ByLetterSeqAndHistSeq(Long histSeq);
+
+    /**
+     * 뉴스레터 채널별 등록된 컨텐츠 조회
      *
      * @param channelType 채널 타입
      * @return

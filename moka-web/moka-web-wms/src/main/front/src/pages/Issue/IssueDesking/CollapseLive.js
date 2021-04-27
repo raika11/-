@@ -12,7 +12,9 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { ArticleTabModal } from '@pages/Article/modals';
 import { liveColumnDefs } from './IssueDeskingColumns';
+import { DeskingHistoryModal } from '../modal';
 import StatusBadge from './StatusBadge';
+import ReserveWork from './ReserveWork';
 
 const defaultProps = {
     desking: {},
@@ -22,13 +24,14 @@ const defaultProps = {
 /**
  * 패키지관리 > 관련 데이터 편집 > 라이브기사
  */
-const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight }, ref) => {
+const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight, preview }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
-    const [status, setStatus] = useState(DESK_STATUS_WORK);
+    const [status, setStatus] = useState(DESK_STATUS_SAVE);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
+    const [histShow, setHistShow] = useState(false);
     const id = 'live-1';
     const controls = 'collapse-live';
 
@@ -170,6 +173,23 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
         }
     };
 
+    /**
+     * 예약 완료
+     */
+    const onReserve = ({ header }) => {
+        if (header.success) {
+            setStatus(DESK_STATUS_PUBLISH);
+        }
+    };
+
+    /**
+     * on/off 변경
+     */
+    const onChange = (e) => {
+        setOpen(e.target.checked);
+        setStatus(DESK_STATUS_WORK);
+    };
+
     useImperativeHandle(
         ref,
         () => ({
@@ -214,17 +234,20 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
     return (
         <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
-            <Row className="d-flex" noGutters>
-                <Col xs={3}>
+            <Row className="d-flex position-relative" noGutters>
+                <Col xs={4} className="d-flex align-items-center position-unset">
+                    <ReserveWork reserveDt={desking.reserveDt} pkgSeq={pkgSeq} compNo={compNo} status={status} onReserve={onReserve} />
                     <MokaInputLabel
                         as="switch"
                         label="라이브기사"
                         id={controls}
+                        style={{ height: 'auto' }}
                         inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
-                        onChange={(e) => setOpen(e.target.checked)}
+                        labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
+                        onChange={onChange}
                     />
                 </Col>
-                <Col xs={4} className="d-flex align-items-center">
+                <Col xs={3} className="d-flex align-items-center">
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>
@@ -233,12 +256,19 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">
                         <StatusBadge desking={desking} />
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="미리보기" variant="white" onClick={preview}>
+                            <MokaIcon iconName="fal-file-search" />
+                        </MokaOverlayTooltipButton>
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
                             <MokaIcon iconName="Save" feather />
                         </MokaOverlayTooltipButton>
-                        <MokaOverlayTooltipButton className="work-btn" tooltipText="전송" variant="white" onClick={publishDesking}>
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="전송" variant="white" onClick={publishDesking}>
                             <MokaIcon iconName="Send" feather />
                         </MokaOverlayTooltipButton>
+                        <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
+                            <MokaIcon iconName="fal-history" />
+                        </MokaOverlayTooltipButton>
+                        <DeskingHistoryModal show={histShow} onHide={() => setHistShow(false)} pkgSeq={pkgSeq} compNo={compNo} />
                     </div>
                 </Col>
             </Row>

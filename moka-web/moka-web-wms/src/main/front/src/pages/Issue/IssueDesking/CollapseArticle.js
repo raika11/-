@@ -142,6 +142,14 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
     };
 
     /**
+     * on/off 변경
+     */
+    const onChange = (e) => {
+        setOpen(e.target.checked);
+        setStatus(DESK_STATUS_WORK);
+    };
+
+    /**
      * 데이터 유효성 검사
      * @param {array} desking 데스킹 컨텐츠 데이터
      */
@@ -246,6 +254,15 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
         }
     };
 
+    /**
+     * 예약 완료
+     */
+    const onReserve = ({ header }) => {
+        if (header.success) {
+            setStatus(DESK_STATUS_PUBLISH);
+        }
+    };
+
     useImperativeHandle(
         ref,
         () => ({
@@ -280,7 +297,7 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
             {loading && <MokaLoader />}
             <Row className="d-flex position-relative" noGutters>
                 <Col xs={4} className="d-flex align-items-center position-unset">
-                    <ReserveWork reserveDt={desking.reserveDt} status={status} pkgSeq={pkgSeq} compNo={compNo} />
+                    <ReserveWork reserveDt={desking.reserveDt} status={status} pkgSeq={pkgSeq} compNo={compNo} onReserve={onReserve} />
                     <MokaInputLabel
                         as="switch"
                         label="메인기사"
@@ -288,7 +305,7 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
                         style={{ height: 'auto' }}
                         labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
                         inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
-                        onChange={(e) => setOpen(e.target.checked)}
+                        onChange={onChange}
                     />
                 </Col>
                 <Col xs={3} className="d-flex align-items-center">
@@ -302,7 +319,7 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
                     <div className="d-flex">
                         <StatusBadge desking={desking} />
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="미리보기" variant="white" onClick={preview}>
-                            <MokaIcon iconName="Save" feather />
+                            <MokaIcon iconName="fal-file-search" />
                         </MokaOverlayTooltipButton>
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
                             <MokaIcon iconName="Save" feather />

@@ -229,7 +229,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
 
     useEffect(() => {
         // 등록 페이지일 때 미리보기키 조회
-        if (!paramSeq && svcAtRows.length > 0) {
+        if (!paramSeq && svcAtRows && svcAtRows.length > 0) {
             getTotalId(svcAtRows[0].cdNmEtc1);
         }
     }, [getTotalId, paramSeq, svcAtRows]);

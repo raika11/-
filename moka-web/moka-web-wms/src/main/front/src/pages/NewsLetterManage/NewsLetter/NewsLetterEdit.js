@@ -19,26 +19,6 @@ const NewsLetterEdit = ({ match }) => {
     const { letterSeq } = useParams();
 
     const storeLetter = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterInfo);
-    // const [temp, setTemp] = useState({
-    //     state: 'T',
-    //     sendType: 'A',
-    //     type: '',
-    //     contents: '',
-    //     pkg: '',
-    //     service: '',
-    //     reporter: '',
-    //     jpod: '',
-    //     sendPeriod: 'S',
-    //     sendPeriodType: 'week',
-    //     week: [],
-    //     day: 1,
-    //     sendDt: null,
-    //     sendTime: null,
-    //     item: '',
-    //     imgUrl: '',
-    //     thumbnailFile: null,
-    //     editLetterType: 'L',
-    // });
     const [temp, setTemp] = useState(initialState.newsLetter.letterInfo);
 
     /**

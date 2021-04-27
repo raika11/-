@@ -28,24 +28,22 @@ $(document).ready(function() {
             LayerPopup.removeClass("open");
         }
     });
-
-
-
-
-    /****
-        * slick  group
-        * -----------------------------------------------------
-        */
-    /* list to slider  */
-    var $slider = $('#slider_div');
-    changeToSlid($slider);
-
-    $(window).resize(function(e){
-        bylineControl(window.innerWidth);
-        /* scroll indicator */
-        scrollIndicator();
-        /* list to slider */
-        changeToSlid($slider);
-    })
-    
 });
+
+/* list to slider  */
+function changeToSlider($target, slickOptions){
+    if(typeof slickOptions === "undefined"){
+        slickOptions = {
+            infinite: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            dots:true,
+            arrows:false
+        };
+    }
+    
+    $target.not('.slick-initialized').slick(slickOptions);
+    if(window.innerWidth >= BREAKPOINT_LARGE) {
+        $target.slick('unslick');
+    };
+}

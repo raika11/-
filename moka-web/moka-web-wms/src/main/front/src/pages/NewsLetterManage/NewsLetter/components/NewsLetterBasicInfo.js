@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@/components';
 import NewsLetterPackageModal from '../modals/NewsLetterPackageModal';
 import ReporterListModal from '@/pages/Reporter/modals/ReporterListModal';
 import NewsLetterJpodModal from '../modals/NewsLetterJpodModal';
+import { EditThumbModal } from '@/pages/Desking/modals';
 
 /**
  * 뉴스레터 편집 > 기본정보 설정
@@ -21,6 +23,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
     const [pkgModal, setPkgModal] = useState(false);
     const [reporterModal, setReporterModal] = useState(false);
     const [jpodModal, setJpodModal] = useState(false);
+    const [imgModal, setImgModal] = useState(false);
 
     /**
      * 입력값 변경
@@ -53,6 +56,27 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
             ...temp,
             channelId: chnl.chnlSeq,
         });
+    };
+
+    /**
+     * 파일 변경
+     * @param {any} data 파일데이터
+     */
+    const handleFileValue = (data) => {
+        if (data) {
+            setTemp({ ...temp, thumbnailFile: data });
+        } else {
+            setTemp({ ...temp, img: null, thumbnailFile: data });
+        }
+    };
+
+    /**
+     * 이미지 신규등록
+     * @param {string} imageSrc 이미지 src
+     * @param {*} file 파일데이터
+     */
+    const handleThumbFileApply = (imageSrc, file) => {
+        // setTemp({ ...temp, img: imageSrc, thumbnailFile: file });
     };
 
     useEffect(() => {
@@ -194,71 +218,107 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                 )}
             </Form.Row>
 
+            <Form.Row className="mb-2">
+                <MokaInputLabel as="none" label="카테고리" />
+                <Col xs={7} className="p-0">
+                    <MokaSearchInput placeholder="" className="w-100" disabled />
+                </Col>
+            </Form.Row>
+
             {temp.sendType === 'A' && (
                 <Form.Row className="mb-2">
                     <MokaInputLabel as="none" label="발송 콘텐츠 선택" />
                     <div className="flex-fill">
                         <div className="mb-1 d-flex align-items-center" style={{ height: 31 }}>
-                            <Col xs={2} className="p-0 pr-2">
-                                <MokaInput
-                                    as="radio"
-                                    name="channelType"
-                                    value="ISSUE"
-                                    id="letter-channelType-issue"
-                                    inputProps={{ label: '이슈', custom: true, checked: temp.channelType === 'ISSUE' }}
-                                    onChange={handleChangeValue}
-                                />
-                            </Col>
-                            <Col xs={2} className="p-0 pr-2">
-                                <MokaInput
-                                    as="radio"
-                                    name="channelType"
-                                    value="TOPIC"
-                                    id="letter-channelType-topic"
-                                    inputProps={{ label: '토픽', custom: true, checked: temp.channelType === 'TOPIC' }}
-                                    onChange={handleChangeValue}
-                                />
-                            </Col>
-                            <Col xs={2} className="p-0 pr-2">
-                                <MokaInput
-                                    as="radio"
-                                    name="channelType"
-                                    value="SERIES"
-                                    id="letter-channelType-series"
-                                    inputProps={{ label: '연재', custom: true, checked: temp.channelType === 'SERIES' }}
-                                    onChange={handleChangeValue}
-                                />
-                            </Col>
-                            <Col xs={3} className="p-0">
-                                <MokaInput
-                                    as="radio"
-                                    name="channelType"
-                                    value="ARTICLE"
-                                    id="letter-channelType-article"
-                                    inputProps={{ label: '기사 패키지', custom: true, checked: temp.channelType === 'ARTICLE' }}
-                                    onChange={handleChangeValue}
-                                />
-                            </Col>
-                        </div>
-                        <div className="mb-1 d-flex align-items-center">
-                            <MokaInputLabel as="none" label="연결 이슈 선택" labelWidth={80} />
-                            <MokaSearchInput
-                                className="flex-fill"
-                                value={issueSeq}
-                                placeholder="이슈를 검색하세요"
-                                onSearch={() => {
-                                    if (temp.channelType === 'ISSUE' || temp.channelType === 'TOPIC' || temp.channelType === 'SERIES' || temp.channelType === 'ARTICLE') {
-                                        setPkgModal(true);
-                                    } else {
-                                        return;
-                                    }
-                                }}
-                                inputProps={{ readOnly: true }}
-                                disabled={temp.channelType === '' ? true : false}
+                            <MokaInput
+                                as="radio"
+                                className="mr-2"
+                                name="channelType"
+                                value="ISSUE"
+                                id="letter-channelType-issue"
+                                inputProps={{ label: '이슈', custom: true, checked: temp.channelType === 'ISSUE' }}
+                                onChange={handleChangeValue}
                             />
-                            <NewsLetterPackageModal show={pkgModal} onHide={() => setPkgModal(false)} />
+                            <MokaInput
+                                as="radio"
+                                className="mr-2"
+                                name="channelType"
+                                value="TOPIC"
+                                id="letter-channelType-topic"
+                                inputProps={{ label: '토픽', custom: true, checked: temp.channelType === 'TOPIC' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                className="mr-2"
+                                name="channelType"
+                                value="SERIES"
+                                id="letter-channelType-series"
+                                inputProps={{ label: '연재', custom: true, checked: temp.channelType === 'SERIES' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                className="mr-2"
+                                name="channelType"
+                                value="ARTICLE"
+                                id="letter-channelType-article"
+                                inputProps={{ label: '기사', custom: true, checked: temp.channelType === 'ARTICLE' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                value="REPORTER"
+                                className="mr-2"
+                                name="channelType"
+                                id="letter-channelType-reporter"
+                                inputProps={{ label: '기자', custom: true, checked: temp.channelType === 'REPORTER' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                value="JPOD"
+                                className="mr-2"
+                                name="channelType"
+                                id="letter-channelType-jpod"
+                                inputProps={{ label: 'J팟', custom: true, checked: temp.channelType === 'JPOD' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                value="TREND"
+                                name="channelType"
+                                id="letter-channelType-trend"
+                                inputProps={{ label: '트렌드 뉴스', custom: true, checked: temp.channelType === 'TREND' }}
+                                onChange={handleChangeValue}
+                            />
                         </div>
-                        <div className="mb-1 d-flex align-items-center">
+                        <div>
+                            <Col xs={8} className="p-0">
+                                <MokaSearchInput
+                                    // className="flex-fill"
+                                    value={issueSeq}
+                                    placeholder=""
+                                    onSearch={() => {
+                                        if (temp.channelType === 'ISSUE' || temp.channelType === 'TOPIC' || temp.channelType === 'SERIES' || temp.channelType === 'ARTICLE') {
+                                            setPkgModal(true);
+                                        } else if (temp.channelType === 'REPORTER') {
+                                            setReporterModal(true);
+                                        } else if (temp.channelType === 'JPOD') {
+                                            setJpodModal(true);
+                                        } else {
+                                            return;
+                                        }
+                                    }}
+                                    inputProps={{ readOnly: true }}
+                                    disabled={temp.channelType === '' ? true : false}
+                                />
+                            </Col>
+                        </div>
+                        <NewsLetterPackageModal show={pkgModal} onHide={() => setPkgModal(false)} />
+                        <ReporterListModal show={reporterModal} onHide={() => setReporterModal(false)} onRowClicked={addReporter} />
+                        <NewsLetterJpodModal show={jpodModal} onHide={() => setJpodModal(false)} onRowSelected={addJpod} />
+                        {/* <div className="mb-1 d-flex align-items-center">
                             <Col xs={6} className="p-0 pr-20 d-flex align-items-center">
                                 <div className="mr-2" style={{ width: 80 }}>
                                     <MokaInput
@@ -333,13 +393,15 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                                     onChange={handleChangeValue}
                                 />
                             </Col>
-                        </div>
+                        </div> */}
                     </div>
                 </Form.Row>
             )}
-            <MokaInputLabel label="뉴스레터 명" name="letterName" className="mb-2" value={temp.letterName} onChange={handleChangeValue} />
+            <MokaInputLabel label="뉴스레터 명(한글)" name="letterName" className="mb-2" value={temp.letterName} onChange={handleChangeValue} />
+            <MokaInputLabel label="뉴스레터 명(영문)" className="mb-2" disabled />
             <MokaInputLabel
                 as="textarea"
+                className="mb-2"
                 name="letterDesc"
                 label="뉴스레터 설명"
                 value={temp.letterDesc}
@@ -347,6 +409,26 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                 inputProps={{ rows: 3 }}
                 onChange={handleChangeValue}
             />
+            <Form.Row className="align-items-end">
+                <MokaInputLabel
+                    as="imageFile"
+                    className="mr-2"
+                    label={
+                        <React.Fragment>
+                            상품 이미지
+                            <br />
+                            <Button variant="gray-700" size="sm" className="mt-2" onClick={() => setImgModal(true)}>
+                                신규등록
+                            </Button>
+                        </React.Fragment>
+                    }
+                    // inputProps={{ img: temp.img, setFileValue: handleFileValue, width: 190, deleteButton: true, accept: 'image/jpeg, image/png' }}
+                />
+                <p className="mb-0 color-primary">사이즈 000 * 000 px</p>
+            </Form.Row>
+
+            {/* 포토 아카이브 모달 */}
+            <EditThumbModal show={imgModal} cropWidth={290} cropHeight={180} onHide={() => setImgModal(false)} thumbFileName={temp.headerImg} apply={handleThumbFileApply} />
 
             <hr className="divider" />
         </>

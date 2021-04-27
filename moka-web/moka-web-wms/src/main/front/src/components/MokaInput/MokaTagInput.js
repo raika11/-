@@ -2,9 +2,8 @@ import React, { useState, useRef, forwardRef, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 // import { propTypes as tagPropTypes } from './MokaTag';
-import { MokaIcon } from '@/components';
 import toast from '@/utils/toastUtil';
-// import MokaTag from './MokaTag';
+import MokaTag from './MokaTag';
 
 const propTypes = {
     // ...tagPropTypes,
@@ -21,12 +20,23 @@ const propTypes = {
      */
     onChange: PropTypes.func,
     /**
+     * onAddSpace (true면 스페이스 키보드 입력시 태그 추가)
+     */
+    onAddSpace: PropTypes.bool,
+    /**
+     * onAllowBlank (true면 공백 태그 허용)
+     */
+    onAllowBlank: PropTypes.bool,
+    /**
      * tags input style
      */
     style: PropTypes.object,
 };
 
-export const defaultProps = {};
+export const defaultProps = {
+    onAddSpace: false,
+    onAllowBlank: true,
+};
 
 /**
  * 공통 Tag Input (수정중)
@@ -36,6 +46,8 @@ const MokaTagInput = forwardRef((props, ref) => {
         className,
         value,
         onChange,
+        onAddSpace,
+        onAllowBlank,
         style,
         // 태그 props
         // tag,
@@ -54,28 +66,46 @@ const MokaTagInput = forwardRef((props, ref) => {
     /**
      * 태그 추가
      */
-    const addTags = (e) => {
-        if (e.key === 'Enter' && e.target.value !== '') {
+    const handleAddTag = (e) => {
+        let space = /\s/;
+        if (!onAllowBlank && space.exec(e.target.value)) {
+            toast.warning('태그는 공백을 사용할 수 없습니다.');
+            e.target.value = e.target.value.replace(' ', ''); // 공백제거
+            return;
+        }
+
+        // Enter(13), Space(32)
+        if ((e.keyCode === 13 && e.target.value !== '') || (onAddSpace && e.keyCode === 32 && e.target.value !== '')) {
             e.preventDefault();
             e.stopPropagation();
 
             if (tags.indexOf(e.target.value) > -1) {
                 toast.warning('중복된 태그가 존재합니다.');
             } else {
+                if (onAddSpace && e.target.value === ' ') {
+                    toast.warning('태그는 공백으로 시작할 수 없습니다.');
+                    e.target.value = e.target.value.replace(' ', ''); // 공백제거
+                    return;
+                }
                 setTags([...tags, e.target.value]);
             }
             e.target.value = '';
         }
-
-        // (e.key === 'Space' && e.target.value !== '')
     };
 
     /**
      * 태그 제거
      */
-    const removeTags = (index) => {
+    const handleClickDelete = (index) => {
         setTags([...tags.filter((tag) => tags.indexOf(tag) !== index)]);
     };
+
+    useEffect(() => {
+        if (value) {
+            setTags(value);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         onChange(tags);
@@ -85,29 +115,23 @@ const MokaTagInput = forwardRef((props, ref) => {
     return (
         <div ref={tagsWrapRef} className={clsx('form-control', 'moka-tags-input', className)} style={style}>
             {tags.map((tag, index) => (
-                <div key={index} className="moka-tag">
-                    <span className="tag-title">{tag}</span>
-                    <span className="tag-close-icon" onClick={() => removeTags(index)}>
-                        <MokaIcon iconName="fal-times" />
-                    </span>
-                </div>
-                // <MokaTag
-                //     key={index}
-                //     index={index}
-                //     value={tag}
-                //     editable={isEditable}
-                //     readOnly={readOnly || false}
-                //     tagRef={tagRef}
-                //     update={updateTag}
-                //     remove={removeTag}
-                //     isInvalid={isInvalid}
-                //     onRemoveBackspace={onRemoveBackspace}
-                // />
+                <MokaTag
+                    key={index}
+                    index={index}
+                    tag={tag}
+                    // editable={isEditable}
+                    // readOnly={readOnly || false}
+                    // tagRef={tagRef}
+                    // update={updateTag}
+                    onDelete={handleClickDelete}
+                    // isInvalid={isInvalid}
+                    // onRemoveBackspace={onRemoveBackspace}
+                />
             ))}
 
             <input
                 type="text"
-                onKeyUp={addTags}
+                onKeyUp={handleAddTag}
                 // placeholder=""
             />
         </div>

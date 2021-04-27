@@ -60,6 +60,9 @@ public class Menu {
     @JsonProperty("Url")
     private String url;
 
+    @JsonProperty("Target")
+    private String target;
+
     @JsonProperty("New")
     private String New;
 
@@ -143,6 +146,9 @@ public class Menu {
             Element urlEl = (Element)urlNode;
             if ( urlEl.hasAttribute("Link")) {
                 this.url = urlEl.getAttribute("Link");
+            }
+            if ( urlEl.hasAttribute("Target")) {
+                this.target = urlEl.getAttribute("Target");
             }
         }
     }

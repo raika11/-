@@ -6,6 +6,7 @@ import { messageBox } from '@utils/toastUtil';
 import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { initialState, getReporterListModal, GET_REPORTER_LIST_MODAL } from '@store/reporter';
+import { getJplusRep } from '@store/codeMgt';
 import columnDefs from './ReporterListModalColumns';
 
 const propTypes = {
@@ -126,6 +127,10 @@ const ReporterListModal = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]);
+
+    useEffect(() => {
+        if (show && !jplusRepRows) dispatch(getJplusRep());
+    }, [dispatch, jplusRepRows, show]);
 
     useEffect(() => {
         if (show) {

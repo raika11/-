@@ -62,6 +62,7 @@ const Field = (props) => {
     }, [field]);
 
     switch (type) {
+        case 'ISSUE':
         case 'TEXT':
         case 'LINK':
             return (

@@ -68,31 +68,7 @@ $(document).ready(function() {
     });
 });
 
-/* 임시 레이어팝업 */
-function toggleOpenLayer(obj){
-	$(obj).toggleClass("active");
-}
 
-function toggleOpen(obj){
-	$(obj).parent().toggleClass("open");
-}
-
-function openLayer(obj){
-	$(obj).addClass("active");
-}
-
-function closeLayer($btnCk){
-	$btnCk.parents(".layer_popup.active").removeClass("active");
-	$btnCk.parents(".layer_comment.active").removeClass("active");
-	$btnCk.parents(".layer_ticker.active").removeClass("active");
-}
-
-function btnCloseModal(){
-	$(".btn_close").off().on("click", function(){
-        $btnCk= $(this);
-		closeLayer($btnCk);
-    });
-}
 
 /* scroll indicator */
 function scrollIndicator(){

@@ -730,6 +730,22 @@ dl.date dd {margin-left: 6px;}
 .figure_caption{margin-top:10px;color:#b3b3b3;font-size:0.75rem;text-align:left;line-height:1rem;word-break:break-all;font-weight:normal;}
 
 
+
+/****************************************************************************************************/
+/***                                            tab                                             ***/
+/****************************************************************************************************/
+.tab_nav { width: 100%; border-bottom: 1px solid #e2e2e2; }
+.tab_nav .nav { display: flex; }
+.tab_nav .nav_item { position: relative; padding: 10px 6px; }
+.tab_nav .nav_item:nth-child(n+2) { margin-left: 16px; }
+.tab_nav .nav_item .nav_link {  font-weight: 400; }
+.tab_nav .nav_item .nav_link.active::before { content: ''; position: absolute; left: 0; bottom: -1px; width: 100%; height: 1px; background-color: #f6330a; }
+.tab_content .tab_pane { display: none; }
+.tab_content .tab_pane.active { display: block; }
+
+/* 공통 flex */
+.flex_column { flex-direction: column!important; }
+
 /****************************************************************************************************/
 /***                                             card                                             ***/
 /****************************************************************************************************/

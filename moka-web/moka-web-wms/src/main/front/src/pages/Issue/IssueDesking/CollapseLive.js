@@ -173,6 +173,15 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
         }
     };
 
+    /**
+     * 예약 완료
+     */
+    const onReserve = ({ header }) => {
+        if (header.success) {
+            setStatus(DESK_STATUS_PUBLISH);
+        }
+    };
+
     useImperativeHandle(
         ref,
         () => ({
@@ -219,13 +228,14 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
             {loading && <MokaLoader />}
             <Row className="d-flex position-relative" noGutters>
                 <Col xs={4} className="d-flex align-items-center position-unset">
-                    <ReserveWork reserveDt={desking.reserveDt} pkgSeq={pkgSeq} compNo={compNo} status={status} />
+                    <ReserveWork reserveDt={desking.reserveDt} pkgSeq={pkgSeq} compNo={compNo} status={status} onReserve={onReserve} />
                     <MokaInputLabel
                         as="switch"
                         label="라이브기사"
                         id={controls}
                         style={{ height: 'auto' }}
                         inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
+                        labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
                         onChange={(e) => setOpen(e.target.checked)}
                     />
                 </Col>

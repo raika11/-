@@ -79,15 +79,22 @@ const MokaTagInput = forwardRef((props, ref) => {
             e.preventDefault();
             e.stopPropagation();
 
-            if (tags.indexOf(e.target.value) > -1) {
+            // debugger;
+            if (tags.indexOf(e.target.value) > -1 || (onAddSpace && tags.indexOf(e.target.value.trim()) > -1)) {
                 toast.warning('중복된 태그가 존재합니다.');
             } else {
-                if (onAddSpace && e.target.value === ' ') {
-                    toast.warning('태그는 공백으로 시작할 수 없습니다.');
-                    e.target.value = e.target.value.replace(' ', ''); // 공백제거
-                    return;
+                // 스페이스 입력 허용시 시작 공백 체크, 입력 후 target값의 공백을 지우고 태그 추가
+                if (onAddSpace) {
+                    if (e.target.value === ' ') {
+                        toast.warning('태그는 공백으로 시작할 수 없습니다.');
+                        e.target.value = e.target.value.replace(' ', ''); // 공백제거
+                    } else {
+                        e.target.value = e.target.value.replace(/(\s*)/g, ''); // 입력 후 공백 제거
+                        setTags([...tags, e.target.value]);
+                    }
+                } else {
+                    setTags([...tags, e.target.value]);
                 }
-                setTags([...tags, e.target.value]);
             }
             e.target.value = '';
         }

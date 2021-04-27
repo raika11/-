@@ -48,4 +48,5 @@ public abstract class AbstractCommonController {
     protected String msg(String messageKey, Object... parameters) {
         return messageByLocale.get(messageKey, parameters);
     }
+
 }

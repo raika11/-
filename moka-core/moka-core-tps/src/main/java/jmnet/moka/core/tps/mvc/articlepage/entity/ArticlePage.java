@@ -72,10 +72,10 @@ public class ArticlePage extends BaseAudit {
     private String artPageName;
 
     /**
-     * 서비스유형(기타코드)
+     * 서비스유형(기타코드 SVC_AT)
      */
-    @Column(name = "ART_TYPE", columnDefinition = "char")
-    private String artType;
+    @Column(name = "ART_TYPES")
+    private String artTypes;
 
     /**
      * 기사페이지본문

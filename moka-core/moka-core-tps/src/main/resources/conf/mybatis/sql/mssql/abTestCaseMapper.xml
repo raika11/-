@@ -153,7 +153,7 @@
   </select>
 
   <!--ABTest 상세 정보 조회 -->
-  <select id="findABTestById" parameterType="ABTestCaseSearchDTO" resultType="ABTestCaseVO"
+  <select id="findABTestById" parameterType="ABTestCaseSearchDTO" resultType="AbTestCaseSaveVO"
     statementType="CALLABLE">
     {call UPA_ABTEST_CASE_SEL(
       #{abtestSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
@@ -202,14 +202,18 @@
       #{abtestTitle, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{abtestDesc, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{abtestGrpMethod, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{abtestGrp, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestGrpA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestGrpB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{kpiValueA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{kpiValueB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{deskingPart, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{componentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{templateSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{datasetSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{componentSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{componentSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{templateSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{templateSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{datasetSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{datasetSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{title, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{senderName, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{sendDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
@@ -224,16 +228,17 @@
     { call UPA_ABTEST_CASE_UPD(
       #{abtestSeq, mode=IN, jdbcType=INTEGER, javaType=int},
       #{abtestType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{abtestPurpose, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{domainId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{pageType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{pageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{componentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{letterSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{artType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{zoneDiv, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{zoneSeq, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestPurpose, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
       #{endDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
-      #{endCondi, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{endPeriod, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{endCondi, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{endKpi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{kpiClickCondi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{kpiPeriodCondi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
@@ -245,8 +250,8 @@
       #{modDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
       #{modId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{loginYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{subscribeYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{subscribeSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{scbYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{scbNo, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{devDiv, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{browser, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{referer, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
@@ -259,7 +264,24 @@
       #{utmTerm, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{utmContent, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{abtestTitle, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{abtestDesc, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+      #{abtestDesc, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestGrpMethod, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestGrpA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestGrpB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{kpiValueA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{kpiValueB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{deskingPart, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{componentSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{componentSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{templateSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{templateSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{datasetSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{datasetSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{title, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{senderName, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{sendDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+      #{artContent, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
       )}
   </update>
 </mapper>

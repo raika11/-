@@ -23,7 +23,7 @@ import org.springframework.data.domain.Page;
 public interface AbTestCaseService {
     Page<AbTestCaseVO> findAllList(AbTestCaseSearchDTO searchDTO);
 
-    AbTestCaseVO findABTestById(Long abtestSeq);
+    AbTestCaseSaveVO findABTestById(Long abtestSeq);
 
     Optional<AbTestCase> findById(Long abtestSeq);
 

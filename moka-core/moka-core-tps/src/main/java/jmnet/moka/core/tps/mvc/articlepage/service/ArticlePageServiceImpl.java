@@ -10,6 +10,7 @@ package jmnet.moka.core.tps.mvc.articlepage.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -332,17 +333,31 @@ public class ArticlePageServiceImpl implements ArticlePageService {
     }
 
     @Override
-    public boolean existArtType(String domainId, String artType, Long artPageSeq) {
-        return articlePageRepository.countByArtType(domainId, artType, artPageSeq) > 0;
+    public boolean existArtTypes(String domainId, String artTypes, Long artPageSeq) {
+        return articlePageRepository.countByArtTypes(domainId, artTypes, artPageSeq) > 0;
     }
 
     @Override
     public ArticlePage findByArticePage(String artType, String domainId) {
         List<ArticlePage> pageList = articlePageRepository.findByDomainDomainIdAndArtType(domainId, artType);
+        ArticlePage returnPage = null;
         if (pageList.size() > 0) {
+            for (ArticlePage page : pageList) {
+                String[] artTypeList = page
+                        .getArtTypes()
+                        .split(",");
+                long count = Arrays
+                        .stream(artTypeList)
+                        .filter(t -> t.equals(artType))
+                        .count();
+                if (count > 0) {
+                    return page;
+                }
+            }
+
             return pageList.get(0);
-        } else {
-            return null;
         }
+
+        return returnPage;
     }
 }

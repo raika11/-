@@ -194,7 +194,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     public ResponseEntity<?> getArticleSnsShare(
             @ApiParam("기사 ID") @PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
             @ApiParam("SNS 유형") @RequestParam(value = "snsType", required = false)
-            @Length(max = 2, message = "{tps.article-page.error.length.artType}") SnsTypeCode snsType)
+            @Length(max = 2, message = "{tps.article-page.error.length.artTypes}") SnsTypeCode snsType)
             throws NoDataException {
 
         // 조회
@@ -365,7 +365,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     public ResponseEntity<?> exists(
             @ApiParam("기사 ID") @PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
             @ApiParam("SNS 유형") @RequestParam(value = "snsType", required = false)
-            @Length(max = 2, message = "{tps.article-page.error.length.artType}") SnsTypeCode snsType) {
+            @Length(max = 2, message = "{tps.article-page.error.length.artTypes}") SnsTypeCode snsType) {
 
         String message = msg("tps.common.success.exists");
         Optional<ArticleSnsShare> articleSnsShare = articleSnsShareService.findArticleSnsShareById(totalId, snsType);
@@ -389,7 +389,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     public ResponseEntity<?> deleteArticleSnsShare(
             @ApiParam("기사 ID") @PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
             @ApiParam("SNS 유형") @RequestParam(value = "snsType", required = false)
-            @Length(max = 2, message = "{tps.article-page.error.length.artType}") SnsTypeCode snsType)
+            @Length(max = 2, message = "{tps.article-page.error.length.artTypes}") SnsTypeCode snsType)
             throws InvalidDataException, NoDataException, Exception {
 
 

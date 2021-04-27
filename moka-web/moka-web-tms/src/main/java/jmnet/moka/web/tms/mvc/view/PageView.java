@@ -39,7 +39,7 @@ import org.springframework.web.servlet.view.AbstractView;
  * @author kspark
  * @since 2019. 9. 10. 오후 3:54:35
  */
-public class PageView extends AbstractView {
+public class PageView extends MokaAbstractView {
     private static final Logger logger = LoggerFactory.getLogger(PageView.class);
 
     @Value("${tms.mte.debug}")
@@ -147,7 +147,7 @@ public class PageView extends AbstractView {
                         if (!this.requestedSet.contains(cacheKey)) {
                             try {
                                 this.requestedSet.add(cacheKey);
-                                this.setCodesAndMenus(domainId, item, mergeContext);
+                                this.setCodesAndMenus(this.templateMerger, domainId, item, mergeContext);
                                 sb = templateMerger.merge(domainId, itemType, itemId, mergeContext);
                                 writer.append(sb);
                                 if (this.isPageCache) {
@@ -180,14 +180,14 @@ public class PageView extends AbstractView {
                     if (cachedItem != null) {
                         writer.append(cachedItem);
                     } else {
-                        this.setCodesAndMenus(domainId, item, mergeContext);
+                        this.setCodesAndMenus(this.templateMerger, domainId, item, mergeContext);
                         sb = templateMerger.merge(domainId, itemType, itemId, mergeContext);
                         writer.append(sb);
                         this.cacheManager.set(cacheType, cacheKey, sb.toString());
                     }
                 }
             } else {
-                this.setCodesAndMenus(domainId, item, mergeContext);
+                this.setCodesAndMenus(this.templateMerger, domainId, item, mergeContext);
                 sb = templateMerger.merge(domainId, itemType, itemId, mergeContext);
                 writer.append(sb);
             }
@@ -208,29 +208,5 @@ public class PageView extends AbstractView {
         long endTime = System.currentTimeMillis();
         logger.debug("Template Merge Completed: {}ms {} {}", endTime - startTime, path, cacheKey);
 
-    }
-
-    private void setCodesAndMenus(String domainId, MergeItem item, MergeContext mergeContext)
-            throws TemplateMergeException, TemplateParseException, DataLoadException {
-        String category = item.getString(ItemConstants.PAGE_CATEGORY);
-        if ( category == null) { // 페이지가 아닌 아이템에 파라미터로 들어올 경우
-            HttpParamMap httpParamMap = (HttpParamMap) mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
-            category = httpParamMap.get(MokaConstants.PARAM_CATEGORY);
-        }
-//        if (category == null) {
-//            return;
-//        }
-        DataLoader loader = this.templateMerger
-                .getTemplateMerger(domainId)
-                .getDataLoader();
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put(MokaConstants.PARAM_CATEGORY, category);
-        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.MENU_CATEGORY, paramMap, true);
-        Map<String, Object> map = jsonResult.getData(); // 서비스 사용 코드들
-        Map codes = (Map) map.get(MokaConstants.MERGE_CONTEXT_CODES);
-        Map menus = (Map) map.get(MokaConstants.MERGE_CONTEXT_MENUS);
-        mergeContext.set(MokaConstants.PARAM_CATEGORY, category);
-        mergeContext.set(MokaConstants.MERGE_CONTEXT_CODES, codes);
-        mergeContext.set(MokaConstants.MERGE_CONTEXT_MENUS, menus);
     }
 }

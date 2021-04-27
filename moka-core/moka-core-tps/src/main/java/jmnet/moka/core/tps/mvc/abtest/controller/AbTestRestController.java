@@ -11,10 +11,9 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseDTO;
+import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseAllDTO;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSaveDTO;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSearchDTO;
-import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseUpdateDTO;
 import jmnet.moka.core.tps.mvc.abtest.entity.AbTestCase;
 import jmnet.moka.core.tps.mvc.abtest.service.AbTestCaseService;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseSaveVO;
@@ -97,16 +96,14 @@ public class AbTestRestController extends AbstractCommonController {
     @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq)
             throws NoDataException {
 
-        ResultListDTO<AbTestCaseVO> resultListMessage = new ResultListDTO<>();
-
         // 조회
-        AbTestCaseVO returnValue = abTestCaseService.findABTestById(abtestSeq);
+        AbTestCaseSaveVO returnValue = abTestCaseService.findABTestById(abtestSeq);
 
-        AbTestCaseDTO dto = modelMapper.map(returnValue, AbTestCaseDTO.class);
+        AbTestCaseAllDTO dto = modelMapper.map(returnValue, AbTestCaseAllDTO.class);
 
         tpsLogger.success(ActionType.SELECT);
 
-        ResultDTO<AbTestCaseDTO> resultDto = new ResultDTO<>(dto);
+        ResultDTO<AbTestCaseAllDTO> resultDto = new ResultDTO<>(dto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -129,7 +126,7 @@ public class AbTestRestController extends AbstractCommonController {
             // insert
             Integer abtestSeq = abTestCaseService.insertABTestCase(abTestCaseSaveVO);
 
-            AbTestCaseDTO dto = modelMapper.map(abTestCaseSaveVO, AbTestCaseDTO.class);
+            AbTestCaseAllDTO dto = modelMapper.map(abTestCaseSaveVO, AbTestCaseAllDTO.class);
 
             String message = "";
             if (abtestSeq != 0) {
@@ -139,7 +136,7 @@ public class AbTestRestController extends AbstractCommonController {
                 message = msg("tps.common.error.insert");
             }
 
-            ResultDTO<AbTestCaseDTO> resultDto = new ResultDTO<>(dto, message);
+            ResultDTO<AbTestCaseAllDTO> resultDto = new ResultDTO<>(dto, message);
             tpsLogger.success(ActionType.SELECT);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -153,7 +150,7 @@ public class AbTestRestController extends AbstractCommonController {
     /**
      * ABTest 수정
      *
-     * @param abTestCaseUpdateDTO ABTestDTO
+     * @param abTestCaseSaveDTO
      * @return ABTest 정보
      * @throws Exception A/B테스트 오류 그외 모든 에러
      */
@@ -161,11 +158,11 @@ public class AbTestRestController extends AbstractCommonController {
     @PutMapping(value = "/{abtestSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putAbTestCase(@ApiParam("A/B테스트 일련번호 (필수)") @PathVariable("abtestSeq")
     @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq,
-            @ApiParam("A/B테스트 정보") @RequestBody @Valid AbTestCaseUpdateDTO abTestCaseUpdateDTO)
+            @ApiParam("A/B테스트 정보") @RequestBody @Valid AbTestCaseSaveDTO abTestCaseSaveDTO)
             throws Exception {
 
         // STEP 2 기타설정 값 셋팅
-        AbTestCaseSaveVO abTestCaseSaveVO = modelMapper.map(abTestCaseUpdateDTO, AbTestCaseSaveVO.class);
+        AbTestCaseSaveVO abTestCaseSaveVO = modelMapper.map(abTestCaseSaveDTO, AbTestCaseSaveVO.class);
 
         abTestCaseSaveVO.setAbtestSeq(Math.toIntExact(abtestSeq));
 
@@ -175,36 +172,38 @@ public class AbTestRestController extends AbstractCommonController {
                     .findById(abtestSeq)
                     .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
-            // 조회 한 STEP 1 주요설정 값 가져와 셋팅
-            abTestCaseSaveVO.setAbtestType(abtestCase.getAbtestType());
-            abTestCaseSaveVO.setDomainId(abtestCase.getDomainId());
-            abTestCaseSaveVO.setPageType(abtestCase.getPageType());
-            abTestCaseSaveVO.setPageSeq(abtestCase.getPageSeq());
-            abTestCaseSaveVO.setArtType(abtestCase.getArtType());
-            abTestCaseSaveVO.setZoneDiv(abtestCase.getZoneDiv());
-            abTestCaseSaveVO.setZoneSeq(abtestCase.getZoneSeq());
-            abTestCaseSaveVO.setAbtestPurpose(abtestCase.getAbtestPurpose());
-            abTestCaseSaveVO.setStartDt(abtestCase.getStartDt());
-            abTestCaseSaveVO.setEndDt(abtestCase.getEndDt());
-            abTestCaseSaveVO.setEndPeriod(abtestCase.getEndPeriod());
-            abTestCaseSaveVO.setEndCondi(abtestCase.getEndCondi());
-            abTestCaseSaveVO.setEndKpi(abtestCase.getEndKpi());
-            abTestCaseSaveVO.setKpiClickCondi(abtestCase.getKpiClickCondi());
-            abTestCaseSaveVO.setKpiPeriodCondi(abtestCase.getKpiPeriodCondi());
-            abTestCaseSaveVO.setAutoApplyYn(abtestCase.getAutoApplyYn());
-            abTestCaseSaveVO.setStatus(abtestCase.getStatus());
-            abTestCaseSaveVO.setDelYn(abtestCase.getDelYn());
-            abTestCaseSaveVO.setRegId(abtestCase.getRegId());
-            abTestCaseSaveVO.setRegDt(abtestCase.getRegDt());
-            abTestCaseSaveVO.setModId(abtestCase.getModId());
+            //AbTestCaseSaveVO abTestCaseSave = modelMapper.map(abtestCase, AbTestCaseSaveVO.class);
 
-            abTestCaseSaveVO.setAbtestTitle(abtestCase.getAbtestTitle());
-            abTestCaseSaveVO.setAbtestDesc(abtestCase.getAbtestDesc());
+            // 조회 한 STEP 1 주요설정 값 가져와 셋팅
+            //            abTestCaseSaveVO.setAbtestType(abtestCase.getAbtestType());
+            //            abTestCaseSaveVO.setDomainId(abtestCase.getDomainId());
+            //            abTestCaseSaveVO.setPageType(abtestCase.getPageType());
+            //            abTestCaseSaveVO.setPageSeq(abtestCase.getPageSeq());
+            //            abTestCaseSaveVO.setArtType(abtestCase.getArtType());
+            //            abTestCaseSaveVO.setZoneDiv(abtestCase.getZoneDiv());
+            //            abTestCaseSaveVO.setZoneSeq(abtestCase.getZoneSeq());
+            //            abTestCaseSaveVO.setAbtestPurpose(abtestCase.getAbtestPurpose());
+            //            abTestCaseSaveVO.setStartDt(abtestCase.getStartDt());
+            //            abTestCaseSaveVO.setEndDt(abtestCase.getEndDt());
+            //            abTestCaseSaveVO.setEndPeriod(abtestCase.getEndPeriod());
+            //            abTestCaseSaveVO.setEndCondi(abtestCase.getEndCondi());
+            //            abTestCaseSaveVO.setEndKpi(abtestCase.getEndKpi());
+            //            abTestCaseSaveVO.setKpiClickCondi(abtestCase.getKpiClickCondi());
+            //            abTestCaseSaveVO.setKpiPeriodCondi(abtestCase.getKpiPeriodCondi());
+            //            abTestCaseSaveVO.setAutoApplyYn(abtestCase.getAutoApplyYn());
+            //            abTestCaseSaveVO.setStatus(abtestCase.getStatus());
+            //            abTestCaseSaveVO.setDelYn(abtestCase.getDelYn());
+            //            abTestCaseSaveVO.setRegId(abtestCase.getRegId());
+            //            abTestCaseSaveVO.setRegDt(abtestCase.getRegDt());
+            //            abTestCaseSaveVO.setModId(abtestCase.getModId());
+            //
+            //            abTestCaseSaveVO.setAbtestTitle(abtestCase.getAbtestTitle());
+            //            abTestCaseSaveVO.setAbtestDesc(abtestCase.getAbtestDesc());
 
             // update
             Integer chk = abTestCaseService.updateABTestCase(abTestCaseSaveVO);
 
-            AbTestCaseDTO dto = modelMapper.map(abTestCaseSaveVO, AbTestCaseDTO.class);
+            AbTestCaseAllDTO dto = modelMapper.map(abTestCaseSaveVO, AbTestCaseAllDTO.class);
             String message = "";
             if (abtestSeq > 0) {
                 message = msg("tps.common.success.update");
@@ -213,7 +212,7 @@ public class AbTestRestController extends AbstractCommonController {
                 message = msg("tps.common.error.update");
             }
 
-            ResultDTO<AbTestCaseDTO> resultDto = new ResultDTO<>(dto, message);
+            ResultDTO<AbTestCaseAllDTO> resultDto = new ResultDTO<>(dto, message);
             tpsLogger.success(ActionType.SELECT);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 

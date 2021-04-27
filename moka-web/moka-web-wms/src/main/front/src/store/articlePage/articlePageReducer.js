@@ -41,7 +41,7 @@ export const initialState = {
             domainAddress: null,
         },
         artPageName: '',
-        artType: 'B',
+        artTypes: null,
         artPageBody: '',
     },
     articlePageError: null,

@@ -76,7 +76,7 @@ const SearchKeywordDetail = ({ match }) => {
             <div className="mb-14">
                 <Row noGutters>
                     <Col xs={8} className="pr-2">
-                        <MokaInputLabel label="검색어" inputClassName="font-weight-bold" inputProps={{ plaintext: true }} value={keyword} disabled />
+                        <MokaInputLabel label="검색어" labelWidth={40} inputClassName="font-weight-bold" inputProps={{ plaintext: true }} value={keyword} disabled />
                     </Col>
                     <Col xs={4} className="d-flex justify-content-end">
                         <MokaInputLabel

@@ -1,7 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-
 import * as api from './articlePageApi';
 import * as act from './articlePageAction';
 
@@ -27,60 +26,13 @@ const getArticlePageLookup = createRequestSaga(act.GET_ARTICLE_PAGE_LOOKUP, api.
 
 /**
  * 기사 타입별 마지막 기사 조회
- * @param {string|number} param0.payload.artType 페이지ID (필수)
- * @param {func} param0.payload.callback 콜백
  */
-export function* getPreviewTotalId({ payload: { artType, callback } }) {
-    const ACTION = act.GET_PREVIEW_TOTAL_ID;
-    const SUCCESS = act.GET_PREVIEW_TOTAL_ID_SUCCESS;
-    let callbackData = {};
-
-    yield put(startLoading(ACTION));
-    try {
-        const response = yield call(api.getPreviewTotalId, { artType });
-        callbackData = response.data;
-
-        if (response.data.header.success && response.data.body) {
-            yield put({
-                type: SUCCESS,
-                payload: response.data,
-            });
-        }
-    } catch (e) {
-        callbackData = errorResponse(e);
-    }
-
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-
-    yield put(finishLoading(ACTION));
-}
+const getPreviewTotalId = createRequestSaga(act.GET_PREVIEW_TOTAL_ID, api.getPreviewTotalId);
 
 /**
  * 동일아티클페이지 유형 존재여부
  */
-function* existsArtType({ payload }) {
-    const { callback } = payload;
-    const ACTION = act.EXISTS_ARTICLE_TYPE;
-    let callbackData = {};
-
-    yield put(startLoading(ACTION));
-
-    try {
-        const response = yield call(api.existsArtType, payload);
-        console.log(response);
-        callbackData = response.data;
-    } catch (e) {
-        callbackData = errorResponse(true);
-    }
-
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-
-    yield put(finishLoading(ACTION));
-}
+const existsArtType = createRequestSaga(act.EXISTS_ARTICLE_TYPE, api.existsArtType);
 
 /**
  * 저장

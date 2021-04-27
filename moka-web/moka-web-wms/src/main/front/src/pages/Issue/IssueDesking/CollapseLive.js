@@ -27,7 +27,7 @@ const defaultProps = {
 const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight, preview }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
-    const [status, setStatus] = useState(DESK_STATUS_WORK);
+    const [status, setStatus] = useState(DESK_STATUS_SAVE);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);

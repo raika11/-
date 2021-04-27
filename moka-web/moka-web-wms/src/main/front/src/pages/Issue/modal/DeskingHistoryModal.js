@@ -77,8 +77,6 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                 }),
             );
             setSearchDt(newDt);
-
-            // const test = moment('2021-04-27T05:09:29.700+0000', moment.ISO_8601);
         } else {
             dispatch(clearIssueDeskingHistory());
         }
@@ -88,6 +86,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
         setRowData(
             list.map((data) => ({
                 ...data,
+                displayRegDt: moment(data.regDt, moment.ISO_8601).format(DB_DATEFORMAT),
                 worker: `${data.regNm}(${data.regId})`,
                 onClick: (rowData) => {
                     if (selected.regDt !== rowData.regDt) {
@@ -146,6 +145,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                         loading={loading}
                         preventRowClickCell={['load']}
                         selected={selected.regDt}
+                        enableBrowserTooltips
                     />
                 </Col>
                 <Col sm={6} className="pl-12 h-100">
@@ -156,6 +156,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                         onRowNodeId={(data) => data.contentsId}
                         paging={false}
                         loading={detailLoading}
+                        enableBrowserTooltips
                     />
                 </Col>
             </Row>
@@ -174,8 +175,11 @@ const columnDefs = [
     },
     {
         headerName: '전송일시',
-        field: 'regDt',
+        field: 'displayRegDt',
         width: 125,
+        cellClassRules: {
+            'text-positive': ({ data }) => data.approvalYn === 'N', // 예약 데이터
+        },
     },
     {
         headerName: '작업자',
@@ -197,11 +201,12 @@ const detailColumnDefs = [
     {
         headerName: 'No',
         field: 'contentsOrd',
-        width: 50,
+        width: 30,
     },
     {
         headerName: '제목',
         field: 'title',
+        tooltipValueGetter: (params) => unescapeHtmlArticle(params.data.title || ''),
         flex: 1,
         valueGetter: (params) => unescapeHtmlArticle(params.data.title || ''),
     },

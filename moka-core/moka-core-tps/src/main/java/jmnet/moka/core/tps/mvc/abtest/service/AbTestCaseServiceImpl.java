@@ -49,7 +49,7 @@ public class AbTestCaseServiceImpl implements AbTestCaseService {
     }
 
     @Override
-    public AbTestCaseVO findABTestById(Long abTestSeq) {
+    public AbTestCaseSaveVO findABTestById(Long abTestSeq) {
         return abTestCaseMapper.findABTestById(abTestSeq);
     }
 

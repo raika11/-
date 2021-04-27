@@ -29,5 +29,5 @@
     start
     sort
   </parameterGroup>
-  <referer>localhost:8081,stg-mnews.joongang.co.kr</referer>
+  <referer>localhost:8081,stg-news.joongang.co.kr,stg-www.joongang.co.kr</referer>
 </DefaultConfig>

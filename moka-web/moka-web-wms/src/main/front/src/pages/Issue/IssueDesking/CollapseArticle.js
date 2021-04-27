@@ -246,6 +246,15 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
         }
     };
 
+    /**
+     * 예약 완료
+     */
+    const onReserve = ({ header }) => {
+        if (header.success) {
+            setStatus(DESK_STATUS_PUBLISH);
+        }
+    };
+
     useImperativeHandle(
         ref,
         () => ({
@@ -280,7 +289,7 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
             {loading && <MokaLoader />}
             <Row className="d-flex position-relative" noGutters>
                 <Col xs={4} className="d-flex align-items-center position-unset">
-                    <ReserveWork reserveDt={desking.reserveDt} status={status} pkgSeq={pkgSeq} compNo={compNo} />
+                    <ReserveWork reserveDt={desking.reserveDt} status={status} pkgSeq={pkgSeq} compNo={compNo} onReserve={onReserve} />
                     <MokaInputLabel
                         as="switch"
                         label="메인기사"

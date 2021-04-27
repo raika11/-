@@ -121,6 +121,15 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
         }
     };
 
+    /**
+     * 예약 완료
+     */
+    const onReserve = ({ header }) => {
+        if (header.success) {
+            setStatus(DESK_STATUS_PUBLISH);
+        }
+    };
+
     useImperativeHandle(
         ref,
         () => ({
@@ -167,8 +176,16 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
             {loading && <MokaLoader />}
             <Row className="d-flex position-relative" noGutters>
                 <Col xs={4} className="d-flex align-items-center position-unset">
-                    <ReserveWork pkgSeq={pkgSeq} compNo={compNo} status={status} reserveDt={desking.reserveDt} />
-                    <MokaInputLabel as="switch" label="배너" id={controls} inputProps={{ checked: open }} onChange={(e) => setOpen(e.target.checked)} style={{ height: 'auto' }} />
+                    <ReserveWork pkgSeq={pkgSeq} compNo={compNo} status={status} reserveDt={desking.reserveDt} onReserve={onReserve} />
+                    <MokaInputLabel
+                        as="switch"
+                        label="배너"
+                        id={controls}
+                        inputProps={{ checked: open }}
+                        onChange={(e) => setOpen(e.target.checked)}
+                        style={{ height: 'auto' }}
+                        labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
+                    />
                 </Col>
                 <Col xs={3}></Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">

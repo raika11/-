@@ -100,7 +100,7 @@ const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE }, re
             {loading && <MokaLoader />}
             <Row className="d-flex" noGutters>
                 <Col xs={3}>
-                    <MokaInputLabel as="switch" label="메인기사" id={controls} inputProps={{ checked: open }} onChange={(e) => setOpen(e.target.checked)} />
+                    <MokaInputLabel as="switch" label="데이터기사" id={controls} inputProps={{ checked: open }} onChange={(e) => setOpen(e.target.checked)} />
                 </Col>
                 <Col xs={6} className="d-flex align-items-center"></Col>
                 <Col xs={3} className="d-flex justify-content-end align-items-center">

@@ -29,6 +29,7 @@ import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.helper.PurgeHelper;
@@ -134,7 +135,7 @@ public class ArticlePageRestController extends AbstractCommonController {
 
         ArticlePageDTO dto = modelMapper.map(articlePage, ArticlePageDTO.class);
 
-        Long totalId = articleService.findLastestArticleBasicByArtType(dto.getArtType());
+        Long totalId = this.getTotalId(dto.getArtTypes());
         dto.setPreviewTotalId(totalId);
 
         ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<>(dto);
@@ -164,10 +165,10 @@ public class ArticlePageRestController extends AbstractCommonController {
                 tpsLogger.fail(actionType, message, true);
             }
 
-            if (actionType == ActionType.INSERT && articlePageService.existArtType(articlePageDTO
+            if (actionType == ActionType.INSERT && articlePageService.existArtTypes(articlePageDTO
                     .getDomain()
-                    .getDomainId(), articlePageDTO.getArtType(), artPageSeq)) {
-                String message = msg("tps.article-page.error.duplicate.artType");
+                    .getDomainId(), articlePageDTO.getArtTypes(), artPageSeq)) {
+                String message = msg("tps.article-page.error.duplicate.artTypes");
                 invalidList.add(new InvalidDataDTO("artPageBody", message));
             }
 
@@ -222,8 +223,10 @@ public class ArticlePageRestController extends AbstractCommonController {
             // 결과리턴
             ArticlePageDTO dto = modelMapper.map(returnValue, ArticlePageDTO.class);
 
-            Long totalId = articleService.findLastestArticleBasicByArtType(dto.getArtType());
+            Long totalId = this.getTotalId(dto.getArtTypes());
             dto.setPreviewTotalId(totalId);
+
+
 
             String message = msg("tps.common.success.insert");
             ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<>(dto, message);
@@ -235,6 +238,22 @@ public class ArticlePageRestController extends AbstractCommonController {
             throw new Exception(msg("tps.common.error.insert"), e);
         }
 
+    }
+
+    /**
+     * 미리보기용 기사키 조회
+     *
+     * @param artTypes 기사타입
+     * @return 기사키
+     */
+    private Long getTotalId(String artTypes) {
+        String artType = TpsConstants.DEFAULT_ART_TYPE;
+        if (McpString.isNotEmpty(artTypes)) {
+            String[] artTypeList = artTypes.split(",");
+            artType = artTypeList[0];
+        }
+        Long totalId = articleService.findLastestArticleBasicByArtType(artType);
+        return totalId;
     }
 
     /**
@@ -275,7 +294,7 @@ public class ArticlePageRestController extends AbstractCommonController {
             // purge 날림!!  성공실패여부는 리턴하지 않는다.
             purge(dto);
 
-            Long totalId = articleService.findLastestArticleBasicByArtType(dto.getArtType());
+            Long totalId = this.getTotalId(dto.getArtTypes());
             dto.setPreviewTotalId(totalId);
 
             String message = msg("tps.common.success.update");
@@ -349,10 +368,10 @@ public class ArticlePageRestController extends AbstractCommonController {
     public ResponseEntity<?> existsArtType(@Valid @SearchParam ArticlePageSearchDTO search,
             @ApiParam(value = "제외 기사페이지 일련번호", required = false) @RequestParam(value = "artPageSeq", required = false) Long artPageSeq) {
 
-        boolean duplicated = articlePageService.existArtType(search.getDomainId(), search.getArtType(), artPageSeq);
+        boolean duplicated = articlePageService.existArtTypes(search.getDomainId(), search.getArtTypes(), artPageSeq);
         String message = "";
         if (duplicated) {
-            message = msg("tps.article-page.error.duplicate.artType");
+            message = msg("tps.article-page.error.duplicate.artTypes");
         }
         ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated, message);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -361,17 +380,17 @@ public class ArticlePageRestController extends AbstractCommonController {
     /**
      * 기사 유형 중복 체크
      *
-     * @param artType 기사 유형
+     * @param artTypes 기사 유형
      * @return 중복 여부
      */
     @ApiOperation(value = "미리보기용 최근 기사ID 조회")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "artType", value = "기사 유형", required = true, dataType = "String", paramType = "query", defaultValue = "B")})
+            @ApiImplicitParam(name = "artTypes", value = "기사 유형", required = true, dataType = "String", paramType = "query", defaultValue = TpsConstants.DEFAULT_ART_TYPE)})
     @GetMapping("/preview-totalid")
     public ResponseEntity<?> getPreviewTotalId(
-            @RequestParam("artType") @Length(max = 24, message = "{tps.article-page.error.length.artType}") String artType) {
+            @RequestParam("artTypes") @Length(max = 24, message = "{tps.article-page.error.length.artTypes}") String artTypes) {
 
-        Long totalId = articleService.findLastestArticleBasicByArtType(artType);
+        Long totalId = this.getTotalId(artTypes);
         ResultDTO<Long> resultDTO = new ResultDTO<>(totalId);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }

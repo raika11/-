@@ -11,6 +11,7 @@ import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
 import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issue';
 import { ArticleTabModal } from '@pages/Article/modals';
+import { DeskingHistoryModal } from '../modal';
 import StatusBadge from './StatusBadge';
 import { artColumnDefs } from './IssueDeskingColumns';
 
@@ -29,6 +30,7 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
+    const [histShow, setHistShow] = useState(false);
     const controls = 'collapse-art';
 
     /**
@@ -292,6 +294,7 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
                     <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
+                    {/* 버튼 */}
                     <div className="d-flex">
                         <StatusBadge desking={desking} />
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="미리보기" variant="white" onClick={preview}>
@@ -303,9 +306,10 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="전송" variant="white" onClick={publishDesking}>
                             <MokaIcon iconName="Send" feather />
                         </MokaOverlayTooltipButton>
-                        <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={publishDesking}>
+                        <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
                             <MokaIcon iconName="fal-history" />
                         </MokaOverlayTooltipButton>
+                        <DeskingHistoryModal show={histShow} onHide={() => setHistShow(false)} pkgSeq={pkgSeq} compNo={compNo} />
                     </div>
                 </Col>
             </Row>

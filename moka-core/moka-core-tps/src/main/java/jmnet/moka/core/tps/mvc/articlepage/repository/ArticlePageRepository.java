@@ -4,7 +4,6 @@
 
 package jmnet.moka.core.tps.mvc.articlepage.repository;
 
-import java.util.List;
 import jmnet.moka.core.tps.mvc.articlepage.entity.ArticlePage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,22 +16,5 @@ public interface ArticlePageRepository extends JpaRepository<ArticlePage, Long>,
      */
     int countByDomain_DomainId(String domainId);
 
-    //    /**
-    //     * 기사 유형별 건수 조회
-    //     *
-    //     * @param domainId 도메인ID
-    //     * @param artType  기사 유형
-    //     * @return 건수
-    //     */
-    //    int countByDomainDomainIdAndArtType(String domainId, String artType);
-
-    /**
-     * 도메인, 유형에 해당하는 기사페이지 조회
-     *
-     * @param domainId 도메인ID
-     * @param artType  유형
-     * @return 기사페이지
-     */
-    List<ArticlePage> findByDomainDomainIdAndArtType(String domainId, String artType);
 
 }

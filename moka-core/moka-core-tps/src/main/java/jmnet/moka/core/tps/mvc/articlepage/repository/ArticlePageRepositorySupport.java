@@ -8,6 +8,7 @@
 
 package jmnet.moka.core.tps.mvc.articlepage.repository;
 
+import java.util.List;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageSearchDTO;
 import jmnet.moka.core.tps.mvc.articlepage.entity.ArticlePage;
 import org.springframework.data.domain.Page;
@@ -34,10 +35,20 @@ public interface ArticlePageRepositorySupport {
      * 기사 유형별 건수 조회
      *
      * @param domainId           도메인ID
-     * @param artType            기사 유형
+     * @param artTypes           기사 유형
      * @param exclude_artPageSeq 기사페이지순번
      * @return 건수
      */
-    Long countByArtType(String domainId, String artType, Long exclude_artPageSeq);
+    Long countByArtTypes(String domainId, String artTypes, Long exclude_artPageSeq);
+
+
+    /**
+     * 도메인, 유형에 해당하는 기사페이지 조회
+     *
+     * @param domainId 도메인ID
+     * @param artType  유형
+     * @return 기사페이지
+     */
+    List<ArticlePage> findByDomainDomainIdAndArtType(String domainId, String artType);
 
 }

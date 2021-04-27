@@ -79,7 +79,6 @@ const MokaTagInput = forwardRef((props, ref) => {
             e.preventDefault();
             e.stopPropagation();
 
-            // debugger;
             if (tags.indexOf(e.target.value) > -1 || (onAddSpace && tags.indexOf(e.target.value.trim()) > -1)) {
                 toast.warning('중복된 태그가 존재합니다.');
             } else {

@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@/components';
-import NewsLetterPackageModal from '../modals/NewsLetterPackageModal';
+import RecommendIssueListModal from '@/pages/Issue/modal/RecommendIssueListModal';
 import ReporterListModal from '@/pages/Reporter/modals/ReporterListModal';
 import NewsLetterJpodModal from '../modals/NewsLetterJpodModal';
 import { EditThumbModal } from '@/pages/Desking/modals';
@@ -63,11 +63,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
      * @param {any} data 파일데이터
      */
     const handleFileValue = (data) => {
-        if (data) {
-            setTemp({ ...temp, thumbnailFile: data });
-        } else {
-            setTemp({ ...temp, img: null, thumbnailFile: data });
-        }
+        setTemp({ ...temp, letterImgFile: data });
     };
 
     /**
@@ -76,7 +72,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
      * @param {*} file 파일데이터
      */
     const handleThumbFileApply = (imageSrc, file) => {
-        // setTemp({ ...temp, img: imageSrc, thumbnailFile: file });
+        setTemp({ ...temp, letterImg: imageSrc, letterImgFile: file });
     };
 
     useEffect(() => {
@@ -139,7 +135,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                             onChange={handleChangeValue}
                         />
                         <Col xs={3} className="p-0">
-                            <MokaInputLabel label="A/B TEST 여부" value={temp.abtestYN} onChange={handleChangeValue} />
+                            <MokaInputLabel label="A/B TEST 여부" value={temp.abtestYn} onChange={handleChangeValue} />
                         </Col>
                     </Form.Row>
                     <hr className="divider" />
@@ -220,16 +216,18 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
 
             <Form.Row className="mb-2">
                 <MokaInputLabel as="none" label="카테고리" />
-                <Col xs={7} className="p-0">
-                    <MokaSearchInput placeholder="" className="w-100" disabled />
-                </Col>
+                <div className="flex-fill">
+                    <Col xs={8} className="p-0">
+                        <MokaSearchInput placeholder="" disabled />
+                    </Col>
+                </div>
             </Form.Row>
 
             {temp.sendType === 'A' && (
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-2 align-items-center">
                     <MokaInputLabel as="none" label="발송 콘텐츠 선택" />
                     <div className="flex-fill">
-                        <div className="mb-1 d-flex align-items-center" style={{ height: 31 }}>
+                        <div className="mb-2 d-flex align-items-center" style={{ height: 31 }}>
                             <MokaInput
                                 as="radio"
                                 className="mr-2"
@@ -296,7 +294,6 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                         <div>
                             <Col xs={8} className="p-0">
                                 <MokaSearchInput
-                                    // className="flex-fill"
                                     value={issueSeq}
                                     placeholder=""
                                     onSearch={() => {
@@ -311,94 +308,18 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                                         }
                                     }}
                                     inputProps={{ readOnly: true }}
-                                    disabled={temp.channelType === '' ? true : false}
+                                    disabled={temp.channelType === 'TREND' ? true : false}
                                 />
                             </Col>
                         </div>
-                        <NewsLetterPackageModal show={pkgModal} onHide={() => setPkgModal(false)} />
+                        <RecommendIssueListModal usageNewsLetter show={pkgModal} onHide={() => setPkgModal(false)} />
                         <ReporterListModal show={reporterModal} onHide={() => setReporterModal(false)} onRowClicked={addReporter} />
                         <NewsLetterJpodModal show={jpodModal} onHide={() => setJpodModal(false)} onRowSelected={addJpod} />
-                        {/* <div className="mb-1 d-flex align-items-center">
-                            <Col xs={6} className="p-0 pr-20 d-flex align-items-center">
-                                <div className="mr-2" style={{ width: 80 }}>
-                                    <MokaInput
-                                        as="radio"
-                                        value="REPORTER"
-                                        name="channelType"
-                                        id="letter-channelType-reporter"
-                                        inputProps={{ label: '기자', custom: true, checked: temp.channelType === 'REPORTER' }}
-                                        onChange={handleChangeValue}
-                                    />
-                                </div>
-                                <MokaSearchInput
-                                    placeholder=""
-                                    value={reporterSeq}
-                                    onSearch={() => {
-                                        if (temp.channelType === 'REPORTER') {
-                                            setReporterModal(true);
-                                        } else {
-                                            return;
-                                        }
-                                    }}
-                                    inputProps={{ readOnly: true }}
-                                    disabled={temp.channelType === '' ? true : false}
-                                />
-                                <ReporterListModal show={reporterModal} onHide={() => setReporterModal(false)} onRowClicked={addReporter} />
-                            </Col>
-                            <Col xs={6} className="p-0 pl-20 d-flex align-items-center">
-                                <div className="mr-2" style={{ width: 80 }}>
-                                    <MokaInput
-                                        as="radio"
-                                        value="JPOD"
-                                        name="channelType"
-                                        id="letter-channelType-jpod"
-                                        inputProps={{ label: 'J팟', custom: true, checked: temp.channelType === 'JPOD' }}
-                                        onChange={handleChangeValue}
-                                    />
-                                </div>
-                                <MokaSearchInput
-                                    placeholder=""
-                                    value={jpodSeq}
-                                    inputProps={{ readOnly: true }}
-                                    onSearch={() => {
-                                        if (temp.channelType === 'JPOD') {
-                                            setJpodModal(true);
-                                        } else {
-                                            return;
-                                        }
-                                    }}
-                                    disabled={temp.channelType === '' ? true : false}
-                                />
-                                <NewsLetterJpodModal show={jpodModal} onHide={() => setJpodModal(false)} onRowSelected={addJpod} />
-                            </Col>
-                        </div>
-                        <div className="d-flex align-items-center" style={{ height: 31 }}>
-                            <Col xs={3} className="p-0 pr-2">
-                                <MokaInput
-                                    as="radio"
-                                    value="TREND"
-                                    name="channelType"
-                                    id="letter-channelType-trend"
-                                    inputProps={{ label: '트렌드 뉴스', custom: true, checked: temp.channelType === 'TREND' }}
-                                    onChange={handleChangeValue}
-                                />
-                            </Col>
-                            <Col xs={3} className="p-0">
-                                <MokaInput
-                                    as="radio"
-                                    value=""
-                                    name="channelType"
-                                    id="letter-channelType-null"
-                                    inputProps={{ label: '해당 없음', custom: true, checked: temp.channelType === '' }}
-                                    onChange={handleChangeValue}
-                                />
-                            </Col>
-                        </div> */}
                     </div>
                 </Form.Row>
             )}
             <MokaInputLabel label="뉴스레터 명(한글)" name="letterName" className="mb-2" value={temp.letterName} onChange={handleChangeValue} />
-            <MokaInputLabel label="뉴스레터 명(영문)" className="mb-2" disabled />
+            <MokaInputLabel label="뉴스레터 명(영문)" name="letterEngName" className="mb-2" value={temp.letterEngName} onChange={handleChangeValue} />
             <MokaInputLabel
                 as="textarea"
                 className="mb-2"
@@ -422,7 +343,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                             </Button>
                         </React.Fragment>
                     }
-                    // inputProps={{ img: temp.img, setFileValue: handleFileValue, width: 190, deleteButton: true, accept: 'image/jpeg, image/png' }}
+                    inputProps={{ img: temp.letterImg, setFileValue: handleFileValue, width: 190, deleteButton: true, accept: 'image/jpeg, image/png' }}
                 />
                 <p className="mb-0 color-primary">사이즈 000 * 000 px</p>
             </Form.Row>

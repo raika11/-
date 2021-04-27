@@ -57,6 +57,29 @@ font-*,color,text-align,vertical-align, ...
 .tab_nav .nav_item .nav_link.active::before { content: ''; position: absolute; left: 0; bottom: -1px; width: 100%; height: 1px; background-color: #f6330a; }
 
 
+.journalist_total{font-size:16px; font-weight: bold;}
+
+.journalist_list .list_item{display:block; width:100%;padding:24px; border:1px solid #e2e2e2;}
+
+/*기자 정보 공통 */
+.profile_area{display:flex;}
+.profile_area > *{flex:0 0 auto;}
+.profile_image img{max-width:100%;border-radius:100%;border:1px solid rgba(0,0,0,0.03);}
+.flex_area{display: flex; align-items: center;}
+.badge{padding: 0px;}
+.badge span{padding: 3px 8px;border-radius: 10px;background-color: #00828c; color:#fff; white-space: nowrap;vertical-align: bottom;}
+.profile_info{margin-top: 4px;color: #111;font-size: 14px;line-height: 1.4;}
+.name{margin-right:6px; font-size:18px; color:#111111; }
+
+.profile_area .profile_body .journalist_popularity{display: flex; margin-top: 9px; color: #999;font-size: 13px;line-height: 1.54;}
+.profile_area .profile_body .journalist_popularity dt {margin-right:4px;}
+.profile_area .profile_body .journalist_popularity dd {font-weight: bold;}
+.profile_area .profile_body .journalist_popularity dd:nth-of-type(1) {position: relative; margin-right:16px;}
+.profile_area .profile_body .journalist_popularity dd:nth-of-type(1)::after{content: ""; display: block;position: absolute;top: 50%;left: 22px;width: 1px;height: 10px;background-color: #bcbcbc;transform: translateY(-50%);}
+
+.journalist_list .meta{display:flex; margin-top:6px;}
+.journalist_list .meta .ico_up span{width:28px; height:18px; padding:3px 6px; margin-right:6px; border: 1px solid #f6330a; border-radius:10px; font-size:10px; font-weight: bold; color: #f6330a;}
+.journalist_list .meta .date{font-size:13px; line-height: 22px; color: #999999;}
 /****************************************************************************************************/
 /***                                            image                                             ***/
 /****************************************************************************************************/
@@ -98,7 +121,10 @@ font-*,color,text-align,vertical-align, ...
     /****************************************************************************************************/
     /***                                           content                                            ***/
     /****************************************************************************************************/
-    
+    .journalist_list .row li{margin-bottom: 16px;}
+    .profile_area .profile_image{width:80px;margin-right:16px;}
+    .profile_area .profile_body .flex_area .name{font-size:20px; color:#111111;}
+    .journalist_list .headline{height:37px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
 
 }
 
@@ -123,7 +149,10 @@ font-*,color,text-align,vertical-align, ...
     /****************************************************************************************************/
     /***                                           content                                            ***/
     /****************************************************************************************************/
-
+    .journalist_list .row li{margin-bottom: 30px;}
+    .profile_area .profile_image{width:72px;margin-right:24px;}
+    .profile_area .profile_body .flex_area .name{font-size:18px; color:#111111;}
+    .journalist_list .headline{height:61px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
 
 }
 

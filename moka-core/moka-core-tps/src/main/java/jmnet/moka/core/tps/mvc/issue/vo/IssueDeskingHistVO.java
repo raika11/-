@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -71,6 +72,7 @@ public class IssueDeskingHistVO implements Serializable {
     /**
      * 예약일시
      */
+    @DTODateTimeFormat
     @Column(name = "RESERVE_DT", updatable = false)
     private Date reserveDt;
 
@@ -102,6 +104,7 @@ public class IssueDeskingHistVO implements Serializable {
     /**
      * 배부일시
      */
+    @DTODateTimeFormat
     @Column(name = "DIST_DT")
     private Date distDt;
 

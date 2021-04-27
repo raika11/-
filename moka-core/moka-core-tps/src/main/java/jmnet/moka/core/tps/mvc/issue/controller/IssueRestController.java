@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -17,6 +18,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
@@ -853,7 +855,7 @@ public class IssueRestController extends AbstractCommonController {
             // 리턴 DTO 생성
             ResultListDTO<IssueDeskingHistGroupVO> resultList = new ResultListDTO<IssueDeskingHistGroupVO>();
             resultList.setList(returnValue);
-            resultList.setTotalCnt(search.getTotal());
+            resultList.setTotalCnt(search.getTotal() == null ? 0L : search.getTotal());
 
             ResultDTO<ResultListDTO<IssueDeskingHistGroupVO>> resultDTO = new ResultDTO<ResultListDTO<IssueDeskingHistGroupVO>>(resultList);
             tpsLogger.success(true);
@@ -869,7 +871,7 @@ public class IssueRestController extends AbstractCommonController {
     @GetMapping("/{pkgSeq}/desking/{compNo}/histories/{regDt}")
     public ResponseEntity<?> getComponentHistory(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq,
             @ApiParam(value = "컴포넌트순번", required = true) @PathVariable("compNo") Integer compNo,
-            @ApiParam(value = "작업일자", required = true) @PathVariable("regDt") Date regDt,
+            @ApiParam(value = "작업일자", required = true) @PathVariable("regDt") String regDtStr,
             @ApiParam(value = "작업상태", defaultValue = "SAVE", required = true) @RequestParam("status") EditStatusCode status,
             @ApiParam(value = "승인여부", defaultValue = "N", required = true) @RequestParam("approvalYn") String approvalYn)
             throws NoDataException, Exception {
@@ -877,6 +879,10 @@ public class IssueRestController extends AbstractCommonController {
         PackageMaster packageMaster = packageService
                 .findByPkgSeq(pkgSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date regDt = sdf.parse(regDtStr);
 
         IssueDeskingHistGroupSearchDTO search = IssueDeskingHistGroupSearchDTO
                 .builder()

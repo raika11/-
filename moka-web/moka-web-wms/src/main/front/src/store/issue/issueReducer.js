@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from '@store/issue/issueAction';
-import { PAGESIZE_OPTIONS } from '@/constants';
+import { PAGESIZE_OPTIONS, S_MODAL_PAGESIZE_OPTIONS, DESK_STATUS_PUBLISH } from '@/constants';
 
 export const CAT_DIV = {
     SEARCH_KEYWORD: 'K',
@@ -126,7 +126,22 @@ export const initialState = {
             { checked: false, value: '' },
         ],
     },
+    // 이슈의 데스킹
     desking: [],
+    // 이슈의 데스킹 히스토리
+    deskingHistory: {
+        search: {
+            page: 0,
+            size: S_MODAL_PAGESIZE_OPTIONS[0],
+            searchDt: null, // 검색일자
+            pkgSeq: null,
+            compNo: null,
+            status: DESK_STATUS_PUBLISH, // 상태
+        },
+        total: 0,
+        list: [],
+        detailList: [],
+    },
     invalidList: [],
     initialPkgKeyword,
     initialDesking,
@@ -141,6 +156,11 @@ export default handleActions(
         [act.CLEAR_ISSUE]: (state) => {
             return produce(state, (draft) => {
                 draft.pkg = initialState.pkg;
+            });
+        },
+        [act.CLEAR_ISSUE_DESKING_HISTORY]: (state) => {
+            return produce(state, (draft) => {
+                draft.deskingHistory = initialState.deskingHistory;
             });
         },
         /**
@@ -188,6 +208,21 @@ export default handleActions(
         [act.GET_ISSUE_DESKING_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.desking = payload.body.list;
+            });
+        },
+        /**
+         * 이슈 데스킹 히스토리
+         */
+        [act.GET_ISSUE_DESKING_HISTORY_LIST_SUCCESS]: (state, { payload: { body, payload } }) => {
+            return produce(state, (draft) => {
+                draft.deskingHistory.search = payload.search;
+                draft.deskingHistory.list = body.list;
+                draft.deskingHistory.total = body.total;
+            });
+        },
+        [act.GET_ISSUE_DESKING_HISTORY_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.deskingHistory.detailList = body.list;
             });
         },
     },

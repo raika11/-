@@ -422,6 +422,16 @@ function* publishIssueDesking({ payload }) {
 }
 
 /**
+ * 이슈 데스킹 히스토리 목록 조회
+ */
+const getIssueDeskingHistoryList = createRequestSaga(act.GET_ISSUE_DESKING_HISTORY_LIST, api.getIssueDeskingHistoryList);
+
+/**
+ * 이슈 데스킹 히스토리 상세 조회
+ */
+const getIssueDeskingHistory = createRequestSaga(act.GET_ISSUE_DESKING_HISTORY, api.getIssueDeskingHistory);
+
+/**
  * saga
  */
 export default function* saga() {
@@ -436,4 +446,6 @@ export default function* saga() {
     yield takeLatest(act.GET_ISSUE_DESKING, getIssueDesking);
     yield takeLatest(act.SAVE_ISSUE_DESKING, saveIssueDesking);
     yield takeLatest(act.PUBLISH_ISSUE_DESKING, publishIssueDesking);
+    yield takeLatest(act.GET_ISSUE_DESKING_HISTORY_LIST, getIssueDeskingHistoryList);
+    yield takeLatest(act.GET_ISSUE_DESKING_HISTORY, getIssueDeskingHistory);
 }

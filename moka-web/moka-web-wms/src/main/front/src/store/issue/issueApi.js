@@ -105,6 +105,20 @@ export const getIssueDesking = ({ pkgSeq }) => {
     });
 };
 
+// 이슈 데스킹 히스토리 조회
+export const getIssueDeskingHistoryList = ({ search }) => {
+    return instance.get(`/api/issue/${search.pkgSeq}/desking/${search.compNo}/histories?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 이슈 데스킹 히스토리 상세 조회
+export const getIssueDeskingHistory = ({ pkgSeq, compNo, regDt, status }) => {
+    return instance.get(`/api/issue/${pkgSeq}/desking/${compNo}/histories/${regDt}?${qs.stringify({ status })}`).catch((err) => {
+        throw err;
+    });
+};
+
 // 이슈 데스킹 임시저장(폼데이터)
 export const saveIssueDesking = ({ pkgSeq, compNo, issueDesking }) => {
     return instance

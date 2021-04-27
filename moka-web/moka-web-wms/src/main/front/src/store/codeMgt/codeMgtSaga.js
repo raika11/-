@@ -287,7 +287,8 @@ const getDsTitleLoc = createReadOnlySaga(act.GET_DS_TITLE_LOC, 'dsTitleLocRows',
 const getDsPre = createReadOnlySaga(act.GET_DS_PRE, 'dsPreRows', constants.CODETYPE_DS_PRE);
 const getDsPreLoc = createReadOnlySaga(act.GET_DS_PRE_LOC, 'dsPreLocRows', constants.CODETYPE_DS_PRE_LOC);
 const getDsIcon = createReadOnlySaga(act.GET_DS_ICON, 'dsIconRows', constants.CODETYPE_DS_ICON);
-const getAt = createReadOnlySaga(act.GET_SERVICE_TYPE, 'atRows', constants.CODETYPE_AT);
+const getAt = createReadOnlySaga(act.GET_AT, 'atRows', constants.CODETYPE_AT);
+const getSvcAt = createReadOnlySaga(act.GET_SVC_AT, 'svcAtRows', constants.CODETYPE_SVC_AT);
 const getPt = createReadOnlySaga(act.GET_PT, 'ptRows', constants.CODETYPE_PT);
 const getChannelTp = createReadOnlySaga(act.GET_CHANNEL_TP, 'channelTpRows', constants.CODETYPE_CHANNEL_TP);
 const getPressCate1 = createReadOnlySaga(act.GET_PRESS_CATE1, 'pressCate1Rows', constants.CODETYPE_PRESS_CATE1);
@@ -332,6 +333,7 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_DS_PRE_LOC, getDsPreLoc);
     yield takeLatest(act.GET_DS_ICON, getDsIcon);
     yield takeLatest(act.GET_AT, getAt);
+    yield takeLatest(act.GET_SVC_AT, getSvcAt);
     yield takeLatest(act.GET_PT, getPt);
     yield takeLatest(act.GET_CHANNEL_TP, getChannelTp);
     yield takeLatest(act.GET_PRESS_CATE1, getPressCate1);

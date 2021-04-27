@@ -187,9 +187,8 @@
     .showcase_general .card_body + .card_image { padding-left: 0; }
     .showcase_general .headline {font-size:16px;}
     
-    .story_list .headline {font-size:16px;}
     /* .story_list > .row { margin-top: -20px; } */
-    .story_list .card { padding-top: 20px; padding-bottom: 20px; }
+    
 
     .fb_wrap {padding:20px 30px;}
     .fb_wrap .fb_area .title {font-size:16px;}
@@ -259,12 +258,11 @@
     
 
     /* 컴포넌트 */
-    .chain_wrap {margin-bottom:50px;}
+    
     
     /* card*/
-    .card_body .headline {font-size:16px;}
-    .card_body .description {color:#444; font-size:14px;}
-    .card_more { height: 61px; padding-top:20px; padding-bottom: 20px; }
+    /* .card_body .headline {font-size:16px;} */
+    /* .card_body .description {color:#444; font-size:14px;} */
 
     /***************************************    general     ************************************/
     .showcase_general { padding-top: 40px; }

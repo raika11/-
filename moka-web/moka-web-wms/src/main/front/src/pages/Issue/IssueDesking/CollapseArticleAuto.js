@@ -8,6 +8,10 @@ import { DESK_STATUS_SAVE, DESK_STATUS_PUBLISH } from '@/constants';
 import { saveIssueDesking, publishIssueDesking } from '@store/issue';
 import StatusBadge from './StatusBadge';
 
+const defaultProps = {
+    desking: {},
+};
+
 /**
  * 패키지관리 > 관련 데이터 편집 > 기사 (자동)
  */
@@ -92,15 +96,13 @@ const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE }, re
     );
 
     return (
-        <div className="position-relative border-bottom mb-24 pb-24">
+        <div className="position-relative border-bottom pb-24">
             {loading && <MokaLoader />}
             <Row className="d-flex" noGutters>
                 <Col xs={3}>
                     <MokaInputLabel as="switch" label="메인기사" id={controls} inputProps={{ checked: open }} onChange={(e) => setOpen(e.target.checked)} />
                 </Col>
-                <Col xs={6} className="d-flex align-items-center">
-                    <span>조회수가 가장 높은 기사가 자동으로 노출됩니다</span>
-                </Col>
+                <Col xs={6} className="d-flex align-items-center"></Col>
                 <Col xs={3} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">
                         <StatusBadge desking={desking} />
@@ -116,5 +118,7 @@ const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE }, re
         </div>
     );
 });
+
+CollapseArticleAuto.defaultProps = defaultProps;
 
 export default CollapseArticleAuto;

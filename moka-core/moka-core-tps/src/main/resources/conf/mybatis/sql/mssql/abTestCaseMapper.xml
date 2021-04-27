@@ -17,6 +17,15 @@
     {call UPA_ABTEST_CASE_LIST_SEL(
 
     <choose>
+      <when test="abtestType != 'all' and abtestType != null and abtestType != ''">
+        #{abtestType},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
       <when test="domainId != null and domainId != ''">
         #{domainId},
       </when>
@@ -26,8 +35,8 @@
     </choose>
 
     <choose>
-      <when test="status != 'all' and status != null and status != ''">
-        #{status},
+      <when test="pageType != 'all' and pageType != null and pageType != ''">
+        #{pageType},
       </when>
       <otherwise>
         NULL,
@@ -44,8 +53,26 @@
     </choose>
 
     <choose>
-      <when test="areaSeq != '0' and areaSeq != null and areaSeq != ''">
-        #{areaSeq},
+      <when test="artType != 'all' and artType != null and artType != ''">
+        #{artType},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="zoneDiv != 'all' and zoneDiv != null and zoneDiv != ''">
+        #{zoneDiv},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="zoneSeq != '0' and zoneSeq != null and zoneSeq != ''">
+        #{zoneSeq},
       </when>
       <otherwise>
         NULL,
@@ -63,15 +90,6 @@
 
     #{startDt, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
-
-    <choose>
-      <when test="abtestType != 'all' and abtestType != null and abtestType != ''">
-        #{abtestType},
-      </when>
-      <otherwise>
-        NULL,
-      </otherwise>
-    </choose>
 
     <choose>
       <when test="searchType == 'all' and keyword != null and keyword != ''">
@@ -117,6 +135,16 @@
         NULL,
       </otherwise>
     </choose>
+
+    <choose>
+      <when test="status != 'all' and status != null and status != ''">
+        #{status},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
     #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
@@ -125,7 +153,7 @@
   </select>
 
   <!--ABTest 상세 정보 조회 -->
-  <select id="findABTestById" parameterType="ABTestCaseSearchDTO" resultType="ABTestCaseVO"
+  <select id="findABTestById" parameterType="ABTestCaseSearchDTO" resultType="AbTestCaseSaveVO"
     statementType="CALLABLE">
     {call UPA_ABTEST_CASE_SEL(
       #{abtestSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
@@ -136,16 +164,17 @@
     statementType="CALLABLE">
     { call UPA_ABTEST_CASE_INS(
       #{abtestType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{abtestPurpose, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{domainId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{pageType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{pageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{componentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{letterSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{artType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{zoneDiv, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{zoneSeq, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestPurpose, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
       #{endDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
-      #{endCondi, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{endPeriod, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{endCondi, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{endKpi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{kpiClickCondi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{kpiPeriodCondi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
@@ -157,8 +186,8 @@
       #{modDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
       #{modId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{loginYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{subscribeYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{subscribeSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{scbYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{scbNo, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{devDiv, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{browser, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{referer, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
@@ -173,15 +202,22 @@
       #{abtestTitle, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{abtestDesc, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{abtestGrpMethod, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestGrpA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestGrpB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{kpiValueA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{kpiValueB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.String},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{deskingPart, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{templateSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{datasetSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{componentSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{componentSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{templateSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{templateSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{datasetSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{datasetSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{title, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{senderName, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{sendDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+      #{artContent, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{abtestSeq, mode=OUT, jdbcType=INTEGER, javaType=int}
       )}
   </insert>
@@ -192,16 +228,17 @@
     { call UPA_ABTEST_CASE_UPD(
       #{abtestSeq, mode=IN, jdbcType=INTEGER, javaType=int},
       #{abtestType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{abtestPurpose, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{domainId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{pageType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{pageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{componentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{letterSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{artType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{zoneDiv, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{zoneSeq, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestPurpose, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
       #{endDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
-      #{endCondi, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{endPeriod, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{endCondi, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{endKpi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{kpiClickCondi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{kpiPeriodCondi, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
@@ -213,8 +250,8 @@
       #{modDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
       #{modId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{loginYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{subscribeYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{subscribeSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{scbYn, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{scbNo, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{devDiv, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{browser, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{referer, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
@@ -227,7 +264,24 @@
       #{utmTerm, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{utmContent, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{abtestTitle, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{abtestDesc, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+      #{abtestDesc, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestGrpMethod, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestGrpA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{abtestGrpB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{kpiValueA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{kpiValueB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{deskingPart, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{componentSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{componentSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{templateSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{templateSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{datasetSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{datasetSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{title, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{senderName, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{sendDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+      #{artContent, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
       )}
   </update>
 </mapper>

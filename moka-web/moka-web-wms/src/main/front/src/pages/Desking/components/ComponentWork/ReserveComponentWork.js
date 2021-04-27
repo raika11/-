@@ -51,12 +51,10 @@ const ReserveComponentWork = ({ component, workStatus }) => {
     /**
      * 예약 아이콘버튼 클릭
      */
-    const handleClickBtn = () => {
-        openReserve ? handleClickCancle() : setOpenReserve(true);
-    };
+    const handleClickBtn = () => (openReserve ? handleClickCancle() : setOpenReserve(true));
 
     /**
-     * 저장
+     * 전송
      */
     const handleClickSave = () => {
         if (!reserveDt) {
@@ -151,7 +149,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
                     <div style={{ width: 162 }}>
                         <MokaInput
                             as="dateTimePicker"
-                            className="is-not-position-center"
+                            // className="is-not-position-center"
                             size="sm"
                             value={reserveDt}
                             onChange={handleDate}

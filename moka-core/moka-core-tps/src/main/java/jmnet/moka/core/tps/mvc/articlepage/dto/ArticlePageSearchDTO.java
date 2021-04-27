@@ -46,8 +46,8 @@ public class ArticlePageSearchDTO extends SearchDTO {
     private String domainId;
 
     @ApiModelProperty("기사타입")
-    @Length(max = 24, message = "{tps.article-page.error.length.artType}")
-    private String artType;
+    @Length(max = 24, message = "{tps.article-page.error.length.artTypes}")
+    private String artTypes;
 
     // 검색 조건의 기본값을 설정
     public ArticlePageSearchDTO() {

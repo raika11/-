@@ -62,6 +62,10 @@ const moviePhotoColumnDefs = [
         flex: 1,
         cellRendererFramework: MPRenderer,
         suppressKeyboardEvent,
+        cellStyle: {
+            paddingTop: '6px',
+            paddingBottom: '6px',
+        },
     },
 ];
 

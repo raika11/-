@@ -60,6 +60,9 @@ public class Menu {
     @JsonProperty("Url")
     private String url;
 
+    @JsonProperty("Target")
+    private String target;
+
     @JsonProperty("New")
     private String New;
 
@@ -118,6 +121,10 @@ public class Menu {
         // Hight
         this.setHeight(decideString(menuEl,"Hight"));
 
+        // Filter: OnlyJoongang, Date
+        this.setFilter(menuEl, menuParser);
+
+        // Category & SearchParameter
         this.setCategoryAndSearchParamter(menuEl, menuParser);
     }
 
@@ -143,6 +150,9 @@ public class Menu {
             Element urlEl = (Element)urlNode;
             if ( urlEl.hasAttribute("Link")) {
                 this.url = urlEl.getAttribute("Link");
+            }
+            if ( urlEl.hasAttribute("Target")) {
+                this.target = urlEl.getAttribute("Target");
             }
         }
     }

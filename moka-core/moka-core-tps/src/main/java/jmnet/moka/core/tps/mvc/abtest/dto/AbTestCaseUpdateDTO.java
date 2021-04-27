@@ -54,16 +54,16 @@ public class AbTestCaseUpdateDTO {
      */
     @ApiModelProperty("구독여부")
     @Builder.Default
-    private String subscribeYn = MokaConstants.NO;
+    private String scbYn = MokaConstants.NO;
 
     /**
      * 구독상품SEQ
      */
     @ApiModelProperty("구독상품SEQ")
     @Builder.Default
-    @NotNull(message = "{tps.abTest.error.notnull.subscribeSeq}")
-    @Min(value = 0, message = "{tps.abTest.error.min.subscribeSeq}")
-    private Long subscribeSeq = 0L;
+    @NotNull(message = "{tps.abTest.error.notnull.scbNo}")
+    @Min(value = 0, message = "{tps.abTest.error.min.scbNo}")
+    private Long scbNo = 0L;
 
     /**
      * 디바이스 구분(PC:P/Mobile:M/App:A/전체') - 구분자콤마

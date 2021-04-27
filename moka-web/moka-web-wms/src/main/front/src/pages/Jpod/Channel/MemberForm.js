@@ -62,12 +62,12 @@ const defaultProps = {
  */
 const MemberForm = ({ index, member, onChangeMember, onDeleteMember, onResetMember }) => {
     return (
-        <div className="d-flex w-100 p-2">
+        <div className="d-flex w-100 px-12 py-10">
             {/* 입력폼 */}
             <div className="flex-fill">
-                <div className="d-flex mb-2">
+                <div className="d-flex mb-1">
                     <MokaPrependLinkInput
-                        className="mr-2"
+                        className="mr-1"
                         linkText={member.memRepSeq ? `ID: ${member.memRepSeq}` : 'ID'}
                         inputList={{
                             placeholder: '기자명',
@@ -77,8 +77,8 @@ const MemberForm = ({ index, member, onChangeMember, onDeleteMember, onResetMemb
                             onChange: (e) => onChangeMember(e, index),
                         }}
                     />
-                    <MokaInput name="memMemo" className="mr-2" value={member.memMemo} onChange={(e) => onChangeMember(e, index)} placeholder="직책" />
-                    <MokaInput name="nickNm" className="mr-2" value={member.nickNm} onChange={(e) => onChangeMember(e, index)} placeholder="닉네임" />
+                    <MokaInput name="memMemo" className="mr-1" value={member.memMemo} onChange={(e) => onChangeMember(e, index)} placeholder="직책" />
+                    <MokaInput name="nickNm" className="mr-1" value={member.nickNm} onChange={(e) => onChangeMember(e, index)} placeholder="닉네임" />
                     <Button variant="negative" className="flex-shrink-0" onClick={() => onResetMember(index)}>
                         삭제
                     </Button>
@@ -87,12 +87,12 @@ const MemberForm = ({ index, member, onChangeMember, onDeleteMember, onResetMemb
             </div>
 
             {/* 필드 삭제 */}
-            <div className="flex-shrink-0 d-flex align-items-center pl-2">
+            <div className="flex-shrink-0 d-flex align-items-center ml-10">
                 <MokaOverlayTooltipButton
                     tooltipId="tooltip-table-editc-button"
                     tooltipText="삭제"
                     variant="white"
-                    className="border-0 p-0 moka-table-button bg-transparent shadow-none"
+                    className="border-0 p-0 bg-transparent"
                     onClick={() => onDeleteMember(index)}
                 >
                     <MokaIcon iconName="fas-minus-circle" />

@@ -290,4 +290,12 @@
       ) }
   </select>
 
+  <!-- form -->
+  <select id="form" parameterType="map" resultType="map"
+    statementType="CALLABLE">
+    {call USP_WMS_EDIT_FORM_PART_LIST_SEL(
+      #{ids, mode=IN, jdbcType=VARCHAR, javaType=string}
+      ) }
+  </select>
+
 </mapper>

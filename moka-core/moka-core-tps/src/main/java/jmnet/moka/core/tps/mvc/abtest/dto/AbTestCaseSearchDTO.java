@@ -32,16 +32,22 @@ public class AbTestCaseSearchDTO extends SearchDTO {
     private static final long serialVersionUID = 1L;
 
     /**
+     * A/B테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
+     */
+    @ApiModelProperty("유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)")
+    private String abtestType;
+
+    /**
      * 매체코드(도메인 정보)
      */
     @ApiModelProperty("도메인ID")
     private String domainId;
 
     /**
-     * 상태(임시T/진행Y/대기P/종료Q)
+     * AB테스트 페이지(메인:M, 기사:A, 뉴스레터:L)
      */
-    @ApiModelProperty("상태(임시T/진행Y/대기P/종료Q)")
-    private String status;
+    @ApiModelProperty("AB테스트 페이지(메인:M, 기사:A, 뉴스레터:L)")
+    private String pageType;
 
     /**
      * 페이지SEQ
@@ -50,15 +56,27 @@ public class AbTestCaseSearchDTO extends SearchDTO {
     private Long pageSeq = 0l;
 
     /**
-     * 영역일련번호(대안입력-디자인의 경우 영역으로 선택)
+     * 기사타입(직접-기사-본문외) - 기본형:B, 연재형:CWYZ, QA형:X, 특집형:S, 이슈라이브:TG
      */
-    @ApiModelProperty("영역일련번호")
-    private Long areaSeq = 0l;
+    @ApiModelProperty("기사타입(직접-기사-본문외) - 기본형:B, 연재형:CWYZ, QA형:X, 특집형:S, 이슈라이브:TG")
+    private String artType;
 
     /**
-     * A/B테스트 목표(T:디자인 D:데이터)
+     * 영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)
      */
-    @ApiModelProperty("테스트대상(T:디자인 D:데이터)")
+    @ApiModelProperty("영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)")
+    private String zoneDiv;
+
+    /**
+     * 영역일련번호(AREA_SEQ,COMPONENT_SEQ,LETTER_SEQ,파티클구분(기타코드MC))
+     */
+    @ApiModelProperty("영역일련번호(AREA_SEQ,COMPONENT_SEQ,LETTER_SEQ,파티클구분(기타코드MC))")
+    private String zoneSeq;
+
+    /**
+     * AB테스트 목표(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
+     */
+    @ApiModelProperty("테스트대상(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)")
     private String abtestPurpose;
 
     /**
@@ -74,12 +92,6 @@ public class AbTestCaseSearchDTO extends SearchDTO {
     @ApiModelProperty(value = "종료일시")
     @DTODateTimeFormat
     private String endDt;
-
-    /**
-     * A/B테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
-     */
-    @ApiModelProperty("유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)")
-    private String abtestType;
 
     /**
      * 제목
@@ -104,6 +116,12 @@ public class AbTestCaseSearchDTO extends SearchDTO {
      */
     @ApiModelProperty("작성자명")
     private String regNm;
+
+    /**
+     * 상태(임시T/진행Y/대기P/종료Q)
+     */
+    @ApiModelProperty("상태(임시T/진행Y/대기P/종료Q)")
+    private String status;
 
     public AbTestCaseSearchDTO() {
         super(AbTestCaseVO.class, "abtestSeq,desc");

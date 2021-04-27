@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { initialState, clearStatDetail, getSearchKeywordStatDetail, changeDetailSearchOption } from '@store/searchKeyword';
 import { messageBox } from '@utils/toastUtil';
@@ -65,8 +65,7 @@ const SearchKeywordDetail = ({ match }) => {
             className="flex-fill"
             title="검색 로그 상세 현황"
             bodyClassName="d-flex flex-column"
-            footer
-            footerButtons={[
+            titleButtons={[
                 {
                     text: '취소',
                     variant: 'negative',
@@ -74,22 +73,21 @@ const SearchKeywordDetail = ({ match }) => {
                 },
             ]}
         >
-            <Form className="mb-14">
-                <Form.Row>
-                    <Col xs={8} className="p-0 pr-2">
-                        <MokaInputLabel label="검색어" inputClassName="font-weight-bold" inputProps={{ plaintext: true }} value={keyword} disabled />
+            <div className="mb-14">
+                <Row noGutters>
+                    <Col xs={8} className="pr-2">
+                        <MokaInputLabel label="검색어" labelWidth={40} inputClassName="font-weight-bold" inputProps={{ plaintext: true }} value={keyword} disabled />
                     </Col>
-                    <Col xs={2} className="p-0">
+                    <Col xs={4} className="d-flex justify-content-end">
                         <MokaInputLabel
                             as="radio"
                             inputProps={{ custom: true, label: '일자별', checked: type === 'DATE' }}
                             name="type"
                             value="DATE"
                             id="type-1"
+                            className="mr-3"
                             onChange={handleChangeValue}
                         />
-                    </Col>
-                    <Col xs={2} className="p-0">
                         <MokaInputLabel
                             as="radio"
                             inputProps={{ custom: true, label: '영역별', checked: type === 'TAB' }}
@@ -99,8 +97,8 @@ const SearchKeywordDetail = ({ match }) => {
                             onChange={handleChangeValue}
                         />
                     </Col>
-                </Form.Row>
-            </Form>
+                </Row>
+            </div>
 
             <SearchKeywordDetailAgGrid type={type} />
         </MokaCard>

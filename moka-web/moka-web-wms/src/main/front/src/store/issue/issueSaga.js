@@ -422,6 +422,26 @@ function* publishIssueDesking({ payload }) {
 }
 
 /**
+ * 이슈 데스킹 히스토리 목록 조회
+ */
+const getIssueDeskingHistoryList = createRequestSaga(act.GET_ISSUE_DESKING_HISTORY_LIST, api.getIssueDeskingHistoryList);
+
+/**
+ * 이슈 데스킹 히스토리 상세 조회
+ */
+const getIssueDeskingHistory = createRequestSaga(act.GET_ISSUE_DESKING_HISTORY, api.getIssueDeskingHistory);
+
+/**
+ * 이슈 데스킹 예약
+ */
+const postReserveIssueDesking = createRequestSaga(act.POST_RESERVE_ISSUE_DESKING, api.reserveIssueDesking);
+
+/**
+ * 이슈 데스킹 예약 삭제
+ */
+const deleteReserveIssueDesking = createRequestSaga(act.DELETE_RESERVE_ISSUE_DESKING, api.deleteReserveIssueDesking);
+
+/**
  * saga
  */
 export default function* saga() {
@@ -436,4 +456,8 @@ export default function* saga() {
     yield takeLatest(act.GET_ISSUE_DESKING, getIssueDesking);
     yield takeLatest(act.SAVE_ISSUE_DESKING, saveIssueDesking);
     yield takeLatest(act.PUBLISH_ISSUE_DESKING, publishIssueDesking);
+    yield takeLatest(act.GET_ISSUE_DESKING_HISTORY_LIST, getIssueDeskingHistoryList);
+    yield takeLatest(act.GET_ISSUE_DESKING_HISTORY, getIssueDeskingHistory);
+    yield takeLatest(act.POST_RESERVE_ISSUE_DESKING, postReserveIssueDesking);
+    yield takeLatest(act.DELETE_RESERVE_ISSUE_DESKING, deleteReserveIssueDesking);
 }

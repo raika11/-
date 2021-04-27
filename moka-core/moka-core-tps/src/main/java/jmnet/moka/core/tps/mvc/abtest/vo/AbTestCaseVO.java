@@ -14,7 +14,7 @@ import org.apache.ibatis.type.Alias;
  * ABTest목록 조회용 VO
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.abtest.vo
- * ClassName : ABTestVO
+ * ClassName : AbTestCaseVO
  * Created : 2021-04-15
  * </pre>
  *
@@ -22,7 +22,7 @@ import org.apache.ibatis.type.Alias;
  * @since 2021-04-15 09:54
  */
 
-@Alias("ABTestCaseVO")
+@Alias("AbTestCaseVO")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -43,12 +43,6 @@ public class AbTestCaseVO {
     private String abtestType;
 
     /**
-     * A/B테스트 목표(T:디자인 D:데이터)
-     */
-    @Column(name = "ABTEST_PURPOSE")
-    private String abtestPurpose;
-
-    /**
      * 도메인ID
      */
     @Column(name = "DOMAIN_ID")
@@ -57,6 +51,12 @@ public class AbTestCaseVO {
      * 도메인ID명
      */
     private String domainIdNm;
+
+    /**
+     * AB테스트 페이지(메인:M, 기사:A, 뉴스레터:L)
+     */
+    @Column(name = "PAGE_TYPE")
+    private String pageType;
 
     /**
      * 페이지SEQ
@@ -70,37 +70,28 @@ public class AbTestCaseVO {
     private String pageNm;
 
     /**
-     * 영역일련번호(대안입력-디자인의 경우 영역으로 선택)
+     * 기사타입(직접-기사-본문외) - 기본형:B, 연재형:CWYZ, QA형:X, 특집형:S, 이슈라이브:TG
      */
-    @Column(name = "AREA_SEQ")
-    private Long areaSeq = 0l;
+    @Column(name = "ART_TYPE")
+    private String artType;
 
     /**
-     * 영역명
+     * 영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)
      */
-    private String areaNm;
+    @Column(name = "ZONE_DIV")
+    private String zoneDiv;
 
     /**
-     * 컴포넌트SEQ
+     * 영역일련번호(AREA_SEQ,COMPONENT_SEQ,LETTER_SEQ,파티클구분(기타코드MC))
      */
-    @Column(name = "COMPONENT_SEQ")
-    private Long componentSeq = 0l;
+    @Column(name = "ZONE_SEQ")
+    private String zoneSeq;
 
     /**
-     * 컴포넌트명
+     * AB테스트 목표(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
      */
-    private String componentNm;
-
-    /**
-     * 뉴스레터SEQ
-     */
-    @Column(name = "LETTER_SEQ")
-    private Long letterSeq = 0l;
-
-    /**
-     * 뉴스레터명
-     */
-    private String letterNm;
+    @Column(name = "ABTEST_PURPOSE")
+    private String abtestPurpose;
 
     /**
      * 시작일시
@@ -187,6 +178,18 @@ public class AbTestCaseVO {
     private String modId;
 
     /**
+     * A/B테스트 제목
+     */
+    @Column(name = "ABTEST_TITLE")
+    private String abtestTitle;
+
+    /**
+     * A/B테스트 설명
+     */
+    @Column(name = "ABTEST_DESC")
+    private String abtestDesc;
+
+    /**
      * 로그인 여부(전체:`, 로그인:Y, 비로그인 : N)
      */
     @Column(name = "LOGIN_YN")
@@ -195,14 +198,16 @@ public class AbTestCaseVO {
     /**
      * 구독여부
      */
-    @Column(name = "SUBSCRIBE_YN")
-    private String subscribeYn;
+    @Column(name = "SCB_YN")
+    @Builder.Default
+    private String scbYn = "N";
 
     /**
      * 구독상품SEQ
      */
-    @Column(name = "SUBSCRIBE_SEQ")
-    private Long subscribeSeq = 0l;
+    @Column(name = "SCB_NO")
+    @Builder.Default
+    private Long scbNo = 0l;
 
     /**
      * 디바이스 구분(PC:P/Mobile:M/App:A/전체`) - 구분자콤마
@@ -269,16 +274,4 @@ public class AbTestCaseVO {
      */
     @Column(name = "UTM_CONTENT")
     private String utmContent;
-
-    /**
-     * A/B테스트 제목
-     */
-    @Column(name = "ABTEST_TITLE")
-    private String abtestTitle;
-
-    /**
-     * A/B테스트 설명
-     */
-    @Column(name = "ABTEST_DESC")
-    private String abtestDesc;
 }

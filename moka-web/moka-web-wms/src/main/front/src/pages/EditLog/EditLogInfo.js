@@ -45,9 +45,7 @@ const EditLogInfo = ({ match }) => {
         <MokaCard
             title="로그 정보"
             className="flex-fill"
-            footer
-            footerClassName="justify-content-center"
-            footerButtons={[{ text: '취소', onClick: () => history.push(match.path), variant: 'negative' }]}
+            titleButtons={[{ text: '취소', onClick: () => history.push(match.path), variant: 'negative' }]}
             loading={loading}
             bodyClassName="d-flex flex-column color-gray-900"
         >

@@ -268,4 +268,18 @@
     </keys>
   </api>
 
+  <!--폼편집조회-->
+  <api id="form">
+    <description>폼편집조회을 조회한다.</description>
+    <parameter>
+      <ids desc="파트아이디" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>
+    </parameter>
+    <request type="module">
+      jmnet.moka.web.dps.module.EditFormModule
+    </request>
+    <keys>
+      ids
+    </keys>
+  </api>
+
 </apiConfig>

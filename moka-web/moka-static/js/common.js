@@ -1,4 +1,6 @@
 $(document).ready(function() {
+
+    //header stiky
     if ($(this).scrollTop() > 10) {
         $('.header').addClass('sticky_top');
     }
@@ -26,5 +28,48 @@ $(document).ready(function() {
             LayerPopup.removeClass("open");
         }
     });
-    
 });
+
+/* 임시 레이어팝업 */
+function toggleOpenLayer(obj){
+	$(obj).toggleClass("active");
+}
+
+function toggleOpen(obj){
+	$(obj).parent().toggleClass("open");
+}
+
+function openLayer(obj){
+	$(obj).addClass("active");
+}
+
+function closeLayer($btnCk){
+	$btnCk.parents(".layer_popup.active").removeClass("active");
+	$btnCk.parents(".layer_comment.active").removeClass("active");
+	$btnCk.parents(".layer_ticker.active").removeClass("active");
+}
+
+function btnCloseModal(){
+	$(".btn_close").off().on("click", function(){
+        $btnCk= $(this);
+		closeLayer($btnCk);
+    });
+}
+
+/* list to slider  */
+function changeToSlider($target, slickOptions){
+    if(typeof slickOptions === "undefined"){
+        slickOptions = {
+            infinite: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            dots:true,
+            arrows:false
+        };
+    }
+    
+    $target.not('.slick-initialized').slick(slickOptions);
+    if(window.innerWidth >= BREAKPOINT_LARGE) {
+        $target.slick('unslick');
+    };
+}

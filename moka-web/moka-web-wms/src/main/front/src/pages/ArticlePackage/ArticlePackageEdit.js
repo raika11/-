@@ -5,8 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { CodeAutocomplete, CodeListModal } from '@pages/commons';
 import Button from 'react-bootstrap/Button';
-import { MokaCard, MokaInputLabel, MokaInput } from '@/components';
-import MokaTagInput from './MokaTagInput';
+import { MokaCard, MokaInputLabel, MokaInput, MokaTagInput } from '@/components';
 
 /**
  * 패키지 관리 > 기사 패키지 > 패키지 편집
@@ -171,7 +170,7 @@ const ArticlePackageEdit = ({ match }) => {
                 {temp.type !== 'tag' && <p className="mb-2">└ 태그</p>}
                 <Form.Row className="mb-2">
                     {temp.type === 'tag' && <MokaInputLabel as="none" label="태그" />}
-                    <MokaTagInput value={temp.tags} onChange={(value) => setTemp({ ...temp, tags: value })} />
+                    <MokaTagInput value={temp.tags} onChange={(value) => setTemp({ ...temp, tags: value })} onAddSpace />
                 </Form.Row>
                 {(temp.type === 'section' || temp.type === 'tag') && (
                     <MokaInputLabel

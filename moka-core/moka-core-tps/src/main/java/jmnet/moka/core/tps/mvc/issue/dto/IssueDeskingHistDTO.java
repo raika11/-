@@ -54,6 +54,7 @@ public class IssueDeskingHistDTO implements Serializable {
     @ApiModelProperty("상태 SAVE(임시) / PUBLISH(전송)")
     private String status;
 
+    @DTODateTimeFormat
     @ApiModelProperty("예약일시")
     private Date reserveDt;
 

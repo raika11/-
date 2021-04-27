@@ -12,7 +12,9 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { ArticleTabModal } from '@pages/Article/modals';
 import { liveColumnDefs } from './IssueDeskingColumns';
+import { DeskingHistoryModal } from '../modal';
 import StatusBadge from './StatusBadge';
+import ReserveWork from './ReserveWork';
 
 const defaultProps = {
     desking: {},
@@ -29,6 +31,7 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
+    const [histShow, setHistShow] = useState(false);
     const id = 'live-1';
     const controls = 'collapse-live';
 
@@ -214,17 +217,19 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
     return (
         <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
-            <Row className="d-flex" noGutters>
-                <Col xs={3}>
+            <Row className="d-flex position-relative" noGutters>
+                <Col xs={4} className="d-flex align-items-center position-unset">
+                    <ReserveWork reserveDt={desking.reserveDt} pkgSeq={pkgSeq} compNo={compNo} status={status} />
                     <MokaInputLabel
                         as="switch"
                         label="라이브기사"
                         id={controls}
+                        style={{ height: 'auto' }}
                         inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
                         onChange={(e) => setOpen(e.target.checked)}
                     />
                 </Col>
-                <Col xs={4} className="d-flex align-items-center">
+                <Col xs={3} className="d-flex align-items-center">
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>
@@ -236,9 +241,13 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
                             <MokaIcon iconName="Save" feather />
                         </MokaOverlayTooltipButton>
-                        <MokaOverlayTooltipButton className="work-btn" tooltipText="전송" variant="white" onClick={publishDesking}>
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="전송" variant="white" onClick={publishDesking}>
                             <MokaIcon iconName="Send" feather />
                         </MokaOverlayTooltipButton>
+                        <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
+                            <MokaIcon iconName="fal-history" />
+                        </MokaOverlayTooltipButton>
+                        <DeskingHistoryModal show={histShow} onHide={() => setHistShow(false)} pkgSeq={pkgSeq} compNo={compNo} />
                     </div>
                 </Col>
             </Row>

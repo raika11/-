@@ -105,6 +105,20 @@ export const getIssueDesking = ({ pkgSeq }) => {
     });
 };
 
+// 이슈 데스킹 히스토리 조회
+export const getIssueDeskingHistoryList = ({ search }) => {
+    return instance.get(`/api/issue/${search.pkgSeq}/desking/${search.compNo}/histories?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 이슈 데스킹 히스토리 상세 조회
+export const getIssueDeskingHistory = ({ pkgSeq, compNo, regDt, status, approvalYn }) => {
+    return instance.get(`/api/issue/${pkgSeq}/desking/${compNo}/histories/${regDt}?${qs.stringify({ pkgSeq, compNo, regDt, status, approvalYn })}`).catch((err) => {
+        throw err;
+    });
+};
+
 // 이슈 데스킹 임시저장(폼데이터)
 export const saveIssueDesking = ({ pkgSeq, compNo, issueDesking }) => {
     return instance
@@ -121,6 +135,20 @@ export const saveIssueDesking = ({ pkgSeq, compNo, issueDesking }) => {
 // 이슈 데스킹 전송
 export const publishIssueDesking = ({ pkgSeq, compNo }) => {
     return instance.post(`/api/issue/${pkgSeq}/desking/${compNo}/publish?${qs.stringify({ pkgSeq, compNo })}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 이슈 데스킹 예약
+export const reserveIssueDesking = ({ pkgSeq, compNo, reserveDt }) => {
+    return instance.post(`/api/issue/${pkgSeq}/desking/${compNo}/reserve?${qs.stringify({ reserveDt })}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 이슈 데스킹 예약 삭제
+export const deleteReserveIssueDesking = ({ pkgSeq, compNo }) => {
+    return instance.delete(`/api/issue/${pkgSeq}/desking/${compNo}/reserve`).catch((err) => {
         throw err;
     });
 };

@@ -121,6 +121,7 @@ export const defaultProps = {
     displayPageNum: DISPLAY_PAGE_NUM,
     sizeType: '',
     // ag-grid default
+    rowData: [],
     localeText: { noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' },
     preventRowClickCell: [],
     loading: false,

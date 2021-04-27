@@ -80,7 +80,7 @@
                   <MasterCodes>1006001 1006005</MasterCodes>
                 </Category>
               </Menu>
-              <Menu Key="NK" Display="국방">
+              <Menu Key="NationalDefense" Display="국방">
                 <Url Link="/politics/nk"/>
                 <List FilterOnlyJoongang="true" FilterDate="true"/>
                 <Category Term="15">
@@ -477,29 +477,29 @@
               <MasterCodes>2705001 2704001 2701031 2703001 2702001</MasterCodes>
             </Category>
             <Children>
-              <Menu Key="Domestic" Display="국내여행">
+              <Menu Key="TravelDomestic" Display="국내여행">
                 <Url Link="/travel/domestic" />
                 <List FilterOnlyJoongang="true" FilterDate="true"/>
                 <Category>
                   <MasterCodes>2701031</MasterCodes>
                 </Category>
               </Menu>
-              <Menu Key="Abroad" Display="해외여행">
+              <Menu Key="TravelAbroad" Display="해외여행">
                 <Url Link="/travel/abroad" />
                 <List FilterOnlyJoongang="true" FilterDate="true"/>
                 <Category>
                   <MasterCodes>2702001</MasterCodes>
                 </Category>
               </Menu>
-              <Menu Key="News" Display="여행뉴스">
+              <Menu Key="TravelNews" Display="여행뉴스">
                 <Url Link="/travel/abroad" />
                 <List FilterOnlyJoongang="true" FilterDate="true"/>
                 <Category>
                   <MasterCodes>2703001</MasterCodes>
                 </Category>
               </Menu>
-              <Menu Key="Week" Display="week&#38;">
-                <Url Link="/travel/abroad" />
+              <Menu Key="WeekEnd" Display="week&#38;">
+                <Url Link="/travel/week" />
                 <List FilterOnlyJoongang="true" FilterDate="true"/>
                 <Category>
                   <MasterCodes>2704001</MasterCodes>
@@ -686,49 +686,186 @@
             </Children>
           </Menu>
 
-					<!-- 메뉴로고 -->
-          <Menu Key="Retirement" Display="더,오래" LogoImage="https://images.joins.com/ui_joongang/news/pc/senior/t_senior.png" Width="105" Height="39">
-            <Url Link="/retirement" />
-            <Category Term="15">
-              <MasterCodes>
-                1111005 1111003 1111006 1111001 1111004 1111007 1111002
-              </MasterCodes>
-              <SourceCodes> <!-- UsageType = Retirement -->
-                1 3 7 d5
-              </SourceCodes>
+          <Menu Key="Nk" Display="통일무지개" LogoImage="https://images.joins.com/ui_joongang/news/pc/list/t_ksecurity.png" Width="300" Height="30">
+            <Url Link="/nk"/>
+            <Category>
+              <MasterCodes>1009002 1009003 1009005 1009004 1009001</MasterCodes>
             </Category>
             <Children>
+              <Menu Key="NkOdyssey" Display="평양오디세이" MegaMenu="true">
+                <Url Link="/nk/odyssey" />
+                <List FilterOnlyJoongang="false" FilterDate="true"/>
+                <Category Term="365">
+                  <MasterCodes>1009001</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="NkIng" Display="북한~ing" MegaMenu="true">
+                <Url Link="/nk/ing" />
+                <List FilterOnlyJoongang="false" FilterDate="true"/>
+                <Category Term="365">
+                  <MasterCodes>1009003</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="NkPhoto" Display="사진 속 북한" MegaMenu="true">
+                <Url Link="/nk/photo" />
+                <List FilterOnlyJoongang="false" FilterDate="false"/>
+                <Category Term="180">
+                  <MasterCodes>1009005 1006005</MasterCodes>
+                </Category>
+              </Menu>
             </Children>
           </Menu>
+
+          <Menu Key="Retirement" Display="더,오래" LogoImage="https://images.joins.com/ui_joongang/news/pc/senior/t_senior.png" Width="105" Height="39">
+            <Url Link="/retirement" />
+            <Category Term="180">
+              <MasterCodes>1111005 1111003 1111006 1111001 1111004 1111007 1111002</MasterCodes>
+              <SourceCodes>1 3 7 d5</SourceCodes>
+            </Category>
+            <Children>
+              <Menu Key="RetirementCate" Display="주제별" MegaMenu="true">
+                <Url Link="/retirement/cate" />
+                <Category Term="180">
+                  <MasterCodes>1111005 1111003 1111006 1111001 1111004 1111007 1111002</MasterCodes>
+                  <SourceCodes>1 3 7 d5</SourceCodes>
+                </Category>
+                <Children>
+                  <Menu Key="RetirementCommon" Display="일더하기" MegaMenu="false" TopMenu="false">
+                    <Url Link="/retirement/cate/work" />
+                    <Category Term="180">
+                      <MasterCodes>1111001</MasterCodes>
+                      <SourceCodes>1 3 7 d5</SourceCodes>
+                    </Category>
+                  </Menu>
+                </Children>
+              </Menu>
+              <Menu Key="RetirementReporterList" Display="필진별" MegaMenu="true">
+                <Url Link="/retirement/reporter" />
+                <Category Term="180">
+                  <MasterCodes>1111005 1111003 1111006 1111001 1111004 1111007 1111002</MasterCodes>
+                  <SourceCodes>1 3 7 d5</SourceCodes>
+                </Category>
+              </Menu>
+              <Menu Key="RetirementSubscribe" Display="필진 Pick" MegaMenu="true">
+                <Url Link="/retirement/subscribe" />
+                <!-- categorydefinition에는 없음, 마스터 코드 형태인지 확인 필요 -->
+              </Menu>
+              <Menu Key="RetirementIntro" Display="더,오래란?" MegaMenu="true">
+                <Url Link="/retirement/intro" />
+              </Menu>
+              <!-- /retirement/hashtag/  처리 방안 필요 -->
+            </Children>
+          </Menu>
+
+          <Menu Key="Mgrg" Display="먼지알지" MegaMenu="true">
+            <Url Link="https://mgrg.joins.com/" Target="_blank" />
+          </Menu>
+
+          <Menu Key="Welfaretotal" Display="복지토털" MegaMenu="true">
+            <Url Link="https://welfaretotal.joins.com/" Target="_blank" />
+          </Menu>
+
+          <Menu Key="Mm" Display="Mr.밀리터리" LogoImage="https://images.joins.com/ui_joongang/news/pc/list/t_mr_military.png" Width="300" Height="30">
+            <Url Link="/mm"/>
+            <Category Term="30">
+              <MasterCodes>1004007 1004008 1004009 1004011 1004010</MasterCodes>
+            </Category>
+            <Children>
+              <Menu Key="MmFocusinside" Display="Focus 인사이드" MegaMenu="true">
+                <Url Link="/mm/focusinside" />
+                <Category Term="30">
+                  <MasterCodes>1004007</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="MmHotnews" Display="Hot 뉴스" MegaMenu="true">
+                <Url Link="/mm/hotnews" />
+                <Category Term="30">
+                  <MasterCodes>1004008</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="MmHotnews" Display="Hot 뉴스" MegaMenu="true">
+                <Url Link="/mm/hotnews" />
+                <Category Term="30">
+                  <MasterCodes>1004008</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="MmWatchcon" Display="김민석의 Watchcon" MegaMenu="true">
+                <Url Link="/mm/watchcon" />
+                <Category Term="30">
+                  <MasterCodes>1004009</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="MmWeaponstory" Display="무기이야기" MegaMenu="true">
+                <Url Link="/mm/weaponstory" />
+                <Category Term="30">
+                  <MasterCodes>1004010</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="MmInterview" Display="김민석의 인터뷰" MegaMenu="true">
+                <Url Link="/mm/interview" />
+                <Category Term="30">
+                  <MasterCodes>1004010</MasterCodes>
+                </Category>
+              </Menu>
+              <Menu Key="MnQnA" Display="밀리터리 Request" MegaMenu="true">
+                <Url Link="http://bbs.news.joins.com/mm/qna" />
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="Jpod" Display="J팟" LogoImage="https://images.joins.com/ui_joongang/news/pc/jpod/logo_jpod.png" Width="66" Height="40">
+            <Url Link="/jpod" Target="_blank" />
+          </Menu>
+
         </Children>
       </Menu>
 
-      <!-- NewsGroup, SectionGroup에 속하지 않는 경우 -->
       <Menu Key="NewsLetter" Display="뉴스레터" TopMenu="false">
         <Url Link="/newsletter" />
+      </Menu>
+
+      <Menu Key="NewsDigest" Display="뉴스 다이제스트" TopMenu="false" MegaMenu="true" New="true">
+        <Url Link="/newsDigest" />
       </Menu>
 
       <Menu Key="User" Display="독자 서비스" Dummy="true">
         <Url Link="/customercenter"/>
         <Children>
-          <!-- 보도자료, 중앙선데이와 같이 한페이지에 여러개의 카테고리를 가지는 경우 -->
           <Menu Key="BrandNews" Display="보도 자료">
             <Url Link="/brandnews"/>
             <Category Term="15">
-              <!-- 전체는 제외, 하위 카테고리의 정보를 모아 BrandNews 카테고리로 설정
-              <SubCategory Key="ReportMeterial">
-                <ServiceCodes>2300</ServiceCodes>
-              </SubCategory>
-              -->
-              <SubCategory Key="ReportMeterialBook" Display="도서" > <!-- UageType = Joongang -->
+              <SubCategory Key="ReportMeterialBook" Display="도서" >
                 <MasterCodes>2307002</MasterCodes>
               </SubCategory>
-              <SubCategory Key="ReportMeterialEducation" Display="교육" > <!-- UageType = Joongang -->
+              <SubCategory Key="ReportMeterialEducation" Display="교육" >
                 <MasterCodes>2301001</MasterCodes>
+              </SubCategory>
+              <SubCategory Key="ReportMeterialRealEstate" Display="재테크&amp;부동산" >
+                <MasterCodes>2302002</MasterCodes>
+              </SubCategory>
+              <SubCategory Key="ReportMeterialMarket" Display="기업&amp;마켓" >
+                <MasterCodes>2306001</MasterCodes>
+              </SubCategory>
+              <SubCategory Key="ReportMeterialCulture" Display="문화&amp;공연" >
+                <MasterCodes>2309001 2309002 2309003</MasterCodes>
+              </SubCategory>
+              <SubCategory Key="ReportMeterialLifeTrend" Display="라이프트렌드" >
+                <MasterCodes>
+                  2303003 2308001 2308002 2308003 2308004 2308005 2308006
+                  2308007 2308008
+                </MasterCodes>
+              </SubCategory>
+              <SubCategory Key="ReportMeterialHealth" Display="레져&amp;건강" >
+                <MasterCodes>2304001</MasterCodes>
+              </SubCategory>
+              <SubCategory Key="ReportMeterialIt" Display="IT&amp;가전" >
+                <MasterCodes>2305001</MasterCodes>
+              </SubCategory>
+              <SubCategory Key="ReportMeterialDisplay" Display="전시" >
+                <MasterCodes>2309004</MasterCodes>
               </SubCategory>
             </Category>
           </Menu>
-
         </Children>
       </Menu>
     </Children>

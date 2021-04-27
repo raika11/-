@@ -164,7 +164,7 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
     }, [desking.viewYn]);
 
     return (
-        <div className="position-relative border-bottom pb-24">
+        <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
             <Row className="d-flex" noGutters>
                 <Col xs={3}>

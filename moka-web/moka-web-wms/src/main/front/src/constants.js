@@ -9,7 +9,6 @@ export const DB_DATEFORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 // BASIC 날짜 포맷
 export const BASIC_DATEFORMAT = 'YYYY-MM-DD HH:mm';
-
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
 // image 확장자
@@ -82,6 +81,8 @@ export const CODETYPE_BO_SCHJOB = 'BO_SCHJOB';
 export const CODETYPE_JPLUS_REP = 'JPLUS_REP';
 // 시스템코드 : 기사 타입
 export const CODETYPE_AT = 'AT';
+// 시스템코드 : 서비스 기사 타입
+export const CODETYPE_SVC_AT = 'SVC_AT';
 
 // 기본 필진 코드타입 텍스트 (JPLUS_REP_DIV === null 일 때 노출하는 텍스트)
 export const JPLUS_REP_DIV_DEFAULT = '일보기자';
@@ -256,4 +257,26 @@ export const ISSUE_CHANNEL_TYPE = {
     K: { code: 'K', name: '키워드' },
     G: { code: 'G', name: '차트' },
     B: { code: 'B', name: '배너' },
+};
+
+// 뉴스레터 관리 발송 유형
+export const NEWS_LETTER_SEND_TYPE = {
+    A: '자동',
+    E: '수동',
+};
+
+// 뉴스레터 관리 유형
+export const NEWS_LETTER_TYPE = {
+    O: '오리지널',
+    B: '브리핑',
+    N: '알림',
+    E: '기타',
+};
+
+// 뉴스레터 관리 상태
+export const NEWS_LETTER_STATUS = {
+    Y: '활성',
+    P: '임시저장',
+    S: '중지',
+    Q: '종료',
 };

@@ -5,7 +5,7 @@ import { MokaCard, MokaInputLabel } from '@components';
 /**
  * 배너 수정/등록
  */
-const BannerForm = ({ banner, onCancle, onSave, loading, error, setError }) => {
+const BannerForm = ({ banner, onCancle, onSave, loading, error, onAdd, setError }) => {
     const [temp, setTemp] = useState({});
     const fileRef = useRef(null);
 
@@ -40,12 +40,13 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, setError }) => {
 
     return (
         <MokaCard
-            title={temp.bnnrSeq ? '공통 배너 수정' : '공통 배너 등록'}
+            title={`공통 배너 ${temp.bnnrSeq ? '수정' : '등록'}`}
+            titleClassName="ft-14"
+            titleButtons={[{ text: '등록', variant: 'positive', onClick: onAdd }]}
             className="shadow-none w-100 h-100"
-            headerClassName="pt-0"
+            headerClassName="pt-0 pr-0 align-items-center"
             bodyClassName="pr-0"
             footerClassName="pb-0 mr-0"
-            footer
             footerButtons={[
                 { text: temp.bnnrSeq ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: () => onSave(temp) },
                 { text: '취소', variant: 'negative', onClick: onCancle },

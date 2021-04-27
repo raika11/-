@@ -15,6 +15,8 @@ import { invalidListToError } from '@utils/convertUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 import { PageListModal } from '@pages/Page/modals';
 
+const baseCheck = (st = '') => /^[\s\/\*]*$/.test(st);
+
 /**
  * 페이지 정보
  */
@@ -31,19 +33,20 @@ const PageEdit = ({ onDelete }) => {
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [moveModalShow, setMoveModalShow] = useState(false);
 
+    /**
+     * pageUrl 처리
+     */
     const makePageUrl = useCallback(
         (name, value) => {
             let url = '';
             if (name === 'pageServiceName') {
-                url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${value}`;
-                if (util.isEmpty(temp.urlParam)) {
-                    url = `${url}/*`;
-                }
+                url = baseCheck(temp.pageUrl || temp?.parent?.pageUrl) ? '' : `${temp.parent.pageUrl}/${value}`;
+                if (!util.isEmpty(temp.urlParam)) url = `${url}/*`;
+                if (util.isEmpty(url)) url = '/';
             } else if (name === 'urlParam') {
-                url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${temp.pageServiceName}`;
-                if (util.isEmpty(value)) {
-                    url = `${url}/*`;
-                }
+                url = baseCheck(temp.pageUrl || temp?.parent?.pageUrl) ? '' : `${temp.parent.pageUrl}/${temp.pageServiceName}`;
+                if (!util.isEmpty(value)) url = `${url}/*`;
+                if (util.isEmpty(url)) url = '/';
             } else {
                 url = temp.pageUrl;
             }

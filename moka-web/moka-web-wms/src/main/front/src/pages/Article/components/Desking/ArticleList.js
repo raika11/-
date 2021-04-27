@@ -7,6 +7,7 @@ import { DB_DATEFORMAT } from '@/constants';
 import util from '@utils/commonUtil';
 import { messageBox } from '@utils/toastUtil';
 import { initialState, GET_ARTICLE_LIST_MODAL, getArticleListModal } from '@store/article';
+import { getSvcAt } from '@store/codeMgt';
 import Search from './Search';
 import AgGrid from './AgGrid';
 
@@ -35,6 +36,10 @@ const propTypes = {
      * @default
      */
     isNaverChannel: PropTypes.bool,
+    /**
+     * 면판 검색 막기
+     */
+    suppressSearchMyunPan: PropTypes.bool,
     /**
      * 편집그룹 변경 기능 막기 (네이버채널, 영상탭일 경우 막음)
      * @default
@@ -66,6 +71,7 @@ const defaultProps = {
     isNaverChannel: false,
     suppressChangeArtGroup: false,
     suppressChangeArtTitle: false,
+    suppressSearchMyunPan: true,
 };
 
 /**
@@ -83,10 +89,12 @@ const ArticleList = ({
     movie,
     suppressChangeArtGroup,
     suppressChangeArtTitle,
+    suppressSearchMyunPan,
     addColumnDefs,
 }) => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_ARTICLE_LIST_MODAL]);
+    const svcAtRows = useSelector(({ codeMgt }) => codeMgt.svcAtRows);
 
     // initial setting
     const sourceList = useSelector(({ articleSource }) => (isNaverChannel ? articleSource.typeSourceList.BULK : articleSource.deskingSourceList));
@@ -213,6 +221,10 @@ const ArticleList = ({
     );
 
     useEffect(() => {
+        if (show && !svcAtRows) dispatch(getSvcAt());
+    }, [show, dispatch, svcAtRows]);
+
+    useEffect(() => {
         if (show) {
             const type = !!isNaverChannel ? 'BULK' : 'DESKING';
             const masterCode = selectedComponent.schCodeId || null;
@@ -248,6 +260,9 @@ const ArticleList = ({
                 sourceList={sourceList}
                 // 편집그룹 변경 막기
                 suppressChangeArtGroup={suppressChangeArtGroup || isNaverChannel || movie}
+                // 면판 검색 막기
+                suppressSearchMyunPan={suppressSearchMyunPan}
+                svcAtRows={svcAtRows}
             />
 
             <AgGrid

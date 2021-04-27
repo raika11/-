@@ -57,7 +57,6 @@ const Issue = ({ match, displayName }) => {
                                     className="w-100"
                                     tabs={[<IssueEdit match={match} reporters={allReporter} />, <IssueDesking match={match} />]}
                                     tabNavWidth={48}
-                                    activeKey={1}
                                     placement="left"
                                     hasHotkeys
                                     tabNavs={[

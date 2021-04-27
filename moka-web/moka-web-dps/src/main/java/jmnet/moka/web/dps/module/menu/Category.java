@@ -41,6 +41,7 @@ public class Category {
     private String display;
     private String term;
     private String startDate;
+    private Category parent;
     private List<Category> subCategoryList;
     private final static List<String> EMPTY_CODE_LIST = new ArrayList<>(0);
 
@@ -62,6 +63,7 @@ public class Category {
             for ( int i=0; i<subCategoryNodes.getLength(); i++) {
                 Element subCategoryEl = (Element)subCategoryNodes.item(i);
                 Category subCategory = new Category(subCategoryEl.getAttribute("Key"), subCategoryEl, menuParser);
+                subCategory.setParent(this);
                 this.subCategoryList.add(subCategory);
                 menuParser.addCategory(subCategory.getKey(),subCategory);
             }
@@ -82,6 +84,14 @@ public class Category {
             this.exceptSourceCodeList = new ArrayList(exceptsourceCodeSet);
         }
         menuParser.addCategory(this.key,this);
+    }
+
+    public void setParent(Category parent) {
+        this.parent = parent;
+    }
+
+    public Category getParent() {
+        return this.parent;
     }
 
     public Map<String, String> getSubCategoryEntry() {

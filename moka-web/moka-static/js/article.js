@@ -24,17 +24,24 @@ $(document).ready(function() {
 
     /* 화면 크기에 따른 기자 목록 */
     bylineControl(window.innerWidth);
-
-    /* list to slider  */
+    
+    /* list to slider */
+    var slickOptions = {
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        dots:true,
+        arrows:false
+    };
     var $slider = $('#slider_div');
-    changeToSlid($slider);
+    changeToSlider($slider, slickOptions);
 
     $(window).resize(function(e){
         bylineControl(window.innerWidth);
         /* scroll indicator */
         scrollIndicator();
         /* list to slider */
-        changeToSlid($slider);
+        changeToSlider($slider, slickOptions);
     })
 
     /* 기자 더보기(외○명) 클릭 */
@@ -61,31 +68,7 @@ $(document).ready(function() {
     });
 });
 
-/* 임시 레이어팝업 */
-function toggleOpenLayer(obj){
-	$(obj).toggleClass("active");
-}
 
-function toggleOpen(obj){
-	$(obj).parent().toggleClass("open");
-}
-
-function openLayer(obj){
-	$(obj).addClass("active");
-}
-
-function closeLayer($btnCk){
-	$btnCk.parents(".layer_popup.active").removeClass("active");
-	$btnCk.parents(".layer_comment.active").removeClass("active");
-	$btnCk.parents(".layer_ticker.active").removeClass("active");
-}
-
-function btnCloseModal(){
-	$(".btn_close").off().on("click", function(){
-        $btnCk= $(this);
-		closeLayer($btnCk);
-    });
-}
 
 /* scroll indicator */
 function scrollIndicator(){
@@ -143,17 +126,3 @@ function setBylinePopPos(){
     $bylinePop.css("left",bylinePopleft+"px");
 }
 
-function changeToSlid($target){
-    var slickOptions = {
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        dots:true,
-        arrows:false
-    };
-
-    $target.not('.slick-initialized').slick(slickOptions);
-    if(window.innerWidth >= BREAKPOINT_LARGE) {
-        $target.slick('unslick');
-    };
-}

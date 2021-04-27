@@ -63,5 +63,40 @@
   </api>
 
 
+  <!--더오래 필진목록 조회-->
+  <api id="reporter.retirement">
+    <description>더오래 필진목록을 조회한다.</description>
+    <parameter>
+      <category desc="페이지서비스명" default="" require="Y">^.{0,1000}$</category>
+    </parameter>
+    <request eval="Y" dmlType="sp" setNames="_DATA" outParam="_TOTAL">
+      var queryId = "dps.reporter.retirement";
+
+      if ($param.get("url") == null || $param.get("url") == "") {
+      $param.put("keyword", "");
+      }else if ($param.get("url").equals("work") ) {
+      $param.put("keyword", "일더하기");
+      }else if ($param.get("url").equals("money") ) {
+      $param.put("keyword", "재산짓기");
+      }else if ($param.get("url").equals("place") ) {
+      $param.put("keyword", "살곳찾기");
+      }else if ($param.get("url").equals("health") ) {
+      $param.put("keyword", "건강챙기기");
+      }else if ($param.get("url").equals("leisure") ) {
+      $param.put("keyword", "시간즐기기");
+      }else if ($param.get("url").equals("together") ) {
+      $param.put("keyword", "어울리기");
+      }else if ($param.get("url").equals("selfdevel") ) {
+      $param.put("keyword", "나가꾸기");
+      }
+
+      queryId;
+    </request>
+    <keys>
+      category
+      #paging
+    </keys>
+  </api>
+
 </apiConfig>
 

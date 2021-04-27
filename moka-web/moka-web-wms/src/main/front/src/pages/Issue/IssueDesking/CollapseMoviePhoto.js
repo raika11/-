@@ -11,9 +11,10 @@ import { unescapeHtmlArticle } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issue';
 import { ArticleTabModal } from '@pages/Article/modals';
-import { VodModal } from '@pages/Desking/modals';
 import { moviePhotoColumnDefs } from './IssueDeskingColumns';
+import { DeskingHistoryModal } from '../modal';
 import StatusBadge from './StatusBadge';
+import ReserveWork from './ReserveWork';
 
 const defaultProps = {
     desking: {},
@@ -30,6 +31,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
+    const [histShow, setHistShow] = useState(false);
     const [vodShow, setVodShow] = useState(false);
     const controls = 'collapse-mp';
 
@@ -255,26 +257,26 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
     return (
         <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
-            <Row className="d-flex" noGutters>
-                <Col xs={3}>
+            <Row className="d-flex position-relative" noGutters>
+                <Col xs={4} className="d-flex align-items-center position-unset">
+                    <ReserveWork pkgSea={pkgSeq} status={status} compNo={compNo} reserveDt={desking.reserveDt} />
                     <MokaInputLabel
                         as="switch"
-                        label="영상/포토"
+                        label="영상포토"
                         id={controls}
                         inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
+                        style={{ height: 'auto' }}
                         onChange={(e) => setOpen(e.target.checked)}
                     />
                 </Col>
-                <Col xs={4} className="d-flex align-items-center">
+                <Col xs={3} className="d-flex align-items-center">
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>
                     <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
-
-                    <Button variant="searching" size="sm" className="mr-1" onClick={() => setVodShow(true)}>
-                        영상검색
+                    <Button variant="positive" size="sm" className="mr-1" onClick={() => setVodShow(true)}>
+                        추가
                     </Button>
-                    <VodModal show={vodShow} onHide={() => setVodShow(false)} onSave={addMovie} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">
@@ -282,9 +284,13 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
                             <MokaIcon iconName="Save" feather />
                         </MokaOverlayTooltipButton>
-                        <MokaOverlayTooltipButton className="work-btn" tooltipText="전송" variant="white" onClick={publishDesking}>
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="전송" variant="white" onClick={publishDesking}>
                             <MokaIcon iconName="Send" feather />
                         </MokaOverlayTooltipButton>
+                        <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
+                            <MokaIcon iconName="fal-history" />
+                        </MokaOverlayTooltipButton>
+                        <DeskingHistoryModal show={histShow} pkgSeq={pkgSeq} compNo={compNo} onHide={() => setHistShow(false)} />
                     </div>
                 </Col>
             </Row>

@@ -3,7 +3,6 @@ package jmnet.moka.core.tps.mvc.abtest.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
@@ -12,10 +11,9 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseDTO;
+import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseAllDTO;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSaveDTO;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSearchDTO;
-import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseUpdateDTO;
 import jmnet.moka.core.tps.mvc.abtest.entity.AbTestCase;
 import jmnet.moka.core.tps.mvc.abtest.service.AbTestCaseService;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseSaveVO;
@@ -95,19 +93,17 @@ public class AbTestRestController extends AbstractCommonController {
     @ApiOperation(value = "A/B테스트 상세 조회")
     @GetMapping("/{abtestSeq}")
     public ResponseEntity<?> getABTest(@ApiParam("A/B테스트 일련번호(필수)") @PathVariable("abtestSeq")
-    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq)
+    @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq)
             throws NoDataException {
 
-        ResultListDTO<AbTestCaseVO> resultListMessage = new ResultListDTO<>();
-
         // 조회
-        List<AbTestCaseVO> returnValue = abTestCaseService.findABTestById(abtestSeq);
-        resultListMessage.setList(returnValue);
+        AbTestCaseSaveVO returnValue = abTestCaseService.findABTestById(abtestSeq);
 
-        ResultDTO<ResultListDTO<AbTestCaseVO>> resultDto = new ResultDTO<>(resultListMessage);
+        AbTestCaseAllDTO dto = modelMapper.map(returnValue, AbTestCaseAllDTO.class);
 
         tpsLogger.success(ActionType.SELECT);
 
+        ResultDTO<AbTestCaseAllDTO> resultDto = new ResultDTO<>(dto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -119,9 +115,10 @@ public class AbTestRestController extends AbstractCommonController {
      * @throws Exception 예외처리
      */
     @ApiOperation(value = "A/B테스트 등록")
-    @PostMapping
+    @PostMapping(headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postABTest(@ApiParam("A/B테스트 등록") @RequestBody @Valid AbTestCaseSaveDTO abTestCaseSaveDTO)
             throws Exception {
+
         AbTestCaseSaveVO abTestCaseSaveVO = modelMapper.map(abTestCaseSaveDTO, AbTestCaseSaveVO.class);
 
         try {
@@ -129,7 +126,7 @@ public class AbTestRestController extends AbstractCommonController {
             // insert
             Integer abtestSeq = abTestCaseService.insertABTestCase(abTestCaseSaveVO);
 
-            AbTestCaseDTO dto = modelMapper.map(abTestCaseSaveVO, AbTestCaseDTO.class);
+            AbTestCaseAllDTO dto = modelMapper.map(abTestCaseSaveVO, AbTestCaseAllDTO.class);
 
             String message = "";
             if (abtestSeq != 0) {
@@ -139,7 +136,7 @@ public class AbTestRestController extends AbstractCommonController {
                 message = msg("tps.common.error.insert");
             }
 
-            ResultDTO<AbTestCaseDTO> resultDto = new ResultDTO<>(dto, message);
+            ResultDTO<AbTestCaseAllDTO> resultDto = new ResultDTO<>(dto, message);
             tpsLogger.success(ActionType.SELECT);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -153,19 +150,19 @@ public class AbTestRestController extends AbstractCommonController {
     /**
      * ABTest 수정
      *
-     * @param abTestCaseUpdateDTO ABTestDTO
+     * @param abTestCaseSaveDTO
      * @return ABTest 정보
      * @throws Exception A/B테스트 오류 그외 모든 에러
      */
     @ApiOperation(value = "A/B테스트 수정")
     @PutMapping(value = "/{abtestSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putAbTestCase(@ApiParam("A/B테스트 일련번호 (필수)") @PathVariable("abtestSeq")
-    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq,
-            @ApiParam("A/B테스트 정보") @RequestBody @Valid AbTestCaseUpdateDTO abTestCaseUpdateDTO)
+    @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq,
+            @ApiParam("A/B테스트 정보") @RequestBody @Valid AbTestCaseSaveDTO abTestCaseSaveDTO)
             throws Exception {
 
         // STEP 2 기타설정 값 셋팅
-        AbTestCaseSaveVO abTestCaseSaveVO = modelMapper.map(abTestCaseUpdateDTO, AbTestCaseSaveVO.class);
+        AbTestCaseSaveVO abTestCaseSaveVO = modelMapper.map(abTestCaseSaveDTO, AbTestCaseSaveVO.class);
 
         abTestCaseSaveVO.setAbtestSeq(Math.toIntExact(abtestSeq));
 
@@ -175,33 +172,38 @@ public class AbTestRestController extends AbstractCommonController {
                     .findById(abtestSeq)
                     .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
+            //AbTestCaseSaveVO abTestCaseSave = modelMapper.map(abtestCase, AbTestCaseSaveVO.class);
+
             // 조회 한 STEP 1 주요설정 값 가져와 셋팅
-            abTestCaseSaveVO.setAbtestType(abtestCase.getAbtestType());
-            abTestCaseSaveVO.setAbtestPurpose(abtestCase.getAbtestPurpose());
-            abTestCaseSaveVO.setDomainId(abtestCase.getDomainId());
-            abTestCaseSaveVO.setPageSeq(abtestCase.getPageSeq());
-            abTestCaseSaveVO.setAreaSeq(abtestCase.getAreaSeq());
-            abTestCaseSaveVO.setComponentSeq(abtestCase.getComponentSeq());
-            abTestCaseSaveVO.setLetterSeq(abtestCase.getLetterSeq());
-            abTestCaseSaveVO.setStartDt(abtestCase.getStartDt());
-            abTestCaseSaveVO.setEndDt(abtestCase.getEndDt());
-            abTestCaseSaveVO.setEndCondi(abtestCase.getEndCondi());
-            abTestCaseSaveVO.setEndPeriod(abtestCase.getEndPeriod());
-            abTestCaseSaveVO.setEndKpi(abtestCase.getEndKpi());
-            abTestCaseSaveVO.setKpiClickCondi(abtestCase.getKpiClickCondi());
-            abTestCaseSaveVO.setKpiPeriodCondi(abtestCase.getKpiPeriodCondi());
-            abTestCaseSaveVO.setAutoApplyYn(abtestCase.getAutoApplyYn());
-            abTestCaseSaveVO.setStatus(abtestCase.getStatus());
-            abTestCaseSaveVO.setDelYn(abtestCase.getDelYn());
-            abTestCaseSaveVO.setRegId(abtestCase.getRegId());
-            abTestCaseSaveVO.setRegDt(abtestCase.getRegDt());
-            abTestCaseSaveVO.setAbtestTitle(abtestCase.getAbtestTitle());
-            abTestCaseSaveVO.setAbtestDesc(abtestCase.getAbtestDesc());
+            //            abTestCaseSaveVO.setAbtestType(abtestCase.getAbtestType());
+            //            abTestCaseSaveVO.setDomainId(abtestCase.getDomainId());
+            //            abTestCaseSaveVO.setPageType(abtestCase.getPageType());
+            //            abTestCaseSaveVO.setPageSeq(abtestCase.getPageSeq());
+            //            abTestCaseSaveVO.setArtType(abtestCase.getArtType());
+            //            abTestCaseSaveVO.setZoneDiv(abtestCase.getZoneDiv());
+            //            abTestCaseSaveVO.setZoneSeq(abtestCase.getZoneSeq());
+            //            abTestCaseSaveVO.setAbtestPurpose(abtestCase.getAbtestPurpose());
+            //            abTestCaseSaveVO.setStartDt(abtestCase.getStartDt());
+            //            abTestCaseSaveVO.setEndDt(abtestCase.getEndDt());
+            //            abTestCaseSaveVO.setEndPeriod(abtestCase.getEndPeriod());
+            //            abTestCaseSaveVO.setEndCondi(abtestCase.getEndCondi());
+            //            abTestCaseSaveVO.setEndKpi(abtestCase.getEndKpi());
+            //            abTestCaseSaveVO.setKpiClickCondi(abtestCase.getKpiClickCondi());
+            //            abTestCaseSaveVO.setKpiPeriodCondi(abtestCase.getKpiPeriodCondi());
+            //            abTestCaseSaveVO.setAutoApplyYn(abtestCase.getAutoApplyYn());
+            //            abTestCaseSaveVO.setStatus(abtestCase.getStatus());
+            //            abTestCaseSaveVO.setDelYn(abtestCase.getDelYn());
+            //            abTestCaseSaveVO.setRegId(abtestCase.getRegId());
+            //            abTestCaseSaveVO.setRegDt(abtestCase.getRegDt());
+            //            abTestCaseSaveVO.setModId(abtestCase.getModId());
+            //
+            //            abTestCaseSaveVO.setAbtestTitle(abtestCase.getAbtestTitle());
+            //            abTestCaseSaveVO.setAbtestDesc(abtestCase.getAbtestDesc());
 
             // update
             Integer chk = abTestCaseService.updateABTestCase(abTestCaseSaveVO);
 
-            AbTestCaseDTO dto = modelMapper.map(abTestCaseSaveVO, AbTestCaseDTO.class);
+            AbTestCaseAllDTO dto = modelMapper.map(abTestCaseSaveVO, AbTestCaseAllDTO.class);
             String message = "";
             if (abtestSeq > 0) {
                 message = msg("tps.common.success.update");
@@ -210,7 +212,7 @@ public class AbTestRestController extends AbstractCommonController {
                 message = msg("tps.common.error.update");
             }
 
-            ResultDTO<AbTestCaseDTO> resultDto = new ResultDTO<>(dto, message);
+            ResultDTO<AbTestCaseAllDTO> resultDto = new ResultDTO<>(dto, message);
             tpsLogger.success(ActionType.SELECT);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -231,7 +233,7 @@ public class AbTestRestController extends AbstractCommonController {
     @ApiOperation(value = "A/B테스트 종료")
     @PutMapping(value = "/close/{abtestSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putAbTestCaseClose(@ApiParam("A/B테스트 일련번호 (필수)") @PathVariable("abtestSeq")
-    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq)
+    @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq)
             throws Exception {
 
         try {
@@ -245,15 +247,15 @@ public class AbTestRestController extends AbstractCommonController {
             abTestCaseService.closeABTestCase(abtestSeq);
 
             // 3. 결과리턴
-            String message = msg("tps.abTest.success.close");
+            String message = msg("tps.abtest.success.close");
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
-            tpsLogger.success(ActionType.DELETE, true);
+            tpsLogger.success(ActionType.SHUTDOWN, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO CLOSE ABTest] seq: {} {}", abtestSeq, e.getMessage());
-            tpsLogger.error(ActionType.DELETE, "[FAIL TO CLOSE ABTest]", e, true);
-            throw new Exception(msg("tps.abTest.error.close"), e);
+            tpsLogger.error(ActionType.SHUTDOWN, "[FAIL TO CLOSE ABTest]", e, true);
+            throw new Exception(msg("tps.abtest.error.close"), e);
         }
     }
 
@@ -267,7 +269,7 @@ public class AbTestRestController extends AbstractCommonController {
     @ApiOperation(value = "A/B테스트 삭제")
     @PutMapping(value = "/delete/{abtestSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putAbTestCaseDelete(@ApiParam("A/B테스트 일련번호 (필수)") @PathVariable("abtestSeq")
-    @Size(min = 1, max = 4, message = "{tps.abTest.error.notnull.abtestSeq}") Long abtestSeq)
+    @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq)
             throws Exception {
 
         try {
@@ -281,7 +283,7 @@ public class AbTestRestController extends AbstractCommonController {
             abTestCaseService.deleteABTestCase(abtestSeq);
 
             // 3. 결과리턴
-            String message = msg("tps.abTest.success.delete");
+            String message = msg("tps.abtest.success.delete");
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
             tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -289,7 +291,7 @@ public class AbTestRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO DELETE ABTest] seq: {} {}", abtestSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE ABTest]", e, true);
-            throw new Exception(msg("tps.abTest.error.delete"), e);
+            throw new Exception(msg("tps.abtest.error.delete"), e);
         }
     }
 }

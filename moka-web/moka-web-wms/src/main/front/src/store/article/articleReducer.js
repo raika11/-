@@ -15,6 +15,7 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
         searchType: 'all',
         keyword: '',
+        artTypeList: null, // 기사타입(구분자 ,)
         pressPan: null, // 판
         pressMyun: null, // 면
         sourceList: null, // 매체(구분자 ,)
@@ -59,6 +60,7 @@ export const initialState = {
             size: PAGESIZE_OPTIONS[0],
             searchType: 'title',
             keyword: '',
+            artTypeList: null, // 기사타입(구분자 ,)
             pressPan: null, // 판
             pressMyun: null, // 면
             sourceList: null, // 매체(구분자 ,)
@@ -75,6 +77,7 @@ export const initialState = {
             size: PAGESIZE_OPTIONS[0],
             searchType: 'title',
             keyword: '',
+            artTypeList: null, // 기사타입(구분자 ,)
             pressPan: null, // 판
             pressMyun: null, // 면
             sourceList: null, // 매체(구분자 ,)

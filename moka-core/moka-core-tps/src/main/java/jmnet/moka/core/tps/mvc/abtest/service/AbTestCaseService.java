@@ -1,6 +1,5 @@
 package jmnet.moka.core.tps.mvc.abtest.service;
 
-import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSearchDTO;
@@ -24,7 +23,7 @@ import org.springframework.data.domain.Page;
 public interface AbTestCaseService {
     Page<AbTestCaseVO> findAllList(AbTestCaseSearchDTO searchDTO);
 
-    List<AbTestCaseVO> findABTestById(Long abtestSeq);
+    AbTestCaseSaveVO findABTestById(Long abtestSeq);
 
     Optional<AbTestCase> findById(Long abtestSeq);
 

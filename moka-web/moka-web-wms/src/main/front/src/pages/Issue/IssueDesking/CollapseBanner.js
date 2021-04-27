@@ -10,7 +10,9 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import { bannerColumnDefs } from './IssueDeskingColumns';
+import { DeskingHistoryModal } from '../modal';
 import StatusBadge from './StatusBadge';
+import ReserveWork from './ReserveWork';
 
 const defaultProps = {
     desking: {},
@@ -26,6 +28,7 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
     const [status, setStatus] = useState(DESK_STATUS_WORK);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [histShow, setHistShow] = useState(false);
     const controls = 'collapse-banner';
 
     /**
@@ -162,20 +165,25 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
     return (
         <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
-            <Row className="d-flex" noGutters>
-                <Col xs={3}>
-                    <MokaInputLabel as="switch" label="배너" id={controls} inputProps={{ checked: open }} onChange={(e) => setOpen(e.target.checked)} />
+            <Row className="d-flex position-relative" noGutters>
+                <Col xs={4} className="d-flex align-items-center position-unset">
+                    <ReserveWork pkgSeq={pkgSeq} compNo={compNo} status={status} reserveDt={desking.reserveDt} />
+                    <MokaInputLabel as="switch" label="배너" id={controls} inputProps={{ checked: open }} onChange={(e) => setOpen(e.target.checked)} style={{ height: 'auto' }} />
                 </Col>
-                <Col xs={4}></Col>
+                <Col xs={3}></Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">
                         <StatusBadge desking={desking} />
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
                             <MokaIcon iconName="Save" feather />
                         </MokaOverlayTooltipButton>
-                        <MokaOverlayTooltipButton className="work-btn" tooltipText="전송" variant="white" onClick={publishDesking}>
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="전송" variant="white" onClick={publishDesking}>
                             <MokaIcon iconName="Send" feather />
                         </MokaOverlayTooltipButton>
+                        <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
+                            <MokaIcon iconName="fal-history" />
+                        </MokaOverlayTooltipButton>
+                        <DeskingHistoryModal show={histShow} pkgSeq={pkgSeq} compNo={compNo} onHide={() => setHistShow(false)} reserveDt={desking.reserveDt} />
                     </div>
                 </Col>
             </Row>

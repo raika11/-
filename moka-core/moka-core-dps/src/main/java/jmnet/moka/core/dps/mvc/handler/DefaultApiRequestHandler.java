@@ -319,6 +319,7 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
             try {
                 URL refererUrl = new URL(referer);
                 String host = refererUrl.getHost() + (refererUrl.getPort() == 80 ? "" : ":" + refererUrl.getPort());
+                logger.debug("referer:[{}]" + host);
                 String apiPath = apiContext.getApiPath();
                 DefaultApiConfig defaultApiConfig = this.apiRequestHelper.getDefaultApiConfig(apiPath);
                 if (defaultApiConfig != null && defaultApiConfig.getRefererSet() != null) {

@@ -22,10 +22,10 @@ const defaultProps = {
 /**
  * 패키지관리 > 관련 데이터 편집 > 배너
  */
-const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSAGE, rowToData, rowHeight }, ref) => {
+const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSAGE, rowToData, rowHeight, preview }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
-    const [status, setStatus] = useState(DESK_STATUS_WORK);
+    const [status, setStatus] = useState(DESK_STATUS_SAVE);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [histShow, setHistShow] = useState(false);
@@ -130,6 +130,14 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
         }
     };
 
+    /**
+     * on/off 변경
+     */
+    const onChange = (e) => {
+        setOpen(e.target.checked);
+        setStatus(DESK_STATUS_WORK);
+    };
+
     useImperativeHandle(
         ref,
         () => ({
@@ -182,7 +190,7 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
                         label="배너"
                         id={controls}
                         inputProps={{ checked: open }}
-                        onChange={(e) => setOpen(e.target.checked)}
+                        onChange={onChange}
                         style={{ height: 'auto' }}
                         labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
                     />
@@ -191,6 +199,9 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">
                         <StatusBadge desking={desking} />
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="미리보기" variant="white" onClick={preview}>
+                            <MokaIcon iconName="fal-file-search" />
+                        </MokaOverlayTooltipButton>
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
                             <MokaIcon iconName="Save" feather />
                         </MokaOverlayTooltipButton>

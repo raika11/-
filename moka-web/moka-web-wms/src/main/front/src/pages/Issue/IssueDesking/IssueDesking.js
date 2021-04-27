@@ -200,6 +200,7 @@ const IssueDesking = () => {
                 ref={liveRef}
                 desking={deskingByCompNo.comp3}
                 deskingList={deskingByCompNo.comp3?.issueDeskings}
+                preview={preview}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
                 rowHeight={90}
@@ -222,6 +223,7 @@ const IssueDesking = () => {
                 ref={mpRef}
                 desking={deskingByCompNo.comp5}
                 deskingList={deskingByCompNo.comp5?.issueDeskings}
+                preview={preview}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
                 rowHeight={165}
@@ -234,6 +236,7 @@ const IssueDesking = () => {
                 ref={bannerRef}
                 desking={deskingByCompNo.comp7}
                 deskingList={deskingByCompNo.comp7?.issueDeskings}
+                preview={preview}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
                 rowHeight={90}
@@ -245,6 +248,7 @@ const IssueDesking = () => {
                 ref={keywordRef}
                 desking={deskingByCompNo.comp8}
                 deskingList={deskingByCompNo.comp8?.issueDeskings}
+                preview={preview}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
                 rowHeight={90}

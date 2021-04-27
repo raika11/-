@@ -13,6 +13,7 @@ import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issu
 import { ArticleTabModal } from '@pages/Article/modals';
 import { DeskingHistoryModal } from '../modal';
 import StatusBadge from './StatusBadge';
+import ReserveWork from './ReserveWork';
 import { artColumnDefs } from './IssueDeskingColumns';
 
 const defaultProps = {
@@ -277,17 +278,20 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
     return (
         <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
-            <Row className="d-flex" noGutters>
-                <Col xs={3}>
+            <Row className="d-flex position-relative" noGutters>
+                <Col xs={4} className="d-flex align-items-center position-unset">
+                    <ReserveWork reserveDt={desking.reserveDt} status={status} pkgSeq={pkgSeq} compNo={compNo} />
                     <MokaInputLabel
                         as="switch"
                         label="메인기사"
                         id={controls}
+                        style={{ height: 'auto' }}
+                        labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
                         inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
                         onChange={(e) => setOpen(e.target.checked)}
                     />
                 </Col>
-                <Col xs={4} className="d-flex align-items-center">
+                <Col xs={3} className="d-flex align-items-center">
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>

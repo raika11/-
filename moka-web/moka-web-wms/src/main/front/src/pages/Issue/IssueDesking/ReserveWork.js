@@ -1,19 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import Button from 'react-bootstrap/Button';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
-import { MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { postReserveComponentWork, deleteReserveComponentWork } from '@store/desking';
+import Button from 'react-bootstrap/Button';
+import { DB_DATEFORMAT, DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
+import { MokaOverlayTooltipButton, MokaIcon, MokaInput } from '@components';
+import { postReserveIssueDesking, deleteReserveIssueDesking } from '@store/issue';
 
 moment.locale('ko');
 
+const propTypes = {
+    /**
+     * 예약 정보
+     */
+    reserveDt: PropTypes.string,
+    /**
+     * 패키지 아이디
+     */
+    pkgSeq: PropTypes.string,
+    /**
+     * compNo
+     */
+    compNo: PropTypes.number,
+    /**
+     * 예약 된 후 실행
+     */
+    onReserve: PropTypes.func,
+    /**
+     * 워크 상태
+     */
+    status: PropTypes.oneOf([DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH]),
+};
+
 /**
- * 컴포넌트 워크 예약
+ * 이슈 데스킹 예약
  */
-const ReserveComponentWork = ({ component, workStatus }) => {
+const ReserveWork = ({ reserveDt: alreadyReservedDt, pkgSeq, compNo, onReserve, status }) => {
     const dispatch = useDispatch();
     const [reservation, setReservation] = useState(false);
     const [originReDt, setOriginReDt] = useState(null);
@@ -44,6 +68,15 @@ const ReserveComponentWork = ({ component, workStatus }) => {
     };
 
     /**
+     * 취소
+     */
+    const handleClickCancle = () => {
+        setOpenReserve(false);
+        setReserveDt(originReDt || null);
+        setError(false);
+    };
+
+    /**
      * 달력 오늘날짜 이후로 선택할 수 있게 처리한다
      */
     const isValidDate = (current) => current.isAfter(moment(thisTime).subtract(1, 'days'));
@@ -63,7 +96,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
             return;
         }
 
-        if (workStatus !== 'save' && workStatus) {
+        if (status !== DESK_STATUS_SAVE && status) {
             messageBox.alert('임시저장한 데이터만 예약할 수 있습니다.');
             return;
         }
@@ -72,29 +105,23 @@ const ReserveComponentWork = ({ component, workStatus }) => {
             let message = reservation === true ? '예약을 변경하시겠습니까?' : '예약하시겠습니까?';
             messageBox.confirm(message, () => {
                 dispatch(
-                    postReserveComponentWork({
-                        componentWorkSeq: component.seq,
+                    postReserveIssueDesking({
+                        pkgSeq,
+                        compNo,
                         reserveDt: moment(reserveDt).format(DB_DATEFORMAT),
-                        callback: ({ header }) => {
+                        callback: ({ header, body }) => {
                             if (!header.success) {
                                 messageBox.alert(header.message);
                             } else {
                                 toast.success(header.message);
                                 setOpenReserve(false);
                             }
+                            if (onReserve) onReserve({ header, body });
                         },
                     }),
                 );
             });
         }
-    };
-
-    /**
-     * 취소
-     */
-    const handleClickCancle = () => {
-        setOpenReserve(false);
-        setReserveDt(originReDt || null);
     };
 
     /**
@@ -105,8 +132,9 @@ const ReserveComponentWork = ({ component, workStatus }) => {
             '예약을 삭제하시겠습니까?',
             () => {
                 dispatch(
-                    deleteReserveComponentWork({
-                        componentWorkSeq: component.seq,
+                    deleteReserveIssueDesking({
+                        pkgSeq,
+                        compNo,
                         callback: ({ header }) => {
                             if (header.success) {
                                 toast.success(header.message);
@@ -123,8 +151,8 @@ const ReserveComponentWork = ({ component, workStatus }) => {
     };
 
     useEffect(() => {
-        if (component.reserveDt) {
-            let rd = moment(component.reserveDt, DB_DATEFORMAT);
+        if (alreadyReservedDt) {
+            let rd = moment(alreadyReservedDt, DB_DATEFORMAT);
             setOriginReDt(rd);
             setReserveDt(rd);
             // 현재 시각보다 예약일이 크면 예약상태
@@ -136,7 +164,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
             setReserveDt(null);
             setReservation(false);
         }
-    }, [component]);
+    }, [alreadyReservedDt]);
 
     return (
         <React.Fragment>
@@ -145,11 +173,11 @@ const ReserveComponentWork = ({ component, workStatus }) => {
             </MokaOverlayTooltipButton>
 
             {openReserve && (
-                <div className="d-flex align-items-center justify-content-between position-absolute bg-white" style={{ left: 26, right: 2, zIndex: 1 }}>
-                    <div style={{ width: 162 }}>
+                <div className="d-flex align-items-center justify-content-between position-absolute bg-white" style={{ left: 26, zIndex: 2, width: 'calc(100% - 26px)' }}>
+                    <div style={{ width: 162 }} className="mr-2">
                         <MokaInput
                             as="dateTimePicker"
-                            // className="is-not-position-center"
+                            className="is-not-position-center"
                             size="sm"
                             value={reserveDt}
                             onChange={handleDate}
@@ -177,4 +205,6 @@ const ReserveComponentWork = ({ component, workStatus }) => {
     );
 };
 
-export default ReserveComponentWork;
+ReserveWork.propTypes = propTypes;
+
+export default ReserveWork;

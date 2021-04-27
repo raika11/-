@@ -140,7 +140,7 @@ export const initialState = {
         },
         total: 0,
         list: [],
-        detailList: [],
+        detail: [],
     },
     invalidList: [],
     initialPkgKeyword,
@@ -227,7 +227,12 @@ export default handleActions(
         },
         [act.GET_ISSUE_DESKING_HISTORY_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.deskingHistory.detailList = body.list;
+                draft.deskingHistory.detail = body;
+            });
+        },
+        [act.GET_ISSUE_DESKING_HISTORY_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.deskingHistory.detail = initialState.deskingHistory.detail;
             });
         },
     },

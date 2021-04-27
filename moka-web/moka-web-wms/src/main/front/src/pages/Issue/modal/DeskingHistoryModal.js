@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import moment from 'moment';
 import { DB_DATEFORMAT, S_MODAL_PAGESIZE_OPTIONS, DESK_STATUS_PUBLISH } from '@/constants';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { MokaModal, MokaInput, MokaTable } from '@components';
 import {
     initialState,
@@ -28,7 +29,7 @@ const defaultProps = {};
  */
 const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
     const dispatch = useDispatch();
-    const { total, list, search, deskingList } = useSelector(({ issue }) => issue.deskingHistory);
+    const { total, list, search, detail } = useSelector(({ issue }) => issue.deskingHistory);
     const { loading, detailLoading } = useSelector(({ loading }) => ({
         loading: loading[GET_ISSUE_DESKING_HISTORY_LIST],
         detailLoading: loading[GET_ISSUE_DESKING_HISTORY],
@@ -49,6 +50,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                 pkgSeq,
                 regDt: data.regDt,
                 status: DESK_STATUS_PUBLISH,
+                approvalYn: data.approvalYn,
             }),
         );
     };
@@ -75,6 +77,8 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                 }),
             );
             setSearchDt(newDt);
+
+            // const test = moment('2021-04-27T05:09:29.700+0000', moment.ISO_8601);
         } else {
             dispatch(clearIssueDeskingHistory());
         }
@@ -95,18 +99,18 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                                 status: DESK_STATUS_PUBLISH,
                                 callback: ({ header, body }) => {
                                     if (header.success) {
-                                        onLoad(body.list);
+                                        onLoad(body.issueDeskings);
                                     }
                                 },
                             }),
                         );
                     } else {
-                        onLoad(deskingList);
+                        onLoad(detail.issueDeskings);
                     }
                 },
             })),
         );
-    }, [compNo, selected, dispatch, list, onLoad, pkgSeq, deskingList]);
+    }, [compNo, selected, dispatch, list, onLoad, pkgSeq, detail]);
 
     return (
         <MokaModal title="히스토리" show={show} onHide={onHide} size="lg" width={850} height={550} centered>
@@ -133,7 +137,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                         total={total}
                         page={search.page}
                         size={search.size}
-                        onRowNodeId={(data) => data.rownum}
+                        onRowNodeId={(data) => data.regDt}
                         onRowClicked={handleRowClicked}
                         onChangeSearchOption={handleChangeSearchOption}
                         columnDefs={columnDefs}
@@ -141,11 +145,18 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                         pageSize={S_MODAL_PAGESIZE_OPTIONS}
                         loading={loading}
                         preventRowClickCell={['load']}
-                        selected={selected.rownum}
+                        selected={selected.regDt}
                     />
                 </Col>
                 <Col sm={6} className="pl-12 h-100">
-                    <MokaTable className="h-100" rowData={deskingList} columnDefs={detailColumnDefs} onRowNodeId={(data) => data.histSeq} paging={false} loading={detailLoading} />
+                    <MokaTable
+                        className="h-100"
+                        rowData={detail?.issueDeskings}
+                        columnDefs={detailColumnDefs}
+                        onRowNodeId={(data) => data.contentsId}
+                        paging={false}
+                        loading={detailLoading}
+                    />
                 </Col>
             </Row>
         </MokaModal>
@@ -185,13 +196,14 @@ const columnDefs = [
 const detailColumnDefs = [
     {
         headerName: 'No',
-        field: 'histSeq',
+        field: 'contentsOrd',
         width: 50,
     },
     {
         headerName: '제목',
-        field: 'artTitle',
+        field: 'title',
         flex: 1,
+        valueGetter: (params) => unescapeHtmlArticle(params.data.title || ''),
     },
 ];
 

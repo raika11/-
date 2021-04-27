@@ -22,6 +22,13 @@
     <link href="https://static.joins.com/html/guide/guide.css" rel="stylesheet">
     <link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">
     <link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">
+
+
+    <script src="//stg-static.joongang.co.kr/js/resource.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/common.js"></script>
+    <script src="//stg-static.joongang.co.kr/js/journalist.js"></script>
+
+
 </head>
 <body class="guide">
 <div id="wrapper">
@@ -111,15 +118,22 @@
 
                     <h2 class="guide_title">버튼추가</h2>
                     <div class="sample_wrap">
+                        <link href="//stg-static.joongang.co.kr/css/journalist.css" rel="stylesheet">
 
                         <header class="title_wrap">
                             <div class="title_area">
                                 <h2 class="title">2021년 재·보궐선거</h2>
                                 <div class="exp sm_hidden">동물과 자연에 대한 모든 것</div>
                             </div>
-                            <button type="button" class="btn btn_outline_orange"><i class="fa fa_plus_orange"></i>구독</button>
+                            <button type="button" class="btn_info" onclick="openLayer(test);"><i class="ico_info"></i></button>
+                            <div class="layer_popup layer_cheer" id="test"><!-- 여기에 개별 클래스 추가 -->
+                                <div class="layer_body">
+                                    <p>기자에게 보내는 응원은 하루 1번 가능합니다.</p>
+                                    <p class="desc">(0시 기준)</p>
+                                </div>
+                                <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">닫기</span></button>
+                            </div>
                         </header>
-
 
                         <header class="title_wrap">
                             <h2 class="title"><a href="#" class="flex flex_align_center">권혁재의 핸드폰 사진관 <i class="ico_arrow_primary_right"></i></a></h2>

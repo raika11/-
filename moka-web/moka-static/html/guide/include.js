@@ -19,6 +19,7 @@ var include = {
         document.write('<link href="//stg-static.joongang.co.kr/css/article.css" rel="stylesheet">');
 
         document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>');
+        document.write('<script src="//stg-static.joongang.co.kr/js/resource.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/common.js"></script>');
         // document.write('<script src="//stg-static.joongang.co.kr/js/plugin/select2.min.js"></script>');
 

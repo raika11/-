@@ -71,7 +71,7 @@ button{border:0 none;background-color:transparent;cursor:pointer;}
 button,input{border-radius:0;border:0;-webkit-border-radius:0;}
 table{border-collapse:collapse;border-spacing:0;}
 body{direction:ltr;word-break:keep-all;word-wrap:break-word;-webkit-text-size-adjust:none;}
-body,th,td,input,select,textarea,button{font-size:100%;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",Arial,"Noto Sans KR","Malgun Gothic","맑은 고딕",Dotum,"돋움",sans-serif;line-height:1;color:#2e2a26;}
+body,th,td,input,select,textarea,button{font-size:100%;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic","맑은 고딕",Dotum,"돋움",Arial,sans-serif;line-height:1;color:#2e2a26;}
 a{color:inherit;font-size:inherit;line-height:inherit;text-decoration:none;}
 a:hover{text-decoration:underline;}
 a:active{background-color:transparent;}

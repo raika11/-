@@ -97,8 +97,6 @@ public class AbTestRestController extends AbstractCommonController {
     @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq)
             throws NoDataException {
 
-        ResultListDTO<AbTestCaseVO> resultListMessage = new ResultListDTO<>();
-
         // 조회
         AbTestCaseVO returnValue = abTestCaseService.findABTestById(abtestSeq);
 

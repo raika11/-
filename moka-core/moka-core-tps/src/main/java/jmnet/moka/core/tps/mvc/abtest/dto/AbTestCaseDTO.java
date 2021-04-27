@@ -192,6 +192,12 @@ public class AbTestCaseDTO {
     private String delYn = MokaConstants.NO;
 
     /**
+     * 등록자
+     */
+    @ApiModelProperty(value = "등록자")
+    private String regNm;
+
+    /**
      * 생성자 TB_ABTEST_CASE(A/B테스트 정의)
      * <p>
      * 등록자(대안입력 편집자ID) TB_ABTEST_INSTANCE(A/B테스트 인스턴스)
@@ -346,7 +352,10 @@ public class AbTestCaseDTO {
      * AB테스트 그룹(랜덤:비율 / 고정:0~9숫자)
      */
     @ApiModelProperty("AB테스트 그룹(랜덤:비율 / 고정:0~9숫자)")
-    private String abtestGrp;
+    private String abtestGrpA;
+
+    @ApiModelProperty("AB테스트 그룹(랜덤:비율 / 고정:0~9숫자)")
+    private String abtestGrpB;
 
     /**
      * KPI달성율(A) / TB_ABTEST_INSTANCE(A/B테스트 인스턴스) KPI_VALUE_A
@@ -379,21 +388,33 @@ public class AbTestCaseDTO {
      */
     @ApiModelProperty("템플릿SEQ")
     @Builder.Default
-    private Long componentSeq = 0L;
+    private Long componentSeqA = 0L;
+
+    @ApiModelProperty("템플릿SEQ")
+    @Builder.Default
+    private Long componentSeqB = 0L;
 
     /**
      * 템플릿SEQ / TB_ABTEST_VARIANT(A/B테스트 VARIANT) TEMPLATE_SEQ
      */
     @ApiModelProperty("템플릿SEQ")
     @Builder.Default
-    private Long templateSeq = 0L;
+    private Long templateSeqA = 0L;
+
+    @ApiModelProperty("템플릿SEQ")
+    @Builder.Default
+    private Long templateSeqB = 0L;
 
     /**
      * 데이터셋SEQ / TB_ABTEST_VARIANT(A/B테스트 VARIANT) DATASET_SEQ
      */
     @ApiModelProperty("데이터셋SEQ")
     @Builder.Default
-    private Long datasetSeq = 0L;
+    private Long datasetSeqA = 0L;
+
+    @ApiModelProperty("데이터셋SEQ")
+    @Builder.Default
+    private Long datasetSeqB = 0L;
 
     /**
      * 제목(JAM 또는 뉴스레터) / TB_ABTEST_VARIANT(A/B테스트 VARIANT) TITLE

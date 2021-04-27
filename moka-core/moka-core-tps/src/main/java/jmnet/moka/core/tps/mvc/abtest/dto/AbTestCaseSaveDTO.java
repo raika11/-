@@ -241,7 +241,10 @@ public class AbTestCaseSaveDTO {
      * AB테스트 그룹(랜덤:비율 / 고정:0~9숫자)
      */
     @ApiModelProperty("AB테스트 그룹(랜덤:비율 / 고정:0~9숫자)")
-    private String abtestGrp;
+    private String abtestGrpA;
+
+    @ApiModelProperty("AB테스트 그룹(랜덤:비율 / 고정:0~9숫자)")
+    private String abtestGrpB;
 
     /**
      * KPI달성율(A) / TB_ABTEST_INSTANCE(AB테스트 인스턴스) KPI_VALUE_A
@@ -272,23 +275,35 @@ public class AbTestCaseSaveDTO {
     /**
      * 컴포넌트SEQ(본문외 영역 테스트시) / TB_ABTEST_VARIANT(AB테스트 VARIANT) TEMPLATE_SEQ
      */
-    @ApiModelProperty("템플릿SEQ")
+    @ApiModelProperty("컴포넌트SEQ")
     @Builder.Default
-    private Long componentSeq = 0L;
+    private Long componentSeqA = 0L;
+
+    @ApiModelProperty("컴포넌트SEQ")
+    @Builder.Default
+    private Long componentSeqB = 0L;
 
     /**
      * 템플릿SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT) TEMPLATE_SEQ
      */
     @ApiModelProperty("템플릿SEQ")
     @Builder.Default
-    private Long templateSeq = 0L;
+    private Long templateSeqA = 0L;
+
+    @ApiModelProperty("템플릿SEQ")
+    @Builder.Default
+    private Long templateSeqB = 0L;
 
     /**
      * 데이터셋SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT) DATASET_SEQ 데이터셋SEQ (대안설계 데이터형은 TB_WMS_DESKING.DATASET_SEQ 와 조인)
      */
     @ApiModelProperty("데이터셋SEQ")
     @Builder.Default
-    private Long datasetSeq = 0L;
+    private Long datasetSeqA = 0L;
+
+    @ApiModelProperty("데이터셋SEQ")
+    @Builder.Default
+    private Long datasetSeqB = 0L;
 
     /**
      * 로그인 여부(전체:', 로그인:Y, 비로그인 : N)

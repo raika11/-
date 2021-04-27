@@ -40,7 +40,7 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, onAdd, setError 
 
     return (
         <MokaCard
-            title={temp.bnnrSeq ? '공통 배너 수정' : '공통 배너 등록'}
+            title={`공통 배너 ${temp.bnnrSeq ? '수정' : '등록'}`}
             titleClassName="ft-14"
             titleButtons={[{ text: '등록', variant: 'positive', onClick: onAdd }]}
             className="shadow-none w-100 h-100"

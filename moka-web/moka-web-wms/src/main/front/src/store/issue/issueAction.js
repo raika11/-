@@ -80,3 +80,21 @@ export const saveIssueDesking = createAction(SAVE_ISSUE_DESKING, ({ pkgSeq, comp
  */
 export const [PUBLISH_ISSUE_DESKING, PUBLISH_ISSUE_DESKING_SUCCESS] = createRequestActionTypes('issue/PUBLISH_ISSUE_DESKING');
 export const publishIssueDesking = createAction(PUBLISH_ISSUE_DESKING, ({ pkgSeq, compNo, callback }) => ({ pkgSeq, compNo, callback }));
+
+/**
+ * 이슈 데스킹 히스토리 스토어 클리어
+ */
+export const CLEAR_ISSUE_DESKING_HISTORY = 'issue/CLEAR_ISSUE_DESKING_HISTORY';
+export const clearIssueDeskingHistory = createAction(CLEAR_ISSUE_DESKING_HISTORY);
+
+/**
+ * 이슈 데스킹 히스토리 목록 조회
+ */
+export const [GET_ISSUE_DESKING_HISTORY_LIST, GET_ISSUE_DESKING_HISTORY_LIST_SUCCESS] = createRequestActionTypes('issue/GET_ISSUE_DESKING_HISTORY_LIST');
+export const getIssueDeskingHistoryList = createAction(GET_ISSUE_DESKING_HISTORY_LIST, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 이슈 데스킹 히스토리 상세 조회
+ */
+export const [GET_ISSUE_DESKING_HISTORY, GET_ISSUE_DESKING_HISTORY_SUCCESS] = createRequestActionTypes('issue/GET_ISSUE_DESKING_HISTORY');
+export const getIssueDeskingHistory = createAction(GET_ISSUE_DESKING_HISTORY, ({ pkgSeq, compNo, regDt, status }) => ({ pkgSeq, compNo, regDt, status }));

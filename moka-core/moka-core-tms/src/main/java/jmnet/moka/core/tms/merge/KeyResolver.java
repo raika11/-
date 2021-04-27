@@ -141,12 +141,15 @@ public class KeyResolver {
         String count =
                 httpParamMap.containsKey(MokaConstants.PARAM_COUNT)
                         ? httpParamMap.get(MokaConstants.PARAM_COUNT).toString() : ANY;
+        String filter =
+                httpParamMap.containsKey(MokaConstants.PARAM_FILTER)
+                        ? httpParamMap.get(MokaConstants.PARAM_FILTER).toString() : ANY;
         String category = httpParamMap.get(MokaConstants.PARAM_CATEGORY);
         category = McpString.isNotEmpty(category) ? category : ANY;
         if (httpParamMap.get(MokaConstants.PARAM_SORT) == null) {
-            return String.join(DEFAULT_SEPARATOR, page, count, category);
+            return String.join(DEFAULT_SEPARATOR, page, count, filter, category);
         } else {
-            return String.join(DEFAULT_SEPARATOR, page, count, category,
+            return String.join(DEFAULT_SEPARATOR, page, count, filter, category,
                     httpParamMap.get(MokaConstants.PARAM_SORT));
         }
     }

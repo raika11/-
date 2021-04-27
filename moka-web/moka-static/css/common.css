@@ -875,7 +875,6 @@ dl.date dd {margin-left: 6px;}
 
 /* 댓글 */
 .comment { position: relative; z-index: 1; padding: 16px 0; }
-.new_comment::before { content:''; z-index: -1; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(255, 246, 226, 0.5); }
 .report_comment::before { content:''; z-index: -1; position: absolute; left: 0; top: 0; width: 100%; height: 100%;  } 
 .comment_wrap .comment_state { padding-top: 26px; }
 .comment_state { display: flex; align-items: center; }
@@ -909,7 +908,6 @@ dl.date dd {margin-left: 6px;}
 .comment .ico_more_option { width: 3px; height: 17px;  }
 .comment_area { display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid #e2e2e2; }
 .comment_wrap .comment_area { margin-top: 40px; }
-.layer_comment .comment_area {  border-bottom: 4px solid #f6330a; }
 .comment_area .dropdown_toggle { height: 22px; }
 .btn_new_reply { width: 100%; height: 52px; margin: 20px 0 18px; background-color: #fff6e2; font-size: 14px; color: #f6330a; }
 .btn_mycomment { display: flex; align-items: center; font-size: 13px; line-height: 22px; letter-spacing: -0.5px; color: #f6330a; }
@@ -932,6 +930,21 @@ dl.date dd {margin-left: 6px;}
 /* 댓글목록 없을때 */
 .not_comment { display: flex; flex-flow: column; align-items: center; font-size: 14px; text-align: center; color: #999; }
 .not_comment .ico_comment { width: 30px; height: 30px; margin-bottom: 6px; }
+
+/* layer_comment 답글 */
+.layer_comment { overflow-y: auto; z-index:301; position: fixed; top: 0; height: 100%; background-color: #fff; }
+.layer_comment.active { right: 0; transition: all 0.5s; }
+.layer_comment .comment_header .comment_form { display: block; }
+.layer_comment .comment_area {  border-bottom: 4px solid #f6330a; }
+.layer_comment .new_comment::before { content:''; z-index: -1; position: absolute; left: -40px; top: 0; width: calc(100% + 80px);  height: 100%; background-color: rgba(255, 246, 226, 0.5); }
+.layer_comment .reply_area .new_comment::before { left: -60px; width: calc(100% + 120px); }
+.layer_comment .comment_wrap { margin-top: 40px; }
+
+.sm_main_text_area .headline { font-size: 24px; }
+.sm_main_text_area .btn_full { margin-top: 20px; }
+.btn_close .ico_close { width: 22px; height: 22px; }
+
+
 
 @media (max-width: 1023px) {
     /* story_list */

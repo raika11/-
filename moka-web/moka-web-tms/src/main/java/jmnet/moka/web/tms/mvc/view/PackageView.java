@@ -38,7 +38,7 @@ import org.springframework.web.servlet.view.AbstractView;
  * @author kspark
  * @since 2021. 03. 31. 오전 8:20:35
  */
-public class PackageView extends AbstractView {
+public class PackageView extends MokaAbstractView {
     private static final Logger logger = LoggerFactory.getLogger(PackageView.class);
     @Value("${tms.mte.debug}")
     private boolean templateMergeDebug;
@@ -124,7 +124,7 @@ public class PackageView extends AbstractView {
         StringBuilder sb;
         try {
             writer = response.getWriter();
-            this.setCodesAndMenus(domainId, item, mergeContext);
+            this.setCodesAndMenus(this.domainTemplateMerger, domainId, item, mergeContext);
             sb = domainTemplateMerger.merge(domainId, itemType, itemId, mergeContext);
             writer.append(sb);
             actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
@@ -144,26 +144,6 @@ public class PackageView extends AbstractView {
         long endTime = System.currentTimeMillis();
         logger.debug("Template Merge Completed: {}ms {}", endTime - startTime, path);
 
-    }
-
-    private void setCodesAndMenus(String domainId, MergeItem item, MergeContext mergeContext)
-            throws TemplateMergeException, TemplateParseException, DataLoadException {
-        String category = item.getString(ItemConstants.PAGE_CATEGORY);
-        if (category == null) {
-            return;
-        }
-        DataLoader loader = this.domainTemplateMerger
-                .getTemplateMerger(domainId)
-                .getDataLoader();
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put(MokaConstants.PARAM_CATEGORY, category);
-        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.MENU_CATEGORY, paramMap, true);
-        Map<String, Object> map = jsonResult.getData(); // 서비스 사용 코드들
-        Map codes = (Map) map.get(MokaConstants.MERGE_CONTEXT_CODES);
-        Map menus = (Map) map.get(MokaConstants.MERGE_CONTEXT_MENUS);
-        mergeContext.set(MokaConstants.PARAM_CATEGORY, MokaConstants.MERGE_CONTEXT_CATEGORY);
-        mergeContext.set(MokaConstants.MERGE_CONTEXT_CODES, codes);
-        mergeContext.set(MokaConstants.MERGE_CONTEXT_MENUS, menus);
     }
 
 }

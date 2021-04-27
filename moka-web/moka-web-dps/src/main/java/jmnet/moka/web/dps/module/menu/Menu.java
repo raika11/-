@@ -121,6 +121,10 @@ public class Menu {
         // Hight
         this.setHeight(decideString(menuEl,"Hight"));
 
+        // Filter: OnlyJoongang, Date
+        this.setFilter(menuEl, menuParser);
+
+        // Category & SearchParameter
         this.setCategoryAndSearchParamter(menuEl, menuParser);
     }
 

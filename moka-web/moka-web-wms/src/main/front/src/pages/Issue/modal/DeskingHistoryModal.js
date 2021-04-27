@@ -23,6 +23,9 @@ const propTypes = {
 };
 const defaultProps = {};
 
+/**
+ * 이슈의 데스킹 히스토리 모달 (전송 히스토리)
+ */
 const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
     const dispatch = useDispatch();
     const { total, list, search, deskingList } = useSelector(({ issue }) => issue.deskingHistory);
@@ -54,7 +57,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
      * 테이블 검색옵션 변경
      */
     const handleChangeSearchOption = ({ key, value }) => {
-        const ns = { ...search, page: key !== 'page' ? 0 : value, [key]: value, searchDt: searchDt.format(DB_DATEFORMAT) };
+        const ns = { ...search, page: key !== 'page' ? 0 : value, [key]: value, searchDt: moment(searchDt).format(DB_DATEFORMAT) };
         dispatch(getIssueDeskingHistoryList({ search: ns }));
     };
 
@@ -81,6 +84,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
         setRowData(
             list.map((data) => ({
                 ...data,
+                worker: `${data.regNm}(${data.regId})`,
                 onClick: (rowData) => {
                     if (selected.regDt !== rowData.regDt) {
                         dispatch(
@@ -105,7 +109,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
     }, [compNo, selected, dispatch, list, onLoad, pkgSeq, deskingList]);
 
     return (
-        <MokaModal title="히스토리" show={show} onHide={onHide} size="lg" width={700} height={550} centered>
+        <MokaModal title="히스토리" show={show} onHide={onHide} size="lg" width={850} height={550} centered>
             <Row className="h-100" noGutters>
                 <Col sm={6} className="h-100 pr-12 d-flex flex-column">
                     <div className="d-flex mb-14">
@@ -119,7 +123,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                                 else if (date === '') setSearchDt(null);
                             }}
                         />
-                        <Button className="flex-shrink-0" variant="searching">
+                        <Button className="flex-shrink-0" variant="searching" onClick={() => handleChangeSearchOption({ key: 'page', value: 0 })}>
                             검색
                         </Button>
                     </div>
@@ -129,7 +133,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                         total={total}
                         page={search.page}
                         size={search.size}
-                        onRowNodeId={(data) => data.histSeq}
+                        onRowNodeId={(data) => data.rownum}
                         onRowClicked={handleRowClicked}
                         onChangeSearchOption={handleChangeSearchOption}
                         columnDefs={columnDefs}
@@ -137,6 +141,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                         pageSize={S_MODAL_PAGESIZE_OPTIONS}
                         loading={loading}
                         preventRowClickCell={['load']}
+                        selected={selected.rownum}
                     />
                 </Col>
                 <Col sm={6} className="pl-12 h-100">
@@ -153,17 +158,18 @@ DeskingHistoryModal.defaultProps = defaultProps;
 const columnDefs = [
     {
         headerName: 'No',
-        field: 'histSeq',
+        field: 'rownum',
         width: 50,
     },
     {
         headerName: '전송일시',
-        field: 'histDt',
-        width: 120,
+        field: 'regDt',
+        width: 125,
     },
     {
         headerName: '작업자',
-        field: 'histUser',
+        field: 'worker',
+        tooltipField: 'worker',
         width: 70,
         flex: 1,
     },

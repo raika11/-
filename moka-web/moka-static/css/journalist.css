@@ -20,16 +20,16 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 .section_header_wrap.section_header_custom_wrap .header_area,
 .section_header_wrap.section_header_custom_wrap .btn_group {display:none;}
-.journalist_header {position:relative; margin-top:24px;}
+.journalist_header {position:relative; margin:24px 0 60px;}
 .journalist_header .profile_area {display:flex; align-items:center;}
 .journalist_header .profile_image {overflow:hidden; width: 128px; height: 128px; border-radius: 50%;}
 .journalist_header .profile_image img {max-width:100%;}
 .journalist_header .profile_body { margin-left:20px;}
-.journalist_header .profile_body .name {margin:0; font-size:32px; line-height:44px;}
-.journalist_header .profile_body .profile_info {margin-top:4px; font-size:16px; line-height:24px;}
-.profile_body .btn_share {margin-left:10px;}
-.profile_body .btn_share .ico_share {width:28px; height:28px; border-radius: 50%; background-color: #f2f2f2; background-image:none;/*background-image: url("data:image/svg+xml,%0AOpen SVG%0APaste markup%0ADemo%0AContribute%0AAbout%0APowered by the incredible SVGO 530 bytes → 401 bytes 75.66%25%0A%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.200000 0 0 0 0 0.200000 0 0 0 0 0.200000 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Ccircle cx='14' cy='14' r='14' fill='%23F2F2F2'/%3E%3Cg filter='url(%23a)'%3E%3Cg fill='%231D1D1D'%3E%3Cpath d='M19.398 9.684c.292 0 .602.236.602.607v10.025a.606.606 0 01-.602.607H8.628A.604.604 0 018 20.316V10.291c0-.305.236-.607.628-.607h3.034v.936H8.935v9.367h10.13V10.62h-2.728v-.937z'/%3E%3Cpath d='M11.172 7.82l.606.605 1.766-1.765-.014 5.832h.925l.014-5.79 1.72 1.72.607-.607-2.81-2.81-2.814 2.814z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");*/}
-.flex_area {display:flex;}
+.journalist_header .profile_body .name {margin-right:6px; font-size:32px; line-height:44px;}
+.profile_body .badge_opinion {width: 38px; height:19px; margin-right:10px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='19'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Crect width='38' height='19' fill='%23067E77' rx='9.5'/%3E%3Ctext fill='%23FFF' font-family='NotoSansKR-Bold, Noto Sans KR' font-size='12' font-weight='bold' letter-spacing='-.2'%3E%3Ctspan x='8' y='14'%3E필진%3C/tspan%3E%3C/text%3E%3C/g%3E%3C/svg%3E");}
+.profile_body .profile_info {margin-top:4px; font-size:16px; line-height:24px;}
+.profile_body .btn_share {font-size:0;}
+.profile_body .btn_share .ico_share {width:28px; height:28px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.200000 0 0 0 0 0.200000 0 0 0 0 0.200000 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Ccircle cx='14' cy='14' r='14' fill='%23F2F2F2'/%3E%3Cg filter='url(%23a)'%3E%3Cg fill='%231D1D1D'%3E%3Cpath d='M19.398 9.684c.292 0 .602.236.602.607v10.025a.606.606 0 01-.602.607H8.628A.604.604 0 018 20.316V10.291c0-.305.236-.607.628-.607h3.034v.936H8.935v9.367h10.13V10.62h-2.728v-.937z'/%3E%3Cpath d='M11.172 7.82l.606.605 1.766-1.765-.014 5.832h.925l.014-5.79 1.72 1.72.607-.607-2.81-2.81-2.814 2.814z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
 .journalist_header .journalist_share {display:flex; margin-top:11px;}
 .journalist_header .journalist_share [class*='btn_']:not(.btn_email) {width:24px; height:22px; margin-left: 12px;}
 .journalist_share button {font-family:"Noto Sans KR"; font-size:14px; line-height: 22px; color:#666;}
@@ -41,8 +41,8 @@ font-*,color,text-align,vertical-align, ...
 .journalist_header .journalist_share li {font-size:0;}
 .journalist_header .journalist_share li:nth-child(2):before {display:inline-block; content:''; transform: translateY(5px); width:1px; height: 12px; padding-left: 4px; margin-left:16px; border-left:1px solid #bcbcbc; opacity:.8;}
 .journalist_header .journalist_introduce {margin-top:24px; font-size:14px; line-height: 22px; color:#666;}
-.journalist_header .journalist_popularity {position:absolute; top:0; right:0; min-width:301px; /*margin:0;*/}
-.journalist_header .journalist_popularity > div {position:relative; /*width:104px; flex:none;*/ flex: 0 0 140px; padding: 0; text-align:center;}
+.journalist_header .journalist_popularity {position:absolute; top:12px; right:0; min-width:301px;}
+.journalist_header .journalist_popularity > div {position:relative; flex: 0 0 140px; text-align:center;}
 .journalist_header .journalist_popularity > div + div {padding-left:10px; margin-left:10px;}
 .journalist_header .journalist_popularity > div + div:before {display:inline-block; content:''; position:absolute; top:0; left:0; width:1px; height:100%; border-left: 1px solid #e2e2e2;}
 .journalist_header .journalist_popularity dl {margin-bottom:12px; font-family:"Noto Sans KR"; font-weight:bold;}
@@ -50,15 +50,21 @@ font-*,color,text-align,vertical-align, ...
 .journalist_header .journalist_popularity dd {font-size:24px; line-height:34px; color:#111;}
 .journalist_header .journalist_popularity .btn {display:inline-block;}
 .journalist_header .journalist_popularity .btn_info {position:absolute; top:1px; left:50%; margin-left:17px;}
-.journalist_header .journalist_popularity .ico_info {width:18px; height:18px; /*background-image: url("data:image/svg+xml,%0AOpen SVG%0APaste markup%0ADemo%0AContribute%0AAbout%0APowered by the incredible SVGO 357 bytes → 250 bytes 70.03%25%0A%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h18v18H0z'/%3E%3Cpath fill='%23999' d='M9 1.8a7.2 7.2 0 11-.001 14.401A7.2 7.2 0 019 1.8zm0 .9C5.52 2.7 2.7 5.52 2.7 9s2.82 6.3 6.3 6.3 6.3-2.82 6.3-6.3S12.48 2.7 9 2.7z'/%3E%3Cpath fill='%23999' d='M8.55 8.025h1v4.5h-1z'/%3E%3Ccircle cx='9' cy='6.225' r='1' fill='%23999'/%3E%3C/g%3E%3C/svg%3E");*/}
+.journalist_header .journalist_popularity .ico_info {width:18px; height:18px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h18v18H0z'/%3E%3Cpath fill='%23999' d='M9 1.8a7.2 7.2 0 11-.001 14.401A7.2 7.2 0 019 1.8zm0 .9C5.52 2.7 2.7 5.52 2.7 9s2.82 6.3 6.3 6.3 6.3-2.82 6.3-6.3S12.48 2.7 9 2.7z'/%3E%3Cpath fill='%23999' d='M8.55 8.025h1v4.5h-1z'/%3E%3Ccircle cx='9' cy='6.225' r='1' fill='%23999'/%3E%3C/g%3E%3C/svg%3E");}
+.layer_cheer {top:29px; left:50%; width:185px; padding:30px; margin-left:-12px;}
+.layer_cheer p {font-size:13px; line-height:22px; letter-spacing:-0.5px; text-align:left;}
+.layer_cheer p.desc {margin-top:10px; letter-spacing:-0.2px; color:#999;}
+.layer_cheer .btn_close {top:10px; right:10px;}
 .package_list {overflow:hidden; margin-top:16px; margin-left:-20px;}
 .package_list li {float:left; width:calc((100% - 40px)/2); margin-top:16px; margin-left:20px;}
-.package_list li:only-child {float:none; width: 100%;}
-.package_list a {display:block; position:relative; padding:15px 38px 17px 24px; border:1px solid #f3f3f3; background:#f9f9f9; font-size:0;}
+.package_list a {display: block; position:relative; padding:15px 38px 17px 24px; border:1px solid #f3f3f3; background:#f9f9f9; font-size:0;}
 .package_list a:hover {text-decoration:none;}
-.package_list a strong {display:inline-block; font-size:18px; line-height:28px; letter-spacing:-0.4px; vertical-align: middle; color:#111;}
-.package_list a span {display:inline-block; min-height:20px; font-size:14px; color: #666; vertical-align: middle;}
-.package_list a span:before {display:inline-block; content:''; transform:translateY(2px);width:1px; height:16px; padding-left: 16px; margin-left: 16px; border-left:1px solid #bcbcbc;}
+.package_list a strong {display:inline-block; font-size:18px; line-height:28px; letter-spacing:-0.4px; color:#111;}
+.package_list a span {display:block; min-height:20px; margin-top:4px; font-size:14px; color: #666; text-overflow:ellipsis; overflow: hidden; white-space: nowrap;}
+.package_list li:only-child {float:none; width: inherit;}
+.package_list li:only-child a {display:flex; align-items: center; width:inherit;}
+.package_list li:only-child a span {margin-top:0;}
+.package_list li:only-child a span:before {display:inline-block; content:''; transform:translateY(2px); width:1px; height:16px; padding-left: 16px; margin-left: 16px; border-left:1px solid #bcbcbc;}
 .package_list a .ico_arrow_right {position:absolute; top: 50%; right:20px; transform:translateY(-50%); width:18px; height:18px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0v18h18V0z'/%3E%3Cpath fill='%231D1D1D' d='M12.558 9L6.3 2.742l-.636.637L11.285 9l-5.621 5.621.636.637L12.558 9z'/%3E%3C/g%3E%3C/svg%3E");}
 
 .highlight_wrap {  }
@@ -95,14 +101,14 @@ font-*,color,text-align,vertical-align, ...
 .journalist_list .list_item{display:block; width:100%;padding:24px; border:1px solid #e2e2e2;}
 
 /*기자 정보 공통 */
-.profile_area{display:flex;}
-.profile_area > *{flex:0 0 auto;}
-.profile_image img{max-width:100%;border-radius:100%;border:1px solid rgba(0,0,0,0.03);}
+.journalist_list .profile_area{display:flex;}
+.journalist_list .profile_area > *{flex:0 0 auto;}
+.journalist_list .profile_image img{max-width:100%;border-radius:100%;border:1px solid rgba(0,0,0,0.03);}
 .flex_area{display: flex; align-items: center;}
-.badge{padding: 0px;}
-.badge span{padding: 3px 8px;border-radius: 10px;background-color: #00828c; color:#fff; white-space: nowrap;vertical-align: bottom;}
-.profile_info{margin-top: 4px;color: #111;font-size: 14px;line-height: 1.4;}
-.name{margin-right:6px; font-size:18px; color:#111111; }
+/* .badge{padding: 0px;} */
+/* .badge span{padding: 3px 8px;border-radius: 10px;background-color: #00828c; color:#fff; white-space: nowrap;vertical-align: bottom;} */
+.journalist_list .profile_info{margin-top: 4px;color: #111;font-size: 14px;line-height: 1.4;}
+.journalist_list .name{margin-right:6px; font-size:18px; color:#111111; }
 
 .profile_area .profile_body .journalist_popularity{display: flex; margin-top: 9px; color: #999;font-size: 13px;line-height: 1.54;}
 .profile_area .profile_body .journalist_popularity dt {margin-right:4px;}
@@ -154,13 +160,18 @@ font-*,color,text-align,vertical-align, ...
     /****************************************************************************************************/
     /***                                           content                                            ***/
     /****************************************************************************************************/
+    .journalist_header {margin-bottom: 40px;}
     .journalist_header .profile_body .name {font-size:28px; line-height:34px; letter-spacing:-0.47px;}
     .journalist_header .profile_body .profile_info {margin-top:6px; font-size:15px; line-height:21px;}
     .journalist_header .journalist_share {margin-top:12px;}
     .journalist_share .btn_email .ico_email {display:block;}
     .journalist_header .journalist_share li:nth-child(2):before {display:none;}
     .journalist_header .journalist_introduce {display:none;}
-    .journalist_header .journalist_popularity {position:relative; width:100%; padding: 16px 0 18px; margin-top:25px; border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;}
+    .journalist_header .journalist_popularity {position:relative; padding: 16px 0 18px; margin-top:25px;}
+    .journalist_header .journalist_popularity:before,
+    .journalist_header .journalist_popularity:after {display:block; content:''; position: absolute; left:6px; width:calc(100% - 12px); border-top:1px solid #e2e2e2;}
+    .journalist_header .journalist_popularity:before {top:0;}
+    .journalist_header .journalist_popularity:after {bottom:0;}
     .journalist_header .journalist_popularity > div {flex: 0 0 auto; text-align:left;}
     .journalist_header .journalist_popularity > div + div {padding-left: 18px; margin-left:0; border-left:1px solid #e2e2e2;}
     .journalist_header .journalist_popularity > div + div:before {display:none;}
@@ -170,17 +181,20 @@ font-*,color,text-align,vertical-align, ...
     .journalist_header .journalist_popularity > div dl {margin-bottom:0;}
     .journalist_header .journalist_popularity > div .btn {position:absolute; bottom:0; right:16px;}
     .journalist_header .journalist_popularity > div + div .btn {right: 0;}
+    .layer_cheer {top:33px; left:0; margin-left:0;}
     .package_list {margin:24px 0 0;}
     .package_list li {float:none; width:100%; margin: 6px 0 0;}
     .package_list a {padding: 16px 36px 18px 20px;}
     .package_list li strong {font-size:16px; line-height:24px;}
-    .package_list li span {display:block; margin-top:4px; color:#111;}
+    .package_list li span {display:block; margin-top:4px !important; color:#111;}
     .package_list li span:before {display:none;}
+    .package_list li:only-child a {display:block;}
+    .package_list li:only-child a span:before {display:none;}
     .package_list a .ico_arrow_right {right:18px;}
     
     .journalist_list .row li{margin-bottom: 16px;}
-    .profile_area .profile_image{width:80px;margin-right:16px;}
-    .profile_area .profile_body .flex_area .name{font-size:20px; color:#111111;}
+    .journalist_list .profile_area .profile_image{width:80px;margin-right:16px;}
+    .journalist_list .profile_area .profile_body .flex_area .name{font-size:20px; color:#111111;}
     .journalist_list .headline{height:37px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
 
 }
@@ -207,8 +221,8 @@ font-*,color,text-align,vertical-align, ...
     /***                                           content                                            ***/
     /****************************************************************************************************/
     .journalist_list .row li{margin-bottom: 30px;}
-    .profile_area .profile_image{width:72px;margin-right:24px;}
-    .profile_area .profile_body .flex_area .name{font-size:18px; color:#111111;}
+    .journalist_list .profile_area .profile_image{width:72px;margin-right:24px;}
+    .journalist_list .profile_area .profile_body .flex_area .name{font-size:18px; color:#111111;}
     .journalist_list .headline{height:61px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
 
 }

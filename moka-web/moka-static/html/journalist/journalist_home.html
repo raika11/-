@@ -99,10 +99,17 @@
                     <div class="journalist_popularity row">
                         <div class="col_sm6 col_lg6">
                             <dl>
-                                <dt>응원<button type="button" class="btn_info"><i class="ico_info"></i></button></dt>
+                                <dt>응원<button type="button" class="btn_info" onclick="openLayer(layer_cheer);"><i class="ico_info"></i></button></dt>
                                 <dd>1,562</dd>
                             </dl>
-                            <button type="button" class="btn btn_default">응원</button>                            
+                            <button type="button" class="btn btn_default">응원</button>
+                            <div class="layer_popup layer_cheer" id="layer_cheer"><!-- 여기에 개별 클래스 추가 -->
+                                <div class="layer_body">
+                                    <p>기자에게 보내는 응원은 하루 1번 가능합니다.</p>
+                                    <p class="desc">(0시 기준)</p>
+                                </div>
+                                <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+                            </div>                     
                         </div>
                         <div class="col_sm6 col_lg6">
                             <dl>
@@ -112,25 +119,31 @@
                             <button type="button" class="btn btn_default">구독</button>
                         </div>
                     </div>
-                </section>
-                
-                <ul class="package_list">
-                    <li>
-                        <a href="">
-                            <strong>바퀴와 날개</strong>
-                            <span>생활 속 다양한 교통 현안을 살핍니다.</span>
-                            <i class="ico_arrow_right"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <strong>한국의 실리콘밸리 판교</strong>
-                            <span>대중교통의 소식을 가장 빠르게 전달합니다.</span>
-                            <i class="ico_arrow_right"></i>
-                        </a>
-                    </li>
-                </ul>
 
+                    <ul class="package_list">
+                        <li>
+                            <a href="">
+                                <strong>바퀴와 날개</strong>
+                                <span>생활 속 다양한 교통 현안을 살펴봅니다. 생활 속 다양한 교통 현안을 살펴봅니다. 생활 속 다양한 교통 현안을 살펴봅니다.</span>
+                                <i class="ico_arrow_right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <strong>미래로 달리는 교통</strong>
+                                <span>대중교통의 소식을 가장 빠르게 전달합니다. 대중교통의 소식을 가장 빠르게 전달합니다. 대중교통의 소식을 가장 빠르게 전달합니다.</span>
+                                <i class="ico_arrow_right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <strong>한국의 실리콘밸리 판교</strong>
+                                <span>대중교통의 소식을 가장 빠르게 전달합니다.</span>
+                                <i class="ico_arrow_right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
                 <div class="row ">
                     <div class="col_lg9">
                         <section class="chain_wrap">

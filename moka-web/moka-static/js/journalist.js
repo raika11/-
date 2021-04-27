@@ -28,6 +28,8 @@ $(document).ready(function() {
             clickable: true,
         },
     });
+
+    btnCloseModal();
     
 
 

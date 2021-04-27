@@ -43,7 +43,7 @@ export const getArticlePageLookupList = createAction(GET_ARTICLE_PAGE_LOOKUP_LIS
 export const getArticlePageLookup = createAction(GET_ARTICLE_PAGE_LOOKUP, ({ artPageSeq, callback }) => ({ artPageSeq, callback }));
 
 export const EXISTS_ARTICLE_TYPE = 'articlePage/EXISTS_ARTICLE_TYPE';
-export const existsArtType = createAction(EXISTS_ARTICLE_TYPE, ({ domainId, artType, artPageSeq, callback }) => ({ domainId, artType, artPageSeq, callback }));
+export const existsArtType = createAction(EXISTS_ARTICLE_TYPE, ({ domainId, artTypes, artPageSeq, callback }) => ({ domainId, artTypes, artPageSeq, callback }));
 
 /**
  * 데이터 변경
@@ -92,5 +92,8 @@ export const getHistory = createAction(GET_HISTORY, ({ artPageSeq, histSeq }) =>
 export const APPEND_TAG = 'articlePage/APPEND_TAG';
 export const appendTag = createAction(APPEND_TAG, (inputTag) => inputTag);
 
+/**
+ * 미리보기 키 조회
+ */
 export const [GET_PREVIEW_TOTAL_ID, GET_PREVIEW_TOTAL_ID_SUCCESS, GET_PREVIEW_TOTAL_ID_FAILURE] = createRequestActionTypes('articlePage/GET_PREVIEW_TOTAL_ID');
-export const getPreviewTotalId = createAction(GET_PREVIEW_TOTAL_ID, ({ artType, callback }) => ({ artType, callback }));
+export const getPreviewTotalId = createAction(GET_PREVIEW_TOTAL_ID, ({ artTypes, callback }) => ({ artTypes, callback }));

@@ -17,16 +17,16 @@ export const getArticlePage = ({ artPageSeq }) => {
 };
 
 // 기사 타입별 마지막 기사 조회
-export const getPreviewTotalId = (artType) => {
-    const queryString = qs.stringify(artType);
+export const getPreviewTotalId = (artTypes) => {
+    const queryString = qs.stringify(artTypes);
     return instance.get(`/api/article-pages/preview-totalid?${queryString}`).catch((err) => {
         throw err;
     });
 };
 
 // 동일 기사 유형 존재 여부
-export const existsArtType = ({ domainId, artType, artPageSeq }) => {
-    const queryString = qs.stringify({ domainId, artType, artPageSeq });
+export const existsArtType = ({ domainId, artTypes, artPageSeq }) => {
+    const queryString = qs.stringify({ domainId, artTypes, artPageSeq });
     return instance.get(`/api/article-pages/exists-type?${queryString}`).catch((err) => {
         throw err;
     });

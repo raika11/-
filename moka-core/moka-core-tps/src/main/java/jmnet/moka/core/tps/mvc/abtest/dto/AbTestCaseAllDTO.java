@@ -36,7 +36,7 @@ import lombok.Setter;
 @Getter
 @Builder
 @ApiModel("ABTest 정의 DTO")
-public class AbTestCaseDTO {
+public class AbTestCaseAllDTO {
     public static final Type TYPE = new TypeReference<List<jmnet.moka.core.tps.mvc.board.dto.BoardInfoDTO>>() {
     }.getType();
 
@@ -340,4 +340,106 @@ public class AbTestCaseDTO {
     @Size(max = 1000, message = "{tps.abtest.error.size.abtestDesc}")
     private String abtestDesc;
 
+    /**
+     * A/B테스트 그룹생성 방식(R:랜덤, S:고정) / TB_ABTEST_GRP(A/B테스트 그룹) ABTEST_GRP_METHOD
+     */
+    @ApiModelProperty("A/B테스트 그룹생성 방식(R:랜덤, S:고정)")
+    @Builder.Default
+    @Pattern(regexp = "[R|S]{1}$", message = "{tps.abtest.error.pattern.abtestGrpMethod}")
+    private String abtestGrpMethod = "R";
+
+    /**
+     * AB테스트 그룹(랜덤:비율 / 고정:0~9숫자)
+     */
+    @ApiModelProperty("AB테스트 그룹(랜덤:비율 / 고정:0~9숫자)")
+    private String abtestGrpA;
+
+    @ApiModelProperty("AB테스트 그룹(랜덤:비율 / 고정:0~9숫자)")
+    private String abtestGrpB;
+
+    /**
+     * KPI달성율(A) / TB_ABTEST_INSTANCE(A/B테스트 인스턴스) KPI_VALUE_A
+     */
+    @ApiModelProperty("KPI달성율(A) ")
+    @Builder.Default
+    private Long kpiValueA = 0L;
+
+    /**
+     * KPI달성율(B) / TB_ABTEST_INSTANCE(A/B테스트 인스턴스) KPI_VALUE_B
+     */
+    @ApiModelProperty("KPI달성율(B)")
+    @Builder.Default
+    private Long kpiValueB = 0L;
+
+    /**
+     * 서비스기사ID(JAM설계경우) / TB_ABTEST_INSTANCE(A/B테스트 인스턴스) TOTAL_ID
+     */
+    @ApiModelProperty("서비스기사ID(JAM설계경우)")
+    private Long totalId;
+    /**
+     * 화면편집파트(T:제목,L:리드문,I:이미지,R;관련기사) / TB_ABTEST_INSTANCE(A/B테스트 인스턴스) DESKING_PART
+     */
+    @ApiModelProperty("화면편집파트(T:제목,L:리드문,I:이미지,R;관련기사) : 텍스트 Comma(,)로 여러 개 입력")
+    @Size(max = 10, message = "{tps.abtest.error.size.deskingPart}")
+    private String deskingPart;
+
+    /**
+     * 컴포넌트SEQ(본문외 영역 테스트시) / TB_ABTEST_VARIANT(A/B테스트 VARIANT) COMPONENT_SEQ
+     */
+    @ApiModelProperty("템플릿SEQ")
+    @Builder.Default
+    private Long componentSeqA = 0L;
+
+    @ApiModelProperty("템플릿SEQ")
+    @Builder.Default
+    private Long componentSeqB = 0L;
+
+    /**
+     * 템플릿SEQ / TB_ABTEST_VARIANT(A/B테스트 VARIANT) TEMPLATE_SEQ
+     */
+    @ApiModelProperty("템플릿SEQ")
+    @Builder.Default
+    private Long templateSeqA = 0L;
+
+    @ApiModelProperty("템플릿SEQ")
+    @Builder.Default
+    private Long templateSeqB = 0L;
+
+    /**
+     * 데이터셋SEQ / TB_ABTEST_VARIANT(A/B테스트 VARIANT) DATASET_SEQ
+     */
+    @ApiModelProperty("데이터셋SEQ")
+    @Builder.Default
+    private Long datasetSeqA = 0L;
+
+    @ApiModelProperty("데이터셋SEQ")
+    @Builder.Default
+    private Long datasetSeqB = 0L;
+
+    /**
+     * 제목(JAM 또는 뉴스레터) / TB_ABTEST_VARIANT(A/B테스트 VARIANT) TITLE
+     */
+    @ApiModelProperty(value = "제목(JAM 또는 뉴스레터)")
+    @Size(max = 510, message = "{tps.abtest.error.size.title}")
+    private String title;
+
+    /**
+     * 발송자명(뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT) SENDER_NAME
+     */
+    @ApiModelProperty(value = "발송자명(뉴스레터)")
+    @Size(max = 100, message = "{tps.abtest.error.size.senderName}")
+    private String senderName;
+
+    /**
+     * 발송일시(뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT) SEND_DT
+     */
+    @ApiModelProperty(value = "발송일시(뉴스레터)")
+    @DTODateTimeFormat
+    private Date sendDt;
+
+    /**
+     * 기사내용
+     */
+    @ApiModelProperty(value = "기사내용")
+    private String artContent;
 }

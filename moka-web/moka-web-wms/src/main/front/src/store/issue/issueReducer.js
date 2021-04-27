@@ -220,6 +220,11 @@ export default handleActions(
                 draft.deskingHistory.total = body.total;
             });
         },
+        [act.GET_ISSUE_DESKING_HISTORY_LIST_FAILURE]: (state, { payload: { payload } }) => {
+            return produce(state, (draft) => {
+                draft.deskingHistory.search = payload.search;
+            });
+        },
         [act.GET_ISSUE_DESKING_HISTORY_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.deskingHistory.detailList = body.list;

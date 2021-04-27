@@ -90,7 +90,9 @@ export const clearIssueDeskingHistory = createAction(CLEAR_ISSUE_DESKING_HISTORY
 /**
  * 이슈 데스킹 히스토리 목록 조회
  */
-export const [GET_ISSUE_DESKING_HISTORY_LIST, GET_ISSUE_DESKING_HISTORY_LIST_SUCCESS] = createRequestActionTypes('issue/GET_ISSUE_DESKING_HISTORY_LIST');
+export const [GET_ISSUE_DESKING_HISTORY_LIST, GET_ISSUE_DESKING_HISTORY_LIST_SUCCESS, GET_ISSUE_DESKING_HISTORY_LIST_FAILURE] = createRequestActionTypes(
+    'issue/GET_ISSUE_DESKING_HISTORY_LIST',
+);
 export const getIssueDeskingHistoryList = createAction(GET_ISSUE_DESKING_HISTORY_LIST, ({ search, callback }) => ({ search, callback }));
 
 /**

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel } from '@components';
@@ -26,23 +26,23 @@ import { API_BASE_URL, W3C_URL } from '@/constants';
 const ArticlePageEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
+    const { artPageSeq: paramSeq } = useParams();
     const loading = useSelector(({ loading }) => loading[GET_ARTICLE_PAGE] || loading[SAVE_ARTICLE_PAGE] || loading[DELETE_ARTICLE_PAGE]);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const svcAtRows = useSelector(({ codeMgt }) => codeMgt.svcAtRows);
     const { articlePage, artPageBody, invalidList } = useSelector(({ articlePage }) => articlePage);
     const [temp, setTemp] = useState(initialState.articlePage); // 입력값 state
     const [error, setError] = useState({}); // 에러 state
-    const [btnDisabled, setBtnDisabled] = useState(true);
     const [previewTotalId, setPreviewTotalId] = useState(''); // 미리보기용 기사ID
 
     /**
      * 기사타입별 최신 totalId 조회
      */
     const getTotalId = useCallback(
-        (artTypeList) => {
+        (artTypes) => {
             dispatch(
                 getPreviewTotalId({
-                    artTypeList,
+                    artTypes,
                     callback: ({ header, body }) => {
                         if (header.success) {
                             !body && toast.warning('미리보기용 기사ID가 존재하지 않습니다.');
@@ -63,30 +63,23 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     const handleChangeValue = useCallback(
         ({ target }) => {
             const { name, value } = target;
-            if (name === 'artPageName') {
-                setTemp({ ...temp, artPageName: value });
-            } else if (name === 'previewTotalId') {
-                setPreviewTotalId(value);
-            } else if (name === 'artType') {
-                setTemp({ ...temp, artType: value });
-                getTotalId(value);
-            }
+            setTemp({ ...temp, [name]: value });
 
-            if (error[name]) {
-                setError({ ...error, [name]: false });
-            }
+            if (name === 'artTypes') getTotalId(value);
+            if (error[name]) setError({ ...error, [name]: false });
         },
         [error, temp, getTotalId],
     );
 
     /**
      * 유효성 검사
-     * @param {object} page 페이지데이터
+     * @param {object} articlePage 페이지데이터
      */
     const validate = useCallback(
         (articlePage) => {
             let isInvalid = false;
             let errList = [];
+
             // 아티클페이지명 체크
             if (/^[\s\t\n]+/.test(articlePage.artPageName)) {
                 errList.push({
@@ -103,13 +96,13 @@ const ArticlePageEdit = ({ onDelete, match }) => {
 
     /**
      * 저장 콜백
-     * @param {object} tmp 아티클페이지
+     * @param {object} articlePage 아티클페이지 데이터
      */
     const saveCallback = useCallback(
-        (tmp) => {
+        (articlePage) => {
             dispatch(
                 saveArticlePage({
-                    actions: [changeArticlePage(tmp)],
+                    actions: [changeArticlePage(articlePage)],
                     callback: ({ header, body }) => {
                         if (header.success) {
                             toast.success(header.message);
@@ -133,22 +126,22 @@ const ArticlePageEdit = ({ onDelete, match }) => {
 
     /**
      * 아티클페이지 저장
-     * @param {object} tmp 아티클페이지
+     * @param {object} articlePage 아티클페이지
      */
     const submitPage = useCallback(
-        (tmp) => {
+        (save) => {
             // 본인을 제외한 아티클페이지 중 동일한 기사타입이 있는지 체크
             dispatch(
                 existsArtType({
                     domainId: latestDomainId,
-                    artType: tmp.artType,
+                    artTypes: save.artTypes,
                     artPageSeq: articlePage.artPageSeq,
                     callback: ({ header, body }) => {
                         if (body) {
-                            setError({ ...error, artType: true });
+                            setError({ ...error, artTypes: true });
                             messageBox.alert(header.message);
                         } else {
-                            saveCallback(tmp);
+                            saveCallback(save);
                         }
                     },
                 }),
@@ -235,14 +228,11 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     const handleClickCancle = () => history.push(match.path);
 
     useEffect(() => {
-        if (articlePage.artPageSeq) {
-            setBtnDisabled(false);
-        } else {
-            getTotalId(initialState.articlePage.artType);
-            setBtnDisabled(true);
+        // 등록 페이지일 때 미리보기키 조회
+        if (!paramSeq && svcAtRows.length > 0) {
+            getTotalId(svcAtRows[0].cdNmEtc1);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, articlePage.artPageSeq]);
+    }, [getTotalId, paramSeq, svcAtRows]);
 
     useEffect(() => {
         setTemp(articlePage);
@@ -262,10 +252,10 @@ const ArticlePageEdit = ({ onDelete, match }) => {
             {/* 버튼 그룹 */}
             <div className="mb-14 d-flex justify-content-between">
                 <div className="d-flex">
-                    <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={handleClickW3C}>
+                    <Button variant="outline-neutral" className="mr-1" disabled={!articlePage.artPageSeq} onClick={handleClickW3C}>
                         W3C
                     </Button>
-                    <Button variant="outline-neutral" disabled={btnDisabled} onClick={handleClickPreviewOpen}>
+                    <Button variant="outline-neutral" disabled={!articlePage.artPageSeq} onClick={handleClickPreviewOpen}>
                         미리보기
                     </Button>
                 </div>
@@ -273,7 +263,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                     <Button variant="positive" className="mr-1" onClick={handleClickSave}>
                         {articlePage.artPageSeq ? '수정' : '저장'}
                     </Button>
-                    {!btnDisabled && (
+                    {articlePage.artPageSeq && (
                         <Button variant="negative" className="mr-1" onClick={(e) => onDelete(articlePage)}>
                             삭제
                         </Button>
@@ -316,9 +306,9 @@ const ArticlePageEdit = ({ onDelete, match }) => {
             <MokaInputLabel
                 as="select"
                 label="기사타입"
-                value={temp.artType}
-                name="artType"
-                isInvalid={error.artType}
+                value={temp.artTypes}
+                name="artTypes"
+                isInvalid={error.artTypes}
                 onChange={handleChangeValue}
                 className="mb-2"
                 placeholder="기사타입을 선택하세요"

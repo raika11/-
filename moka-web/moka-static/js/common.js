@@ -53,6 +53,7 @@ function btnCloseModal(){
 	$(".btn_close").off().on("click", function(){
         $btnCk= $(this);
 		closeLayer($btnCk);
+        alert("234");
     });
 }
 

@@ -69,7 +69,8 @@ var include = {
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Container</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Grid</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Section</a></li>');
-            document.write('                <li class="nav_item"><a class="nav_link" href="title.html">타이틀</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="layout_page_title.html">페이지타이틀</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="layout_title.html">타이틀</a></li>');
             document.write('            </ul>');
             document.write('        </li>');
             document.write('        <li class="nav_item">');

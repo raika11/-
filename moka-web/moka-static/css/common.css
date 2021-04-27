@@ -244,6 +244,11 @@ textarea {resize: none;}
 .pb_50{padding-bottom:50px;}
 
 /*** border ***/
+
+/* border 유형 */
+.border_type1 {border-top: 1px solid #000;}
+.bdr_title_w4{border-top:4px solid #f6330a;} /* 보더만 추가된 유형일 때 */
+
 /* border 위치 */
 .bdr_top {border-top-style: solid;}
 .bdr_right {border-right-style: solid;}
@@ -258,9 +263,6 @@ textarea {resize: none;}
 
 /* border 색상 */
 .bdr_black {border-color: #000;}
-
-/* border 기타 */
-.border_type1 {border-top: 1px solid #000;}
 
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width: 1023px) {

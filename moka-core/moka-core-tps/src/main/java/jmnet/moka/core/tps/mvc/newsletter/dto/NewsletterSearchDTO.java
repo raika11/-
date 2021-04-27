@@ -37,6 +37,13 @@ public class NewsletterSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1L;
 
+    //    /**
+    //     * 뉴스레터 일련번호
+    //     */
+    //    @ApiModelProperty("뉴스레터 일련번호")
+    //    @Min(value = 0, message = "{tps.common.error.min.seqNo}")
+    //    private Long letterSeq;
+
     /**
      * 유형
      */

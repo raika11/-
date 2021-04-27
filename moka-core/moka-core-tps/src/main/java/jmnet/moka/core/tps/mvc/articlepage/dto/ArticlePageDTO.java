@@ -62,9 +62,9 @@ public class ArticlePageDTO implements Serializable {
     @Length(min = 1, max = 128, message = "{tps.article-page.error.length.artPageName}")
     private String artPageName;
 
-    @ApiModelProperty("서비스유형(기타코드)")
-    @Length(max = 24, message = "{tps.article-page.error.length.artType}")
-    private String artType;
+    @ApiModelProperty("서비스유형(기타코드 SVC_AT)")
+    @Length(max = 24, message = "{tps.article-page.error.length.artTypes}")
+    private String artTypes;
 
     @ApiModelProperty("미리보기용 기사ID, 상세조회시에만 사용")
     private Long previewTotalId;
@@ -77,7 +77,7 @@ public class ArticlePageDTO implements Serializable {
         ArticlePageItem item = new ArticlePageItem();
         item.put(ItemConstants.ARTICLE_PAGE_ID, this.artPageSeq);
         item.put(ItemConstants.ARTICLE_PAGE_DOMAIN_ID, this.domain.getDomainId());
-        item.put(ItemConstants.ARTICLE_PAGE_TYPE, this.artType);
+        item.put(ItemConstants.ARTICLE_PAGE_TYPES, this.artTypes);
         item.put(ItemConstants.ARTICLE_PAGE_NAME, this.artPageName);
         item.put(ItemConstants.ARTICLE_PAGE_BODY, this.artPageBody);
         return item;

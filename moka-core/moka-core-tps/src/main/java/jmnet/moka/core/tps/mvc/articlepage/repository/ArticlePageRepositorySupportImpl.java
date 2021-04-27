@@ -12,6 +12,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
@@ -76,7 +77,7 @@ public class ArticlePageRepositorySupportImpl extends TpsQueryDslRepositorySuppo
     }
 
     @Override
-    public Long countByArtType(String domainId, String artType, Long exclude_artPageSeq) {
+    public Long countByArtTypes(String domainId, String artTypes, Long exclude_artPageSeq) {
         QArticlePage articlePage = QArticlePage.articlePage;
         QDomain domain = QDomain.domain;
 
@@ -84,7 +85,7 @@ public class ArticlePageRepositorySupportImpl extends TpsQueryDslRepositorySuppo
 
         // WHERE 조건
         builder.and(articlePage.domain.domainId.eq(domainId));
-        builder.and(articlePage.artType.eq(artType));
+        builder.and(articlePage.artTypes.eq(artTypes));
 
         if (exclude_artPageSeq != null && exclude_artPageSeq > 0) {
             builder.and(articlePage.artPageSeq.ne(exclude_artPageSeq));
@@ -95,5 +96,27 @@ public class ArticlePageRepositorySupportImpl extends TpsQueryDslRepositorySuppo
                 .innerJoin(articlePage.domain, domain)
                 .where(builder)
                 .fetchCount();
+    }
+
+    @Override
+    public List<ArticlePage> findByDomainDomainIdAndArtType(String domainId, String artType) {
+        QArticlePage articlePage = QArticlePage.articlePage;
+        QDomain domain = QDomain.domain;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        // WHERE 조건
+        builder.and(articlePage.domain.domainId.eq(domainId));
+        builder.and(articlePage.artTypes.contains(artType));
+
+        JPQLQuery<ArticlePage> query = queryFactory.selectFrom(articlePage);
+        List<ArticlePage> list = query
+                .innerJoin(articlePage.domain, domain)
+                .fetchJoin()
+                .where(builder)
+                .fetchResults()
+                .getResults();
+
+        return list;
     }
 }

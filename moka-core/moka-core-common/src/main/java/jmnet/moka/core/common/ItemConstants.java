@@ -149,7 +149,7 @@ public class ItemConstants {
     /* Article Page Item */
     public static String ARTICLE_PAGE_ID = "id";
     public static String ARTICLE_PAGE_DOMAIN_ID = "domainId";
-    public static String ARTICLE_PAGE_TYPE = "type";
+    public static String ARTICLE_PAGE_TYPES = "types";
     public static String ARTICLE_PAGE_NAME = "name";
     public static String ARTICLE_PAGE_BODY = "body";
     public static String ARTICLE_PAGE_CREATE_YMDT = "create";
@@ -303,7 +303,7 @@ public class ItemConstants {
         /* Article Page Item */
         public static String ARTICLE_PAGE_ID = "ART_PAGE_SEQ";
         public static String ARTICLE_PAGE_DOMAIN_ID = "DOMAIN_ID";
-        public static String ARTICLE_PAGE_TYPE = "ART_TYPE";
+        public static String ARTICLE_PAGE_TYPES = "ART_TYPES";
         public static String ARTICLE_PAGE_NAME = "ART_PAGE_NAME";
         public static String ARTICLE_PAGE_BODY = "ART_PAGE_BODY";
         public static String ARTICLE_PAGE_CREATE_YMDT = "REG_DT";

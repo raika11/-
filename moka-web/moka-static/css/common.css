@@ -869,10 +869,19 @@ dl.date dd {margin-left: 6px;}
 .comment_recomm [class^="ico_face_"] { width: 22px; height: 22px; background-size: 100%; }
 .comment_recomm > button .count { margin-left: 5px; color: #999; font-size: 14px; }
 
+.txt_outline { padding: 20px; border: 1px solid #e2e2e2; font-size: 14px; line-height: 20px; letter-spacing: -0.4px; color: #666;  }
+
+
 /* 댓글 */
 .comment { position: relative; z-index: 1; padding: 16px 0; }
 .new_comment::before { content:''; z-index: -1; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(255, 246, 226, 0.5); }
 .report_comment::before { content:''; z-index: -1; position: absolute; left: 0; top: 0; width: 100%; height: 100%;  } 
+.comment_wrap .comment_state { padding-top: 26px; }
+.comment_state { display: flex; align-items: center; }
+.comment_state .comment_count { font-size: 20px; line-height: 30px; letter-spacing: -0.4px; font-weight: 700; color: #111;  }
+.comment_state .btn_reset { width: 22px; height: 22px; margin-left: 6px; }
+.comment_state .ico_reset { width: 22px; height: 22px; }
+.comment_state + .txt_outline { margin-top: 20px; } 
 .comment_header { position: relative; }
 .comment_header .comment_userid { color: #000; font-size: 15px; line-height: 22px; font-weight: 700; }
 .my_comment .comment_header .comment_userid { color: #f6330a; }
@@ -897,10 +906,10 @@ dl.date dd {margin-left: 6px;}
 
 .comment_list li:nth-child(n+2) { border-top: 1px solid #e2e2e2; }
 .comment .ico_more_option { width: 3px; height: 17px;  }
-.comment_area { position: relative; padding-bottom: 12px;  border-bottom: 4px solid #f6330a; }
+.comment_area { display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 4px solid #f6330a; }
 .comment_area .dropdown_toggle { height: 22px; }
 .btn_new_reply { width: 100%; height: 52px; margin: 20px 0 18px; background-color: #fff6e2; font-size: 14px; color: #f6330a; }
-.btn_mycomment { display: flex; align-items: center; position: absolute; right: 0; top: 0; font-size: 13px; line-height: 22px; letter-spacing: -0.5px; color: #f6330a; }
+.btn_mycomment { display: flex; align-items: center; font-size: 13px; line-height: 22px; letter-spacing: -0.5px; color: #f6330a; }
 .btn_mycomment .ico_arrow_primary_right { margin-left: 4px; }
 
 /* 답글쓰기 */
@@ -912,9 +921,11 @@ dl.date dd {margin-left: 6px;}
 .comment_form .comment_byte { float: left; font-size: 13px; line-height: 30px; letter-spacing: -0.5px; color: #999;  }
 .comment_form .btn_gray2 { float: right; }
 /*답글*/
-.reply_area { display: none; padding: 0 20px; border-top: 1px solid #e2e2e2; background-color: #f3f3f3; }
+.reply_area { display: none; border-top: 1px solid #e2e2e2;  }
 .reply_area.active { display: block; }
-.reply_area .new_comment::before { left: -20px; width: calc(100% + 40px);}
+.reply_area li { padding: 0 20px; }
+.reply_area .comment:not(.new_comment)::before { content:''; z-index: -1; position: absolute; top: 0; left: -20px; width: calc(100% + 40px); height: 100%;  background-color: #f3f3f3; }
+.reply_area .new_comment::before { left: -20px; width: calc(100% + 40px); }
 /* 댓글목록 없을때 */
 .not_comment { display: flex; flex-flow: column; align-items: center; font-size: 14px; text-align: center; color: #999; }
 .not_comment .ico_comment { width: 30px; height: 30px; margin-bottom: 6px; }

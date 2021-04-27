@@ -1004,7 +1004,8 @@ dl.date dd {margin-left: 6px;}
 /***                                            title                                             ***/
 /****************************************************************************************************/
 /* sub title 영역-필요시 */
-.title_wrap{display:flex;align-items:center;justify-content:space-between;padding:12px 0;height:60px;border-top: 4px solid #f6330a;}
+.title_wrap{display:flex;align-items:center;justify-content:space-between;padding:12px 0;height:60px;}
+header.title_wrap{border-top: 4px solid #f6330a;}
 .title_wrap .title_area{display:flex;align-items:center;}
 .title_wrap .title{color:#ff3c14;font-size:16px;font-weight:700;}
 .title_wrap .title [class*="ico_"]{margin-left:6px;}

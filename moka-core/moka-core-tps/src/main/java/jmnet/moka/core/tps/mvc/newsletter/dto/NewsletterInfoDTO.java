@@ -124,7 +124,7 @@ public class NewsletterInfoDTO implements Serializable {
     @ApiModelProperty("상단이미지(자동, 수동 직접등록형)")
     private String headerImg;
 
-    @ApiModelProperty("이미지파일")
+    @ApiModelProperty("상단이미지")
     @JsonIgnore
     private MultipartFile headerImgFile;
 
@@ -148,12 +148,26 @@ public class NewsletterInfoDTO implements Serializable {
     @Length(max = 100, message = "{tps.newsletter.error.size.category}")
     private String category;
 
+    @ApiModelProperty("'':없음 / 광고:A / 레터명:N / 중앙일보:J")
+    @Pattern(regexp = "^()|(A)|(N)|(J)$", message = "TODO")
+    private String titleType;
+
+    @ApiModelProperty("날짜표기탭(1-6 월/주1/주2/일/요일/해당없음)")
+    private Long dateTab;
+
+    @ApiModelProperty("1(발송,해당없음) / 0(직전 또는 TODAY)")
+    private Long dateType;
+
+    @ApiModelProperty("기사제목포함여부")
+    private String artTitleYn;
+
+    @ApiModelProperty("직접입력한 제목")
+    private String editTitle;
+
     @ApiModelProperty("레터제목")
     @Length(max = 100, message = "{tps.newsletter.error.size.letterTitle}")
     private String letterTitle;
 
-    @ApiModelProperty("광고:A / 레터명:N / 직접입력:E + 기사제목:T")
-    private String titleType;
 
     @ApiModelProperty("레터명")
     @Length(max = 100, message = "{tps.newsletter.error.size.letterName}")
@@ -165,6 +179,10 @@ public class NewsletterInfoDTO implements Serializable {
 
     @ApiModelProperty("레터이미지")
     private String letterImg;
+
+    @ApiModelProperty("레터이미지")
+    @JsonIgnore
+    private MultipartFile letterImgFile;
 
     @ApiModelProperty("레터설명")
     @Length(max = 1000, message = "{tps.newsletter.error.size.letterDesc}")

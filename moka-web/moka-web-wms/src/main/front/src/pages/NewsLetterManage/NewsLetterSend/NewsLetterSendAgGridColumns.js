@@ -1,17 +1,17 @@
 export default [
     {
         headerName: 'NO',
-        field: 'no',
+        field: 'sendSeq',
         width: 40,
     },
     {
         headerName: '유형',
-        field: 'letterType',
+        field: 'letterTypeName',
         sortable: true,
         unSortIcon: true,
         sort: null,
         sortingOrder: ['asc', 'desc'],
-        width: 100,
+        width: 80,
     },
     {
         headerName: '뉴스레터 명',
@@ -34,11 +34,17 @@ export default [
         unSortIcon: true,
         sort: null,
         sortingOrder: ['asc', 'desc'],
-        width: 100,
+        width: 120,
+    },
+    {
+        headerName: '상태',
+        field: 'sendStatus',
+        width: 80,
     },
     {
         headerName: 'A/B TEST',
         field: 'abtestYn',
         width: 70,
+        cellRenderer: 'usedYnRenderer',
     },
 ];

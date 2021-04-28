@@ -7,7 +7,7 @@ import columnDefs from './NewsLetterAgGridColumns';
 import { GET_NEWS_LETTER_LIST, getNewsLetterList, changeNewsLetterSearchOption } from '@store/newsLetter';
 import moment from 'moment';
 import { DATE_FORMAT, NEWS_LETTER_SEND_TYPE, NEWS_LETTER_TYPE, NEWS_LETTER_STATUS } from '@/constants';
-import { GRID_ROW_HEIGHT } from '@/style_constants';
+import { GRID_HEADER_HEIGHT } from '@/style_constants';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 상품 목록
@@ -70,7 +70,7 @@ const NewsLetterAgGrid = ({ match }) => {
             </div>
             <MokaTable
                 suppressMultiSort // 다중 정렬 비활성
-                rowHeight={GRID_ROW_HEIGHT.T[1]}
+                headerHeight={GRID_HEADER_HEIGHT[1]}
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}

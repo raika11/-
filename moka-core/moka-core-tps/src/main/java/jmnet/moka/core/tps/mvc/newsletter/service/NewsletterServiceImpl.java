@@ -180,10 +180,12 @@ public class NewsletterServiceImpl implements NewsletterService {
     @Override
     public NewsletterSend updateNewsletterSend(NewsletterSend newsletterSend, List<NewsletterExcel> emailList) {
         NewsletterSend result = newsletterSendRepository.save(newsletterSend);
-        // 삭제
-        newsletterExcelRepository
-                .findBySendSeq(result.getSendSeq())
-                .forEach(newsletterExcelRepository::delete);
+        if (emailList != null && emailList.size() > 0) {
+            // 삭제
+            newsletterExcelRepository
+                    .findBySendSeq(result.getSendSeq())
+                    .forEach(newsletterExcelRepository::delete);
+        }
         // 추가
         emailList
                 .stream()

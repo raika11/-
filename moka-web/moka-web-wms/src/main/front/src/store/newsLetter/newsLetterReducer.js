@@ -19,11 +19,12 @@ export const initialState = {
             keyword: '',
             useTotal: '',
             letterType: '',
-            // category: '',
+            category: '',
             status: '',
             sendType: '',
             startDt: null,
             endDt: null,
+            scbYn: '',
             abtestYn: '',
             letterName: '',
         },
@@ -44,10 +45,10 @@ export const initialState = {
             sendPeriod: 'D',
             sendDay: '',
             sendTime: null,
-            sendMinCnt: '',
-            sendMaxCnt: '',
+            sendMinCnt: 1,
+            sendMaxCnt: 1,
             sendOrder: 'N',
-            scbYn: '',
+            scbYn: 'N',
             scbLinkYn: '',
             senderName: '',
             senderEmail: '',
@@ -64,7 +65,11 @@ export const initialState = {
             modId: '',
             lastSendDt: '',
             category: '',
-            titleType: 'A',
+            titleType: 'N',
+            dateTab: 6,
+            dateType: 1,
+            artTitleYn: 'N',
+            editTitle: '',
             letterTitle: '',
             letterName: '',
             letterEngName: '',
@@ -73,14 +78,20 @@ export const initialState = {
         },
     },
     send: {
+        list: [],
+        letterList: [],
+        letterListError: null,
+        total: 0,
         error: null,
         search: {
-            sort: 'letterSeq,desc',
+            sort: 'sendSeq,desc',
             page: 0,
             size: PAGESIZE_OPTIONS[0],
+            searchType: '',
+            letterType: '',
             startDt: null,
             endDt: null,
-            letterTitle: '',
+            letterName: '',
         },
         sendInfo: {
             sendSeq: '',
@@ -126,6 +137,11 @@ export default handleActions(
                 draft.newsLetter.search = payload;
             });
         },
+        [act.CHANGE_NEWS_LETTER_SEND_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.send.search = payload;
+            });
+        },
         // 뉴스레터 상품 목록 조회
         [act.GET_NEWS_LETTER_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
@@ -150,6 +166,34 @@ export default handleActions(
         [act.GET_NEWS_LETTER_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.newsLetter.letterInfo = initialState.newsLetter.letterInfo;
+            });
+        },
+        // 뉴스레터 발송 목록 조회
+        [act.GET_NEWS_LETTER_SEND_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.send.total = body.totalCnt;
+                draft.send.list = body.list;
+                draft.send.error = initialState.error;
+            });
+        },
+        [act.GET_NEWS_LETTER_SEND_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.send.total = initialState.send.total;
+                draft.send.list = initialState.send.list;
+                draft.send.error = payload;
+            });
+        },
+        // 뉴스레터 수동 상품 목록 조회(sendType: E, STATUS: Y)
+        [act.GET_NEWS_LETTER_PASSIVE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.send.letterList = body.list.map((l) => ({ value: l.letterName, lebel: l.letterName }));
+                draft.send.letterListError = initialState.letterListError;
+            });
+        },
+        [act.GET_NEWS_LETTER_PASSIVE_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.send.letterList = initialState.send.letterList;
+                draft.send.letterListError = payload;
             });
         },
     },

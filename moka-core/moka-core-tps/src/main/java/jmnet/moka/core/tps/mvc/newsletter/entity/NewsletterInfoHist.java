@@ -120,11 +120,23 @@ public class NewsletterInfoHist extends RegAudit {
     @Column(name = "CATEGORY")
     private String category;
 
+    @Column(name = "TITLE_TYPE")
+    private String titleType;
+
     @Column(name = "LETTER_TITLE")
     private String letterTitle;
 
-    @Column(name = "TITLE_TYPE")
-    private String titleType;
+    @Column(name = "DATE_TAB")
+    private Long dateTab;
+
+    @Column(name = "DATE_TYPE")
+    private Long dateType;
+
+    @Column(name = "ART_TITLE_YN")
+    private String artTitleYn;
+
+    @Column(name = "EDIT_TITLE")
+    private String editTitle;
 
     @Column(name = "LETTER_NAME")
     private String letterName;

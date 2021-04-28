@@ -61,6 +61,12 @@ public class AbTestCaseSaveVO {
     private String pageValue;
 
     /**
+     * 페이지SEQ 또는 기사타입 (기타코드 SVC_AT) 명
+     */
+    @Column(name = "PAGE_NM")
+    private String pageNm;
+
+    /**
      * 영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)
      */
     @Column(name = "ZONE_DIV")
@@ -71,6 +77,9 @@ public class AbTestCaseSaveVO {
      */
     @Column(name = "ZONE_SEQ")
     private String zoneSeq;
+
+    @Column(name = "ZONE_NM")
+    private String zoneNm;
 
     /**
      * AB테스트 대상(TPLT:디자인,레터레이아웃 / DATA:데이터 / COMP:컴포넌트(메인탑디자인 및 본문외) / 레터제목:LTIT / 발송일시 / LSDT / 발송자명:LSNM)
@@ -216,21 +225,31 @@ public class AbTestCaseSaveVO {
     /**
      * VARIANT일련번호(템플릿SEQ/데이터셋SEQ/컴포넌트SEQ/컨테이너SEQ) / TB_ABTEST_VARIANT(AB테스트 VARIANT) VARIANT_SEQ
      */
-    @Column(name = "VARIANT_SEQ")
+    @Column(name = "VARIANT_SEQ_A")
     @Builder.Default
-    private Long variantSeq = 0l;
+    private Long variantSeqA = 0l;
+
+    @Column(name = "VARIANT_SEQ_B")
+    @Builder.Default
+    private Long variantSeqB = 0l;
 
     /**
      * 제목(JAM,뉴스레터), 뉴스레터 발송시간, 뉴스레터 발송자명   / TB_ABTEST_VARIANT(AB테스트 VARIANT) VARIANT_VALUE
      */
-    @Column(name = "VARIANT_VALUE")
-    private String variantValue;
+    @Column(name = "VARIANT_VALUE_A")
+    private String variantValueA;
+
+    @Column(name = "VARIANT_VALUE_B")
+    private String variantValueB;
 
     /**
      * 기사내용
      */
-    @Column(name = "ART_CONTENT")
-    private String artContent;
+    @Column(name = "ART_CONTENT_A")
+    private String artContentA;
+    
+    @Column(name = "ART_CONTENT_B")
+    private String artContentB;
 
     /**
      * 로그인 여부(전체:`, 로그인:Y, 비로그인 : N)

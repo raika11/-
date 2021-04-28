@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -68,6 +69,8 @@ public class NewsletterSimpleDTO implements Serializable {
     private String statusName;
 
     private Date regDt;
+
+    private CodeMgtDtlDTO categoryInfo;
 
     /**
      * 등록자

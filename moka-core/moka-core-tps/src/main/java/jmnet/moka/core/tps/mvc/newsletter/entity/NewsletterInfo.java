@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeSimple;
 import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -137,11 +138,23 @@ public class NewsletterInfo extends BaseAudit {
     @Column(name = "CATEGORY")
     private String category;
 
+    @Column(name = "TITLE_TYPE")
+    private String titleType;
+
     @Column(name = "LETTER_TITLE")
     private String letterTitle;
 
-    @Column(name = "TITLE_TYPE")
-    private String titleType;
+    @Column(name = "DATE_TAB")
+    private Long dateTab;
+
+    @Column(name = "DATE_TYPE")
+    private Long dateType;
+
+    @Column(name = "ART_TITLE_YN")
+    private String artTitleYn;
+
+    @Column(name = "EDIT_TITLE")
+    private String editTitle;
 
     @Column(name = "LETTER_NAME")
     private String letterName;
@@ -166,6 +179,14 @@ public class NewsletterInfo extends BaseAudit {
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "newsletterInfo", cascade = {CascadeType.REMOVE})
     private Set<NewsletterSend> newsletterSends = new LinkedHashSet<>();
+
+    /**
+     * 분야
+     */
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "CATEGORY", referencedColumnName = "DTL_CD", insertable = false, updatable = false)
+    private CodeSimple categoryInfo;
 
     /**
      * 등록자

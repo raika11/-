@@ -8,7 +8,7 @@ import { getDisplayedRows } from '@utils/agGridUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issue';
-import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
+import { MokaInputLabel, MokaInput, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import { DeskingHistoryModal } from '../modal';
 import StatusBadge from './StatusBadge';
 import ReserveWork from './ReserveWork';
@@ -28,6 +28,7 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
     const [status, setStatus] = useState(DESK_STATUS_SAVE);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [viewYn, setViewYn] = useState('Y');
     const [histShow, setHistShow] = useState(false);
     const id = 'keyword-1';
     const controls = 'collapse-keyword';
@@ -64,7 +65,6 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
      * 임시저장
      */
     const saveDesking = () => {
-        const viewYn = open ? 'Y' : 'N';
         const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
 
         if (!open || validate(displayedRows)) {
@@ -141,8 +141,8 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
      * on/off 변경
      */
     const onChange = (e) => {
-        setOpen(e.target.checked);
         setStatus(DESK_STATUS_WORK);
+        setViewYn(e.target.checked ? 'Y' : 'N');
     };
 
     /**
@@ -168,11 +168,11 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
     useImperativeHandle(
         ref,
         () => ({
-            viewYn: open ? 'Y' : 'N',
+            viewYn,
             gridInstance,
-            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
+            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), viewYn),
         }),
-        [gridInstance, open, rowToData],
+        [gridInstance, rowToData, viewYn],
     );
 
     useEffect(() => {
@@ -206,6 +206,7 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
     }, [compNo, deskingList, gridInstance, pkgSeq]);
 
     useEffect(() => {
+        setViewYn(desking.viewYn);
         setOpen(desking.viewYn === 'Y');
     }, [desking.viewYn]);
 
@@ -216,14 +217,13 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
                 <Col xs={4} className="d-flex align-items-center position-unset">
                     <ReserveWork compNo={compNo} reserveDt={desking.reserveDt} pkgSeq={pkgSeq} status={status} onReserve={onReserve} />
                     <MokaInputLabel
-                        as="switch"
+                        as="none"
                         label="연관키워드"
-                        id={controls}
-                        inputProps={{ checked: open }}
-                        onChange={onChange}
                         style={{ height: 'auto' }}
                         labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
+                        labelProps={{ id: controls, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse', onClick: () => setOpen(!open) }}
                     />
+                    <MokaInput as="switch" id={`${controls}-input`} style={{ height: 'auto' }} inputProps={{ checked: viewYn === 'Y', label: '' }} onChange={onChange} />
                 </Col>
                 <Col xs={8} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">

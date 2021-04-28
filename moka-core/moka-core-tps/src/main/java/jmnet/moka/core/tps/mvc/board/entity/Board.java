@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.board.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -91,6 +92,12 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      */
     @Column(name = "REG_NAME")
     private String regName;
+
+    /**
+     * 예약일시
+     */
+    @Column(name = "RESERVE_DT")
+    private Date reserveDt;
 
     /**
      * 뎁스

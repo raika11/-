@@ -98,7 +98,7 @@
     FROM (
            SELECT (SELECT VALUE
                    FROM DB_JOINS_DBA.dbo.FN_GET_CHARINDEX(ISNULL(A.art_types, ''), ',')
-                   WHERE VALUE = ${artType}) AS IS_FIND
+                   WHERE VALUE = #{artType}) AS IS_FIND
                 , A.ART_PAGE_SEQ
            from TB_WMS_ARTICLE_PAGE A
            WHERE DOMAIN_ID = #{domainId}

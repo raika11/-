@@ -309,7 +309,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>
-                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
+                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} hidePackageTab hideGraphTab />
                     <Button variant="positive" size="sm" className="mr-1" onClick={addMp}>
                         추가
                     </Button>

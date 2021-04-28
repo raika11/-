@@ -274,7 +274,7 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>
-                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
+                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} hideMovieTab hidePackageTab hideGraphTab />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">

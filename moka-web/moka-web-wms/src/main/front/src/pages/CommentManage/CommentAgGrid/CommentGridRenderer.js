@@ -1,5 +1,5 @@
 import React, { useCallback, useState, forwardRef, useImperativeHandle, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Button, Dropdown } from 'react-bootstrap';
 import { GRID_ROW_HEIGHT, WEBKIT_BOX } from '@/style_constants';
 import { MokaIcon, MokaOverlayTooltipButton, MokaTableButtonRenderer } from '@components';
@@ -213,6 +213,7 @@ export const HistoryButtonRenderer = forwardRef((params, ref) => {
 export const CommentBodyRenderer = forwardRef((params, ref) => {
     const { api, value, node } = params;
     const [open, setOpen] = useState(false);
+    const sidebarIsOpen = useSelector(({ layout }) => layout.sidebarIsOpen);
     const textRef = useRef(null);
 
     useImperativeHandle(
@@ -235,26 +236,35 @@ export const CommentBodyRenderer = forwardRef((params, ref) => {
 
     // gridApi.onRowHeightChanged();
 
+    const resetRowHeight = React.useCallback(() => {
+        if (open) {
+            setOpen(false);
+            node.setRowHeight(GRID_ROW_HEIGHT.C[0]);
+            api.onRowHeightChanged();
+        } else {
+            const h = textRef.current.offsetHeight + 16;
+            if (h > node.rowHeight) {
+                node.setRowHeight(h);
+                api.onRowHeightChanged();
+                setOpen(true);
+            }
+        }
+    }, [api, node, open]);
+
+    React.useEffect(() => {
+        setOpen(false);
+        node.setRowHeight(GRID_ROW_HEIGHT.C[0]);
+        api.onRowHeightChanged();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sidebarIsOpen]);
+
     return (
         <div
             className="h-100 w-100 ag-preline-cell"
             onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // api.resetRowHeights();
-
-                if (open) {
-                    setOpen(false);
-                    node.setRowHeight(GRID_ROW_HEIGHT.C[0]);
-                    api.onRowHeightChanged();
-                } else {
-                    const h = textRef.current.offsetHeight + 16;
-                    if (h > node.rowHeight) {
-                        node.setRowHeight(h);
-                        api.onRowHeightChanged();
-                        setOpen(true);
-                    }
-                }
+                resetRowHeight();
             }}
         >
             <span style={!open ? { ...WEBKIT_BOX(1), margin: 'auto 0' } : { margin: 'auto 0' }}>

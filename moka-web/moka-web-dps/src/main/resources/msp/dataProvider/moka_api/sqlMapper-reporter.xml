@@ -77,4 +77,14 @@
       ) }
   </select>
 
+  <!-- 내가 응원한 기자목록 -->
+  <select id="cheerMy" parameterType="map" resultType="map"
+    statementType="CALLABLE">
+    {call UPU_15RE_ARTICLE_SHARE_LIST_SEL_BY_MEMCHEER(
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string}
+      ) }
+  </select>
+
 </mapper>

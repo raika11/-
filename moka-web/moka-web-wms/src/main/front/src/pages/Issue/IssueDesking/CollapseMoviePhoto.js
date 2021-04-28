@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
@@ -33,6 +33,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
     const [histShow, setHistShow] = useState(false);
+    const [compLabel, setCompLabel] = useState('');
     const controls = 'collapse-mp';
 
     /**
@@ -148,11 +149,34 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
     };
 
     /**
+     * 라벨명 데이터 + agGrid 데이터
+     * @param {array} rows agGrid Row Data
+     * @returns array 라벨명 row + agGrid row
+     */
+    const combineRows = useCallback(
+        (rowsData) =>
+            [
+                {
+                    ...initialState.initialDesking,
+                    pkgSeq,
+                    compNo,
+                    compLabel,
+                    channelType: ISSUE_CHANNEL_TYPE.M.code,
+                },
+                ...rowsData,
+            ].map((d, idx) => ({
+                ...d,
+                contentsOrd: idx + 1,
+            })),
+        [compLabel, compNo, pkgSeq],
+    );
+
+    /**
      * 임시저장
      */
     const saveDesking = () => {
         const viewYn = open ? 'Y' : 'N';
-        const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
+        let displayedRows = getDisplayedRows(gridInstance.api);
 
         if (open && displayedRows.length < 1) {
             messageBox.alert(MESSAGE.FAIL_SAVE_NO_DATA);
@@ -161,6 +185,8 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
 
         if (!open || validate(displayedRows)) {
             setLoading(true);
+            displayedRows = open ? rowToData(combineRows(displayedRows), viewYn) : [];
+
             dispatch(
                 saveIssueDesking({
                     compNo,
@@ -243,8 +269,11 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
      */
     const onLoad = (histories) => {
         if (histories) {
+            const filtered = histories.length > 0 ? histories.slice(1) : [];
+            setCompLabel(histories.length > 0 ? histories[0].compLabel : '');
+
             gridInstance.api.setRowData(
-                histories.map((d) => ({
+                filtered.map((d) => ({
                     ...d,
                     id: `${pkgSeq}-${ISSUE_CHANNEL_TYPE.M.code}-${common.getUniqueKey()}`,
                     title: unescapeHtmlArticle(d.title),
@@ -262,9 +291,9 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
         () => ({
             viewYn: open ? 'Y' : 'N',
             gridInstance,
-            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
+            getDisplayedRows: () => rowToData(combineRows(getDisplayedRows(gridInstance.api)), open ? 'Y' : 'N'),
         }),
-        [gridInstance, open, rowToData],
+        [combineRows, gridInstance, open, rowToData],
     );
 
     useEffect(() => {
@@ -273,9 +302,14 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
 
     useEffect(() => {
         if (gridInstance) {
+            // 첫번째 데이터는 라벨로 노출하는 데이터로 컨텐츠성격의 데이터와 분리한다
+            // 만약 데이터가 0개라면 첫번째 데이터를 만든다
+            const filtered = deskingList.length > 0 ? deskingList.slice(1) : [];
+            setCompLabel(deskingList.length > 0 ? deskingList[0].compLabel : '');
+
             // title, bodyHead unescapeHtmlArticle 처리
             gridInstance.api.setRowData(
-                deskingList.map((d) => ({
+                filtered.map((d) => ({
                     ...d,
                     id: `${pkgSeq}-${ISSUE_CHANNEL_TYPE.M.code}-${common.getUniqueKey()}`,
                     title: unescapeHtmlArticle(d.title),
@@ -335,6 +369,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
             </Row>
             <Collapse in={open}>
                 <div id={controls} className="mt-2">
+                    <MokaInputLabel label="라벨명" name="compLabel" value={compLabel} onChange={(e) => setCompLabel(e.target.value)} className="mb-1" />
                     <MokaTable
                         rowHeight={rowHeight}
                         header={false}

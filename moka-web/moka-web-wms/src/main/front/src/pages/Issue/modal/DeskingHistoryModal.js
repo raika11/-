@@ -234,7 +234,7 @@ const detailColumnDefs = [
         field: 'title',
         tooltipValueGetter: (params) => unescapeHtmlArticle(params.data.title || ''),
         flex: 1,
-        valueGetter: (params) => unescapeHtmlArticle(params.data.title || ''),
+        valueGetter: (params) => unescapeHtmlArticle(params.data.title || params.data.compLabel || ''),
     },
 ];
 

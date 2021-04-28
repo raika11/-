@@ -8,7 +8,7 @@ import { MokaCard } from '@components';
 import CollapseArticle from './CollapseArticle';
 import CollapseArticleAuto from './CollapseArticleAuto';
 import CollapseLive from './CollapseLive';
-import CollapsePacket from './CollapsePacket';
+// import CollapsePacket from './CollapsePacket';
 import CollapseMoviePhoto from './CollapseMoviePhoto';
 import CollapseBanner from './CollapseBanner';
 import CollapseKeyword from './CollapseKeyword';

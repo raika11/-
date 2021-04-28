@@ -32,6 +32,15 @@ font-*,color,text-align,vertical-align, ...
 .profile_body .btn_share .ico_share {width:28px; height:28px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.200000 0 0 0 0 0.200000 0 0 0 0 0.200000 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Ccircle cx='14' cy='14' r='14' fill='%23F2F2F2'/%3E%3Cg filter='url(%23a)'%3E%3Cg fill='%231D1D1D'%3E%3Cpath d='M19.398 9.684c.292 0 .602.236.602.607v10.025a.606.606 0 01-.602.607H8.628A.604.604 0 018 20.316V10.291c0-.305.236-.607.628-.607h3.034v.936H8.935v9.367h10.13V10.62h-2.728v-.937z'/%3E%3Cpath d='M11.172 7.82l.606.605 1.766-1.765-.014 5.832h.925l.014-5.79 1.72 1.72.607-.607-2.81-2.81-2.814 2.814z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
 .journalist_header .journalist_share {display:flex; margin-top:11px;}
 .journalist_header .journalist_share [class*='btn_']:not(.btn_email) {width:24px; height:22px; margin-left: 12px;}
+.profile_body .layer_share { left: 148px; top: 60px; width: 288px; height: 207px; padding: 14px 20px 20px; }
+.profile_body .layer_share ul { margin: 1px 5px 0; }
+.profile_body .layer_share li { display: inline-block; position: relative; width: 40px; height: 64px; margin: 13px 0 0 20px;}
+.profile_body .layer_share li:nth-child(1),
+.profile_body .layer_share li:nth-child(4n+1) {margin-left: 0;}
+.profile_body .layer_share li button { width: 40px;}
+.profile_body .layer_share li button [class^='ico'] { position: relative; width: 40px; height: 40px; border: 1px solid #e2e2e2; border-radius: 50%;  vertical-align: top;}
+.profile_body .layer_share li button span { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); font-size: 13px; line-height: 22px; letter-spacing: -0.5px; white-space: nowrap; color: #999; }
+.profile_body .layer_share .btn_close { top: 15px; right: 18px; }
 .journalist_share button {font-family:"Noto Sans KR"; font-size:14px; line-height: 22px; color:#666;}
 .journalist_share .btn_email .ico_email {display:none; width:24px; height:22px; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='16'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.600000 0 0 0 0 0.600000 0 0 0 0 0.600000 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23a)' transform='translate(-381 -97)' fill='none' fill-rule='evenodd'%3E%3Cpath fill='%23333' d='M388.551 105.19l.353-2.677h-2.711v-1.71c0-.774.22-1.303 1.357-1.303H389v-2.394a19.665 19.665 0 00-2.113-.106c-2.09 0-3.522 1.248-3.522 3.539v1.974H381v2.677h2.365v6.869h2.828v-6.87h2.357z'/%3E%3C/g%3E%3C/svg%3E");}
 .journalist_share .text_email {font-weight:normal;}

@@ -28,6 +28,9 @@ $(document).ready(function() {
             LayerPopup.removeClass("open");
         }
     });
+    
+    //레이어팝업 닫기
+    btnCloseModal();
 });
 
 /* 임시 레이어팝업 */
@@ -53,7 +56,6 @@ function btnCloseModal(){
 	$(".btn_close").off().on("click", function(){
         $btnCk= $(this);
 		closeLayer($btnCk);
-        alert("234");
     });
 }
 

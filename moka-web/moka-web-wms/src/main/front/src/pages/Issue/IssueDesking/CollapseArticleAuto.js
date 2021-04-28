@@ -2,11 +2,12 @@ import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'rea
 import { useDispatch } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaInputLabel, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
+import { MokaInputLabel, MokaInput, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
-import { DESK_STATUS_SAVE, DESK_STATUS_PUBLISH } from '@/constants';
+import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH } from '@/constants';
 import { saveIssueDesking, publishIssueDesking } from '@store/issue';
 import StatusBadge from './StatusBadge';
+import ReserveWork from './ReserveWork';
 
 const defaultProps = {
     desking: {},
@@ -15,18 +16,17 @@ const defaultProps = {
 /**
  * 패키지관리 > 관련 데이터 편집 > 기사 (자동)
  */
-const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE }, ref) => {
+const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE, preview }, ref) => {
     const dispatch = useDispatch();
-    const [open, setOpen] = useState(false);
+    const [viewYn, setViewYn] = useState('Y');
     const [loading, setLoading] = useState(false);
-    const [, setStatus] = useState(DESK_STATUS_SAVE);
+    const [status, setStatus] = useState(DESK_STATUS_SAVE);
     const controls = 'collapse-art-auto';
 
     /**
      * 임시저장
      */
     const saveDesking = () => {
-        const viewYn = open ? 'Y' : 'N';
         setLoading(true);
         dispatch(
             saveIssueDesking({
@@ -83,29 +83,60 @@ const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE }, re
         }
     };
 
+    /**
+     * 예약 완료
+     */
+    const onReserve = ({ header }) => {
+        if (header.success) {
+            setStatus(DESK_STATUS_PUBLISH);
+        }
+    };
+
+    /**
+     * on/off 변경
+     */
+    const onChange = (e) => {
+        setStatus(DESK_STATUS_WORK);
+        setViewYn(e.target.checked ? 'Y' : 'N');
+    };
+
     useEffect(() => {
-        setOpen(desking.viewYn === 'Y');
+        setViewYn(desking.viewYn);
     }, [desking.viewYn]);
+
+    useEffect(() => {
+        setStatus(DESK_STATUS_SAVE);
+    }, [pkgSeq]);
 
     useImperativeHandle(
         ref,
         () => ({
-            viewYn: open ? 'Y' : 'N',
+            viewYn,
         }),
-        [open],
+        [viewYn],
     );
 
     return (
         <div className="position-relative border-bottom pb-24">
             {loading && <MokaLoader />}
-            <Row className="d-flex" noGutters>
-                <Col xs={3}>
-                    <MokaInputLabel as="switch" label="데이터기사" id={controls} inputProps={{ checked: open }} onChange={(e) => setOpen(e.target.checked)} />
+            <Row className="d-flex position-relative" noGutters>
+                <Col xs={4} className="d-flex align-items-center position-unset">
+                    <ReserveWork compNo={compNo} reserveDt={desking.reserveDt} pkgSeq={pkgSeq} status={status} onReserve={onReserve} />
+                    <MokaInputLabel
+                        as="none"
+                        label="데이터기사"
+                        style={{ height: 'auto' }}
+                        labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
+                        labelProps={{ id: controls }}
+                    />
+                    <MokaInput as="switch" id={`${controls}-input`} style={{ height: 'auto' }} inputProps={{ checked: viewYn === 'Y', label: '' }} onChange={onChange} />
                 </Col>
-                <Col xs={6} className="d-flex align-items-center"></Col>
-                <Col xs={3} className="d-flex justify-content-end align-items-center">
+                <Col xs={8} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">
                         <StatusBadge desking={desking} />
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="미리보기" variant="white" onClick={preview}>
+                            <MokaIcon iconName="fal-file-search" />
+                        </MokaOverlayTooltipButton>
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
                             <MokaIcon iconName="Save" feather />
                         </MokaOverlayTooltipButton>

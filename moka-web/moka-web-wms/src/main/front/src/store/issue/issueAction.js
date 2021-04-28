@@ -99,7 +99,14 @@ export const getIssueDeskingHistoryList = createAction(GET_ISSUE_DESKING_HISTORY
  * 이슈 데스킹 히스토리 상세 조회
  */
 export const [GET_ISSUE_DESKING_HISTORY, GET_ISSUE_DESKING_HISTORY_SUCCESS, GET_ISSUE_DESKING_HISTORY_FAILURE] = createRequestActionTypes('issue/GET_ISSUE_DESKING_HISTORY');
-export const getIssueDeskingHistory = createAction(GET_ISSUE_DESKING_HISTORY, ({ pkgSeq, compNo, regDt, status, approvalYn }) => ({ pkgSeq, compNo, regDt, status, approvalYn }));
+export const getIssueDeskingHistory = createAction(GET_ISSUE_DESKING_HISTORY, ({ pkgSeq, compNo, regDt, status, approvalYn, callback }) => ({
+    pkgSeq,
+    compNo,
+    regDt,
+    status,
+    approvalYn,
+    callback,
+}));
 
 /**
  * 이슈 데스킹 예약

@@ -49,22 +49,16 @@ public class AbTestCaseSaveVO {
     private String domainId;
 
     /**
-     * AB테스트 페이지(메인:M, 기사:A, 뉴스레터:L)
+     * AB테스트 페이지(메인:M, 섹션: S, 기사(본문외):A, 뉴스레터:L)
      */
     @Column(name = "PAGE_TYPE")
     private String pageType;
 
     /**
-     * 페이지SEQ
+     * 페이지SEQ 또는 기사타입 (기타코드 SVC_AT), 선택없을때는 ''
      */
-    @Column(name = "PAGE_SEQ")
-    private Long pageSeq = 0l;
-
-    /**
-     * 기사타입(직접-기사-본문외) - 기본형:B, 연재형:CWYZ, QA형:X, 특집형:S, 이슈라이브:TG
-     */
-    @Column(name = "ART_TYPE")
-    private String artType;
+    @Column(name = "PAGE_VALUE")
+    private String pageValue;
 
     /**
      * 영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)
@@ -79,7 +73,7 @@ public class AbTestCaseSaveVO {
     private String zoneSeq;
 
     /**
-     * AB테스트 목표(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
+     * AB테스트 대상(TPLT:디자인,레터레이아웃 / DATA:데이터 / COMP:컴포넌트(메인탑디자인 및 본문외) / 레터제목:LTIT / 발송일시 / LSDT / 발송자명:LSNM)
      */
     @Column(name = "ABTEST_PURPOSE")
     private String abtestPurpose;
@@ -220,32 +214,23 @@ public class AbTestCaseSaveVO {
     private String deskingPart;
 
     /**
-     * 템컴포넌트SEQ(본문외 영역 테스트시) / TB_ABTEST_VARIANT(AB테스트 VARIANT)
+     * VARIANT일련번호(템플릿SEQ/데이터셋SEQ/컴포넌트SEQ/컨테이너SEQ) / TB_ABTEST_VARIANT(AB테스트 VARIANT) VARIANT_SEQ
      */
-    @Column(name = "COMPONENT_SEQ_A")
-    private Long componentSeqA = 0L;
-
-    @Column(name = "COMPONENT_SEQ_B")
-    private Long componentSeqB = 0L;
+    @Column(name = "VARIANT_SEQ")
+    @Builder.Default
+    private Long variantSeq = 0l;
 
     /**
-     * 템플릿SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT)
+     * 제목(JAM,뉴스레터), 뉴스레터 발송시간, 뉴스레터 발송자명   / TB_ABTEST_VARIANT(AB테스트 VARIANT) VARIANT_VALUE
      */
-    @Column(name = "TEMPLATE_SEQ_A")
-    private Long templateSeqA = 0L;
-
-    @Column(name = "TEMPLATE_SEQ_B")
-    private Long templateSeqB = 0L;
+    @Column(name = "VARIANT_VALUE")
+    private String variantValue;
 
     /**
-     * 데이터셋SEQ / TB_ABTEST_VARIANT(AB테스트 VARIANT) 데이터셋SEQ (대안설계 데이터형은 TB_WMS_DESKING.DATASET_SEQ 와 조인)
+     * 기사내용
      */
-    @Column(name = "DATASET_SEQ_A")
-    private Long datasetSeqA = 0L;
-    
-    @Column(name = "DATASET_SEQ_B")
-    private Long datasetSeqB = 0L;
-
+    @Column(name = "ART_CONTENT")
+    private String artContent;
 
     /**
      * 로그인 여부(전체:`, 로그인:Y, 비로그인 : N)
@@ -333,27 +318,4 @@ public class AbTestCaseSaveVO {
     @Column(name = "UTM_CONTENT")
     private String utmContent;
 
-    /**
-     * 제목(JAM 또는 뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT)
-     */
-    @Column(name = "TITLE")
-    private String title;
-
-    /**
-     * 발송자명(뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT)
-     */
-    @Column(name = "SENDER_NAME")
-    private String senderName;
-
-    /**
-     * 발송일시(뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT)
-     */
-    @Column(name = "SEND_DT")
-    private Date sendDt;
-
-    /**
-     * 기사내용
-     */
-    @Column(name = "ART_CONTENT")
-    private String artContent;
 }

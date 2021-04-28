@@ -6,7 +6,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import moment from 'moment';
 import { DB_DATEFORMAT, S_MODAL_PAGESIZE_OPTIONS, DESK_STATUS_PUBLISH } from '@/constants';
+import common from '@utils/commonUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
+import { messageBox } from '@utils/toastUtil';
 import { MokaModal, MokaInput, MokaTable } from '@components';
 import {
     initialState,
@@ -21,6 +23,8 @@ moment.locale('ko');
 
 const propTypes = {
     compNo: PropTypes.number,
+    pkgSeq: PropTypes.string,
+    onLoad: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -35,6 +39,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
         detailLoading: loading[GET_ISSUE_DESKING_HISTORY],
     }));
     const [rowData, setRowData] = useState([]);
+    const [dRowData, setDRowData] = useState([]);
     const [selected, setSelected] = useState({});
     const [searchDt, setSearchDt] = useState(null);
 
@@ -77,8 +82,6 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                 }),
             );
             setSearchDt(newDt);
-
-            // const test = moment('2021-04-27T05:09:29.700+0000', moment.ISO_8601);
         } else {
             dispatch(clearIssueDeskingHistory());
         }
@@ -88,29 +91,53 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
         setRowData(
             list.map((data) => ({
                 ...data,
+                displayRegDt: moment(data.regDt, moment.ISO_8601).format(DB_DATEFORMAT),
                 worker: `${data.regNm}(${data.regId})`,
                 onClick: (rowData) => {
-                    if (selected.regDt !== rowData.regDt) {
-                        dispatch(
-                            getIssueDeskingHistory({
-                                compNo,
-                                pkgSeq,
-                                regDt: rowData.regDt,
-                                status: DESK_STATUS_PUBLISH,
-                                callback: ({ header, body }) => {
-                                    if (header.success) {
-                                        onLoad(body.issueDeskings);
-                                    }
-                                },
-                            }),
-                        );
-                    } else {
-                        onLoad(detail.issueDeskings);
-                    }
+                    messageBox.confirm(
+                        '현재 작업 중인 목록이 히스토리 목록으로 변경됩니다.\n변경하시겠습니까?',
+                        () => {
+                            if (selected.regDt !== rowData.regDt) {
+                                dispatch(
+                                    getIssueDeskingHistory({
+                                        compNo,
+                                        pkgSeq,
+                                        approvalYn: rowData.approvalYn,
+                                        regDt: rowData.regDt,
+                                        status: DESK_STATUS_PUBLISH,
+                                        callback: ({ header, body }) => {
+                                            if (header.success) {
+                                                setSelected(rowData);
+                                                onLoad(body.issueDeskings.filter((a) => a.viewYn === 'Y'));
+                                            }
+                                        },
+                                    }),
+                                );
+                            } else {
+                                onLoad(detail.issueDeskings.filter((a) => a.viewYn === 'Y'));
+                            }
+                        },
+                        () => {},
+                    );
                 },
             })),
         );
     }, [compNo, selected, dispatch, list, onLoad, pkgSeq, detail]);
+
+    useEffect(() => {
+        if (detail?.issueDeskings) {
+            setDRowData(
+                detail.issueDeskings
+                    .filter((d) => d.viewYn === 'Y')
+                    .map((d) => ({
+                        ...d,
+                        id: `${d.contentsId}-${common.getUniqueKey()}`,
+                    })),
+            );
+        } else {
+            setDRowData([]);
+        }
+    }, [detail.issueDeskings]);
 
     return (
         <MokaModal title="히스토리" show={show} onHide={onHide} size="lg" width={850} height={550} centered>
@@ -146,16 +173,18 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                         loading={loading}
                         preventRowClickCell={['load']}
                         selected={selected.regDt}
+                        enableBrowserTooltips
                     />
                 </Col>
                 <Col sm={6} className="pl-12 h-100">
                     <MokaTable
                         className="h-100"
-                        rowData={detail?.issueDeskings}
+                        rowData={dRowData}
                         columnDefs={detailColumnDefs}
-                        onRowNodeId={(data) => data.contentsId}
+                        onRowNodeId={(data) => data.id}
                         paging={false}
                         loading={detailLoading}
+                        enableBrowserTooltips
                     />
                 </Col>
             </Row>
@@ -174,8 +203,11 @@ const columnDefs = [
     },
     {
         headerName: '전송일시',
-        field: 'regDt',
+        field: 'displayRegDt',
         width: 125,
+        cellClassRules: {
+            'text-positive': ({ data }) => data.approvalYn === 'N', // 예약 데이터
+        },
     },
     {
         headerName: '작업자',
@@ -197,13 +229,14 @@ const detailColumnDefs = [
     {
         headerName: 'No',
         field: 'contentsOrd',
-        width: 50,
+        width: 30,
     },
     {
         headerName: '제목',
         field: 'title',
+        tooltipValueGetter: (params) => unescapeHtmlArticle(params.data.title || ''),
         flex: 1,
-        valueGetter: (params) => unescapeHtmlArticle(params.data.title || ''),
+        valueGetter: (params) => unescapeHtmlArticle(params.data.title || params.data.compLabel || ''),
     },
 ];
 

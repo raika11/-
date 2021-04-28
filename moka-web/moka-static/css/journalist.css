@@ -20,7 +20,7 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 .section_header_wrap.section_header_custom_wrap .header_area,
 .section_header_wrap.section_header_custom_wrap .btn_group {display:none;}
-.journalist_header {position:relative; margin:24px 0 60px;}
+.journalist_header {position:relative; padding-top: 24px; }
 .journalist_header .profile_area {display:flex; align-items:center;}
 .journalist_header .profile_image {overflow:hidden; width: 128px; height: 128px; border-radius: 50%;}
 .journalist_header .profile_image img {max-width:100%;}
@@ -32,6 +32,15 @@ font-*,color,text-align,vertical-align, ...
 .profile_body .btn_share .ico_share {width:28px; height:28px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.200000 0 0 0 0 0.200000 0 0 0 0 0.200000 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Ccircle cx='14' cy='14' r='14' fill='%23F2F2F2'/%3E%3Cg filter='url(%23a)'%3E%3Cg fill='%231D1D1D'%3E%3Cpath d='M19.398 9.684c.292 0 .602.236.602.607v10.025a.606.606 0 01-.602.607H8.628A.604.604 0 018 20.316V10.291c0-.305.236-.607.628-.607h3.034v.936H8.935v9.367h10.13V10.62h-2.728v-.937z'/%3E%3Cpath d='M11.172 7.82l.606.605 1.766-1.765-.014 5.832h.925l.014-5.79 1.72 1.72.607-.607-2.81-2.81-2.814 2.814z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
 .journalist_header .journalist_share {display:flex; margin-top:11px;}
 .journalist_header .journalist_share [class*='btn_']:not(.btn_email) {width:24px; height:22px; margin-left: 12px;}
+.profile_body .layer_share { left: 148px; top: 60px; width: 288px; height: 207px; padding: 14px 20px 20px; }
+.profile_body .layer_share ul { margin: 1px 5px 0; }
+.profile_body .layer_share li { display: inline-block; position: relative; width: 40px; height: 64px; margin: 13px 0 0 20px;}
+.profile_body .layer_share li:nth-child(1),
+.profile_body .layer_share li:nth-child(4n+1) {margin-left: 0;}
+.profile_body .layer_share li button { width: 40px;}
+.profile_body .layer_share li button [class^='ico'] { position: relative; width: 40px; height: 40px; border: 1px solid #e2e2e2; border-radius: 50%;  vertical-align: top;}
+.profile_body .layer_share li button span { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); font-size: 13px; line-height: 22px; letter-spacing: -0.5px; white-space: nowrap; color: #999; }
+.profile_body .layer_share .btn_close { top: 15px; right: 18px; }
 .journalist_share button {font-family:"Noto Sans KR"; font-size:14px; line-height: 22px; color:#666;}
 .journalist_share .btn_email .ico_email {display:none; width:24px; height:22px; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='16'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.600000 0 0 0 0 0.600000 0 0 0 0 0.600000 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23a)' transform='translate(-381 -97)' fill='none' fill-rule='evenodd'%3E%3Cpath fill='%23333' d='M388.551 105.19l.353-2.677h-2.711v-1.71c0-.774.22-1.303 1.357-1.303H389v-2.394a19.665 19.665 0 00-2.113-.106c-2.09 0-3.522 1.248-3.522 3.539v1.974H381v2.677h2.365v6.869h2.828v-6.87h2.357z'/%3E%3C/g%3E%3C/svg%3E");}
 .journalist_share .text_email {font-weight:normal;}
@@ -41,11 +50,10 @@ font-*,color,text-align,vertical-align, ...
 .journalist_header .journalist_share li {font-size:0;}
 .journalist_header .journalist_share li:nth-child(2):before {display:inline-block; content:''; transform: translateY(5px); width:1px; height: 12px; padding-left: 4px; margin-left:16px; border-left:1px solid #bcbcbc; opacity:.8;}
 .journalist_header .journalist_introduce {margin-top:24px; font-size:14px; line-height: 22px; color:#666;}
-.journalist_header .journalist_popularity {position:absolute; top:12px; right:0; min-width:301px;}
-.journalist_header .journalist_popularity > div {position:relative; flex: 0 0 140px; text-align:center;}
-.journalist_header .journalist_popularity > div + div {padding-left:10px; margin-left:10px;}
+.journalist_header .journalist_popularity {position:absolute; top:40px; right:0; min-width:261px;}
+.journalist_header .journalist_popularity > div {position:relative; text-align:center;}
 .journalist_header .journalist_popularity > div + div:before {display:inline-block; content:''; position:absolute; top:0; left:0; width:1px; height:100%; border-left: 1px solid #e2e2e2;}
-.journalist_header .journalist_popularity dl {margin-bottom:12px; font-family:"Noto Sans KR"; font-weight:bold;}
+.journalist_header .journalist_popularity dl {margin-bottom:12px; font-family:"Noto Sans KR"; font-weight:700;}
 .journalist_header .journalist_popularity dt {font-size:14px; line-height:20px; color:#333;}
 .journalist_header .journalist_popularity dd {font-size:24px; line-height:34px; color:#111;}
 .journalist_header .journalist_popularity .btn {display:inline-block;}
@@ -67,7 +75,6 @@ font-*,color,text-align,vertical-align, ...
 .package_list li:only-child a span:before {display:inline-block; content:''; transform:translateY(2px); width:1px; height:16px; padding-left: 16px; margin-left: 16px; border-left:1px solid #bcbcbc;}
 .package_list a .ico_arrow_right {position:absolute; top: 50%; right:20px; transform:translateY(-50%); width:18px; height:18px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0v18h18V0z'/%3E%3Cpath fill='%231D1D1D' d='M12.558 9L6.3 2.742l-.636.637L11.285 9l-5.621 5.621.636.637L12.558 9z'/%3E%3C/g%3E%3C/svg%3E");}
 
-.highlight_wrap {  }
 .swiper_highlight_list { position: relative; margin-top: 16px; padding-bottom: 40px; }
 .swiper_highlight_list .swiper-button-prev, 
 .swiper_highlight_list .swiper-button-next { top: auto; bottom: 0; }
@@ -76,10 +83,9 @@ font-*,color,text-align,vertical-align, ...
 .swiper_highlight_list .swiper-button-disabled { background-color: #F7F7F7; }
 .swiper_highlight_list .btn_prev { left: 50%; transform: translateX(-53.5px); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M15 0v15H0V0z'/%3E%3Cpath fill='%231D1D1D' d='M9.75 2.284l.53.53-4.684 4.687 4.683 4.683-.53.53L4.534 7.5 9.75 2.285z'/%3E%3C/g%3E%3C/svg%3E"); }
 .swiper_highlight_list .btn_next { right: 50%; transform: translateX(53.5px); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0v15h15V0z'/%3E%3Cpath fill='%231D1D1D' d='M5.25 2.284l-.53.53 4.684 4.687-4.683 4.683.53.53L10.466 7.5 5.25 2.285z'/%3E%3C/g%3E%3C/svg%3E"); }
-.swiper-pagination-fraction { bottom: 0; font-size: 12px; line-height: 25px; }
+.swiper_highlight_list .swiper-pagination-fraction { bottom: 0; font-size: 12px; font-weight: 700; line-height: 25px; }
 .swiper_highlight_list .swiper-pagination-current { color: #333; }
-.swiper_highlight_list .swiper-pagination-total { position: relative; margin-left: 4px; font-weight: 700; color: #999; }
-.swiper_highlight_list .swiper-pagination-total::before { content: '/'; position: absolute; left: -5px; top: 0;  }
+.swiper_highlight_list .swiper-pagination-total { position: relative; margin-left: 4px; color: #999; }
 
 .swiper_highlight_list .list_item { padding: 26px 24px 28px; background-color: #fff6e2; }
 .swiper_highlight_list .list_item .title { margin-top: 20px; padding-top: 12px; border-top: 1px solid #999; font-size: 12px; color: #999; }
@@ -89,15 +95,16 @@ font-*,color,text-align,vertical-align, ...
 .swiper_highlight_inner .pagination_bullet { bottom: 0px; line-height: 5px; }
 .swiper_highlight_inner .swiper-pagination-bullet { width: 5px; height: 5px; line-height: 5px; }
 .swiper_highlight_inner .swiper-pagination-bullet-active { background-color: #f6330a; }
+.list_item:not(.swiper-slide-active) .swiper_highlight_inner { visibility: hidden; } 
 .highlight_wrap .highlight_text { font-size: 16px; line-height: 24px; letter-spacing: -.4px; color: #f6330a; }
 .highlight_wrap .highlight_text .ico_quotes { display: block; width: 20px; height: 14px; margin-bottom: 8px; background-position: 1px 0; }
-.col_lg9 > .chain_wrap:nth-child(n+2) { margin-top: 60px; }
+
 
 /* icon */
 .ico_quotes { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='13'%3E%3Cpath d='M12.602 4.811c.746-.204 1.458-.27 2.17-.105 1.17.27 2.044.912 2.702 1.946 1.35 2.123.312 5.543-2.799 6.157-2.252.445-4.38-1.057-4.852-3.434-.716-3.615.734-6.998 3.854-8.99a1.932 1.932 0 011.401-.282c.333.055.414.248.206.513a2.984 2.984 0 01-.447.43c-1.037.863-1.94 2.363-2.235 3.765m-9.643 0c.746-.204 1.457-.27 2.17-.105 1.17.27 2.044.912 2.701 1.946 1.35 2.123.313 5.543-2.798 6.157C2.78 13.254.652 11.752.18 9.375-.537 5.76.914 2.377 4.034.385A1.93 1.93 0 015.435.103c.333.055.414.248.205.513a2.93 2.93 0 01-.446.43c-1.037.863-1.94 2.363-2.235 3.765' fill='%23FD3C18' fill-rule='evenodd'/%3E%3C/svg%3E"); }
 
 
-.journalist_total{font-size:16px; font-weight: bold;}
+.journalist_total{}
 .journalist_list .list_item{display:block; width:100%;padding:24px; border:1px solid #e2e2e2;}
 
 /*기자 정보 공통 */
@@ -112,13 +119,25 @@ font-*,color,text-align,vertical-align, ...
 
 .profile_area .profile_body .journalist_popularity{display: flex; margin-top: 9px; color: #999;font-size: 13px;line-height: 1.54;}
 .profile_area .profile_body .journalist_popularity dt {margin-right:4px;}
-.profile_area .profile_body .journalist_popularity dd {font-weight: bold;}
+.profile_area .profile_body .journalist_popularity dd {font-weight: 700;}
 .profile_area .profile_body .journalist_popularity dd:nth-of-type(1) {position: relative; margin-right:16px;}
 .profile_area .profile_body .journalist_popularity dd:nth-of-type(1)::after{content: ""; display: block;position: absolute;top: 50%;left: 22px;width: 1px;height: 10px;background-color: #bcbcbc;transform: translateY(-50%);}
 
+.journalist_list .list_option_area {margin-bottom: 16px; }
 .journalist_list .meta{display:flex; margin-top:6px;}
-.journalist_list .meta .ico_up span{width:28px; height:18px; padding:3px 6px; margin-right:6px; border: 1px solid #f6330a; border-radius:10px; font-size:10px; font-weight: bold; color: #f6330a;}
+.journalist_list .meta .ico_up span{min-width:28px; height:18px; padding:3px 6px; margin-right:6px; border: 1px solid #f6330a; border-radius:10px; font-size:10px; font-weight: 700; color: #f6330a;}
 .journalist_list .meta .date{font-size:13px; line-height: 22px; color: #999999;}
+.journalist_body::after { display: block; content: ''; clear: both; }
+
+.ad { display: none; }
+
+/* 공통영역 */
+.not_date_bx { padding-top: 16px; }
+.not_date_bx .results { font-size: 20px; font-weight: 700; line-height: 30px; letter-spacing: -0.4px; color: #111; }
+.not_date_bx .list_blt { margin-top: 8px; }
+.list_blt li { position: relative; padding-left: 12px; font-size: 15px; line-height: 24px; letter-spacing: -0.4px; color: #666; }
+.list_blt li::before { content: ''; position: absolute; left: 0; top: 11px; width: 4px; height: 4px; background-color: #666; }
+
 /****************************************************************************************************/
 /***                                            image                                             ***/
 /****************************************************************************************************/
@@ -192,10 +211,14 @@ font-*,color,text-align,vertical-align, ...
     .package_list li:only-child a span:before {display:none;}
     .package_list a .ico_arrow_right {right:18px;}
     
+    .journalist_body { margin-top: 40px; }
+    .highlight_wrap { margin-top: 20px; }
+
     .journalist_list .row li{margin-bottom: 16px;}
     .journalist_list .profile_area .profile_image{width:80px;margin-right:16px;}
     .journalist_list .profile_area .profile_body .flex_area .name{font-size:20px; color:#111111;}
     .journalist_list .headline{height:37px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
+
 
 }
 
@@ -224,6 +247,8 @@ font-*,color,text-align,vertical-align, ...
     .journalist_list .profile_area .profile_image{width:72px;margin-right:24px;}
     .journalist_list .profile_area .profile_body .flex_area .name{font-size:18px; color:#111111;}
     .journalist_list .headline{height:61px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
+    .journalist_header .journalist_introduce { width: 668px; }
+    .journalist_body { margin-top: 60px; }
 
 }
 

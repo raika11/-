@@ -20,7 +20,6 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
-import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.merge.MokaPreviewTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ArticlePageItem;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
@@ -852,10 +851,10 @@ public class MergeServiceImpl implements MergeService {
     private List<Map<String, Object>> toListMap(List<IssueDeskingHistDTO> issueDeskings) {
         List<Map<String, Object>> returnList = new ArrayList<>();
         for (IssueDeskingHistDTO dto : issueDeskings) {
-            Map<String, Object> map = ResourceMapper
-                    .getDefaultObjectMapper()
-                    .convertValue(dto, Map.class);
-            returnList.add(map);
+            //            Map<String, Object> map = ResourceMapper
+            //                    .getDefaultObjectMapper()
+            //                    .convertValue(dto, Map.class);
+            returnList.add(dto.toItem());
         }
         return returnList;
     }

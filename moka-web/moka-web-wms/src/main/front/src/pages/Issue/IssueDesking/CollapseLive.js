@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH, CHANNEL_TYPE, ISSUE_CHANNEL_TYPE, ARTICLE_URL } from '@/constants';
 import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issue';
-import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
+import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon, MokaInput } from '@components';
 import { getDisplayedRows } from '@utils/agGridUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
@@ -24,12 +24,13 @@ const defaultProps = {
 /**
  * 패키지관리 > 관련 데이터 편집 > 라이브기사
  */
-const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight }, ref) => {
+const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight, preview }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
-    const [status, setStatus] = useState(DESK_STATUS_WORK);
+    const [status, setStatus] = useState(DESK_STATUS_SAVE);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [viewYn, setViewYn] = useState('N');
     const [show, setShow] = useState(false);
     const [histShow, setHistShow] = useState(false);
     const id = 'live-1';
@@ -104,7 +105,6 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
      * 임시저장
      */
     const saveDesking = () => {
-        const viewYn = open ? 'Y' : 'N';
         const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
 
         if (open && displayedRows.length < 1) {
@@ -182,15 +182,52 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
         }
     };
 
+    /**
+     * on/off 변경
+     */
+    const onChange = (e) => {
+        setStatus(DESK_STATUS_WORK);
+        setViewYn(e.target.checked ? 'Y' : 'N');
+    };
+
+    /**
+     * 히스토리 불러오기
+     * @param {array} histories 히스토리 목록
+     */
+    const onLoad = (histories) => {
+        if (histories) {
+            gridInstance.api.setRowData(
+                histories.map((d) => ({
+                    ...d,
+                    id,
+                    title: unescapeHtmlArticle(d.title),
+                    afterOnChange: () => setStatus(DESK_STATUS_WORK),
+                })),
+            );
+            setStatus(DESK_STATUS_WORK);
+        } else {
+            toast.warning('불러올 히스토리 목록이 없습니다');
+        }
+    };
+
     useImperativeHandle(
         ref,
         () => ({
-            viewYn: open ? 'Y' : 'N',
+            viewYn,
             gridInstance,
-            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
+            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), viewYn),
         }),
-        [gridInstance, open, rowToData],
+        [gridInstance, rowToData, viewYn],
     );
+
+    useEffect(() => {
+        setViewYn(desking.viewYn);
+        setOpen(desking.viewYn === 'Y');
+    }, [desking.viewYn]);
+
+    useEffect(() => {
+        setStatus(DESK_STATUS_SAVE);
+    }, [pkgSeq]);
 
     useEffect(() => {
         const data =
@@ -215,13 +252,8 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
                   };
         if (gridInstance) {
             gridInstance.api.setRowData([data]);
-            setStatus(DESK_STATUS_SAVE);
         }
     }, [compNo, deskingList, gridInstance, pkgSeq]);
-
-    useEffect(() => {
-        setOpen(desking.viewYn === 'Y');
-    }, [desking.viewYn]);
 
     return (
         <div className="position-relative border-bottom mb-24 pb-24">
@@ -230,24 +262,26 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
                 <Col xs={4} className="d-flex align-items-center position-unset">
                     <ReserveWork reserveDt={desking.reserveDt} pkgSeq={pkgSeq} compNo={compNo} status={status} onReserve={onReserve} />
                     <MokaInputLabel
-                        as="switch"
+                        as="none"
                         label="라이브기사"
-                        id={controls}
                         style={{ height: 'auto' }}
-                        inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
                         labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
-                        onChange={(e) => setOpen(e.target.checked)}
+                        labelProps={{ id: controls, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse', onClick: () => setOpen(!open) }}
                     />
+                    <MokaInput as="switch" id={`${controls}-input`} style={{ height: 'auto' }} inputProps={{ checked: viewYn === 'Y', label: '' }} onChange={onChange} />
                 </Col>
                 <Col xs={3} className="d-flex align-items-center">
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>
-                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
+                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} hideMovieTab hidePackageTab hideGraphTab />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">
                         <StatusBadge desking={desking} />
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="미리보기" variant="white" onClick={preview}>
+                            <MokaIcon iconName="fal-file-search" />
+                        </MokaOverlayTooltipButton>
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
                             <MokaIcon iconName="Save" feather />
                         </MokaOverlayTooltipButton>
@@ -257,7 +291,7 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
                         <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
                             <MokaIcon iconName="fal-history" />
                         </MokaOverlayTooltipButton>
-                        <DeskingHistoryModal show={histShow} onHide={() => setHistShow(false)} pkgSeq={pkgSeq} compNo={compNo} />
+                        <DeskingHistoryModal show={histShow} onHide={() => setHistShow(false)} pkgSeq={pkgSeq} compNo={compNo} onLoad={onLoad} />
                     </div>
                 </Col>
             </Row>

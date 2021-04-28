@@ -104,10 +104,26 @@
                     <h2 class="guide_title">드롭박스</h2>
                     <div class="sample_wrap">
                         <!-- 드롭박스 -->
-                        <div class="dropdown type_down ">
-                            <button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle">최신순</button>
+                        <div class="dropdown ">
+                            <button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle">최신순<i class="ico_arrow"></i></button>
                             
                             <div id="dropdown" class="dropdown_menu">
+                                <ul role="listbox">
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">최신순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">좋아요 많은 순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">화나요 많은 순</a></li>
+                                    <li class="dropdown_item" role="option"><a href="javascript:void(null);">답글 많은 순</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //드롭박스 -->
+
+
+                        <!-- 드롭박스 -->
+                        <div class="dropdown flt_r">
+                            <button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle">최신순<i class="ico_arrow"></i></button>
+                            
+                            <div id="dropdown" class="dropdown_menu right"> <!--  우측기준으로 열릴때 right추가 -->
                                 <ul role="listbox">
                                     <li class="dropdown_item" role="option"><a href="javascript:void(null);">최신순</a></li>
                                     <li class="dropdown_item" role="option"><a href="javascript:void(null);">좋아요 많은 순</a></li>
@@ -122,10 +138,25 @@
                     <div class="code_wrap">
 <pre><code class="html">
 &lt;!-- 드롭박스 --&gt;
-&lt;div class="dropdown type_down "&gt;
-    &lt;button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle"&gt;최신순&lt;/button&gt;
+&lt;div class="dropdown"&gt;
+    &lt;button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle"&gt;최신순&lt;i class="ico_arrow"&gt;&lt;/i&gt;&lt;/button&gt;
     
     &lt;div id="dropdown" class="dropdown_menu"&gt;
+        &lt;ul role="listbox"&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;최신순&lt;/a&gt;&lt;/li&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;좋아요 많은 순&lt;/a&gt;&lt;/li&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;화나요 많은 순&lt;/a&gt;&lt;/li&gt;
+            &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;답글 많은 순&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- //드롭박스 --&gt;
+
+&lt;!-- 드롭박스 --&gt;
+&lt;div class="dropdown"&gt;
+    &lt;button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle"&gt;최신순&lt;i class="ico_arrow"&gt;&lt;/i&gt;&lt;/button&gt;
+    
+    &lt;div id="dropdown" class="dropdown_menu right"&gt; &lt;!--  우측기준으로 열릴때 right추가 --&gt;
         &lt;ul role="listbox"&gt;
             &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;최신순&lt;/a&gt;&lt;/li&gt;
             &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;좋아요 많은 순&lt;/a&gt;&lt;/li&gt;
@@ -141,8 +172,8 @@
                     <h2 class="guide_title">드롭박스 업</h2>
                     <div class="sample_wrap">
                         <!-- 드롭박스 업 -->
-                        <div class="dropdown type_down type_up ">
-                            <button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle">북마크 많은 순</button>
+                        <div class="dropdown type_up">
+                            <button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle">북마크 많은 순<i class="ico_arrow"></i></button>
                             
                             <div id="dropdown" class="dropdown_menu">
                                 <ul role="listbox">
@@ -162,7 +193,7 @@
 <pre><code class="html">
 &lt;!-- 드롭박스 업 --&gt;
 &lt;div class="dropdown type_down type_up "&gt;
-    &lt;button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle"&gt;북마크 많은 순&lt;/button&gt;
+    &lt;button type="button" aria-controls="dropdown" aria-hasmodal="listbox" aria-expanded="false" class="dropdown_toggle"&gt;북마크 많은 순&lt;i class="ico_arrow"&gt;&lt;/i&gt;&lt;/button&gt;
     
     &lt;div id="dropdown" class="dropdown_menu"&gt;
         &lt;ul role="listbox"&gt;

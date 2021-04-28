@@ -50,7 +50,6 @@ public class AbTestCaseDTO {
      * A/B테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
     @ApiModelProperty("A/B테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)-필수")
-    @NotNull(message = "{tps.abtest.error.notnull.abtestType}")
     @Pattern(regexp = "[A|E|J|B|L]{1}$", message = "{tps.abtest.error.pattern.abtestType}")
     private String abtestType;
 
@@ -64,34 +63,22 @@ public class AbTestCaseDTO {
     private String domainId = "1000";
 
     /**
-     * AB테스트 페이지(메인:M, 기사:A, 뉴스레터:L)
+     * AB테스트 페이지(메인:M, 섹션: S, 기사(본문외):A, 뉴스레터:L)
      */
-    @ApiModelProperty("AB테스트 페이지(메인:M, 기사:A, 뉴스레터:L)")
-    @NotNull(message = "{tps.abtest.error.notnull.pageType}")
-    @Pattern(regexp = "[M|A|L]{1}$", message = "{tps.abtest.error.pattern.pageType}")
+    @ApiModelProperty("AB테스트 페이지(메인:M, 섹션: S, 기사(본문외):A, 뉴스레터:L)")
+    @Pattern(regexp = "[M|S|A|L]{1}$", message = "{tps.abtest.error.pattern.pageType}")
     private String pageType;
 
     /**
-     * 페이지SEQ
+     * 페이지SEQ 또는 기사타입 (기타코드 SVC_AT), 선택없을때는 ''
      */
-    @ApiModelProperty("페이지SEQ-필수")
-    @Min(value = 0, message = "{tps.page.error.min.pageSeq}")
-    private Long pageSeq = 0L;
-
-    /**
-     * 기사타입(직접-기사-본문외) - 기본형:B, 연재형:CWYZ, QA형:X, 특집형:S, 이슈라이브:TG
-     */
-    @ApiModelProperty("기사타입(직접-기사-본문외) - 기본형:B, 연재형:CWYZ, QA형:X, 특집형:S, 이슈라이브:TG")
-    @NotNull(message = "{tps.abtest.error.notnull.artType}")
-    @Pattern(regexp = "[A|E|J|B|L]{1}$", message = "{tps.abtest.error.pattern.artType}")
-    private String artType;
+    @ApiModelProperty("페이지SEQ 또는 기사타입 (기타코드 SVC_AT), 선택없을때는 ''")
+    private String pageValue;
 
     /**
      * 영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)
      */
     @ApiModelProperty("영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)")
-    @NotNull(message = "{tps.abtest.error.notnull.zoneDiv}")
-    @Pattern(regexp = "[A|C|L|P]{1}$", message = "{tps.abtest.error.pattern.zoneDiv}")
     private String zoneDiv;
 
     /**
@@ -101,9 +88,9 @@ public class AbTestCaseDTO {
     private String zoneSeq;
 
     /**
-     * AB테스트 목표(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
+     * AB테스트 대상(TPLT:디자인,레터레이아웃 / DATA:데이터 / COMP:컴포넌트(메인탑디자인 및 본문외) / 레터제목:LTIT / 발송일시 / LSDT / 발송자명:LSNM)
      */
-    @ApiModelProperty("AB테스트 목표(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)")
+    @ApiModelProperty("AB테스트 대상(TPLT:디자인,레터레이아웃 / DATA:데이터 / COMP:컴포넌트(메인탑디자인 및 본문외) / 레터제목:LTIT / 발송일시 / LSDT / 발송자명:LSNM)")
     @NotNull(message = "{tps.abtest.error.notnull.abtestPurpose}")
     private String abtestPurpose;
 
@@ -179,9 +166,9 @@ public class AbTestCaseDTO {
      * 상태(임시T/진행Y/대기P/종료Q)
      */
     @ApiModelProperty("상태(임시T/진행Y/대기P/종료Q)")
-    @NotNull(message = "{tps.abtest.error.notnull.status}")
+    @Builder.Default
     @Pattern(regexp = "[T|Y|P|Q]{1}$", message = "{tps.abtest.error.pattern.status}")
-    private String status;
+    private String status = MokaConstants.ABTEST_STATUS_T;
 
     /**
      * 삭제여부

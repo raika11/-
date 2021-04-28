@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaInput } from '@/components';
+import { MokaInput, MokaSearchInput } from '@/components';
 import { initialState, getNewsLetterList, changeNewsLetterSearchOption } from '@store/newsLetter';
 import toast from '@/utils/toastUtil';
 import { DB_DATEFORMAT, NEWS_LETTER_TYPE, NEWS_LETTER_SEND_TYPE, NEWS_LETTER_STATUS } from '@/constants';
@@ -16,8 +16,7 @@ const NewsLetterSearch = () => {
     const dispatch = useDispatch();
     const storeSearch = useSelector(({ newsLetter }) => newsLetter.newsLetter.search);
     const [search, setSearch] = useState(initialState.newsLetter.search);
-    const [period, setPeriod] = useState([0, 'all']);
-    const [nlTitle, setNlTitle] = useState([]);
+    const [period, setPeriod] = useState([7, 'days']);
 
     /**
      * 입력값 변경
@@ -67,8 +66,7 @@ const NewsLetterSearch = () => {
      */
     const handleClickReset = () => {
         setSearch(initialState.newsLetter.search);
-        setPeriod([0, 'all']);
-        setNlTitle([]);
+        setPeriod([7, 'days']);
     };
 
     useEffect(() => {
@@ -77,7 +75,13 @@ const NewsLetterSearch = () => {
     }, [storeSearch]);
 
     useEffect(() => {
-        dispatch(getNewsLetterList());
+        const date = new Date();
+        const startDt = moment(date).subtract(period[0], period[1]).startOf('day').format(DB_DATEFORMAT);
+        const endDt = moment(date).endOf('day').format(DB_DATEFORMAT);
+        const ns = { ...search, startDt, endDt };
+
+        dispatch(getNewsLetterList(changeNewsLetterSearchOption(ns)));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
     return (
@@ -92,7 +96,7 @@ const NewsLetterSearch = () => {
                     ))}
                 </MokaInput>
                 <MokaInput as="select" name="category" className="mr-2" value={search.category} onChange={handleChangeValue}>
-                    <option value="">분야 전체</option>
+                    <option value="">카테고리 전체</option>
                     <option value="1">분야1</option>
                     <option value="2">분야2</option>
                     <option value="3">분야3</option>
@@ -114,9 +118,9 @@ const NewsLetterSearch = () => {
                     ))}
                 </MokaInput>
                 <MokaInput as="select" name="abtestYn" className="mr-2" value={search.abtestYn} onChange={handleChangeValue}>
-                    <option>A/B TEST 여부 전체</option>
-                    <option value="Y">사용</option>
-                    <option value="N">미사용</option>
+                    <option>A/B TEST 유무 전체</option>
+                    <option value="Y">Y</option>
+                    <option value="N">N</option>
                 </MokaInput>
                 <Button variant="negative" style={{ overflow: 'visible' }} onClick={handleClickReset}>
                     초기화
@@ -169,30 +173,14 @@ const NewsLetterSearch = () => {
                         }}
                     />
                 </Col>
-                <MokaInput
-                    as="autocomplete"
-                    className="mr-2 flex-fill"
-                    value={nlTitle}
-                    inputProps={{
-                        options: [
-                            { value: '001', label: '정치 언박싱' },
-                            { value: '002', label: '팩플' },
-                            { value: '003', label: '백성호의 현문우답' },
-                            { value: '004', label: '풀인 인사이트' },
-                            { value: '005', label: '뉴스다이제스트' },
-                            { value: '006', label: '기타 상품' },
-                        ],
-                        maxMenuHeight: 300,
-                        placeholder: '뉴스레터 명 검색',
-                    }}
-                    onChange={(value) => {
-                        setNlTitle(value);
-                        setSearch({ ...search, letterName: value?.label });
-                    }}
+                <MokaSearchInput
+                    name="letterName"
+                    className="flex-fill"
+                    placeholder="뉴스레터 명을 입력하세요"
+                    value={search.letterName}
+                    onChange={handleChangeValue}
+                    onSearch={handleClickSearch}
                 />
-                <Button variant="searching" onClick={handleClickSearch}>
-                    검색
-                </Button>
             </Form.Row>
         </Form>
     );

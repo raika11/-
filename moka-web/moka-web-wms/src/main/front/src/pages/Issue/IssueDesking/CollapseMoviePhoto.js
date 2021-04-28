@@ -1,11 +1,11 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH, CHANNEL_TYPE, ISSUE_CHANNEL_TYPE } from '@/constants';
-import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
+import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon, MokaInput } from '@components';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
 import common from '@utils/commonUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
@@ -25,14 +25,16 @@ const defaultProps = {
 /**
  * 패키지관리 > 관련 데이터 편집 > 영상/포토
  */
-const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight }, ref) => {
+const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight, preview }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
-    const [status, setStatus] = useState(DESK_STATUS_WORK);
+    const [status, setStatus] = useState(DESK_STATUS_SAVE);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [viewYn, setViewYn] = useState('Y');
     const [show, setShow] = useState(false);
     const [histShow, setHistShow] = useState(false);
+    const [compLabel, setCompLabel] = useState('');
     const controls = 'collapse-mp';
 
     /**
@@ -148,11 +150,33 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
     };
 
     /**
+     * 라벨명 데이터 + agGrid 데이터
+     * @param {array} rows agGrid Row Data
+     * @returns array 라벨명 row + agGrid row
+     */
+    const combineRows = useCallback(
+        (rowsData) =>
+            [
+                {
+                    ...initialState.initialDesking,
+                    pkgSeq,
+                    compNo,
+                    compLabel,
+                    channelType: ISSUE_CHANNEL_TYPE.M.code,
+                },
+                ...rowsData,
+            ].map((d, idx) => ({
+                ...d,
+                contentsOrd: idx + 1,
+            })),
+        [compLabel, compNo, pkgSeq],
+    );
+
+    /**
      * 임시저장
      */
     const saveDesking = () => {
-        const viewYn = open ? 'Y' : 'N';
-        const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
+        let displayedRows = getDisplayedRows(gridInstance.api);
 
         if (open && displayedRows.length < 1) {
             messageBox.alert(MESSAGE.FAIL_SAVE_NO_DATA);
@@ -161,6 +185,8 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
 
         if (!open || validate(displayedRows)) {
             setLoading(true);
+            displayedRows = open ? rowToData(combineRows(displayedRows), viewYn) : [];
+
             dispatch(
                 saveIssueDesking({
                     compNo,
@@ -229,32 +255,72 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
         }
     };
 
-    useImperativeHandle(
-        ref,
-        () => ({
-            viewYn: open ? 'Y' : 'N',
-            gridInstance,
-            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
-        }),
-        [gridInstance, open, rowToData],
-    );
+    /**
+     * on/off 변경
+     */
+    const onChange = (e) => {
+        setStatus(DESK_STATUS_WORK);
+        setViewYn(e.target.checked ? 'Y' : 'N');
+    };
 
-    useEffect(() => {
-        if (gridInstance) {
-            // title, bodyHead unescapeHtmlArticle 처리
+    /**
+     * 히스토리 불러오기
+     * @param {array} histories 히스토리 목록
+     */
+    const onLoad = (histories) => {
+        if (histories) {
+            const filtered = histories.length > 0 ? histories.slice(1) : [];
+            setCompLabel(histories.length > 0 ? histories[0].compLabel : '');
+
             gridInstance.api.setRowData(
-                deskingList.map((d) => ({
+                filtered.map((d) => ({
                     ...d,
                     id: `${pkgSeq}-${ISSUE_CHANNEL_TYPE.M.code}-${common.getUniqueKey()}`,
                     title: unescapeHtmlArticle(d.title),
                     afterOnChange: () => setStatus(DESK_STATUS_WORK),
                 })),
             );
-            setStatus(DESK_STATUS_SAVE);
+            setStatus(DESK_STATUS_WORK);
+        } else {
+            toast.warning('불러올 히스토리 목록이 없습니다');
+        }
+    };
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            viewYn,
+            gridInstance,
+            getDisplayedRows: () => rowToData(combineRows(getDisplayedRows(gridInstance.api)), viewYn),
+        }),
+        [combineRows, gridInstance, rowToData, viewYn],
+    );
+
+    useEffect(() => {
+        setStatus(DESK_STATUS_SAVE);
+    }, [pkgSeq]);
+
+    useEffect(() => {
+        if (gridInstance) {
+            // 첫번째 데이터는 라벨로 노출하는 데이터로 컨텐츠성격의 데이터와 분리한다
+            // 만약 데이터가 0개라면 첫번째 데이터를 만든다
+            const filtered = deskingList.length > 0 ? deskingList.slice(1) : [];
+            setCompLabel(deskingList.length > 0 ? deskingList[0].compLabel : '');
+
+            // title, bodyHead unescapeHtmlArticle 처리
+            gridInstance.api.setRowData(
+                filtered.map((d) => ({
+                    ...d,
+                    id: `${pkgSeq}-${ISSUE_CHANNEL_TYPE.M.code}-${common.getUniqueKey()}`,
+                    title: unescapeHtmlArticle(d.title),
+                    afterOnChange: () => setStatus(DESK_STATUS_WORK),
+                })),
+            );
         }
     }, [gridInstance, pkgSeq, deskingList]);
 
     useEffect(() => {
+        setViewYn(desking.viewYn);
         setOpen(desking.viewYn === 'Y');
     }, [desking.viewYn]);
 
@@ -265,20 +331,19 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                 <Col xs={4} className="d-flex align-items-center position-unset">
                     <ReserveWork pkgSea={pkgSeq} status={status} compNo={compNo} reserveDt={desking.reserveDt} onReserve={onReserve} />
                     <MokaInputLabel
-                        as="switch"
+                        as="none"
                         label="영상포토"
-                        id={controls}
-                        inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
-                        labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
                         style={{ height: 'auto' }}
-                        onChange={(e) => setOpen(e.target.checked)}
+                        labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
+                        labelProps={{ id: controls, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse', onClick: () => setOpen(!open) }}
                     />
+                    <MokaInput as="switch" id={`${controls}-input`} style={{ height: 'auto' }} inputProps={{ checked: viewYn === 'Y', label: '' }} onChange={onChange} />
                 </Col>
                 <Col xs={3} className="d-flex align-items-center">
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>
-                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
+                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} hidePackageTab hideGraphTab />
                     <Button variant="positive" size="sm" className="mr-1" onClick={addMp}>
                         추가
                     </Button>
@@ -286,6 +351,9 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">
                         <StatusBadge desking={desking} />
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="미리보기" variant="white" onClick={preview}>
+                            <MokaIcon iconName="fal-file-search" />
+                        </MokaOverlayTooltipButton>
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
                             <MokaIcon iconName="Save" feather />
                         </MokaOverlayTooltipButton>
@@ -295,12 +363,13 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                         <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
                             <MokaIcon iconName="fal-history" />
                         </MokaOverlayTooltipButton>
-                        <DeskingHistoryModal show={histShow} pkgSeq={pkgSeq} compNo={compNo} onHide={() => setHistShow(false)} />
+                        <DeskingHistoryModal show={histShow} pkgSeq={pkgSeq} compNo={compNo} onHide={() => setHistShow(false)} onLoad={onLoad} />
                     </div>
                 </Col>
             </Row>
             <Collapse in={open}>
                 <div id={controls} className="mt-2">
+                    <MokaInputLabel label="라벨명" name="compLabel" value={compLabel} onChange={(e) => setCompLabel(e.target.value)} className="mb-1" />
                     <MokaTable
                         rowHeight={rowHeight}
                         header={false}

@@ -29,8 +29,6 @@ $(document).ready(function() {
         },
     });
 
-    btnCloseModal();
-    
 
 
 

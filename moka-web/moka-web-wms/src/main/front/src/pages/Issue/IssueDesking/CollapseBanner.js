@@ -29,6 +29,7 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [histShow, setHistShow] = useState(false);
+    const id = 'banner-1';
     const controls = 'collapse-banner';
 
     /**
@@ -138,6 +139,26 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
         setStatus(DESK_STATUS_WORK);
     };
 
+    /**
+     * 히스토리 불러오기
+     * @param {array} histories 히스토리 목록
+     */
+    const onLoad = (histories) => {
+        if (histories) {
+            gridInstance.api.setRowData(
+                histories.map((d) => ({
+                    ...d,
+                    id,
+                    title: unescapeHtmlArticle(d.title),
+                    afterOnChange: () => setStatus(DESK_STATUS_WORK),
+                })),
+            );
+            setStatus(DESK_STATUS_WORK);
+        } else {
+            toast.warning('불러올 히스토리 목록이 없습니다');
+        }
+    };
+
     useImperativeHandle(
         ref,
         () => ({
@@ -147,6 +168,10 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
         }),
         [gridInstance, open, rowToData],
     );
+
+    useEffect(() => {
+        setStatus(DESK_STATUS_SAVE);
+    }, [pkgSeq]);
 
     useEffect(() => {
         if (gridInstance) {
@@ -159,7 +184,7 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
                           pkgSeq,
                           compNo,
                           channelType: ISSUE_CHANNEL_TYPE.B.code,
-                          id: 'banner-1',
+                          id,
                           afterOnChange: () => setStatus(DESK_STATUS_WORK),
                       }
                     : {
@@ -167,11 +192,10 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
                           pkgSeq,
                           compNo,
                           channelType: ISSUE_CHANNEL_TYPE.B.code,
-                          id: 'banner-1',
+                          id,
                           afterOnChange: () => setStatus(DESK_STATUS_WORK),
                       };
             gridInstance.api.setRowData([data]);
-            setStatus(DESK_STATUS_SAVE);
         }
     }, [compNo, deskingList, gridInstance, pkgSeq]);
 
@@ -211,7 +235,7 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
                         <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
                             <MokaIcon iconName="fal-history" />
                         </MokaOverlayTooltipButton>
-                        <DeskingHistoryModal show={histShow} pkgSeq={pkgSeq} compNo={compNo} onHide={() => setHistShow(false)} reserveDt={desking.reserveDt} />
+                        <DeskingHistoryModal show={histShow} pkgSeq={pkgSeq} compNo={compNo} onHide={() => setHistShow(false)} reserveDt={desking.reserveDt} onLoad={onLoad} />
                     </div>
                 </Col>
             </Row>

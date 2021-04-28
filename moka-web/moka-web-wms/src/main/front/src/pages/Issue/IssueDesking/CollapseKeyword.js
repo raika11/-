@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH, ISSUE_CHANNEL_TYPE } from '@/constants';
 import { getDisplayedRows } from '@utils/agGridUtil';
 import toast, { messageBox } from '@utils/toastUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issue';
 import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import { DeskingHistoryModal } from '../modal';
@@ -28,6 +29,7 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [histShow, setHistShow] = useState(false);
+    const id = 'keyword-1';
     const controls = 'collapse-keyword';
 
     /**
@@ -143,6 +145,26 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
         setStatus(DESK_STATUS_WORK);
     };
 
+    /**
+     * 히스토리 불러오기
+     * @param {array} histories 히스토리 목록
+     */
+    const onLoad = (histories) => {
+        if (histories) {
+            gridInstance.api.setRowData(
+                histories.map((d) => ({
+                    ...d,
+                    id,
+                    title: unescapeHtmlArticle(d.title),
+                    afterOnChange: () => setStatus(DESK_STATUS_WORK),
+                })),
+            );
+            setStatus(DESK_STATUS_WORK);
+        } else {
+            toast.warning('불러올 히스토리 목록이 없습니다');
+        }
+    };
+
     useImperativeHandle(
         ref,
         () => ({
@@ -154,6 +176,10 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
     );
 
     useEffect(() => {
+        setStatus(DESK_STATUS_SAVE);
+    }, [pkgSeq]);
+
+    useEffect(() => {
         if (gridInstance) {
             const data =
                 deskingList.length > 0
@@ -162,8 +188,9 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
                           ...deskingList[0],
                           pkgSeq,
                           compNo,
+                          title: unescapeHtmlArticle(deskingList[0].title),
                           channelType: ISSUE_CHANNEL_TYPE.K.code,
-                          id: 'keyword-1',
+                          id,
                           afterOnChange: () => setStatus(DESK_STATUS_WORK),
                       }
                     : {
@@ -171,11 +198,10 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
                           pkgSeq,
                           compNo,
                           channelType: ISSUE_CHANNEL_TYPE.K.code,
-                          id: 'keyword-1',
+                          id,
                           afterOnChange: () => setStatus(DESK_STATUS_WORK),
                       };
             gridInstance.api.setRowData([data]);
-            setStatus(DESK_STATUS_SAVE);
         }
     }, [compNo, deskingList, gridInstance, pkgSeq]);
 
@@ -214,7 +240,7 @@ const CollapseKeyword = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESS
                         <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
                             <MokaIcon iconName="fal-history" />
                         </MokaOverlayTooltipButton>
-                        <DeskingHistoryModal show={histShow} onHide={() => setHistShow(false)} pkgSeq={pkgSeq} compNo={compNo} />
+                        <DeskingHistoryModal show={histShow} onHide={() => setHistShow(false)} pkgSeq={pkgSeq} compNo={compNo} onLoad={onLoad} />
                     </div>
                 </Col>
             </Row>

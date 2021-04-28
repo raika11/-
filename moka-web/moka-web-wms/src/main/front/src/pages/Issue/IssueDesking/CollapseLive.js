@@ -190,6 +190,26 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
         setStatus(DESK_STATUS_WORK);
     };
 
+    /**
+     * 히스토리 불러오기
+     * @param {array} histories 히스토리 목록
+     */
+    const onLoad = (histories) => {
+        if (histories) {
+            gridInstance.api.setRowData(
+                histories.map((d) => ({
+                    ...d,
+                    id,
+                    title: unescapeHtmlArticle(d.title),
+                    afterOnChange: () => setStatus(DESK_STATUS_WORK),
+                })),
+            );
+            setStatus(DESK_STATUS_WORK);
+        } else {
+            toast.warning('불러올 히스토리 목록이 없습니다');
+        }
+    };
+
     useImperativeHandle(
         ref,
         () => ({
@@ -199,6 +219,10 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
         }),
         [gridInstance, open, rowToData],
     );
+
+    useEffect(() => {
+        setStatus(DESK_STATUS_SAVE);
+    }, [pkgSeq]);
 
     useEffect(() => {
         const data =
@@ -223,7 +247,6 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
                   };
         if (gridInstance) {
             gridInstance.api.setRowData([data]);
-            setStatus(DESK_STATUS_SAVE);
         }
     }, [compNo, deskingList, gridInstance, pkgSeq]);
 
@@ -251,7 +274,7 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>
-                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
+                    <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} hideMovieTab hidePackageTab hideGraphTab />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">
@@ -268,7 +291,7 @@ const CollapseLive = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE
                         <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
                             <MokaIcon iconName="fal-history" />
                         </MokaOverlayTooltipButton>
-                        <DeskingHistoryModal show={histShow} onHide={() => setHistShow(false)} pkgSeq={pkgSeq} compNo={compNo} />
+                        <DeskingHistoryModal show={histShow} onHide={() => setHistShow(false)} pkgSeq={pkgSeq} compNo={compNo} onLoad={onLoad} />
                     </div>
                 </Col>
             </Row>

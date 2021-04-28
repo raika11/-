@@ -89,7 +89,7 @@ table{border-collapse:collapse;border-spacing:0;}
 body{direction:ltr;word-break:keep-all;word-wrap:break-word;-webkit-text-size-adjust:none;}
 body,th,td,input,select,textarea,button{font-size:100%;font-family:-atheme_uniquele-system,BlinkMacSystemFont,"Atheme_uniquele SD Gothic Neo","Noto Sans KR","Malgun Gothic","맑은 고딕",Dotum,"돋움",Arial,sans-serif;line-height:1;color:#2e2a26;}
 a{color:inherit;font-size:inherit;line-height:inherit;text-decoration:none;}
-a:hover{text-decoration:underline;}
+/* a:hover{text-decoration:underline;} */
 a:active{background-color:transparent;}
 address,caption,cite,code,dfn,em,var{font-style:normal;font-weight:normal;}
 img{vertical-align:middle;}
@@ -927,7 +927,7 @@ dl.date dd {margin-left: 6px;}
 .btn [class*="ico_"]{margin-right:2px;}
 
 /* 상태 */
-.btn_default{border-color:rgba(202, 202, 202, 0.8);}
+.btn_default{border-color:rgba(153, 153, 153, 0.8);}
 .btn_default_bg{background-color:#999;color:#fff;font-weight:700;}
 .btn_primary{border-color:#ff3c14;color:#ff3c14;font-weight:700;}
 .btn_primary_bg{background-color:#ff3c14;color:#fff;font-weight:700;}
@@ -956,6 +956,10 @@ dl.date dd {margin-left: 6px;}
 
 /* sns */
 .btn_sns {width: 40px;height: 40px;padding: 0 0;border-color: #e2e2e2;background-color: #fff;}
+
+/* 단독사용 */
+.btn.btn_more{padding:7px 28px;font-size: 14px;line-height: 1.57;letter-spacing: -0.4px;color: #111;}
+
 
 /****************************************************************************************************/
 /***                                            image                                             ***/
@@ -1080,14 +1084,17 @@ dl.date dd {margin-left: 6px;}
 .story_list .card {display: flex;align-items: end;padding-top: 20px; padding-bottom: 20px;}
 .story_list .card::before {content: "";position: absolute;top: unset;bottom: 0;left: 0;display: block;width: 100%;height: 1px;background: #e2e2e2;}
 
-.story_list .headline {font-size: 18px;line-height: 1.5;letter-spacing: -0.4px;}
+.story_list .card_body{position: relative;}
+.story_list .headline {font-size: 20px;line-height: 1.5;letter-spacing: -0.4px;}
 .story_list .card_image figure {max-width:100%;}
+.story_list  .ico_bookmark{width:24px;height:23px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='25'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 .923h24V24H0z'/%3E%3Cpath fill='%231D1D1D' d='M5.003 16.927v-1.646L5 11.103V8.061l.002-1.902v-.297l.001-.084.001-.203.001-.132v-.048l.002-.017a.992.992 0 011.044-.993h11.95c.33-.012.999.285.999.993v12.995l-1.2-.666V5.538H6.2v12.24l-1.196.662z'/%3E%3Cpath fill='%231D1D1D' d='M12.048 17.173l6.958 4.444-.009 1.268-.4.004-6.554-4.189-6.636 4.242-.404-.001L5 21.669l7.04-4.496.003.008.005-.008z'/%3E%3C/g%3E%3C/svg%3E");}
+.story_rank .rank_count{position:absolute;left:0;top:0;width:28px !important;font-size:0;background-position: 0 0;}
 
 
 /* 기자기사랭크 */
-.journalist_story_list .card {flex-direction: row-reverse;}
-.journalist_story_list .card_body {position: relative;}
-.journalist_story_list .rank_count {position:absolute;left:0;top:0;font-size:0;background-position: 0 0;}
+.story_rank .card {flex-direction: row-reverse;}
+/* .journalist_story_list .card_body {position: relative;} */
+
 .rank_data {margin-right:8px;font-size: 13px;line-height: 1.69;letter-spacing: -0.5px;color: #f6330a;}
 .ico_rank_all {width:17px;height:11px;margin-right:3px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='17' height='11'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 1.000000 0 0 0 0 0.235294 0 0 0 0 0.078431 0 0 0 1.000000 0'/%3E%3C/filter%3E%3Cpath id='b' d='M.174.047h1.645v1.645H.174z'/%3E%3C/defs%3E%3Cg filter='url(%23a)' fill='none' fill-rule='evenodd'%3E%3Cpath fill='%233F3A3A' d='M14.816 4.928a.275.275 0 00-.229-.022h-.006l-3.016 1.096c-.006.002-.01.006-.015.009l-.894.325-2.05-3.504c-.099-.17-.377-.17-.475 0l-.747 1.29L6.113 6.29l-2.748-.945-1.21-.44h-.007a.274.274 0 00-.228.023.275.275 0 00-.124.305l1.646 5.484a.274.274 0 00.334.195h9.183a.274.274 0 00.335-.195l1.645-5.484a.275.275 0 00-.123-.305M1.645 3.554a.822.822 0 11-1.644 0 .822.822 0 011.644 0'/%3E%3Cg transform='translate(7.403 .228)'%3E%3Cmask id='c' fill='%23fff'%3E%3Cuse xlink:href='%23b'/%3E%3C/mask%3E%3Cpath fill='%233F3A3A' d='M1.819.87a.823.823 0 110-.001' mask='url(%23c)'/%3E%3C/g%3E%3Cpath fill='%233F3A3A' d='M16.73 3.569a.823.823 0 11-1.648 0 .823.823 0 011.649 0'/%3E%3C/g%3E%3C/svg%3E");}
 
@@ -1097,16 +1104,17 @@ dl.date dd {margin-left: 6px;}
     /* story_list */
     .story_list .card {display:block;}
     .story_list .card_body{display:block;width: auto;max-width: 100%;overflow: inherit;}
-    .story_list .headline {min-height:81px;padding-right:12px;}
-    .story_list .none_photo .card_body .headline{min-height: unset;}
+    .story_list .headline {width:calc(100% - 132px);min-height:81px;padding-right:12px;}
+    .story_list .none_photo .card_body .headline{min-height: unset;width: unset;padding-right: unset;}
     .story_list .card_image{float:right;}
     .story_list .card_image img{width:132px;}
     .story_list .meta {margin-top: unset;}
 
-    /* 기자기사랭크 */
+    /* 스토리리스크-랭크 */
     .journalist_story_list.headline{font-size:16px;}
-    /* .journalist_story_list .rank_count {width:23px !important;} */
-    .journalist_story_list .card_body {padding-left:23px;}
+    .story_rank .card_body {padding-left:23px;}
+    .story_rank .description{display:none;}
+
 
     /* not_comment */
     .not_comment { padding: 20px 0; }
@@ -1116,23 +1124,25 @@ dl.date dd {margin-left: 6px;}
 
     /* story_list */
     .story_list .card {align-items : stretch;padding-top: 16px; padding-bottom: 16px;}
+    .story_list .card_image img{width:205px;}
     .story_list .card_body {display:flex;padding-left:30px;flex-wrap: wrap;flex-grow: 1 !important;}
     .story_list .none_photo .card_body {padding-left:0;}
     .story_list .card_body >  *{width:100%;flex: 0 0 auto;}
     .story_list .headline {font-size:20px;}
     .story_list .meta{margin-top:auto;}
+    .story_list .ico_bookmark{width:20px;height:20px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h20v20H0z'/%3E%3Cpath fill='%231D1D1D' d='M15 3c.277-.01.833.248.833.861v11.262l-1-.578V4H5.167v10.606l-.997.576V13.959l-.001-1.175V4.121l.001-.113v-.045l.001-.065v-.02l.001-.018c-.008-.32.225-.86.87-.86z'/%3E%3Cpath fill='%231D1D1D' d='M10.04 14.083l5.799 3.852-.008 1.1-.333.002-5.462-3.63-5.53 3.676-.336-.001-.004-1.102 5.867-3.897.003.007.004-.007z'/%3E%3C/g%3E%3C/svg%3E");}
 
 
     
     
     /* 기자기사랭크 */
     .journalist_story_list .card_image img {width:136px;}
-    .journalist_story_list .rank_count {width:28px !important;}
-    .journalist_story_list .card_body {width:calc(100% - 205px);padding-left:36px;padding-right:10px;flex-direction: column;}
+    
+    .story_rank .card_body {width:calc(100% - 205px);padding-left:36px;padding-right:10px;flex-direction: column;}
 
 
     /* 트랜드기사랭크 */
-    .trend_story_list.card_image img {width:205px;}
+    /* .trend_story_list.card_image img {width:205px;} */
     
     /* not_comment */
     .not_comment { padding: 40px 0; }
@@ -1160,11 +1170,6 @@ dl.date dd {margin-left: 6px;}
     .bookmark_list_area .card_image {display: none;}
 }
 
-/* list */
-/* .list{list-style-type:none;}
-.list_item,.story_item,.photo_item,.card_image,.card_body{overflow:hidden;}
-.list .list_item,.story_list .story_item,.photo_list .photo_item{position:relative;padding-top:7px;padding-bottom:7px;font-size:14px;}
-.list .list_item::before,.story_list .story_item::before,.photo_list .photo_item::before{content:"";position:absolute;bottom:0;left:0;width:100%;height:1px;background:#ddd;} */
 
 /* Images types */
 .list .list_item .list_image{float:left;margin-right:16px;}

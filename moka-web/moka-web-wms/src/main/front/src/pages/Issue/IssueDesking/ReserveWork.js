@@ -166,6 +166,10 @@ const ReserveWork = ({ reserveDt: alreadyReservedDt, pkgSeq, compNo, onReserve, 
         }
     }, [alreadyReservedDt]);
 
+    useEffect(() => {
+        setOpenReserve(false);
+    }, [pkgSeq]);
+
     return (
         <React.Fragment>
             <MokaOverlayTooltipButton tooltipText="예약" variant="white" className="work-btn mr-2 flex-shrink-0" onClick={handleClickBtn}>

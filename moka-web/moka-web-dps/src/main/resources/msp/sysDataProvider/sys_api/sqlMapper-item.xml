@@ -18,33 +18,13 @@
     WHERE DOMAIN_ID = #{domainId}
   </select>
 
-  <select id="page_list" parameterType="hashmap" resultType="map">
-    SELECT [PAGE_SEQ]
-    ,[DOMAIN_ID]
-    ,[PAGE_NAME]
-    ,[PAGE_SERVICE_NAME]
-    ,[PAGE_DISPLAY_NAME]
-    ,[PARENT_PAGE_SEQ]
-    ,[PAGE_TYPE]
-    ,[PAGE_URL]
-    ,[PAGE_ORD]
-    <if test='tBody.equalsIgnoreCase("Y") || tBody == null'>,[PAGE_BODY]</if>
-    ,[URL_PARAM]
-    ,[USED_YN]
-    ,[FILE_YN]
-    ,[KWD]
-    ,[CATEGORY]
-    ,[DESCRIPTION]
-    ,[MOVE_YN]
-    ,[MOVE_URL]
-    ,[REG_DT]
-    ,[REG_ID]
-    ,[MOD_DT]
-    ,[MOD_ID]
-    FROM TB_WMS_PAGE
-    WHERE USED_YN='Y'
-    <if test="domainId != null">AND DOMAIN_ID = #{domainId}</if>
-    <if test="id != null">AND PAGE_SEQ = #{id}</if>
+  <select id="page_list" parameterType="hashmap" resultType="map"
+    statementType="CALLABLE">
+    {call UPA_WMS_PAGE_LIST_SEL_BY_TMS(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{tBody, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{domainId, mode=IN, jdbcType=VARCHAR, javaType=string}
+      ) }
   </select>
 
   <select id="container" parameterType="hashmap" resultType="map">

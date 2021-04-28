@@ -126,7 +126,7 @@ font-*,color,text-align,vertical-align, ...
 .profile_area .profile_body .journalist_popularity dd:nth-of-type(1)::after{content: ""; display: block;position: absolute;top: 50%;left: 22px;width: 1px;height: 10px;background-color: #bcbcbc;transform: translateY(-50%);}
 
 .journalist_list .meta{display:flex; margin-top:6px;}
-.journalist_list .meta .ico_up span{width:28px; height:18px; padding:3px 6px; margin-right:6px; border: 1px solid #f6330a; border-radius:10px; font-size:10px; font-weight: bold; color: #f6330a;}
+.journalist_list .meta .ico_up span{min-width:28px; height:18px; padding:3px 6px; margin-right:6px; border: 1px solid #f6330a; border-radius:10px; font-size:10px; font-weight: bold; color: #f6330a;}
 .journalist_list .meta .date{font-size:13px; line-height: 22px; color: #999999;}
 
 .journalist_body::after { display: block; content: ''; clear: both; }

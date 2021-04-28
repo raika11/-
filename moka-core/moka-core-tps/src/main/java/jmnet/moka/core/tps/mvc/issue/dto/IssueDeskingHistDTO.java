@@ -10,7 +10,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import jmnet.moka.core.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -113,4 +115,31 @@ public class IssueDeskingHistDTO implements Serializable {
     @ApiModelProperty("이미지파일")
     @JsonIgnore
     private MultipartFile thumbFile;
+
+    public Map<String, Object> toItem() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("SEQ_NO", this.seqNo);
+        map.put("PKG_SEQ", this.pkgSeq);
+        map.put("COMP_NO", this.compNo);
+        map.put("COMP_LABEL", this.compLabel);
+        map.put("VIEW_YN", this.viewYn);
+        map.put("STATUS", this.status);
+        map.put("RESERVE_DT", this.reserveDt);
+        map.put("APPROVAL_YN", this.approvalYn);
+        map.put("CONTENTS_ID", this.contentsId);
+        map.put("CONTENTS_ORD", this.contentsOrd);
+        map.put("CHANNEL_TYPE", this.channelType);
+        map.put("DIST_DT", this.distDt);
+        map.put("TITLE", this.title);
+        map.put("LINK_URL", this.linkUrl);
+        map.put("LINK_TARGET", this.linkTarget);
+        map.put("THUMB_FILE_NAME", this.thumbFileName);
+        map.put("THUMB_SIZE", this.thumbSize);
+        map.put("THUMB_WIDTH", this.thumbWidth);
+        map.put("THUMB_HEIGHT", this.thumbHeight);
+        map.put("BG_COLOR", this.bgColor);
+        map.put("DURATION", this.duration);
+        map.put("BODY_HEAD", this.bodyHead);
+        return map;
+    }
 }

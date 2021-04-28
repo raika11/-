@@ -288,14 +288,30 @@ textarea {resize: none;}
     .row {margin-left: -6px;margin-right: -6px;}
     .row > * {padding-left: 6px;padding-right: 6px;}
 
-    .sm_hidden {display: none;} /* <<- .pc {display:none;}*/
-
     .side_nav_mobile {width: 100%;}
     .side_nav_mobile .form_select {padding-left: 0;border: none;font-size: 24px;font-weight: 900;}
 
     .tab_box {padding: 5px 0;}
     .tab_box a {padding: 0 16px;line-height: 1.38;}
     .tab_box a:first-child {padding-left: 0;}
+
+    /** flex **/
+    .flex_sm {display: flex !important;}
+    .flex_sm > * {flex: 0 0 auto !important;}
+    .flex_sm_col {display: flex !important;flex-direction: column !important;}
+    .flex_sm_align_center {align-items: center !important;}
+    .flex_sm_align_start {align-items: flex-start !important;}
+    .flex_sm_align_end {align-items: flex-end !important;}
+    .flex_sm_justify_center {justify-content: center !important;}
+    .flex_sm_justify_start {justify-content: flex-start !important;}
+    .flex_sm_justify_end {justify-content: flex-end !important;}
+    .flex_sm_justify_between {justify-content: space-between !important;}
+    .flex_sm_justify_around {justify-content: space-around !important;}
+    .flex_sm_wrap {flex-wrap: wrap !important;}
+    .flex_sm_nowrap {flex-wrap: nowrap !important;}
+
+    .flex_sm_row_reverse {flex-direction: row-reverse !important;}
+    .flex_sm_col_reverse {flex-direction: column-reverse !important;}
 
     /* font size */
     .fs_sm32{font-size:32px !important;}

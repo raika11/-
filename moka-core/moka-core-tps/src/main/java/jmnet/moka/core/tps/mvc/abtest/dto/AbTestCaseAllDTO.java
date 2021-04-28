@@ -374,17 +374,27 @@ public class AbTestCaseAllDTO {
      */
     @ApiModelProperty("VARIANT일련번호(템플릿SEQ/데이터셋SEQ/컴포넌트SEQ/컨테이너SEQ)")
     @Builder.Default
-    private Long variantSeq = 0L;
+    private Long variantSeqA = 0L;
+
+    @ApiModelProperty("VARIANT일련번호(템플릿SEQ/데이터셋SEQ/컴포넌트SEQ/컨테이너SEQ)")
+    @Builder.Default
+    private Long variantSeqB = 0L;
 
     /**
      * 제목(JAM,뉴스레터), 뉴스레터 발송시간, 뉴스레터 발송자명   / TB_ABTEST_VARIANT(AB테스트 VARIANT) VARIANT_VALUE
      */
-    @ApiModelProperty(value = "제목(JAM,뉴스레터), 뉴스레터 발송시간, 뉴스레터 발송자명")
-    private String variantValue;
+    @ApiModelProperty(value = "A테스트 제목(JAM,뉴스레터), 뉴스레터 발송시간, 뉴스레터 발송자명")
+    private String variantValueA;
+
+    @ApiModelProperty(value = "B테스트 제목(JAM,뉴스레터), 뉴스레터 발송시간, 뉴스레터 발송자명")
+    private String variantValueB;
 
     /**
      * 기사내용
      */
-    @ApiModelProperty(value = "기사내용")
-    private String artContent;
+    @ApiModelProperty(value = "A테스트 기사내용")
+    private String artContentA;
+
+    @ApiModelProperty(value = "B테스트 기사내용")
+    private String artContentB;
 }

@@ -64,6 +64,9 @@ public class AbTestCaseVO {
     @Column(name = "PAGE_VALUE")
     private String pageValue;
 
+    @Column(name = "PAGE_NM")
+    private String pageNm;
+
     /**
      * 영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)
      */
@@ -75,6 +78,9 @@ public class AbTestCaseVO {
      */
     @Column(name = "ZONE_SEQ")
     private String zoneSeq;
+
+    @Column(name = "ZONE_NM")
+    private String zoneNm;
 
     /**
      * AB테스트 대상(TPLT:디자인,레터레이아웃 / DATA:데이터 / COMP:컴포넌트(메인탑디자인 및 본문외) / 레터제목:LTIT / 발송일시 / LSDT / 발송자명:LSNM)

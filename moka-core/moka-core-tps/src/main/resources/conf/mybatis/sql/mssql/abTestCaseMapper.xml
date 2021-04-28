@@ -198,9 +198,12 @@
       #{kpiValueB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{deskingPart, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{variantSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{variantValue, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{artContent, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{variantSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{variantSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{variantValueA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{variantValueB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{artContentA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{artContentB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{abtestSeq, mode=OUT, jdbcType=INTEGER, javaType=int}
       )}
   </insert>
@@ -254,9 +257,12 @@
       #{kpiValueB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{deskingPart, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{variantSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{variantValue, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{artContent, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+      #{variantSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{variantSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{variantValueA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{variantValueB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{artContentA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{artContentB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
       )}
   </update>
 </mapper>

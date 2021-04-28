@@ -19,6 +19,7 @@ var include = {
         document.write('<link href="//stg-static.joongang.co.kr/css/article.css" rel="stylesheet">');
 
         document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>');
+        document.write('<script src="//stg-static.joongang.co.kr/js/resource.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/common.js"></script>');
         // document.write('<script src="//stg-static.joongang.co.kr/js/plugin/select2.min.js"></script>');
 
@@ -68,7 +69,8 @@ var include = {
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Container</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Grid</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Section</a></li>');
-            document.write('                <li class="nav_item"><a class="nav_link" href="title.html">타이틀</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="layout_page_title.html">페이지타이틀</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="layout_title.html">타이틀</a></li>');
             document.write('            </ul>');
             document.write('        </li>');
             document.write('        <li class="nav_item">');

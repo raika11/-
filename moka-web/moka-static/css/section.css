@@ -222,7 +222,7 @@
 @media (min-width:768px) and (max-width:1023px) {
 
     /* card */
-    .card_image + .card_body { padding-top: 8px; }
+    /* .card_image + .card_body { padding-top: 8px; } */
     .story_list > .card::before {left:10px;width:calc(100% - 20px);}
 
     /***************************************    general     ************************************/

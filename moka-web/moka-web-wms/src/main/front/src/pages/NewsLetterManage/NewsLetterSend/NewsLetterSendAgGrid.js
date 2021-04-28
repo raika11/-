@@ -1,17 +1,30 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import moment from 'moment';
 import { useHistory } from 'react-router';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@/components';
 import columnDefs from './NewsLetterSendAgGridColumns';
+import { GET_NEWS_LETTER_SEND_LIST } from '@/store/newsLetter';
+import { BASIC_DATEFORMAT, NEWS_LETTER_TYPE } from '@/constants';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 발송 목록
  */
 const NewsLetterSendAgGrid = ({ match }) => {
     const history = useHistory();
-    const [total] = useState(0);
-    const [loading] = useState(false);
-    const [search] = useState({ page: 1, size: 10 });
+    const dispatch = useDispatch();
+    const { total, search, list, loading } = useSelector(
+        (store) => ({
+            total: store.newsLetter.send.total,
+            search: store.newsLetter.send.search,
+            list: store.newsLetter.send.list,
+            loading: store.loading[GET_NEWS_LETTER_SEND_LIST],
+        }),
+        shallowEqual,
+    );
+
+    const [rowData, setRowData] = useState([]);
 
     /**
      * 테이블 검색 옵션 변경
@@ -33,6 +46,15 @@ const NewsLetterSendAgGrid = ({ match }) => {
         history.push(`${match.path}/send`);
     };
 
+    useEffect(() => {
+        setRowData(
+            list.map((s) => ({
+                ...s,
+                sendDt: s.sendDt ? moment(s.sendDt).format(BASIC_DATEFORMAT) : '',
+            })),
+        );
+    }, [list]);
+
     return (
         <>
             <div className="mb-14 d-flex justify-content-end">
@@ -48,25 +70,8 @@ const NewsLetterSendAgGrid = ({ match }) => {
                 suppressMultiSort // 다중 정렬 비활성
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
-                rowData={[
-                    {
-                        no: '1',
-                        letterType: '오리지널',
-                        letterName: '정치 언박싱',
-                        letterTitle: '[정치 언박싱] 지지후보 바꿀수도...',
-                        sendDt: '2021-03-01',
-                        abtestYn: 'N',
-                    },
-                    {
-                        no: '2',
-                        letterType: '알림',
-                        letterName: '폴인 인사이트',
-                        letterTitle: "[폴인 인사이트] '초통령' 로블록스, 졸업 할 수 있을까",
-                        sendDt: '2021-03-02',
-                        abtestYn: 'Y',
-                    },
-                ]}
-                onRowNodeId={(data) => data.no}
+                rowData={rowData}
+                onRowNodeId={(data) => data.sendSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 page={search.page}

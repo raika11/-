@@ -29,8 +29,22 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
      * 입력값 변경
      */
     const handleChangeValue = (e) => {
-        const { name, value } = e.target;
-        onChangeValue({ [name]: value });
+        const { name, value, checked } = e.target;
+        if (name === 'channelType') {
+            if (value === 'Trend') {
+                onChangeValue({ letterName: '트렌드 뉴스' });
+            } else {
+                onChangeValue({ [name]: value, letterName: '' });
+            }
+        } else if (name === 'scbYn') {
+            if (checked) {
+                onChangeValue({ [name]: 'Y' });
+            } else {
+                onChangeValue({ [name]: 'N' });
+            }
+        } else {
+            onChangeValue({ [name]: value });
+        }
     };
 
     /**
@@ -146,7 +160,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
             <p className="mb-2">※ 기본정보 설정</p>
 
             <Form.Row className="mb-2 align-items-center">
-                <MokaInputLabel as="none" label="발송 방법" />
+                <MokaInputLabel as="none" label="발송 방법" required />
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput
                         as="radio"
@@ -169,7 +183,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2 align-items-center">
-                <MokaInputLabel as="none" label="유형" />
+                <MokaInputLabel as="none" label="유형" required />
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput
                         as="radio"
@@ -215,7 +229,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
             </Form.Row>
 
             <Form.Row className="mb-2">
-                <MokaInputLabel as="none" label="카테고리" />
+                <MokaInputLabel as="none" label="카테고리" required />
                 <div className="flex-fill">
                     <Col xs={8} className="p-0">
                         <MokaSearchInput placeholder="" disabled />
@@ -225,7 +239,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
 
             {temp.sendType === 'A' && (
                 <Form.Row className="mb-2 align-items-center">
-                    <MokaInputLabel as="none" label="발송 콘텐츠 선택" />
+                    <MokaInputLabel as="none" label="발송 콘텐츠 선택" required />
                     <div className="flex-fill">
                         <div className="mb-2 d-flex align-items-center" style={{ height: 31 }}>
                             <MokaInput
@@ -318,7 +332,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                     </div>
                 </Form.Row>
             )}
-            <MokaInputLabel label="뉴스레터 명(한글)" name="letterName" className="mb-2" value={temp.letterName} onChange={handleChangeValue} />
+            <MokaInputLabel label="뉴스레터 명(한글)" name="letterName" className="mb-2" value={temp.letterName} onChange={handleChangeValue} required />
             <MokaInputLabel label="뉴스레터 명(영문)" name="letterEngName" className="mb-2" value={temp.letterEngName} onChange={handleChangeValue} />
             <MokaInputLabel
                 as="textarea"
@@ -329,8 +343,9 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                 inputClassName="resize-none"
                 inputProps={{ rows: 3 }}
                 onChange={handleChangeValue}
+                required
             />
-            <Form.Row className="align-items-end">
+            <Form.Row className="mb-2 align-items-end">
                 <MokaInputLabel
                     as="imageFile"
                     className="mr-2"
@@ -343,10 +358,21 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                             </Button>
                         </React.Fragment>
                     }
-                    inputProps={{ img: temp.letterImg, setFileValue: handleFileValue, width: 190, deleteButton: true, accept: 'image/jpeg, image/png' }}
+                    inputProps={{ img: temp.letterImg, setFileValue: handleFileValue, width: 170, deleteButton: true, accept: 'image/jpeg, image/png' }}
                 />
-                <p className="mb-0 color-primary">사이즈 000 * 000 px</p>
+                <div>
+                    <p className="mb-0">사이즈 000 * 000 px</p>
+                    <p className="mb-0 color-primary">※ 지정하지 않을 경우 "사진없음" 기본 이미지가 노출됨</p>
+                </div>
             </Form.Row>
+            <MokaInputLabel
+                as="switch"
+                label="구독 가능 여부"
+                name="scbYn"
+                id="letter-scbYn"
+                onChange={handleChangeValue}
+                inputProps={{ custom: true, checked: temp.scbYn === 'Y' }}
+            />
 
             {/* 포토 아카이브 모달 */}
             <EditThumbModal show={imgModal} cropWidth={290} cropHeight={180} onHide={() => setImgModal(false)} thumbFileName={temp.headerImg} apply={handleThumbFileApply} />

@@ -911,7 +911,7 @@ dl.date dd {margin-left: 6px;}
 .btn [class*="ico_"]{margin-right:2px;}
 
 /* 상태 */
-.btn_default{border-color:rgba(202, 202, 202, 0.8);}
+.btn_default{border-color:rgba(153, 153, 153, 0.8);}
 .btn_default_bg{background-color:#999;color:#fff;font-weight:700;}
 .btn_primary{border-color:#ff3c14;color:#ff3c14;font-weight:700;}
 .btn_primary_bg{background-color:#ff3c14;color:#fff;font-weight:700;}
@@ -940,6 +940,10 @@ dl.date dd {margin-left: 6px;}
 
 /* sns */
 .btn_sns {width: 40px;height: 40px;padding: 0 0;border-color: #e2e2e2;background-color: #fff;}
+
+/* 단독사용 */
+.btn.btn_more{padding:7px 28px;font-size: 14px;line-height: 1.57;letter-spacing: -0.4px;color: #111;}
+
 
 /****************************************************************************************************/
 /***                                            image                                             ***/

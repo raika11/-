@@ -591,6 +591,11 @@ header.title_wrap{border-top: 4px solid #f6330a;}
 .title_wrap .exp{color: #f6330a;font-size: 13px;letter-spacing: -0.33px;}
 .title_wrap .btn_group { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
 
+/* 리스트 상단 옵션 */
+.list_option_area { display: flex; align-items: center; justify-content: space-between; margin-top: 24px;  }
+.list_option_area .all_count { font-size:16px; font-weight: 700; }
+
+
 /* 태블릿 디자인 나올때 까지는 아래 분기만 사용 - 2021.04.22 */
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width: 1023px) {    }

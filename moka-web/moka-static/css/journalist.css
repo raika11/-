@@ -53,7 +53,7 @@ font-*,color,text-align,vertical-align, ...
 .journalist_header .journalist_popularity {position:absolute; top:12px; right:0; min-width:261px;}
 .journalist_header .journalist_popularity > div {position:relative; text-align:center;}
 .journalist_header .journalist_popularity > div + div:before {display:inline-block; content:''; position:absolute; top:0; left:0; width:1px; height:100%; border-left: 1px solid #e2e2e2;}
-.journalist_header .journalist_popularity dl {margin-bottom:12px; font-family:"Noto Sans KR"; font-weight:bold;}
+.journalist_header .journalist_popularity dl {margin-bottom:12px; font-family:"Noto Sans KR"; font-weight:700;}
 .journalist_header .journalist_popularity dt {font-size:14px; line-height:20px; color:#333;}
 .journalist_header .journalist_popularity dd {font-size:24px; line-height:34px; color:#111;}
 .journalist_header .journalist_popularity .btn {display:inline-block;}
@@ -105,7 +105,7 @@ font-*,color,text-align,vertical-align, ...
 .ico_quotes { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='13'%3E%3Cpath d='M12.602 4.811c.746-.204 1.458-.27 2.17-.105 1.17.27 2.044.912 2.702 1.946 1.35 2.123.312 5.543-2.799 6.157-2.252.445-4.38-1.057-4.852-3.434-.716-3.615.734-6.998 3.854-8.99a1.932 1.932 0 011.401-.282c.333.055.414.248.206.513a2.984 2.984 0 01-.447.43c-1.037.863-1.94 2.363-2.235 3.765m-9.643 0c.746-.204 1.457-.27 2.17-.105 1.17.27 2.044.912 2.701 1.946 1.35 2.123.313 5.543-2.798 6.157C2.78 13.254.652 11.752.18 9.375-.537 5.76.914 2.377 4.034.385A1.93 1.93 0 015.435.103c.333.055.414.248.205.513a2.93 2.93 0 01-.446.43c-1.037.863-1.94 2.363-2.235 3.765' fill='%23FD3C18' fill-rule='evenodd'/%3E%3C/svg%3E"); }
 
 
-.journalist_total{font-size:16px; font-weight: bold;}
+.journalist_total{}
 .journalist_list .list_item{display:block; width:100%;padding:24px; border:1px solid #e2e2e2;}
 
 /*기자 정보 공통 */
@@ -120,19 +120,18 @@ font-*,color,text-align,vertical-align, ...
 
 .profile_area .profile_body .journalist_popularity{display: flex; margin-top: 9px; color: #999;font-size: 13px;line-height: 1.54;}
 .profile_area .profile_body .journalist_popularity dt {margin-right:4px;}
-.profile_area .profile_body .journalist_popularity dd {font-weight: bold;}
+.profile_area .profile_body .journalist_popularity dd {font-weight: 700;}
 .profile_area .profile_body .journalist_popularity dd:nth-of-type(1) {position: relative; margin-right:16px;}
 .profile_area .profile_body .journalist_popularity dd:nth-of-type(1)::after{content: ""; display: block;position: absolute;top: 50%;left: 22px;width: 1px;height: 10px;background-color: #bcbcbc;transform: translateY(-50%);}
 
 .journalist_list .meta{display:flex; margin-top:6px;}
-.journalist_list .meta .ico_up span{min-width:28px; height:18px; padding:3px 6px; margin-right:6px; border: 1px solid #f6330a; border-radius:10px; font-size:10px; font-weight: bold; color: #f6330a;}
+.journalist_list .meta .ico_up span{min-width:28px; height:18px; padding:3px 6px; margin-right:6px; border: 1px solid #f6330a; border-radius:10px; font-size:10px; font-weight: 700; color: #f6330a;}
 .journalist_list .meta .date{font-size:13px; line-height: 22px; color: #999999;}
 .journalist_body::after { display: block; content: ''; clear: both; }
 
 /* 공통목록검색 */
-
-.list_option_area { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; padding-bottom: 6px; border-bottom: 1px solid #e2e2e2; }
-.list_option_area {  }
+.journalist_list .list_option_area {margin-bottom: 16px; }
+.tab_content .list_option_area { padding-bottom: 6px; border-bottom: 1px solid #e2e2e2; }
 
 /* 공통 검색 */
 .search_form {  position: relative; height: 36px; border: 1px solid #e2e2e2 }

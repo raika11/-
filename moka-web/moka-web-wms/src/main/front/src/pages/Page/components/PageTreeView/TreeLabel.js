@@ -40,7 +40,7 @@ const MokaTreeLabel = (props) => {
                     <Button
                         key={idx}
                         variant={button.variant}
-                        className="btn-pill mr-1"
+                        className="d-flex align-items-center justify-content-center mr-1"
                         size="sm"
                         onClick={(e) => {
                             e.preventDefault();

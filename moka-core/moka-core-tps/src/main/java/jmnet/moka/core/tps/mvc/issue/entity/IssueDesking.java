@@ -58,6 +58,13 @@ public class IssueDesking extends RegAudit {
     private Integer compNo;
 
     /**
+     * 영상포토 제목
+     */
+    @Nationalized
+    @Column(name = "COMP_LABEL")
+    private String compLabel;
+
+    /**
      * 콘텐츠ID
      */
     @Column(name = "CONTENTS_ID")

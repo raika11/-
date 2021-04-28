@@ -58,6 +58,12 @@ public class IssueDeskingHistVO implements Serializable {
     private Integer compNo;
 
     /**
+     * 영상포토 제목
+     */
+    @Column(name = "COMP_LABEL")
+    private String compLabel;
+
+    /**
      * 노출여부
      */
     @Column(name = "VIEW_YN")

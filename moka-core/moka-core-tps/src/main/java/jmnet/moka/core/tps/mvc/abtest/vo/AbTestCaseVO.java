@@ -59,21 +59,13 @@ public class AbTestCaseVO {
     private String pageType;
 
     /**
-     * 페이지SEQ
+     * 페이지SEQ 또는 기사타입 (기타코드 SVC_AT), 선택없을때는 ''
      */
-    @Column(name = "PAGE_SEQ")
-    private Long pageSeq = 0l;
+    @Column(name = "PAGE_VALUE")
+    private String pageValue;
 
-    /**
-     * 페이지명
-     */
+    @Column(name = "PAGE_NM")
     private String pageNm;
-
-    /**
-     * 기사타입(직접-기사-본문외) - (기타코드 SVC_AT)
-     */
-    @Column(name = "ART_TYPE")
-    private String artType;
 
     /**
      * 영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)
@@ -87,8 +79,11 @@ public class AbTestCaseVO {
     @Column(name = "ZONE_SEQ")
     private String zoneSeq;
 
+    @Column(name = "ZONE_NM")
+    private String zoneNm;
+
     /**
-     * AB테스트 대상(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
+     * AB테스트 대상(TPLT:디자인,레터레이아웃 / DATA:데이터 / COMP:컴포넌트(메인탑디자인 및 본문외) / 레터제목:LTIT / 발송일시 / LSDT / 발송자명:LSNM)
      */
     @Column(name = "ABTEST_PURPOSE")
     private String abtestPurpose;

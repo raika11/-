@@ -1,6 +1,5 @@
 package jmnet.moka.core.tps.mvc.newsletter.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -19,7 +18,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -128,10 +126,6 @@ public class NewsletterInfoHistDTO implements Serializable {
     @ApiModelProperty("상단이미지(자동, 수동 직접등록형)")
     private String headerImg;
 
-    @ApiModelProperty("이미지파일")
-    @JsonIgnore
-    private MultipartFile headerImgFile;
-
     @ApiModelProperty("수동형식 - 지정형(S), 자유형(F)")
     @Pattern(regexp = "^(S)|(F)$", message = "{tps.newsletter.error.pattern.abtestYn}")
     private String editLetterType;
@@ -151,6 +145,18 @@ public class NewsletterInfoHistDTO implements Serializable {
     @ApiModelProperty("카테고리")
     @Length(max = 100, message = "{tps.newsletter.error.size.category}")
     private String category;
+
+    @ApiModelProperty("날짜표기탭(1-6 월/주1/주2/일/요일/해당없음)")
+    private Long dateTab;
+
+    @ApiModelProperty("1(발송,해당없음) / 0(직전 또는 TODAY)")
+    private Long dateType;
+
+    @ApiModelProperty("기사제목포함여부")
+    private String artTitleYn;
+
+    @ApiModelProperty("직접입력한 제목")
+    private String editTitle;
 
     @ApiModelProperty("레터제목")
     @Length(max = 100, message = "{tps.newsletter.error.size.letterTitle}")

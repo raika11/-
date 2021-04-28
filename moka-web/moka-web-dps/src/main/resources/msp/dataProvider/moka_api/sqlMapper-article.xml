@@ -268,7 +268,7 @@
   <!-- 내가 좋아요/싫어요한 기사목록 -->
   <select id="likeMy" parameterType="map" resultType="map"
     statementType="CALLABLE">
-    {call UPU_15RE_ARTICLE_SHARE_LIST_SEL_BY_MEM(
+    {call UPU_15RE_ARTICLE_SHARE_LIST_SEL_BY_MEMLIKE(
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string},

@@ -63,24 +63,16 @@ public class AbTestCaseAllDTO {
     private String domainId = "1000";
 
     /**
-     * AB테스트 페이지(메인:M, 섹션: S, 기사(본문외):A, 뉴스레터:L)
+     * AB테스트 페이지(메인:M, 섹션: S, 기사(본문외):A, 뉴스레터:L, 전체 또는 없음:'')
      */
-    @ApiModelProperty("AB테스트 페이지(메인:M, 섹션: S, 기사(본문외):A, 뉴스레터:L)")
-    @Pattern(regexp = "[M|S|A|L]{1}$", message = "{tps.abtest.error.pattern.pageType}")
+    @ApiModelProperty("AB테스트 페이지(메인:M, 섹션: S, 기사(본문외):A, 뉴스레터:L, 전체 또는 없음:'')")
     private String pageType;
 
     /**
-     * 페이지SEQ
+     * 페이지SEQ 또는 기사타입 (기타코드 SVC_AT), 선택없을때는 ''
      */
-    @ApiModelProperty("페이지SEQ-필수")
-    @Min(value = 0, message = "{tps.page.error.min.pageSeq}")
-    private Long pageSeq = 0L;
-
-    /**
-     * 기사타입(직접-기사-본문외) - (기타코드 SVC_AT)
-     */
-    @ApiModelProperty("기사타입(직접-기사-본문외) - (기타코드 SVC_AT)")
-    private String artType;
+    @ApiModelProperty("페이지SEQ 또는 기사타입 (기타코드 SVC_AT), 선택없을때는 ''")
+    private String pageValue;
 
     /**
      * 영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)
@@ -95,9 +87,9 @@ public class AbTestCaseAllDTO {
     private String zoneSeq;
 
     /**
-     * AB테스트 대상(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
+     * AB테스트 대상(TPLT:디자인,레터레이아웃 / DATA:데이터 / COMP:컴포넌트(메인탑디자인 및 본문외) / 레터제목:LTIT / 발송일시 / LSDT / 발송자명:LSNM)
      */
-    @ApiModelProperty("AB테스트 대상(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)")
+    @ApiModelProperty("AB테스트 대상(TPLT:디자인,레터레이아웃 / DATA:데이터 / COMP:컴포넌트(메인탑디자인 및 본문외) / 레터제목:LTIT / 발송일시 / LSDT / 발송자명:LSNM)")
     @NotNull(message = "{tps.abtest.error.notnull.abtestPurpose}")
     private String abtestPurpose;
 
@@ -378,62 +370,31 @@ public class AbTestCaseAllDTO {
     private String deskingPart;
 
     /**
-     * 컴포넌트SEQ(본문외 영역 테스트시) / TB_ABTEST_VARIANT(A/B테스트 VARIANT) COMPONENT_SEQ
+     * VARIANT일련번호(템플릿SEQ/데이터셋SEQ/컴포넌트SEQ/컨테이너SEQ) / TB_ABTEST_VARIANT(AB테스트 VARIANT) VARIANT_SEQ
      */
-    @ApiModelProperty("템플릿SEQ")
+    @ApiModelProperty("VARIANT일련번호(템플릿SEQ/데이터셋SEQ/컴포넌트SEQ/컨테이너SEQ)")
     @Builder.Default
-    private Long componentSeqA = 0L;
+    private Long variantSeqA = 0L;
 
-    @ApiModelProperty("템플릿SEQ")
+    @ApiModelProperty("VARIANT일련번호(템플릿SEQ/데이터셋SEQ/컴포넌트SEQ/컨테이너SEQ)")
     @Builder.Default
-    private Long componentSeqB = 0L;
+    private Long variantSeqB = 0L;
 
     /**
-     * 템플릿SEQ / TB_ABTEST_VARIANT(A/B테스트 VARIANT) TEMPLATE_SEQ
+     * 제목(JAM,뉴스레터), 뉴스레터 발송시간, 뉴스레터 발송자명   / TB_ABTEST_VARIANT(AB테스트 VARIANT) VARIANT_VALUE
      */
-    @ApiModelProperty("템플릿SEQ")
-    @Builder.Default
-    private Long templateSeqA = 0L;
+    @ApiModelProperty(value = "A테스트 제목(JAM,뉴스레터), 뉴스레터 발송시간, 뉴스레터 발송자명")
+    private String variantValueA;
 
-    @ApiModelProperty("템플릿SEQ")
-    @Builder.Default
-    private Long templateSeqB = 0L;
-
-    /**
-     * 데이터셋SEQ / TB_ABTEST_VARIANT(A/B테스트 VARIANT) DATASET_SEQ
-     */
-    @ApiModelProperty("데이터셋SEQ")
-    @Builder.Default
-    private Long datasetSeqA = 0L;
-
-    @ApiModelProperty("데이터셋SEQ")
-    @Builder.Default
-    private Long datasetSeqB = 0L;
-
-    /**
-     * 제목(JAM 또는 뉴스레터) / TB_ABTEST_VARIANT(A/B테스트 VARIANT) TITLE
-     */
-    @ApiModelProperty(value = "제목(JAM 또는 뉴스레터)")
-    @Size(max = 510, message = "{tps.abtest.error.size.title}")
-    private String title;
-
-    /**
-     * 발송자명(뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT) SENDER_NAME
-     */
-    @ApiModelProperty(value = "발송자명(뉴스레터)")
-    @Size(max = 100, message = "{tps.abtest.error.size.senderName}")
-    private String senderName;
-
-    /**
-     * 발송일시(뉴스레터) / TB_ABTEST_VARIANT(AB테스트 VARIANT) SEND_DT
-     */
-    @ApiModelProperty(value = "발송일시(뉴스레터)")
-    @DTODateTimeFormat
-    private Date sendDt;
+    @ApiModelProperty(value = "B테스트 제목(JAM,뉴스레터), 뉴스레터 발송시간, 뉴스레터 발송자명")
+    private String variantValueB;
 
     /**
      * 기사내용
      */
-    @ApiModelProperty(value = "기사내용")
-    private String artContent;
+    @ApiModelProperty(value = "A테스트 기사내용")
+    private String artContentA;
+
+    @ApiModelProperty(value = "B테스트 기사내용")
+    private String artContentB;
 }

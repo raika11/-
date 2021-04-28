@@ -172,34 +172,6 @@ public class AbTestRestController extends AbstractCommonController {
                     .findById(abtestSeq)
                     .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
-            //AbTestCaseSaveVO abTestCaseSave = modelMapper.map(abtestCase, AbTestCaseSaveVO.class);
-
-            // 조회 한 STEP 1 주요설정 값 가져와 셋팅
-            //            abTestCaseSaveVO.setAbtestType(abtestCase.getAbtestType());
-            //            abTestCaseSaveVO.setDomainId(abtestCase.getDomainId());
-            //            abTestCaseSaveVO.setPageType(abtestCase.getPageType());
-            //            abTestCaseSaveVO.setPageSeq(abtestCase.getPageSeq());
-            //            abTestCaseSaveVO.setArtType(abtestCase.getArtType());
-            //            abTestCaseSaveVO.setZoneDiv(abtestCase.getZoneDiv());
-            //            abTestCaseSaveVO.setZoneSeq(abtestCase.getZoneSeq());
-            //            abTestCaseSaveVO.setAbtestPurpose(abtestCase.getAbtestPurpose());
-            //            abTestCaseSaveVO.setStartDt(abtestCase.getStartDt());
-            //            abTestCaseSaveVO.setEndDt(abtestCase.getEndDt());
-            //            abTestCaseSaveVO.setEndPeriod(abtestCase.getEndPeriod());
-            //            abTestCaseSaveVO.setEndCondi(abtestCase.getEndCondi());
-            //            abTestCaseSaveVO.setEndKpi(abtestCase.getEndKpi());
-            //            abTestCaseSaveVO.setKpiClickCondi(abtestCase.getKpiClickCondi());
-            //            abTestCaseSaveVO.setKpiPeriodCondi(abtestCase.getKpiPeriodCondi());
-            //            abTestCaseSaveVO.setAutoApplyYn(abtestCase.getAutoApplyYn());
-            //            abTestCaseSaveVO.setStatus(abtestCase.getStatus());
-            //            abTestCaseSaveVO.setDelYn(abtestCase.getDelYn());
-            //            abTestCaseSaveVO.setRegId(abtestCase.getRegId());
-            //            abTestCaseSaveVO.setRegDt(abtestCase.getRegDt());
-            //            abTestCaseSaveVO.setModId(abtestCase.getModId());
-            //
-            //            abTestCaseSaveVO.setAbtestTitle(abtestCase.getAbtestTitle());
-            //            abTestCaseSaveVO.setAbtestDesc(abtestCase.getAbtestDesc());
-
             // update
             Integer chk = abTestCaseService.updateABTestCase(abTestCaseSaveVO);
 

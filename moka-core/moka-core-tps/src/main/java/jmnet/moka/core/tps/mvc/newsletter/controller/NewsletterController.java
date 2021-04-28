@@ -250,6 +250,10 @@ public class NewsletterController extends AbstractCommonController {
             if (newsletterInfoDTO.getHeaderImgFile() != null) {
                 newsletterInfoDTO.setHeaderImg(uploadImage(newsletterInfoDTO.getHeaderImgFile()));
             }
+            // 뉴스레터 이미지 저장
+            if (newsletterInfoDTO.getLetterImgFile() != null) {
+                newsletterInfoDTO.setLetterImg(uploadImage(newsletterInfoDTO.getLetterImgFile()));
+            }
             NewsletterInfo newsletterInfo = modelMapper.map(newsletterInfoDTO, NewsletterInfo.class);
 
             // 등록
@@ -279,7 +283,13 @@ public class NewsletterController extends AbstractCommonController {
         }
         try {
             // 상단 이미지 저장
-            newsletterInfoDTO.setHeaderImg(uploadImage(newsletterInfoDTO.getHeaderImgFile()));
+            if (newsletterInfoDTO.getHeaderImgFile() != null) {
+                newsletterInfoDTO.setHeaderImg(uploadImage(newsletterInfoDTO.getHeaderImgFile()));
+            }
+            // 뉴스레터 이미지 저장
+            if (newsletterInfoDTO.getLetterImgFile() != null) {
+                newsletterInfoDTO.setLetterImg(uploadImage(newsletterInfoDTO.getLetterImgFile()));
+            }
             NewsletterInfo newsletterInfo = modelMapper.map(newsletterInfoDTO, NewsletterInfo.class);
             // 수정
             NewsletterInfo returnValue = newsletterService.updateNewsletterInfo(newsletterInfo);
@@ -416,8 +426,11 @@ public class NewsletterController extends AbstractCommonController {
         if (newsletterSendDTO.getSendSeq() != null) {
             throw new MokaException(msg("tps.common.error.duplicated.key"));
         }
+
         // 상단 이미지 저장
-        newsletterSendDTO.setHeaderImg(uploadImage(newsletterSendDTO.getHeaderImgFile()));
+        if (newsletterSendDTO.getHeaderImgFile() != null) {
+            newsletterSendDTO.setHeaderImg(uploadImage(newsletterSendDTO.getHeaderImgFile()));
+        }
         NewsletterSend newsletterSend = modelMapper.map(newsletterSendDTO, NewsletterSend.class);
 
         // 등록
@@ -497,11 +510,13 @@ public class NewsletterController extends AbstractCommonController {
             throw new MokaException(msg("tps.common.error.no-data"));
         }
         // 상단 이미지 저장
-        newsletterSendDTO.setHeaderImg(uploadImage(newsletterSendDTO.getHeaderImgFile()));
+        if (newsletterSendDTO.getHeaderImgFile() != null) {
+            newsletterSendDTO.setHeaderImg(uploadImage(newsletterSendDTO.getHeaderImgFile()));
+        }
         NewsletterSend newsletterSend = modelMapper.map(newsletterSendDTO, NewsletterSend.class);
 
         // 수정
-        NewsletterSend returnValue = newsletterService.updateNewsletterSend(newsletterSend, null);
+        NewsletterSend returnValue = newsletterService.updateNewsletterSend(newsletterSend, parseExcelFile(newsletterSendDTO.getEmailExcelFile()));
 
         // 결과리턴
         NewsletterSendDTO dto = modelMapper.map(returnValue, NewsletterSendDTO.class);

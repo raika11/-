@@ -44,17 +44,8 @@
     </choose>
 
     <choose>
-      <when test="pageSeq != '0' and pageSeq != null and pageSeq != ''">
-        #{pageSeq},
-      </when>
-      <otherwise>
-        NULL,
-      </otherwise>
-    </choose>
-
-    <choose>
-      <when test="artType != 'all' and artType != null and artType != ''">
-        #{artType},
+      <when test="pageValue != 'all' and pageValue != null and pageValue != ''">
+        #{pageValue},
       </when>
       <otherwise>
         NULL,
@@ -166,8 +157,7 @@
       #{abtestType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{domainId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{pageType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{pageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{artType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{pageValue, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{zoneDiv, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{zoneSeq, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{abtestPurpose, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
@@ -208,16 +198,12 @@
       #{kpiValueB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{deskingPart, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{componentSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{componentSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{templateSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{templateSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{datasetSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{datasetSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{title, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{senderName, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{sendDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
-      #{artContent, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{variantSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{variantSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{variantValueA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{variantValueB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{artContentA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{artContentB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{abtestSeq, mode=OUT, jdbcType=INTEGER, javaType=int}
       )}
   </insert>
@@ -230,8 +216,7 @@
       #{abtestType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{domainId, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{pageType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{pageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{artType, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{pageValue, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{zoneDiv, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{zoneSeq, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
       #{abtestPurpose, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
@@ -272,16 +257,12 @@
       #{kpiValueB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
       #{deskingPart, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{componentSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{componentSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{templateSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{templateSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{datasetSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{datasetSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{title, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{senderName, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
-      #{sendDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
-      #{artContent, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+      #{variantSeqA, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{variantSeqB, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{variantValueA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{variantValueB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{artContentA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+      #{artContentB, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
       )}
   </update>
 </mapper>

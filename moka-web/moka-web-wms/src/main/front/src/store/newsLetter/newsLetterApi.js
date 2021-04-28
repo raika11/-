@@ -28,3 +28,10 @@ export const getNewsLetter = (letterSeq) => {
         throw err;
     });
 };
+
+// 뉴스레터 발송 목록 조회
+export const getNewsLetterSendList = ({ search }) => {
+    return instance.get(`/api/newsletter/newsletterSend?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};

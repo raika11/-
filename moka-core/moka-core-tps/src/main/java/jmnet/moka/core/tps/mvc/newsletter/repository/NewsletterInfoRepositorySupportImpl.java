@@ -6,11 +6,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
+import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeSimple;
 import jmnet.moka.core.tps.mvc.member.entity.QMemberSimpleInfo;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
 import jmnet.moka.core.tps.mvc.newsletter.entity.QNewsletterInfo;
-import jmnet.moka.core.tps.mvc.newsletter.entity.QNewsletterSend;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -42,9 +42,16 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
         //        QNewsletterSubscribe qNewsletterSubscribe = QNewsletterSubscribe.newsletterSubscribe;
         //        QNewsletterLog qNewsletterLog = QNewsletterLog.newsletterLog;
         QMemberSimpleInfo qMemberSimpleInfo = QMemberSimpleInfo.memberSimpleInfo;
-        QNewsletterSend qNewsletterSend = QNewsletterSend.newsletterSend;
+        //        QNewsletterSend qNewsletterSend = QNewsletterSend.newsletterSend;
+        QCodeSimple qCodeSimple = QCodeSimple.codeSimple;
 
-        JPQLQuery<NewsletterInfo> query = from(qNewsletterInfo).distinct();
+        JPQLQuery<NewsletterInfo> query = from(qNewsletterInfo)
+                .leftJoin(qNewsletterInfo.regMember, qMemberSimpleInfo)
+                .fetchJoin()
+                .leftJoin(qNewsletterInfo.categoryInfo, qCodeSimple)
+                .where(qCodeSimple.grpCd.eq("LETTER_CATE"))
+                .fetchJoin()
+                .distinct();
         Pageable pageable = searchDTO.getPageable();
 
         if (McpString.isNotEmpty(searchDTO.getLetterType())) {
@@ -85,26 +92,6 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
         }
         if (McpString.isYes(searchDTO.getUseTotal())) {
             query = getQuerydsl().applyPagination(pageable, query);
-
-            //            query
-            //                    .orderBy(new CaseBuilder()
-            //                            .when(qNewsletterInfo.letterType.eq("O"))
-            //                            .then("오리지널")
-            //                            .when(qNewsletterInfo.letterType.eq("B"))
-            //                            .then("브리핑")
-            //                            .when(qNewsletterInfo.letterType.eq("N"))
-            //                            .then("알림")
-            //                            .otherwise("기타")
-            //                            .asc())
-            //                    .offset(pageable.getOffset())
-            //                    .limit(pageable.getPageSize());
-            //            searchDTO
-            //                    .getPageable()
-            //                    .getSort()
-            //                    .stream()
-            //                    .forEach((order) -> {
-            //                        System.out.println(order.getProperty() + "," + order.getDirection());
-            //                    });
         }
 
         QueryResults<NewsletterInfo> list = query
@@ -112,10 +99,15 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
                 //                .fetchJoin()
                 //                .leftJoin(qNewsletterInfo.newsletterLogs, qNewsletterLog)
                 //                .fetchJoin()
-                .leftJoin(qNewsletterInfo.newsletterSends, qNewsletterSend)
-                .fetchJoin()
-                .leftJoin(qNewsletterInfo.regMember, qMemberSimpleInfo)
-                .fetchJoin()
+                //                .leftJoin(qNewsletterInfo.newsletterSends, qNewsletterSend)
+                //                .fetchJoin()
+
+                //                                                 .leftJoin(qNewsletterInfo.regMember, qMemberSimpleInfo)
+                //                                                 .fetchJoin()
+                //                                                 .leftJoin(qNewsletterInfo.category, qCodeSimple)
+                //                                                 .where(qCodeSimple.grpCd.eq("LETTER_CATE"))
+                //                                                 .fetchJoin()
+
                 .fetchResults();
 
         return new PageImpl<NewsletterInfo>(list.getResults(), pageable, list.getTotal());

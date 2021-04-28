@@ -158,6 +158,11 @@ export default handleActions(
                 draft.pkg = initialState.pkg;
             });
         },
+        [act.CLEAR_SEARCH]: (state) => {
+            return produce(state, (draft) => {
+                draft.search = initialState.search;
+            });
+        },
         [act.CLEAR_ISSUE_DESKING_HISTORY]: (state) => {
             return produce(state, (draft) => {
                 draft.deskingHistory = initialState.deskingHistory;

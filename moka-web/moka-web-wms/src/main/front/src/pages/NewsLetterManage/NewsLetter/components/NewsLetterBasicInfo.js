@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@/components';
-import RecommendIssueListModal from '@/pages/Issue/modal/RecommendIssueListModal';
+import NewsLetterPackageModal from '../modals/NewsLetterPackageModal';
 import ReporterListModal from '@/pages/Reporter/modals/ReporterListModal';
 import NewsLetterJpodModal from '../modals/NewsLetterJpodModal';
 import { EditThumbModal } from '@/pages/Desking/modals';
@@ -326,7 +326,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                                 />
                             </Col>
                         </div>
-                        <RecommendIssueListModal usageNewsLetter show={pkgModal} onHide={() => setPkgModal(false)} />
+                        <NewsLetterPackageModal show={pkgModal} onHide={() => setPkgModal(false)} channelType={temp.channelType} />
                         <ReporterListModal show={reporterModal} onHide={() => setReporterModal(false)} onRowClicked={addReporter} />
                         <NewsLetterJpodModal show={jpodModal} onHide={() => setJpodModal(false)} onRowSelected={addJpod} />
                     </div>

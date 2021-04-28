@@ -1,93 +1,73 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { MokaInput, MokaModal, MokaSearchInput, MokaTable } from '@/components';
+import { MokaInput, MokaModal, MokaSearchInput } from '@/components';
+import { initialState, getIssueList, clearSearch, changeIssueSearchOptions } from '@store/issue';
+import RelIssueAgGrid from '../components/RelIssueAgGrid';
 
 /**
- * 뉴스레터 관리 > 뉴스레터 목록 > 패키지 검색 모달
+ * 뉴스레터 관리 > 뉴스레터 목록 > 이슈 패키지 검색 모달
  */
-const NewsLetterPackageModal = ({ show, onHide }) => {
-    const [total] = useState(0);
-    const [loading] = useState(false);
-    const [search] = useState({ page: 1, size: 10 });
+const NewsLetterPackageModal = ({ show, onHide, channelType, onRowClicked }) => {
+    const dispatch = useDispatch();
+    const pkgDiv = useSelector(({ app }) => app.PACKAGE_DIV);
+    const storeSearch = useSelector(({ issue }) => issue.search);
+    const [search, setSearch] = useState(initialState.search);
 
     /**
-     * 테이블 검색 옵션 변경
-     * @param {object} payload 변경된 값
+     * 검색
      */
-    const handleChangeSearchOption = useCallback((search) => console.log(search), []);
+    const handleClickSearch = () => {
+        let ns = { ...search, page: 0 };
+        dispatch(getIssueList({ search: ns }));
+    };
 
-    /**
-     * 목록 Row클릭
-     */
-    const handleRowClicked = useCallback((row) => {
-        console.log(row);
-    }, []);
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    useEffect(() => {
+        let ns;
+        if (show && channelType) {
+            if (channelType === 'ISSUE') {
+                ns = { ...search, scbYn: 'Y', div: 'I' };
+            } else if (channelType === 'TOPIC') {
+                ns = { ...search, scbYn: 'Y', div: 'T' };
+            } else if (channelType === 'SERIES') {
+                ns = { ...search, scbYn: 'Y', div: 'S' };
+            }
+            dispatch(changeIssueSearchOptions(ns));
+            dispatch(getIssueList({ search: ns }));
+        } else if (!show) {
+            dispatch(clearSearch());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show, channelType]);
 
     return (
-        <MokaModal
-            size="lg"
-            width={800}
-            height={800}
-            show={show}
-            onHide={onHide}
-            bodyClassName="d-flex flex-column"
-            title="패키지 검색"
-            buttons={[
-                { text: '선택', variant: 'positive' },
-                { text: '취소', variant: 'negative', onClick: () => onHide() },
-            ]}
-            draggable
-        >
-            <hr className="divider" />
+        <MokaModal size="lg" width={800} height={800} show={show} onHide={onHide} bodyClassName="d-flex flex-column" title="패키지 검색" draggable>
             <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
                 <Form.Row>
                     <Col xs={3} className="p-0 pr-2">
-                        <MokaInput as="select" disabled>
-                            <option>이슈</option>
+                        <MokaInput as="select" value={search.div} onChange={(e) => setSearch({ ...search, div: e.target.value })} disabled>
+                            {pkgDiv.map((code) => (
+                                <option key={code.code} value={code.code}>
+                                    {code.name}
+                                </option>
+                            ))}
                         </MokaInput>
                     </Col>
-                    <MokaSearchInput className="flex-fill" placeholder="패키지 명을 입력하세요" disabled />
+                    <MokaSearchInput
+                        className="flex-fill"
+                        value={search.keyword}
+                        onChange={(e) => setSearch({ ...search, keyword: e.target.value })}
+                        onSearch={handleClickSearch}
+                        placeholder="패키지 명을 입력하세요"
+                    />
                 </Form.Row>
             </Form>
-            <MokaTable
-                className="overflow-hidden flex-fill"
-                columnDefs={[
-                    {
-                        headerName: '',
-                        field: '',
-                        width: 35,
-                    },
-                    {
-                        headerName: 'NO',
-                        field: 'no',
-                        width: 40,
-                    },
-                    {
-                        headerName: 'ID',
-                        field: 'id',
-                        width: 50,
-                    },
-                    {
-                        headerName: '연계 패키지',
-                        field: 'pkg',
-                        flex: 1,
-                    },
-                    {
-                        headerName: '뉴스레터 여부',
-                        field: 'letterYn',
-                        width: 90,
-                    },
-                ]}
-                rowData={total}
-                onRowNodeId={(params) => params.noSeq}
-                onRowClicked={handleRowClicked}
-                loading={loading}
-                total={total}
-                page={search.page}
-                size={search.size}
-                onChangeSearchOption={handleChangeSearchOption}
-            />
+            <RelIssueAgGrid pkgDiv={pkgDiv} onRowClicked={onRowClicked} />
         </MokaModal>
     );
 };

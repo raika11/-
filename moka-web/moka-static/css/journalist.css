@@ -128,6 +128,10 @@ font-*,color,text-align,vertical-align, ...
 .journalist_list .meta{display:flex; margin-top:6px;}
 .journalist_list .meta .ico_up span{width:28px; height:18px; padding:3px 6px; margin-right:6px; border: 1px solid #f6330a; border-radius:10px; font-size:10px; font-weight: bold; color: #f6330a;}
 .journalist_list .meta .date{font-size:13px; line-height: 22px; color: #999999;}
+
+.journalist_body::after { display: block; content: ''; clear: both; }
+
+
 /****************************************************************************************************/
 /***                                            image                                             ***/
 /****************************************************************************************************/
@@ -205,6 +209,7 @@ font-*,color,text-align,vertical-align, ...
     .journalist_list .profile_area .profile_image{width:80px;margin-right:16px;}
     .journalist_list .profile_area .profile_body .flex_area .name{font-size:20px; color:#111111;}
     .journalist_list .headline{height:37px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
+
 
 }
 

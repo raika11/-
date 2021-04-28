@@ -44,9 +44,9 @@ public class AbTestCaseSearchDTO extends SearchDTO {
     private String domainId;
 
     /**
-     * AB테스트 페이지(메인:M, 기사:A, 뉴스레터:L)
+     * AB테스트 페이지(메인:M, 섹션: S, 기사(본문외):A, 뉴스레터:L)
      */
-    @ApiModelProperty("AB테스트 페이지(메인:M, 기사:A, 뉴스레터:L)")
+    @ApiModelProperty("AB테스트 페이지(메인:M, 섹션: S, 기사(본문외):A, 뉴스레터:L)")
     private String pageType;
 
     /**
@@ -56,9 +56,9 @@ public class AbTestCaseSearchDTO extends SearchDTO {
     private Long pageSeq = 0l;
 
     /**
-     * 기사타입(직접-기사-본문외) - 기본형:B, 연재형:CWYZ, QA형:X, 특집형:S, 이슈라이브:TG
+     * 기사타입(직접-기사-본문외) - (기타코드 SVC_AT)
      */
-    @ApiModelProperty("기사타입(직접-기사-본문외) - 기본형:B, 연재형:CWYZ, QA형:X, 특집형:S, 이슈라이브:TG")
+    @ApiModelProperty("기사타입(직접-기사-본문외) - (기타코드 SVC_AT)")
     private String artType;
 
     /**
@@ -74,9 +74,9 @@ public class AbTestCaseSearchDTO extends SearchDTO {
     private String zoneSeq;
 
     /**
-     * AB테스트 목표(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
+     * AB테스트 대상(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)
      */
-    @ApiModelProperty("테스트대상(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)")
+    @ApiModelProperty("AB테스트 대상(TPLT:디자인,레터레이아웃 DATA:데이터 COMP:컴포넌트-본문외 테스트시,레터제목:LTIT,레터발송일시:LSDT, 레터발송자명:LSNM)")
     private String abtestPurpose;
 
     /**

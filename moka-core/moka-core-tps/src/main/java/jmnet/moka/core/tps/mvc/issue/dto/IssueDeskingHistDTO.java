@@ -48,6 +48,9 @@ public class IssueDeskingHistDTO implements Serializable {
     @ApiModelProperty("컴포넌트번호(1-7)")
     private Integer compNo;
 
+    @ApiModelProperty("영상포토 제목")
+    private String compLabel;
+
     @ApiModelProperty("노출여부")
     private String viewYn;
 

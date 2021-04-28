@@ -114,10 +114,16 @@
   </select>
 
   <select id="articlePageId" parameterType="hashmap" resultType="map">
-    SELECT [ART_PAGE_SEQ]
-    FROM TB_WMS_ARTICLE_PAGE
-    WHERE DOMAIN_ID= #{domainId}
-      AND ART_TYPE = #{artType}
+    SELECT TOP 1 ART_PAGE_SEQ
+    FROM (
+           SELECT (SELECT VALUE
+                   FROM DB_JOINS_DBA.dbo.FN_GET_CHARINDEX(ISNULL(A.art_types, ''), ',')
+                   WHERE VALUE = ${artType}) AS IS_FIND
+                , A.ART_PAGE_SEQ
+           from TB_WMS_ARTICLE_PAGE A
+           WHERE DOMAIN_ID = #{domainId}
+         ) AS B
+    WHERE B.IS_FIND IS NOT NULL
   </select>
 
   <select id="dataset" parameterType="hashmap" resultType="map">

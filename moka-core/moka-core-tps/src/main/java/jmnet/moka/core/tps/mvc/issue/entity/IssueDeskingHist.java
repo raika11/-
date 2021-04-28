@@ -62,6 +62,13 @@ public class IssueDeskingHist {
     private Integer compNo;
 
     /**
+     * 영상포토 제목
+     */
+    @Nationalized
+    @Column(name = "COMP_LABEL")
+    private String compLabel;
+
+    /**
      * 노출여부
      */
     @Column(name = "VIEW_YN")

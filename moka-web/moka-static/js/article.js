@@ -4,8 +4,6 @@ $(document).ready(function() {
         $(this).parent().toggleClass('open');
     });
 
-    btnCloseModal();
-
     $(window).scroll(function(event){
         /* article mobile sticky_menu */
         var scrollT = $(this).scrollTop();

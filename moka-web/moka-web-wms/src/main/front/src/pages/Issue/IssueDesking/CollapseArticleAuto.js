@@ -105,6 +105,10 @@ const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE, prev
         setOpen(desking.viewYn === 'Y');
     }, [desking.viewYn]);
 
+    useEffect(() => {
+        setStatus(DESK_STATUS_SAVE);
+    }, [pkgSeq]);
+
     useImperativeHandle(
         ref,
         () => ({

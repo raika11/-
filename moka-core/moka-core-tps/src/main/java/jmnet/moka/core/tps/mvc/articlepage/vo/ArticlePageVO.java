@@ -48,8 +48,8 @@ public class ArticlePageVO {
 
     private DomainSimpleDTO domain;
 
-    @Column(name = "ART_TYPE")
-    private String artType;
+    @Column(name = "ART_TYPES")
+    private String artTypes;
 
     @Column(name = "ART_TYPE_NAME")
     private String artTypeName;

@@ -7,13 +7,15 @@ import Col from 'react-bootstrap/Col';
 import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH, CHANNEL_TYPE, ISSUE_CHANNEL_TYPE } from '@/constants';
 import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
+import common from '@utils/commonUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issue';
 import { ArticleTabModal } from '@pages/Article/modals';
-import { VodModal } from '@pages/Desking/modals';
 import { moviePhotoColumnDefs } from './IssueDeskingColumns';
+import { DeskingHistoryModal } from '../modal';
 import StatusBadge from './StatusBadge';
+import ReserveWork from './ReserveWork';
 
 const defaultProps = {
     desking: {},
@@ -23,14 +25,14 @@ const defaultProps = {
 /**
  * 패키지관리 > 관련 데이터 편집 > 영상/포토
  */
-const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight }, ref) => {
+const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, MESSAGE, rowToData, rowHeight, preview }, ref) => {
     const dispatch = useDispatch();
     const [gridInstance, setGridInstance] = useState(null);
-    const [status, setStatus] = useState(DESK_STATUS_WORK);
+    const [status, setStatus] = useState(DESK_STATUS_SAVE);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
-    const [vodShow, setVodShow] = useState(false);
+    const [histShow, setHistShow] = useState(false);
     const controls = 'collapse-mp';
 
     /**
@@ -46,13 +48,13 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                 add: [
                     {
                         ...initialState.initialDesking,
+                        id: `${pkgSeq}-${ISSUE_CHANNEL_TYPE.M.code}-${common.getUniqueKey()}`,
                         pkgSeq,
                         compNo,
                         contentsOrd: cnt + 1,
-                        contentsId: data.totalId,
                         thumbFileName: data.artThumb,
                         title: data.artTitle,
-                        channelType: ISSUE_CHANNEL_TYPE.A.code,
+                        channelType: ISSUE_CHANNEL_TYPE.M.code,
                         afterOnChange: () => setStatus(DESK_STATUS_WORK),
                     },
                 ],
@@ -63,13 +65,13 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                 add: [
                     {
                         ...initialState.initialDesking,
+                        id: `${pkgSeq}-${ISSUE_CHANNEL_TYPE.M.code}-${common.getUniqueKey()}`,
                         pkgSeq,
                         compNo,
                         contentsOrd: cnt + 1,
-                        contentsId: data.totalId,
                         thumbFileName: data.ovpThumb,
                         title: data.artTitle,
-                        channelType: ISSUE_CHANNEL_TYPE.A.code,
+                        channelType: ISSUE_CHANNEL_TYPE.M.code,
                         afterOnChange: () => setStatus(DESK_STATUS_WORK),
                     },
                 ],
@@ -81,25 +83,19 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
     };
 
     /**
-     * 영상 등록
-     * @param {string} url url path
-     * @param {object} data ovp 데이터 (유투브일 경우 null)
+     * 영상포토 추가
      */
-    const addMovie = (url, data) => {
+    const addMp = () => {
         const cnt = gridInstance.api.getDisplayedRowCount();
-
         gridInstance.api.applyTransaction({
             add: [
                 {
                     ...initialState.initialDesking,
+                    id: `${pkgSeq}-${ISSUE_CHANNEL_TYPE.M.code}-${common.getUniqueKey()}`,
                     pkgSeq,
                     compNo,
                     contentsOrd: cnt + 1,
-                    contentsId: data.id,
-                    thumbFileName: data.thumbFileName,
-                    title: data.name,
                     channelType: ISSUE_CHANNEL_TYPE.M.code,
-                    vodUrl: url,
                     afterOnChange: () => setStatus(DESK_STATUS_WORK),
                 },
             ],
@@ -140,7 +136,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
         desking.forEach((data, index) => {
             // 제목 검사
             if (!data.title || data.title === '') {
-                invalidList.push({ index, message: '라벨을 입력해주세요' });
+                invalidList.push({ index, message: '타이틀을 입력해주세요' });
                 isInvalid = true;
             }
         });
@@ -224,6 +220,23 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
         }
     };
 
+    /**
+     * 예약 완료
+     */
+    const onReserve = ({ header }) => {
+        if (header.success) {
+            setStatus(DESK_STATUS_PUBLISH);
+        }
+    };
+
+    /**
+     * on/off 변경
+     */
+    const onChange = (e) => {
+        setOpen(e.target.checked);
+        setStatus(DESK_STATUS_WORK);
+    };
+
     useImperativeHandle(
         ref,
         () => ({
@@ -240,6 +253,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
             gridInstance.api.setRowData(
                 deskingList.map((d) => ({
                     ...d,
+                    id: `${pkgSeq}-${ISSUE_CHANNEL_TYPE.M.code}-${common.getUniqueKey()}`,
                     title: unescapeHtmlArticle(d.title),
                     afterOnChange: () => setStatus(DESK_STATUS_WORK),
                 })),
@@ -255,36 +269,44 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
     return (
         <div className="position-relative border-bottom mb-24 pb-24">
             {loading && <MokaLoader />}
-            <Row className="d-flex" noGutters>
-                <Col xs={3}>
+            <Row className="d-flex position-relative" noGutters>
+                <Col xs={4} className="d-flex align-items-center position-unset">
+                    <ReserveWork pkgSea={pkgSeq} status={status} compNo={compNo} reserveDt={desking.reserveDt} onReserve={onReserve} />
                     <MokaInputLabel
                         as="switch"
-                        label="영상/포토"
+                        label="영상포토"
                         id={controls}
                         inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
-                        onChange={(e) => setOpen(e.target.checked)}
+                        labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
+                        style={{ height: 'auto' }}
+                        onChange={onChange}
                     />
                 </Col>
-                <Col xs={4} className="d-flex align-items-center">
+                <Col xs={3} className="d-flex align-items-center">
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>
                         기사검색
                     </Button>
                     <ArticleTabModal show={show} onHide={() => setShow(false)} onRowClicked={addArticle} />
-
-                    <Button variant="searching" size="sm" className="mr-1" onClick={() => setVodShow(true)}>
-                        영상검색
+                    <Button variant="positive" size="sm" className="mr-1" onClick={addMp}>
+                        추가
                     </Button>
-                    <VodModal show={vodShow} onHide={() => setVodShow(false)} onSave={addMovie} />
                 </Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">
                         <StatusBadge desking={desking} />
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="미리보기" variant="white" onClick={preview}>
+                            <MokaIcon iconName="fal-file-search" />
+                        </MokaOverlayTooltipButton>
                         <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="임시저장" variant="white" onClick={saveDesking}>
                             <MokaIcon iconName="Save" feather />
                         </MokaOverlayTooltipButton>
-                        <MokaOverlayTooltipButton className="work-btn" tooltipText="전송" variant="white" onClick={publishDesking}>
+                        <MokaOverlayTooltipButton className="work-btn mr-2" tooltipText="전송" variant="white" onClick={publishDesking}>
                             <MokaIcon iconName="Send" feather />
                         </MokaOverlayTooltipButton>
+                        <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
+                            <MokaIcon iconName="fal-history" />
+                        </MokaOverlayTooltipButton>
+                        <DeskingHistoryModal show={histShow} pkgSeq={pkgSeq} compNo={compNo} onHide={() => setHistShow(false)} />
                     </div>
                 </Col>
             </Row>
@@ -295,7 +317,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                         header={false}
                         paging={false}
                         columnDefs={moviePhotoColumnDefs}
-                        onRowNodeId={(data) => data.contentsId}
+                        onRowNodeId={(data) => data.id}
                         setGridInstance={setGridInstance}
                         animateRows
                         rowDragManaged

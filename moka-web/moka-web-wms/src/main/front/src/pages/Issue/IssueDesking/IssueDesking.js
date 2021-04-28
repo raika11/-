@@ -51,7 +51,7 @@ const IssueDesking = () => {
     const artRef = useRef(null);
     const artAutoRef = useRef(null);
     const liveRef = useRef(null);
-    const packetRef = useRef(null);
+    // const packetRef = useRef(null);
     const mpRef = useRef(null);
     const bannerRef = useRef(null);
     const keywordRef = useRef(null);
@@ -84,12 +84,14 @@ const IssueDesking = () => {
             issueDeskings: liveRef.current.getDisplayedRows(),
         };
 
-        // packet work
+        // packet work => delete
         const comp4 = {
             pkgSeq,
             compNo: 4,
-            viewYn: packetRef.current.viewYn,
-            issueDeskings: packetRef.current.getDisplayedRows(),
+            viewYn: 'N',
+            issueDeskings: [],
+            // viewYn: packetRef.current.viewYn,
+            // issueDeskings: packetRef.current.getDisplayedRows(),
         };
 
         // mp work
@@ -191,8 +193,6 @@ const IssueDesking = () => {
                 rowToData={rowToData}
                 rowHeight={198}
             />
-            {/* 메인기사(자동) */}
-            <CollapseArticleAuto ref={artAutoRef} pkgSeq={pkgSeq} compNo={2} desking={deskingByCompNo.comp2 || {}} MESSAGE={MESSAGE} />
             {/* 라이브기사 */}
             <CollapseLive
                 pkgSeq={pkgSeq}
@@ -200,12 +200,13 @@ const IssueDesking = () => {
                 ref={liveRef}
                 desking={deskingByCompNo.comp3}
                 deskingList={deskingByCompNo.comp3?.issueDeskings}
+                preview={preview}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
                 rowHeight={90}
             />
             {/* 관련기사꾸러미 */}
-            <CollapsePacket
+            {/* <CollapsePacket
                 pkgSeq={pkgSeq}
                 compNo={4}
                 ref={packetRef}
@@ -214,14 +215,15 @@ const IssueDesking = () => {
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
                 rowHeight={90}
-            />
-            {/* 영상/포토 */}
+            /> */}
+            {/* 영상포토 */}
             <CollapseMoviePhoto
                 pkgSeq={pkgSeq}
                 compNo={5}
                 ref={mpRef}
                 desking={deskingByCompNo.comp5}
                 deskingList={deskingByCompNo.comp5?.issueDeskings}
+                preview={preview}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
                 rowHeight={165}
@@ -234,6 +236,7 @@ const IssueDesking = () => {
                 ref={bannerRef}
                 desking={deskingByCompNo.comp7}
                 deskingList={deskingByCompNo.comp7?.issueDeskings}
+                preview={preview}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
                 rowHeight={90}
@@ -245,10 +248,13 @@ const IssueDesking = () => {
                 ref={keywordRef}
                 desking={deskingByCompNo.comp8}
                 deskingList={deskingByCompNo.comp8?.issueDeskings}
+                preview={preview}
                 MESSAGE={MESSAGE}
                 rowToData={rowToData}
                 rowHeight={90}
             />
+            {/* 데이터기사(자동) */}
+            <CollapseArticleAuto ref={artAutoRef} pkgSeq={pkgSeq} compNo={2} desking={deskingByCompNo.comp2} MESSAGE={MESSAGE} />
         </MokaCard>
     );
 };

@@ -14,9 +14,9 @@ import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
-import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,8 +52,8 @@ public class IssueDeskingHistGroupSearchDTO extends SearchDTO {
     @Builder.Default
     private EditStatusCode status = EditStatusCode.SAVE;
 
-    @ApiModelProperty("검색일자")
     @DTODateTimeFormat
+    @ApiModelProperty("검색일자")
     private Date searchDt;
 
     @ApiModelProperty("승인여부")

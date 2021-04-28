@@ -52,7 +52,6 @@ public class IssueDeskingHistGroupVO implements Serializable {
     /**
      * 작업일시
      */
-    @DTODateTimeFormat
     @Column(name = "REG_DT")
     private Date regDt;
 
@@ -77,6 +76,7 @@ public class IssueDeskingHistGroupVO implements Serializable {
     /**
      * 예약일시
      */
+    @DTODateTimeFormat
     @Column(name = "RESERVE_DT", updatable = false)
     private Date reserveDt;
 

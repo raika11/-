@@ -145,7 +145,7 @@ const NewsLetterSendEdit = ({ match }) => {
                 <hr className="divider" />
 
                 {/* A/B TEST 항목 선택 (A/B 테스트 지정이 없는 경우 Hidden) */}
-                {temp.abtestYN === 'Y' && (
+                {temp.abtestYn === 'Y' && (
                     <Form.Row className="mb-2">
                         <Col xs={6} className="p-0">
                             <MokaInputLabel as="select" name="abVariantType" label="A/B TEST" value={temp.abVariantType} onChange={handleChangeValue}>

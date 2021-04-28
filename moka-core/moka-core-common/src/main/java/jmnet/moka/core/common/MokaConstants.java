@@ -116,6 +116,7 @@ public class MokaConstants {
     public static final String PARAM_CATEGORY = "category";
     public static final String PARAM_START = "start";
     public static final String PARAM_REG_ID = "regId";
+    public static final String PARAM_FILTER = "filter";
     public static final String PARAM_EDITION_SEQ = "editionSeq";
     public static final String COMPONENT_PAGING_TYPE_NUMBER = "N";
     public static final String COMPONENT_PAGING_TYPE_MORE = "M";

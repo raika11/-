@@ -3,19 +3,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dps.item">
   <select id="domain_list" parameterType="hashmap" resultType="map">
-    SELECT [DOMAIN_ID]
-      , [DOMAIN_NAME]
-      , [DOMAIN_URL]
-      , [SERVICE_PLATFORM]
-      , [USED_YN]
-      , [LANG]
-      , [API_PATH]
-      , [API_HOST]
-      , [DESCRIPTION]
-      , [REG_DT]
-      , [REG_ID]
-      , [MOD_DT]
-      , [MOD_ID]
+    SELECT *
     FROM TB_WMS_DOMAIN
   </select>
 
@@ -25,70 +13,34 @@
   </select>
 
   <select id="reserved_list" parameterType="hashmap" resultType="map">
-    SELECT [RESERVED_SEQ]
-      , [DOMAIN_ID]
-      , [RESERVED_ID]
-      , [RESERVED_VALUE]
-      , [DESCRIPTION]
-      , [USED_YN]
-      , [REG_DT]
-      , [REG_ID]
-      , [MOD_DT]
-      , [MOD_ID]
+    SELECT *
     FROM TB_WMS_RESERVED
     WHERE DOMAIN_ID = #{domainId}
   </select>
 
   <select id="page_list" parameterType="hashmap" resultType="map">
-    <choose>
-      <when test='tBody.equalsIgnoreCase("Y") || tBody == null'>
-        SELECT [PAGE_SEQ]
-        ,[DOMAIN_ID]
-        ,[PAGE_NAME]
-        ,[PAGE_SERVICE_NAME]
-        ,[PAGE_DISPLAY_NAME]
-        ,[PARENT_PAGE_SEQ]
-        ,[PAGE_TYPE]
-        ,[PAGE_URL]
-        ,[PAGE_ORD]
-        ,[PAGE_BODY]
-        ,[URL_PARAM]
-        ,[USED_YN]
-        ,[FILE_YN]
-        ,[KWD]
-        ,[CATEGORY]
-        ,[DESCRIPTION]
-        ,[MOVE_YN]
-        ,[MOVE_URL]
-        ,[REG_DT]
-        ,[REG_ID]
-        ,[MOD_DT]
-        ,[MOD_ID]
-      </when>
-      <otherwise>
-        SELECT [PAGE_SEQ]
-        ,[DOMAIN_ID]
-        ,[PAGE_NAME]
-        ,[PAGE_SERVICE_NAME]
-        ,[PAGE_DISPLAY_NAME]
-        ,[PARENT_PAGE_SEQ]
-        ,[PAGE_TYPE]
-        ,[PAGE_URL]
-        ,[PAGE_ORD]
-        ,[URL_PARAM]
-        ,[USED_YN]
-        ,[FILE_YN]
-        ,[KWD]
-        ,[CATEGORY]
-        ,[DESCRIPTION]
-        ,[MOVE_YN]
-        ,[MOVE_URL]
-        ,[REG_DT]
-        ,[REG_ID]
-        ,[MOD_DT]
-        ,[MOD_ID]
-      </otherwise>
-    </choose>
+    SELECT [PAGE_SEQ]
+    ,[DOMAIN_ID]
+    ,[PAGE_NAME]
+    ,[PAGE_SERVICE_NAME]
+    ,[PAGE_DISPLAY_NAME]
+    ,[PARENT_PAGE_SEQ]
+    ,[PAGE_TYPE]
+    ,[PAGE_URL]
+    ,[PAGE_ORD]
+    <if test='tBody.equalsIgnoreCase("Y") || tBody == null'>,[PAGE_BODY]</if>
+    ,[URL_PARAM]
+    ,[USED_YN]
+    ,[FILE_YN]
+    ,[KWD]
+    ,[CATEGORY]
+    ,[DESCRIPTION]
+    ,[MOVE_YN]
+    ,[MOVE_URL]
+    ,[REG_DT]
+    ,[REG_ID]
+    ,[MOD_DT]
+    ,[MOD_ID]
     FROM TB_WMS_PAGE
     WHERE USED_YN='Y'
     <if test="domainId != null">AND DOMAIN_ID = #{domainId}</if>
@@ -96,46 +48,13 @@
   </select>
 
   <select id="container" parameterType="hashmap" resultType="map">
-    SELECT [CONTAINER_SEQ]
-      , [DOMAIN_ID]
-      , [CONTAINER_NAME]
-      , [CONTAINER_BODY]
-      , [REG_DT]
-      , [REG_ID]
-      , [MOD_DT]
-      , [MOD_ID]
+    SELECT *
     FROM TB_WMS_CONTAINER
     WHERE CONTAINER_SEQ = #{id}
   </select>
 
   <select id="component" parameterType="hashmap" resultType="map">
-    SELECT [COMPONENT_SEQ]
-      , [DOMAIN_ID]
-      , [TEMPLATE_SEQ]
-      , [DATASET_SEQ]
-      , [PART_SEQ]
-      , [COMPONENT_NAME]
-      , [DESCRIPTION]
-      , [PERIOD_YN]
-      , [PERIOD_START_DT]
-      , [PERIOD_END_DT]
-      , [DATA_TYPE]
-      , [DEL_WORDS]
-      , [PAGING_YN]
-      , [PAGING_TYPE]
-      , [PER_PAGE_COUNT]
-      , [MAX_PAGE_COUNT]
-      , [DISP_PAGE_COUNT]
-      , [MORE_COUNT]
-      , [SCH_CODE_ID]
-      , [VIEW_YN]
-      , [SNAPSHOT_YN]
-      , [SNAPSHOT_BODY]
-      , [ART_PAGE_SEQ]
-      , [REG_DT]
-      , [REG_ID]
-      , [MOD_DT]
-      , [MOD_ID]
+    SELECT *
     FROM TB_WMS_COMPONENT
     WHERE COMPONENT_SEQ = #{id}
   </select>
@@ -177,34 +96,13 @@
   </select>
 
   <select id="template" parameterType="hashmap" resultType="map">
-    SELECT [TEMPLATE_SEQ]
-      , [DOMAIN_ID]
-      , [TEMPLATE_NAME]
-      , [TEMPLATE_BODY]
-      , [CROP_WIDTH]
-      , [CROP_HEIGHT]
-      , [TEMPLATE_GROUP]
-      , [TEMPLATE_WIDTH]
-      , [TEMPLATE_THUMB]
-      , [DESCRIPTION]
-      , [REG_DT]
-      , [REG_ID]
-      , [MOD_DT]
-      , [MOD_ID]
+    SELECT *
     FROM TB_WMS_TEMPLATE
     WHERE TEMPLATE_SEQ = #{id}
   </select>
 
   <select id="articlePage" parameterType="hashmap" resultType="map">
-    SELECT [ART_PAGE_SEQ]
-      , [DOMAIN_ID]
-      , [ART_TYPE]
-      , [ART_PAGE_NAME]
-      , [ART_PAGE_BODY]
-      , [REG_DT]
-      , [REG_ID]
-      , [MOD_DT]
-      , [MOD_ID]
+    SELECT *
     FROM TB_WMS_ARTICLE_PAGE
     WHERE ART_PAGE_SEQ = #{id}
   </select>
@@ -223,44 +121,13 @@
   </select>
 
   <select id="dataset" parameterType="hashmap" resultType="map">
-    SELECT [DATASET_SEQ]
-      , [DATASET_NAME]
-      , [DATA_API_PATH]
-      , [DATA_API_HOST]
-      , [DATA_API]
-      , [DATA_API_PARAM]
-      , [DESCRIPTION]
-      , [AUTO_CREATE_YN]
-      , [REG_DT]
-      , [REG_ID]
-      , [MOD_DT]
-      , [MOD_ID]
+    SELECT *
     FROM TB_WMS_DATASET
     WHERE DATASET_SEQ = #{id}
   </select>
 
   <select id="ad" parameterType="hashmap" resultType="map">
-    SELECT [AD_SEQ]
-      , [DOMAIN_ID]
-      , [AD_NAME]
-      , [AD_DEPT_NO]
-      , [AD_USE_TYPE]
-      , [AD_LOCATION]
-      , [PERIOD_YN]
-      , [PERIOD_START_DT]
-      , [PERIOD_END_DT]
-      , [USED_YN]
-      , [AD_WIDTH]
-      , [AD_HEIGHT]
-      , [DESCRIPTION]
-      , [AD_TYPE]
-      , [SLIDE_TYPE]
-      , [AD_BODY]
-      , [AD_FILE_NAME]
-      , [REG_DT]
-      , [REG_ID]
-      , [MOD_DT]
-      , [MOD_ID]
+    SELECT *
     FROM TB_WMS_AD
     WHERE AD_SEQ = #{id}
   </select>

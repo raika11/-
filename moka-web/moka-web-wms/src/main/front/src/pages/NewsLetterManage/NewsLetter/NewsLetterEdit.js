@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -20,6 +20,7 @@ const NewsLetterEdit = ({ match }) => {
 
     const storeLetter = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterInfo);
     const [temp, setTemp] = useState(initialState.newsLetter.letterInfo);
+    const sendInfoRef = useRef(null);
 
     /**
      * 입력값 변경
@@ -45,7 +46,13 @@ const NewsLetterEdit = ({ match }) => {
     }, []);
 
     useEffect(() => {
-        setTemp(storeLetter);
+        if (sendInfoRef.current) {
+            if (sendInfoRef.current.sender.value === 'ja') {
+                setTemp({ ...storeLetter, senderName: '중앙일보', senderEmail: 'root@joongang.co.kr' });
+            } else {
+                setTemp({ ...storeLetter, senderName: '', senderEmail: '' });
+            }
+        }
     }, [storeLetter]);
 
     useEffect(() => {
@@ -88,9 +95,9 @@ const NewsLetterEdit = ({ match }) => {
                 {/* 뉴스레터 기본정보 */}
                 <NewsLetterBasicInfo letterSeq={letterSeq} temp={temp} setTemp={setTemp} onChangeValue={handleChangeValue} />
                 {/* 뉴스레터 발송정보 */}
-                <NewsLetterSendInfo temp={temp} setTemp={setTemp} onChangeValue={handleChangeValue} />
+                <NewsLetterSendInfo ref={sendInfoRef} temp={temp} setTemp={setTemp} onChangeValue={handleChangeValue} />
                 {/* 뉴스레터 설정 */}
-                <NewsLetterSetInfo temp={temp} setTemp={setTemp} onChangeValue={handleChangeValue} />
+                {/* <NewsLetterSetInfo temp={temp} setTemp={setTemp} onChangeValue={handleChangeValue} /> */}
             </Form>
         </MokaCard>
     );

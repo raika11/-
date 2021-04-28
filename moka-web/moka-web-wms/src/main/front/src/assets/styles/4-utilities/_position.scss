@@ -3,7 +3,11 @@
     top: 0;
     right: 0;
     left: 0;
-} 
+}
+
+.position-unset {
+	position: unset;
+}
 
 .absolute-top-right {
     position: absolute;

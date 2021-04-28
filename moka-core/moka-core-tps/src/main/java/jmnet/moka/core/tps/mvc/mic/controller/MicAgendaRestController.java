@@ -277,7 +277,8 @@ public class MicAgendaRestController extends AbstractCommonController {
 
         if (micBannerVO != null) {
             if (micBannerVO.getBnnrSeq() != null && micBannerVO.getBnnrSeq() > 0) {
-                if (McpString.isEmpty(micBannerVO.getImgLink()) || micBannerVO.getImgFile() == null) {
+                if (McpString.isNotEmpty(micBannerVO.getImgLink()) || micBannerVO.getImgFile() != null) {
+                } else {
                     String message = msg("tps.banner.error.notnull.imgLink");
                     invalidList.add(new InvalidDataDTO("imgLink", message));
                     tpsLogger.fail(actionType, message, true);

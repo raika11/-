@@ -98,5 +98,17 @@ export const getIssueDeskingHistoryList = createAction(GET_ISSUE_DESKING_HISTORY
 /**
  * 이슈 데스킹 히스토리 상세 조회
  */
-export const [GET_ISSUE_DESKING_HISTORY, GET_ISSUE_DESKING_HISTORY_SUCCESS] = createRequestActionTypes('issue/GET_ISSUE_DESKING_HISTORY');
-export const getIssueDeskingHistory = createAction(GET_ISSUE_DESKING_HISTORY, ({ pkgSeq, compNo, regDt, status }) => ({ pkgSeq, compNo, regDt, status }));
+export const [GET_ISSUE_DESKING_HISTORY, GET_ISSUE_DESKING_HISTORY_SUCCESS, GET_ISSUE_DESKING_HISTORY_FAILURE] = createRequestActionTypes('issue/GET_ISSUE_DESKING_HISTORY');
+export const getIssueDeskingHistory = createAction(GET_ISSUE_DESKING_HISTORY, ({ pkgSeq, compNo, regDt, status, approvalYn }) => ({ pkgSeq, compNo, regDt, status, approvalYn }));
+
+/**
+ * 이슈 데스킹 예약
+ */
+export const [POST_RESERVE_ISSUE_DESKING] = createRequestActionTypes('issue/POST_RESERVE_ISSUE_DESKING');
+export const postReserveIssueDesking = createAction(POST_RESERVE_ISSUE_DESKING, ({ pkgSeq, compNo, reserveDt }) => ({ pkgSeq, compNo, reserveDt }));
+
+/**
+ * 이슈 데스킹 예약 삭제
+ */
+export const [DELETE_RESERVE_ISSUE_DESKING] = createRequestActionTypes('issue/DELETE_RESERVE_ISSUE_DESKING');
+export const deleteReserveIssueDesking = createAction(DELETE_RESERVE_ISSUE_DESKING, ({ pkgSeq, compNo }) => ({ pkgSeq, compNo }));

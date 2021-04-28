@@ -29,12 +29,14 @@ import jmnet.moka.core.mail.mvc.service.EmsService;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterInfoDTO;
+import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterInfoHistDTO;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSendDTO;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSendSimpleDTO;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSimpleDTO;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterExcel;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
+import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfoHist;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterSend;
 import jmnet.moka.core.tps.mvc.newsletter.service.NewsletterService;
 import lombok.extern.slf4j.Slf4j;
@@ -214,7 +216,7 @@ public class NewsletterController extends AbstractCommonController {
             throws NoDataException {
         // 조회
         NewsletterInfo newsletterInfo = newsletterService
-                .findByletterSeq(letterSeq)
+                .findByLetterSeq(letterSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
         NewsletterInfoDTO newsletterInfoDTO = modelMapper.map(newsletterInfo, NewsletterInfoDTO.class);
@@ -269,7 +271,7 @@ public class NewsletterController extends AbstractCommonController {
 
     @ApiOperation(value = "뉴스레터 상품수정")
     @PutMapping(value = "/{letterSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> putNewsletterInfo(@ApiParam(value = "패키지 일련번호", required = true) @PathVariable("letterSeq") Long letterSeq,
+    public ResponseEntity<?> putNewsletterInfo(@ApiParam(value = "뉴스레터 상품 일련번호", required = true) @PathVariable("letterSeq") Long letterSeq,
             @Valid NewsletterInfoDTO newsletterInfoDTO)
             throws Exception {
         if (newsletterInfoDTO.getLetterSeq() == null) {
@@ -298,7 +300,7 @@ public class NewsletterController extends AbstractCommonController {
     @ApiOperation(value = "뉴스레터 채널별 등록된 컨텐츠 조회")
     @GetMapping(value = "/channelType/{channelType}")
     public ResponseEntity<?> getNewsletterInfoByLetterSeq(@ApiParam(value = "뉴스레터 채널별 등록된 컨텐츠 조회", required = true) @PathVariable("channelType")
-    @Pattern(regexp = "^()|(TOPIC)|(ISSUE)|(SERIES)|(JPOD)|(REPORTER)|(TREND)|(ARTICLE)|(STAR)|(DIJEST)$", message = "{tps.newsletter.error.pattern.channelType}") String channelType)
+    @Pattern(regexp = "^(TOPIC)|(ISSUE)|(SERIES)|(JPOD)|(REPORTER)|(TREND)|(ARTICLE)|(STAR)|(DIJEST)$", message = "{tps.newsletter.error.pattern.channelType}") String channelType)
             throws NoDataException {
         // 조회
         List<Long> channelIds = newsletterService.findChannelIdByChannelType(channelType);
@@ -348,18 +350,18 @@ public class NewsletterController extends AbstractCommonController {
     @Min(value = 0, message = "{tps.common.error.min.seqNo}") Long sendSeq)
             throws NoDataException {
         // 조회
-        //        NewsletterInfo newsletterInfo = newsletterService
-        //                .findByletterSeq(sendSeq)
-        //                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
-        //
-        //        NewsletterInfoDTO newsletterInfoDTO = modelMapper.map(newsletterInfo, NewsletterInfoDTO.class);
-        //
-        //        // 리턴값 설정
-        //        ResultDTO<NewsletterInfoDTO> resultDto = new ResultDTO<>(newsletterInfoDTO);
-        //
-        //        tpsLogger.success(ActionType.SELECT);
+        NewsletterSend newsletterSend = newsletterService
+                .findNewsletterSendBySendSeq(sendSeq)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
-        return new ResponseEntity<>(null/* resultDto */, HttpStatus.OK);
+        NewsletterSendDTO newsletterSendDTO = modelMapper.map(newsletterSend, NewsletterSendDTO.class);
+
+        // 리턴값 설정
+        ResultDTO<NewsletterSendDTO> resultDto = new ResultDTO<>(newsletterSendDTO);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
@@ -459,7 +461,7 @@ public class NewsletterController extends AbstractCommonController {
                             .legacyid("newsletter_email_test") // TODO: 발송키값
                             .mailtype("01") // TODO: 메일타입
                             .email(to)
-                            .name(to)
+                            .name(to) // TODO: 수신 메일 이름 ??
                             .sendtime(McpDate.now())
                             .fromaddress("noreply@joongang.co.kr") // TODO: 발송이메일
                             .fromname("중앙일보") // TODO: 발송자명
@@ -468,7 +470,7 @@ public class NewsletterController extends AbstractCommonController {
                                     .getLetterHtml()
                                     .substring(0, Math.min(256, newsletterSendDTO
                                             .getLetterHtml()
-                                            .length())))
+                                            .length()))) // TODO: 메일본문 url?
                             .build());
 
                 });
@@ -487,11 +489,11 @@ public class NewsletterController extends AbstractCommonController {
      * @throws Exception
      */
     @ApiOperation(value = "뉴스레터 발송 (수동)수정")
-    @PutMapping(value = "/newsletterSend/{seq}")
-    public ResponseEntity<?> putNewsletterSend(@ApiParam(value = "뉴스레터발송 일련번호", required = true) @PathVariable("seq") Long seq,
+    @PutMapping(value = "/newsletterSend/{sendSeq}")
+    public ResponseEntity<?> putNewsletterSend(@ApiParam(value = "뉴스레터발송 일련번호", required = true) @PathVariable("sendSeq") Long sendSeq,
             @RequestBody @Valid NewsletterSendDTO newsletterSendDTO)
             throws InvalidDataException, Exception {
-        if (newsletterSendDTO.getLetterSeq() == null) {
+        if (newsletterSendDTO.getSendSeq() == null) {
             throw new MokaException(msg("tps.common.error.no-data"));
         }
         // 상단 이미지 저장
@@ -528,6 +530,45 @@ public class NewsletterController extends AbstractCommonController {
         tpsLogger.success(ActionType.UPLOAD, message);
 
         return imageUrl;
+    }
+
+
+    @ApiOperation(value = "뉴스레터 상품 히스토리 조회")
+    @GetMapping(value = "/{letterSeq}/historys")
+    public ResponseEntity<?> getNewsletterInfoHistoryByLetterSeq(@ApiParam(value = "뉴스레터상품 일련번호", required = true) @PathVariable("letterSeq")
+    @Min(value = 0, message = "{tps.common.error.min.seqNo}") Long letterSeq, @Valid @SearchParam NewsletterSearchDTO search)
+            throws NoDataException {
+        // 조회
+        Page<NewsletterInfoHist> returnValue = newsletterService.findAllNewsletterInfoHistByLetterSeq(letterSeq, search);
+
+        // 리턴값 설정
+        ResultListDTO<NewsletterInfoHistDTO> resultListMessage = new ResultListDTO<>();
+        resultListMessage.setTotalCnt(returnValue.getTotalElements());
+        resultListMessage.setList(modelMapper.map(returnValue.getContent(), NewsletterInfoHistDTO.TYPE));
+
+        ResultDTO<ResultListDTO<NewsletterInfoHistDTO>> resultDto = new ResultDTO<>(resultListMessage);
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "뉴스레터 히스토리 상세조회")
+    @GetMapping(value = "/historys/{histSeq}")
+    public ResponseEntity<?> getNewsletterInfoHistoryByhistSeq(@ApiParam(value = "히스토리 일련번호", required = true) @PathVariable("histSeq")
+    @Min(value = 0, message = "{tps.common.error.min.seqNo}") Long histSeq)
+            throws NoDataException {
+        // 조회
+        List<NewsletterInfoHist> returnValue = newsletterService.findTop2ByLetterSeqAndHistSeq(histSeq);
+
+        // 리턴값 설정
+        ResultListDTO<NewsletterInfoHistDTO> resultListMessage = new ResultListDTO<>();
+        resultListMessage.setTotalCnt(returnValue.size());
+        resultListMessage.setList(modelMapper.map(returnValue, NewsletterInfoHistDTO.TYPE));
+
+        ResultDTO<ResultListDTO<NewsletterInfoHistDTO>> resultDto = new ResultDTO<>(resultListMessage);
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**

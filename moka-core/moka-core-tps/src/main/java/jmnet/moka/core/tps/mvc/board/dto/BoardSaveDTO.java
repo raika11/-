@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.board.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -89,6 +91,12 @@ public class BoardSaveDTO {
     @Min(value = 0, message = "{tps.board.error.min.ordNo}")
     private Integer ordNo = TpsConstants.BOARD_GENERAL_CONTENT;
 
+    /**
+     * 등록일시
+     */
+    @ApiModelProperty(value = "예약일시")
+    @DTODateTimeFormat
+    private Date reserveDt;
 
     /**
      * 내용

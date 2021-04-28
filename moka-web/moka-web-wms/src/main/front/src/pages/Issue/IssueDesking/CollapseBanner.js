@@ -8,7 +8,7 @@ import { initialState, saveIssueDesking, publishIssueDesking } from '@store/issu
 import { getDisplayedRows } from '@utils/agGridUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
-import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
+import { MokaInputLabel, MokaInput, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import { bannerColumnDefs } from './IssueDeskingColumns';
 import { DeskingHistoryModal } from '../modal';
 import StatusBadge from './StatusBadge';
@@ -28,6 +28,7 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
     const [status, setStatus] = useState(DESK_STATUS_SAVE);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [viewYn, setViewYn] = useState('Y');
     const [histShow, setHistShow] = useState(false);
     const id = 'banner-1';
     const controls = 'collapse-banner';
@@ -58,7 +59,6 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
      * 임시저장
      */
     const saveDesking = () => {
-        const viewYn = open ? 'Y' : 'N';
         const displayedRows = open ? rowToData(getDisplayedRows(gridInstance.api), viewYn) : [];
 
         if (!open || validate(displayedRows)) {
@@ -135,8 +135,8 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
      * on/off 변경
      */
     const onChange = (e) => {
-        setOpen(e.target.checked);
         setStatus(DESK_STATUS_WORK);
+        setViewYn(e.target.checked ? 'Y' : 'N');
     };
 
     /**
@@ -162,11 +162,11 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
     useImperativeHandle(
         ref,
         () => ({
-            viewYn: open ? 'Y' : 'N',
+            viewYn,
             gridInstance,
-            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), open ? 'Y' : 'N'),
+            getDisplayedRows: () => rowToData(getDisplayedRows(gridInstance.api), viewYn),
         }),
-        [gridInstance, open, rowToData],
+        [gridInstance, rowToData, viewYn],
     );
 
     useEffect(() => {
@@ -200,6 +200,7 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
     }, [compNo, deskingList, gridInstance, pkgSeq]);
 
     useEffect(() => {
+        setViewYn(desking.viewYn);
         setOpen(desking.viewYn === 'Y');
     }, [desking.viewYn]);
 
@@ -210,14 +211,13 @@ const CollapseBanner = forwardRef(({ compNo, pkgSeq, desking, deskingList, MESSA
                 <Col xs={4} className="d-flex align-items-center position-unset">
                     <ReserveWork pkgSeq={pkgSeq} compNo={compNo} status={status} reserveDt={desking.reserveDt} onReserve={onReserve} />
                     <MokaInputLabel
-                        as="switch"
+                        as="none"
                         label="배너"
-                        id={controls}
-                        inputProps={{ checked: open }}
-                        onChange={onChange}
                         style={{ height: 'auto' }}
                         labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
+                        labelProps={{ id: controls, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse', onClick: () => setOpen(!open) }}
                     />
+                    <MokaInput as="switch" id={`${controls}-input`} style={{ height: 'auto' }} inputProps={{ checked: viewYn === 'Y', label: '' }} onChange={onChange} />
                 </Col>
                 <Col xs={3}></Col>
                 <Col xs={5} className="d-flex justify-content-end align-items-center">

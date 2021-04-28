@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH, CHANNEL_TYPE, ISSUE_CHANNEL_TYPE } from '@/constants';
-import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
+import { MokaInputLabel, MokaTable, MokaLoader, MokaOverlayTooltipButton, MokaIcon, MokaInput } from '@components';
 import { autoScroll, classElementsFromPoint, getDisplayedRows } from '@utils/agGridUtil';
 import common from '@utils/commonUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
@@ -31,6 +31,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
     const [status, setStatus] = useState(DESK_STATUS_SAVE);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [viewYn, setViewYn] = useState('Y');
     const [show, setShow] = useState(false);
     const [histShow, setHistShow] = useState(false);
     const [compLabel, setCompLabel] = useState('');
@@ -175,7 +176,6 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
      * 임시저장
      */
     const saveDesking = () => {
-        const viewYn = open ? 'Y' : 'N';
         let displayedRows = getDisplayedRows(gridInstance.api);
 
         if (open && displayedRows.length < 1) {
@@ -259,8 +259,8 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
      * on/off 변경
      */
     const onChange = (e) => {
-        setOpen(e.target.checked);
         setStatus(DESK_STATUS_WORK);
+        setViewYn(e.target.checked ? 'Y' : 'N');
     };
 
     /**
@@ -289,11 +289,11 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
     useImperativeHandle(
         ref,
         () => ({
-            viewYn: open ? 'Y' : 'N',
+            viewYn,
             gridInstance,
-            getDisplayedRows: () => rowToData(combineRows(getDisplayedRows(gridInstance.api)), open ? 'Y' : 'N'),
+            getDisplayedRows: () => rowToData(combineRows(getDisplayedRows(gridInstance.api)), viewYn),
         }),
-        [combineRows, gridInstance, open, rowToData],
+        [combineRows, gridInstance, rowToData, viewYn],
     );
 
     useEffect(() => {
@@ -320,6 +320,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
     }, [gridInstance, pkgSeq, deskingList]);
 
     useEffect(() => {
+        setViewYn(desking.viewYn);
         setOpen(desking.viewYn === 'Y');
     }, [desking.viewYn]);
 
@@ -330,14 +331,13 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                 <Col xs={4} className="d-flex align-items-center position-unset">
                     <ReserveWork pkgSea={pkgSeq} status={status} compNo={compNo} reserveDt={desking.reserveDt} onReserve={onReserve} />
                     <MokaInputLabel
-                        as="switch"
+                        as="none"
                         label="영상포토"
-                        id={controls}
-                        inputProps={{ checked: open, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse' }}
-                        labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
                         style={{ height: 'auto' }}
-                        onChange={onChange}
+                        labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
+                        labelProps={{ id: controls, 'aria-controls': controls, 'aria-expanded': open, 'data-toggle': 'collapse', onClick: () => setOpen(!open) }}
                     />
+                    <MokaInput as="switch" id={`${controls}-input`} style={{ height: 'auto' }} inputProps={{ checked: viewYn === 'Y', label: '' }} onChange={onChange} />
                 </Col>
                 <Col xs={3} className="d-flex align-items-center">
                     <Button variant="searching" size="sm" className="mr-1" onClick={() => setShow(true)}>

@@ -237,6 +237,26 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
         setStatus(DESK_STATUS_WORK);
     };
 
+    /**
+     * 히스토리 불러오기
+     * @param {array} histories 히스토리 목록
+     */
+    const onLoad = (histories) => {
+        if (histories) {
+            gridInstance.api.setRowData(
+                histories.map((d) => ({
+                    ...d,
+                    id: `${pkgSeq}-${ISSUE_CHANNEL_TYPE.M.code}-${common.getUniqueKey()}`,
+                    title: unescapeHtmlArticle(d.title),
+                    afterOnChange: () => setStatus(DESK_STATUS_WORK),
+                })),
+            );
+            setStatus(DESK_STATUS_WORK);
+        } else {
+            toast.warning('불러올 히스토리 목록이 없습니다');
+        }
+    };
+
     useImperativeHandle(
         ref,
         () => ({
@@ -246,6 +266,10 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
         }),
         [gridInstance, open, rowToData],
     );
+
+    useEffect(() => {
+        setStatus(DESK_STATUS_SAVE);
+    }, [pkgSeq]);
 
     useEffect(() => {
         if (gridInstance) {
@@ -258,7 +282,6 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                     afterOnChange: () => setStatus(DESK_STATUS_WORK),
                 })),
             );
-            setStatus(DESK_STATUS_SAVE);
         }
     }, [gridInstance, pkgSeq, deskingList]);
 
@@ -306,7 +329,7 @@ const CollapseMoviePhoto = forwardRef(({ pkgSeq, compNo, desking, deskingList, M
                         <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
                             <MokaIcon iconName="fal-history" />
                         </MokaOverlayTooltipButton>
-                        <DeskingHistoryModal show={histShow} pkgSeq={pkgSeq} compNo={compNo} onHide={() => setHistShow(false)} />
+                        <DeskingHistoryModal show={histShow} pkgSeq={pkgSeq} compNo={compNo} onHide={() => setHistShow(false)} onLoad={onLoad} />
                     </div>
                 </Col>
             </Row>

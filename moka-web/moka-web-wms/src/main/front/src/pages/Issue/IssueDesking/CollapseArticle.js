@@ -221,6 +221,26 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
     };
 
     /**
+     * 히스토리 불러오기
+     * @param {array} histories 히스토리 목록
+     */
+    const onLoad = (histories) => {
+        if (histories) {
+            gridInstance.api.setRowData(
+                histories.map((d) => ({
+                    ...d,
+                    title: unescapeHtmlArticle(d.title),
+                    bodyHead: unescapeHtmlArticle(d.bodyHead),
+                    afterOnChange: () => setStatus(DESK_STATUS_WORK),
+                })),
+            );
+            setStatus(DESK_STATUS_WORK);
+        } else {
+            toast.warning('불러올 히스토리 목록이 없습니다');
+        }
+    };
+
+    /**
      * 전송
      */
     const publishDesking = () => {
@@ -278,6 +298,10 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
     }, [desking.viewYn]);
 
     useEffect(() => {
+        setStatus(DESK_STATUS_SAVE);
+    }, [pkgSeq]);
+
+    useEffect(() => {
         if (gridInstance) {
             // title, bodyHead unescapeHtmlArticle 처리
             gridInstance.api.setRowData(
@@ -288,7 +312,6 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
                     afterOnChange: () => setStatus(DESK_STATUS_WORK),
                 })),
             );
-            setStatus(DESK_STATUS_SAVE);
         }
     }, [gridInstance, pkgSeq, deskingList]);
 
@@ -330,7 +353,7 @@ const CollapseArticle = forwardRef(({ pkgSeq, compNo, desking, deskingList, prev
                         <MokaOverlayTooltipButton className="work-btn" tooltipText="히스토리" variant="white" onClick={() => setHistShow(true)}>
                             <MokaIcon iconName="fal-history" />
                         </MokaOverlayTooltipButton>
-                        <DeskingHistoryModal show={histShow} onHide={() => setHistShow(false)} pkgSeq={pkgSeq} compNo={compNo} />
+                        <DeskingHistoryModal show={histShow} onHide={() => setHistShow(false)} pkgSeq={pkgSeq} compNo={compNo} onLoad={onLoad} />
                     </div>
                 </Col>
             </Row>

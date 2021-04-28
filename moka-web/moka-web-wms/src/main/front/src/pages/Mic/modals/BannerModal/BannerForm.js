@@ -44,7 +44,7 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, onAdd, setError 
             titleClassName="ft-14"
             titleButtons={[{ text: '등록', variant: 'positive', onClick: onAdd }]}
             className="shadow-none w-100 h-100"
-            headerClassName="pt-0 pr-0 align-items-center"
+            headerClassName="pt-0 pb-10 pr-0 align-items-center"
             bodyClassName="pr-0"
             footerClassName="pb-0 mr-0"
             footerButtons={[
@@ -53,6 +53,7 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, onAdd, setError 
             ]}
             loading={loading}
         >
+            <hr className="mt-0 mb-10" />
             <MokaInputLabel
                 as="imageFile"
                 label={

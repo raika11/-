@@ -108,13 +108,13 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
                                         callback: ({ header, body }) => {
                                             if (header.success) {
                                                 setSelected(rowData);
-                                                onLoad(body.issueDeskings);
+                                                onLoad(body.issueDeskings.filter((a) => a.viewYn === 'Y'));
                                             }
                                         },
                                     }),
                                 );
                             } else {
-                                onLoad(detail.issueDeskings);
+                                onLoad(detail.issueDeskings.filter((a) => a.viewYn === 'Y'));
                             }
                         },
                         () => {},
@@ -127,10 +127,12 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
     useEffect(() => {
         if (detail?.issueDeskings) {
             setDRowData(
-                detail.issueDeskings.map((d) => ({
-                    ...d,
-                    id: `${d.contentsId}-${common.getUniqueKey()}`,
-                })),
+                detail.issueDeskings
+                    .filter((d) => d.viewYn === 'Y')
+                    .map((d) => ({
+                        ...d,
+                        id: `${d.contentsId}-${common.getUniqueKey()}`,
+                    })),
             );
         } else {
             setDRowData([]);

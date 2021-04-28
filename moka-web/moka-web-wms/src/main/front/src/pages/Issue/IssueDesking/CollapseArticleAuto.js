@@ -2,7 +2,7 @@ import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'rea
 import { useDispatch } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaInputLabel, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
+import { MokaInputLabel, MokaInput, MokaLoader, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { DESK_STATUS_WORK, DESK_STATUS_SAVE, DESK_STATUS_PUBLISH } from '@/constants';
 import { saveIssueDesking, publishIssueDesking } from '@store/issue';
@@ -18,7 +18,7 @@ const defaultProps = {
  */
 const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE, preview }, ref) => {
     const dispatch = useDispatch();
-    const [open, setOpen] = useState(false);
+    const [viewYn, setViewYn] = useState('Y');
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState(DESK_STATUS_SAVE);
     const controls = 'collapse-art-auto';
@@ -27,7 +27,6 @@ const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE, prev
      * 임시저장
      */
     const saveDesking = () => {
-        const viewYn = open ? 'Y' : 'N';
         setLoading(true);
         dispatch(
             saveIssueDesking({
@@ -97,12 +96,12 @@ const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE, prev
      * on/off 변경
      */
     const onChange = (e) => {
-        setOpen(e.target.checked);
         setStatus(DESK_STATUS_WORK);
+        setViewYn(e.target.checked ? 'Y' : 'N');
     };
 
     useEffect(() => {
-        setOpen(desking.viewYn === 'Y');
+        setViewYn(desking.viewYn);
     }, [desking.viewYn]);
 
     useEffect(() => {
@@ -112,9 +111,9 @@ const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE, prev
     useImperativeHandle(
         ref,
         () => ({
-            viewYn: open ? 'Y' : 'N',
+            viewYn,
         }),
-        [open],
+        [viewYn],
     );
 
     return (
@@ -124,14 +123,13 @@ const CollapseArticleAuto = forwardRef(({ compNo, pkgSeq, desking, MESSAGE, prev
                 <Col xs={4} className="d-flex align-items-center position-unset">
                     <ReserveWork compNo={compNo} reserveDt={desking.reserveDt} pkgSeq={pkgSeq} status={status} onReserve={onReserve} />
                     <MokaInputLabel
-                        as="switch"
+                        as="none"
                         label="데이터기사"
-                        id={controls}
-                        inputProps={{ checked: open }}
-                        onChange={onChange}
                         style={{ height: 'auto' }}
                         labelClassName={status === DESK_STATUS_WORK ? 'color-positive' : status === DESK_STATUS_PUBLISH ? 'color-info' : 'color-gray-900'}
+                        labelProps={{ id: controls }}
                     />
+                    <MokaInput as="switch" id={`${controls}-input`} style={{ height: 'auto' }} inputProps={{ checked: viewYn === 'Y', label: '' }} onChange={onChange} />
                 </Col>
                 <Col xs={8} className="d-flex justify-content-end align-items-center">
                     <div className="d-flex">

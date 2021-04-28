@@ -62,6 +62,12 @@ public class BoardDTO {
     @Min(value = 0, message = "{tps.board.error.min.parentBoardSeq}")
     private Long parentBoardSeq;
 
+    /**
+     * 예약일시
+     */
+    @ApiModelProperty(value = "예약일시")
+    @DTODateTimeFormat
+    private String reserveDt;
 
     /**
      * 등록자명

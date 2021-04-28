@@ -32,6 +32,10 @@ const propTypes = {
      */
     required: PropTypes.bool,
     /**
+     * 라벨의 추가 props를 정의한다
+     */
+    labelProps: PropTypes.shape({}),
+    /**
      * none -> label만 그림 (input 없음),
      * 나머지 타입은 MokaInput 확인
      */
@@ -59,6 +63,7 @@ const MokaInputLabel = forwardRef((props, ref) => {
         className,
         labelClassName,
         required,
+        labelProps,
         // common props
         inputClassName,
         as,
@@ -108,6 +113,7 @@ const MokaInputLabel = forwardRef((props, ref) => {
                     className={clsx('px-0 mb-0 position-relative flex-shrink-0 ft-13', labelClassName)}
                     style={{ width: labelWidth, minWidth: labelWidth, marginRight: 12 }}
                     htmlFor={id || 'none'}
+                    {...labelProps}
                 >
                     {required && <span className="required-text">*</span>}
                     {ln}

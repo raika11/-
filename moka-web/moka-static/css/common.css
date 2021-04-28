@@ -1102,6 +1102,7 @@ dl.date dd {margin-left: 6px;}
 
     /* story_list */
     .story_list .card {align-items : stretch;padding-top: 16px; padding-bottom: 16px;}
+    .story_list .card_image img{width:205px;}
     .story_list .card_body {display:flex;padding-left:30px;flex-wrap: wrap;flex-grow: 1 !important;}
     .story_list .none_photo .card_body {padding-left:0;}
     .story_list .card_body >  *{width:100%;flex: 0 0 auto;}

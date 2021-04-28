@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import Button from 'react-bootstrap/Button';
 import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import { MokaCard, MokaInputLabel, MokaInputGroup, MokaCopyTextButton } from '@components';
-import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
+import { initialState, GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
 
 /**
  * 컨테이너 관리 > 등록, 수정
@@ -14,23 +15,19 @@ const ContainerEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const loading = useSelector(({ loading }) => loading[GET_CONTAINER] || loading[DELETE_CONTAINER] || loading[SAVE_CONTAINER]);
-    const latestDomainId = useSelector((store) => store.auth.latestDomainId);
+    const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const { container, inputTag, invalidList } = useSelector(({ container }) => container);
-    const [containerSeq, setContainerSeq] = useState('');
-    const [containerName, setContainerName] = useState('');
+    const [temp, setTemp] = useState(initialState.container);
     const [error, setError] = useState({});
+    const imgFileRef = useRef(null);
 
     /**
      * 항목별 값 변경
      */
     const handleChangeValue = ({ target }) => {
         const { name, value } = target;
-        if (name === 'containerName') {
-            setContainerName(value);
-            if (util.isEmpty(value)) {
-                setError({ ...error, [name]: false });
-            }
-        }
+        setTemp({ ...temp, [name]: value });
+        if (error[name]) setError({ ...error, [name]: false });
     };
 
     /**
@@ -87,11 +84,7 @@ const ContainerEdit = ({ onDelete, match }) => {
     const handleClickSave = (e) => {
         e.preventDefault();
         e.stopPropagation();
-
-        let data = {
-            ...container,
-            containerName,
-        };
+        const data = temp;
 
         if (validate(data)) {
             if (!container.containerSeq || container.containerSeq === '') {
@@ -145,12 +138,8 @@ const ContainerEdit = ({ onDelete, match }) => {
     const handleClickCancle = () => history.push(match.path);
 
     useEffect(() => {
+        setTemp(container);
         setError({});
-    }, [container.containerSeq]);
-
-    useEffect(() => {
-        setContainerSeq(container.containerSeq || '');
-        setContainerName(container.containerName || '');
     }, [container]);
 
     useEffect(() => {
@@ -182,22 +171,23 @@ const ContainerEdit = ({ onDelete, match }) => {
                 },
             ].filter(Boolean)}
         >
-            {/* 컨테이너ID */}
-            <MokaInputLabel className="mb-2" label="컨테이너ID" name="containerSeq" value={containerSeq} inputProps={{ plaintext: true, readOnly: true }} />
+            <MokaInputLabel className="mb-2" label="컨테이너ID" name="containerSeq" value={temp.containerSeq} inputProps={{ plaintext: true, readOnly: true }} />
 
-            {/* 컨테이너명 */}
+            <MokaInputLabel label="사용분류" className="mb-2" as="select" disabled>
+                <option>서비스페이지</option>
+            </MokaInputLabel>
+
             <MokaInputLabel
                 className="mb-2"
                 label="컨테이너명"
                 name="containerName"
                 placeholder="컨테이너명을 입력하세요"
-                value={containerName}
+                value={temp.containerName}
                 onChange={handleChangeValue}
                 isInvalid={error.containerName}
                 required
             />
 
-            {/* 입력태그 */}
             <MokaInputGroup
                 label="입력태그"
                 as="textarea"
@@ -206,6 +196,29 @@ const ContainerEdit = ({ onDelete, match }) => {
                 className="mb-2"
                 disabled
                 append={<MokaCopyTextButton copyText={inputTag} />}
+            />
+
+            <MokaInputLabel label="설명" as="textarea" name="description" inputProps={{ rows: 3 }} className="mb-2" value={container.description} onChange={handleChangeValue} />
+
+            <MokaInputLabel
+                ref={imgFileRef}
+                label={
+                    <React.Fragment>
+                        이미지
+                        <Button className="mt-1" size="sm" variant="gray-700" onClick={(e) => imgFileRef.current.rootRef.onClick(e)}>
+                            신규등록
+                        </Button>
+                    </React.Fragment>
+                }
+                as="imageFile"
+                inputProps={{
+                    width: 284,
+                    height: (284 * 9) / 16,
+                    // img: thumbSrc,
+                    //  alt: temp.templateName,
+                    deleteButton: true,
+                    //   setFileValue
+                }}
             />
         </MokaCard>
     );

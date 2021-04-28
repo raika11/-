@@ -38,19 +38,21 @@ const PageEdit = ({ onDelete }) => {
      */
     const makePageUrl = useCallback(
         (name, value) => {
-            let url = '';
+            let pageUrl = '';
             if (name === 'pageServiceName') {
-                url = baseCheck(temp.pageUrl || temp?.parent?.pageUrl) ? '' : `${temp.parent.pageUrl}/${value}`;
-                if (!util.isEmpty(temp.urlParam)) url = `${url}/*`;
-                if (util.isEmpty(url)) url = '/';
+                pageUrl = [temp.parent.pageUrl, temp.parent.pageUrl.slice(-1) === '/' ? '' : '/', value].join('');
+                if (!util.isEmpty(temp.urlParam)) pageUrl = `${pageUrl}/*`;
+                if (util.isEmpty(pageUrl)) pageUrl = '/';
             } else if (name === 'urlParam') {
-                url = baseCheck(temp.pageUrl || temp?.parent?.pageUrl) ? '' : `${temp.parent.pageUrl}/${temp.pageServiceName}`;
-                if (!util.isEmpty(value)) url = `${url}/*`;
-                if (util.isEmpty(url)) url = '/';
+                pageUrl = baseCheck(temp.pageUrl || temp?.parent?.pageUrl)
+                    ? ''
+                    : [temp.parent.pageUrl, temp.parent.pageUrl.slice(-1) === '/' ? '' : '/', temp.pageServiceName].join('');
+                if (!util.isEmpty(value)) pageUrl = `${pageUrl}/*`;
+                if (util.isEmpty(pageUrl)) pageUrl = '/';
             } else {
-                url = temp.pageUrl;
+                pageUrl = temp.pageUrl;
             }
-            return url;
+            return pageUrl;
         },
         [temp],
     );
@@ -65,10 +67,10 @@ const PageEdit = ({ onDelete }) => {
             if (name === 'usedYn') {
                 setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
             } else if (name === 'pageServiceName') {
-                const url = makePageUrl(name, value);
+                const pageUrl = makePageUrl(name, value);
                 setTemp({
                     ...temp,
-                    pageUrl: url,
+                    pageUrl,
                     pageServiceName: value,
                 });
                 setError({ ...error, pageServiceName: false });
@@ -77,10 +79,10 @@ const PageEdit = ({ onDelete }) => {
             } else if (name === 'fileYn') {
                 setTemp({ ...temp, fileYn: checked ? 'Y' : 'N' });
             } else if (name === 'urlParam') {
-                const url = makePageUrl(name, value);
+                const pageUrl = makePageUrl(name, value);
                 setTemp({
                     ...temp,
-                    pageUrl: url,
+                    pageUrl,
                     urlParam: value,
                 });
                 setError({ ...error, urlParam: false });

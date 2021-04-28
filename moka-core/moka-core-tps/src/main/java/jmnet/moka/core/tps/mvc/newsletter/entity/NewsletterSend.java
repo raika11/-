@@ -50,9 +50,6 @@ public class NewsletterSend extends RegAudit {
     @Column(name = "ABTEST_YN")
     private String abtestYn;
 
-    @Column(name = "AB_DIV")
-    private String abDiv;
-
     @Column(name = "AB_VARIANT_TYPE")
     private String abVariantType;
 
@@ -61,6 +58,9 @@ public class NewsletterSend extends RegAudit {
 
     @Column(name = "SENDER_NAME")
     private String senderName;
+
+    @Column(name = "SENDER_NAME_B")
+    private String senderNameB;
 
     @Column(name = "SENDER_EMAIL")
     private String senderEmail;
@@ -74,11 +74,17 @@ public class NewsletterSend extends RegAudit {
     @Column(name = "SEND_DT")
     private Date sendDt;
 
+    @Column(name = "SEND_DT_B")
+    private Date sendDtB;
+
     @Column(name = "SCB_LINK_YN")
     private String scbLinkYn;
 
     @Column(name = "CONTAINER_SEQ")
     private Long containerSeq;
+
+    @Column(name = "CONTAINER_SEQ_B")
+    private Long containerSeqB;
 
     @Column(name = "HEADER_IMG")
     private String headerImg;
@@ -88,6 +94,9 @@ public class NewsletterSend extends RegAudit {
 
     @Column(name = "LETTER_TITLE")
     private String letterTitle;
+
+    @Column(name = "LETTER_TITLE_B")
+    private String letterTitleB;
 
     @Column(name = "LETTER_URL")
     private String letterUrl;

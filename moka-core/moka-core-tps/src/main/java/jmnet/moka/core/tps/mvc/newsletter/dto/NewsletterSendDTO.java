@@ -56,17 +56,23 @@ public class NewsletterSendDTO implements Serializable {
     @Pattern(regexp = "^(Y)|(N)$", message = "{tps.newsletter.error.pattern.abtestYn}")
     private String abtestYn;
 
-    @ApiModelProperty("A / B")
-    @Pattern(regexp = "^(A)|(B)$", message = "{tps.newsletter.error.pattern.abDiv}")
-    private String abDiv;
+    @ApiModelProperty("AB 테스트 변경항목(제목:T,발송일시:D, 발송자명:N, 레이아웃:L)")
+    // TODO: message
+    @Pattern(regexp = "^(T)|(D)|(N)|(L)$", message = "TODO")
+    private String abVariantType;
 
     @ApiModelProperty("전송상태(S:성공, F:실패, N:데이터없음, R:예약)")
+    // TODO: message
     @Pattern(regexp = "^(S)|(F)|(N)|(R)$", message = "TODO")
     private String sendStatus;
 
     @ApiModelProperty("발송자명")
     @Length(max = 100, message = "{tps.newsletter.error.size.senderName}")
     private String senderName;
+
+    @ApiModelProperty("발송자명(B안)")
+    @Length(max = 100, message = "{tps.newsletter.error.size.senderName}")
+    private String senderNameB;
 
     @ApiModelProperty("발송자이메일")
     @Email
@@ -84,6 +90,10 @@ public class NewsletterSendDTO implements Serializable {
     @DTODateTimeFormat
     private Date sendDt;
 
+    @ApiModelProperty("발송일시(B안)")
+    @DTODateTimeFormat
+    private Date sendDtB;
+
     @ApiModelProperty("구독자연동여부(Y/N-excel업로드)")
     @Pattern(regexp = "^(Y)|(N)$", message = "{tps.newsletter.error.pattern.scbLinkYn}")
     private String scbLinkYn;
@@ -91,6 +101,10 @@ public class NewsletterSendDTO implements Serializable {
     @ApiModelProperty("레이아웃일련번호")
     @Min(value = 0, message = "{tps.common.error.min.seqNo}")
     private Long containerSeq;
+
+    @ApiModelProperty("레이아웃일련번호(B안)")
+    @Min(value = 0, message = "{tps.common.error.min.seqNo}")
+    private Long containerSeqB;
 
     @ApiModelProperty("헤더이미지")
     private String headerImg;
@@ -110,6 +124,10 @@ public class NewsletterSendDTO implements Serializable {
     @Length(max = 100, message = "{tps.newsletter.error.size.letterTitle}")
     private String letterTitle;
 
+    @ApiModelProperty("레터제목(B안)")
+    @Length(max = 100, message = "{tps.newsletter.error.size.letterTitle}")
+    private String letterTitleB;
+
     @ApiModelProperty("레터URL")
     @Length(max = 200, message = "{tps.newsletter.error.size.letterUrl}")
     private String letterUrl;
@@ -122,9 +140,6 @@ public class NewsletterSendDTO implements Serializable {
 
     @ApiModelProperty("발송할 이메일 리스트 (;) 구분자")
     private String testEmails;
-
-    @ApiModelProperty("엑셀업로드이메일목록")
-    private String uploadEmail;
 
     @ApiModelProperty("엑셀파일 업로드")
     @JsonIgnore

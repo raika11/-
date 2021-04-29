@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { MokaInputLabel } from '@components';
+import { MokaInput, MokaInputLabel } from '@components';
 import ReplyNote from '@/pages/Boards/BoardsList/BoardsEdit/ReplyNote';
+import { DATE_FORMAT } from '@/constants';
+import toast from '@/utils/toastUtil';
 
 /**
  * J팟 관리 > 공지 게시판 > 게시글 답변 편집 폼
@@ -17,6 +20,12 @@ const NoticeEditReplyForm = ({ data, onChange }) => {
     const channelList = useSelector((store) => store.jpod.jpodNotice.channelList);
     const contents = useSelector((store) => store.jpod.jpodNotice.contents);
     const storeReply = useSelector((store) => store.jpod.jpodNotice.reply);
+
+    // 예약 일시 정보
+    const [reserveInfo, setReserveInfo] = useState({
+        date: null,
+        time: null,
+    });
 
     /**
      * 입력값 변경
@@ -52,6 +61,19 @@ const NoticeEditReplyForm = ({ data, onChange }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [parentBoardSeq]);
 
+    useEffect(() => {
+        if (reserveInfo.date && reserveInfo.time) {
+            onChange({ reserveDt: `${moment(reserveInfo.date).format(DATE_FORMAT)} ${moment(reserveInfo.time).format('HH:mm')}` });
+        }
+        // else if ((reserveInfo.date && !reserveInfo.time) || (!reserveInfo.date && reserveInfo.time)) {
+        //     toast.warning('예약 일시를 확인해주세요');
+        // }
+        else {
+            onChange({ reserveDt: null });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reserveInfo]);
+
     return (
         <Form>
             <Form.Row className="mb-2">
@@ -74,6 +96,44 @@ const NoticeEditReplyForm = ({ data, onChange }) => {
                     </Col>
                 </Form.Row>
             )}
+            <Form.Row className="mb-2">
+                <Col xs={5} className="p-0 pr-2">
+                    <MokaInputLabel
+                        as="dateTimePicker"
+                        label="예약 일시"
+                        value={reserveInfo.date}
+                        inputProps={{ timeFormat: null }}
+                        onChange={(date) => {
+                            if (typeof date) {
+                                const nd = new Date();
+                                const diff = moment(nd).diff(date, 'days');
+                                if (diff > 0) {
+                                    toast.warning('미래 일시를 지정해주세요');
+                                    setReserveInfo({ ...reserveInfo, date: moment(nd) });
+                                } else {
+                                    setReserveInfo({ ...reserveInfo, date: date });
+                                }
+                            } else {
+                                setReserveInfo({ ...reserveInfo, date: null });
+                            }
+                        }}
+                    />
+                </Col>
+                <Col xs={3} className="p-0">
+                    <MokaInput
+                        as="dateTimePicker"
+                        value={reserveInfo.time}
+                        inputProps={{ dateFormat: null }}
+                        onChange={(date) => {
+                            if (typeof date) {
+                                setReserveInfo({ ...reserveInfo, time: date });
+                            } else {
+                                setReserveInfo({ ...reserveInfo, time: null });
+                            }
+                        }}
+                    />
+                </Col>
+            </Form.Row>
             {/* textarea, 에디터 */}
             {jpodBoard.editorYn === 'N' ? (
                 <Form.Row className="mb-2">

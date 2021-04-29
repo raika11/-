@@ -187,7 +187,7 @@ public class AbTestCaseSaveVO {
      * AB테스트 그룹생성 방식(R:랜덤, S:고정) / TB_ABTEST_GRP(AB테스트 그룹) ABTEST_GRP_METHOD
      */
     @Column(name = "ABTEST_GRP_METHOD")
-    private String abtestGrpMethod = "R";
+    private String abtestGrpMethod;
 
     /**
      * AB테스트 그룹(랜덤:비율 / 고정:0~9숫자) / TB_ABTEST_GRP(AB테스트 그룹) ABTEST_GRP
@@ -247,7 +247,7 @@ public class AbTestCaseSaveVO {
      */
     @Column(name = "ART_CONTENT_A")
     private String artContentA;
-    
+
     @Column(name = "ART_CONTENT_B")
     private String artContentB;
 

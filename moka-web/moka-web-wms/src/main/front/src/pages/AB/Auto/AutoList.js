@@ -17,7 +17,11 @@ const AutoList = (props) => {
     const history = useHistory();
     const { match } = props;
 
-    const { search, list } = useSelector(({ ab }) => ab);
+    const { search, list, total } = useSelector(({ ab }) => ab);
+
+    const handleClickRow = ({ seq }) => {
+        history.push(`/ab-auto/${seq}`);
+    };
 
     useEffect(() => {
         dispatch(getAbTestList({ ...search, abtestType: ABTEST_TYPE.DIRECT_DESIGN }));
@@ -32,7 +36,7 @@ const AutoList = (props) => {
                     설계 등록
                 </Button>
             </Row>
-            <ABAgGrid rowData={list} searchOptions={search} columnDefs={AutoAgGridColumns} />
+            <ABAgGrid rowData={list} searchOptions={search} total={total} columnDefs={AutoAgGridColumns} onRowClicked={handleClickRow} />
         </React.Fragment>
     );
 };

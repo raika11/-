@@ -42,7 +42,7 @@ const PageEdit = ({ onDelete }) => {
             let pageUrl = '';
             if (name === 'pageServiceName') {
                 pageUrl = [temp.parent.pageUrl, temp.parent.pageUrl.slice(-1) === '/' ? '' : '/', value].join('');
-                if (!util.isEmpty(temp.urlParam)) pageUrl = `${pageUrl}/*`;
+                if (!util.isEmpty(temp.urlParam)) pageUrl = [pageUrl, pageUrl.slice(-1) === '/' ? '' : '/', '*'].join('');
                 if (util.isEmpty(pageUrl)) pageUrl = '/';
             } else if (name === 'urlParam') {
                 pageUrl = baseCheck(temp.pageUrl || temp?.parent?.pageUrl)

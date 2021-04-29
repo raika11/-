@@ -5,7 +5,7 @@
 
     <!-- <script src="include.js"></script> -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>section 기사 리스트</title>
+    <title>section 일반형 홈</title>
 
     <!-- Adaptive meta tag -->
     <meta name="viewport" content="width=device-width">
@@ -48,25 +48,95 @@
         <!-- container -->
         <main role="main" id="container">
             <!-- contents -->
-            <section class="contents">
+            <section class="contents clearfix">
                 <!-- 헤더 -->
                 <header class="section_header_wrap">
                     <div class="header_area">
-                            <h1 class="section_title">정치</h1>
-                            <nav class="header_nav">
-                                    <ul class="nav">
-                                            <li class="nav_item"><h2><a href="#">국회정당</a></h2></li>
-                                            <li class="nav_item"><h2><a href="#">청와대</a></h2></li>
-                                            <li class="nav_item"><h2><a href="#">외교</a></h2></li>
-                                            <li class="nav_item"><h2><a href="#">국방</a></h2></li>
-                                            <li class="nav_item"><h2><a href="#">북한</a></h2></li>
-                                    </ul>
-                            </nav>
+                        <h1 class="section_title">정치</h1>
+                        <nav class="header_nav">
+                            <ul class="nav">
+                                <li class="nav_item"><h2><a href="#">국회정당</a></h2></li>
+                                <li class="nav_item"><h2><a href="#">청와대</a></h2></li>
+                                <li class="nav_item"><h2><a href="#">외교</a></h2></li>
+                                <li class="nav_item"><h2><a href="#">국방</a></h2></li>
+                                <li class="nav_item"><h2><a href="#">북한</a></h2></li>
+                            </ul>
+                        </nav>
                     </div>
                 </header>
                 <!-- // 헤더 -->
-                <div class="row">
-                    <div class="col_lg9"> 
+                <!-- 쇼케이스 -->
+                <section class="showcase_general float_left">
+                    <!-- 1개 타입 -->
+                    <div class="card row flex_row_reverse">
+                            <div class="card_image col_sm12 col_lg56">
+                                <figure>
+                                    <a href="javascript:(0);" class="img_thumbnail">
+                                        <img src="//via.placeholder.com/483x271" width="483" alt="..." />
+                                    </a>
+                                </figure>
+                            </div>
+                            <div class="card_body col_sm12 col_lg44">
+                                <h2 class="headline fs_sm20 fs_lg32"><a href="javascript:(0);">지위고하 막론 투기 파헤쳐야… 부동산 반전 마지막 기회"</a></h2>
+                                <p class="description">문재인 대통령 주재로 오는 15일 열리는 확대경제장관회의에 국내 주요 기업 최고경영자(CEO)가 대거 참석한다. 강민석 청와대 대변인은 13일 서면브리핑을 통해 “반도체·전기차·조선 등 주요 전략산업 현황을 점검하고 대응 전략을 논의하기 위해 문 대통령이 긴급 소집한 회의”라고 설명했다.</p>
+                            </div>
+                    </div>
+                    <!-- //1개 타입 -->
+                </section>
+                <!-- //쇼케이스 -->
+                <div class="aside float_right">
+                    <!-- 많이 본 기사-->
+                    <section class="">
+                        <!-- 소제목형 -->
+                        <div class="title_wrap">
+                            <div class="title_area">
+                                <h2 class="title">정치 많이 본 기사</h2>
+                            </div>
+                            <button type="button" class="btn_info" onclick="openLayer(test);"><i class="ico_info"></i></button>
+                            <div class="layer_popup layer_cheer" id="test"><!-- 여기에 개별 클래스 추가 -->
+                                <div class="layer_body">
+                                    <p>기자에게 보내는 응원은 하루 1번 가능합니다.</p>
+                                    <p class="desc">(0시 기준)</p>
+                                </div>
+                                <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">닫기</span></button>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- // 많이 본 기사-->
+                    <!-- 광고-->
+                    <div class="ad_wrap">
+                        광고
+                    </div>
+                    <!-- //광고-->
+                </div>
+                <div class="contents_bottom float_left">
+                    <!-- 추천 패키지 -->
+                    <section class="chain_wrap">
+                        <header class="title_wrap">
+                                <div class="title_area">
+                                        <h3 class="title">추천 패키지</h3>
+                                </div>
+                        </header>
+                        
+                    </section>
+                    <!-- //추천 패키지 -->
+                    <!-- 정정보도 -->
+                    <div class="notice_wrap">
+                        <div class="info_wrap">
+                            <div class="info_area">
+                                <strong class="title">정정보도</strong>
+                                <p class="description"><a href="#">9월 28일자 20면 김형석 교수 인터뷰</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //정정보도 -->
+                    <!-- 최신기사 -->
+                    <section class="chain_wrap">
+                        <header class="title_wrap">
+                                <div class="title_area">
+                                        <h3 class="title">최신기사</h3>
+                                </div>
+                        </header>
                         <!-- 스토리리스트 -->
                         <ul class="story_list">
                             <li class="card">
@@ -123,32 +193,13 @@
                             <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
                             <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
                             <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
-                            <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
-                            <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
-                            <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
-                            <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
-                            <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
-                            <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
-                            <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
-                            <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
-                            <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
-                            <li class="card "><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">옆집 신축공사로 벽에 균열…해결 방법은</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta col_sm12"><p class="date">2020.1.26  11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li>
-                            <!-- //반복 영역-->
                         </ul>
-                         <!-- //스토리리스트 -->
-
-                         <div class="button_wrap_wide">
-                            <button type="button" class="btn btn_default btn_more">더 보기</button>
+                        <!-- //스토리리스트 -->
+                        <div class="button_wrap_wide">
+                            <button type="button" class="btn btn_outline_gray">더 보기</button>
                         </div>
-                    </div>
-                   
-                    <!-- 광고 영역 -->
-                    <div class="col_lg3">
-                        <div class="ad">
-                            내부 서비스 배너 or 광고 영역
-                        </div>
-                    </div>
-                    <!-- //광고 영역 -->
+                    </section>
+                    <!-- //최신기사 -->
                 </div>
             </section>
             <!-- // contents -->

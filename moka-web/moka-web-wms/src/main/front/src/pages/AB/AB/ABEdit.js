@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaCardTabs } from '@components';
 import { ABMainForm, ABEtcForm, ABStatusRow } from '../components';
+import { useSelector } from 'react-redux';
 
 /**
  * A/B 테스트 > 전체 목록 > 탭 > 정보
  */
 
 const ABEdit = () => {
+    const { ab: data } = useSelector((store) => store.ab.ab);
+
     return (
         <MokaCard title="AB테스트명" headerClassName="pb-0" className="w-100 shadow-none" bodyClassName="p-0 m-0">
             <MokaCardTabs
@@ -23,7 +26,7 @@ const ABEdit = () => {
                         </div>
 
                         <ABStatusRow />
-                        <ABMainForm />
+                        <ABMainForm data={data} />
                     </div>,
                     <ABEtcForm />,
                 ]}

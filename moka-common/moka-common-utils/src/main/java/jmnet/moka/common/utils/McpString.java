@@ -871,4 +871,35 @@ public class McpString extends StringUtils {
     public static boolean isNo(String yesOrNo, String defaultValue) {
         return defaultValue(yesOrNo, defaultValue).equals(NO);
     }
+
+    /**
+     * 텍스트 뒤에서 부터 제거할 char를 나오지 않을때 까지 제거한다.
+     * @param text 문자열
+     * @param aChar 제거할 문자
+     * @return 문자열
+     */
+    public static String trimEnd(String text, char aChar) {
+        if ( text == null || text.length() == 0) return text;
+        int lastIndex = text.length() - 1;
+        while ( text.charAt(lastIndex) == aChar) {
+            lastIndex--;
+        }
+        return text.substring(0,lastIndex+1);
+    }
+
+    /**
+     * 문자열 앞에서 부터 제거할 char가 나오지 않을때 까지 제거한다.
+     * @param text 문자열
+     * @param aChar 제거할 문자
+     * @return 문자열
+     */
+    public static String trimStart(String text, char aChar) {
+        if ( text == null || text.length() == 0) return text;
+        int firstIndex = 0;
+        while ( text.charAt(firstIndex) == aChar) {
+            firstIndex++;
+        }
+        return text.substring(firstIndex,text.length());
+    }
+
 }

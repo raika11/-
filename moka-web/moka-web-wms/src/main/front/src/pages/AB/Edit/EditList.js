@@ -16,11 +16,16 @@ const EditList = (props) => {
     const history = useHistory();
     const { match } = props;
 
-    const { search, list } = useSelector(({ ab }) => ab);
+    const { search, list, total } = useSelector(({ ab }) => ab);
+
+    const handleClickRow = ({ seq }) => {
+        history.push(`/ab-edit/${seq}`);
+    };
 
     useEffect(() => {
         dispatch(getAbTestList({ ...search, abtestType: ABTEST_TYPE.ALTERNATIVE_INPUT }));
     }, [search, dispatch]);
+
     return (
         <React.Fragment>
             <ABSearch {...props} />
@@ -30,7 +35,7 @@ const EditList = (props) => {
                     설계 등록
                 </Button>
             </Row>
-            <ABAgGrid rowData={list} searchOptions={search} columnDefs={EditAgGridColumns} />
+            <ABAgGrid rowData={list} searchOptions={search} total={total} columnDefs={EditAgGridColumns} onRowClicked={handleClickRow} />
         </React.Fragment>
     );
 };

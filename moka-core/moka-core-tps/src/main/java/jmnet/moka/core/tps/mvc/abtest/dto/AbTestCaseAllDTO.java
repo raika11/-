@@ -74,6 +74,10 @@ public class AbTestCaseAllDTO {
     @ApiModelProperty("페이지SEQ 또는 기사타입 (기타코드 SVC_AT), 선택없을때는 ''")
     private String pageValue;
 
+
+    @ApiModelProperty("페이지SEQ 또는 기사타입 (기타코드 SVC_AT) 명")
+    private String pageNm;
+
     /**
      * 영역구분(A:영역,C:컴포넌트,L:뉴스레터,P:파티클)
      */
@@ -85,6 +89,9 @@ public class AbTestCaseAllDTO {
      */
     @ApiModelProperty("영역일련번호(AREA_SEQ,COMPONENT_SEQ,LETTER_SEQ,파티클구분(기타코드MC))")
     private String zoneSeq;
+
+    @ApiModelProperty("영역일련번호명(AREA_SEQ,COMPONENT_SEQ,LETTER_SEQ,파티클구분(기타코드MC))")
+    private String zoneNm;
 
     /**
      * AB테스트 대상(TPLT:디자인,레터레이아웃 / DATA:데이터 / COMP:컴포넌트(메인탑디자인 및 본문외) / 레터제목:LTIT / 발송일시 / LSDT / 발송자명:LSNM)

@@ -454,7 +454,6 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         width: 81%;
 
         textarea {
-            height: 43px;
             @include custom-scroll;
         }
     }

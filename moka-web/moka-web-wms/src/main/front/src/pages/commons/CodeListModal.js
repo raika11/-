@@ -55,24 +55,18 @@ const propTypes = {
      * @default
      */
     selectable: PropTypes.arrayOf(PropTypes.string),
-    /**
-     * autocomplete 안에 있는 모달인지 체크함 (안에 있으면 리스트 조회 X)
-     * @default
-     */
-    inAutoComplete: PropTypes.bool,
 };
 const defaultProps = {
     title: '분류코드표',
     selection: 'single',
     selectable: ['service', 'section', 'content'],
-    inAutoComplete: false,
 };
 
 /**
  * 기사 분류(masterCode) 코드 선택 모달
  */
 const CodeListModal = (props) => {
-    const { show, onHide, title, onSave, onCancel, selection, value, max, selectable, inAutoComplete, ...rest } = props;
+    const { show, onHide, title, onSave, onCancel, selection, value, max, selectable, ...rest } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_MASTER_CODE_LIST]);
     const masterCodeList = useSelector(({ code }) => code.master.list);
@@ -194,10 +188,10 @@ const CodeListModal = (props) => {
 
     useEffect(() => {
         // 마스터코드 조회
-        if (!inAutoComplete && show && !masterCodeList) {
+        if (show && !masterCodeList) {
             dispatch(getMasterCodeList());
         }
-    }, [dispatch, inAutoComplete, masterCodeList, show]);
+    }, [dispatch, masterCodeList, show]);
 
     useEffect(() => {
         if (masterCodeList) {

@@ -114,6 +114,10 @@ public class PageDTO implements Serializable {
     @Length(max = 128, message = "{tps.page.error.len.kwd}")
     private String kwd;
 
+    @ApiModelProperty("cloc코드")
+    @Length(max = 100, message = "{tps.page.error.len.cloc}")
+    private String cloc;
+
     @ApiModelProperty("카테고리")
     @Length(max = 256, message = "{tps.page.error.len.category}")
     private String category;
@@ -148,6 +152,7 @@ public class PageDTO implements Serializable {
         pageItem.put(ItemConstants.PAGE_USE_YN, this.usedYn);
         pageItem.put(ItemConstants.PAGE_FILE_YN, this.fileYn);
         pageItem.put(ItemConstants.PAGE_KEYWORD, this.kwd);
+        pageItem.put(ItemConstants.PAGE_CLOC, this.cloc);
         pageItem.put(ItemConstants.PAGE_URL_PARAM, this.urlParam);
         pageItem.put(ItemConstants.PAGE_CATEGORY, this.category);
         pageItem.put(ItemConstants.PAGE_DESCRIPTION, this.description);

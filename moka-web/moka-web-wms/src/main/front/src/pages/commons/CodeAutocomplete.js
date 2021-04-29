@@ -275,7 +275,6 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                     onHide={() => setModalShow(false)}
                     onSave={handleClickSave}
                     selection={isMulti ? 'multiple' : 'single'}
-                    inAutoComplete
                 />
             )}
         </React.Fragment>

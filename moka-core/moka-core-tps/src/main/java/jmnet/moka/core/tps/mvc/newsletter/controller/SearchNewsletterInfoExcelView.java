@@ -40,43 +40,61 @@ public class SearchNewsletterInfoExcelView extends AbstractExcelView {
             HSSFRow row = worksheet.createRow(rowIdx.addAndGet(1));
             AtomicInteger cellNum = new AtomicInteger(0);
 
+            // 방법
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter.getSendTypeName());
+            // 유형
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter.getLetterTypeName());
+            // 카테고리
+            Cell cellCategory = row.createCell(cellNum.getAndAdd(1));
+            if (newsletter.getCategoryInfo() != null) {
+                cellCategory.setCellValue(newsletter
+                        .getCategoryInfo()
+                        .getCdNm());
+            }
+            // 뉴스레터명
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter.getLetterName());
+            // 발송시작일
             Cell cellSendStartDt = row.createCell(cellNum.getAndAdd(1));
             if (newsletter.getSendStartDt() != null) {
                 cellSendStartDt.setCellValue(newsletter.getSendStartDt());
                 cellSendStartDt.setCellStyle(cellStyle);
             }
+            // 최근발송일
             Cell cellLastSendDt = row.createCell(cellNum.getAndAdd(1));
             if (newsletter.getLastSendDt() != null) {
                 cellLastSendDt.setCellValue(newsletter.getLastSendDt());
                 cellLastSendDt.setCellStyle(cellStyle);
             }
+            // 발송주기 - 일정/콘텐츠
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter.getSendDay() + newsletter.getSendDay());
+            // 발송주기 - 시간
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter.getSendTime());
+            // 구독자수
+            // TODO: 값 조인필요
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(0);
-            //.setCellValue(newsletter.getSendBaseCnt());
+            // 상태
             row
                     .createCell(cellNum.getAndAdd(1))
-                    .setCellValue(newsletter.getStatus());
+                    .setCellValue(newsletter.getStatusName());
+            // 등록일
             Cell cellRegDt = row.createCell(cellNum.getAndAdd(1));
             if (newsletter.getRegDt() != null) {
                 cellRegDt.setCellValue(newsletter.getRegDt());
                 cellRegDt.setCellStyle(cellStyle);
             }
+            // 등록자
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter
@@ -84,6 +102,11 @@ public class SearchNewsletterInfoExcelView extends AbstractExcelView {
                             .getMemberNm() + "(" + newsletter
                             .getRegMember()
                             .getMemberId() + ")");
+            // TODO: 전용상품여부(구독상품여부)
+            row
+                    .createCell(cellNum.getAndAdd(1))
+                    .setCellValue(newsletter.getScbYn());
+            // A/B TEST
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter.getAbtestYn());

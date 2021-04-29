@@ -17,6 +17,7 @@ function topSwiper() {
     
         var swiper = new Swiper('.list' + index, {
             slidesPerView : 4,
+            spaceBetween: 30,
             navigation: {
                 nextEl: $('.list' + index).siblings('.swiper-button-next'),
                 prevEl: $('.list' + index).siblings('.swiper-button-prev'),

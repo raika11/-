@@ -91,6 +91,7 @@ public class NewsletterInfoDTO implements Serializable {
     private Long sendMaxCnt;
 
     @ApiModelProperty("콘텐트 정렬조건(최신순:N/인기순:H)")
+    @Pattern(regexp = "^(H)|(N)$", message = "{tps.newsletter.error.pattern.sendOrder}")
     private String sendOrder;
 
     @ApiModelProperty("구독상품여부(자동인경우 디폴트Y)")
@@ -106,6 +107,7 @@ public class NewsletterInfoDTO implements Serializable {
     private String senderEmail;
 
     @ApiModelProperty("발송시작일시")
+    //    @FutureOrPresent
     @DTODateTimeFormat
     private Date sendStartDt;
 
@@ -148,8 +150,8 @@ public class NewsletterInfoDTO implements Serializable {
     @Length(max = 100, message = "{tps.newsletter.error.size.category}")
     private String category;
 
-    @ApiModelProperty("'':없음 / 광고:A / 레터명:N / 중앙일보:J")
-    @Pattern(regexp = "^()|(A)|(N)|(J)$", message = "TODO")
+    @ApiModelProperty("고정표기 ('':없음 / 광고:A / 레터명:N / 중앙일보:J)")
+    @Pattern(regexp = "^()|(A)|(N)|(J)$", message = "tps.newsletter.error.pattern.titleType")
     private String titleType;
 
     @ApiModelProperty("날짜표기탭(1-6 월/주1/주2/일/요일/해당없음)")

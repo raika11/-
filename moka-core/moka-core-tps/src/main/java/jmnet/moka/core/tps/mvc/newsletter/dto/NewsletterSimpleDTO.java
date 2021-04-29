@@ -77,5 +77,7 @@ public class NewsletterSimpleDTO implements Serializable {
      */
     private MemberSimpleDTO regMember;
 
+    private String scbYn;
+
     private String abtestYn;
 }

@@ -197,7 +197,8 @@ public class NewsletterController extends AbstractCommonController {
 
         List<NewsletterSimpleDTO> result = modelMapper.map(returnValue.getContent(), NewsletterSimpleDTO.TYPE);
 
-        String[] columns = new String[] {"방법", "유형", "뉴스레터 명", "발송 시작일", "최근 발송일", "일정/콘텐츠", "시간", "구독자 수", "상태", "등록일", "등록자", "A/B TEST"};
+        String[] columns =
+                new String[] {"방법", "유형", "카테고리", "뉴스레터 명", "발송 시작일", "최근 발송일", "일정/콘텐츠", "시간", "구독자 수", "상태", "등록일", "등록자", "전용상품여부", "A/B TEST"};
 
         map.addAttribute("title", "뉴스레터 상품관리");
         map.addAttribute("columnList", CollectionUtils.arrayToList(columns));
@@ -471,19 +472,20 @@ public class NewsletterController extends AbstractCommonController {
                 .forEach(to -> {
                     EmsSendDTO test = emsService.send(EmsSendDTO
                             .builder()
-                            .legacyid("newsletter_email_test") // TODO: 발송키값
-                            .mailtype("01") // TODO: 메일타입
+                            .legacyid("NEWSLETTER_TEST_SEND_100")
+                            .mailtype("14")
                             .email(to)
-                            .name(to) // TODO: 수신 메일 이름 ??
+                            //                            .name(to)
                             .sendtime(McpDate.now())
-                            .fromaddress("noreply@joongang.co.kr") // TODO: 발송이메일
-                            .fromname("중앙일보") // TODO: 발송자명
+                            .fromaddress("root@joongang.co.kr")
+                            .fromname("중앙일보")
                             .title(newsletterSendDTO.getLetterTitle())
-                            .tag1(newsletterSendDTO
+                            .tag1("https://stibee.com/api/v1.0/emails/share/UqDS-Fbt5FH-_LgKj-mF3ZxYP1x4lw=="
+                                    /*newsletterSendDTO
                                     .getLetterHtml()
                                     .substring(0, Math.min(256, newsletterSendDTO
                                             .getLetterHtml()
-                                            .length()))) // TODO: 메일본문 url?
+                                            .length()))*/) // TODO: 메일본문 url?
                             .build());
 
                 });

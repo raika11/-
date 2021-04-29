@@ -4,6 +4,7 @@ import java.util.Optional;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSearchDTO;
 import jmnet.moka.core.tps.mvc.abtest.entity.AbTestCase;
+import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseResultVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseSaveVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseVO;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,9 @@ import org.springframework.data.domain.Page;
  * @since 2021-04-15 14:02
  */
 public interface AbTestCaseService {
+    
+    Page<AbTestCaseResultVO> findResultList(AbTestCaseSearchDTO searchDTO);
+
     Page<AbTestCaseVO> findAllList(AbTestCaseSearchDTO searchDTO);
 
     AbTestCaseSaveVO findABTestById(Long abtestSeq);

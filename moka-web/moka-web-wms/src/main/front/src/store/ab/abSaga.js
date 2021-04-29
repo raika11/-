@@ -170,14 +170,14 @@ const toSaveAbtestData = (data) => {
         abtestGrpB = abtestFixGrpB;
     }
 
-    console.log({ ...rest, abtestGrpMethod, abtestGrpA, abtestGrpB });
+    return { ...rest, abtestGrpMethod, abtestGrpA, abtestGrpB };
 };
 
 function* saveAbTest({ type, payload }) {
     console.log('save', payload);
     const { detail, callback } = payload;
     const saveAbtestData = toSaveAbtestData(detail);
-    //yield call(api.putAbTest, { detail });
+    yield call(api.putAbTest, { detail: saveAbtestData });
     if (callback instanceof Function) {
         callback();
     }

@@ -35,6 +35,8 @@ $(document).ready(function() {
     
     //레이어팝업 닫기
     btnCloseModal();
+
+    //탭
     $.tabs.init();
 });
 

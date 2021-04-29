@@ -147,7 +147,7 @@ public class BoardRestController extends AbstractCommonController {
      *
      * @param boardId  게시판 일련번호
      * @param boardSeq 게시글아이디 (필수)
-     * @param boardSeq 게시글아이디 (필수)
+     * @param pwd      비밀번호
      * @return 게시판정보
      * @throws NoDataException 게시판 정보가 없음
      */

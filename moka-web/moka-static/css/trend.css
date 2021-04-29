@@ -25,8 +25,6 @@ font-*,color,text-align,vertical-align, ...
 .top_history_list .list_item .card:before { display: inline-block; content: ''; }
 .top_history_list .headline { overflow: hidden; }
 .top_history_list .card_image { background: #ddd;}
-.top_history_list + .button_wrap_wide { margin-top: 30px;}
-.top_history_list + .button_wrap_wide .btn { padding: 8px 28px; line-height: 20px; letter-spacing: -0.4px; }
 
 
 /*************************************************************************************************************************/
@@ -55,7 +53,7 @@ font-*,color,text-align,vertical-align, ...
     .top_history_list .list_item .card.last_time:before { display: none; }
     .top_history_list .card_body .time { height: 20px; font-size: 12px; line-height: 18px; }
     .top_history_list .card_body .time.first_item:before { display: inline-block; margin-right: 10px; }
-    .top_history_list .headline { height: 42px; padding: 0 12px 0 20px; margin-top: 2px; font-size: 14px; line-height: 22px; }
+    .top_history_list .headline { height: 42px; padding: 0 12px 0 19px; margin-top: 2px; font-size: 14px; line-height: 22px; }
     .top_history_list .card_image { flex: 0 0 110px;}
     .top_history_list [class*='btn_'] { display: none; }
     .top_history_list + .button_wrap_wide { padding-top: 20px; margin-top: 0; border-top: 1px solid #e2e2e2; }

@@ -11,6 +11,138 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.core.tps.mvc.abtest.mapper.AbTestCaseMapper">
 
+  <!--ABTest 결과 목록 조회 -->
+  <select id="findResultList" parameterType="ABTestCaseSearchDTO" resultType="AbTestCaseResultVO"
+    statementType="CALLABLE">
+    {call UPA_ABTEST_CASE_RESULT_LIST_SEL(
+
+    <choose>
+      <when test="abtestType != 'all' and abtestType != null and abtestType != ''">
+        #{abtestType},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="domainId != null and domainId != ''">
+        #{domainId},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="pageType != 'all' and pageType != null and pageType != ''">
+        #{pageType},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="pageValue != 'all' and pageValue != null and pageValue != ''">
+        #{pageValue},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="zoneDiv != 'all' and zoneDiv != null and zoneDiv != ''">
+        #{zoneDiv},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="zoneSeq != '0' and zoneSeq != null and zoneSeq != ''">
+        #{zoneSeq},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="abtestPurpose != 'all' and abtestPurpose != null and abtestPurpose != ''">
+        #{abtestPurpose},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+
+    <choose>
+      <when test="searchType == 'all' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'abtestTitle' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'abtestDesc' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'regId' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'regNm' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="status != 'all' and status != null and status != ''">
+        #{status},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+
   <!--ABTest 목록 조회 -->
   <select id="findAllList" parameterType="ABTestCaseSearchDTO" resultType="ABTestCaseVO"
     statementType="CALLABLE">

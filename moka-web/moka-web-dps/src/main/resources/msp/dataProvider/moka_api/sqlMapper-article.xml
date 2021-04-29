@@ -298,4 +298,53 @@
       ) }
   </select>
 
+  <!-- 투표목록조회 -->
+  <select id="poll" parameterType="map" resultType="map" resultMap="map,map"
+    statementType="CALLABLE">
+    {call UPU_TRENDPOLL_LIST_SEL(
+      #{main, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!-- 투표 관련 기사목록조회 -->
+  <select id="pollArticle" parameterType="map" resultType="map"
+    statementType="CALLABLE">
+    {call UPU_TRENDPOLL_RELATE_ARTICLE_LIST_SEL(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!-- 투표 관련 기사목록조회 -->
+  <select id="pollRelatePoll" parameterType="map" resultType="map" resultMap="map,map"
+    statementType="CALLABLE">
+    {call UPU_TRENDPOLL_RELATE_POLL_LIST_SEL(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!--투표등록-->
+  <select id="pollInsert" parameterType="hashmap" resultType="hashmap" statementType="CALLABLE">
+    { call UPU_TRENDPOLL_VOTE_INS(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{votes, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{remoteIp, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
+  </select>
+
 </mapper>

@@ -11,6 +11,7 @@ import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSearchDTO;
 import jmnet.moka.core.tps.mvc.abtest.entity.AbTestCase;
 import jmnet.moka.core.tps.mvc.abtest.mapper.AbTestCaseMapper;
 import jmnet.moka.core.tps.mvc.abtest.repository.AbTestCaseRepository;
+import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseResultVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseSaveVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,12 @@ public class AbTestCaseServiceImpl implements AbTestCaseService {
 
     @Autowired
     private AbTestCaseMapper abTestCaseMapper;
+
+    @Override
+    public Page<AbTestCaseResultVO> findResultList(AbTestCaseSearchDTO searchDTO) {
+        List<AbTestCaseResultVO> list = abTestCaseMapper.findResultList(searchDTO);
+        return new PageImpl<>(list, searchDTO.getPageable(), searchDTO.getTotal() == null ? 0 : searchDTO.getTotal());
+    }
 
     @Override
     public Page<AbTestCaseVO> findAllList(AbTestCaseSearchDTO searchDTO) {

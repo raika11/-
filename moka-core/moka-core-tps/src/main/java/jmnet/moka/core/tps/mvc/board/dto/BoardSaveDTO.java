@@ -24,7 +24,7 @@ import lombok.experimental.SuperBuilder;
  *
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.board.dto
- * ClassName : BoardDTO
+ * ClassName : BoardSaveDTO
  * Created : 2020-12-17 ince
  * </pre>
  *
@@ -106,6 +106,12 @@ public class BoardSaveDTO {
     @Size(min = 1, message = "{tps.board.error.size.content}")
     private String content;
 
+    /**
+     * 삭제여부
+     */
+    @ApiModelProperty(hidden = true, value = "삭제여부")
+    @Builder.Default
+    private String delYn = MokaConstants.NO;
 
     /**
      * 비밀번호

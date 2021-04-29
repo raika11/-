@@ -77,21 +77,6 @@ const PollChildRelation = () => {
         setSelectArticle(row);
     };
 
-    /*const handleClickRelationArticleDelete = (id) => {
-        const articles = relationArticles
-            .filter((data) => data.ordNo !== id)
-            .map((article, index) => ({
-                ...article,
-                ordNo: index + 1,
-            }));
-        setRelationArticles(articles);
-        setEdit(
-            produce(edit, (draft) => {
-                draft.pollRelateContents = [...relationPolls, ...articles];
-            }),
-        );
-    };*/
-
     const handleChangeSave = () => {
         if (commonUtil.isEmpty(edit.pollSeq)) {
             toast.warning('투표 정보를 먼저 등록해 주세요');
@@ -150,13 +135,6 @@ const PollChildRelation = () => {
                         ordNo: index + 1,
                     })),
             );
-            /*const articles = edit.pollRelateContents
-                .filter((data) => data.relType === 'A')
-                .map((poll, index) => ({
-                    ...poll,
-                    ordNo: index + 1,
-                }));
-            setRelationArticles(articles);*/
         } else {
             setRelationPolls([]);
             setRelationArticles([]);

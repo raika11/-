@@ -125,7 +125,6 @@ font-*,color,text-align,vertical-align, ...
 .journalist_list .meta .date{font-size:13px; line-height: 22px; color: #999999;}
 .journalist_body::after { display: block; content: ''; clear: both; }
 
-.ad { display: none; }
 
 /* 공통영역 */
 .not_date_bx { padding-top: 16px; }
@@ -167,6 +166,7 @@ font-*,color,text-align,vertical-align, ...
 
 /* Medium devices (mobile ~ tablet, 1023px and down) */
 @media (max-width:1023px) {
+    .ad { display: none; }
 
 /****************************************************************************************************/
 /***                                           layout                                             ***/
@@ -247,7 +247,7 @@ font-*,color,text-align,vertical-align, ...
     .journalist_header .journalist_introduce { width: 668px; }
     .journalist_header .journalist_popularity {position:absolute; top:40px; right:0; min-width:261px;}
     .journalist_header .journalist_popularity .btn_info { position:absolute; top:1px; left:50%; height: 20px; margin-left:15px;}
-    .journalist_header .journalist_popularity .ico_info { width:18px; height:18px; background-size: 100% auto;}
+    .journalist_header .journalist_popularity .ico_info { width:18px; height:18px;}
     .journalist_header .journalist_popularity dt {font-size:14px; line-height:20px; color:#333;}
     
     .layer_cheer {left:50%; margin-left:-12px;}

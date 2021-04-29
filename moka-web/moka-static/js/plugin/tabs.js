@@ -11,7 +11,6 @@
     function setTabs($tablist, index){
         $tabs = $tablist.find('[role="tab"]');
         $panels = $(".tab_content").eq(index).find('[role="tabpanel"]');
-        console.log($panels)
         for (i = 0; i < $tabs.length; ++i) {
             addListeners($($tabs[i]), $tabs, $panels, i);
         };

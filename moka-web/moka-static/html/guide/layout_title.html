@@ -50,7 +50,7 @@
                         </ol>
                     </div>
                     <!-- 가이드 내용 시작 -->
-                    <h2 class="guide_title">기본형</h2>
+                    <h3 class="guide_title">기본형</h3>
                     <div class="sample_wrap">
                         <div class="view_btn_wrap">
                             <button type="button" class="btn_view" data-rel="375px">375</button>
@@ -58,19 +58,19 @@
                             <button type="button" class="btn_view" data-rel="">clear</button>
                         </div>
                         <header class="title_wrap">
-                            <h2 class="title">문화 많이 본 기사</h2>
+                            <h3 class="title">문화 많이 본 기사</h3>
                         </header>
                     </div>
                     <div class="code_wrap">
 <pre><code class="html">
 &lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
+    &lt;h3 class="title"&gt;문화 많이 본 기사&lt;/h3&gt;
 &lt;/header&gt;
 </code></pre>
                     </div>
 
 
-                    <h2 class="guide_title">소제목</h2>
+                    <h3 class="guide_title">소제목</h3>
                     <div class="sample_wrap">
                         <div class="view_btn_wrap">
                             <button type="button" class="btn_view" data-rel="375px">375</button>
@@ -79,7 +79,7 @@
                         </div>
                         <header class="title_wrap">
                             <div class="title_area">
-                                <h2 class="title">집콕할 때 필요한건?</h2>
+                                <h3 class="title">집콕할 때 필요한건?</h3>
                                 <div class="exp sm_hidden">취미 홈 인테리어 트렌드의 모든 것</div>
                             </div>
                         </header>
@@ -97,7 +97,7 @@
 <pre><code class="html">
 &lt;header class="title_wrap"&gt;
     &lt;div class="title_area"&gt;
-        &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
+        &lt;h3 class="title"&gt;문화 많이 본 기사&lt;/h3&gt;
         &lt;div class="exp sm_hidden"&gt;취미 홈 인테리어 트렌드의 모든 것&lt;/div&gt;
     &lt;/div&gt;
 &lt;/header&gt;
@@ -105,7 +105,7 @@
                     </div>
                     
 
-                    <h2 class="guide_title">링크형</h2>
+                    <h3 class="guide_title">링크형</h3>
                     <div class="sample_wrap">
                         <div class="view_btn_wrap">
                             <button type="button" class="btn_view" data-rel="375px">375</button>
@@ -114,28 +114,29 @@
                         </div>
                         <header class="title_wrap">
                             <div class="title_area">
-                                <h2 class="title"><a href="#" class="flex flex_align_center">권혁재의 핸드폰 사진관 <i class="ico_arrow_primary_right"></i></a></h2>
+                                <h3 class="title"><a href="#">권혁재의 핸드폰 사진관<i class="ico_arrow_primary_right"></i></a></h3>
                             </div>
                         </header>
                     </div>
                     <div class="code_wrap">
 <pre><code class="html">
 &lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;&lt;a href="#" class="flex flex_align_center"&gt;권혁재의 핸드폰 사진관 &lt;i class="ico_arrow_primary_right"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/h2&gt;
+    &lt;div class="title_area"&gt;
+        &lt;h3 class="title"&gt;&lt;a href="#"&gt;권혁재의 핸드폰 사진관 &lt;i class="ico_arrow_primary_right"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/h3&gt;
+    &lt;/div&gt;
 &lt;/header&gt;
 </code></pre>
                     </div>
 
 
-                    <h2 class="guide_title">버튼추가</h2>
+                    <h3 class="guide_title">버튼추가</h3>
                     <div class="sample_wrap">
                         <link href="//stg-static.joongang.co.kr/css/journalist.css" rel="stylesheet">
 
                         <header class="title_wrap">
                             <div class="title_area">
-                                <h2 class="title">2021년 재·보궐선거</h2>
+                                <h3 class="title">2021년 재·보궐선거</h3>
                                 <div class="exp sm_hidden">동물과 자연에 대한 모든 것</div>
-                            
                                 <button type="button" class="btn_info ml_auto" onclick="openLayer(test);"><i class="ico_info"></i></button>
                                 <div class="layer_popup layer_cheer " id="test"><!-- 여기에 개별 클래스 추가 -->
                                     <div class="layer_body">
@@ -149,10 +150,9 @@
 
                         <header class="title_wrap">
                             <div class="title_area">
-                                <h2 class="title"><a href="#" class="flex flex_align_center">권혁재의 핸드폰 사진관 <i class="ico_arrow_primary_right"></i></a></h2>
+                                <h3 class="title"><a href="#">권혁재의 핸드폰 사진관 <i class="ico_arrow_primary_right"></i></a></h3>
                                 <button type="button" class="btn btn_outline_orange ml_auto"><i class="fa fa_plus_orange"></i>구독</button>
                             </div>
-                            
                         </header>
                     </div>
                     <div class="code_wrap">
@@ -160,16 +160,25 @@
 &lt;!-- 소제목형 --&gt;
 &lt;header class="title_wrap"&gt;
     &lt;div class="title_area"&gt;
-        &lt;h2 class="title"&gt;2021년 재·보궐선거&lt;/h2&gt;
+        &lt;h3 class="title"&gt;2021년 재·보궐선거&lt;/h3&gt;
         &lt;div class="exp sm_hidden"&gt;동물과 자연에 대한 모든 것&lt;/div&gt;
+        &lt;button type="button" class="btn_info ml_auto" onclick="openLayer(test);"&gt;&lt;i class="ico_info"&gt;&lt;/i&gt;&lt;/button&gt;
+        &lt;div class="layer_popup layer_cheer " id="test"&gt;&lt;!-- 여기에 개별 클래스 추가 --&gt;
+            &lt;div class="layer_body"&gt;
+                &lt;p&gt;기자에게 보내는 응원은 하루 1번 가능합니다.&lt;/p&gt;
+                &lt;p class="desc"&gt;(0시 기준)&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;button type="button" class="btn_close" title="Close"&gt;&lt;i class="ico_close"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;닫기&lt;/span&gt;&lt;/button&gt;
+        &lt;/div&gt;
     &lt;/div&gt;
-    &lt;button type="button" class="btn btn_outline_orange"&gt;&lt;i class="fa fa_plus_orange"&gt;&lt;/i&gt;구독&lt;/button&gt;
 &lt;/header&gt;
 
 &lt;!-- 링크형 --&gt;
 &lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;&lt;a href="#" class="flex flex_align_center"&gt;권혁재의 핸드폰 사진관 &lt;i class="ico_arrow_primary_right"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/h2&gt;
-    &lt;button type="button" class="btn btn_outline_orange"&gt;&lt;i class="fa fa_plus_orange"&gt;&lt;/i&gt;구독&lt;/button&gt;
+    &lt;div class="title_area"&gt;
+        &lt;h3 class="title"&gt;&lt;a href="#"&gt;권혁재의 핸드폰 사진관 &lt;i class="ico_arrow_primary_right"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/h3&gt;
+        &lt;button type="button" class="btn btn_outline_orange ml_auto"&gt;&lt;i class="fa fa_plus_orange"&gt;&lt;/i&gt;구독&lt;/button&gt;
+    &lt;/div&gt;
 &lt;/header&gt;
 </code></pre>
                     </div>

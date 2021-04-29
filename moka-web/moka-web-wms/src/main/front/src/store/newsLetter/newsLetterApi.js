@@ -29,6 +29,13 @@ export const getNewsLetter = (letterSeq) => {
     });
 };
 
+// 뉴스레터 채널별 등록된 컨텐츠 조회(뉴스레터 여부 검색)
+export const getNewsLetterChannelType = ({ channelType }) => {
+    return instance.get(`/api/newsletter/channelType/${channelType}`).catch((err) => {
+        throw err;
+    });
+};
+
 // 뉴스레터 발송 목록 조회
 export const getNewsLetterSendList = ({ search }) => {
     return instance.get(`/api/newsletter/newsletterSend?${qs.stringify(search)}`).catch((err) => {

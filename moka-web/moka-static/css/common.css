@@ -590,9 +590,10 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
     * ---------------------------------
     */
 /* sub title 영역-필요시 */
-.title_wrap{z-index: 1;position:relative ; padding-top:4px;}
+.title_wrap{z-index: 1;position:relative ;}
 header.title_wrap{border-top: 4px solid #f6330a;}
-.title_wrap .title_area{display:flex;align-items:center;}
+.title_wrap .title_area{display:flex;align-items:center;padding-top:5px;}
+header.title_wrap > .title{padding-top:5px;}
 .title_wrap .title{color:#ff3c14;font-size:18px;line-height:1.44;letter-spacing:-0.4px;font-weight:900;}
 .title_wrap .title [class*="ico_"]{margin-left:6px;}
 .title_wrap .exp{color: #f6330a;font-size: 13px;letter-spacing: -0.33px;}
@@ -1159,8 +1160,8 @@ dl.date dd {margin-left: 6px;}
 .story_list .card_body{position: relative;}
 .story_list .headline {font-size: 20px;line-height: 1.5;letter-spacing: -0.4px;}
 .story_list .card_image figure {max-width:100%;}
-.story_list  .ico_bookmark{width:24px;height:23px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='25'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 .923h24V24H0z'/%3E%3Cpath fill='%231D1D1D' d='M5.003 16.927v-1.646L5 11.103V8.061l.002-1.902v-.297l.001-.084.001-.203.001-.132v-.048l.002-.017a.992.992 0 011.044-.993h11.95c.33-.012.999.285.999.993v12.995l-1.2-.666V5.538H6.2v12.24l-1.196.662z'/%3E%3Cpath fill='%231D1D1D' d='M12.048 17.173l6.958 4.444-.009 1.268-.4.004-6.554-4.189-6.636 4.242-.404-.001L5 21.669l7.04-4.496.003.008.005-.008z'/%3E%3C/g%3E%3C/svg%3E");}
-
+.story_list .ico_bookmark{width:24px;height:23px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='25'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 .923h24V24H0z'/%3E%3Cpath fill='%231D1D1D' d='M5.003 16.927v-1.646L5 11.103V8.061l.002-1.902v-.297l.001-.084.001-.203.001-.132v-.048l.002-.017a.992.992 0 011.044-.993h11.95c.33-.012.999.285.999.993v12.995l-1.2-.666V5.538H6.2v12.24l-1.196.662z'/%3E%3Cpath fill='%231D1D1D' d='M12.048 17.173l6.958 4.444-.009 1.268-.4.004-6.554-4.189-6.636 4.242-.404-.001L5 21.669l7.04-4.496.003.008.005-.008z'/%3E%3C/g%3E%3C/svg%3E");}
+.story_list .active .ico_bookmark{background-image: url("data:image/svg+xml,%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' x='0' y='0' viewBox='0 0 20 20' xml:space='preserve'%3E%3Cstyle%3E.st1%7Bfill-rule:evenodd;clip-rule:evenodd;fill:%23f6330a%7D%3C/style%3E%3Cpath d='M0 0h20v20H0V0z' fill='none'/%3E%3Cpath class='st1' d='M15 3c.3 0 .8.2.8.9v11.3l-1-.6V4H5.2v10.6l-1 .6V4c0-.5.2-1 .8-1h10z'/%3E%3Cpath class='st1' d='M10 14.1l5.8 3.3v1h-.3L10 15.2l-5.5 3.2h-.3v-1l5.8-3.3z'/%3E%3C/svg%3E");}
 
 
 /* 기자기사랭크 */
@@ -1209,6 +1210,8 @@ dl.date dd {margin-left: 6px;}
     
     /* 기자기사랭크 */
     .journalist_story_list .card_image img {width:136px;}
+    .journalist_story_list .meta{margin-top:unset;}
+    .journalist_story_list .btn_bookmark{position:absolute;right:10px;bottom:0;}
     
     .story_rank .card_body {width:calc(100% - 205px);padding-left:36px;padding-right:10px;flex-direction: column;}
 

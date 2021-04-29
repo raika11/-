@@ -160,8 +160,6 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reserveInfo]);
 
-    console.log(reserveInfo);
-
     return (
         <>
             <Form>

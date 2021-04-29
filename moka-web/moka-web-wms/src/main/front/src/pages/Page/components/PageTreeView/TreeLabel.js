@@ -9,6 +9,7 @@ const propTypes = {
      */
     nodeData: PropTypes.shape({
         pageName: PropTypes.string,
+        pageUrl: PropTypes.string,
         usedYn: PropTypes.oneOf(['Y', 'N']),
     }).isRequired,
     /**

@@ -15,8 +15,6 @@ import { invalidListToError } from '@utils/convertUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 import { PageListModal } from '@pages/Page/modals';
 
-const baseCheck = (st = '') => /^[\s\/\*]*$/.test(st);
-
 /**
  * 페이지 정보
  */
@@ -41,21 +39,19 @@ const PageEdit = ({ onDelete }) => {
         (name, value) => {
             let pageUrl = '';
             if (name === 'pageServiceName') {
-                pageUrl = [temp.parent.pageUrl, temp.parent.pageUrl.slice(-1) === '/' ? '' : '/', value].join('');
+                pageUrl = `${page.pageUrl}${value}`;
                 if (!util.isEmpty(temp.urlParam)) pageUrl = [pageUrl, pageUrl.slice(-1) === '/' ? '' : '/', '*'].join('');
                 if (util.isEmpty(pageUrl)) pageUrl = '/';
             } else if (name === 'urlParam') {
-                pageUrl = baseCheck(temp.pageUrl || temp?.parent?.pageUrl)
-                    ? ''
-                    : [temp.parent.pageUrl, temp.parent.pageUrl.slice(-1) === '/' ? '' : '/', temp.pageServiceName].join('');
-                if (!util.isEmpty(value)) pageUrl = `${pageUrl}/*`;
+                pageUrl = `${page.pageUrl}${temp.pageServiceName}`;
+                if (!util.isEmpty(value)) pageUrl = [pageUrl, pageUrl.slice(-1) === '/' ? '' : '/', '*'].join('');
                 if (util.isEmpty(pageUrl)) pageUrl = '/';
             } else {
                 pageUrl = temp.pageUrl;
             }
             return pageUrl;
         },
-        [temp],
+        [page, temp],
     );
 
     /**

@@ -152,6 +152,7 @@ public class PageDTO implements Serializable {
         pageItem.put(ItemConstants.PAGE_USE_YN, this.usedYn);
         pageItem.put(ItemConstants.PAGE_FILE_YN, this.fileYn);
         pageItem.put(ItemConstants.PAGE_KEYWORD, this.kwd);
+        pageItem.put(ItemConstants.PAGE_CLOC, this.cloc);
         pageItem.put(ItemConstants.PAGE_URL_PARAM, this.urlParam);
         pageItem.put(ItemConstants.PAGE_CATEGORY, this.category);
         pageItem.put(ItemConstants.PAGE_DESCRIPTION, this.description);

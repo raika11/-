@@ -8,6 +8,8 @@ export const CLEAR_STORE = 'issue/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 export const CLEAR_ISSUE = 'issue/CLEAR_ISSUE';
 export const clearIssue = createAction(CLEAR_ISSUE);
+export const CLEAR_SEARCH = 'issue/CLEAR_SEARCH';
+export const clearSearch = createAction(CLEAR_SEARCH);
 
 /**
  * 이슈 목록 조회

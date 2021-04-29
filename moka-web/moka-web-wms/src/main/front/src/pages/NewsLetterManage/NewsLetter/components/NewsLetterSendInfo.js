@@ -18,9 +18,9 @@ import { DB_DATEFORMAT, DATE_FORMAT } from '@/constants';
 const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) => {
     // 발송 주기(일/주/월) state
     const [sendTime, setSendTime] = useState({
-        D: null,
-        W: null,
-        M: null,
+        D: moment().startOf('day').format('HH:mm'),
+        W: moment().startOf('day').format('HH:mm'),
+        M: moment().startOf('day').format('HH:mm'),
     });
     const [weekArr, setWeekArr] = useState([]);
     // 발송자 명 state
@@ -28,7 +28,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
     // 발송 시작일 state
     const [sendStartDt, setSendStartDt] = useState({
         date: null,
-        time: null,
+        time: moment().startOf('day').format('HH:mm'),
     });
     // 발송 제목 날짜 표기 state
     const [dateType, setDateType] = useState({
@@ -96,8 +96,8 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
     useEffect(() => {
         // 발송 주기, 발송 시작일 상태 초기화
         const nd = new Date();
-        setSendTime({ ...sendTime, D: moment(nd).startOf('day').format('HH:mm'), W: moment(nd).startOf('day').format('HH:mm'), M: moment(nd).startOf('day').format('HH:mm') });
-        setSendStartDt({ ...sendStartDt, date: null, time: moment(nd).startOf('day').format('HH:mm') });
+        // setSendTime({ ...sendTime, D: moment(nd).startOf('day').format('HH:mm'), W: moment(nd).startOf('day').format('HH:mm'), M: moment(nd).startOf('day').format('HH:mm') });
+        // setSendStartDt({ ...sendStartDt, date: null, time: moment(nd).startOf('day').format('HH:mm') });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -176,21 +176,23 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                                 onChange={handleChangeValue}
                             />
                         </Col>
-                        <MokaInput
-                            as="dateTimePicker"
-                            value={sendTime.D}
-                            inputProps={{ dateFormat: null, width: 120 }}
-                            disabled={temp.sendPeriod !== 'D'}
-                            onChange={(date) => {
-                                if (typeof date === 'object') {
-                                    setSendTime({ ...sendTime, D: date });
-                                    setTemp({ ...temp, sendTime: date });
-                                } else {
-                                    setSendTime({ ...sendTime, D: null });
-                                    setTemp({ ...temp, sendTime: null });
-                                }
-                            }}
-                        />
+                        <div style={{ width: 120 }}>
+                            <MokaInput
+                                as="dateTimePicker"
+                                value={sendTime.D}
+                                inputProps={{ dateFormat: null }}
+                                disabled={temp.sendPeriod !== 'D'}
+                                onChange={(date) => {
+                                    if (typeof date === 'object') {
+                                        setSendTime({ ...sendTime, D: date });
+                                        setTemp({ ...temp, sendTime: date });
+                                    } else {
+                                        setSendTime({ ...sendTime, D: null });
+                                        setTemp({ ...temp, sendTime: null });
+                                    }
+                                }}
+                            />
+                        </div>
                     </div>
                     {/* 매 주 */}
                     <div className="mb-2 d-flex align-items-center">
@@ -241,22 +243,24 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                                 일
                             </ToggleButton>
                         </ToggleButtonGroup>
-                        <MokaInput
-                            as="dateTimePicker"
-                            className="right"
-                            value={sendTime.W}
-                            inputProps={{ dateFormat: null, width: 120 }}
-                            disabled={temp.sendPeriod !== 'W'}
-                            onChange={(date) => {
-                                if (typeof date === 'object') {
-                                    setSendTime({ ...sendTime, W: date });
-                                    setTemp({ ...temp, sendTime: date });
-                                } else {
-                                    setSendTime({ ...sendTime, W: null });
-                                    setTemp({ ...temp, sendTime: null });
-                                }
-                            }}
-                        />
+                        <div style={{ width: 120 }}>
+                            <MokaInput
+                                as="dateTimePicker"
+                                className="right"
+                                value={sendTime.W}
+                                inputProps={{ dateFormat: null }}
+                                disabled={temp.sendPeriod !== 'W'}
+                                onChange={(date) => {
+                                    if (typeof date === 'object') {
+                                        setSendTime({ ...sendTime, W: date });
+                                        setTemp({ ...temp, sendTime: date });
+                                    } else {
+                                        setSendTime({ ...sendTime, W: null });
+                                        setTemp({ ...temp, sendTime: null });
+                                    }
+                                }}
+                            />
+                        </div>
                     </div>
                     {/* 매 월 */}
                     <div className="mb-2 d-flex align-items-center">
@@ -283,22 +287,24 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                             </MokaInput>
                         </Col>
                         <p className="mb-0 mr-2">일</p>
-                        <MokaInput
-                            as="dateTimePicker"
-                            className="right"
-                            value={sendTime.M}
-                            inputProps={{ dateFormat: null, width: 120 }}
-                            disabled={temp.sendPeriod !== 'M'}
-                            onChange={(date) => {
-                                if (typeof date === 'object') {
-                                    setSendTime({ ...sendTime, M: date });
-                                    setTemp({ ...temp, sendTime: date });
-                                } else {
-                                    setSendTime({ ...sendTime, M: null });
-                                    setTemp({ ...temp, sendTime: null });
-                                }
-                            }}
-                        />
+                        <div style={{ width: 120 }}>
+                            <MokaInput
+                                as="dateTimePicker"
+                                className="right"
+                                value={sendTime.M}
+                                inputProps={{ dateFormat: null }}
+                                disabled={temp.sendPeriod !== 'M'}
+                                onChange={(date) => {
+                                    if (typeof date === 'object') {
+                                        setSendTime({ ...sendTime, M: date });
+                                        setTemp({ ...temp, sendTime: date });
+                                    } else {
+                                        setSendTime({ ...sendTime, M: null });
+                                        setTemp({ ...temp, sendTime: null });
+                                    }
+                                }}
+                            />
+                        </div>
                         {temp.sendType === 'A' && (
                             <MokaInput
                                 as="radio"
@@ -376,9 +382,9 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} />
                     </Col>
-                    <Col xs={3} className="p-0 pr-2">
+                    <div className="mr-2" style={{ width: 120 }}>
                         <MokaInput as="dateTimePicker" inputProps={{ dateFormat: null }} />
-                    </Col>
+                    </div>
                     <MokaInput as="checkbox" id="immediate" inputProps={{ label: '즉시', custom: true }} disabled />
                 </Form.Row>
             )}
@@ -420,18 +426,20 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                                 }}
                             />
                         </Col>
-                        <MokaInput
-                            as="dateTimePicker"
-                            value={sendStartDt.time}
-                            inputProps={{ dateFormat: null, width: 120 }}
-                            onChange={(date) => {
-                                if (typeof date === 'object') {
-                                    setSendStartDt({ ...sendStartDt, time: date });
-                                } else {
-                                    setSendStartDt({ ...sendStartDt, time: null });
-                                }
-                            }}
-                        />
+                        <div style={{ width: 120 }}>
+                            <MokaInput
+                                as="dateTimePicker"
+                                value={sendStartDt.time}
+                                inputProps={{ dateFormat: null }}
+                                onChange={(date) => {
+                                    if (typeof date === 'object') {
+                                        setSendStartDt({ ...sendStartDt, time: date });
+                                    } else {
+                                        setSendStartDt({ ...sendStartDt, time: null });
+                                    }
+                                }}
+                            />
+                        </div>
                     </>
                 )}
                 {temp.sendType === 'E' && (

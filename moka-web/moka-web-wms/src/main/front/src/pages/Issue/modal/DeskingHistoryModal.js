@@ -68,6 +68,15 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
         dispatch(getIssueDeskingHistoryList({ search: ns }));
     };
 
+    /**
+     * 모달 닫기
+     */
+    const handleHide = () => {
+        setDRowData([]);
+        setSelected({});
+        onHide();
+    };
+
     useEffect(() => {
         if (show) {
             const newDt = moment(new Date()).startOf('day');
@@ -140,7 +149,7 @@ const DeskingHistoryModal = ({ show, onHide, compNo, pkgSeq, onLoad }) => {
     }, [detail.issueDeskings]);
 
     return (
-        <MokaModal title="히스토리" show={show} onHide={onHide} size="lg" width={850} height={550} centered>
+        <MokaModal title="히스토리" show={show} onHide={handleHide} size="lg" width={850} height={550} centered>
             <Row className="h-100" noGutters>
                 <Col sm={6} className="h-100 pr-12 d-flex flex-column">
                     <div className="d-flex mb-14">

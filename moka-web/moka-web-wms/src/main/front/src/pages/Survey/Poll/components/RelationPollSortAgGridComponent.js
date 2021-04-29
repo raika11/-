@@ -8,7 +8,9 @@ function areEqual(prevProps, nextProps) {
     let areEqual = false;
     if (!commonUtil.isEmpty(prevProps.rows) && !commonUtil.isEmpty(nextProps.rows)) {
         if (prevProps.rows.length === nextProps.rows.length) {
-            areEqual = true;
+            if (JSON.stringify(prevProps.rows) === JSON.stringify(nextProps.rows)) {
+                areEqual = true;
+            }
         }
     }
     return areEqual;

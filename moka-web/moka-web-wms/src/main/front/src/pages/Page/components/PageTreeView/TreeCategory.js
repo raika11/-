@@ -90,7 +90,7 @@ const MokaTreeCategory = (props) => {
                 <Button
                     size="sm"
                     variant={selected === nodeId ? 'info' : 'searching'}
-                    className={clsx('d-flex align-items-center justify-content-center mr-1')}
+                    className={clsx('d-flex align-items-center justify-content-center mr-2')}
                     onClick={handleExpanded}
                 >
                     <MokaIcon iconName={open ? 'fal-minus' : 'fal-plus'} />

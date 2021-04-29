@@ -67,7 +67,7 @@ public class BoardDTO {
      */
     @ApiModelProperty(value = "예약일시")
     @DTODateTimeFormat
-    private String reserveDt;
+    private Date reserveDt;
 
     /**
      * 등록자명

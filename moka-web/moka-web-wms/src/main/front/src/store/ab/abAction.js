@@ -12,3 +12,9 @@ export const changeSearchOptions = createAction(CHANGE_SEARCH_OPTIONS);
 
 export const [GET_AB_TEST_LIST, GET_AB_TEST_LIST_SUCCESS, GET_AB_TEST_LIST_FAILURE] = createRequestActionTypes('ab/GET_AB_TEST_LIST');
 export const getAbTestList = createAction(GET_AB_TEST_LIST);
+
+export const [GET_AB_TEST, GET_AB_TEST_SUCCESS, GET_AB_TEST_FAILURE] = createRequestActionTypes('ab/GET_AB_TEST');
+export const getAbtest = createAction(GET_AB_TEST);
+
+export const SAVE_AB_TEST = 'ab/SAVE_AB_TEST';
+export const saveAbTest = createAction(SAVE_AB_TEST);

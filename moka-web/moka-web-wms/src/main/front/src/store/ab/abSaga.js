@@ -32,7 +32,7 @@ const toAbTestTypeNameForTypeCode = (code) => {
 };
 
 const toAbTestPurposeNameForPurposeCode = (code) => {
-    const { DESIGN, DATA } = ABTEST_PURPOSE;
+    const { DESIGN, DATA, LETTER_SEND_DATE, LETTER_SENDER_NAME, LETTER_TITLE, COMPONENT } = ABTEST_PURPOSE;
     let name = '';
     switch (code) {
         case DESIGN:
@@ -40,6 +40,18 @@ const toAbTestPurposeNameForPurposeCode = (code) => {
             break;
         case DATA:
             name = '데이터';
+            break;
+        case COMPONENT:
+            name = '컴포넌트';
+            break;
+        case LETTER_SEND_DATE:
+            name = '뉴스레터 타이틀';
+            break;
+        case LETTER_SENDER_NAME:
+            name = '뉴스레터 발송자명';
+            break;
+        case LETTER_TITLE:
+            name = '뉴스레터 제목';
             break;
         default:
             break;
@@ -51,12 +63,13 @@ const toAbTestPurposeNameForPurposeCode = (code) => {
 const toAbTestListData = (list) => {
     return list.map((row) => {
         const {
+            abtestSeq: seq,
             status,
             abtestTitle,
             abtestType,
             abtestPurpose,
             pageNm: pageNmForServer,
-            areaNm: areaNmForServer,
+            zoneNm: areaNmForServer,
             regNm,
             regId,
             startDt: startDtForServer,
@@ -76,7 +89,17 @@ const toAbTestListData = (list) => {
 
         const regInfo = `${regNm}(${regId})\n${regDt}`;
 
-        return { status, abtestTitle, typeAndPurpose: `${abtestTypeNm}\n${abtestPurposeNm}`, pageAndArea: `${pageNm}\n${areaNm}`, periodInfo, regInfo };
+        return {
+            seq,
+            status,
+            abtestTitle,
+            abtestTypeNm,
+            abtestPurposeNm,
+            typeAndPurpose: `${abtestTypeNm}\n${abtestPurposeNm}`,
+            pageAndArea: `${pageNm}\n${areaNm}`,
+            periodInfo,
+            regInfo,
+        };
     });
 };
 
@@ -92,13 +115,76 @@ function* getAbTestList({ type, payload: search }) {
                 }),
             });
         }
-        console.log(response);
     } catch (e) {
         console.log(e);
     }
     yield finishLoading(type);
 }
 
+const toAbTestData = (data) => {
+    const { abtestGrpMethod, abtestGrpA, abtestGrpB, ...rest } = data;
+    let abtestRandomGrpA = '';
+    let abtestRandomGrpB = '';
+    let abtestFixGrpA = '';
+    let abtestFixGrpB = '';
+
+    if (abtestGrpMethod === 'R') {
+        abtestRandomGrpA = abtestGrpA;
+        abtestRandomGrpB = abtestGrpB;
+    }
+
+    if (abtestGrpMethod === 'S') {
+        abtestFixGrpA = abtestGrpA;
+        abtestFixGrpB = abtestGrpB;
+    }
+
+    return { ...rest, abtestGrpMethod, abtestRandomGrpA, abtestRandomGrpB, abtestFixGrpA, abtestFixGrpB };
+};
+
+function* getAbTest({ type, payload: { abtestSeq, callback } }) {
+    yield startLoading(type);
+    try {
+        const response = yield call(api.getAbTest, abtestSeq);
+        const abtestData = toAbTestData(response.data.body);
+        yield put({
+            type: `${type}_SUCCESS`,
+            payload: abtestData,
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+const toSaveAbtestData = (data) => {
+    const { abtestGrpMethod, abtestRandomGrpA, abtestRandomGrpB, abtestFixGrpA, abtestFixGrpB, ...rest } = data;
+    let abtestGrpA = '';
+    let abtestGrpB = '';
+
+    if (abtestGrpMethod === 'R') {
+        abtestGrpA = abtestRandomGrpA;
+        abtestGrpB = abtestRandomGrpB;
+    }
+
+    if (abtestGrpMethod === 'S') {
+        abtestGrpA = abtestFixGrpA;
+        abtestGrpB = abtestFixGrpB;
+    }
+
+    console.log({ ...rest, abtestGrpMethod, abtestGrpA, abtestGrpB });
+};
+
+function* saveAbTest({ type, payload }) {
+    console.log('save', payload);
+    const { detail, callback } = payload;
+    const saveAbtestData = toSaveAbtestData(detail);
+    //yield call(api.putAbTest, { detail });
+    if (callback instanceof Function) {
+        callback();
+    }
+}
+
 export default function* abSaga() {
     yield takeLatest(action.GET_AB_TEST_LIST, getAbTestList);
+    yield takeLatest(action.GET_AB_TEST, getAbTest);
+    yield takeLatest(action.SAVE_AB_TEST, saveAbTest);
 }

@@ -35,6 +35,7 @@ public class ItemConstants {
     public static String PAGE_USE_YN = "usedYn";
     public static String PAGE_FILE_YN = "fileYn";
     public static String PAGE_KEYWORD = "keyword";
+    public static String PAGE_CLOC = "cloc";
     public static String PAGE_CATEGORY = "category";
     public static String PAGE_DESCRIPTION = "desc";
     public static String PAGE_MOVE_YN = "moveYn";
@@ -198,6 +199,7 @@ public class ItemConstants {
         public static String PAGE_USE_YN = "USED_YN";
         public static String PAGE_FILE_YN = "FILE_YN";
         public static String PAGE_KEYWORD = "KWD";
+        public static String PAGE_CLOC = "CLOC";
         public static String PAGE_CATEGORY = "CATEGORY";
         public static String PAGE_DESCRIPTION = "DESCRIPTION";
         public static String PAGE_MOVE_YN = "MOVE_YN";

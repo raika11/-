@@ -30,6 +30,7 @@ const PageEdit = ({ onDelete }) => {
     const { page, pageBody, invalidList } = useSelector(({ page }) => page);
     const [temp, setTemp] = useState(initialState.page);
     const [error, setError] = useState({});
+    const [isRoot, setIsRoot] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [moveModalShow, setMoveModalShow] = useState(false);
 
@@ -41,7 +42,7 @@ const PageEdit = ({ onDelete }) => {
             let pageUrl = '';
             if (name === 'pageServiceName') {
                 pageUrl = [temp.parent.pageUrl, temp.parent.pageUrl.slice(-1) === '/' ? '' : '/', value].join('');
-                if (!util.isEmpty(temp.urlParam)) pageUrl = `${pageUrl}/*`;
+                if (!util.isEmpty(temp.urlParam)) pageUrl = [pageUrl, pageUrl.slice(-1) === '/' ? '' : '/', '*'].join('');
                 if (util.isEmpty(pageUrl)) pageUrl = '/';
             } else if (name === 'urlParam') {
                 pageUrl = baseCheck(temp.pageUrl || temp?.parent?.pageUrl)
@@ -102,78 +103,58 @@ const PageEdit = ({ onDelete }) => {
         (page) => {
             let isInvalid = false;
             let errList = [];
-            const isRoot = !(page.parent && page.parent.pageSeq);
 
             // 페이지명 체크
             if (util.isEmpty(page.pageName)) {
-                errList.push({
-                    field: 'pageName',
-                    reason: '페이지명을 입력하세요',
-                });
+                errList.push({ field: 'pageName', reason: '페이지명을 입력하세요' });
                 isInvalid = isInvalid | true;
             }
 
-            // 서비스명 입력체크
-            if (!isRoot && util.isEmpty(page.pageServiceName)) {
-                errList.push({
-                    field: 'pageServiceName',
-                    reason: '서비스명을 입력하세요.',
-                });
+            // 서비스명 혹은 경로파라미터가 있는지 확인
+            if (!isRoot && util.isEmpty(page.pageServiceName) && util.isEmpty(page.urlParam)) {
+                errList.push({ field: 'pageServiceName', reason: '서비스명 혹은 경로 파라미터를 입력하세요' });
                 isInvalid = isInvalid | true;
-            } else if (!isRoot && !/^[a-zA-Z0-9_-]+$/.test(page.pageServiceName)) {
-                // 서비스명 문자체크
-                errList.push({
-                    field: 'pageServiceName',
-                    reason: '영문, 숫자, _, -만 입력할 수 있습니다',
-                });
-                isInvalid = isInvalid | true;
-            } else if (!isRoot && EXCLUDE_PAGE_SERVICE_NAME_LIST.includes(page.pageServiceName)) {
-                // 서비스명 불가 문자체크
-                errList.push({
-                    field: 'pageServiceName',
-                    reason: '서비스명으로 등록할 수 없는 문자열입니다',
-                });
-                isInvalid = isInvalid | true;
+            }
+
+            // 서비스명이 있는 경우 입력값에 대한 검증
+            if (!isRoot && !util.isEmpty(page.pageServiceName)) {
+                if (!/^[a-zA-Z0-9_-]+$/.test(page.pageServiceName)) {
+                    errList.push({ field: 'pageServiceName', reason: '서비스명은 영문, 숫자, _, -만 입력할 수 있습니다' });
+                    isInvalid = isInvalid | true;
+                } else if (EXCLUDE_PAGE_SERVICE_NAME_LIST.includes(page.pageServiceName)) {
+                    errList.push({ field: 'pageServiceName', reason: '서비스명으로 등록할 수 없는 문자열입니다' });
+                    isInvalid = isInvalid | true;
+                }
+            }
+
+            // 경로파라미터가 있는 경우 입력값에 대한 검증
+            if (!isRoot && !util.isEmpty(page.urlParam)) {
+                if (!isRoot && !/^[a-zA-Z0-9_-]*$/.test(page.urlParam)) {
+                    errList.push({ field: 'urlParam', reason: '경로 파라미터는 영문, 숫자, _, -만 입력할 수 있습니다' });
+                    isInvalid = isInvalid | true;
+                }
             }
 
             // 페이지순서 체크
             if (util.isEmpty(page.pageOrd)) {
-                errList.push({
-                    field: 'pageOrd',
-                    reason: '페이지순서를 입력하세요',
-                });
+                errList.push({ field: 'pageOrd', reason: '페이지순서를 입력하세요' });
                 isInvalid = isInvalid | true;
             } else if (!/^[\d]+$/.test(page.pageOrd)) {
                 // 페이지순서 체크
-                errList.push({
-                    field: 'pageOrd',
-                    reason: '페이지순서를 숫자로 입력하세요',
-                });
+                errList.push({ field: 'pageOrd', reason: '페이지순서를 숫자로 입력하세요' });
                 isInvalid = isInvalid | true;
             }
 
             // 이동URL 체크
             if (page.moveYn === 'Y' && util.isEmpty(page.moveUrl)) {
-                errList.push({
-                    field: 'moveUrl',
-                    reason: '이동URL을 입력하세요',
-                });
-                isInvalid = isInvalid | true;
-            }
-
-            // 경로파라미터 문자체크
-            if (!isRoot && !/^[a-zA-Z0-9_-]*$/.test(page.urlParam)) {
-                errList.push({
-                    field: 'urlParam',
-                    reason: '영문, 숫자, _, -만 입력할 수 있습니다',
-                });
+                errList.push({ field: 'moveUrl', reason: '이동URL을 입력하세요' });
                 isInvalid = isInvalid | true;
             }
 
             dispatch(changeInvalidList(errList));
             return !isInvalid;
         },
-        [EXCLUDE_PAGE_SERVICE_NAME_LIST, dispatch],
+        [EXCLUDE_PAGE_SERVICE_NAME_LIST, isRoot, dispatch],
     );
 
     /**
@@ -207,18 +188,14 @@ const PageEdit = ({ onDelete }) => {
     );
 
     /**
-     * 저장 클릭
+     * 저장
      * @param {object} e 이벤트
      */
     const handleClickSave = (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        let saveObj = {
-            ...page,
-            ...temp,
-        };
-
+        let saveObj = { ...page, ...temp };
         if (validate(saveObj)) {
             if (!page.pageSeq || page.pageSeq === '') {
                 // 새 페이지 저장 시에 도메인ID 셋팅
@@ -244,7 +221,7 @@ const PageEdit = ({ onDelete }) => {
         dispatch(
             checkSyntax({
                 content: pageBody,
-                callback: ({ header, body }) => {
+                callback: ({ header }) => {
                     if (header.success) {
                         const item = produce(temp, (draft) => {
                             draft.pageBody = pageBody;
@@ -299,10 +276,8 @@ const PageEdit = ({ onDelete }) => {
     }, [page.pageSeq]);
 
     useEffect(() => {
-        setTemp({
-            ...page,
-            pageType: page.pageType || PAGE_TYPE_HTML,
-        });
+        setTemp({ ...page, pageType: page.pageType || PAGE_TYPE_HTML });
+        setIsRoot(!(page.parent && page.parent.pageSeq));
     }, [PAGE_TYPE_HTML, page]);
 
     useEffect(() => {
@@ -314,12 +289,12 @@ const PageEdit = ({ onDelete }) => {
 
     useEffect(() => {
         setError(invalidListToError(invalidList));
+        invalidList.filter((a) => !util.isEmpty(a.reason)).forEach((a) => toast.warning(a.reason));
     }, [invalidList]);
 
     return (
-        <MokaCard titleClassName="h-100" title={`페이지 ${page.pageSeq ? '수정' : '등록'}`} loading={loading}>
+        <MokaCard title={`페이지 ${page.pageSeq ? '수정' : '등록'}`} loading={loading}>
             <Form>
-                {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
                     <div className="d-flex">
                         <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={handleClickW3COpen}>
@@ -341,19 +316,15 @@ const PageEdit = ({ onDelete }) => {
                     </div>
                 </Form.Group>
 
-                {/* 사용여부,페이지 ID */}
                 <Form.Row className="mb-2">
-                    {/* 페이지 ID */}
                     <Col xs={6} className="px-0">
                         <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={page.pageSeq} inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
-                    {/* 사용여부 */}
                     <Col xs={6} className="px-0">
                         <MokaInputLabel as="switch" label="사용여부" id="usedYn" name="usedYn" inputProps={{ checked: temp.usedYn === 'Y' }} onChange={handleChangeValue} />
                     </Col>
                 </Form.Row>
 
-                {/* 페이지 URL */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label="URL" as="none" />
                     <p className="mb-0 d-flex align-items-center cursor-pointer hover-underline" onClick={handleClickOpenService}>
@@ -361,7 +332,6 @@ const PageEdit = ({ onDelete }) => {
                     </p>
                 </Form.Row>
 
-                {/* 페이지명 */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel
                         label="페이지명"
@@ -375,7 +345,6 @@ const PageEdit = ({ onDelete }) => {
                     />
                 </Form.Row>
 
-                {/* 서비스명, 서비스타입 */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel
                         label="서비스명"
@@ -383,14 +352,12 @@ const PageEdit = ({ onDelete }) => {
                         name="pageServiceName"
                         onChange={handleChangeValue}
                         className="mb-0 w-100"
-                        placeholder="서비스명을 입력하세요"
-                        required
+                        placeholder="서비스할 Path를 입력하세요"
                         isInvalid={error.pageServiceName}
-                        disabled={!btnDisabled || (temp.parent && temp.parent.pageSeq === null)}
+                        disabled={!btnDisabled || isRoot}
                     />
                 </Form.Row>
 
-                {/* 표출명, 순서 */}
                 <Form.Row className="mb-2">
                     <Col xs={8} className="px-0">
                         <MokaInputLabel
@@ -416,7 +383,6 @@ const PageEdit = ({ onDelete }) => {
                     </Col>
                 </Form.Row>
 
-                {/* 이동URL */}
                 <Form.Row className="mb-2">
                     <Col xs={4} className="px-0">
                         <MokaInputLabel
@@ -428,12 +394,13 @@ const PageEdit = ({ onDelete }) => {
                             inputProps={{ checked: temp.moveYn === 'Y' }}
                             onChange={handleChangeValue}
                         />
+                        <PageListModal title="이동페이지 검색" show={moveModalShow} onHide={() => setMoveModalShow(false)} onClickSave={handleClickMoveSave} />
                     </Col>
                     <Col xs={8} className="px-0">
                         <MokaSearchInput
                             className="pl-2"
                             value={temp.moveUrl}
-                            placeholder="이동 페이지 선택"
+                            placeholder="이동시킬 페이지 선택"
                             onSearch={() => setMoveModalShow(true)}
                             inputProps={{ readOnly: true }}
                             disabled={temp.moveYn === 'N'}
@@ -442,7 +409,7 @@ const PageEdit = ({ onDelete }) => {
                     </Col>
                 </Form.Row>
 
-                {/* 파일저장 => 주석처리 */}
+                {/* 파일저장(사용X) */}
                 {/* <Form.Row className="mb-2">
                     <Col xs={4} className="px-0">
                         <MokaInputLabel
@@ -457,10 +424,8 @@ const PageEdit = ({ onDelete }) => {
                     </Col>
                 </Form.Row> */}
 
-                {/* 키워드 */}
-                <MokaInputLabel className="mb-2" label="키워드" value={temp.kwd} name="kwd" onChange={handleChangeValue} placeholder="키워드를 입력하세요" />
+                <MokaInputLabel className="mb-2" label="키워드" value={temp.kwd} name="kwd" onChange={handleChangeValue} placeholder="메타로 사용할 키워드를 입력하세요" />
 
-                {/* 설명 */}
                 <MokaInputLabel
                     className="mb-2"
                     as="textarea"
@@ -468,22 +433,21 @@ const PageEdit = ({ onDelete }) => {
                     value={temp.description}
                     name="description"
                     onChange={handleChangeValue}
-                    inputProps={{ rows: 10 }}
-                    placeholder="설명을 입력하세요"
+                    inputProps={{ rows: 3 }}
+                    placeholder="메타로 사용할 설명을 입력하세요"
                 />
 
-                {/* 경로 파라미터명 */}
                 <MokaInputLabel
                     className="mb-2"
-                    label="경로\n파라미터명"
+                    label="경로\n파라미터"
                     value={temp.urlParam}
                     name="urlParam"
                     onChange={handleChangeValue}
-                    placeholder="파라미터명을 입력하세요"
+                    placeholder="경로 파라미터(PathVariable)를 입력하세요"
                     isInvalid={error.urlParam}
+                    disabled={!btnDisabled || isRoot}
                 />
 
-                {/* 카테고리 */}
                 <MokaInputLabel
                     className="mb-2"
                     label="카테고리"
@@ -493,9 +457,9 @@ const PageEdit = ({ onDelete }) => {
                     placeholder="카테고리를 입력하세요"
                     isInvalid={error.category}
                 />
-            </Form>
 
-            <PageListModal title="이동페이지 검색" show={moveModalShow} onHide={() => setMoveModalShow(false)} onClickSave={handleClickMoveSave} />
+                <MokaInputLabel className="mb-2" label="CLOC" value={temp.cloc} name="cloc" onChange={handleChangeValue} placeholder="CLOC를 입력하세요" isInvalid={error.cloc} />
+            </Form>
         </MokaCard>
     );
 };

@@ -55,7 +55,7 @@ const MokaTreeItem = (props) => {
                 <Button
                     size="sm"
                     variant={selected === nodeId ? 'info' : 'white'}
-                    className={clsx('d-flex align-items-center justify-content-center mr-1', { border: selected !== nodeId })}
+                    className={clsx('d-flex align-items-center justify-content-center mr-2', { border: selected !== nodeId })}
                     disabled
                 >
                     <MokaIcon iconName="fal-minus" />

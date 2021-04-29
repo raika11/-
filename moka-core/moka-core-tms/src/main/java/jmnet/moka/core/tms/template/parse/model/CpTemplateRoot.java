@@ -105,7 +105,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             String effectiveTemplateId = templateId;
             if (context != null && context.has(MokaConstants.MERGE_CONTEXT_ABTEST)) { // ABTest에 템플릿정보가 있으면 templateId 변경
                 AbTest abTest = (AbTest) context.get(MokaConstants.MERGE_CONTEXT_ABTEST);
-                if ( abTest.hasTemplate()) {
+                if (abTest.hasTemplate()) {
                     effectiveTemplateId = abTest.getTemplateId();
                 }
             }
@@ -127,7 +127,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             String datasetId = this.item.getString(ItemConstants.COMPONENT_DATASET_ID);
             if (context.has(MokaConstants.MERGE_CONTEXT_ABTEST)) { // AB테스트에 dataset 정보가 있으면 datasetId 변경
                 AbTest abTest = (AbTest) context.get(MokaConstants.MERGE_CONTEXT_ABTEST);
-                if ( abTest.hasDataset()) {
+                if (abTest.hasDataset()) {
                     datasetId = abTest.getDatasetId();
                 }
             }
@@ -223,11 +223,11 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             HashMap<String, JSONResult> dataMap = (HashMap<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
 
             JSONResult jsonResult = null;
-            if (dataMap != null ) {
+            if (dataMap != null) {
                 // AB테스트에 데이터셋이 설정되지 않은 경우만 dataMap에서 조회한다.
                 if (context.has(MokaConstants.MERGE_CONTEXT_ABTEST)) {
                     AbTest abTest = (AbTest) context.get(MokaConstants.MERGE_CONTEXT_ABTEST);
-                    if ( !abTest.hasDataset()) {
+                    if (!abTest.hasDataset()) {
                         jsonResult = dataMap.get(KeyResolver.makeDataId(this.getItemType(), this.getId()));
                     }
                 } else {
@@ -245,9 +245,10 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             }
             // 데이터를 참조할 수 있도록 _RESULT에 추가
             context.set(DEFAULT_DATA_NAME, jsonResult);
-            context.set(DEFAULT_LOOP_DATA_SIZE, jsonResult
+            int dataSize = jsonResult
                     .getDataList()
-                    .size());
+                    .size();
+            context.set(DEFAULT_LOOP_DATA_SIZE, dataSize);
             rowDataContext.set(Constants.CURRENT_DATA_ID, this.item.getItemType() + this.item.getItemId());
             // loop 커스텀태그 없이(혹은 결과가 1건인 경우) 첫번째 데이터를 사용하는 경우를 위해 첫 row를 context에
             rowDataContext.set(Constants.LOOP_INDEX, 0);
@@ -262,6 +263,9 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             }
             // TOTAL 처리
             int total = jsonResult.getTotal();
+            if (total == 0 & dataSize > 0) {
+                total = dataSize;
+            }
             rowDataContext.set(ApiResult.MAIN_TOTAL, total);
         } else {
             rowDataContext.set(ApiResult.MAIN_TOTAL, 0);

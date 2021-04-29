@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaInputLabel, MokaInput, MokaTableEditCancleButton } from '@components';
-import { messageBox } from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { GET_JPOD_NOTICE_CONTENTS } from '@store/jpod';
 import BoardsNote from '@/pages/Boards/BoardsList/BoardsEdit/BoardsNote';
+import { DATE_FORMAT } from '@/constants';
 
 /**
  * J팟 관리 > 공지 게시판 > 게시글 편집 폼
@@ -23,6 +25,11 @@ const NoticeEditForm = ({ data, onChange }) => {
     const loading = useSelector((store) => store.loading[GET_JPOD_NOTICE_CONTENTS]);
 
     const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일
+    // 예약 일시 정보
+    const [reserveInfo, setReserveInfo] = useState({
+        date: null,
+        time: null,
+    });
     const fileRef = useRef(null);
 
     /**
@@ -120,6 +127,19 @@ const NoticeEditForm = ({ data, onChange }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading]);
+
+    useEffect(() => {
+        if (reserveInfo.date && reserveInfo.time) {
+            onChange({ reserveDt: `${moment(reserveInfo.date).format(DATE_FORMAT)} ${moment(reserveInfo.time).format('HH:mm')}` });
+        }
+        // else if ((reserveInfo.date && !reserveInfo.time) || (!reserveInfo.date && reserveInfo.time)) {
+        //     toast.warning('예약 일시를 확인해주세요');
+        // }
+        else {
+            onChange({ reserveDt: null });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reserveInfo]);
 
     return (
         <>
@@ -254,6 +274,44 @@ const NoticeEditForm = ({ data, onChange }) => {
                         onChange={handleChangeValue}
                     />
                     <MokaInputLabel label="이메일" labelWidth={40} className="flex-fill" name="email" placeholder="이메일" value={data.email} onChange={handleChangeValue} />
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={5} className="p-0 pr-2">
+                        <MokaInputLabel
+                            as="dateTimePicker"
+                            label="예약 일시"
+                            value={reserveInfo.date}
+                            inputProps={{ timeFormat: null }}
+                            onChange={(date) => {
+                                if (typeof date) {
+                                    const nd = new Date();
+                                    const diff = moment(nd).diff(date, 'days');
+                                    if (diff > 0) {
+                                        toast.warning('미래 일시를 지정해주세요');
+                                        setReserveInfo({ ...reserveInfo, date: moment(nd) });
+                                    } else {
+                                        setReserveInfo({ ...reserveInfo, date: date });
+                                    }
+                                } else {
+                                    setReserveInfo({ ...reserveInfo, date: null });
+                                }
+                            }}
+                        />
+                    </Col>
+                    <Col xs={3} className="p-0">
+                        <MokaInput
+                            as="dateTimePicker"
+                            value={reserveInfo.time}
+                            inputProps={{ dateFormat: null }}
+                            onChange={(date) => {
+                                if (typeof date) {
+                                    setReserveInfo({ ...reserveInfo, time: date });
+                                } else {
+                                    setReserveInfo({ ...reserveInfo, time: null });
+                                }
+                            }}
+                        />
+                    </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <MokaInput className="mb-0" name="title" placeholder="제목을 입력해 주세요." value={data.title} onChange={handleChangeValue} />

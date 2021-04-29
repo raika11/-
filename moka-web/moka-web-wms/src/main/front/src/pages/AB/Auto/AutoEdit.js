@@ -4,24 +4,58 @@ import { useHistory, useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaCardTabs } from '@components';
 import { ABMainForm, ABEtcForm, ABStatusRow } from '../components';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAbtest, saveAbTest } from '@store/ab/abAction';
+import commonUtil from '@utils/commonUtil';
+import toast from '@utils/toastUtil';
 
 /**
  * A/B 테스트 > 직접 설계 > 등록, 수정
  */
 const AutoEdit = ({ match }) => {
-    const { abTestSeq } = useParams();
+    const dispatch = useDispatch();
+    const { abTestSeq: abtestSeq } = useParams();
     const history = useHistory();
     const [isAdd, setIsAdd] = useState(true);
     const [activeKey, setActiveKey] = useState(0);
     const [temp, setTemp] = useState({});
+    const data = useSelector(({ ab: store }) => store.ab);
+
+    useEffect(() => {
+        if (!commonUtil.isEmpty(abtestSeq)) {
+            dispatch(getAbtest({ abtestSeq }));
+            setIsAdd(true);
+        } else {
+            setIsAdd(false);
+        }
+    }, [dispatch, abtestSeq]);
+
+    useEffect(() => {
+        if (!commonUtil.isEmpty(`${data.abtestSeq}`)) {
+            setTemp(data);
+        }
+    }, [data]);
 
     /**
      * 카드 버튼 렌더러
      */
-    const renderFooter = useCallback(() => {
+    const renderFooter = () => {
         return (
             <React.Fragment>
-                <Button variant="positive" className="mr-1">
+                <Button
+                    variant="positive"
+                    className="mr-1"
+                    onClick={() => {
+                        dispatch(
+                            saveAbTest({
+                                detail: temp,
+                                callback: () => {
+                                    toast.success('성고옹');
+                                },
+                            }),
+                        );
+                    }}
+                >
                     저장
                 </Button>
                 <Button variant="temp" className="mr-1">
@@ -44,7 +78,7 @@ const AutoEdit = ({ match }) => {
                 )}
             </React.Fragment>
         );
-    }, [activeKey, history, isAdd, match]);
+    };
 
     /**
      * 탭 nav 렌더러
@@ -58,20 +92,11 @@ const AutoEdit = ({ match }) => {
      * @param {object} 변경될 값들이 담겨져있는 obj
      */
     const handleChange = useCallback(
-        (valueObj) => {
-            setTemp({ ...temp, ...valueObj });
+        (changeTemp) => {
+            setTemp(changeTemp);
         },
         [temp],
     );
-
-    useEffect(() => {
-        if (!abTestSeq) {
-            // 등록페이지
-            setIsAdd(true);
-        } else {
-            setIsAdd(false);
-        }
-    }, [abTestSeq]);
 
     return (
         <MokaCard
@@ -97,7 +122,7 @@ const AutoEdit = ({ match }) => {
                         {!isAdd && <ABStatusRow />}
                         <ABMainForm data={temp} onChange={handleChange} />
                     </React.Fragment>,
-                    <ABEtcForm data={temp} onChange={handleChange} />,
+                    <ABEtcForm data={data} onChange={handleChange} />,
                 ]}
             />
         </MokaCard>

@@ -11,8 +11,6 @@ import toast from '@utils/toastUtil';
 const PageHtmlModal = (props) => {
     const { show, onHide, pageSeq } = props;
     const dispatch = useDispatch();
-
-    // state
     const [page, setPage] = useState({});
     const [loading, setLoading] = useState(false);
 

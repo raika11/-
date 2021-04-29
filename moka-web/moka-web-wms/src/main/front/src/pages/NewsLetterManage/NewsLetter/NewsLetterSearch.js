@@ -55,6 +55,7 @@ const NewsLetterSearch = () => {
 
         let ns = {
             ...search,
+            page: 0,
             startDt: search.startDt ? moment(search.startDt).format(DB_DATEFORMAT) : null,
             endDt: search.endDt ? moment(search.endDt).format(DB_DATEFORMAT) : null,
         };
@@ -117,7 +118,12 @@ const NewsLetterSearch = () => {
                         </option>
                     ))}
                 </MokaInput>
-                <MokaInput as="select" name="abtestYn" className="mr-2" value={search.abtestYn} onChange={handleChangeValue}>
+                <MokaInput as="select" name="scbYn" className="mr-2" style={{ width: 140 }} value={search.scbYn} onChange={handleChangeValue}>
+                    <option>전용 상품 여부 전체</option>
+                    <option value="Y">Y</option>
+                    <option value="N">N</option>
+                </MokaInput>
+                <MokaInput as="select" name="abtestYn" style={{ width: 140 }} className="mr-2" value={search.abtestYn} onChange={handleChangeValue}>
                     <option>A/B TEST 유무 전체</option>
                     <option value="Y">Y</option>
                     <option value="N">N</option>
@@ -141,12 +147,9 @@ const NewsLetterSearch = () => {
                         <option value="6months" data-number="6" data-date="months">
                             6개월
                         </option>
-                        <option value="1years" data-number="1" data-date="years">
-                            1년
-                        </option>
                     </MokaInput>
                 </Col>
-                <Col xs={5} className="p-0 pr-2 d-flex">
+                <Col xs={5} className="p-0 pr-2 d-flex align-items-center">
                     <MokaInput
                         as="dateTimePicker"
                         value={search.startDt}
@@ -159,7 +162,7 @@ const NewsLetterSearch = () => {
                             }
                         }}
                     />
-                    <p className="mb-0 mx-2 d-flex align-items-center">~</p>
+                    <p className="mb-0 mx-2">~</p>
                     <MokaInput
                         as="dateTimePicker"
                         value={search.endDt}

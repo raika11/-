@@ -23,7 +23,7 @@
     <parameter>
       <!-- domainId는 페이지 목록이 아닐 경우 필수가 아니여서 재정의 함 -->
       <domainId desc="도메인 Id">[0-9]{4}</domainId>
-      <id desc="페이지 Id">[0-9]{1,6}</id>
+      <id desc="페이지 Id" type="number">[0-9]{1,6}</id>
       <tBody desc="템플릿 조회여부(Y/N)" require="N" default="Y">(Y|N)</tBody>
     </parameter>
     <request>dps.item.page_list</request>

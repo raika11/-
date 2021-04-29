@@ -23,7 +23,7 @@ const defaultProps = {
 /**
  * A/B 테스트 > 전체 목록 > 리스트 > AgGrid
  */
-const ABAgGrid = ({ columnDefs, rowData, total, searchOptions }) => {
+const ABAgGrid = ({ columnDefs, rowData, total, searchOptions, onRowClicked }) => {
     return (
         <React.Fragment>
             <MokaTable
@@ -35,6 +35,7 @@ const ABAgGrid = ({ columnDefs, rowData, total, searchOptions }) => {
                 size={searchOptions.size}
                 page={searchOptions.page}
                 total={total}
+                onRowClicked={onRowClicked}
                 onRowNodeId={(data) => data.seq}
                 frameworkComponents={{ statusRenderer: StatusRenderer }}
             />

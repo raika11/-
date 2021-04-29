@@ -9,9 +9,17 @@ export const ABTEST_TYPE = {
     NEWSLETTER: 'L',
 };
 
+/**
+ * AB테스트 대상(TPLT:디자인,레터레이아웃 / DATA:데이터 / COMP:컴포넌트(메인탑디자인 및 본문외) / 레터제목:LTIT / 발송일시 / LSDT / 발송자명:LSNM)
+ * @type {{DESIGN: string, DATA: string}}
+ */
 export const ABTEST_PURPOSE = {
-    DESIGN: 'T',
-    DATA: 'D',
+    DESIGN: 'TPLT',
+    DATA: 'DATA',
+    COMPONENT: 'COMP',
+    LETTER_TITLE: 'LTIT',
+    LETTER_SEND_DATE: 'LSDT',
+    LETTER_SENDER_NAME: 'LSNM',
 };
 
 export const initialState = {
@@ -49,6 +57,12 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.total = payload.data.body.totalCnt;
                 draft.list = payload.data.body.list;
+            });
+        },
+
+        [action.GET_AB_TEST_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.ab = payload;
             });
         },
     },

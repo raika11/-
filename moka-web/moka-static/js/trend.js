@@ -1,10 +1,13 @@
 $(document).ready(function() {
     topSwiper();
 
+    var timer;
     $(window).resize(function(){
-        topSwiper();
-    });
-    
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(topSwiper, 10);
+    });    
 });
 
 function topSwiper() {
@@ -13,8 +16,6 @@ function topSwiper() {
         $this.addClass('list' + index);
     
         var swiper = new Swiper('.list' + index, {
-            //observer: true,
-            //observeParents: true,
             slidesPerView : 4,
             navigation: {
                 nextEl: $('.list' + index).siblings('.swiper-button-next'),
@@ -28,7 +29,10 @@ function topSwiper() {
         });
         
         if ( $(window).width() < 1024 ) {
-            swiper.destroy();
+            if (swiper) {
+                swiper.destroy();
+            }
         }
     });
 }
+

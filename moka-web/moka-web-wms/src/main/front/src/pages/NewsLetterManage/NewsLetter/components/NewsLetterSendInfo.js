@@ -16,19 +16,31 @@ import { DB_DATEFORMAT, DATE_FORMAT } from '@/constants';
  * 뉴스레터 편집 > 발송정보 설정
  */
 const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) => {
-    const [weekArr, setWeekArr] = useState([]);
-    const [sn, setSn] = useState('ja');
+    // 발송 주기(일/주/월) state
     const [sendTime, setSendTime] = useState({
-        D: null,
-        W: null,
-        M: null,
+        D: moment().startOf('day').format('HH:mm'),
+        W: moment().startOf('day').format('HH:mm'),
+        M: moment().startOf('day').format('HH:mm'),
     });
+    const [weekArr, setWeekArr] = useState([]);
+    // 발송자 명 state
+    const [sn, setSn] = useState('ja');
+    // 발송 시작일 state
     const [sendStartDt, setSendStartDt] = useState({
         date: null,
-        time: null,
+        time: moment().startOf('day').format('HH:mm'),
+    });
+    // 발송 제목 날짜 표기 state
+    const [dateType, setDateType] = useState({
+        M: 1, // 날짜 표기 월 dateType 1이면 발송,해당없음 0이면 직전 또는 TODAY
+        WK: 1, // 주(한글)
+        WE: 1, // 주(영문)
+        D: 1, // 일
+        WD: 1, // 요일
     });
     const [layoutModal, setLayoutModal] = useState(false);
     const [imgModal, setImgModal] = useState(false);
+    // 발송자 명
     const senderInfoRef = useRef(null);
 
     /**
@@ -43,11 +55,13 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
             } else {
                 onChangeValue({ senderName: '', senderEmail: '' });
             }
-        } else if (name === 'subTitleType') {
+        } else if (name.indexOf('newDateType') > -1) {
+            onChangeValue({ dateType: Number(value) });
+        } else if (name === 'artTitleYn') {
             if (checked) {
-                onChangeValue({ titleType: temp.titleType + 'T' });
+                onChangeValue({ editTitle: '', [name]: 'Y' });
             } else {
-                onChangeValue({ titleType: temp.titleType.replace('T', '') });
+                onChangeValue({ [name]: 'N' });
             }
         } else {
             onChangeValue({ [name]: value });
@@ -80,9 +94,10 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
     );
 
     useEffect(() => {
-        // 발송 시작일 상태 초기화
+        // 발송 주기, 발송 시작일 상태 초기화
         const nd = new Date();
-        setSendStartDt({ ...sendStartDt, date: null, time: moment(nd).startOf('day').format('HH:mm') });
+        // setSendTime({ ...sendTime, D: moment(nd).startOf('day').format('HH:mm'), W: moment(nd).startOf('day').format('HH:mm'), M: moment(nd).startOf('day').format('HH:mm') });
+        // setSendStartDt({ ...sendStartDt, date: null, time: moment(nd).startOf('day').format('HH:mm') });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -93,6 +108,13 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sendStartDt]);
+
+    useEffect(() => {
+        if (Number(temp.sendMaxCnt) - Number(temp.sendMinCnt) > 1) {
+            setTemp({ ...temp, editTitle: '' });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [temp.sendMaxCnt, temp.sendMinCnt]);
 
     return (
         <>
@@ -117,14 +139,26 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
             <Form.Row className="mb-2 align-items-center">
                 <MokaInputLabel as="none" label="발송 조건" required />
                 <Col xs={5} className="p-0 d-flex align-items-center">
-                    <MokaInput as="radio" value="N" inputProps={{ label: '최신 등록순', custom: true, checked: temp.sendOrder === 'N' }} onChange={handleChangeValue} />
-                    <MokaInput as="radio" value="H" inputProps={{ label: '조회 높은순', custom: true, checked: temp.sendOrder === 'H' }} onChange={handleChangeValue} />
+                    <MokaInput
+                        as="radio"
+                        name="sendOrder"
+                        value="N"
+                        inputProps={{ label: '최신 등록순', custom: true, checked: temp.sendOrder === 'N' }}
+                        onChange={handleChangeValue}
+                    />
+                    <MokaInput
+                        as="radio"
+                        name="sendOrder"
+                        value="H"
+                        inputProps={{ label: '조회 높은순', custom: true, checked: temp.sendOrder === 'H' }}
+                        onChange={handleChangeValue}
+                    />
                 </Col>
                 <p className="mb-0 mr-2">신규 콘텐츠</p>
                 <Col xs={3} className="p-0 d-flex align-items-center">
-                    <MokaInput value={temp.sendMinCnt} onChange={handleChangeValue} />
+                    <MokaInput name="sendMinCnt" value={temp.sendMinCnt} onChange={handleChangeValue} />
                     <p className="mb-0 mx-2">~</p>
-                    <MokaInput value={temp.sendMaxCnt} onChange={handleChangeValue} />
+                    <MokaInput name="sendMaxCnt" value={temp.sendMaxCnt} onChange={handleChangeValue} />
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2">
@@ -142,21 +176,23 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                                 onChange={handleChangeValue}
                             />
                         </Col>
-                        <MokaInput
-                            as="dateTimePicker"
-                            value={sendTime.D}
-                            inputProps={{ dateFormat: null, width: 120 }}
-                            disabled={temp.sendPeriod !== 'D'}
-                            onChange={(date) => {
-                                if (typeof date === 'object') {
-                                    setSendTime({ ...sendTime, D: date });
-                                    setTemp({ ...temp, sendTime: date });
-                                } else {
-                                    setSendTime({ ...sendTime, D: null });
-                                    setTemp({ ...temp, sendTime: null });
-                                }
-                            }}
-                        />
+                        <div style={{ width: 120 }}>
+                            <MokaInput
+                                as="dateTimePicker"
+                                value={sendTime.D}
+                                inputProps={{ dateFormat: null }}
+                                disabled={temp.sendPeriod !== 'D'}
+                                onChange={(date) => {
+                                    if (typeof date === 'object') {
+                                        setSendTime({ ...sendTime, D: date });
+                                        setTemp({ ...temp, sendTime: date });
+                                    } else {
+                                        setSendTime({ ...sendTime, D: null });
+                                        setTemp({ ...temp, sendTime: null });
+                                    }
+                                }}
+                            />
+                        </div>
                     </div>
                     {/* 매 주 */}
                     <div className="mb-2 d-flex align-items-center">
@@ -207,22 +243,24 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                                 일
                             </ToggleButton>
                         </ToggleButtonGroup>
-                        <MokaInput
-                            as="dateTimePicker"
-                            className="right"
-                            value={sendTime.W}
-                            inputProps={{ dateFormat: null, width: 120 }}
-                            disabled={temp.sendPeriod !== 'W'}
-                            onChange={(date) => {
-                                if (typeof date === 'object') {
-                                    setSendTime({ ...sendTime, W: date });
-                                    setTemp({ ...temp, sendTime: date });
-                                } else {
-                                    setSendTime({ ...sendTime, W: null });
-                                    setTemp({ ...temp, sendTime: null });
-                                }
-                            }}
-                        />
+                        <div style={{ width: 120 }}>
+                            <MokaInput
+                                as="dateTimePicker"
+                                className="right"
+                                value={sendTime.W}
+                                inputProps={{ dateFormat: null }}
+                                disabled={temp.sendPeriod !== 'W'}
+                                onChange={(date) => {
+                                    if (typeof date === 'object') {
+                                        setSendTime({ ...sendTime, W: date });
+                                        setTemp({ ...temp, sendTime: date });
+                                    } else {
+                                        setSendTime({ ...sendTime, W: null });
+                                        setTemp({ ...temp, sendTime: null });
+                                    }
+                                }}
+                            />
+                        </div>
                     </div>
                     {/* 매 월 */}
                     <div className="mb-2 d-flex align-items-center">
@@ -249,22 +287,24 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                             </MokaInput>
                         </Col>
                         <p className="mb-0 mr-2">일</p>
-                        <MokaInput
-                            as="dateTimePicker"
-                            className="right"
-                            value={sendTime.M}
-                            inputProps={{ dateFormat: null, width: 120 }}
-                            disabled={temp.sendPeriod !== 'M'}
-                            onChange={(date) => {
-                                if (typeof date === 'object') {
-                                    setSendTime({ ...sendTime, M: date });
-                                    setTemp({ ...temp, sendTime: date });
-                                } else {
-                                    setSendTime({ ...sendTime, M: null });
-                                    setTemp({ ...temp, sendTime: null });
-                                }
-                            }}
-                        />
+                        <div style={{ width: 120 }}>
+                            <MokaInput
+                                as="dateTimePicker"
+                                className="right"
+                                value={sendTime.M}
+                                inputProps={{ dateFormat: null }}
+                                disabled={temp.sendPeriod !== 'M'}
+                                onChange={(date) => {
+                                    if (typeof date === 'object') {
+                                        setSendTime({ ...sendTime, M: date });
+                                        setTemp({ ...temp, sendTime: date });
+                                    } else {
+                                        setSendTime({ ...sendTime, M: null });
+                                        setTemp({ ...temp, sendTime: null });
+                                    }
+                                }}
+                            />
+                        </div>
                         {temp.sendType === 'A' && (
                             <MokaInput
                                 as="radio"
@@ -342,9 +382,9 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} />
                     </Col>
-                    <Col xs={3} className="p-0 pr-2">
+                    <div className="mr-2" style={{ width: 120 }}>
                         <MokaInput as="dateTimePicker" inputProps={{ dateFormat: null }} />
-                    </Col>
+                    </div>
                     <MokaInput as="checkbox" id="immediate" inputProps={{ label: '즉시', custom: true }} disabled />
                 </Form.Row>
             )}
@@ -375,33 +415,31 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                                         const nd = new Date();
                                         const diff = moment(nd).diff(date, 'days');
                                         if (diff > 0) {
-                                            toast.warning('현재 기준 과거 날짜는 선택할 수 없습니다.');
+                                            toast.warning('미래 일시를 지정해주세요');
                                             setSendStartDt({ ...sendStartDt, date: moment(nd, DATE_FORMAT) });
                                         } else {
                                             setSendStartDt({ ...sendStartDt, date: date });
-                                            // setTemp({ ...temp, sendStartDt: date });
                                         }
                                     } else {
                                         setSendStartDt({ ...sendStartDt, date: null });
-                                        // setTemp({ ...temp, sendStartDt: null });
                                     }
                                 }}
                             />
                         </Col>
-                        <MokaInput
-                            as="dateTimePicker"
-                            value={sendStartDt.time}
-                            inputProps={{ dateFormat: null, width: 120 }}
-                            onChange={(date) => {
-                                if (typeof date === 'object') {
-                                    setSendStartDt({ ...sendStartDt, time: date });
-                                    // setTemp({ ...temp, sendTime: date });
-                                } else {
-                                    setSendStartDt({ ...sendStartDt, time: null });
-                                    // setTemp({ ...temp, sendTime: null });
-                                }
-                            }}
-                        />
+                        <div style={{ width: 120 }}>
+                            <MokaInput
+                                as="dateTimePicker"
+                                value={sendStartDt.time}
+                                inputProps={{ dateFormat: null }}
+                                onChange={(date) => {
+                                    if (typeof date === 'object') {
+                                        setSendStartDt({ ...sendStartDt, time: date });
+                                    } else {
+                                        setSendStartDt({ ...sendStartDt, time: null });
+                                    }
+                                }}
+                            />
+                        </div>
                     </>
                 )}
                 {temp.sendType === 'E' && (
@@ -442,7 +480,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
             </Form.Row>
             <Form.Row className="mb-2 align-items-center">
                 <MokaInputLabel as="none" label="발송 제목" required />
-                <Col xs={2} className="p-0 pr-2">
+                {/* <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="titleType" value={temp.titleType} onChange={handleChangeValue}>
                         <option value={temp.titleType && temp.titleType.indexOf('T') > 0 ? 'AT' : 'A'}>광고</option>
                         <option value={temp.titleType && temp.titleType.indexOf('T') > 0 ? 'NT' : 'N'}>레터명</option>
@@ -463,7 +501,265 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                     id="letter-subTitleType-t"
                     inputProps={{ label: '기사 제목', custom: true, checked: (temp.titleType || '') && temp.titleType.indexOf('T') > 0 }}
                     onChange={handleChangeValue}
-                />
+                /> */}
+                <div className="flex-fill">
+                    <p className="mb-0">1) 고정 표기</p>
+                    <Col xs={10} className="p-0 pl-3 mb-2 d-flex" style={{ height: 31 }}>
+                        <MokaInput
+                            as="radio"
+                            name="titleType"
+                            className="mr-2"
+                            value="N"
+                            id="letter-titleType-n"
+                            inputProps={{ label: '[뉴스레터 상품명]', custom: true, checked: temp.titleType === 'N' }}
+                            onChange={handleChangeValue}
+                        />
+                        <MokaInput
+                            as="radio"
+                            name="titleType"
+                            className="mr-2"
+                            value="J"
+                            id="letter-titleType-j"
+                            inputProps={{ label: '[중앙일보]', custom: true, checked: temp.titleType === 'J' }}
+                            onChange={handleChangeValue}
+                        />
+                        <MokaInput
+                            as="radio"
+                            name="titleType"
+                            className="mr-2"
+                            value="A"
+                            id="letter-titleType-a"
+                            inputProps={{ label: '[광고]', custom: true, checked: temp.titleType === 'A' }}
+                            onChange={handleChangeValue}
+                        />
+                        <MokaInput
+                            as="radio"
+                            name="titleType"
+                            value=""
+                            id="letter-titleType-empty"
+                            inputProps={{ label: '해당 없음', custom: true, checked: temp.titleType === '' }}
+                            onChange={handleChangeValue}
+                        />
+                    </Col>
+                    <p className="mb-0">2) 날짜 표기</p>
+                    <Col xs={10} className="p-0 pl-3 mb-2">
+                        {/* 월 */}
+                        <div className="mb-2 d-flex align-items-center" style={{ height: 31 }}>
+                            <MokaInput
+                                as="radio"
+                                name="dateTab"
+                                className="mr-2"
+                                value="1"
+                                id="letter-dateTab-first"
+                                inputProps={{ label: '월(month)-○○월:', custom: true, checked: String(temp.dateTab) === '1' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                name="newDateType1"
+                                className="mr-2"
+                                value="1"
+                                id="letter-dateType-first-f"
+                                inputProps={{ label: '발송월', custom: true, checked: String(dateType.M) === '1' }}
+                                onChange={(e) => {
+                                    setDateType({ ...dateType, M: Number(e.target.value) });
+                                    handleChangeValue(e);
+                                }}
+                                disabled={Number(temp.dateTab) !== 1 ? true : false}
+                            />
+                            <MokaInput
+                                as="radio"
+                                name="newDateType1"
+                                value="0"
+                                id="letter-dateType-first-z"
+                                inputProps={{ label: '발송 직전월', custom: true, checked: String(dateType.M) === '0' }}
+                                onChange={(e) => {
+                                    setDateType({ ...dateType, M: Number(e.target.value) });
+                                    handleChangeValue(e);
+                                }}
+                                disabled={Number(temp.dateTab) !== 1 ? true : false}
+                            />
+                        </div>
+                        {/* 주(00월 00주) */}
+                        <div className="mb-2 d-flex align-items-center" style={{ height: 31 }}>
+                            <MokaInput
+                                as="radio"
+                                name="dateTab"
+                                className="mr-2"
+                                value="2"
+                                id="letter-dateTab-second"
+                                inputProps={{ label: '주(week)-○○월 ○○주:', custom: true, checked: String(temp.dateTab) === '2' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                name="newDateType2"
+                                className="mr-2"
+                                value="1"
+                                id="letter-dateType-second-f"
+                                inputProps={{ label: '발송주', custom: true, checked: String(dateType.WK) === '1' }}
+                                onChange={(e) => {
+                                    setDateType({ ...dateType, WK: Number(e.target.value) });
+                                    handleChangeValue(e);
+                                }}
+                                disabled={Number(temp.dateTab) !== 2 ? true : false}
+                            />
+                            <MokaInput
+                                as="radio"
+                                name="newDateType2"
+                                value="0"
+                                id="letter-dateType-second-z"
+                                inputProps={{ label: '발송 직전주', custom: true, checked: String(dateType.WK) === '0' }}
+                                onChange={(e) => {
+                                    setDateType({ ...dateType, WK: Number(e.target.value) });
+                                    handleChangeValue(e);
+                                }}
+                                disabled={Number(temp.dateTab) !== 2 ? true : false}
+                            />
+                        </div>
+                        {/* 주(mm/dd) */}
+                        <div className="mb-2 d-flex align-items-center" style={{ height: 31 }}>
+                            <MokaInput
+                                as="radio"
+                                name="dateTab"
+                                className="mr-2"
+                                value="3"
+                                id="letter-dateTab-third"
+                                inputProps={{ label: '주(week)-MM/DD ~ MM/DD:', custom: true, checked: String(temp.dateTab) === '3' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                name="newDateType3"
+                                className="mr-2"
+                                value="1"
+                                id="letter-dateType-third-f"
+                                inputProps={{ label: '발송주', custom: true, checked: String(dateType.WE) === '1' }}
+                                onChange={(e) => {
+                                    setDateType({ ...dateType, WE: Number(e.target.value) });
+                                    handleChangeValue(e);
+                                }}
+                                disabled={Number(temp.dateTab) !== 3 ? true : false}
+                            />
+                            <MokaInput
+                                as="radio"
+                                name="newDateType3"
+                                value="0"
+                                id="letter-dateType-third-z"
+                                inputProps={{ label: '발송 직전주', custom: true, checked: String(dateType.WE) === '0' }}
+                                onChange={(e) => {
+                                    setDateType({ ...dateType, WE: Number(e.target.value) });
+                                    handleChangeValue(e);
+                                }}
+                                disabled={Number(temp.dateTab) !== 3 ? true : false}
+                            />
+                        </div>
+                        {/* 일 */}
+                        <div className="mb-2 d-flex align-items-center" style={{ height: 31 }}>
+                            <MokaInput
+                                as="radio"
+                                name="dateTab"
+                                className="mr-2"
+                                value="4"
+                                id="letter-dateTab-fourth"
+                                inputProps={{ label: '일(day)-○○월 ○○일:', custom: true, checked: String(temp.dateTab) === '4' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                name="newDateType4"
+                                className="mr-2"
+                                value="1"
+                                id="letter-dateType-fourth-f"
+                                inputProps={{ label: '발송일', custom: true, checked: String(dateType.D) === '1' }}
+                                onChange={(e) => {
+                                    setDateType({ ...dateType, D: Number(e.target.value) });
+                                    handleChangeValue(e);
+                                }}
+                                disabled={Number(temp.dateTab) !== 4 ? true : false}
+                            />
+                            <MokaInput
+                                as="radio"
+                                name="newDateType4"
+                                value="0"
+                                id="letter-dateType-fourth-z"
+                                inputProps={{ label: '발송 직전일', custom: true, checked: String(dateType.D) === '0' }}
+                                onChange={(e) => {
+                                    setDateType({ ...dateType, D: Number(e.target.value) });
+                                    handleChangeValue(e);
+                                }}
+                                disabled={Number(temp.dateTab) !== 4 ? true : false}
+                            />
+                        </div>
+                        {/* 요일 */}
+                        <div className="mb-2 d-flex align-items-center" style={{ height: 31 }}>
+                            <MokaInput
+                                as="radio"
+                                name="dateTab"
+                                className="mr-2"
+                                value="5"
+                                id="letter-dateTab-fifth"
+                                inputProps={{ label: '요일:', custom: true, checked: String(temp.dateTab) === '5' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInput
+                                as="radio"
+                                name="newDateType5"
+                                className="mr-2"
+                                value="1"
+                                id="letter-dateType-fifth-f"
+                                inputProps={{ label: '발송일(○요일)', custom: true, checked: String(dateType.WD) === '1' }}
+                                onChange={(e) => {
+                                    setDateType({ ...dateType, WD: Number(e.target.value) });
+                                    handleChangeValue(e);
+                                }}
+                                disabled={Number(temp.dateTab) !== 5 ? true : false}
+                            />
+                            <MokaInput
+                                as="radio"
+                                name="newDateType5"
+                                value="0"
+                                id="letter-dateType-fifth-z"
+                                inputProps={{ label: `Today's`, custom: true, checked: String(dateType.WD) === '0' }}
+                                onChange={(e) => {
+                                    setDateType({ ...dateType, WD: Number(e.target.value) });
+                                    handleChangeValue(e);
+                                }}
+                                disabled={Number(temp.dateTab) !== 5 ? true : false}
+                            />
+                        </div>
+                        <MokaInput
+                            as="radio"
+                            name="dateTab"
+                            value="6"
+                            id="letter-dateTab-sixth"
+                            inputProps={{ label: '해당 없음', custom: true, checked: String(temp.dateTab) === '6' }}
+                            onChange={handleChangeValue}
+                        />
+                    </Col>
+                    <p className="mb-0">3) 직접 입력</p>
+                    <Col xs={10} className="p-0 pl-3 d-flex align-items-center">
+                        <div className="flex-fill mr-2">
+                            <MokaInput
+                                name="editTitle"
+                                value={temp.editTitle}
+                                onChange={(e) => {
+                                    handleChangeValue(e);
+                                }}
+                                disabled={temp.artTitleYn === 'Y' || Number(temp.sendMaxCnt) - Number(temp.sendMinCnt) > 1 ? true : false}
+                            />
+                        </div>
+                        <div>
+                            <MokaInput
+                                as="checkbox"
+                                name="artTitleYn"
+                                id="letter-artTitle-yn"
+                                inputProps={{ label: '기사 제목 포함', custom: true, checked: temp.artTitleYn === 'Y' }}
+                                onChange={handleChangeValue}
+                            />
+                        </div>
+                    </Col>
+                </div>
             </Form.Row>
 
             {/* 포토 아카이브 모달 */}

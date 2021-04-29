@@ -13,12 +13,15 @@ var include = {
         document.write('<link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">');
         
         // document.write('<link href="//stg-static.joongang.co.kr/css/plugin/select2.min.css" rel="stylesheet">');
+        document.write('<link href="//stg-static.joongang.co.kr/css/plugin/slick.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/common.css" rel="stylesheet">');
         
         document.write('<link href="//stg-static.joongang.co.kr/css/section.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/article.css" rel="stylesheet">');
 
         document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>');
+        document.write('<script src="//stg-static.joongang.co.kr/js/plugin/slick.js"></script>');
+
         document.write('<script src="//stg-static.joongang.co.kr/js/resource.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/common.js"></script>');
         // document.write('<script src="//stg-static.joongang.co.kr/js/plugin/select2.min.js"></script>');

@@ -16,6 +16,7 @@ import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSaveDTO;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSearchDTO;
 import jmnet.moka.core.tps.mvc.abtest.entity.AbTestCase;
 import jmnet.moka.core.tps.mvc.abtest.service.AbTestCaseService;
+import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseResultVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseSaveVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseVO;
 import lombok.extern.slf4j.Slf4j;
@@ -64,7 +65,7 @@ public class AbTestRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "A/B테스트 목록 조회")
     @GetMapping
-    public ResponseEntity<?> getBulkLogStatList(@Valid @SearchParam AbTestCaseSearchDTO search) {
+    public ResponseEntity<?> getAbTestCaseList(@Valid @SearchParam AbTestCaseSearchDTO search) {
 
         ResultListDTO<AbTestCaseVO> resultListMessage = new ResultListDTO<>();
 
@@ -265,5 +266,32 @@ public class AbTestRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE ABTest]", e, true);
             throw new Exception(msg("tps.abtest.error.delete"), e);
         }
+    }
+
+    /**
+     * ABTest 결과 목록 조회
+     *
+     * @param search 검색조건
+     * @return API목록 정보
+     */
+    @ApiOperation(value = "A/B테스트 결과 목록 조회")
+    @GetMapping("/result")
+    public ResponseEntity<?> getAbTestCaseResultList(@Valid @SearchParam AbTestCaseSearchDTO search) {
+
+        ResultListDTO<AbTestCaseResultVO> resultListMessage = new ResultListDTO<>();
+
+        // 조회
+        Page<AbTestCaseResultVO> returnValue = abTestCaseService.findResultList(search);
+
+        // 리턴값 설정
+        resultListMessage.setTotalCnt(returnValue.getTotalElements());
+        resultListMessage.setList(returnValue.getContent());
+
+
+        ResultDTO<ResultListDTO<AbTestCaseResultVO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 }

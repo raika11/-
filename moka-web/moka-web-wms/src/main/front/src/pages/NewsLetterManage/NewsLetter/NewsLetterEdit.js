@@ -8,7 +8,7 @@ import { DATE_FORMAT } from '@/constants';
 import { initialState, getNewsLetter, clearNewsLetter } from '@store/newsLetter';
 import NewsLetterBasicInfo from './components/NewsLetterBasicInfo';
 import NewsLetterSendInfo from './components/NewsLetterSendInfo';
-import NewsLetterSetInfo from './components/NewsLetterSetInfo';
+// import NewsLetterSetInfo from './components/NewsLetterSetInfo';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 상품 편집
@@ -82,6 +82,7 @@ const NewsLetterEdit = ({ match }) => {
                 {
                     text: '저장',
                     variant: 'positive',
+                    disabled: !temp.containerSeq ? true : false,
                     className: 'mr-1',
                 },
                 {

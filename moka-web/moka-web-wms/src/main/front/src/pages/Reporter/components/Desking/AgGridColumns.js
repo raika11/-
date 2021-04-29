@@ -33,7 +33,7 @@ export default [
     {
         headerName: '사진',
         field: 'repImg',
-        width: 50,
+        width: 40,
         cellRenderer: 'imageRenderer',
         cellRendererParams: { roundedCircle: true, autoRatio: false, defaultImg: none_img },
         cellStyle: {

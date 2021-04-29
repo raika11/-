@@ -5,13 +5,8 @@ $(document).ready(function() {
     });
 
     $(window).scroll(function(event){
-        /* article mobile sticky_menu */
-        var scrollT = $(this).scrollTop();
-        var bodyTop = $('.article_body').offset().top;
-        var bodyH = $('.article_body').outerHeight(true);
-        var bodyBottom = $('.article_body').position().top + $('.article_body').outerHeight(true);
-        
-        if( scrollT > bodyTop && scrollT < bodyBottom) {
+        /* article mobile sticky_menu */        
+        if( $(this).scrollTop() > 0) {
             $('.sticky_menu').addClass('fixed');
         } else {
             $('.sticky_menu').removeClass('fixed');
@@ -66,11 +61,9 @@ $(document).ready(function() {
     });
 });
 
-
-
 /* scroll indicator */
 function scrollIndicator(){
-    var articleHeight = $(".article").height() - $(".article_footer").height();
+    var articleHeight = $(".article").height() - $(".article_footer").height()- window.innerHeight + $("header").height();
     var percentage = ($(window).scrollTop() / articleHeight) * 100;  
     percentage = (percentage > 100 ? 100 : percentage);
     $(".scroll_indicator span").css("width",percentage + "%");

@@ -20,6 +20,10 @@ const ABList = (props) => {
         history.push(`/ab/${seq}`);
     };
 
+    const handleChangeSearchOption = (option) => {
+        console.log(option);
+    };
+
     useEffect(() => {
         dispatch(getAbTestList(search));
     }, [search, dispatch]);
@@ -31,7 +35,7 @@ const ABList = (props) => {
                 <StatusBar />
                 <Button variant="positive">설계 복사</Button>
             </Row>
-            <ABAgGrid rowData={list} searchOptions={search} columnDefs={ABAgGridColumns} onRowClicked={handleClickRow} />
+            <ABAgGrid rowData={list} searchOptions={search} columnDefs={ABAgGridColumns} onRowClicked={handleClickRow} onChangeSearchOption={handleChangeSearchOption} />
         </React.Fragment>
     );
 };

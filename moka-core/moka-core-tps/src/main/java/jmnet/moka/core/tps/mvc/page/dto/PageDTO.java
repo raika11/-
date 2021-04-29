@@ -114,6 +114,10 @@ public class PageDTO implements Serializable {
     @Length(max = 128, message = "{tps.page.error.len.kwd}")
     private String kwd;
 
+    @ApiModelProperty("cloc코드")
+    @Length(max = 100, message = "{tps.page.error.len.cloc}")
+    private String cloc;
+
     @ApiModelProperty("카테고리")
     @Length(max = 256, message = "{tps.page.error.len.category}")
     private String category;

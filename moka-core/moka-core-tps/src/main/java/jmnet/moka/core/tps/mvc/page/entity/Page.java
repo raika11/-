@@ -153,6 +153,12 @@ public class Page extends BaseAudit {
     private String kwd;
 
     /**
+     * CLOC 코드
+     */
+    @Column(name = "CLOC")
+    private String cloc;
+
+    /**
      * 카테고리
      */
     @Column(name = "CATEGORY")
@@ -221,25 +227,29 @@ public class Page extends BaseAudit {
      * @return 동일한게 있으면 true
      */
     public boolean isEqualRel(PageRel rel) {
-        Optional<PageRel> find = pageRels.stream()
-                                         .filter(r -> {
-                                             if (r.getRelType()
-                                                  .equals(rel.getRelType()) && r.getRelSeq()
-                                                                                .equals(rel.getRelSeq())) {
-                                                 if (r.getRelParentSeq() == null && rel.getRelParentSeq() == null) {
-                                                     return true;
-                                                 } else if (r.getRelParentSeq() == null && rel.getRelParentSeq() != null) {
-                                                     return false;
-                                                 } else if (r.getRelParentSeq() != null && rel.getRelParentSeq() == null) {
-                                                     return false;
-                                                 } else if (r.getRelParentSeq()
-                                                             .equals(rel.getRelParentSeq())) {
-                                                     return true;
-                                                 }
-                                             }
-                                             return false;
-                                         })
-                                         .findFirst();
+        Optional<PageRel> find = pageRels
+                .stream()
+                .filter(r -> {
+                    if (r
+                            .getRelType()
+                            .equals(rel.getRelType()) && r
+                            .getRelSeq()
+                            .equals(rel.getRelSeq())) {
+                        if (r.getRelParentSeq() == null && rel.getRelParentSeq() == null) {
+                            return true;
+                        } else if (r.getRelParentSeq() == null && rel.getRelParentSeq() != null) {
+                            return false;
+                        } else if (r.getRelParentSeq() != null && rel.getRelParentSeq() == null) {
+                            return false;
+                        } else if (r
+                                .getRelParentSeq()
+                                .equals(rel.getRelParentSeq())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .findFirst();
         if (find.isPresent()) {
             return true;
         }

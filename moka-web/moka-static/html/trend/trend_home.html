@@ -48,38 +48,84 @@
         <!-- container -->
         <main role="main" id="container">
             <!-- contents -->
-                <section class="contents">
-                    <header class="section_header_wrap section_header_block_wrap">
-                        <div class="header_area">
-                                <h2 class="section_title"><img src="이미지" width="" height="" alt="트렌드뉴스"> <span class="title">트렌드뉴스</span></h2>
-                                <p class="description">뉴스를 보는 새로운 시각, 트렌드뉴스! 한 주간 가장 이슈 되었던 뉴스를 이메일로 받아보세요.</p>
-                        </div>
-                        <div class="btn_group">
-                                <button type="button" class="btn">구독</button>
-                                <button type="button" class="btn_share"><i class="ico_share"></i><span class="visually_hidden">공유</span></button>
-                        </div>
-                    </header>
-            
-                <section class="chain_wrap">
-                    <header class="title_wrap">
-                        <nav class="tab_nav">
-                            <ul class="nav">
-                                <li class="nav_item"><h1><a href="#">실시간</a></h1></li>
-                                <li class="nav_item"><h2><a href="#">주간</a></h2></li>
-                                <li class="nav_item"><h2><a href="#">월간</a></h2></li>
+            <section class="contents">
+                <header class="">
+                    <div class="header_area">
+                        <h2 class="section_title"><img src="이미지" width="" height="" alt="트렌드뉴스"> <span class="title">트렌드뉴스</span></h2>
+                        <p class="description">뉴스를 보는 새로운 시각, 트렌드뉴스! 한 주간 가장 이슈 되었던 뉴스를 이메일로 받아보세요.</p>
+                    </div>
+                    <div class="btn_group">
+                        <button type="button" class="btn">구독</button>
+                        <button type="button" class="btn_share"><i class="ico_share"></i><span class="visually_hidden">공유</span></button>
+                    </div>
+                </header>
+                
+                <div class="row">
+                    <div class="col_lg9">
+                        <section class="chain_wrap ">
+                            <header class="title_wrap">
+                                <nav class="header_nav">
+                                    <ul class="nav">
+                                        <li class="nav_item"><h1><a href="#" class="nav_link active">실시간</a></h1></li>
+                                        <li class="nav_item"><h2><a href="#" class="nav_link">주간</a></h2></li>
+                                        <li class="nav_item"><h2><a href="#" class="nav_link">월간</a></h2></li>
+                                    </ul>
+                                    <span class="btn_link_txt"><h2><a href="#">지난 TOP기사<i class="ico_arrow_right"></i></a></h2></span>
+                                </nav>
+                                <div class="btn_group">
+                                    <button type="button" class="btn_info"><i class="ico_info"></i><span class="visually_hidden">정보</span></button>
+                                    <div class="dropdown ">
+                                        <button type="button" class="dropdown_toggle">북마크 많은 순<i class="ico_arrow"></i></button>
+                                        <div id="dropdown" class="dropdown_menu right">
+                                            <ul role="listbox">
+                                                <li class="dropdown_item" role="option"><a href="#">종합</a></li>
+                                                <li class="dropdown_item" role="option"><a href="#">많이 본 순</a></li>
+                                                <li class="dropdown_item" role="option"><a href="#">댓글 많은 순</a></li>
+                                                <li class="dropdown_item" role="option"><a href="#">공유 많은 순</a></li>
+                                                <li class="dropdown_item" role="option"><a href="#">공감 많은 순</a></li>
+                                                <li class="dropdown_item" role="option"><a href="#" class="active">북마크 많은 순</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </header>
+                            <!-- 랭크형스토리리스트 -->
+                            <ul class="story_list story_rank">
+                                <li class="card">
+                                    <div class="card_image">
+                                        <figure>
+                                            <a href="#">
+                                                <img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="...">
+                                            </a>
+                                        </figure>
+                                    </div>
+                                    <div class="card_body">
+                                        <em class="rank_count ico_num1">1</em> <!-- 랭크순위별 class명 변경 ico_num1 ~ 30 -->
+                                        <h2 class="headline"><a href="#">文 “좀스럽다”…황교안 “내</a></h2>
+                                        <p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p>
+                                        <div class="meta">
+                                            <p class="rank_data"><i class="ico_rank_all"></i><span class="visually_hidden">종합</span>1.3만</p>
+                                            <p class="date">2020.1.26  11:40</p>
+                                            <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="card"><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."> </a></figure></div><div class="card_body"><em class="rank_count ico_num2">2</em><h2 class="headline"><a href="#">메타버스가 뭐길래… 美 '로블록스' 열풍에 韓 기업도 들썩</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta"><p class="rank_data"><i class="ico_rank_all"></i><span class="visually_hidden">종합</span>1.3만</p><p class="date">2020.1.26 11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                <li class="card"><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."> </a></figure></div><div class="card_body"><em class="rank_count ico_num3">3</em><h2 class="headline"><a href="#">메타버스가 뭐길래… 美 '로블록스' 열풍에 韓 기업도 들썩</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta"><p class="rank_data"><i class="ico_rank_all"></i><span class="visually_hidden">종합</span>1.3만</p><p class="date">2020.1.26 11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                <li class="card"><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."> </a></figure></div><div class="card_body"><em class="rank_count ico_num4">4</em><h2 class="headline"><a href="#">메타버스가 뭐길래… 美 '로블록스' 열풍에 韓 기업도 들썩</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta"><p class="rank_data"><i class="ico_rank_all"></i><span class="visually_hidden">종합</span>1.3만</p><p class="date">2020.1.26 11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
+                                <li class="card"><div class="card_image"><figure><a href="#"><img srcset="//via.placeholder.com/205x115 1x, //via.placeholder.com/410x230 2x, //via.placeholder.com/615x345 3x" width="205" src="//via.placeholder.com/205x115" alt="..."> </a></figure></div><div class="card_body"><em class="rank_count ico_num5">5</em><h2 class="headline"><a href="#">메타버스가 뭐길래… 美 '로블록스' 열풍에 韓 기업도 들썩</a></h2><p class="description"><a href="javasctipt:(0);">미얀마 군부 쿠데타가 일어날 당시 장갑차 앞에서 에어로빅하는 영상이 소셜네트워크 서비스(SNS)를 중심으로 퍼지고 있다.</a></p><div class="meta"><p class="rank_data"><i class="ico_rank_all"></i><span class="visually_hidden">종합</span>1.3만</p><p class="date">2020.1.26 11:40</p><button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button></div></div></li></li>
                             </ul>
-                            <span class=""><h2><a href="#">지난 TOP기사</a></h2></span>
-                        </nav>
-                        <div class="btn_group">
-                            <button type="button" class="btn_info"><i class="ico_info"></i><span class="visually_hidden">정보</span></button>
-                            <button type="button" class="btn_option"><span>댓글 많은 순</span><i class="ico_arrow"></i></button>
-
+                            <!-- //랭크형스토리리스트 -->
+                            
+                            <p class="button_wrap_wide"><button type="button" class="btn btn_outline_gray">더 보기</button></p>
+                        </section>
+                    </div>
+                    <div class="col_lg3">
+                        <div class="ad float_right">
+                            내부 서비스 배너 or 광고 영역
                         </div>
-                    </header>
-                    <!-- 실시간 -->
-                    <!-- //실시간 -->
-
-                </section>
+                    </div>
+                </div>
             </section>
             <!-- // contents -->
         </main>

@@ -34,6 +34,7 @@ export const initialState = {
                 chnlNm: '',
             },
         },
+        letterChannelTypeList: [],
         letterInfo: {
             letterSeq: '',
             sendType: 'A',
@@ -166,6 +167,17 @@ export default handleActions(
         [act.GET_NEWS_LETTER_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.newsLetter.letterInfo = initialState.newsLetter.letterInfo;
+            });
+        },
+        // 뉴스레터 채널별 등록된 컨텐츠 조회
+        [act.GET_NEWS_LETTER_CHANNEL_TYPE_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.newsLetter.letterChannelTypeList = body;
+            });
+        },
+        [act.GET_NEWS_LETTER_CHANNEL_TYPE_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.newsLetter.letterChannelTypeList = initialState.newsLetter.letterChannelTypeList;
             });
         },
         // 뉴스레터 발송 목록 조회

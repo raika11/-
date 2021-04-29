@@ -11,6 +11,7 @@ import { changeIssueSearchOptions, getIssueList, GET_ISSUE_LIST } from '@store/i
 const RelIssueAgGrid = ({ pkgDiv, onRowClicked }) => {
     const dispatch = useDispatch();
     const { search, total, list } = useSelector(({ issue }) => issue, shallowEqual);
+    const letterChannelTypeList = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterChannelTypeList);
     const loading = useSelector(({ loading }) => loading[GET_ISSUE_LIST]);
     // const [gridInstance, setGridInstance] = useState(null);
     const [rowData, setRowData] = useState([]);
@@ -47,6 +48,7 @@ const RelIssueAgGrid = ({ pkgDiv, onRowClicked }) => {
             list.map((i) => ({
                 ...i,
                 pkgDiv: pkgDiv.find((d) => d.code === i.pkgDiv)?.name || '',
+                letterYn: letterChannelTypeList.indexOf(i.pkgSeq) > -1 ? 'Y' : 'N',
                 onClick: handleRowClicked,
             })),
         );

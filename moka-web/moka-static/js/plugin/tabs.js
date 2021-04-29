@@ -11,15 +11,14 @@
     function setTabs($tablist, index){
         $tabs = $tablist.find('[role="tab"]');
         $panels = $(".tab_content").eq(index).find('[role="tabpanel"]');
-        console.log($panels)
         for (i = 0; i < $tabs.length; ++i) {
             addListeners($($tabs[i]), $tabs, $panels, i);
         };
     }
     
     function addListeners ($tab, $tabs, $panels, index) {
-
         $tab.click(function(event){
+            event.preventDefault();
             activateTab($tab, $tabs, $panels, index, false);
         });
     };
@@ -31,9 +30,11 @@
         $tab.attr('aria-selected', 'true');
         $tabs.removeAttr('hidden');
         $panels[index].removeAttribute('hidden');
+        /*
         if (setFocus) {
             $tab.focus();
         };
+        */
     };
     
     function deactivateTabs ($tabs, $panels) {

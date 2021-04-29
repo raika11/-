@@ -1021,7 +1021,7 @@ dl.date dd {margin-left: 6px;}
 .card .byline{color:#aaa;}
 .card_more{display:flex;align-items:center;justify-content:center;width:100%;border-top:1px solid #ddd;color:#999;font-size:14px;line-height:20px;}
 .card_more .fa_arrow_down_g{margin-left:8px;}
-
+.card .rank_count{position:absolute;left:0;top:0;width:28px !important;font-size:0;background-position: 0 0;}
 
 /* card border */
 .card.border{border:1px solid #b3b3b3;}
@@ -1066,6 +1066,7 @@ dl.date dd {margin-left: 6px;}
 .scroll .card::before{display:none;}
 .scroll .headline{font-size:20px;}
 .scroll .card_skin .card_body{padding:20px 16px 15px;}
+.scroll .card_skin .card_image{margin:-1px;}
 .scroll .card_skin .card_image + .card_body .headline{font-size:18px;}
 .scroll .skin{padding:24px 20px;background-color:#f6330a;}
 .scroll .skin .headline{color: #fff;}
@@ -1079,6 +1080,7 @@ dl.date dd {margin-left: 6px;}
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width: 1023px) {
     .scroll .card{padding-top:0;}
+    .scroll .slick-slide {width:80vw !important;margin-right:10px;}
 }
 
 /* Large devices (desktops, 1024px and up) */
@@ -1135,7 +1137,7 @@ dl.date dd {margin-left: 6px;}
 .story_list .headline {font-size: 20px;line-height: 1.5;letter-spacing: -0.4px;}
 .story_list .card_image figure {max-width:100%;}
 .story_list  .ico_bookmark{width:24px;height:23px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='25'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 .923h24V24H0z'/%3E%3Cpath fill='%231D1D1D' d='M5.003 16.927v-1.646L5 11.103V8.061l.002-1.902v-.297l.001-.084.001-.203.001-.132v-.048l.002-.017a.992.992 0 011.044-.993h11.95c.33-.012.999.285.999.993v12.995l-1.2-.666V5.538H6.2v12.24l-1.196.662z'/%3E%3Cpath fill='%231D1D1D' d='M12.048 17.173l6.958 4.444-.009 1.268-.4.004-6.554-4.189-6.636 4.242-.404-.001L5 21.669l7.04-4.496.003.008.005-.008z'/%3E%3C/g%3E%3C/svg%3E");}
-.story_rank .rank_count{position:absolute;left:0;top:0;width:28px !important;font-size:0;background-position: 0 0;}
+
 
 
 /* 기자기사랭크 */

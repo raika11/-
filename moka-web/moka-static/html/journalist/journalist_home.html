@@ -24,7 +24,7 @@
     
     <script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>
     <script src="//stg-static.joongang.co.kr/js/plugin/swiper.min.js"></script>
-    <!-- <script src="//stg-static.joongang.co.kr/js/plugin/jquery.slimscroll.js"></script> -->
+    <script src="//stg-static.joongang.co.kr/js/plugin/tabs.js"></script>
     <script src="//stg-static.joongang.co.kr/js/resource.js"></script>
     <script src="//stg-static.joongang.co.kr/js/common.js"></script>
     <script src="//stg-static.joongang.co.kr/js/journalist.js"></script>
@@ -168,13 +168,13 @@
                             <nav class="tab_nav">
                                 <ul class="nav" role="tablist" >
                                     <li class="nav_item" role="presentation">
-                                        <h3><a class="nav_link active" id="tabPanel1_1" href="#tab1_1" role="tab" aria-controls="tab1_1" aria-selected="true" tabindex="0" data-tabnum="0" >많이 본</a></h3>
+                                        <h3><a class="nav_link" id="tabPanel1_1" href="#tab1_1" role="tab" aria-controls="tab1_1" aria-selected="true">많이 본</a></h3>
                                     </li>
                                     <li class="nav_item" role="presentation">
-                                        <h3><a class="nav_link" id="tabPanel1_2" href="#tab1_2" role="tab" aria-controls="tab1_2" aria-selected="false" tabindex="-1" data-tabnum="1">반응 높은</a></h3>
+                                        <h3><a class="nav_link" id="tabPanel1_2" href="#tab1_2" role="tab" aria-controls="tab1_2" aria-selected="false">반응 높은</a></h3>
                                     </li>
                                     <li class="nav_item" role="presentation">
-                                        <h3><a class="nav_link" id="tabPanel1_3" href="#tab1_3" role="tab" aria-controls="tab1_3" aria-selected="false" tabindex="-1" data-tabnum="2">꼼꼼히 본</a></h3>
+                                        <h3><a class="nav_link" id="tabPanel1_3" href="#tab1_3" role="tab" aria-controls="tab1_3" aria-selected="false">꼼꼼히 본</a></h3>
                                     </li>
                                 </ul>
                             </nav>
@@ -182,7 +182,7 @@
                         </header>
                         <!-- Tab panes -->
                         <ul class="tab_content">
-                            <li class="tab_pane active" id="tab1_1" role="tabpanel" aria-labelledby="tabPanel1_1">
+                            <li class="tab_pane" id="tab1_1" role="tabpanel" aria-labelledby="tabPanel1_1">
                                 <!-- 랭크형스토리리스트 -->
                                 <ul class="story_list story_rank journalist_story_list">
                                     <li class="card">
@@ -237,7 +237,7 @@
                                 </ul>
                                 <!-- //랭크형스토리리스트 -->
                             </li>
-                            <li class="tab_pane" id="tab1_2" role="tabpanel" aria-labelledby="tabPanel1_2">
+                            <li class="tab_pane" id="tab1_2" role="tabpanel" aria-labelledby="tabPanel1_2" hidden="hidden">
                                 <!-- 랭크형스토리리스트 -->
                                 <ul class="story_list story_rank journalist_story_list">
                                     <li class="card">
@@ -292,7 +292,7 @@
                                 </ul>
                                 <!-- //랭크형스토리리스트 -->
                             </li>
-                            <li class="tab_pane" id="tab1_3" role="tabpanel" aria-labelledby="tabPanel1_3">
+                            <li class="tab_pane" id="tab1_3" role="tabpanel" aria-labelledby="tabPanel1_3" hidden="hidden">
                                 <!-- 랭크형스토리리스트 -->
                                 <ul class="story_list story_rank journalist_story_list">
 
@@ -410,7 +410,7 @@
                                         <h3><a class="nav_link" id="tabPanel2_1" href="#tab2_1" role="tab" aria-controls="tab2_1" aria-selected="true" >기사</a></h3>
                                     </li>
                                     <li class="nav_item" role="presentation">
-                                        <h3><a class="nav_link active" id="tabPanel2_2" href="#tab2_2" role="tab" aria-controls="tab2_2" aria-selected="false" >기자에게 한마디</a></h3>
+                                        <h3><a class="nav_link" id="tabPanel2_2" href="#tab2_2" role="tab" aria-controls="tab2_2" aria-selected="false" >기자에게 한마디</a></h3>
                                     </li>
                                 </ul>
                             </nav>
@@ -480,7 +480,7 @@
                                 </div>
                                 <!-- //기사 -->
                             </li>
-                            <li class="tab_pane active" id="tab2_2" role="tabpanel" aria-labelledby="tabPanel2_2">
+                            <li class="tab_pane" id="tab2_2" role="tabpanel" aria-labelledby="tabPanel2_2" hidden="hidden">
                                 <!-- 기자에게 한마디 -->
                                 <div class="comment_wrap">
                                     <div class="comment_state">

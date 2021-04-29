@@ -92,7 +92,7 @@ public class BoardSaveDTO {
     private Integer ordNo = TpsConstants.BOARD_GENERAL_CONTENT;
 
     /**
-     * 등록일시
+     * 예약일시
      */
     @ApiModelProperty(value = "예약일시")
     @DTODateTimeFormat

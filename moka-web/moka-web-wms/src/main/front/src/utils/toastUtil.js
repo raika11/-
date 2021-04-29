@@ -73,7 +73,7 @@ export const toast = {
             position: 'top-center',
             removeOnHover: false,
             attention: true,
-            timeOut: 5000,
+            timeOut: 0,
             escapeHtml: false,
         });
     },
@@ -85,7 +85,7 @@ export const toast = {
             transitionIn: 'fadeIn',
             transitionOut: 'fadeOut',
             position: 'top-right',
-            timeOut: 5000,
+            timeOut: 0,
             escapeHtml: false,
             ...options,
         });

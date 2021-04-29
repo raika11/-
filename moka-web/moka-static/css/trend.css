@@ -76,8 +76,8 @@ font-*,color,text-align,vertical-align, ...
     /****************************************************************************************************/
     /***                                           content                                            ***/
     /****************************************************************************************************/
-    .top_history_list .swiper-container { width: calc(100% + 30px); transform: translateX(-30px); padding-top: 16px; }
-    .top_history_list .swiper-wrapper { padding-left: 30px; }
+    .top_history_list .swiper-container { /*width: calc(100% + 30px); transform: translateX(-30px);*/ padding-top: 16px; }
+    .top_history_list .swiper-wrapper { /*padding-left: 30px;*/ }
     .top_history_list .list_item { padding-bottom: 20px; border-bottom: 1px solid #e2e2e2; }
     .top_history_list .top_history_info { padding-top: 16px; }
     .top_history_list .top_history_info .cnt:before { display: inline-block; content: ''; width: 1px; height: 14px; padding-left: 10px; margin-left: 10px; border-left: 1px solid #bcbcbc; }

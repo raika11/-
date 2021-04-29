@@ -3,7 +3,6 @@ package jmnet.moka.core.tps.mvc.board.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -92,11 +91,11 @@ public class BoardSaveDTO {
     private Integer ordNo = TpsConstants.BOARD_GENERAL_CONTENT;
 
     /**
-     * 등록일시
+     * 예약일시
      */
     @ApiModelProperty(value = "예약일시")
     @DTODateTimeFormat
-    private Date reserveDt;
+    private String reserveDt;
 
     /**
      * 내용

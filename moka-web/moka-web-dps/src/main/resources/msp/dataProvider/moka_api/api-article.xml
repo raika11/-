@@ -116,7 +116,7 @@
 
 
   <!--북마크등록-->
-  <api id="scrap.insert" membership="cookie" method="post">
+  <api id="scrap.insert" membership="cookie" method="post" expire="0">
     <description>북마크를 등록한다.</description>
     <parameter>
       <cid desc="컨텐트아이디" require="Y" type="number">^[0-9]{1,9}$</cid>
@@ -323,7 +323,7 @@
   </api>
 
   <!--투표등록-->
-  <api id="poll.insert" membership="cookiePass">
+  <api id="poll.insert" membership="cookiePass" method="post" expire="0">
     <description>투표등록한다.</description>
     <parameter>
       <id desc="투표아이디" type="number" require="Y">^[0-9]{1,9}$</id>
@@ -331,8 +331,16 @@
       <pcid desc="PCID" require="Y">^[0-9]{23}$</pcid>
       <remoteIp/>
     </parameter>
-    <request dmlType="sp" setNames="_DATA,ITEM" outParam="_SUCCESS,_MESSAGE">
-      dps.article.pollInsert
+    <request eval="Y" dmlType="sp" setNames="_DATA,ITEM" outParam="_SUCCESS,_MESSAGE">
+      var queryId = "dps.article.pollInsert";
+
+      // 비회원처리
+      if ($param.get("member_memSeq") == null) {
+      $param.put("member_memSeq", null);
+      $param.put("member_loginType", null);
+      }
+
+      queryId;
     </request>
     <keys>
       id

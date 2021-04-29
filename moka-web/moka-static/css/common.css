@@ -604,8 +604,10 @@ header.title_wrap{border-top: 4px solid #f6330a;}
 
 /* 태블릿 디자인 나올때 까지는 아래 분기만 사용 - 2021.04.22 */
 /* Mobile devices (mobile + tablet, 1023px and down) */
-@media (max-width: 1023px) {  
+@media (max-width: 1023px) {
     .list_option_area.flex_sm_col_reverse { align-items: flex-start; }
+    .list_option_area.flex_sm_col_reverse .search_form { width: 100%; }
+    .list_option_area.flex_sm_col_reverse .all_count { margin-top: 20px; }
 }
 
 /* Large devices (desktops, 1024px and up) */
@@ -988,7 +990,7 @@ dl.date dd {margin-left: 6px;}
 .tab_content .tab_pane { display: none; }
 .tab_content .tab_pane.active { display: block; }
 
-.tab_content .list_option_area { padding-bottom: 6px; border-bottom: 1px solid #e2e2e2; }
+.tab_content .list_option_area { border-bottom: 1px solid #e2e2e2; }
 
 /* 공통 flex */
 .flex_column { flex-direction: column!important; }
@@ -998,6 +1000,7 @@ dl.date dd {margin-left: 6px;}
     /* tab */
     .tab_nav .nav_link { height: 46px; font-size: 16px; line-height: 24px; }
     .tab_nav .nav_link.active { font-weight: 700; }
+    .tab_content .list_option_area { padding-bottom: 12px; }
 }
 
 /* Large devices (desktops, 1024px and up) */
@@ -1005,6 +1008,7 @@ dl.date dd {margin-left: 6px;}
     /* tab */
     .tab_nav .nav_link { height: 48px; font-size: 18px; line-height: 28px; }
     .tab_nav .nav_link.active { font-weight: 900; }
+    .tab_content .list_option_area { padding-bottom: 6px; }
 }
 /****************************************************************************************************/
 /***                                             card                                             ***/
@@ -1375,17 +1379,16 @@ dl.date dd {margin-left: 6px;}
 .comment_recomm [class^="ico_face_"] { width: 22px; height: 22px; background-size: 100%; }
 .comment_recomm > button .count { margin-left: 5px; color: #999; font-size: 14px; }
 
-.txt_outline { padding: 20px; border: 1px solid #e2e2e2; font-size: 14px; line-height: 20px; letter-spacing: -0.4px; color: #666;  }
+.txt_outline { border: 1px solid #e2e2e2; font-size: 14px; line-height: 20px; letter-spacing: -0.4px; color: #666;  }
 
 
 /* 댓글 */
 .comment { position: relative; z-index: 1; padding: 16px 0; }
 .report_comment::before { content:''; z-index: -1; position: absolute; left: 0; top: 0; width: 100%; height: 100%;  } 
-.comment_wrap .comment_state { padding-top: 26px; }
 .comment_state { display: flex; align-items: center; }
 .comment_state .comment_count { font-size: 20px; line-height: 30px; letter-spacing: -0.4px; font-weight: 700; color: #111;  }
 .comment_state .btn_reset { width: 22px; height: 22px; margin-left: 6px; }
-.comment_state .ico_reset { width: 22px; height: 22px; }
+.comment_state .ico_reset { width: 100%; height: 100%; }
 .comment_state + .txt_outline { margin-top: 20px; } 
 .comment_header { position: relative; }
 .comment_header .comment_userid { color: #000; font-size: 15px; line-height: 22px; font-weight: 700; }
@@ -1411,8 +1414,7 @@ dl.date dd {margin-left: 6px;}
 
 .comment_list li:nth-child(n+2) { border-top: 1px solid #e2e2e2; }
 .comment .ico_more_option { width: 3px; height: 17px;  }
-.comment_area { display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid #e2e2e2; }
-.comment_wrap .comment_area { margin-top: 40px; }
+.comment_area { display: flex; justify-content: space-between; border-bottom: 1px solid #e2e2e2; }
 .comment_area .dropdown_toggle { height: 22px; }
 .btn_new_reply { width: 100%; height: 52px; margin: 20px 0 18px; background-color: #fff6e2; font-size: 14px; color: #f6330a; }
 .btn_mycomment { display: flex; align-items: center; font-size: 13px; line-height: 22px; letter-spacing: -0.5px; color: #f6330a; }
@@ -1449,9 +1451,23 @@ dl.date dd {margin-left: 6px;}
 .main_sm_text_area .btn_full { margin-top: 20px; }
 .btn_close .ico_close { width: 22px; height: 22px; }
 
+/* Mobile devices (mobile + tablet, 1023px and down) */
+@media (max-width: 1023px) {
+    .txt_outline { padding: 13px 16px; }
+    .comment_wrap .comment_state { padding-top: 24px; }
+    .comment_wrap .comment_area { margin-top: 30px; }
+    .comment_state .btn_reset { width: 20px; height: 20px; margin-left: 6px; }
+    .comment_area { padding-bottom: 10px; }
 
+}
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+    .txt_outline { padding: 20px; }
+    .comment_wrap .comment_state { padding-top: 26px; }
+    .comment_wrap .comment_area { margin-top: 40px; }
+    .comment_area { padding-bottom: 12px; }
 
-
+}
 
 /****
     * tablet 디자인 나오면 살릴 것들

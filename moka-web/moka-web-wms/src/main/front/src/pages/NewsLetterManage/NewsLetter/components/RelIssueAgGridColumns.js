@@ -24,5 +24,6 @@ export default [
         headerName: '뉴스레터 여부',
         field: 'letterYn',
         width: 90,
+        cellRenderer: 'usedYnRenderer',
     },
 ];

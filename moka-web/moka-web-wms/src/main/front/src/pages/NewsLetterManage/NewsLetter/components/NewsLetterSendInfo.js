@@ -94,14 +94,6 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
     );
 
     useEffect(() => {
-        // 발송 주기, 발송 시작일 상태 초기화
-        const nd = new Date();
-        // setSendTime({ ...sendTime, D: moment(nd).startOf('day').format('HH:mm'), W: moment(nd).startOf('day').format('HH:mm'), M: moment(nd).startOf('day').format('HH:mm') });
-        // setSendStartDt({ ...sendStartDt, date: null, time: moment(nd).startOf('day').format('HH:mm') });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
         if (sendStartDt.date && sendStartDt.time) {
             let nd = `${moment(sendStartDt.date).format(DATE_FORMAT)} ${moment(sendStartDt.time).format('HH:mm')}`;
             setTemp({ ...temp, sendStartDt: nd });
@@ -287,7 +279,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, setTemp, onChangeValue }, ref) =>
                             </MokaInput>
                         </Col>
                         <p className="mb-0 mr-2">일</p>
-                        <div style={{ width: 120 }}>
+                        <div className="mr-2" style={{ width: 120 }}>
                             <MokaInput
                                 as="dateTimePicker"
                                 className="right"

@@ -17,8 +17,8 @@
     }
     
     function addListeners ($tab, $tabs, $panels, index) {
-
         $tab.click(function(event){
+            event.preventDefault();
             activateTab($tab, $tabs, $panels, index, false);
         });
     };
@@ -30,9 +30,11 @@
         $tab.attr('aria-selected', 'true');
         $tabs.removeAttr('hidden');
         $panels[index].removeAttribute('hidden');
+        /*
         if (setFocus) {
             $tab.focus();
         };
+        */
     };
     
     function deactivateTabs ($tabs, $panels) {

@@ -8,14 +8,13 @@ export default [
     {
         headerName: '페이지명',
         field: 'pageName',
-        width: 120,
         flex: 1,
         tooltipField: 'pageName',
     },
     {
         headerName: '페이지URL',
         field: 'pageUrl',
-        width: 264,
+        width: 265,
         tooltipField: 'pageUrl',
     },
 ];

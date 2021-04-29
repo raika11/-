@@ -25,8 +25,6 @@ font-*,color,text-align,vertical-align, ...
 .top_history_list .list_item .card:before { display: inline-block; content: ''; }
 .top_history_list .headline { overflow: hidden; }
 .top_history_list .card_image { background: #ddd;}
-.top_history_list + .button_wrap_wide { margin-top: 30px;}
-.top_history_list + .button_wrap_wide .btn { padding: 8px 28px; line-height: 20px; letter-spacing: -0.4px; }
 
 
 /*************************************************************************************************************************/

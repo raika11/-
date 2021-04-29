@@ -282,4 +282,63 @@
     </keys>
   </api>
 
+  <!--투표목록조회-->
+  <api id="poll">
+    <description>투표목록을 조회한다.</description>
+    <parameter>
+      <main desc="메인여부">^[Y|N]{1}$</main>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA,ITEM" outParam="_TOTAL">dps.article.poll</request>
+    <keys>
+      main
+      #paging
+    </keys>
+  </api>
+
+  <!--투표 관련 기사목록조회-->
+  <api id="poll.article">
+    <description>투표 관련 기사목록을 조회한다.</description>
+    <parameter>
+      <id desc="투표아이디" type="number" require="Y">^[0-9]{1,9}$</id>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.article.pollArticle</request>
+    <keys>
+      id
+      #paging
+    </keys>
+  </api>
+
+  <!--투표 관련 투표목록조회-->
+  <api id="poll.rpoll">
+    <description>투표 관련 투표목록을 조회한다.</description>
+    <parameter>
+      <id desc="투표아이디" type="number" require="Y">^[0-9]{1,9}$</id>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA,ITEM" outParam="_TOTAL">dps.article.pollRelatePoll
+    </request>
+    <keys>
+      id
+      #paging
+    </keys>
+  </api>
+
+  <!--투표등록-->
+  <api id="poll.insert" membership="cookiePass">
+    <description>투표등록한다.</description>
+    <parameter>
+      <id desc="투표아이디" type="number" require="Y">^[0-9]{1,9}$</id>
+      <votes desc="선택지" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</votes>
+      <pcid desc="PCID" require="Y">^[0-9]{23}$</pcid>
+      <remoteIp/>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA,ITEM" outParam="_SUCCESS,_MESSAGE">
+      dps.article.pollInsert
+    </request>
+    <keys>
+      id
+      votes
+      pcid
+    </keys>
+  </api>
+
 </apiConfig>

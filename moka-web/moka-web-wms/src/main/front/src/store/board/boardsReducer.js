@@ -23,6 +23,7 @@ const initContentInfo = {
     titlePrefix2: '',
     title: '',
     ordNo: 99,
+    reserveDt: null,
     content: '',
     pwd: null,
     addr: null,

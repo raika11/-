@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router';
+import moment from 'moment';
 // import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
@@ -7,10 +8,11 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaInputLabel, MokaInput, MokaTableEditCancleButton } from '@components';
-import { messageBox } from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { getBoardChannelList, GET_LIST_MENU_CONTENTS_INFO } from '@store/board';
 import BoardRepoterSelect from './BoardRepoterSelect';
 import BoardsNote from './BoardsNote';
+import { DATE_FORMAT } from '@/constants';
 
 /**
  * 게시판 관리 > 게시글 관리 > 게시판 편집 폼
@@ -26,6 +28,11 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
 
     const [channalList, setChannalList] = useState([]); // 채널 선택
     const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일
+    // 예약 일시 정보
+    const [reserveInfo, setReserveInfo] = useState({
+        date: null,
+        time: null,
+    });
     let fileRef = useRef(null);
 
     /**
@@ -140,6 +147,21 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
         }
     }, [boardSeq]);
 
+    useEffect(() => {
+        if (reserveInfo.date && reserveInfo.time) {
+            onChangeFormData({ reserveDt: `${moment(reserveInfo.date).format(DATE_FORMAT)} ${moment(reserveInfo.time).format('HH:mm')}` });
+        }
+        // else if ((reserveInfo.date && !reserveInfo.time) || (!reserveInfo.date && reserveInfo.time)) {
+        //     toast.warning('예약 일시를 확인해주세요');
+        // }
+        else {
+            onChangeFormData({ reserveDt: null });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reserveInfo]);
+
+    console.log(reserveInfo);
+
     return (
         <>
             <Form>
@@ -162,7 +184,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                 <p className="mb-0">{data.viewCnt}</p>
                             </Col>
                             {selectBoard.recomFlag === '1' && (
-                                <Col xs={5} className="p-0 d-flex">
+                                <Col xs={5} className="p-0 d-flex align-items-center">
                                     <MokaInputLabel label="추천/비추천" as="none" />
                                     <MokaIcon className="mr-2" iconName="fad-thumbs-up" size="1x" />
                                     <p className="mb-0 mr-4">{data.recomCnt}</p>
@@ -171,7 +193,7 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                                 </Col>
                             )}
                             {selectBoard.recomFlag === '2' && (
-                                <Col xs={5} className="p-0 d-flex">
+                                <Col xs={5} className="p-0 d-flex align-items-center">
                                     <MokaInputLabel label="추천" as="none" />
                                     <MokaIcon className="mr-2" iconName="fad-thumbs-up" size="1x" />
                                     <p className="mb-0">{data.recomCnt}</p>
@@ -301,6 +323,44 @@ const BoardsEditForm = ({ data, onChangeFormData }) => {
                         onChange={handleChangeValue}
                     />
                     <MokaInputLabel label="이메일" labelWidth={40} className="flex-fill" name="email" placeholder="이메일" value={data.email} onChange={handleChangeValue} />
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={5} className="p-0 pr-2">
+                        <MokaInputLabel
+                            as="dateTimePicker"
+                            label="예약 일시"
+                            value={reserveInfo.date}
+                            inputProps={{ timeFormat: null }}
+                            onChange={(date) => {
+                                if (typeof date) {
+                                    const nd = new Date();
+                                    const diff = moment(nd).diff(date, 'days');
+                                    if (diff > 0) {
+                                        toast.warning('미래 일시를 지정해주세요');
+                                        setReserveInfo({ ...reserveInfo, date: moment(nd) });
+                                    } else {
+                                        setReserveInfo({ ...reserveInfo, date: date });
+                                    }
+                                } else {
+                                    setReserveInfo({ ...reserveInfo, date: null });
+                                }
+                            }}
+                        />
+                    </Col>
+                    <Col xs={3} className="p-0">
+                        <MokaInput
+                            as="dateTimePicker"
+                            value={reserveInfo.time}
+                            inputProps={{ dateFormat: null }}
+                            onChange={(date) => {
+                                if (typeof date) {
+                                    setReserveInfo({ ...reserveInfo, time: date });
+                                } else {
+                                    setReserveInfo({ ...reserveInfo, time: null });
+                                }
+                            }}
+                        />
+                    </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <MokaInput className="mb-0" name="title" placeholder="제목을 입력해 주세요." value={data.title} onChange={handleChangeValue} />

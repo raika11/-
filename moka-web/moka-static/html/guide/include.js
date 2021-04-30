@@ -27,6 +27,7 @@ var include = {
         document.write('<script src="//stg-static.joongang.co.kr/js/resource.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/common.js"></script>');
         // document.write('<script src="//stg-static.joongang.co.kr/js/plugin/select2.min.js"></script>');
+        document.write('<script src="//stg-static.joongang.co.kr/js/plugin/tabs.js"></script>');
 
         document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs2015.min.css">');
         document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>');

@@ -219,7 +219,7 @@ const ContainerEdit = ({ onDelete, match }) => {
                     setFileValue: (data) => {
                         setTemp({
                             ...temp,
-                            containerThumbFile: data,
+                            thumbFile: data,
                             containerThumb: !data ? null : temp.containerThumb,
                         });
                     },

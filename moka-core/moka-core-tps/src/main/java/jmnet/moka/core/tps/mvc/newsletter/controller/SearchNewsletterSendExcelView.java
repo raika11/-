@@ -39,21 +39,43 @@ public class SearchNewsletterSendExcelView extends AbstractExcelView {
         for (NewsletterSendSimpleDTO newsletterSend : newsletterSends) {
             HSSFRow row = worksheet.createRow(rowIdx.addAndGet(1));
             AtomicInteger cellNum = new AtomicInteger(0);
-
+            // 유형
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletterSend.getLetterTypeName());
+            // 뉴스레터명
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletterSend.getLetterName());
+            // 제목
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletterSend.getLetterTitle());
+            // 등록자
+            row
+                    .createCell(cellNum.getAndAdd(1))
+                    .setCellValue(newsletterSend
+                            .getRegMember()
+                            .getMemberNm() + "(" + newsletterSend
+                            .getRegMember()
+                            .getMemberId() + ")");
+            // 등록일
+            Cell cellRegDt = row.createCell(cellNum.getAndAdd(1));
+            if (newsletterSend.getRegDt() != null) {
+                cellRegDt.setCellValue(newsletterSend.getRegDt());
+                cellRegDt.setCellStyle(cellStyle);
+            }
+            // 발송일
             Cell cellSendStartDt = row.createCell(cellNum.getAndAdd(1));
             if (newsletterSend.getSendDt() != null) {
                 cellSendStartDt.setCellValue(newsletterSend.getSendDt());
                 cellSendStartDt.setCellStyle(cellStyle);
             }
+            // 상태
+            row
+                    .createCell(cellNum.getAndAdd(1))
+                    .setCellValue(newsletterSend.getSendStatusName());
+            // A/B Test
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletterSend.getAbtestYn());

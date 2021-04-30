@@ -6,7 +6,10 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import jmnet.moka.core.tps.common.code.SendStatusCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -66,6 +69,25 @@ public class NewsletterSendSimpleDTO implements Serializable {
     @ApiModelProperty("발송일시")
     @DTODateTimeFormat
     private Date sendDt;
+
+    private String sendStatus;
+
+    @Getter(AccessLevel.NONE)
+    private String sendStatusName;
+
+    public String getSendStatusName() {
+        return SendStatusCode
+                .valueOf(sendStatus)
+                .getName();
+    }
+
+    @DTODateTimeFormat
+    private Date regDt;
+
+    /**
+     * 등록자
+     */
+    private MemberSimpleDTO regMember;
 
     private String abtestYn;
 }

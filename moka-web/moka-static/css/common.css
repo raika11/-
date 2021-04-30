@@ -223,6 +223,9 @@ textarea {resize: none;}
 .flex_row_reverse {flex-direction: row-reverse !important;}
 .flex_col_reverse {flex-direction: column-reverse !important;}
 
+.flex_area{display: flex; align-items: center;}
+
+
 /** float **/
 .flt_l {float: left !important}
 .flt_r {float: right !important;}

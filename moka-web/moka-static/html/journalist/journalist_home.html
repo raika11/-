@@ -180,11 +180,13 @@
                             </nav>
                             <div class="btn_group">
                                 <div class="info_bx">
-                                    <button type="button" class="btn_info" onclick="openLayer();" ><i class="ico_info"></i><span class="visually_hidden">정보</span></button>
-                                    <div class="layer_popup" style="display: none;" id=""><!-- 여기에 개별 클래스 추가 -->
+                                    <button type="button" class="btn_info" onclick="openLayer(layer_info);" ><i class="ico_info"></i><span class="visually_hidden">정보</span></button>
+                                    <div class="layer_popup layer_info" id="layer_info"><!-- 여기에 개별 클래스 추가 -->
                                         <div class="layer_body">
-                                            <p>기자에게 보내는 응원은 하루 1번 가능합니다.</p>
-                                            <p class="desc">(0시 기준)</p>
+                                            <p>이하경 기자의 기사 중 조회수가 높은 기사를 제공합니다.</p>
+                                            <!-- <p>이하경 기자의 기사 중 댓글, 공감, 공유, 북마크가 많은 기사를 제공합니다.</p> -->
+                                            <!-- <p>이하경 기자의 기사 중 사용자 몰입도가 높은 기사를 제공합니다.</p> -->
+                                            <p class="date">2021.04.02  08:15 ~ 2021.04.30  09:00 기준</p>
                                         </div>
                                         <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">닫기</span></button>
                                     </div>

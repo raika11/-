@@ -291,7 +291,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                     label={
                         <>
                             대표이미지
-                            <Button className="mt-1" size="sm" variant="gray-700" onClick={(e) => imgFileRef.current.rootRef.onClick(e)}>
+                            <Button className="mt-1" size="sm" variant="gray-700" onClick={(e) => imgFileRef.current.openFileDialog(e)}>
                                 신규등록
                             </Button>
                         </>

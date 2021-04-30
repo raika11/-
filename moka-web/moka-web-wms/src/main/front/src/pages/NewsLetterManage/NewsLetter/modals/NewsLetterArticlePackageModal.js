@@ -5,7 +5,7 @@ import { MokaModal, MokaSearchInput } from '@/components';
 // import { initialState, getIssueList, clearSearch, changeIssueSearchOptions } from '@store/issue';
 // import { getNewsLetterChannelType } from '@store/newsLetter';
 // import { messageBox } from '@/utils/toastUtil';
-import ArticlePackageAgGrid from '../components/RelArticlePackageAgGricColumns';
+import ArticlePackageAgGrid from '../components/RelArticlePackageAgGrid';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 목록 > 기사 패키지 검색 모달

@@ -1,6 +1,3 @@
-import React from 'react';
-import { GRID_LINE_HEIGHT } from '@/style_constants';
-
 const cellClassRules = {
     'ag-pre-cell': () => true,
 };

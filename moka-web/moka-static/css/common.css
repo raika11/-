@@ -421,26 +421,26 @@ textarea {resize: none;}
     .fs_lg46 {    font-size: 46px !important;  }
 
     /* line-height */
-    .lh_lg36 {    line-height: 36px;  }
-    .lh_lg34 {    line-height: 34px;  }
-    .lh_lg32 {    line-height: 32px;  }
-    .lh_lg30 {    line-height: 30px;  }
-    .lh_lg29 {    line-height: 29px;  }
-    .lh_lg28 {    line-height: 28px;  }
-    .lh_lg26 {    line-height: 26px;  }
-    .lh_lg24 {    line-height: 24px;  }
-    .lh_lg22 {    line-height: 22px;  }
-    .lh_lg20 {    line-height: 20px;  }
-    .lh_lg19 {    line-height: 19px;  }
-    .lh_lg18 {    line-height: 18px;  }
-    .lh_lg16 {    line-height: 16px;  }
-    .lh_lg14 {    line-height: 14px;  }
+    .lh_lg36 {line-height: 36px;}
+    .lh_lg34 {line-height: 34px;}
+    .lh_lg32 {line-height: 32px;}
+    .lh_lg30 {line-height: 30px;}
+    .lh_lg29 {line-height: 29px;}
+    .lh_lg28 {line-height: 28px;}
+    .lh_lg26 {line-height: 26px;}
+    .lh_lg24 {line-height: 24px;}
+    .lh_lg22 {line-height: 22px;}
+    .lh_lg20 {line-height: 20px;}
+    .lh_lg19 {line-height: 19px;}
+    .lh_lg18 {line-height: 18px;}
+    .lh_lg16 {line-height: 16px;}
+    .lh_lg14 {line-height: 14px;}
 
     /* grid */
-    .col_lg0 {    flex: 0 0 auto;    width: 0;  }
-    .col_lg1 {    flex: 0 0 auto;    width: calc(100% / 12 * 1 - 0.01%);  }
-    .col_lg2 {    flex: 0 0 auto;    width: calc(100% / 12 * 2 - 0.01%);  }
-    .col_lg3 {    flex: 0 0 auto;    width: calc(100% / 12 * 3 - 0.01%);  }
+    .col_lg0 {flex: 0 0 auto;width: 0;  }
+    .col_lg1 {flex: 0 0 auto;width: calc(100% / 12 * 1 - 0.01%);  }
+    .col_lg2 {flex: 0 0 auto;width: calc(100% / 12 * 2 - 0.01%);  }
+    .col_lg3 {flex: 0 0 auto;width: calc(100% / 12 * 3 - 0.01%);  }
     .col_lg4{flex:0 0 auto;width:calc(100% / 12 * 4 - 0.01%);}
     .col_lg5{flex:0 0 auto;width:calc(100% / 12 * 5 - 0.01%);}
     .col_lg6{flex:0 0 auto;width:calc(100% / 12 * 6 - 0.01%);}
@@ -972,6 +972,7 @@ dl.date dd {margin-left: 6px;}
 .btn_outline_default {border: 1px solid #333;}
 .btn_outline_gray {border: 1px solid #d5d5d5;background-color: #fff;}
 .btn_outline_orange {border: 1px solid #f0320a !important;color: #f0320a;}
+.btn_outline_white {border: 1px solid #fff !important;background-color: transparent;color: #fff;}
 
 .button_wrap_wide .btn_outline_gray {padding:8px 28px;line-height: 1.57;letter-spacing: -0.4px;}
 
@@ -1086,6 +1087,28 @@ dl.date dd {margin-left: 6px;}
     * ---------------------------------
     */
 .scroll_wrap{width:100%;}
+.skin_group2 [class*="col_"]{padding:0;margin:0 15px;}
+.card_skin {border:1px solid #e2e2e2;}
+.card_skin .card_image{margin:-1px;}
+.card_skin .card_body{padding:20px 16px 15px;}
+
+.card_skin .card_foot{position:absolute;left:16px;bottom:0;display:flex;align-items: center;width:calc(100% - 32px);padding:10px 0;margin-top: auto;border-top:1px solid #e2e2e2;}
+.card_skin .card_foot .title{color:#f6330a;font-size: 14px;font-weight: 700;line-height: 1.57;}
+.card_skin .card_foot .btn{margin-left: auto;padding:3px 10px;}
+.card_skin .card_foot .ico_plus_orange{width:13px;height:13px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.964706 0 0 0 0 0.200000 0 0 0 0 0.039216 0 0 0 1.000000 0'/%3E%3C/filter%3E%3Cfilter id='b'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.964706 0 0 0 0 0.200000 0 0 0 0 0.039216 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23a)' transform='translate(-8 -8)' fill='none' fill-rule='evenodd'%3E%3Cpath d='M8 8h13v13H8z'/%3E%3Cg filter='url(%23b)' transform='translate(8 8)'%3E%3Cg fill='%23F6330A'%3E%3Cpath d='M6 2h1.5v9.5H6z'/%3E%3Cpath d='M2 6h9.5v1.5H2z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+
+
+
+
+.skin_group2{margin-left:-15px;margin-right:-15px;min-height:291px;width:calc(100% + 30px)}
+.skin_group2 li {height: 100%;}
+.skin_group2 .card{position:relative;margin:0 15px;padding-bottom:50px;border:1px solid #e2e2e2;}
+.skin_group2 .card::before{display:none;}
+
+.skin_group2 .col_lg3{width:calc(100% / 12 * 3 - 0.01% - 30px);}
+.skin_group2 .col_lg4{width:calc(100% / 12 * 4 - 0.01% - 30px);}
+
+
 .skin_group {margin-left:-15px;margin-right:-15px;}
 .skin_group li {height: auto;}
 .skin_group .card{position:relative;margin:0 15px;padding-bottom:50px;border:1px solid #e2e2e2;}

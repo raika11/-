@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@/components';
 import columnDefs from './RelJpodAgGridColumns';
 import { changeChnlSearchOption, getChnlList, GET_CHNL_LIST } from '@store/jpod';
-import { GRID_ROW_HEIGHT } from '@/style_constants';
 
 /**
  * J팟 검색 모달 AgGrid
  * 뉴스레터 구독 여부가 Y, 연계된 뉴스레터가 있는 J팟은 비활성화
  */
-const RelJpodAgGrid = ({ setRowSelected }) => {
+const RelJpodAgGrid = ({ onRowClicked, onHide }) => {
     const dispatch = useDispatch();
-    const { search, list, total, channel } = useSelector(({ jpod }) => jpod.channel);
+    const { search, list, total, channel } = useSelector(({ jpod }) => jpod.channel, shallowEqual);
+    const letterChannelTypeList = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterChannelTypeList);
     const loading = useSelector(({ loading }) => loading[GET_CHNL_LIST]);
-    const [gridInstance, setGridInstance] = useState(null);
-    const [chnl, setChnl] = useState({});
+    const [rowData, setRowData] = useState([]);
 
     /**
      * 테이블 검색옵션 변경
@@ -30,29 +29,36 @@ const RelJpodAgGrid = ({ setRowSelected }) => {
     );
 
     /**
-     * 목록 Row클릭
+     * 등록 버튼
+     * @param {object} data data
      */
-    const handleRowSelected = () => {
-        setChnl(gridInstance.api.getSelectedRows());
-    };
+    const handleRowClicked = useCallback(
+        (data) => {
+            if (onRowClicked) {
+                onRowClicked(data);
+                onHide();
+            }
+        },
+        [onRowClicked, onHide],
+    );
 
     useEffect(() => {
-        if (chnl[0]) {
-            setRowSelected(chnl[0]);
-        }
+        setRowData(
+            list.map((j) => ({
+                ...j,
+                letterYn: letterChannelTypeList.indexOf(j.chnlSeq) > -1 ? 'Y' : 'N',
+                onClick: handleRowClicked,
+            })),
+        );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [chnl]);
+    }, [list, handleRowClicked]);
 
     return (
         <MokaTable
-            setGridInstance={setGridInstance}
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
-            headerHeight={GRID_ROW_HEIGHT.T[0]}
-            rowHeight={GRID_ROW_HEIGHT.C[1]}
             onRowNodeId={(data) => data.chnlSeq}
-            rowData={list}
-            onRowSelected={handleRowSelected}
+            rowData={rowData}
             loading={loading}
             total={total}
             page={search.page}

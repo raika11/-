@@ -6,8 +6,9 @@ import { messageBox } from '@utils/toastUtil';
 import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { initialState, getReporterListModal, GET_REPORTER_LIST_MODAL } from '@store/reporter';
+import { getNewsLetterChannelType } from '@store/newsLetter';
 import { getJplusRep } from '@store/codeMgt';
-import columnDefs from './ReporterListModalColumns';
+import { repColumnDefs } from './ReporterListModalColumns';
 
 const propTypes = {
     show: PropTypes.bool,
@@ -16,16 +17,23 @@ const propTypes = {
      * row click (add버튼)
      */
     onRowClicked: PropTypes.func,
+    /**
+     * 뉴스레터 채널 타입(뉴스레터 channelType='REPORTER')
+     */
+    channelType: PropTypes.string,
 };
-const defaultProps = {};
+const defaultProps = {
+    channelType: null,
+};
 
 /**
  * 기자 목록 모달
  */
 const ReporterListModal = (props) => {
-    const { show, onHide, onRowClicked } = props;
+    const { show, onHide, onRowClicked, channelType } = props;
     const dispatch = useDispatch();
     const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
+    const letterChannelTypeList = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterChannelTypeList);
     const loading = useSelector(({ loading }) => loading[GET_REPORTER_LIST_MODAL]);
     const [setGridInstance] = useState(null);
     const [search, setSearch] = useState(initialState.search);
@@ -40,9 +48,12 @@ const ReporterListModal = (props) => {
         (row) => {
             if (onRowClicked) {
                 onRowClicked(row);
+                if (channelType) {
+                    onHide();
+                }
             }
         },
-        [onRowClicked],
+        [onRowClicked, channelType, onHide],
     );
 
     /**
@@ -119,7 +130,22 @@ const ReporterListModal = (props) => {
 
     useEffect(() => {
         if (show) {
-            getReporterList({});
+            if (channelType) {
+                dispatch(
+                    getNewsLetterChannelType({
+                        channelType,
+                        callback: ({ header, body }) => {
+                            if (header.success && body) {
+                                getReporterList({});
+                            } else {
+                                messageBox.alert(header.message);
+                            }
+                        },
+                    }),
+                );
+            } else {
+                getReporterList({});
+            }
         } else {
             setSearch(initialState.search);
             setRowData([]);
@@ -135,14 +161,24 @@ const ReporterListModal = (props) => {
     useEffect(() => {
         if (show) {
             setRowData(
-                rowData.map((row) => ({
-                    ...row,
-                    onClick: handleRowClicked,
-                })),
+                rowData.map((row) => {
+                    if (channelType) {
+                        return {
+                            ...row,
+                            letterYn: letterChannelTypeList.indexOf(row.repSeq) > -1 ? 'Y' : 'N',
+                            onClick: handleRowClicked,
+                        };
+                    } else {
+                        return {
+                            ...row,
+                            onClick: handleRowClicked,
+                        };
+                    }
+                }),
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, handleRowClicked]);
+    }, [show, channelType, handleRowClicked]);
 
     return (
         <MokaModal show={show} onHide={handleHide} title="기자 검색" size="xl" bodyClassName="d-flex flex-column" width={970} height={800} centered draggable>
@@ -163,11 +199,10 @@ const ReporterListModal = (props) => {
             </div>
             <MokaTable
                 className="overflow-hidden flex-fill"
-                columnDefs={columnDefs}
+                columnDefs={repColumnDefs(props)}
                 rowData={rowData}
                 rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(reporter) => reporter.repSeq}
-                onRowClicked={() => {}}
                 loading={loading}
                 total={total}
                 page={search.page}

@@ -72,7 +72,16 @@ const NewsLetterSearch = () => {
 
     useEffect(() => {
         // 스토어 데이터 로컬에 셋팅
-        setSearch(storeSearch);
+        let ssd = moment(storeSearch.startDt, DB_DATEFORMAT);
+        if (!ssd.isValid()) ssd = null;
+        let esd = moment(storeSearch.endDt, DB_DATEFORMAT);
+        if (!esd.isValid()) esd = null;
+
+        setSearch({
+            ...storeSearch,
+            startDt: ssd,
+            endDt: esd,
+        });
     }, [storeSearch]);
 
     useEffect(() => {

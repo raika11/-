@@ -125,9 +125,10 @@ public class TpsConstants extends MokaConstants {
     public static final String SEARCH_TYPE_ALL = "all";
 
     /**
-     * 파일관리 업무별 구분(템플릿)
+     * 파일관리 업무별 구분
      */
     public static final String TEMPLATE_BUSINESS = "template";
+    public static final String CONTAINER_BUSINESS = "container";
 
     /**
      * 파일관리 업무별 구분

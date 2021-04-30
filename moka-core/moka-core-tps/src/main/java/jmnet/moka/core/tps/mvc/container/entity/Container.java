@@ -75,6 +75,25 @@ public class Container extends BaseAudit {
     private String containerBody = "";
 
     /**
+     * 컨테이너그룹
+     */
+    @Column(name = "CONTAINER_GROUP")
+    private String containerGroup;
+
+    /**
+     * 컨테이너썸네일
+     */
+    @Column(name = "CONTAINER_THUMB")
+    private String containerThumb;
+
+    /**
+     * 컨테이너설명
+     */
+    @Nationalized
+    @Column(name = "CONTAINER_DESC")
+    private String containerDesc;
+
+    /**
      * 페이지 관련갯수
      */
     @Transient
@@ -121,25 +140,29 @@ public class Container extends BaseAudit {
      * @return 동일한게 있으면 true
      */
     public boolean isEqualRel(ContainerRel rel) {
-        Optional<ContainerRel> find = containerRels.stream()
-                                                   .filter(r -> {
-                                                       if (r.getRelType()
-                                                            .equals(rel.getRelType()) && r.getRelSeq()
-                                                                                          .equals(rel.getRelSeq())) {
-                                                           if (r.getRelParentSeq() == null && rel.getRelParentSeq() == null) {
-                                                               return true;
-                                                           } else if (r.getRelParentSeq() == null && rel.getRelParentSeq() != null) {
-                                                               return false;
-                                                           } else if (r.getRelParentSeq() != null && rel.getRelParentSeq() == null) {
-                                                               return false;
-                                                           } else if (r.getRelParentSeq()
-                                                                       .equals(rel.getRelParentSeq())) {
-                                                               return true;
-                                                           }
-                                                       }
-                                                       return false;
-                                                   })
-                                                   .findFirst();
+        Optional<ContainerRel> find = containerRels
+                .stream()
+                .filter(r -> {
+                    if (r
+                            .getRelType()
+                            .equals(rel.getRelType()) && r
+                            .getRelSeq()
+                            .equals(rel.getRelSeq())) {
+                        if (r.getRelParentSeq() == null && rel.getRelParentSeq() == null) {
+                            return true;
+                        } else if (r.getRelParentSeq() == null && rel.getRelParentSeq() != null) {
+                            return false;
+                        } else if (r.getRelParentSeq() != null && rel.getRelParentSeq() == null) {
+                            return false;
+                        } else if (r
+                                .getRelParentSeq()
+                                .equals(rel.getRelParentSeq())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .findFirst();
         if (find.isPresent()) {
             return true;
         }

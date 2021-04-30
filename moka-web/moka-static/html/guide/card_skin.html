@@ -36,15 +36,106 @@
                 <main class="main_guide col_sm12 col_md10 col_lg10">
                     <!-- 가이드 내용 시작 -->
                     <h2 class="guide_title">기본형</h2>
+                    <p>기본  class 명은 <strong>card_skin</strong>을 사용합니다.</p>
                     <div class="sample_wrap">
-                        <div class="view_btn_wrap">
-                            <button type="button" class="btn_view" data-rel="375px">375</button>
-                            <button type="button" class="btn_view" data-rel="768px">768</button>
-                            <button type="button" class="btn_view" data-rel=" ">clear</button>
+                        <li class="card_skin col_sm12 col_lg4">
+                            <div class="card_image">
+                                <figure><a href="#"><img srcset="//via.placeholder.com/278x156 1x, //via.placeholder.com/556x312 2x, //via.placeholder.com/834x468 3x" width="278" src="//via.placeholder.com/278x156" alt="..."></a></figure>
+                            </div>
+                            <div class="card_body">
+                                <h2 class="headline"><a href="#">‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전</a></h2>
+                            </div>
+                            <div class="card_foot">
+                                <h3 class="title"><a href="#">앤츠랩</a></h3>
+                                <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="card"&gt;
+    
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+                    <h2 class="guide_title">배경색상</h2>
+                    <p>배경색이 들어간 카드 유형은 card_skin 옆에 <strong>skin</strong> 추가하여 사용</p>
+                    <div class="sample_wrap">
+                        <li class="card_skin skin col_sm12 col_lg4">
+                            <div class="card_body">
+                                <strong class="headline">원하는 뉴스만<br />빠르고 편리하게<br />나만을 위한<br />구독 패키지를 찾아보세요!</strong>
+                                <button type="button" class="btn ">더 많은 구독 상품 보러가기</button>
+                            </div>
+                        </li>
+
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="card"&gt;
+    
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+                    <h2 class="guide_title">그룹</h2>
+                    <p>class명은 ul에 <strong>skin_group</strong> 사용</p>
+                    <div class="sample_wrap">
+                        <div class="chain_wrap">
+                            <ul class="skin_group "> <!-- row  -->
+                                <li class="card_skin col_sm12 col_lg4 ">
+                                    <div class="card_image">
+                                        <figure><a href="#"><img srcset="//via.placeholder.com/278x156 1x, //via.placeholder.com/556x312 2x, //via.placeholder.com/834x468 3x" width="278" src="//via.placeholder.com/278x156" alt="..."></a></figure>
+                                    </div>
+                                    <div class="card_body">
+                                        <h2 class="headline"><a href="#">‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전</a></h2>
+                                    </div>
+                                    <div class="card_foot">
+                                        <h3 class="title"><a href="#">권혁재의 사람사진</a></h3>
+                                        <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
+                                    </div>
+                                </li>
+                                <li class=" card_skin col_sm12 col_lg4">
+                                    <div class="card_image">
+                                        <figure><a href="#"><img srcset="//via.placeholder.com/278x156 1x, //via.placeholder.com/556x312 2x, //via.placeholder.com/834x468 3x" width="278" src="//via.placeholder.com/278x156" alt="..."></a></figure>
+                                    </div>
+                                    <div class="card_body">
+                                        <h2 class="headline"><a href="#">‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전</a></h2>
+                                    </div>
+                                    <div class="card_foot">
+                                        <h3 class="title"><a href="#">서소문 사진관</a></h3>
+                                        <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
+                                    </div>
+                                </li>
+                                <li class="card_skin col_sm12 col_lg4">
+                                    <div class="card_image">
+                                        <figure><a href="#"><img srcset="//via.placeholder.com/278x156 1x, //via.placeholder.com/556x312 2x, //via.placeholder.com/834x468 3x" width="278" src="//via.placeholder.com/278x156" alt="..."></a></figure>
+                                    </div>
+                                    <div class="card_body">
+                                        <h2 class="headline"><a href="#">‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전</a></h2>
+                                    </div>
+                                    <div class="card_foot">
+                                        <h3 class="title"><a href="#">인생 한 컷</a></h3>
+                                        <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="card"&gt;
+
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
+                    <h2 class="guide_title">조합형</h2>
+                    <p>flex의 <strong>align-items: stretch</strong> 속성으로 가장 높은 객체의 높이를 동일 적용 시켰습니다.</p>
+                    <div class="sample_wrap">
                         <div class="scroll_wrap">
-                            <ul class="skin_group2 swiper-wrapper"> <!-- row  -->
-                                <li class="card_skin col_lg4 swiper-slide">
+                            <ul class="skin_group"> <!-- row  -->
+                                <li class="card_skin col_sm12 col_lg4">
                                     <div class="card_image">
                                         <figure><a href="#"><img srcset="//via.placeholder.com/278x156 1x, //via.placeholder.com/556x312 2x, //via.placeholder.com/834x468 3x" width="278" src="//via.placeholder.com/278x156" alt="..."></a></figure>
                                     </div>
@@ -56,7 +147,7 @@
                                         <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
                                     </div>
                                 </li>
-                                <li class=" card_skin col_lg4 swiper-slide">
+                                <li class=" card_skin col_sm12 col_lg4">
                                     <div class="card_body">
                                         <h2 class="headline"><a href="#">유승민, 경기도 독자적 백신 접종 검토에 “文정부 왜 존재 하는가”</a></h2>
                                     </div>
@@ -65,7 +156,7 @@
                                         <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
                                     </div>
                                 </li>
-                                <li class=" card_skin col_lg4 swiper-slide">
+                                <li class="card_skin skin col_sm12 col_lg4">
                                     <div class="card_body">
                                         <strong class="headline">원하는 뉴스만<br />빠르고 편리하게<br />나만을 위한<br />구독 패키지를 찾아보세요!</strong>
                                         <button type="button" class="btn btn_outline_white">더 많은 구독 상품 보러가기</button>
@@ -74,68 +165,60 @@
                             </ul>
                         </div>
 
-                        <p class="mt_30 pb_30 bdr_title_w4"></p>
 
-                        <div class="scroll_wrap  swiper_wrap2">
-                            <ul class="skin_group swiper-wrapper"> <!-- row  -->
-                                <li class="swiper-slide col_lg4">
-                                    <div class="card card_skin">
-                                        <div class="card_image">
-                                            <figure>
-                                                    <a href="#"><img srcset="//via.placeholder.com/278x156 1x, //via.placeholder.com/556x312 2x, //via.placeholder.com/834x468 3x" width="278" src="//via.placeholder.com/278x156" alt="..."></a>
-                                            </figure>
-                                        </div>
-                                        <div class="card_body">
-                                            <h2 class="headline"><a href="#">‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전</a></h2>
-                                        </div>
-                                        <div class="card_foot">
-                                            <h3 class="title"><a href="#">앤츠랩</a></h3>
-                                            <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="swiper-slide col_lg4 ">
-                                    <div class="card card_skin">
-                                        <div class="card_body">
-                                            <h2 class="headline"><a href="#">유승민, 경기도 독자적 백신 접종 검토에 “文정부 왜 존재 하는가”</a></h2>
-                                        </div>
-                                        <div class="card_foot">
-                                            <h3 class="title"><a href="#">앤츠랩</a></h3>
-                                            <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="swiper-slide col_lg4">
-                                    <div class="card skin">
-                                        <div class="card_body">
-                                            <strong class="headline">원하는 뉴스만<br />빠르고 편리하게<br />나만을 위한<br />구독 패키지를 찾아보세요!</strong>
-                                            <button type="button" class="btn ">더 많은 구독 상품 보러가기</button>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                     <div class="code_wrap">
 <pre><code class="html">
 &lt;div class="card"&gt;
-    &lt;div class="card_image"&gt;
-        &lt;a href="javasctipt:(0);"&gt;&lt;img src="http://placehold.it/273x153"  alt="..." /&gt;&lt;/a&gt;
-    &lt;/div&gt;
-    &lt;div class="card_body"&gt;
-        &lt;h3 class="title"&gt;&lt;a href="javasctipt:(0);"&gt;양성희의 시시각각&lt;/a&gt;&lt;/h3&gt;
-        &lt;h2 class="headline"&gt;&lt;a href="javasctipt:(0);"&gt;&lt;/a&gt;'조선구마사' 의 교훈&lt;/a&gt;&lt;/h2&gt;
-        &lt;p class="description"&gt;&lt;a href="javasctipt:(0);"&gt;&lt;/a&gt;역사 왜곡 논란과 반중 정서로 시청자 불만이 쇄도해 2회 만에 전격 종영한 SBS 드라마 ‘조선구마사’ 얘기다. 드라마 제작사의 모회사인 YG엔터테인먼트에 중국 자본이 들어와 있고, 극본을 쓴 박계옥 작가가 한·중 합작 제작사와 계약관계라는 것도 논란을 키웠다. 박계옥 작가는 전작 ‘철인왕후’(tvN)에서도 현대 남&lt;/a&gt;&lt;/p&gt;
-        &lt;p class="date"&gt;3시간전&lt;/p&gt;
-        &lt;p class="byline"&gt;김선일 기자&lt;/p&gt;
-        &lt;div class="meta"&gt;
-            &lt;p class="date"&gt;2021.03.31 16:42&lt;/p&gt;
-            &lt;p class="play_count"&gt;재생수 00&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
+
 &lt;/div&gt;
 </code></pre>
                     </div>
+
+                    <h2 class="guide_title">슬라이딩 - 모바일 한정</h2>
+                    <p>슬라이딩 플러그인은 swiper를 사용합니다. 그룹형의 skin_group 를 감싸는 <strong>scroll_sm_wrap</strong>클래스가 필요합니다. </p>
+                    <div class="sample_wrap">
+                        <div class="scroll_sm_wrap">
+                            <ul class="skin_group swiper-wrapper"> <!-- row  -->
+                                <li class="card_skin col_sm12 col_lg4 swiper-slide">
+                                    <div class="card_image">
+                                        <figure><a href="#"><img srcset="//via.placeholder.com/278x156 1x, //via.placeholder.com/556x312 2x, //via.placeholder.com/834x468 3x" width="278" src="//via.placeholder.com/278x156" alt="..."></a></figure>
+                                    </div>
+                                    <div class="card_body">
+                                        <h2 class="headline"><a href="#">‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전</a></h2>
+                                    </div>
+                                    <div class="card_foot">
+                                        <h3 class="title"><a href="#">앤츠랩</a></h3>
+                                        <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
+                                    </div>
+                                </li>
+                                <li class=" card_skin col_sm12 col_lg4 swiper-slide">
+                                    <div class="card_body">
+                                        <h2 class="headline"><a href="#">유승민, 경기도 독자적 백신 접종 검토에 “文정부 왜 존재 하는가”</a></h2>
+                                    </div>
+                                    <div class="card_foot">
+                                        <h3 class="title"><a href="#">앤츠랩</a></h3>
+                                        <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
+                                    </div>
+                                </li>
+                                <li class="card_skin col_sm12 col_lg4 swiper-slide">
+                                    <div class="card_body">
+                                        <strong class="headline">원하는 뉴스만<br />빠르고 편리하게<br />나만을 위한<br />구독 패키지를 찾아보세요!</strong>
+                                        <button type="button" class="btn btn_outline_white">더 많은 구독 상품 보러가기</button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="code_wrap">
+<pre><code class="html">
+&lt;div class="card"&gt;
+
+&lt;/div&gt;
+</code></pre>
+                    </div>
+
 
 
 

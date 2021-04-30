@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
+import org.hibernate.annotations.Nationalized;
 
 @Alias("ContainerVO")
 @NoArgsConstructor
@@ -53,5 +54,24 @@ public class ContainerVO implements Serializable {
      * 도메인
      */
     private DomainSimpleDTO domain;
+
+    /**
+     * 컨테이너그룹
+     */
+    @Column(name = "CONTAINER_GROUP")
+    private String containerGroup;
+
+    /**
+     * 컨테이너썸네일
+     */
+    @Column(name = "CONTAINER_THUMB")
+    private String containerThumb;
+
+    /**
+     * 컨테이너설명
+     */
+    @Nationalized
+    @Column(name = "CONTAINER_DESC")
+    private String containerDesc;
 
 }

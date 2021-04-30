@@ -65,4 +65,18 @@
       ) }
   </select>
 
+  <!-- 내가 투표한 목록 -->
+  <select id="my" parameterType="hashmap" resultType="hashmap"
+    statementType="CALLABLE">
+    {call UPU_TRENDPOLL_VOTE_LIST_SEL_BY_MEM(
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
 </mapper>

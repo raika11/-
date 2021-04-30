@@ -84,5 +84,30 @@
     </keys>
   </api>
 
+  <!--내가 투표한 목록-->
+  <api id="poll.my" membership="cookiePass">
+    <description>내가 투표한 목록을 조회한다.</description>
+    <parameter>
+      <pcid desc="PCID" require="Y">^[0-9]{23}$</pcid>
+    </parameter>
+    <request eval="Y" dmlType="sp" setNames="_DATA" outParam="_TOTAL">
+      var queryId = "dps.poll.my";
+
+      // 비회원처리
+      if ($param.get("member_memSeq") == null) {
+      $param.put("member_memSeq", null);
+      $param.put("member_loginType", null);
+      } else {
+      $param.put("pcid", null);
+      }
+
+      queryId;
+    </request>
+    <keys>
+      pcid
+      #paging
+    </keys>
+  </api>
+
 </apiConfig>
 

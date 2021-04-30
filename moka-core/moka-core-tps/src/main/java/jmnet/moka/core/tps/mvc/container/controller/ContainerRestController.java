@@ -196,11 +196,15 @@ public class ContainerRestController extends AbstractCommonController {
             if (containerDTO.getThumbFile() != null) {
                 // 이미지파일 저장(multipartFile)
                 String imgPath = containerService.saveContainerImage(returnValue, containerDTO.getThumbFile());
-                tpsLogger.success(ActionType.UPLOAD, true);
-                returnValue.setContainerThumb(imgPath);
+                if (imgPath.length() > 0) {
+                    tpsLogger.success(ActionType.UPLOAD, true);
+                    returnValue.setContainerThumb(imgPath);
 
-                // 썸네일경로 업데이트(히스토리 생성X)
-                returnValue = containerService.updateContainer(returnValue, false);
+                    // 썸네일경로 업데이트(히스토리 생성X)
+                    returnValue = containerService.updateContainer(returnValue, false);
+                } else {
+                    tpsLogger.fail(ActionType.UPLOAD, "IMAGE FILE UPLOAD FAIL");
+                }
 
             }
 
@@ -262,7 +266,11 @@ public class ContainerRestController extends AbstractCommonController {
                 }
                 // 새로운 이미지 저장
                 String imgPath = containerService.saveContainerImage(newContainer, containerDTO.getThumbFile());
-                tpsLogger.success(ActionType.UPLOAD, true);
+                if (imgPath.length() > 0) {
+                    tpsLogger.success(ActionType.UPLOAD, true);
+                } else {
+                    tpsLogger.fail(ActionType.UPLOAD, "IMAGE FILE UPLOAD FAIL");
+                }
 
                 // 이미지 파일명 수정
                 newContainer.setContainerThumb(imgPath);

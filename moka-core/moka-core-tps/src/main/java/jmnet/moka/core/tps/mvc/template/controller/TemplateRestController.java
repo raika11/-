@@ -154,8 +154,12 @@ public class TemplateRestController extends AbstractCommonController {
             if (templateThumbnailFile != null && !templateThumbnailFile.isEmpty()) {
                 // 이미지파일 저장(multipartFile)
                 String imgPath = templateService.saveTemplateImage(returnVal, templateThumbnailFile);
-                tpsLogger.success(ActionType.UPLOAD, true);
-                returnVal.setTemplateThumb(imgPath);
+                if (imgPath.length() > 0) {
+                    tpsLogger.success(ActionType.UPLOAD, true);
+                    returnVal.setTemplateThumb(imgPath);
+                } else {
+                    tpsLogger.fail(ActionType.UPLOAD, "IMAGE FILE UPLOAD FAIL");
+                }
 
                 // 썸네일경로 업데이트(히스토리 생성X)
                 returnVal = templateService.updateTemplate(returnVal, false);
@@ -239,7 +243,11 @@ public class TemplateRestController extends AbstractCommonController {
                 }
                 // 새로운 이미지 저장
                 String imgPath = templateService.saveTemplateImage(newTemplate, templateThumbnailFile);
-                tpsLogger.success(ActionType.UPLOAD, true);
+                if (imgPath.length() > 0) {
+                    tpsLogger.success(ActionType.UPLOAD, true);
+                } else {
+                    tpsLogger.fail(ActionType.UPLOAD, "IMAGE FILE UPLOAD FAIL");
+                }
 
                 // 이미지 파일명 수정
                 newTemplate.setTemplateThumb(imgPath);

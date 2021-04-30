@@ -43,6 +43,21 @@ $(document).ready(function() {
     if($.tabs){
         $.tabs.init();
     }
+
+
+    //swiper
+    // - mobile 전용
+    mobileSwiper();
+
+    var mtimer;
+    $(window).resize(function(){
+        if (mtimer) {
+            clearTimeout(mtimer);
+        }
+        mtimer = setTimeout(mobileSwiper, 10);
+    });
+
+
 });
 
 /* 임시 레이어팝업 */
@@ -88,3 +103,25 @@ function changeToSlider($target, slickOptions){
         $target.slick('unslick');
     };
 }
+
+/* mobile swiper */
+/* 카드 좌측 정렬 */
+function mobileSwiper() {
+    var swiper = new Swiper('.scroll_sm_wrap', {
+        slidesPerView: 1.2,
+        slidesPerGroup: 1,
+        spaceBetween: 10,
+        // init: false,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        }
+    });
+
+    if ( $(window).width() > 1023 ) {
+        if (swiper) {
+            swiper.destroy();
+        }
+    }
+
+};

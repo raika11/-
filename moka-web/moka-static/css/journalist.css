@@ -65,10 +65,6 @@ font-*,color,text-align,vertical-align, ...
 .layer_cheer p.desc {margin-top:10px; letter-spacing:-0.2px; color:#999;}
 .layer_cheer .btn_close {top:10px; right:10px;}
 
-.layer_info { right: 0; top: 24px; width: 320px; padding: 30px; }
-.layer_info p { font-size: 13px; line-height: 20px; color: #333; }
-.layer_info .date { margin-top: 10px; font-size: 12px; letter-spacing: -0.2px; color: #999; }
-.layer_info .btn_close {top:10px; right:10px;}
 /*  기자의 패키지,구독상품 */
 .package_list a {display: block; position:relative; border:1px solid #f3f3f3; background:#f9f9f9; font-size:0;}
 .package_list a:hover {text-decoration:none;}

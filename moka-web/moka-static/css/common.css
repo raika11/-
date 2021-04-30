@@ -283,6 +283,7 @@ textarea {resize: none;}
 
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width: 1023px) {
+    .ad { display: none; }
     .pc {display: none;}
     .sm_hidden {display: none;}
 

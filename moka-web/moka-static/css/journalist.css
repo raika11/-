@@ -166,7 +166,6 @@ font-*,color,text-align,vertical-align, ...
 
 /* Medium devices (mobile ~ tablet, 1023px and down) */
 @media (max-width:1023px) {
-    .ad { display: none; }
 
 /****************************************************************************************************/
 /***                                           layout                                             ***/

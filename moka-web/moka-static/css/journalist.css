@@ -170,7 +170,7 @@ font-*,color,text-align,vertical-align, ...
     .journalist_header .journalist_popularity > div .btn {position:absolute; bottom:0;}
     .journalist_header .journalist_popularity > div:first-child .btn {right:16px;}
     .journalist_header .journalist_popularity > div:last-child .btn {right: 6px;}
-
+    .profile_body .layer_share { left: -68px; }
     .layer_cheer {top:33px;}
 
     /*  기자의 패키지,구독상품 */
@@ -227,7 +227,7 @@ font-*,color,text-align,vertical-align, ...
     .journalist_header .profile_image {width: 128px; height: 128px;}
     /* 기자정보 */
     .profile_body .profile_info {margin-top:4px; font-size:16px; line-height:24px;}
-    
+    .profile_body .layer_share { right: -148px; }
     .layer_cheer {left:50%; margin-left:-12px;}
 
     /*  기자의 패키지,구독상품 */

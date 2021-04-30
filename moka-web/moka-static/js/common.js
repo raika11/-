@@ -47,16 +47,16 @@ $(document).ready(function() {
 
     //swiper
     // - mobile 전용
-    mobileSwiper();
-
-    var mtimer;
-    $(window).resize(function(){
-        if (mtimer) {
-            clearTimeout(mtimer);
-        }
-        mtimer = setTimeout(mobileSwiper, 10);
-    });
-
+    if($(".scroll_sm_wrap").length > 0){
+        mobileSwiper();
+        var mtimer;
+        $(window).resize(function(){
+            if (mtimer) {
+                clearTimeout(mtimer);
+            }
+            mtimer = setTimeout(mobileSwiper, 10);
+        });
+    }
 
 });
 
@@ -118,7 +118,7 @@ function mobileSwiper() {
         }
     });
 
-    if ( $(window).width() > 1023 ) {
+    if (window.innerWidth >= BREAKPOINT_LARGE) {
         if (swiper) {
             swiper.destroy();
         }

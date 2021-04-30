@@ -85,31 +85,29 @@ const defaultProps = {
  */
 const MokaImageInput = forwardRef((props, ref) => {
     const { width, height, alertProps, img, setFileValue, alt, className, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton, accept } = props;
-
-    // state
     const [imgSrc, setImgSrc] = useState(null);
     const [alert, setAlert] = useState(false);
+    const rootRef = useRef(null); // dropzone
+    const inputRef = useRef(null); // input type='file'
+    const imgRef = useRef(null); // <img />
+    const wrapRef = useRef(null); // div.figure
+    const defaultRef = useRef(null); // default text 혹은 default img 노출하는 div
 
-    // ref
-    const rootRef = useRef(null);
-    const inputRef = useRef(null);
-    const imgRef = useRef(null);
-    const wrapRef = useRef(null);
-    const defaultRef = useRef(null);
-
+    /**
+     * 이미지 hide
+     */
     const imageHide = useCallback(() => {
-        if (imgRef.current) {
-            imgRef.current.classList.add('d-none');
-        }
+        if (imgRef.current) imgRef.current.classList.add('d-none');
         defaultRef.current.classList.remove('d-none');
         defaultRef.current.classList.add('d-flex');
         setImgSrc(null);
     }, []);
 
+    /**
+     * 이미지 show
+     */
     const imageShow = useCallback(() => {
-        if (imgRef.current) {
-            imgRef.current.classList.remove('d-none');
-        }
+        if (imgRef.current) imgRef.current.classList.remove('d-none');
         defaultRef.current.classList.add('d-none');
         defaultRef.current.classList.remove('d-flex');
     }, []);
@@ -124,29 +122,11 @@ const MokaImageInput = forwardRef((props, ref) => {
     };
 
     /**
-     * 이미지 로드 실패
-     */
-    const handleErrorImage = (e) => {
-        imageHide();
-    };
-
-    /**
-     * 이미지 로드 성공
-     */
-    const handleLoadImage = (e) => {
-        imageShow();
-    };
-
-    /**
      * input의 file 삭제하는 함수
      */
     const deleteFile = useCallback(() => {
-        if (setFileValue) {
-            setFileValue(null);
-        }
-        if (inputRef.current) {
-            inputRef.current.value = null;
-        }
+        if (setFileValue) setFileValue(null);
+        if (inputRef.current) inputRef.current.value = null;
         imageHide();
         setAlert(false);
     }, [setFileValue, imageHide]);
@@ -186,7 +166,6 @@ const MokaImageInput = forwardRef((props, ref) => {
         img ? imageShow() : imageHide();
     }, [imageHide, imageShow, img]);
 
-    // 리턴 ref 설정
     useImperativeHandle(
         ref,
         () => ({
@@ -195,6 +174,7 @@ const MokaImageInput = forwardRef((props, ref) => {
             inputRef: inputRef.current,
             imgRef: imgRef.current,
             defaultTextRef: defaultRef.current,
+            openFileDialog: (e) => rootRef.current.onClick(e),
             deleteFile: deleteFile,
             imageHide: imageHide,
             imageShow: imageShow,
@@ -229,7 +209,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         <div className="dropzone-dragover-mask input-border" />
 
                         {/* 이미지 미리보기 */}
-                        <Figure.Image className="center-image" alt={alt} src={imgSrc} ref={imgRef} onLoad={handleLoadImage} onError={handleErrorImage} />
+                        <Figure.Image className="center-image" alt={alt} src={imgSrc} ref={imgRef} onLoad={imageShow} onError={imageHide} />
 
                         {/* 파일 삭제 버튼 */}
                         {deleteButton && imgSrc && (

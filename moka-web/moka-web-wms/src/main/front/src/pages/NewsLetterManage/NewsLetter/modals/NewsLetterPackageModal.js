@@ -59,7 +59,7 @@ const NewsLetterPackageModal = ({ show, onHide, channelType, onRowClicked }) => 
     }, [show, channelType]);
 
     return (
-        <MokaModal size="lg" width={800} height={800} show={show} onHide={onHide} bodyClassName="d-flex flex-column" title="패키지 검색" draggable>
+        <MokaModal size="md" width={600} height={800} show={show} onHide={onHide} bodyClassName="d-flex flex-column" title="패키지 검색" draggable>
             <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
                 <Form.Row>
                     <Col xs={3} className="p-0 pr-2">
@@ -80,7 +80,7 @@ const NewsLetterPackageModal = ({ show, onHide, channelType, onRowClicked }) => 
                     />
                 </Form.Row>
             </Form>
-            <RelIssueAgGrid pkgDiv={pkgDiv} onRowClicked={onRowClicked} />
+            <RelIssueAgGrid pkgDiv={pkgDiv} onRowClicked={onRowClicked} onHide={onHide} />
         </MokaModal>
     );
 };

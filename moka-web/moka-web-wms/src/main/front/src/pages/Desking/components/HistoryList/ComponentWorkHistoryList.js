@@ -1,7 +1,7 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { DESK_HIST_PUBLISH, DESK_HIST_SAVE } from '@/constants';
+import { DESK_STATUS_PUBLISH, DESK_STATUS_SAVE } from '@/constants';
 import { MokaTable, MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { initialState } from '@store/history';
 import columnDefs from './ComponentWorkHistoryListColumns';
@@ -47,8 +47,8 @@ const ComponentWorkHistoryList = (props) => {
             <Form.Row className="mb-2">
                 <div className="flex-shrink-0 mr-40">
                     <MokaInput as="select" value={search.status} name="status" onChange={handleChangeValue}>
-                        <option value={DESK_HIST_PUBLISH}>전송 기록</option>
-                        <option value={DESK_HIST_SAVE}>임시저장 기록</option>
+                        <option value={DESK_STATUS_PUBLISH}>전송 기록</option>
+                        <option value={DESK_STATUS_SAVE}>임시저장 기록</option>
                     </MokaInput>
                 </div>
                 <MokaInputLabel

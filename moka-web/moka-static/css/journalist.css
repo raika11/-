@@ -107,7 +107,7 @@ font-*,color,text-align,vertical-align, ...
 .journalist_list .list_item{display:block; width:100%;padding:24px; border:1px solid #e2e2e2;}
 
 /*기자 정보 공통 */
-.journalist_list .profile_area{display:flex;}
+.journalist_list .profile_area{display:flex; align-items: center; height: 80px;}
 .journalist_list .profile_area > *{flex:0 0 auto;}
 .journalist_list .profile_image img{max-width:100%;border-radius:100%;border:1px solid rgba(0,0,0,0.03);}
 .flex_area{display: flex; align-items: center;}
@@ -219,8 +219,8 @@ font-*,color,text-align,vertical-align, ...
     .journalist_list .row li{margin-bottom: 16px;}
     .journalist_list .profile_area .profile_image{width:80px;margin-right:16px;}
     .journalist_list .profile_area .profile_body .flex_area .name{font-size:20px; color:#111111;}
-    .journalist_list .headline{height:37px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
-
+    .journalist_list .headline{height:37px; margin-top:14px; padding-top:16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
+    .journalist_list + .button_wrap_wide{margin-top:0px;}
 
 }
 
@@ -266,8 +266,8 @@ font-*,color,text-align,vertical-align, ...
     .journalist_list .row li{margin-bottom: 30px;}
     .journalist_list .profile_area .profile_image{width:72px;margin-right:24px;}
     .journalist_list .profile_area .profile_body .flex_area .name{font-size:18px; color:#111111;}
-    .journalist_list .headline{height:61px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
-    
+    .journalist_list .headline{display: -webkit-box;-webkit-box-orient: vertical; -webkit-line-clamp: 2;  height:61px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
+    .journalist_list + .button_wrap_wide{margin-top:0px;}
 
 }
 

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MokaLoader } from '@components';
-import { DATA_TYPE_DESK } from '@/constants';
+import { DATA_TYPE_DESK, DESK_STATUS_SAVE, DESK_STATUS_WORK, DESK_STATUS_PUBLISH } from '@/constants';
 import { deleteDeskingWorkList } from '@store/desking';
 import ButtonGroup from './ButtonGroup';
 import DeskingWorkAgGrid from '../ComponentWork/DeskingWorkAgGrid';
@@ -87,9 +87,9 @@ const NaverChannelWork = (props) => {
         <div
             className={clsx('component-work', {
                 disabled: component.viewYn === 'N',
-                work: workStatus[component.seq] === 'work',
-                save: workStatus[component.seq] === undefined || workStatus[component.seq] === 'save',
-                publish: workStatus[component.seq] === 'publish',
+                work: workStatus[component.seq] === DESK_STATUS_WORK,
+                save: workStatus[component.seq] === undefined || workStatus[component.seq] === DESK_STATUS_SAVE,
+                publish: workStatus[component.seq] === DESK_STATUS_PUBLISH,
             })}
             id={`agGrid-${component.seq}`}
         >

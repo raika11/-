@@ -685,7 +685,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                         size="sm"
                                         variant="gray-700"
                                         onClick={(e) => {
-                                            imgFileRef.current.rootRef.onClick(e);
+                                            imgFileRef.current.openFileDialog(e);
                                         }}
                                     >
                                         신규등록

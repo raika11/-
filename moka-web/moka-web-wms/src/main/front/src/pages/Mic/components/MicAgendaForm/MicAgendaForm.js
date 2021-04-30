@@ -44,7 +44,9 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
      * 카테고리 변경
      * @param {*} value 변경값
      */
-    const handleChangeCategory = (value) => onChange({ categoryList: value });
+    const handleChangeCategory = (value) => {
+        onChange({ categoryList: value });
+    };
 
     /**
      * 투표 변경

@@ -13,7 +13,7 @@ const propTypes = {
         PropTypes.shape({
             label: PropTypes.string,
             value: PropTypes.string,
-            disabled: PropTypes.bool,
+            usedYn: PropTypes.oneOf(['Y', 'N']),
         }),
     ).isRequired,
     /**
@@ -74,21 +74,22 @@ const defaultProps = {
 };
 
 const customStyles = {
-    option: (provided, state) => ({
-        ...provided,
+    option: (styles, { isSelected, isDisabled }) => ({
+        ...styles,
+        backgroundColor: isSelected && isDisabled ? '#F9FAFC' : styles.backgroundColor,
     }),
-    control: (provided, state) => ({
-        ...provided,
+    control: (styles, state) => ({
+        ...styles,
     }),
-    singleValue: (provided, state) => ({
-        ...provided,
+    singleValue: (styles, state) => ({
+        ...styles,
     }),
-    valueContainer: (provided, state) => ({
-        ...provided,
+    valueContainer: (styles, state) => ({
+        ...styles,
         padding: state.isMulti ? '2px 8px 0px 8px' : '0px 8px',
     }),
-    multiValueLabel: (provided, state) => ({
-        ...provided,
+    multiValueLabel: (styles, state) => ({
+        ...styles,
         fontSize: '12px',
         fontWeight: 500,
     }),
@@ -131,17 +132,18 @@ const MokaAutocomplete = forwardRef((props, ref) => {
     };
 
     useEffect(() => {
-        // options에 없는 value일 경우 diabled === true로 options에 추가
-        if (Array.isArray(value)) {
-            const none = value.filter((v) => options.findIndex((o) => (typeof v === 'string' ? v : v.value) === o.value) < 0);
-            setFullOptions([
-                ...none.map((n) => (typeof n === 'string' ? { value: n, label: `${n} [선택불가]`, disabled: true } : { ...n, label: `${n.label} [선택불가]`, disabled: true })),
-                ...options,
-            ]);
-        } else if (typeof value === 'string') {
-            setFullOptions(options.findIndex((o) => o.value === value) > -1 ? [{ value, label: `${value} [선택불가]`, disabled: true }, ...options] : options);
+        if (value) {
+            // options에 없는 value일 경우 usedYn = 'N'으로 options에 추가
+            if (Array.isArray(value)) {
+                const none = value.filter((v) => options.findIndex((o) => (typeof v === 'string' ? v : v.value) === o.value) < 0);
+                setFullOptions([...none.map((n) => (typeof n === 'string' ? { value: n, label: n, usedYn: 'N' } : { ...n, usedYn: 'N' })), ...options]);
+            } else if (typeof value === 'string') {
+                setFullOptions(options.findIndex((o) => o.value === value) > -1 ? [{ value, label: value, usedYn: 'N' }, ...options] : options);
+            } else {
+                setFullOptions(options.findIndex((o) => o.value === value.value) > -1 ? [{ ...value, usedYn: 'N' }, ...options] : options);
+            }
         } else {
-            setFullOptions(options.findIndex((o) => o.value === value.value) > -1 ? [{ ...value, label: `${value.label} [선택불가]`, disabled: true }, ...options] : options);
+            setFullOptions(options);
         }
     }, [options, value]);
 
@@ -159,7 +161,7 @@ const MokaAutocomplete = forwardRef((props, ref) => {
             hideSelectedOptions={false}
             placeholder={placeholder}
             options={fullOptions}
-            isOptionDisabled={(options) => options.disabled === true}
+            isOptionDisabled={(options) => options.usedYn === 'N'}
             defaultValue={defaultValue}
             value={value}
             onChange={onChange}

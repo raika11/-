@@ -1400,7 +1400,6 @@ dl.date dd {margin-left: 6px;}
     /***                                            title                                             ***/
     /****************************************************************************************************/
     /* sub title 영역 */
-    .title_wrap .title{font-size:18px;}
     .title_wrap .title [class*="ico_"]{margin-left:4px;}
     .title_wrap .exp{font-size:14px;}
 }

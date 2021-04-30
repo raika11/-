@@ -508,7 +508,8 @@ section {width: 100%;}
     /* 그리드 예외처리 */
     .float_left{float:left;width:calc(100% / 12 * 9 - 15px);}
     .float_right{float:right;width:calc(100% / 12 * 3 - 15px);}
-    .row.float_left{width:923px;margin-left:-15px;margin-right:-15px;}
+    .row.float_left{width:auto; margin-left:-15px; margin-right:-15px;}
+    .row.float_right{width:auto; margin-left:-15px; margin-right:-15px;}
 }
 
 

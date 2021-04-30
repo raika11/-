@@ -7,7 +7,7 @@ $(document).ready(function() {
     }
     $(window).scroll(function () {
         var headerHeight = $("header").height();
-        if ($(this).scrollTop() > 0) {
+        if ($(this).scrollTop() > headerHeight) {
             $('.header').addClass('sticky_top');
             // $('.section_header_wrap').addClass('sticky_top');
             $("body").css("margin-top",headerHeight+"px");
@@ -40,7 +40,9 @@ $(document).ready(function() {
     btnCloseModal();
 
     //탭
-    $.tabs.init();
+    if($.tabs){
+        $.tabs.init();
+    }
 });
 
 /* 임시 레이어팝업 */

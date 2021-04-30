@@ -30,7 +30,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
         const { name, value, checked } = e.target;
         if (name === 'channelType') {
             if (value === 'TREND') {
-                onChangeValue({ [name]: value, letterName: '트렌드 뉴스', channelId: '트렌드 뉴스' });
+                onChangeValue({ [name]: value, letterName: '트렌드 뉴스' });
             } else {
                 onChangeValue({ [name]: value, letterName: '' });
             }
@@ -51,7 +51,6 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
      * @param {object} obj 콘텐츠 데이터
      */
     const addChannelType = (obj) => {
-        console.log(obj);
         let channelId, letterName, letterDesc;
         if (temp.channelType === 'ISSUE' || temp.channelType === 'TOPIC' || temp.channelType === 'SERIES') {
             channelId = obj.pkgSeq;
@@ -98,6 +97,11 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [temp.channelType]);
+
+    useEffect(() => {
+        onChangeValue({ channelType: '', channelId: '', channelDataId: '', letterName: '', letterEngName: '', letterDesc: '' });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [temp.sendType]);
 
     return (
         <>

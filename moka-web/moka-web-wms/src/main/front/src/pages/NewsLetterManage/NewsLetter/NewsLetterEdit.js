@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import { MokaCard } from '@/components';
-import { DATE_FORMAT } from '@/constants';
+import { DATE_FORMAT, DB_DATEFORMAT } from '@/constants';
 import { initialState, getNewsLetter, clearNewsLetter } from '@store/newsLetter';
 import NewsLetterBasicInfo from './components/NewsLetterBasicInfo';
 import NewsLetterSendInfo from './components/NewsLetterSendInfo';
+import { messageBox } from '@/utils/toastUtil';
 // import NewsLetterSetInfo from './components/NewsLetterSetInfo';
 
 /**
@@ -36,21 +37,26 @@ const NewsLetterEdit = ({ match }) => {
      * 취소
      */
     const handleClickCancel = () => {
-        history.push(match.path);
+        messageBox.confirm(
+            '뉴스레터 상품 등록을 취소 하시겠습니까?',
+            () => {
+                history.push(match.path);
+            },
+            () => {},
+        );
     };
 
     useEffect(() => {
-        const nd = new Date();
-        setTemp({ ...temp, sendDt: moment(nd).format(DATE_FORMAT), sendTime: moment(nd).startOf('day').format('HH:mm') });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        let st = moment(storeLetter.sendTime, DB_DATEFORMAT);
+        if (!st.isValid()) st = null;
+        let ssd = moment(storeLetter.sendStartDt, DB_DATEFORMAT);
+        if (!ssd.isValid()) st = null;
 
-    useEffect(() => {
         if (sendInfoRef.current) {
             if (sendInfoRef.current.sender.value === 'ja') {
-                setTemp({ ...storeLetter, senderName: '중앙일보', senderEmail: 'root@joongang.co.kr' });
+                setTemp({ ...storeLetter, senderName: '중앙일보', senderEmail: 'root@joongang.co.kr', sendTime: st, sendStartDt: ssd });
             } else {
-                setTemp({ ...storeLetter, senderName: '', senderEmail: '' });
+                setTemp({ ...storeLetter, senderName: '', senderEmail: '', sendTime: st, sendStartDt: ssd });
             }
         }
     }, [storeLetter]);
@@ -96,7 +102,7 @@ const NewsLetterEdit = ({ match }) => {
                 {/* 뉴스레터 기본정보 */}
                 <NewsLetterBasicInfo letterSeq={letterSeq} temp={temp} onChangeValue={handleChangeValue} />
                 {/* 뉴스레터 발송정보 */}
-                <NewsLetterSendInfo ref={sendInfoRef} temp={temp} setTemp={setTemp} onChangeValue={handleChangeValue} />
+                <NewsLetterSendInfo ref={sendInfoRef} temp={temp} onChangeValue={handleChangeValue} />
                 {/* 뉴스레터 설정 */}
                 {/* <NewsLetterSetInfo temp={temp} setTemp={setTemp} onChangeValue={handleChangeValue} /> */}
             </Form>

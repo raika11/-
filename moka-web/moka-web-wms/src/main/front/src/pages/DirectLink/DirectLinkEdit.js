@@ -444,7 +444,7 @@ const DirectLinkEdit = ({ history, match }) => {
                                     <br />
                                     (120*100)
                                     <br />
-                                    <Button variant="gray-700" size="sm" className="mt-2" onClick={(e) => imgFileRef.current.rootRef.onClick(e)}>
+                                    <Button variant="gray-700" size="sm" className="mt-2" onClick={(e) => imgFileRef.current.openFileDialog(e)}>
                                         신규등록
                                     </Button>
                                 </React.Fragment>

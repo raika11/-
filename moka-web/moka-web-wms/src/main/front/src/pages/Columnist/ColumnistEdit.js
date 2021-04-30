@@ -326,7 +326,7 @@ const ColumnistEdit = ({ match }) => {
                             이미지
                             <br />
                             <span className="color-danger">(200*200)</span>
-                            <Button variant="gray-700" size="sm" className="mt-1" onClick={(e) => imgFileRef.current.rootRef.onClick(e)}>
+                            <Button variant="gray-700" size="sm" className="mt-1" onClick={(e) => imgFileRef.current.openFileDialog(e)}>
                                 신규등록
                             </Button>
                         </React.Fragment>

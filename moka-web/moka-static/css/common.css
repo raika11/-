@@ -1082,24 +1082,22 @@ dl.date dd {margin-left: 6px;}
     * ---------------------------------
     */
 .scroll_wrap{width:100%;}
-.skin_group2 [class*="col_"]{padding:0;margin:0 15px;}
+
 .card_skin {border:1px solid #e2e2e2;}
 .card_skin .card_image{margin:-1px;}
 .card_skin .card_body{padding:20px 16px 15px;}
 
-.card_skin .card_foot{position:absolute;left:16px;bottom:0;display:flex;align-items: center;width:calc(100% - 32px);padding:10px 0;margin-top: auto;border-top:1px solid #e2e2e2;}
+.card_skin .card_foot{position:relative;left:16px;bottom:0;display:flex;align-items: center;width:calc(100% - 32px);padding:10px 0;margin-top: auto;border-top:1px solid #e2e2e2;}
 .card_skin .card_foot .title{color:#f6330a;font-size: 14px;font-weight: 700;line-height: 1.57;}
 .card_skin .card_foot .btn{margin-left: auto;padding:3px 10px;}
 .card_skin .card_foot .ico_plus_orange{width:13px;height:13px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.964706 0 0 0 0 0.200000 0 0 0 0 0.039216 0 0 0 1.000000 0'/%3E%3C/filter%3E%3Cfilter id='b'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.964706 0 0 0 0 0.200000 0 0 0 0 0.039216 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23a)' transform='translate(-8 -8)' fill='none' fill-rule='evenodd'%3E%3Cpath d='M8 8h13v13H8z'/%3E%3Cg filter='url(%23b)' transform='translate(8 8)'%3E%3Cg fill='%23F6330A'%3E%3Cpath d='M6 2h1.5v9.5H6z'/%3E%3Cpath d='M2 6h9.5v1.5H2z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
-
-
-
 
 .skin_group2{margin-left:-15px;margin-right:-15px;min-height:291px;width:calc(100% + 30px)}
 .skin_group2 li {height: 100%;}
 .skin_group2 .card{position:relative;margin:0 15px;padding-bottom:50px;border:1px solid #e2e2e2;}
 .skin_group2 .card::before{display:none;}
 
+.skin_group2 [class*="col_"]{padding:0;margin:0 15px;}
 .skin_group2 .col_lg3{width:calc(100% / 12 * 3 - 0.01% - 30px);}
 .skin_group2 .col_lg4{width:calc(100% / 12 * 4 - 0.01% - 30px);}
 
@@ -1119,7 +1117,7 @@ dl.date dd {margin-left: 6px;}
 .skin_group .skin{padding:24px 20px;background-color:#f6330a;}
 .skin_group .skin .headline{color: #fff;}
 .skin_group .skin .btn{margin-top:27px;border-color:#fff;color:#fff;}
-.skin_group .card_foot{position:absolute;left:16px;bottom:0;display:flex;align-items: center;width:calc(100% - 32px);padding:10px 0;margin-top: auto;border-top:1px solid #e2e2e2;}
+/* .skin_group .card_foot{position:absolute;left:16px;bottom:0;display:flex;align-items: center;width:calc(100% - 32px);padding:10px 0;margin-top: auto;border-top:1px solid #e2e2e2;} */
 .skin_group .card_foot .title{color:#f6330a;font-size: 14px;font-weight: 700;line-height: 1.57;}
 .skin_group .card_foot .btn{margin-left: auto;padding:3px 10px;}
 .skin_group .card_foot .ico_plus_orange{width:13px;height:13px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.964706 0 0 0 0 0.200000 0 0 0 0 0.039216 0 0 0 1.000000 0'/%3E%3C/filter%3E%3Cfilter id='b'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.964706 0 0 0 0 0.200000 0 0 0 0 0.039216 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23a)' transform='translate(-8 -8)' fill='none' fill-rule='evenodd'%3E%3Cpath d='M8 8h13v13H8z'/%3E%3Cg filter='url(%23b)' transform='translate(8 8)'%3E%3Cg fill='%23F6330A'%3E%3Cpath d='M6 2h1.5v9.5H6z'/%3E%3Cpath d='M2 6h9.5v1.5H2z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}

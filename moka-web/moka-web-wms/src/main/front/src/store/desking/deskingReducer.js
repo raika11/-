@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './deskingAction';
-import { PAGESIZE_OPTIONS, DESK_HIST_PUBLISH } from '@/constants';
+import { PAGESIZE_OPTIONS, DESK_STATUS_SAVE, DESK_STATUS_WORK, DESK_STATUS_PUBLISH } from '@/constants';
 
 /**
  * initialState
@@ -49,7 +49,7 @@ export const initialState = {
                 size: PAGESIZE_OPTIONS[0],
                 sort: 'seq,desc',
                 regDt: null,
-                status: DESK_HIST_PUBLISH,
+                status: DESK_STATUS_PUBLISH,
                 searchType: 'all', // all/regId/regNm
                 keyword: '',
             },
@@ -166,7 +166,7 @@ export default handleActions(
                 draft.selectedComponent = body;
 
                 // 워크 / 임시저장 / 전송 상태 저장
-                if (status === 'work' || status === 'save' || status === 'publish') {
+                if (status === DESK_STATUS_WORK || status === DESK_STATUS_SAVE || status === DESK_STATUS_PUBLISH) {
                     draft.workStatus[body.seq] = status;
                 }
             });

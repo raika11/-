@@ -129,14 +129,10 @@ export const MAX_GROUP_NUMBER = 8;
 // 편집기사 기본언어
 export const DEFAULT_LANG = 'KR';
 
-// 편집상태
+// 데스킹 Status
 export const DESK_STATUS_WORK = 'WORK';
 export const DESK_STATUS_SAVE = 'SAVE';
 export const DESK_STATUS_PUBLISH = 'PUBLISH';
-
-// 페이지편집의 편집상태
-export const DESK_HIST_SAVE = 'SAVE'; // 임시저장
-export const DESK_HIST_PUBLISH = 'PUBLISH'; // 전송
 
 // 컴포넌트 데이터타입
 export const DATA_TYPE_DESK = 'DESK';
@@ -240,7 +236,7 @@ export const SCHEDULE_STATUS = [
     { status: '9', statusNm: '진행 중' },
 ];
 
-// 데스킹 기사의 채널 타입
+// 컨텐츠별 채널 타입 (데이터 성격)
 export const CHANNEL_TYPE = {
     A: { code: 'A', name: '기사' },
     D: { code: 'D', name: '더미기사' },
@@ -251,7 +247,7 @@ export const CHANNEL_TYPE = {
     G: { code: 'G', name: '그래프' },
 };
 
-// 패키지의 채널 타입
+// 패키지 데스킹 요소별 채널 타입
 export const ISSUE_CHANNEL_TYPE = {
     A: { code: 'A', name: '기사' },
     M: { code: 'M', name: '영상포토' },

@@ -1,4 +1,4 @@
-import { DESK_HIST_PUBLISH } from '@/constants';
+import { DESK_STATUS_PUBLISH } from '@/constants';
 
 export default [
     {
@@ -12,7 +12,7 @@ export default [
         field: 'regDt',
         width: 150,
         cellClassRules: {
-            'text-positive': ({ data }) => data.approvalYn === 'N' && data.status === DESK_HIST_PUBLISH, // 예약 데이터
+            'text-positive': ({ data }) => data.approvalYn === 'N' && data.status === DESK_STATUS_PUBLISH, // 예약 데이터
         },
     },
     {

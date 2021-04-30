@@ -508,7 +508,7 @@ section {width: 100%;}
     /* 그리드 예외처리 */
     .float_left{float:left;width:calc(100% / 12 * 9 - 15px);}
     .float_right{float:right;width:calc(100% / 12 * 3 - 15px);}
-    .row.float_left{width:923px;margin-left:-15px;margin-right:-15px;}
+    .row.float_left{width:calc(100% / 12 * 10 - 15px);margin-left:-15px;margin-right:-15px;}
 }
 
 
@@ -598,9 +598,9 @@ header.title_wrap > .title{padding-top:5px;}
 .title_wrap .title{color:#ff3c14;font-size:18px;line-height:1.44;letter-spacing:-0.4px;font-weight:900;}
 .title_wrap .title [class*="ico_"]{margin-left:6px;}
 .title_wrap .exp{color: #f6330a;font-size: 13px;letter-spacing: -0.33px;}
+.title_wrap .info_bx { display: flex; position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
 .title_wrap .btn_group > *:nth-child(n+2) { margin-left: 21px; }
 .title_wrap .btn_group > *:nth-child(n+2)::before { content: ''; position: absolute; left: -11px; top: 50%; transform: translateY(-50%); width: 1px; height: 16px; background-color: #c9c9c9; }
-
 
 /* 리스트 상단 옵션 */
 .list_option_area { display: flex; align-items: center; justify-content: space-between; margin-top: 24px;  }

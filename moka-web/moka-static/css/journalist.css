@@ -60,6 +60,7 @@ font-*,color,text-align,vertical-align, ...
 .layer_cheer p.desc {margin-top:10px; letter-spacing:-0.2px; color:#999;}
 .layer_info .btn_close,
 .layer_cheer .btn_close {top:10px; right:10px;}
+.layer_info { right: 0; top: 24px; width: 320px; padding: 30px; }
 .layer_info p { font-size: 13px; line-height: 20px; color: #333; }
 .layer_info .date { margin-top: 10px; font-size: 12px; letter-spacing: -0.2px; color: #999; }
 .package_list {overflow:hidden; margin-top:16px; margin-left:-20px;}
@@ -92,7 +93,6 @@ font-*,color,text-align,vertical-align, ...
 .swiper_highlight_list .list_item .date { margin-top: 2px; color: #999; }
 .swiper_highlight_inner { padding-bottom: 25px; }
 .swiper_highlight_inner .pagination_bullet { bottom: 0px; line-height: 5px; }
-.swiper_highlight_inner .swiper-pagination-bullet { width: 5px; height: 5px; line-height: 5px; }
 .swiper_highlight_inner .swiper-pagination-bullet-active { background-color: #f6330a; }
 .list_item:not(.swiper-slide-active) .swiper_highlight_inner { visibility: hidden; } 
 .highlight_wrap .highlight_text { font-size: 16px; line-height: 24px; letter-spacing: -.4px; color: #f6330a; }
@@ -213,6 +213,7 @@ font-*,color,text-align,vertical-align, ...
     .journalist_story_list .card:last-child::before { display: none; }
 
     .swiper_highlight_list { margin-bottom: 40px; }
+    .swiper_highlight_inner .swiper-pagination-bullet { width: 7px; height: 7px; line-height: 7px; }
     .highlight_wrap { margin-top: 20px; }
 
 
@@ -253,14 +254,13 @@ font-*,color,text-align,vertical-align, ...
     .journalist_header .journalist_popularity dt {font-size:14px; line-height:20px; color:#333;}
     
     .layer_cheer {left:50%; margin-left:-12px;}
-    .layer_info { right: 0; top: 24px; width: 320px; padding: 30px; }
 
     .package_list a {padding:15px 38px 17px 24px;}
 
 
 
     .journalist_body { margin-top: 60px; }
-
+    .swiper_highlight_inner .swiper-pagination-bullet { width: 5px; height: 5px; line-height: 5px; }
 
 
     .journalist_list .row li{margin-bottom: 30px;}

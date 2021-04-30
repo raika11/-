@@ -2,70 +2,61 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { MokaModal, MokaSearchInput } from '@/components';
-import RelJpodAgGrid from '../components/RelJpodAgGrid';
+import JpodAgGrid from '../components/RelJpodAgGrid';
+import { getNewsLetterChannelType } from '@store/newsLetter';
 import { initialState, getChnlList, clearStore } from '@store/jpod';
+import { messageBox } from '@/utils/toastUtil';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 목록 > JPOD 채널 선택 모달
  */
-const NewsLetterJpodModal = ({ show, onHide, onRowSelected }) => {
+const NewsLetterJpodModal = ({ show, onHide, channelType, onRowClicked }) => {
     const dispatch = useDispatch();
     const storeSearch = useSelector(({ jpod }) => jpod.channel.search);
     const [search, setSearch] = useState(initialState.channel.search);
-    const [rowSelected, setRowSelected] = useState(null);
 
-    /**
-     * 선택
-     */
-    const handleClickSelect = () => {
-        if (rowSelected) {
-            onRowSelected(rowSelected);
-        }
-        onHide();
+    const handleClickSearch = () => {
+        let ns = { ...search, page: 0 };
+        dispatch(getChnlList({ search: ns }));
     };
-
-    useEffect(() => {
-        let ns = {
-            ...search,
-            usedYn: 'Y',
-        };
-        if (show) {
-            dispatch(getChnlList({ search: ns }));
-        } else {
-            dispatch(clearStore());
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, dispatch]);
 
     useEffect(() => {
         setSearch(storeSearch);
     }, [storeSearch]);
 
+    useEffect(() => {
+        if (show && channelType) {
+            let ns = { ...search, usedYn: 'Y' };
+            dispatch(
+                getNewsLetterChannelType({
+                    channelType,
+                    callback: ({ header, body }) => {
+                        if (header.success && body) {
+                            dispatch(getChnlList({ search: ns }));
+                        } else {
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
+        } else if (!show) {
+            dispatch(clearStore());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show, channelType]);
+
     return (
-        <MokaModal
-            size="lg"
-            width={800}
-            height={800}
-            show={show}
-            onHide={onHide}
-            bodyClassName="d-flex flex-column"
-            title="J팟 채널 검색"
-            buttons={[
-                { text: '선택', variant: 'positive', onClick: handleClickSelect },
-                { text: '취소', variant: 'negative', onClick: () => onHide() },
-            ]}
-            draggable
-        >
-            <hr className="divider" />
+        <MokaModal size="md" width={600} height={800} show={show} onHide={onHide} bodyClassName="d-flex flex-column" title="J팟 채널 검색" draggable>
             <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
                 <MokaSearchInput
                     className="flex-fill"
                     placeholder="채널명을 입력하세요"
                     value={search.keyword}
                     onChange={(e) => setSearch({ ...search, keyword: e.target.value })}
+                    onSearch={handleClickSearch}
                 />
             </Form>
-            <RelJpodAgGrid show={show} onHide={onHide} setRowSelected={setRowSelected} />
+            <JpodAgGrid onHide={onHide} onRowClicked={onRowClicked} />
         </MokaModal>
     );
 };

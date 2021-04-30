@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
@@ -13,6 +13,7 @@ const propTypes = {
         PropTypes.shape({
             label: PropTypes.string,
             value: PropTypes.string,
+            usedYn: PropTypes.oneOf(['Y', 'N']),
         }),
     ).isRequired,
     /**
@@ -73,21 +74,22 @@ const defaultProps = {
 };
 
 const customStyles = {
-    option: (provided, state) => ({
-        ...provided,
+    option: (styles, { isSelected, isDisabled }) => ({
+        ...styles,
+        backgroundColor: isSelected && isDisabled ? '#F9FAFC' : styles.backgroundColor,
     }),
-    control: (provided, state) => ({
-        ...provided,
+    control: (styles, state) => ({
+        ...styles,
     }),
-    singleValue: (provided, state) => ({
-        ...provided,
+    singleValue: (styles, state) => ({
+        ...styles,
     }),
-    valueContainer: (provided, state) => ({
-        ...provided,
+    valueContainer: (styles, state) => ({
+        ...styles,
         padding: state.isMulti ? '2px 8px 0px 8px' : '0px 8px',
     }),
-    multiValueLabel: (provided, state) => ({
-        ...provided,
+    multiValueLabel: (styles, state) => ({
+        ...styles,
         fontSize: '12px',
         fontWeight: 500,
     }),
@@ -99,8 +101,13 @@ const customStyles = {
  */
 const MokaAutocomplete = forwardRef((props, ref) => {
     const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, defaultValue, value, onChange, className, isInvalid, maxMenuHeight, ...rest } = props;
+    const [fullOptions, setFullOptions] = useState([]);
 
-    // 검색 아이콘
+    /**
+     * 검색아이콘
+     * @param {object} props param
+     * @returns 검색아이콘 jsx
+     */
     const IndicatorsContainer = (props) => {
         const { children, ...rest } = props;
         const onClick = (e) => {
@@ -124,6 +131,22 @@ const MokaAutocomplete = forwardRef((props, ref) => {
         );
     };
 
+    useEffect(() => {
+        if (value) {
+            // options에 없는 value일 경우 usedYn = 'N'으로 options에 추가
+            if (Array.isArray(value)) {
+                const none = value.filter((v) => options.findIndex((o) => (typeof v === 'string' ? v : v.value) === o.value) < 0);
+                setFullOptions([...none.map((n) => (typeof n === 'string' ? { value: n, label: n, usedYn: 'N' } : { ...n, usedYn: 'N' })), ...options]);
+            } else if (typeof value === 'string') {
+                setFullOptions(options.findIndex((o) => o.value === value) > -1 ? [{ value, label: value, usedYn: 'N' }, ...options] : options);
+            } else {
+                setFullOptions(options.findIndex((o) => o.value === value.value) > -1 ? [{ ...value, usedYn: 'N' }, ...options] : options);
+            }
+        } else {
+            setFullOptions(options);
+        }
+    }, [options, value]);
+
     return (
         <Select
             ref={ref}
@@ -137,7 +160,8 @@ const MokaAutocomplete = forwardRef((props, ref) => {
             isMulti={isMulti}
             hideSelectedOptions={false}
             placeholder={placeholder}
-            options={options}
+            options={fullOptions}
+            isOptionDisabled={(options) => options.usedYn === 'N'}
             defaultValue={defaultValue}
             value={value}
             onChange={onChange}

@@ -103,8 +103,6 @@
     .col_lg44{flex:0 0 auto;width:44.3333333333%;}
 
     /* float*/
-    .float_left{float:left;width:893px;}
-    .float_right{float:right;width:278px;}
 
     /* card */
     .card_right{position: relative;  padding-top: 12px;}

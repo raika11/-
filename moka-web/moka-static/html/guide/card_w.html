@@ -93,37 +93,36 @@
 <script>
 
 
-
-
-
-
-
 $(document).ready(function() {
-    if ( $(window).width() < 1024 ) {
-        mobileSwiper();
-    };
+    mobileSwiper();
+
+    var mtimer;
+    $(window).resize(function(){
+        if (mtimer) {
+            clearTimeout(mtimer);
+        }
+        mtimer = setTimeout(mobileSwiper, 10);
+    });
 });
+
 
 
 function mobileSwiper() {
     var swiper = new Swiper('.scroll_sm_wrap', {
-        slidesPerView: 1.8,
+        slidesPerView: 2,
+        slidesPerGroup: 1,
         spaceBetween: 10,
-        pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-        },
 
     });
 
-    $(document).resize(function() {
-        if ( $(window).width() > 1023 ) {
-                if (swiper) {
-                    swiper.destroy();
-                } 
-            };
-    });
+    if ( $(window).width() > 1023 ) {
+        if (swiper) {
+            swiper.destroy();
+        }
+    }
+
 };
+
 </script>
 </body>
 </html>

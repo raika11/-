@@ -1,22 +1,16 @@
 $(document).ready(function() {
-    var swiper_highlight = new Swiper('.swiper-container.swiper_highlight_list', {
+    var swiper_list = new Swiper('.swiper-container.swiper_list', {
+        infinite: true,
         autoHeight: true,
         spaceBetween: 1,
-        touchRatio: 1,
-        pagination: {
-            el: '.swiper-pagination',
-            type: 'fraction',
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        dots:true,
+        arrows:false,
+        autoplay: {
+            delay: 2000,
+            disableOnInteraction: true // 쓸어 넘기거나 버튼 클릭 시 자동 슬라이드 정지.
         },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        breakpointsInverse: true,
-        breakpoints: {
-            1024: {
-                touchRatio: 0
-            }
-        }
     });
 });
     

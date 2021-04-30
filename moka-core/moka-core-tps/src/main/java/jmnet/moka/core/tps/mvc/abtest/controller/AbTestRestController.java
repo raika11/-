@@ -6,16 +6,19 @@ import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseAllDTO;
+import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseResultDTO;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSaveDTO;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSearchDTO;
 import jmnet.moka.core.tps.mvc.abtest.entity.AbTestCase;
 import jmnet.moka.core.tps.mvc.abtest.service.AbTestCaseService;
+import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseResultDtlVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseResultVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseSaveVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseVO;
@@ -123,6 +126,15 @@ public class AbTestRestController extends AbstractCommonController {
         AbTestCaseSaveVO abTestCaseSaveVO = modelMapper.map(abTestCaseSaveDTO, AbTestCaseSaveVO.class);
 
         try {
+            AbTestCase abtestCase = abTestCaseService.findChk(abTestCaseSaveDTO);
+
+            //확인 알럿 - 페이지, 영역, 테스트대상을 비교하여 중복 케이스가 있을경우  확인 알럿 띄움
+            if (McpString.isNotEmpty(abtestCase)) {
+                if (McpString.isNotEmpty(abtestCase.getAbtestSeq())) {
+                    log.info("getAbtestSeq {}", abtestCase.getAbtestSeq());
+                    throw new Exception(messageByLocale.get("tps.abtest.error.insert.dup", abtestCase.getPageValue()));
+                }
+            }
 
             // insert
             Integer abtestSeq = abTestCaseService.insertABTestCase(abTestCaseSaveVO);
@@ -292,6 +304,30 @@ public class AbTestRestController extends AbstractCommonController {
 
         tpsLogger.success(ActionType.SELECT);
 
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * ABTest 결과 상세 정보 조회
+     *
+     * @param abtestSeq A/B테스트 일련번호 (필수)
+     * @return ABTest정보
+     * @throws NoDataException A/B테스트 결과 정보가 없음
+     */
+    @ApiOperation(value = "A/B테스트 결과 상세 조회")
+    @GetMapping("/result/{abtestSeq}")
+    public ResponseEntity<?> getABTestResult(@ApiParam("A/B테스트 일련번호(필수)") @PathVariable("abtestSeq")
+    @Size(min = 1, max = 4, message = "{tps.abtest.error.notnull.abtestSeq}") Long abtestSeq)
+            throws NoDataException {
+
+        // 조회
+        AbTestCaseResultDtlVO returnValue = abTestCaseService.findABTestResultById(abtestSeq);
+
+        AbTestCaseResultDTO dto = modelMapper.map(returnValue, AbTestCaseResultDTO.class);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        ResultDTO<AbTestCaseResultDTO> resultDto = new ResultDTO<>(dto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 }

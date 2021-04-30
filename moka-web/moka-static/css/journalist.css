@@ -58,7 +58,10 @@ font-*,color,text-align,vertical-align, ...
 .layer_cheer {top:29px; width:185px; padding:30px;}
 .layer_cheer p {font-size:13px; line-height:22px; letter-spacing:-0.5px; text-align:left;}
 .layer_cheer p.desc {margin-top:10px; letter-spacing:-0.2px; color:#999;}
+.layer_info .btn_close,
 .layer_cheer .btn_close {top:10px; right:10px;}
+.layer_info p { font-size: 13px; line-height: 20px; color: #333; }
+.layer_info .date { margin-top: 10px; font-size: 12px; letter-spacing: -0.2px; color: #999; }
 .package_list {overflow:hidden; margin-top:16px; margin-left:-20px;}
 .package_list li {float:left; width:calc((100% - 40px)/2); margin-top:16px; margin-left:20px;}
 .package_list a {display: block; position:relative; padding:15px 38px 17px 24px; border:1px solid #f3f3f3; background:#f9f9f9; font-size:0;}
@@ -104,7 +107,7 @@ font-*,color,text-align,vertical-align, ...
 .journalist_list .list_item{display:block; width:100%;padding:24px; border:1px solid #e2e2e2;}
 
 /*기자 정보 공통 */
-.journalist_list .profile_area{display:flex;}
+.journalist_list .profile_area{display:flex; align-items: center;}
 .journalist_list .profile_area > *{flex:0 0 auto;}
 .journalist_list .profile_image img{max-width:100%;border-radius:100%;border:1px solid rgba(0,0,0,0.03);}
 .flex_area{display: flex; align-items: center;}
@@ -166,7 +169,6 @@ font-*,color,text-align,vertical-align, ...
 
 /* Medium devices (mobile ~ tablet, 1023px and down) */
 @media (max-width:1023px) {
-    .ad { display: none; }
 
 /****************************************************************************************************/
 /***                                           layout                                             ***/
@@ -217,8 +219,8 @@ font-*,color,text-align,vertical-align, ...
     .journalist_list .row li{margin-bottom: 16px;}
     .journalist_list .profile_area .profile_image{width:80px;margin-right:16px;}
     .journalist_list .profile_area .profile_body .flex_area .name{font-size:20px; color:#111111;}
-    .journalist_list .headline{height:37px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
-
+    .journalist_list .headline{height:37px; margin-top:14px; padding-top:16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
+    .journalist_list + .button_wrap_wide{margin-top:0px;}
 
 }
 
@@ -251,6 +253,7 @@ font-*,color,text-align,vertical-align, ...
     .journalist_header .journalist_popularity dt {font-size:14px; line-height:20px; color:#333;}
     
     .layer_cheer {left:50%; margin-left:-12px;}
+    .layer_info { right: 0; top: 24px; width: 320px; padding: 30px; }
 
     .package_list a {padding:15px 38px 17px 24px;}
 
@@ -263,8 +266,8 @@ font-*,color,text-align,vertical-align, ...
     .journalist_list .row li{margin-bottom: 30px;}
     .journalist_list .profile_area .profile_image{width:72px;margin-right:24px;}
     .journalist_list .profile_area .profile_body .flex_area .name{font-size:18px; color:#111111;}
-    .journalist_list .headline{height:61px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
-    
+    .journalist_list .headline{display: -webkit-box;-webkit-box-orient: vertical; -webkit-line-clamp: 2;  height:61px; margin-top:14px; padding-top:16px; overflow: hidden; border-top: 1px solid #e2e2e2; font-size:14px; line-height: 22px; letter-spacing: -0.4px;}
+    .journalist_list + .button_wrap_wide{margin-top:0px;}
 
 }
 

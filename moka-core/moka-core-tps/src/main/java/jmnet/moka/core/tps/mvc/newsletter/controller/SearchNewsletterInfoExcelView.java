@@ -102,7 +102,7 @@ public class SearchNewsletterInfoExcelView extends AbstractExcelView {
                             .getMemberNm() + "(" + newsletter
                             .getRegMember()
                             .getMemberId() + ")");
-            // TODO: 전용상품여부(구독상품여부)
+            // 전용상품여부(구독상품여부)
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(newsletter.getScbYn());

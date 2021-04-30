@@ -66,14 +66,23 @@
                             <header class="title_wrap">
                                 <nav class="header_nav">
                                     <ul class="nav">
-                                        <li class="nav_item"><h1><a href="#" class="nav_link active">실시간</a></h1></li>
+                                        <li class="nav_item"><h1><a href="#" class="nav_link" aria-selected="true" >실시간</a></h1></li>
                                         <li class="nav_item"><h2><a href="#" class="nav_link">주간</a></h2></li>
                                         <li class="nav_item"><h2><a href="#" class="nav_link">월간</a></h2></li>
                                     </ul>
                                     <span class="btn_link_txt"><h2><a href="#">지난 TOP기사<i class="ico_arrow_right"></i></a></h2></span>
                                 </nav>
                                 <div class="btn_group">
-                                    <button type="button" class="btn_info"><i class="ico_info"></i><span class="visually_hidden">정보</span></button>
+                                    <div class="info_bx">
+                                        <button type="button" class="btn_info" onclick="openLayer();" ><i class="ico_info"></i><span class="visually_hidden">정보</span></button>
+                                        <div class="layer_popup" style="display: none;" id=""><!-- 여기에 개별 클래스 추가 -->
+                                            <div class="layer_body">
+                                                <p>기자에게 보내는 응원은 하루 1번 가능합니다.</p>
+                                                <p class="desc">(0시 기준)</p>
+                                            </div>
+                                            <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">닫기</span></button>
+                                        </div>
+                                    </div>
                                     <div class="dropdown ">
                                         <button type="button" class="dropdown_toggle">북마크 많은 순<i class="ico_arrow"></i></button>
                                         <div id="dropdown" class="dropdown_menu right">
@@ -121,7 +130,7 @@
                         </section>
                     </div>
                     <div class="col_lg3">
-                        <div class="ad float_right">
+                        <div class="ad">
                             내부 서비스 배너 or 광고 영역
                         </div>
                     </div>

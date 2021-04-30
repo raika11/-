@@ -79,7 +79,7 @@ font-*,color,text-align,vertical-align, ...
     .top_history_list .card_body .time { transform: translateY(-5px); height: 26px; font-size: 13px; line-height: 22px; }
     .top_history_list .card_body .time.first_item:before { display: block; }
     .top_history_list .headline { height: 55px; margin-top: 6px; font-size: 18px; line-height: 28px; }
-    .top_history_list .card_image { height: 156px; margin-top: 12px; }
+    .top_history_list .card_image { margin-top: 12px; }
     .top_history_list [class*='btn_'] { top: 16px; width: 25px; height: 25px; margin-top: 0; border: 1px solid #e2e2e2; border-radius: 50%; background-size: 13px 13px; }
     .top_history_list .swiper-button-disabled { background-color: #F7F7F7; }
     .top_history_list .btn_prev { left: inherit; right: 31px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M15 0v15H0V0z'/%3E%3Cpath fill='%231D1D1D' d='M9.75 2.284l.53.53-4.684 4.687 4.683 4.683-.53.53L4.534 7.5 9.75 2.285z'/%3E%3C/g%3E%3C/svg%3E"); }

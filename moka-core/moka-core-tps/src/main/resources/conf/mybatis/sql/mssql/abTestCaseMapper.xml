@@ -283,6 +283,15 @@
       ) }
   </select>
 
+  <!--ABTest 결과 상세 정보 조회 -->
+  <select id="findABTestResultById" parameterType="ABTestCaseSearchDTO"
+    resultType="AbTestCaseResultDtlVO"
+    statementType="CALLABLE">
+    {call UPA_ABTEST_CASE_RESULT_SEL(
+      #{abtestSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
+  </select>
+
   <insert id="insertABTestCase" parameterType="ABTestCaseSaveVO"
     statementType="CALLABLE">
     { call UPA_ABTEST_CASE_INS(

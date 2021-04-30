@@ -61,30 +61,63 @@ const ReporterListModal = (props) => {
      */
     const getReporterList = useCallback(
         ({ search: appendSearch }) => {
-            const ns = { ...search, ...appendSearch };
-            setSearch(ns);
+            setSearch({ ...search, ...appendSearch });
 
-            dispatch(
-                getReporterListModal({
-                    search: ns,
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            setRowData(
-                                body.list.map((reporter) => ({
-                                    ...reporter,
-                                    jplusRepDivNm: (reporter.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
-                                    onClick: handleRowClicked,
-                                })),
-                            );
-                            setTotal(body.totalCnt);
-                        } else {
-                            messageBox.alert(header.message);
-                        }
-                    },
-                }),
-            );
+            if (channelType) {
+                dispatch(
+                    getNewsLetterChannelType({
+                        channelType,
+                        callback: ({ header, body }) => {
+                            if (header.success && body) {
+                                dispatch(
+                                    getReporterListModal({
+                                        search,
+                                        callback: ({ header, body }) => {
+                                            if (header.success) {
+                                                setRowData(
+                                                    body.list.map((reporter) => ({
+                                                        ...reporter,
+                                                        jplusRepDivNm: (reporter.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
+                                                        letterYn: letterChannelTypeList.indexOf(reporter.repSeq) > -1 ? 'Y' : 'N',
+                                                        onClick: handleRowClicked,
+                                                    })),
+                                                );
+                                                setTotal(body.totalCnt);
+                                            } else {
+                                                messageBox.alert(header.message);
+                                            }
+                                        },
+                                    }),
+                                );
+                            } else {
+                                messageBox.alert(header.message);
+                            }
+                        },
+                    }),
+                );
+            } else {
+                dispatch(
+                    getReporterListModal({
+                        search,
+                        callback: ({ header, body }) => {
+                            if (header.success) {
+                                setRowData(
+                                    body.list.map((reporter) => ({
+                                        ...reporter,
+                                        jplusRepDivNm: (reporter.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
+                                        onClick: handleRowClicked,
+                                    })),
+                                );
+                                setTotal(body.totalCnt);
+                            } else {
+                                messageBox.alert(header.message);
+                            }
+                        },
+                    }),
+                );
+            }
         },
-        [search, dispatch, handleRowClicked],
+        [search, channelType, dispatch, letterChannelTypeList, handleRowClicked],
     );
 
     /**
@@ -130,22 +163,7 @@ const ReporterListModal = (props) => {
 
     useEffect(() => {
         if (show) {
-            if (channelType) {
-                dispatch(
-                    getNewsLetterChannelType({
-                        channelType,
-                        callback: ({ header, body }) => {
-                            if (header.success && body) {
-                                getReporterList({});
-                            } else {
-                                messageBox.alert(header.message);
-                            }
-                        },
-                    }),
-                );
-            } else {
-                getReporterList({});
-            }
+            getReporterList({});
         } else {
             setSearch(initialState.search);
             setRowData([]);
@@ -157,28 +175,6 @@ const ReporterListModal = (props) => {
     useEffect(() => {
         if (show && !jplusRepRows) dispatch(getJplusRep());
     }, [dispatch, jplusRepRows, show]);
-
-    useEffect(() => {
-        if (show) {
-            setRowData(
-                rowData.map((row) => {
-                    if (channelType) {
-                        return {
-                            ...row,
-                            letterYn: letterChannelTypeList.indexOf(row.repSeq) > -1 ? 'Y' : 'N',
-                            onClick: handleRowClicked,
-                        };
-                    } else {
-                        return {
-                            ...row,
-                            onClick: handleRowClicked,
-                        };
-                    }
-                }),
-            );
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, channelType, handleRowClicked]);
 
     return (
         <MokaModal show={show} onHide={handleHide} title="기자 검색" size="xl" bodyClassName="d-flex flex-column" width={970} height={800} centered draggable>

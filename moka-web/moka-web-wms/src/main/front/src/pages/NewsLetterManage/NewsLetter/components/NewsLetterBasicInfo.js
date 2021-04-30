@@ -13,7 +13,7 @@ import NewsLetterArticlePackageModal from '../modals/NewsLetterArticlePackageMod
 /**
  * 뉴스레터 편집 > 기본정보 설정
  */
-const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
+const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
     const storeLetter = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterInfo);
 
     // 모달 state
@@ -47,19 +47,25 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
 
     /**
      * 발송 콘텐츠 모달 > 콘텐츠 선택
+     * (뉴스레터 명(한글), 뉴스레터 설명 셋팅)
      * @param {object} obj 콘텐츠 데이터
      */
     const addChannelType = (obj) => {
-        let channelId;
+        console.log(obj);
+        let channelId, letterName, letterDesc;
         if (temp.channelType === 'ISSUE' || temp.channelType === 'TOPIC' || temp.channelType === 'SERIES') {
             channelId = obj.pkgSeq;
+            letterName = obj.pkgTitle;
+            letterDesc = obj.pkgDesc;
         } else if (temp.channelType === 'REPORTER') {
             channelId = obj.repSeq;
         } else if (temp.channelType === 'JPOD') {
             channelId = obj.chnlSeq;
+            letterName = obj.chnlNm;
+            letterDesc = obj.chnlMemo;
         }
 
-        setTemp({ ...temp, channelId });
+        onChangeValue({ channelId, letterName, letterDesc });
     };
 
     /**
@@ -67,7 +73,11 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
      * @param {any} data 파일데이터
      */
     const handleFileValue = (data) => {
-        setTemp({ ...temp, letterImgFile: data });
+        if (data) {
+            onChangeValue({ letterImgFile: data });
+        } else {
+            onChangeValue({ letterImg: null, letterImgFile: data });
+        }
     };
 
     /**
@@ -76,13 +86,15 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
      * @param {*} file 파일데이터
      */
     const handleThumbFileApply = (imageSrc, file) => {
-        setTemp({ ...temp, letterImg: imageSrc, letterImgFile: file });
+        onChangeValue({ letterImg: imageSrc, letterImgFile: file });
     };
 
     useEffect(() => {
         // 채널 타입이 바뀌면 channelId, channelDataId 초기화
         if (temp.channelType !== 'TREND') {
-            onChangeValue({ channelId: '', channelDataId: '' });
+            onChangeValue({ channelId: '', channelDataId: '', letterName: '', letterDesc: '' });
+        } else {
+            onChangeValue({ channelDataId: '', letterDesc: '' });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [temp.channelType]);

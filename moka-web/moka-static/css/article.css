@@ -59,7 +59,7 @@ font-*,color,text-align,vertical-align, ...
 .sticky_menu .ico_print { width: 23px; height: 24px; background: #ddd; }
 .sticky_menu .reader_area { position: relative; margin-top: 16px; padding-top: 16px; text-align: center; }
 .sticky_menu .reader_area:before { content: ''; position: absolute; top: 0; left: 50%; width: 33px; height: 1px; transform: translateX(-50%); background: #e2e2e2;}
-.sticky_menu .reader_area .cnt { display: block; margin-bottom: 2px; font-family: "Noto Sans KR"; font-size: 16px; line-height: 24px; letter-spacing: -0.4px; color: #111; }
+.sticky_menu .reader_area .cnt { display: block; margin-bottom: 2px; font-family: "Noto Sans KR"; font-size: 16px; line-height: 24px;  color: #111; }
 
 .sticky_menu .layer_share { left: 90px; top: 158px; width: 288px; height: 207px; padding: 14px 20px 20px; }
 .sticky_menu .layer_share ul { margin: 1px 5px 0; }
@@ -145,7 +145,7 @@ font-*,color,text-align,vertical-align, ...
 /* .subscription_wrap .title_wrap{padding:0;margin-bottom:17px;height:28px;} */
 .subscription_wrap .title_wrap{display:flex;align-items: center;padding-top: unset;}
 .subscription_wrap .title_wrap button{margin-left: auto;}
-.subscription_wrap .title {font-size: 16px;font-weight: 700;line-height: 1.5;letter-spacing: -0.4px;color:#f6330a;}
+.subscription_wrap .title {font-size: 16px;font-weight: 700;line-height: 1.5;color:#f6330a;}
 .subscription_info {padding:24px 0 18px;color:#f6330a;font-size: 14px;line-height: 1.5;letter-spacing: normal;word-break: break-all;text-align: justify;}
 
 /*** 팩플레터 ***/

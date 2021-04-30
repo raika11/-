@@ -54,7 +54,7 @@
     .card_right_list .card_image{float:right;margin-left:12px;}
     .card_right_list .card_image img{width:62px;}
     .card_right_list .card_body{position: relative;}
-    .card_right_list .card_body .headline{width: calc(100% - 62px); padding-right: 16px; font-size: 18px; font-weight: 700; line-height: 27px; letter-spacing: -0.4px;}
+    .card_right_list .card_body .headline{width: calc(100% - 62px); padding-right: 16px; font-size: 18px; font-weight: 700; line-height: 27px; }
     .card_right_list .rank_count{position: absolute; left: 0; top: 0; width: 28px; font-size: 0; background-position: 0 0;}
     .card_right_list .card_body .meta{margin-top:0;}
 
@@ -121,7 +121,7 @@
     .card_right_list .card_image{float:right;margin-left:12px;}
     .card_right_list .card_image img{width:72px;}
     .card_right_list .card_body{position: relative;}
-    .card_right_list .card_body .headline{width: calc(100% - 72px); padding-right: 16px; font-size: 16px; font-weight: 700; line-height: 24px; letter-spacing: -0.4px;}
+    .card_right_list .card_body .headline{width: calc(100% - 72px); padding-right: 16px; font-size: 16px; font-weight: 700; line-height: 24px; }
     .card_right_list .rank_count{position: absolute; left: 0; top: 0; width: 28px; font-size: 0; background-position: 0 0;}
     .card_right_list .card_body .meta{margin-top:0;}
     

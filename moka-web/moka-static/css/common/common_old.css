@@ -313,7 +313,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 /* outline */
 .btn_outline_default {border: 1px solid #333;}
 .btn_outline_gray {border: 1px solid #d5d5d5;}
-.btn_outline_orange { height: 36px; padding: 0 14px; font-size: 14px; font-weight: 700; letter-spacing: -0.4px; color: #fb502f; border: 1px solid #ff3c14; }
+.btn_outline_orange { height: 36px; padding: 0 14px; font-size: 14px; font-weight: 700;  color: #fb502f; border: 1px solid #ff3c14; }
 /* radius */
 .btn_radius1 {border-radius: 17px;}
 .btn_radius2 {border-radius: 19px;}

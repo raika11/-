@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.abtest.mapper;
 import java.util.List;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSearchDTO;
+import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseResultDtlVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseResultVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseSaveVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseVO;
@@ -44,6 +45,14 @@ public interface AbTestCaseMapper extends BaseMapper<AbTestCaseVO, AbTestCaseSea
      * @return 조회 결과
      */
     AbTestCaseSaveVO findABTestById(Long abtestSeq);
+
+    /**
+     * ABTest 결과 상세 조회
+     *
+     * @param abtestSeq 검색 조건
+     * @return 조회 결과
+     */
+    AbTestCaseResultDtlVO findABTestResultById(Long abtestSeq);
 
     /**
      * ABTest 등록

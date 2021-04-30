@@ -69,9 +69,8 @@ font-*,color,text-align,vertical-align, ...
 .layer_info .date { margin-top: 10px; font-size: 12px; letter-spacing: -0.2px; color: #999; }
 .layer_info .btn_close {top:10px; right:10px;}
 /*  기자의 패키지,구독상품 */
-.package_list {overflow:hidden; margin-top:16px; margin-left:-20px;}
-.package_list li {float:left; width:calc((100% - 40px)/2); margin-top:16px; margin-left:20px;}
-.package_list a {display: block; position:relative; padding:15px 38px 17px 24px; border:1px solid #f3f3f3; background:#f9f9f9; font-size:0;}
+.package_list {overflow:hidden; }
+.package_list a {display: block; position:relative; border:1px solid #f3f3f3; background:#f9f9f9; font-size:0;}
 .package_list a:hover {text-decoration:none;}
 .package_list a strong {display:inline-block; letter-spacing:-0.4px; color:#111;}
 .package_list a span {display:block; min-height:20px; margin-top:4px; font-size:14px; color: #666; text-overflow:ellipsis; overflow: hidden; white-space: nowrap;}
@@ -81,7 +80,7 @@ font-*,color,text-align,vertical-align, ...
 .journalist_body::after { display: block; content: ''; clear: both; }
 .journalist_story_list .card:last-child::before { display: none; }
 
-/* 하이라이트 스와이프 */
+/* 최근하이라이트 스와이프 */
 .swiper_highlight_list { position: relative; margin-top: 16px; }
 .swiper_highlight_list .swiper-button-prev, 
 .swiper_highlight_list .swiper-button-next { top: auto; bottom: 0; }
@@ -183,8 +182,8 @@ font-*,color,text-align,vertical-align, ...
     .layer_cheer {top:33px;}
 
     /*  기자의 패키지,구독상품 */
-    .package_list {margin:24px 0 0;}
-    .package_list li {float:none; width:100%; margin: 6px 0 0;}
+    .package_list { margin-top:24px; }
+    .package_list li:nth-child(n+2) { margin-top: 6px; }
     .package_list li strong {font-size:16px; line-height:24px;}
     .package_list li span {color:#111;}
     .package_list li:only-child a {display:block;}
@@ -238,18 +237,22 @@ font-*,color,text-align,vertical-align, ...
     
     .layer_cheer {left:50%; margin-left:-12px;}
     .layer_info { right: 0; top: 24px; width: 320px; padding: 30px; }
-    
+
     /*  기자의 패키지,구독상품 */
-    .package_list li:only-child {float:none; width: inherit;}
+    .package_list { margin-top: 32px; margin-left: -10px; margin-right: -10px;}
+    .package_list li { margin-left: 10px; margin-right: 10px;  }
     .package_list li:only-child a {display:flex; align-items: center; width:inherit;}
     .package_list li:only-child a span {margin-top:0;}
     .package_list li:only-child a span:before {display:inline-block; content:''; transform:translateY(2px); width:1px; height:16px; padding-left: 16px; margin-left: 16px; border-left:1px solid #bcbcbc;}
+    .package_list li:not(:only-child) {float:left; width:calc((100% - 40px)/2); }
+    .package_list li:nth-child(n+3) { margin-top: 16px; }
     .package_list a {padding:15px 38px 17px 24px;}
     .package_list a strong {font-size:18px; line-height:28px; }
     
     /* journalist_body */
     .journalist_body { margin-top: 60px; }
-
+    /* 최근하이라이트 스와이프 */
+    .swiper_highlight_list { padding-bottom: 40px; }
 
     /* 기자목록 */
     .journalist_list .row li{margin-bottom: 30px;}

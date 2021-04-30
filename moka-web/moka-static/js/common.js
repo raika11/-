@@ -1,16 +1,23 @@
 $(document).ready(function() {
 
     //header stiky
-    if ($(this).scrollTop() > 10) {
+    if ($(this).scrollTop() > 0) {
         $('.header').addClass('sticky_top');
+        // $('.section_header_wrap').addClass('sticky_top');
     }
     $(window).scroll(function () {
-        if ($(this).scrollTop() > 10) {
+        var headerHeight = $("header").height();
+        if ($(this).scrollTop() > headerHeight) {
             $('.header').addClass('sticky_top');
+            // $('.section_header_wrap').addClass('sticky_top');
+            $("body").css("margin-top",headerHeight+"px");
         } else {
             $('.header').removeClass('sticky_top');
+            // $('.section_header_wrap').removeClass('sticky_top');
+            $("body").css("margin-top","0px");
         }
     });
+
 
     //li형 select box
     $(".dropdown_toggle").on("click", function(){
@@ -31,6 +38,11 @@ $(document).ready(function() {
     
     //레이어팝업 닫기
     btnCloseModal();
+
+    //탭
+    if($.tabs){
+        $.tabs.init();
+    }
 });
 
 /* 임시 레이어팝업 */

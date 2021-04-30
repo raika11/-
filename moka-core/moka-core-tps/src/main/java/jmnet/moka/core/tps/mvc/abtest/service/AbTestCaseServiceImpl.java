@@ -7,10 +7,12 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSaveDTO;
 import jmnet.moka.core.tps.mvc.abtest.dto.AbTestCaseSearchDTO;
 import jmnet.moka.core.tps.mvc.abtest.entity.AbTestCase;
 import jmnet.moka.core.tps.mvc.abtest.mapper.AbTestCaseMapper;
 import jmnet.moka.core.tps.mvc.abtest.repository.AbTestCaseRepository;
+import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseResultDtlVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseResultVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseSaveVO;
 import jmnet.moka.core.tps.mvc.abtest.vo.AbTestCaseVO;
@@ -56,8 +58,26 @@ public class AbTestCaseServiceImpl implements AbTestCaseService {
     }
 
     @Override
+    public AbTestCase findChk(AbTestCaseSaveDTO abTestCaseSaveDTO) {
+
+        String pageType = abTestCaseSaveDTO.getPageType();
+        String pageValue = abTestCaseSaveDTO.getPageValue();
+        String zoneDiv = abTestCaseSaveDTO.getZoneDiv();
+        String zoneSeq = abTestCaseSaveDTO.getZoneSeq();
+        String abtestPurpose = abTestCaseSaveDTO.getAbtestPurpose();
+
+        return abTestCaseRepository.findByPageTypeAndPageValueAndZoneDivAndZoneSeqAndAbtestPurpose(pageType, pageValue, zoneDiv, zoneSeq,
+                abtestPurpose);
+    }
+
+    @Override
     public AbTestCaseSaveVO findABTestById(Long abTestSeq) {
         return abTestCaseMapper.findABTestById(abTestSeq);
+    }
+
+    @Override
+    public AbTestCaseResultDtlVO findABTestResultById(Long abTestSeq) {
+        return abTestCaseMapper.findABTestResultById(abTestSeq);
     }
 
     @Override

@@ -11,10 +11,10 @@ import org.apache.ibatis.type.Alias;
 
 /**
  * <pre>
- * ABTest목록 등록용 VO
+ * ABTest 결과 상세 조회용 VO
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.abtest.vo
- * ClassName : AbTestCaseSaveVO
+ * ClassName : AbTestCaseResultDtlVO
  * Created : 2021-04-15
  * </pre>
  *
@@ -22,31 +22,44 @@ import org.apache.ibatis.type.Alias;
  * @since 2021-04-15 09:54
  */
 
-@Alias("AbTestCaseSaveVO")
+@Alias("AbTestCaseResultDtlVO")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @Builder
-public class AbTestCaseSaveVO {
+public class AbTestCaseResultDtlVO {
 
     /**
-     * ABTest 일련번호
+     * A/B테스트일련번호
      */
     @Column(name = "ABTEST_SEQ")
-    private Integer abtestSeq;
+    private Long abtestSeq = 0l;
 
     /**
-     * AB테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
+     * A/B테스트 제목
+     */
+    @Column(name = "ABTEST_TITLE")
+    private String abtestTitle;
+
+    /**
+     * A/B테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
     @Column(name = "ABTEST_TYPE")
     private String abtestType;
+
+    @Column(name = "ABTEST_TYPE_NM")
+    private String abtestTypeNm;
 
     /**
      * 도메인ID
      */
     @Column(name = "DOMAIN_ID")
     private String domainId;
+    /**
+     * 도메인ID명
+     */
+    private String domainIdNm;
 
     /**
      * AB테스트 페이지(메인:M, 섹션: S, 기사(본문외):A, 뉴스레터:L)
@@ -60,9 +73,6 @@ public class AbTestCaseSaveVO {
     @Column(name = "PAGE_VALUE")
     private String pageValue;
 
-    /**
-     * 페이지SEQ 또는 기사타입 (기타코드 SVC_AT) 명
-     */
     @Column(name = "PAGE_NM")
     private String pageNm;
 
@@ -87,6 +97,9 @@ public class AbTestCaseSaveVO {
     @Column(name = "ABTEST_PURPOSE")
     private String abtestPurpose;
 
+    @Column(name = "ABTEST_PURPOSE_NM")
+    private String abtestPurposeNm;
+
     /**
      * 시작일시
      */
@@ -98,6 +111,24 @@ public class AbTestCaseSaveVO {
      */
     @Column(name = "END_DT")
     private Date endDt;
+
+    /**
+     * 작성일시
+     */
+    @Column(name = "REG_DT")
+    private Date regDt;
+
+    /**
+     * 생성자
+     */
+    @Column(name = "REG_ID")
+    private String regId;
+
+    /**
+     * 생성자명
+     */
+    @Column(name = "REG_NM")
+    private String regNm;
 
     /**
      * 목표달성기준(P:기간 K:KPI A:모두)
@@ -128,60 +159,6 @@ public class AbTestCaseSaveVO {
      */
     @Column(name = "KPI_PERIOD_CONDI")
     private Long kpiPeriodCondi = 0l;
-
-    /**
-     * 테스트 결과 자동반영여부
-     */
-    @Column(name = "AUTO_APPLY_YN")
-    private String autoApplyYn;
-
-    /**
-     * 상태(임시T/진행Y/대기P/종료Q)
-     */
-    @Column(name = "STATUS")
-    private String status;
-
-    /**
-     * 삭제여부
-     */
-    @Column(name = "DEL_YN")
-    private String delYn;
-
-    /**
-     * 등록자
-     */
-    @Column(name = "REG_ID")
-    private String regId;
-
-    /**
-     * 등록일시
-     */
-    @Column(name = "REG_DT")
-    private Date regDt;
-
-    /**
-     * 수정자
-     */
-    @Column(name = "MOD_ID")
-    private String modId;
-
-    /**
-     * 수정일시
-     */
-    @Column(name = "MOD_DT")
-    private Date modDt;
-
-    /**
-     * AB테스트제목
-     */
-    @Column(name = "ABTEST_TITLE")
-    private String abtestTitle;
-
-    /**
-     * AB테스트설명
-     */
-    @Column(name = "ABTEST_DESC")
-    private String abtestDesc;
 
     /**
      * AB테스트 그룹생성 방식(R:랜덤, S:고정) / TB_ABTEST_GRP(AB테스트 그룹) ABTEST_GRP_METHOD
@@ -251,90 +228,6 @@ public class AbTestCaseSaveVO {
     @Column(name = "ART_CONTENT_B")
     private String artContentB;
 
-    /**
-     * 로그인 여부(전체:`, 로그인:Y, 비로그인 : N)
-     */
-    @Column(name = "LOGIN_YN")
-    private String loginYn;
 
-    /**
-     * 구독여부
-     */
-    @Column(name = "SCB_YN")
-    @Builder.Default
-    private String scbYn = "N";
-
-    /**
-     * 구독상품SEQ
-     */
-    @Column(name = "SCB_NO")
-    @Builder.Default
-    private Long scbNo = 0l;
-
-    /**
-     * 디바이스 구분(PC:P/Mobile:M/App:A/전체`) - 구분자콤마
-     */
-    @Column(name = "DEV_DIV")
-    private String devDiv;
-
-    /**
-     * 브라우저(전체:`/IE:IE/Chrome:CRM/Edge:EDG/Safari:SAF/안드로이드웹:AW/삼성IE:SIE/기타:ETC) - 구분자
-     */
-    @Column(name = "BROWSER")
-    private String browser;
-
-    /**
-     * 유입처(전체`/네이버:NAVER/구글:GOOGLE/카카오:KAKAO/트위터:TWITTER/기타:ETC) - 구분자콤마
-     */
-    @Column(name = "REFERER")
-    private String referer;
-
-    /**
-     * PWA설정여부
-     */
-    @Column(name = "PWA_YN")
-    private String pwaYn;
-
-    /**
-     * 푸시설정여부
-     */
-    @Column(name = "PUSH_YN")
-    private String pushYn;
-
-    /**
-     * UTM(SOURCE/MEDIUM/CAMPAIGN/TERM/CONTENT/전체`) - 구분자콤마
-     */
-    @Column(name = "UTM")
-    private String utm;
-
-    /**
-     * UTM SOURCE 태그
-     */
-    @Column(name = "UTM_SOURCE")
-    private String utmSource;
-
-    /**
-     * UTM MEDIUM 태그
-     */
-    @Column(name = "UTM_MEDIUM")
-    private String utmMedium;
-
-    /**
-     * UTM CAMPAIGN 태그
-     */
-    @Column(name = "UTM_CAMPAIGN")
-    private String utmCampaign;
-
-    /**
-     * UTM TERM 태그
-     */
-    @Column(name = "UTM_TERM")
-    private String utmTerm;
-
-    /**
-     * UTM CONTENT 태그
-     */
-    @Column(name = "UTM_CONTENT")
-    private String utmContent;
 
 }

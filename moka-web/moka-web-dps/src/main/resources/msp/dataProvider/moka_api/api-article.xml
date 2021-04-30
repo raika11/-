@@ -116,7 +116,7 @@
 
 
   <!--북마크등록-->
-  <api id="scrap.insert" membership="cookie" method="post">
+  <api id="scrap.insert" membership="cookie" method="post" expire="0">
     <description>북마크를 등록한다.</description>
     <parameter>
       <cid desc="컨텐트아이디" require="Y" type="number">^[0-9]{1,9}$</cid>
@@ -281,5 +281,6 @@
       ids
     </keys>
   </api>
+
 
 </apiConfig>

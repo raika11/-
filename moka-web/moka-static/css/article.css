@@ -109,10 +109,6 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 
 
-
-
-
-
 /****************************************************************************************************/
 /***                                            image                                             ***/
 /****************************************************************************************************/
@@ -145,10 +141,12 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 /***                                            구독                                              ***/
 /****************************************************************************************************/
-.subscription_wrap {padding:0 20px;background-color: #fff6e2;}
+.subscription_wrap {padding:12px 20px;background-color: #fff6e2;}
 /* .subscription_wrap .title_wrap{padding:0;margin-bottom:17px;height:28px;} */
+.subscription_wrap .title_wrap{display:flex;align-items: center;padding-top: unset;}
+.subscription_wrap .title_wrap button{margin-left: auto;}
 .subscription_wrap .title {font-size: 16px;font-weight: 700;line-height: 1.5;letter-spacing: -0.4px;color:#f6330a;}
-.subscription_info {padding:7px 0 30px;color:#f6330a;font-size: 14px;line-height: 1.5;letter-spacing: normal;word-break: break-all;text-align: justify;}
+.subscription_info {padding:24px 0 18px;color:#f6330a;font-size: 14px;line-height: 1.5;letter-spacing: normal;word-break: break-all;text-align: justify;}
 
 /*** 팩플레터 ***/
 .subscription_wrap.letter_wrap {display:flex;padding:20px 16px 24px;margin:40px auto;background-color: #f3f3f3;}

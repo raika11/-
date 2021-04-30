@@ -10,7 +10,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +22,7 @@ import lombok.Setter;
  *
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.abtest.dto
- * ClassName : ABTestCaseSaveDTO
+ * ClassName : AbTestCaseResultDTO
  * Created : 2021-04-15
  * </pre>
  *
@@ -36,7 +35,7 @@ import lombok.Setter;
 @Getter
 @Builder
 @ApiModel("ABTest 정의 DTO")
-public class AbTestCaseAllDTO {
+public class AbTestCaseResultDTO {
     public static final Type TYPE = new TypeReference<List<jmnet.moka.core.tps.mvc.board.dto.BoardInfoDTO>>() {
     }.getType();
 
@@ -47,12 +46,21 @@ public class AbTestCaseAllDTO {
     private Integer abtestSeq;
 
     /**
+     * A/B테스트 제목
+     */
+    @ApiModelProperty(value = "A/B테스트 제목")
+    @NotNull(message = "{tps.abtest.error.notnull.abtestTitle}")
+    @Size(max = 100, message = "{tps.abtest.error.size.abtestTitle}")
+    private String abtestTitle;
+
+    /**
      * A/B테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)
      */
     @ApiModelProperty("A/B테스트 유형(A:직접설계 / E:대안입력 / J:JAM / B:광고 / L:뉴스레터)-필수")
     @Pattern(regexp = "[A|E|J|B|L]{1}$", message = "{tps.abtest.error.pattern.abtestType}")
     private String abtestType;
 
+    private String abtestTypeNm;
     /**
      * 도메인 아이디
      */
@@ -61,6 +69,8 @@ public class AbTestCaseAllDTO {
     @Builder.Default
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId = "1000";
+
+    private String domainIdNm;
 
     /**
      * AB테스트 페이지(메인:M, 섹션: S, 기사(본문외):A, 뉴스레터:L, 전체 또는 없음:'')
@@ -100,6 +110,8 @@ public class AbTestCaseAllDTO {
     @NotNull(message = "{tps.abtest.error.notnull.abtestPurpose}")
     private String abtestPurpose;
 
+    private String abtestPurposeNm;
+
     /**
      * 시작일시 TB_ABTEST_CASE(A/B테스트 정의)
      * <p>
@@ -117,6 +129,27 @@ public class AbTestCaseAllDTO {
     @ApiModelProperty("종료일시")
     @DTODateTimeFormat
     private Date endDt;
+
+    /**
+     * 등록일시
+     */
+    @ApiModelProperty(value = "등록일시")
+    @DTODateTimeFormat
+    private Date regDt;
+
+    /**
+     * 생성자 TB_ABTEST_CASE(A/B테스트 정의)
+     * <p>
+     * 등록자(대안입력 편집자ID) TB_ABTEST_INSTANCE(A/B테스트 인스턴스)
+     */
+    @ApiModelProperty(value = "등록자")
+    private String regId;
+
+    /**
+     * 등록자
+     */
+    @ApiModelProperty(value = "등록자")
+    private String regNm;
 
     /**
      * 목표달성주기(JAM 수신기사의 경우 - 분단위)
@@ -159,179 +192,6 @@ public class AbTestCaseAllDTO {
     @NotNull(message = "{tps.abtest.error.notnull.kpiPeriodCondi}")
     @Min(value = 0, message = "{tps.abtest.error.min.kpiPeriodCondi}")
     private Long kpiPeriodCondi = 0L;
-
-    /**
-     * 테스트 결과 자동반영여부
-     */
-    @ApiModelProperty("테스트 결과 자동반영여부")
-    @Builder.Default
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.answYn}")
-    private String autoApplyYn = MokaConstants.NO;
-
-    /**
-     * 상태(임시T/진행Y/대기P/종료Q)
-     */
-    @ApiModelProperty("상태(임시T/진행Y/대기P/종료Q)")
-    @Builder.Default
-    @Pattern(regexp = "[T|Y|P|Q]{1}$", message = "{tps.abtest.error.pattern.status}")
-    private String status = MokaConstants.ABTEST_STATUS_T;
-
-    /**
-     * 삭제여부
-     */
-    @ApiModelProperty("삭제여부")
-    @Builder.Default
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.answYn}")
-    private String delYn = MokaConstants.NO;
-
-    /**
-     * 등록자
-     */
-    @ApiModelProperty(value = "등록자")
-    private String regNm;
-
-    /**
-     * 생성자 TB_ABTEST_CASE(A/B테스트 정의)
-     * <p>
-     * 등록자(대안입력 편집자ID) TB_ABTEST_INSTANCE(A/B테스트 인스턴스)
-     */
-    @ApiModelProperty(value = "등록자")
-    private String regId;
-
-    /**
-     * 등록일시
-     */
-    @ApiModelProperty(value = "등록일시")
-    @DTODateTimeFormat
-    @Builder.Default
-    private Date regDt = new Date();
-
-    /**
-     * 수정자
-     */
-    @ApiModelProperty(value = "수정자")
-    private String modId;
-
-    /**
-     * 수정일시
-     */
-    @ApiModelProperty(value = "수정일시")
-    @DTODateTimeFormat
-    private Date modDt;
-
-    /**
-     * 로그인 여부(전체:', 로그인:Y, 비로그인 : N)
-     */
-    @ApiModelProperty("로그인 여부(전체:', 로그인:Y, 비로그인 : N)")
-    private String loginYn;
-
-    /**
-     * 구독여부
-     */
-    @ApiModelProperty("구독여부")
-    @Builder.Default
-    private String scbYn = MokaConstants.NO;
-
-    /**
-     * 구독상품SEQ
-     */
-    @ApiModelProperty("구독상품SEQ")
-    @Builder.Default
-    @NotNull(message = "{tps.abtest.error.notnull.scbNo}")
-    @Min(value = 0, message = "{tps.abtest.error.min.scbNo}")
-    private Long scbNo = 0L;
-
-    /**
-     * 디바이스 구분(PC:P/Mobile:M/App:A/전체') - 구분자콤마
-     */
-    @ApiModelProperty(value = "디바이스 구분(PC:P/Mobile:M/App:A/전체' : 텍스트 Comma(,)로 여러 개 입력)")
-    @Size(max = 50, message = "{tps.abtest.error.size.devDiv}")
-    private String devDiv;
-
-    /**
-     * 브라우저(전체:'/IE:IE/Chrome:CRM/Edge:EDG/Safari:SAF/안드로이드웹:AW/삼성IE:SIE/기타:ETC) - 구분자콤마
-     */
-    @ApiModelProperty(value = "브라우저(전체:'/IE:IE/Chrome:CRM/Edge:EDG/Safari:SAF/안드로이드웹:AW/삼성IE:SIE/기타:ETC) : 텍스트 Comma(,)로 여러 개 입력)")
-    @Size(max = 50, message = "{tps.abtest.error.size.devDiv}")
-    private String browser;
-
-    /**
-     * 유입처(전체'/네이버:NAVER/구글:GOOGLE/카카오:KAKAO/트위터:TWITTER/기타:ETC) - 구분자콤마
-     */
-    @ApiModelProperty(value = "유입처(전체'/네이버:NAVER/구글:GOOGLE/카카오:KAKAO/트위터:TWITTER/기타:ETC) : 텍스트 Comma(,)로 여러 개 입력)")
-    @Size(max = 50, message = "{tps.abtest.error.size.referer}")
-    private String referer;
-
-    /**
-     * PWA설정여부
-     */
-    @ApiModelProperty("PWA설정여부")
-    @Builder.Default
-    private String pwaYn = MokaConstants.NO;
-
-    /**
-     * 푸시설정여부
-     */
-    @ApiModelProperty("푸시설정여부")
-    @Builder.Default
-    private String pushYn = MokaConstants.NO;
-
-    /**
-     * UTM(SOURCE/MEDIUM/CAMPAIGN/TERM/CONTENT/전체') - 구분자콤마
-     */
-    @ApiModelProperty(value = "UTM(SOURCE/MEDIUM/CAMPAIGN/TERM/CONTENT/전체')  : 텍스트 Comma(,)로 여러 개 입력)")
-    @Size(max = 50, message = "{tps.abtest.error.size.utm}")
-    private String utm;
-
-    /**
-     * UTM SOURCE 태그
-     */
-    @ApiModelProperty(value = "UTM SOURCE 태그")
-    @Size(max = 100, message = "{tps.abtest.error.size.utmSource}")
-    private String utmSource;
-
-    /**
-     * UTM MEDIUM 태그
-     */
-    @ApiModelProperty(value = "UTM MEDIUM 태그")
-    @Size(max = 100, message = "{tps.abtest.error.size.utmMedium}")
-    private String utmMedium;
-
-    /**
-     * UTM CAMPAIGN 태그
-     */
-    @ApiModelProperty(value = "UTM CAMPAIGN 태그")
-    @Size(max = 100, message = "{tps.abtest.error.size.utmCampaign}")
-    private String utmCampaign;
-
-    /**
-     * UTM TERM 태그
-     */
-    @ApiModelProperty(value = "UTM TERM 태그")
-    @Size(max = 100, message = "{tps.abtest.error.size.utmTerm}")
-    private String utmTerm;
-
-    /**
-     * UTM CONTENT 태그
-     */
-    @ApiModelProperty(value = "UTM CONTENT 태그")
-    @Size(max = 100, message = "{tps.abtest.error.size.utmContent}")
-    private String utmContent;
-
-    /**
-     * A/B테스트 제목
-     */
-    @ApiModelProperty(value = "A/B테스트 제목")
-    @NotNull(message = "{tps.abtest.error.notnull.abtestTitle}")
-    @Size(max = 100, message = "{tps.abtest.error.size.abtestTitle}")
-    private String abtestTitle;
-
-    /**
-     * A/B테스트 설명
-     */
-    @ApiModelProperty(value = "A/B테스트 설명")
-    @Size(max = 1000, message = "{tps.abtest.error.size.abtestDesc}")
-    private String abtestDesc;
 
     /**
      * A/B테스트 그룹생성 방식(R:랜덤, S:고정) / TB_ABTEST_GRP(A/B테스트 그룹) ABTEST_GRP_METHOD

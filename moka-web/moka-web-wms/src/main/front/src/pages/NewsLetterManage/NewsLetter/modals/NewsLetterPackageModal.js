@@ -4,7 +4,9 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaModal, MokaSearchInput } from '@/components';
 import { initialState, getIssueList, clearSearch, changeIssueSearchOptions } from '@store/issue';
+import { getNewsLetterChannelType } from '@store/newsLetter';
 import RelIssueAgGrid from '../components/RelIssueAgGrid';
+import { messageBox } from '@/utils/toastUtil';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 목록 > 이슈 패키지 검색 모달
@@ -37,8 +39,19 @@ const NewsLetterPackageModal = ({ show, onHide, channelType, onRowClicked }) => 
             } else if (channelType === 'SERIES') {
                 ns = { ...search, scbYn: 'Y', div: 'S' };
             }
-            dispatch(changeIssueSearchOptions(ns));
-            dispatch(getIssueList({ search: ns }));
+            dispatch(
+                getNewsLetterChannelType({
+                    channelType,
+                    callback: ({ header, body }) => {
+                        if (header.success && body) {
+                            dispatch(changeIssueSearchOptions(ns));
+                            dispatch(getIssueList({ search: ns }));
+                        } else {
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
         } else if (!show) {
             dispatch(clearSearch());
         }

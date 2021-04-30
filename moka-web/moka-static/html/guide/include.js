@@ -14,6 +14,7 @@ var include = {
         
         // document.write('<link href="//stg-static.joongang.co.kr/css/plugin/select2.min.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/plugin/slick.css" rel="stylesheet">');
+        document.write('<link href="//stg-static.joongang.co.kr/css/plugin/swiper.css" rel="stylesheet"></link>');
         document.write('<link href="//stg-static.joongang.co.kr/css/common.css" rel="stylesheet">');
         
         document.write('<link href="//stg-static.joongang.co.kr/css/section.css" rel="stylesheet">');
@@ -21,6 +22,7 @@ var include = {
 
         document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/plugin/slick.js"></script>');
+        document.write('<script src="//stg-static.joongang.co.kr/js/plugin/swiper.min.js"></script>');
 
         document.write('<script src="//stg-static.joongang.co.kr/js/resource.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/common.js"></script>');

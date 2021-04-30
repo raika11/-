@@ -104,6 +104,8 @@
 .guide .page_title{margin-bottom:24px;font-size:36px;font-weight:500;}
 .guide_title {margin-top:32px;font-size:28px;line-height:1.5;font-weight:500;letter-spacing:-1.25px;}
 .code_wrap + .guide_title {margin-top:48px;}
+.guide_title + p{display:block;padding:5px 0 16px;}
+.guide_title + p strong{color:#f6330a;}
 .sample_wrap{display:inline-block;width:100%;padding:32px;border:1px solid #dee2e6;}
 .sample_wrap + .sample_wrap{margin-top:48px;}
 

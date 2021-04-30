@@ -40,7 +40,7 @@ public class MokaStorageController {
     private UploadFileHelper uploadFileHelper;
 
     /**
-     * 템플릿 파일 서비스
+     * 템플릿,컨테이너 파일 서비스
      *
      * @param request HTTP 요청
      * @return 이미지 byte[]
@@ -55,6 +55,9 @@ public class MokaStorageController {
         String imgRealPath = null;
         if (business.equals(TpsConstants.TEMPLATE_BUSINESS)) {
             imgRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, domainId, filename);
+        }
+        if (business.equals(TpsConstants.CONTAINER_BUSINESS)) {
+            imgRealPath = uploadFileHelper.getRealPath(TpsConstants.CONTAINER_BUSINESS, domainId, filename);
         }
 
         if (McpString.isEmpty(imgRealPath)) {

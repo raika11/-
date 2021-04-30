@@ -50,6 +50,9 @@ public class ItemConstants {
     public static String CONTAINER_DOMAIN_ID = "domainId";
     public static String CONTAINER_NAME = "name";
     public static String CONTAINER_BODY = "body";
+    public static String CONTAINER_GROUP = "group";
+    public static String CONTAINER_THUMB = "thumb";
+    public static String CONTAINER_DESC = "desc";
     public static String CONTAINER_CREATE_YMDT = "create";
     public static String CONTAINER_CREATOR = "creator";
     public static String CONTAINER_MODIFIED_YMDT = ITEM_MODIFIED;
@@ -214,6 +217,9 @@ public class ItemConstants {
         public static String CONTAINER_DOMAIN_ID = "DOMAIN_ID";
         public static String CONTAINER_NAME = "CONTAINER_NAME";
         public static String CONTAINER_BODY = "CONTAINER_BODY";
+        public static String CONTAINER_GROUP = "CONTAINER_GROUP";
+        public static String CONTAINER_THUMB = "CONTAINER_THUMB";
+        public static String CONTAINER_DESC = "CONTAINER_DESC";
         public static String CONTAINER_CREATE_YMDT = "REG_DT";
         public static String CONTAINER_CREATOR = "REG_ID";
         public static String CONTAINER_MODIFIED_YMDT = "MOD_DT";

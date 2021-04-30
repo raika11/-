@@ -65,6 +65,7 @@ font-*,color,text-align,vertical-align, ...
 .layer_cheer p.desc {margin-top:10px; letter-spacing:-0.2px; color:#999;}
 .layer_cheer .btn_close {top:10px; right:10px;}
 
+.layer_info { right: 0; top: 24px; width: 320px; padding: 30px; }
 .layer_info p { font-size: 13px; line-height: 20px; color: #333; }
 .layer_info .date { margin-top: 10px; font-size: 12px; letter-spacing: -0.2px; color: #999; }
 .layer_info .btn_close {top:10px; right:10px;}
@@ -84,24 +85,21 @@ font-*,color,text-align,vertical-align, ...
 .swiper_highlight_list .swiper-button-prev, 
 .swiper_highlight_list .swiper-button-next { top: auto; bottom: 0; }
 .swiper_highlight_list .btn_prev,
-.swiper_highlight_list .btn_next { width: 25px; height: 25px; border: 1px solid #e2e2e2; border-radius: 50%; background-size: 13px 13px; }
-.swiper_highlight_list .swiper-button-disabled { background-color: #F7F7F7; }
-.swiper_highlight_list .btn_prev { left: 50%; transform: translateX(-53.5px); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M15 0v15H0V0z'/%3E%3Cpath fill='%231D1D1D' d='M9.75 2.284l.53.53-4.684 4.687 4.683 4.683-.53.53L4.534 7.5 9.75 2.285z'/%3E%3C/g%3E%3C/svg%3E"); }
-.swiper_highlight_list .btn_next { right: 50%; transform: translateX(53.5px); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0v15h15V0z'/%3E%3Cpath fill='%231D1D1D' d='M5.25 2.284l-.53.53 4.684 4.687-4.683 4.683.53.53L10.466 7.5 5.25 2.285z'/%3E%3C/g%3E%3C/svg%3E"); }
-.swiper_highlight_list .swiper-pagination-fraction { bottom: 0; font-size: 12px; font-weight: 700; line-height: 25px; }
-.swiper_highlight_list .swiper-pagination-current { color: #333; }
+.swiper_highlight_list .btn_next {border: 1px solid #e2e2e2; border-radius: 50%; }
+.swiper_highlight_list .swiper-button-disabled { background-color: #e2e2e2; }
+.swiper_highlight_list .btn_prev { left: 50%; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M15 0v15H0V0z'/%3E%3Cpath fill='%231D1D1D' d='M9.75 2.284l.53.53-4.684 4.687 4.683 4.683-.53.53L4.534 7.5 9.75 2.285z'/%3E%3C/g%3E%3C/svg%3E"); }
+.swiper_highlight_list .btn_next { right: 50%; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0v15h15V0z'/%3E%3Cpath fill='%231D1D1D' d='M5.25 2.284l-.53.53 4.684 4.687-4.683 4.683.53.53L10.466 7.5 5.25 2.285z'/%3E%3C/g%3E%3C/svg%3E"); }
+.swiper_highlight_list .swiper-pagination-fraction { bottom: 0; font-weight: 700; }.swiper_highlight_list .swiper-pagination-current { color: #333; }
 .swiper_highlight_list .swiper-pagination-total { position: relative; margin-left: 4px; color: #999; }
 .swiper_highlight_list .list_item { padding: 26px 24px 28px; background-color: #fff6e2; }
-.swiper_highlight_list .list_item .title { margin-top: 20px; padding-top: 12px; border-top: 1px solid #999; font-size: 12px; color: #999; }
-.swiper_highlight_list .list_item .headline { margin-top: 2px; font-size: 12px; font-weight: 400; color: #999; }
+.swiper_highlight_list .list_item .title { border-top: 1px solid #e2e2e2; font-size: 12px; color: #999; }.swiper_highlight_list .list_item .headline { margin-top: 2px; font-size: 12px; font-weight: 400; color: #999; }
 .swiper_highlight_list .list_item .date { margin-top: 2px; color: #999; }
 .swiper_highlight_inner { padding-bottom: 25px; }
 .swiper_highlight_inner .pagination_bullet { bottom: 0px; line-height: 5px; }
-.swiper_highlight_inner .swiper-pagination-bullet { width: 5px; height: 5px; line-height: 5px; }
 .swiper_highlight_inner .swiper-pagination-bullet-active { background-color: #f6330a; }
 .list_item:not(.swiper-slide-active) .swiper_highlight_inner { visibility: hidden; }
 .highlight_wrap { margin-bottom: 40px; }
-.highlight_wrap .highlight_text { font-size: 16px; line-height: 24px; letter-spacing: -.4px; color: #f6330a; }
+.highlight_wrap .highlight_text { font-size: 16px; line-height: 24px; letter-spacing: -.4px; font-weight: 400; color: #f6330a; }
 .highlight_wrap .highlight_text .ico_quotes { display: block; width: 20px; height: 14px; margin-bottom: 8px; background-position: 1px 0; }
 
 
@@ -252,6 +250,14 @@ font-*,color,text-align,vertical-align, ...
     .journalist_body { margin-top: 60px; }
     /* 최근하이라이트 스와이프 */
     .swiper_highlight_list { padding-bottom: 40px; }
+    .swiper_highlight_inner .swiper-pagination-bullet { width: 5px; height: 5px; line-height: 5px; }
+    .swiper_highlight_list .list_item .title { margin-top: 20px; padding-top: 12px; }
+    .swiper_highlight_list .btn_prev { transform: translateX(-53.5px); }
+    .swiper_highlight_list .btn_next { transform: translateX(53.5px); }
+    .swiper_highlight_list .btn_prev,
+    .swiper_highlight_list .btn_next { width: 25px; height: 25px; background-size: 13px; }
+    .swiper_highlight_list .swiper-pagination-fraction { font-size: 12px; line-height: 25px; }
+
 
     /* 기자목록 */
     .journalist_list .row li{margin-bottom: 30px;}

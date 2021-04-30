@@ -102,30 +102,6 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    @Transactional
-    public Template updateTemplate(Template template)
-            throws Exception {
-        Template returnVal = templateRepository.save(template);
-        log.debug("Update Template {}", template.getTemplateSeq());
-
-        // 히스토리 생성
-        TemplateHist hist = TemplateHist
-                .builder()
-                .templateBody(template.getTemplateBody())
-                .template(template)
-                .build();
-        if (template.getDomain() != null) {
-            hist.setDomainId(template
-                    .getDomain()
-                    .getDomainId());
-        }
-        templateHistService.insertTemplateHist(hist);
-        log.debug("Insert Template History {}", returnVal.getTemplateSeq());
-
-        return returnVal;
-    }
-
-    @Override
     public void deleteTemplate(Template template)
             throws Exception {
         templateRepository.deleteById(template.getTemplateSeq());
@@ -146,16 +122,37 @@ public class TemplateServiceImpl implements TemplateService {
         }
     }
 
+
     @Override
+    public Template updateTemplate(Template template)
+            throws Exception {
+        return updateTemplate(template, true);
+    }
+
+    @Override
+    @Transactional
     public Template updateTemplate(Template template, boolean historySave)
             throws Exception {
+        Template returnVal = templateRepository.save(template);
+        log.debug("Update Template {}", template.getTemplateSeq());
+
+        // 히스토리 생성
         if (historySave) {
-            return this.updateTemplate(template);
-        } else {
-            Template returnVal = templateRepository.save(template);
-            log.debug("Insert Template {}", returnVal.getTemplateSeq());
-            return returnVal;
+            TemplateHist hist = TemplateHist
+                    .builder()
+                    .templateBody(template.getTemplateBody())
+                    .template(template)
+                    .build();
+            if (template.getDomain() != null) {
+                hist.setDomainId(template
+                        .getDomain()
+                        .getDomainId());
+            }
+            templateHistService.insertTemplateHist(hist);
+            log.debug("Insert Template History {}", returnVal.getTemplateSeq());
         }
+
+        return returnVal;
     }
 
     @Override

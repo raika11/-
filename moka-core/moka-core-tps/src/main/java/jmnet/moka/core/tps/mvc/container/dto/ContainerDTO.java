@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 컨테이너 DTO
@@ -39,7 +40,8 @@ public class ContainerDTO implements Serializable {
 
     private static final long serialVersionUID = 3374752127186183436L;
 
-    public static final Type TYPE = new TypeReference<List<ContainerDTO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<ContainerDTO>>() {
+    }.getType();
 
     @ApiModelProperty("컨테이너SEQ")
     @Min(value = 0, message = "{tps.container.error.min.containerSeq}")
@@ -61,14 +63,30 @@ public class ContainerDTO implements Serializable {
 
     @ApiModelProperty("페이지 관련갯수")
     @JsonIgnore
-    private Long pageRelCount = (long)0;
+    private Long pageRelCount = (long) 0;
 
     @ApiModelProperty("기사페이지 관련갯수")
     @JsonIgnore
-    private Long skinRelCount = (long)0;
+    private Long skinRelCount = (long) 0;
 
     @ApiModelProperty("사용여부")
     private String useYn = MokaConstants.NO;
+
+    @ApiModelProperty("컨테이너그룹")
+    @Length(max = 24, message = "{tps.container.error.length.containerGroup}")
+    private String containerGroup;
+
+    @ApiModelProperty("컨테이너썸네일")
+    @Length(max = 256, message = "{tps.container.error.length.containerThumb}")
+    private String containerThumb;
+
+    @ApiModelProperty("컨테이너설명")
+    @Length(max = 4000, message = "{tps.container.error.length.containerDesc}")
+    private String containerDesc;
+
+    @ApiModelProperty("이미지파일")
+    @JsonIgnore
+    private MultipartFile thumbFile;
 
     public void setPageRelCount(Long pageRelCount) {
         this.pageRelCount = pageRelCount;
@@ -94,6 +112,9 @@ public class ContainerDTO implements Serializable {
         containerItem.put(ItemConstants.CONTAINER_DOMAIN_ID, this.domain.getDomainId());
         containerItem.put(ItemConstants.CONTAINER_NAME, this.containerName);
         containerItem.put(ItemConstants.CONTAINER_BODY, this.containerBody);
+        containerItem.put(ItemConstants.CONTAINER_GROUP, this.containerGroup);
+        containerItem.put(ItemConstants.CONTAINER_THUMB, this.containerThumb);
+        containerItem.put(ItemConstants.CONTAINER_DESC, this.containerDesc);
         return containerItem;
     }
 }

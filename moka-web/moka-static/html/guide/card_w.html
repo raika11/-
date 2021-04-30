@@ -40,7 +40,7 @@
                     <h2 class="guide_title">슬라이딩 - 모바일 한정</h2>
                     <p>슬라이딩 플러그인은 swiper를 사용합니다. 그룹형의 skin_group 를 감싸는 <strong>scroll_sm_wrap</strong>클래스가 필요합니다. </p>
                     <div class="sample_wrap">
-                        <div class="scroll_sm_wrap">
+                        <div class="scroll_sm_wrap swiper-container">
                             <ul class="skin_group swiper-wrapper"> <!-- row  -->
                                 <li class="card_skin col_lg4 swiper-slide">
                                     <div class="card_image">
@@ -70,8 +70,8 @@
                                     </div>
                                 </li>
                             </ul>
+                            <div class="swiper-pagination"></div>
                         </div>
-
                     </div>
                     <div class="code_wrap">
 <pre><code class="html">
@@ -108,12 +108,20 @@ $(document).ready(function() {
 
 
 function mobileSwiper() {
+
     var swiper = new Swiper('.scroll_sm_wrap', {
-        slidesPerView: 2,
+        slidesPerView: 1.5,
         slidesPerGroup: 1,
         spaceBetween: 10,
-
+        // init: false,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        }
+        
     });
+
+
 
     if ( $(window).width() > 1023 ) {
         if (swiper) {

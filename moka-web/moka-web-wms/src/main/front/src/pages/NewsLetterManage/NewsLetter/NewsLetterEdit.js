@@ -94,7 +94,7 @@ const NewsLetterEdit = ({ match }) => {
         >
             <Form>
                 {/* 뉴스레터 기본정보 */}
-                <NewsLetterBasicInfo letterSeq={letterSeq} temp={temp} setTemp={setTemp} onChangeValue={handleChangeValue} />
+                <NewsLetterBasicInfo letterSeq={letterSeq} temp={temp} onChangeValue={handleChangeValue} />
                 {/* 뉴스레터 발송정보 */}
                 <NewsLetterSendInfo ref={sendInfoRef} temp={temp} setTemp={setTemp} onChangeValue={handleChangeValue} />
                 {/* 뉴스레터 설정 */}

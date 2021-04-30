@@ -606,6 +606,7 @@ header.title_wrap > .title{padding-top:5px;}
 .title_wrap > .info_bx { display: flex; position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
 .title_wrap .btn_group > *:nth-child(n+2) { margin-left: 21px; }
 .title_wrap .btn_group > *:nth-child(n+2)::before { content: ''; position: absolute; left: -11px; top: 50%; transform: translateY(-50%); width: 1px; height: 16px; background-color: #c9c9c9; }
+.title_wrap .btn_group .dropdown_menu { top: 32px; }
 
 /* 리스트 상단 옵션 */
 .list_option_area { display: flex; align-items: center; justify-content: space-between; margin-top: 24px;  }
@@ -618,14 +619,13 @@ header.title_wrap > .title{padding-top:5px;}
     .list_option_area.flex_sm_col_reverse { align-items: flex-start; }
     .list_option_area.flex_sm_col_reverse .search_form { width: 100%; }
     .list_option_area.flex_sm_col_reverse .all_count { margin-top: 20px; }
-    .title_wrap .btn_group { display: flex; align-items: center; justify-content: flex-end; height: 46px; border-bottom: 1px solid #e2e2e2; }
+    .title_wrap .btn_group { display: flex; align-items: center; justify-content: flex-end; position: relative; height: 46px; border-bottom: 1px solid #e2e2e2; }
     .title_wrap .btn_group > *:nth-child(n+2)::before { height: 14px; }
 
 }
 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width: 1024px) {
-    .title_wrap{padding-top:5px;}
     .title_wrap .title {font-size: 18px;line-height: 1.56;}
     .title_wrap .btn_group { display: flex; position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
     .title_wrap .btn_group .btn_info { width: 20px; height: 20px; }
@@ -789,7 +789,7 @@ input::-webkit-search-results-decoration{display:none;}
 .headline {color: #111;font-size:18px;font-weight:700;letter-spacing:-0.4px;line-height:1.5;word-break: break-all;}
 .description {color: #666;font-size: 16px;line-height: 1.56;letter-spacing: -0.4px;word-break: break-all;}
 .byline {font-size: 13px;line-height: 1.5;}
-.date {color: #999;font-size: 13px;line-height: 1.5;}
+.date {color: #999;font-size: 13px;line-height: 1.5;letter-spacing: -0.4px;}
 dl.date {display: flex;}
 dl.date > div {display: flex;}
 dl.date > div:nth-child(n + 2) {margin-left: 10px;}
@@ -1013,7 +1013,7 @@ dl.date dd {margin-left: 6px;}
 .chain_wrap .tab_nav { width: 100%; border-bottom: 1px solid #e2e2e2; }
 .chain_wrap .nav { display: inline-flex; }
 .chain_wrap .nav .nav_item:nth-child(n+2) { margin-left: 16px; }
-.chain_wrap .nav .nav_link { display: block; position: relative; padding: 5px 6px 10px; font-weight: 400; }
+.chain_wrap .nav .nav_link { display: block; position: relative; padding: 10px 6px; font-weight: 400; }
 .chain_wrap .nav .nav_link[aria-selected=true]::before { content: ''; position: absolute; left: 0; bottom: -1px; width: 100%; height: 1px; background-color: #f6330a; }
 .chain_wrap .btn_link_txt { display: inline-flex; position: relative; margin-left: 20px; padding: 8px 0 8px 12px; }
 .chain_wrap .btn_link_txt::before { content: ''; position: absolute; left: 0; top: 12px; width: 1px; height: 16px; background-color: #c9c9c9;  }
@@ -1028,7 +1028,7 @@ dl.date dd {margin-left: 6px;}
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width: 1023px) {
     /* tab */
-    .chain_wrap .nav .nav_link { height: 41px; font-size: 16px; line-height: 24px; }
+    .chain_wrap .nav .nav_link { height: 46px; font-size: 16px; line-height: 24px; }
     .chain_wrap .nav .nav_link[aria-selected=true] { font-weight: 700; }
     .tab_content .list_option_area { padding-bottom: 12px; }
 }
@@ -1036,7 +1036,7 @@ dl.date dd {margin-left: 6px;}
 /* Large devices (desktops, 1024px and up) */
 @media (min-width: 1024px) {
     /* tab */
-    .chain_wrap .nav .nav_link { height: 43px; font-size: 18px; line-height: 28px; }
+    .chain_wrap .nav .nav_link { height: 48px; font-size: 18px; line-height: 28px; }
     .chain_wrap .nav .nav_link[aria-selected=true] { font-weight: 900; }
     .tab_content .list_option_area { padding-bottom: 6px; }
 }
@@ -1321,7 +1321,7 @@ dl.date dd {margin-left: 6px;}
 .layer_byline .btn_close{top:14px;right:18px;}
 .layer_comment{position:fixed;right:0;top:0;height:100%;background-color:#fff;}
 
-.layer_info { right: 0; top: 24px; width: 320px; padding: 30px; }
+.layer_info { right: 0; top: 32px; width: 320px; padding: 30px; }
 .layer_info p { font-size: 13px; line-height: 20px; color: #333; }
 .layer_info .date { margin-top: 10px; font-size: 12px; letter-spacing: -0.2px; color: #999; }
 .layer_info .btn_close {top:10px; right:10px;}

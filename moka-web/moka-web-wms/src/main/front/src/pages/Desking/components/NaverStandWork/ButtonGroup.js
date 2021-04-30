@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { DESK_STATUS_WORK, DESK_STATUS_PUBLISH } from '@/constants';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
@@ -36,7 +37,7 @@ const ButtonGroup = (props) => {
      * 전송
      */
     const handleClickPublish = useCallback(() => {
-        if (workStatus === 'work' || workStatus === 'publish') {
+        if (workStatus === DESK_STATUS_WORK || workStatus === DESK_STATUS_PUBLISH) {
             messageBox.alert(saveFailMsg);
             return;
         }

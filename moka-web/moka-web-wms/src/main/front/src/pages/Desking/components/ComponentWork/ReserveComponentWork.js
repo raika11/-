@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
+import { DB_DATEFORMAT, DESK_STATUS_SAVE } from '@/constants';
 import { MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
 import { postReserveComponentWork, deleteReserveComponentWork } from '@store/desking';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -63,7 +63,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
             return;
         }
 
-        if (workStatus !== 'save' && workStatus) {
+        if (workStatus !== DESK_STATUS_SAVE && workStatus) {
             messageBox.alert('임시저장한 데이터만 예약할 수 있습니다.');
             return;
         }

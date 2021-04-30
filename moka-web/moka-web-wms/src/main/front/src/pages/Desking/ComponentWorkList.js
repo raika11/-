@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
+import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, API_BASE_URL, DESK_STATUS_WORK } from '@/constants';
 import { MokaCard, MokaInput, MokaInputLabel } from '@components';
-import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, API_BASE_URL } from '@/constants';
 import { GET_COMPONENT_WORK_LIST, changeWorkStatus, putComponentWorkTemplate, PUT_COMPONENT_WORK_TEMPLATE } from '@store/desking';
 import { getChannelTp } from '@store/codeMgt';
 import { ComponentWork, NaverChannelWork, NaverStandWork } from './components';
@@ -43,7 +43,7 @@ const ComponentWorkList = (props) => {
             dispatch(
                 changeWorkStatus({
                     componentWorkSeq: Number(e.target.value),
-                    status: 'work',
+                    status: DESK_STATUS_WORK,
                 }),
             );
         },
@@ -138,7 +138,7 @@ const ComponentWorkList = (props) => {
 
             if (!component) {
                 return null;
-            } else if (workStatus[component.seq] !== 'work' && component.viewYn === 'N') {
+            } else if (workStatus[component.seq] !== DESK_STATUS_WORK && component.viewYn === 'N') {
                 return null;
             } else if (isNaverChannel) {
                 // 네이버채널 예외처리
@@ -212,7 +212,7 @@ const ComponentWorkList = (props) => {
 
     useEffect(() => {
         // 비활성 영역 리스트 (work 상태가 아니고 N인 것만 리스트에 포함)
-        setDisabledList(componentWorkList.filter((work) => (workStatus[work.seq] !== 'work' && work.viewYn === 'N' ? true : false)));
+        setDisabledList(componentWorkList.filter((work) => (workStatus[work.seq] !== DESK_STATUS_WORK && work.viewYn === 'N' ? true : false)));
     }, [componentWorkList, workStatus]);
 
     useEffect(() => {

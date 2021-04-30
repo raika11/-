@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAbTestList } from '@store/ab/abAction';
+import { changeSearchOption, getAbTestList } from '@store/ab/abAction';
 import { ABTEST_TYPE } from '@store/ab/abReducer';
 
 /**
@@ -23,6 +23,10 @@ const AutoList = (props) => {
         history.push(`/ab-auto/${seq}`);
     };
 
+    const handleChangeSearchOption = (option) => {
+        dispatch(changeSearchOption({ ...search, [option.key]: option.value }));
+    };
+
     useEffect(() => {
         dispatch(getAbTestList({ ...search, abtestType: ABTEST_TYPE.DIRECT_DESIGN }));
     }, [search, dispatch]);
@@ -36,7 +40,14 @@ const AutoList = (props) => {
                     설계 등록
                 </Button>
             </Row>
-            <ABAgGrid rowData={list} searchOptions={search} total={total} columnDefs={AutoAgGridColumns} onRowClicked={handleClickRow} />
+            <ABAgGrid
+                rowData={list}
+                searchOptions={search}
+                total={total}
+                columnDefs={AutoAgGridColumns}
+                onRowClicked={handleClickRow}
+                onChangeSearchOption={handleChangeSearchOption}
+            />
         </React.Fragment>
     );
 };

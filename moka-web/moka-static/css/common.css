@@ -577,7 +577,7 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
     
 
     .section_title .title{display:none;}
-    .sticky .section_title .title{display:inline-block;}
+    .sticky_top .section_title .title{display:inline-block;}
 
     /* .header_nav_wrap {align-items:flex-end; flex-wrap:nowrap;padding-bottom:18px;border-bottom-width:3px;}
     .header_nav_wrap .page_title {padding-top:5px;font-size:40px; } */
@@ -591,9 +591,10 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
     * ---------------------------------
     */
 /* sub title 영역-필요시 */
-.title_wrap{z-index: 1;position:relative ; padding-top:4px;}
+.title_wrap{z-index: 1;position:relative ;}
 header.title_wrap{border-top: 4px solid #f6330a;}
-.title_wrap .title_area{display:flex;align-items:center;}
+.title_wrap .title_area{display:flex;align-items:center;padding-top:5px;}
+header.title_wrap > .title{padding-top:5px;}
 .title_wrap .title{color:#ff3c14;font-size:18px;line-height:1.44;letter-spacing:-0.4px;font-weight:900;}
 .title_wrap .title [class*="ico_"]{margin-left:6px;}
 .title_wrap .exp{color: #f6330a;font-size: 13px;letter-spacing: -0.33px;}
@@ -998,7 +999,7 @@ dl.date dd {margin-left: 6px;}
 .chain_wrap .nav { display: inline-flex; }
 .chain_wrap .nav .nav_item:nth-child(n+2) { margin-left: 16px; }
 .chain_wrap .nav .nav_link { display: block; position: relative; padding: 5px 6px 10px; font-weight: 400; }
-.chain_wrap .nav .nav_link[aria-selected=true]::before { content: ''; position: absolute; left: 0; bottom: -2px; width: 100%; height: 1px; background-color: #f6330a; }
+.chain_wrap .nav .nav_link[aria-selected=true]::before { content: ''; position: absolute; left: 0; bottom: -1px; width: 100%; height: 1px; background-color: #f6330a; }
 .chain_wrap .btn_link_txt { display: inline-flex; position: relative; height: 43px; margin-left: 20px; padding: 8px 0 8px 12px; }
 .chain_wrap .btn_link_txt::before { content: ''; position: absolute; left: 0; top: 12px; width: 1px; height: 16px; background-color: #c9c9c9;  }
 .chain_wrap .btn_link_txt a {  display: flex; align-items: center; font-size: 13px; line-height: 24px; }
@@ -1165,8 +1166,8 @@ dl.date dd {margin-left: 6px;}
 .story_list .card_body{position: relative;}
 .story_list .headline {font-size: 20px;line-height: 1.5;letter-spacing: -0.4px;}
 .story_list .card_image figure {max-width:100%;}
-.story_list  .ico_bookmark{width:24px;height:23px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='25'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 .923h24V24H0z'/%3E%3Cpath fill='%231D1D1D' d='M5.003 16.927v-1.646L5 11.103V8.061l.002-1.902v-.297l.001-.084.001-.203.001-.132v-.048l.002-.017a.992.992 0 011.044-.993h11.95c.33-.012.999.285.999.993v12.995l-1.2-.666V5.538H6.2v12.24l-1.196.662z'/%3E%3Cpath fill='%231D1D1D' d='M12.048 17.173l6.958 4.444-.009 1.268-.4.004-6.554-4.189-6.636 4.242-.404-.001L5 21.669l7.04-4.496.003.008.005-.008z'/%3E%3C/g%3E%3C/svg%3E");}
-
+.story_list .ico_bookmark{width:24px;height:23px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='25'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 .923h24V24H0z'/%3E%3Cpath fill='%231D1D1D' d='M5.003 16.927v-1.646L5 11.103V8.061l.002-1.902v-.297l.001-.084.001-.203.001-.132v-.048l.002-.017a.992.992 0 011.044-.993h11.95c.33-.012.999.285.999.993v12.995l-1.2-.666V5.538H6.2v12.24l-1.196.662z'/%3E%3Cpath fill='%231D1D1D' d='M12.048 17.173l6.958 4.444-.009 1.268-.4.004-6.554-4.189-6.636 4.242-.404-.001L5 21.669l7.04-4.496.003.008.005-.008z'/%3E%3C/g%3E%3C/svg%3E");}
+.story_list .active .ico_bookmark{background-image: url("data:image/svg+xml,%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' x='0' y='0' viewBox='0 0 20 20' xml:space='preserve'%3E%3Cstyle%3E.st1%7Bfill-rule:evenodd;clip-rule:evenodd;fill:%23f6330a%7D%3C/style%3E%3Cpath d='M0 0h20v20H0V0z' fill='none'/%3E%3Cpath class='st1' d='M15 3c.3 0 .8.2.8.9v11.3l-1-.6V4H5.2v10.6l-1 .6V4c0-.5.2-1 .8-1h10z'/%3E%3Cpath class='st1' d='M10 14.1l5.8 3.3v1h-.3L10 15.2l-5.5 3.2h-.3v-1l5.8-3.3z'/%3E%3C/svg%3E");}
 
 
 /* 기자기사랭크 */
@@ -1210,11 +1211,11 @@ dl.date dd {margin-left: 6px;}
     .story_list .meta{margin-top:auto;}
     .story_list .ico_bookmark{width:20px;height:20px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h20v20H0z'/%3E%3Cpath fill='%231D1D1D' d='M15 3c.277-.01.833.248.833.861v11.262l-1-.578V4H5.167v10.606l-.997.576V13.959l-.001-1.175V4.121l.001-.113v-.045l.001-.065v-.02l.001-.018c-.008-.32.225-.86.87-.86z'/%3E%3Cpath fill='%231D1D1D' d='M10.04 14.083l5.799 3.852-.008 1.1-.333.002-5.462-3.63-5.53 3.676-.336-.001-.004-1.102 5.867-3.897.003.007.004-.007z'/%3E%3C/g%3E%3C/svg%3E");}
 
-
-    
     
     /* 기자기사랭크 */
     .journalist_story_list .card_image img {width:136px;}
+    .journalist_story_list .meta{margin-top:unset;}
+    .journalist_story_list .btn_bookmark{position:absolute;right:10px;bottom:0;}
     
     .story_rank .card_body {width:calc(100% - 205px);padding-left:36px;padding-right:10px;flex-direction: column;}
 

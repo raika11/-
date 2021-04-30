@@ -47,7 +47,7 @@ export default handleActions(
             });
         },
 
-        [action.CHANGE_SEARCH_OPTIONS]: (state, { payload }) => {
+        [action.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.search = payload;
             });

@@ -24,6 +24,10 @@ export const [GET_NEWS_LETTER_LIST, GET_NEWS_LETTER_LIST_SUCCESS, GET_NEWS_LETTE
 export const getNewsLetterList = createAction(GET_NEWS_LETTER_LIST, (...actions) => actions);
 export const [GET_NEWS_LETTER, GET_NEWS_LETTER_SUCCESS, GET_NEWS_LETTER_FAILURE] = createRequestActionTypes('newsLetter/GET_NEWS_LETTER');
 export const getNewsLetter = createAction(GET_NEWS_LETTER, (letterSeq) => letterSeq);
+export const [GET_NEWS_LETTER_CHANNEL_TYPE, GET_NEWS_LETTER_CHANNEL_TYPE_SUCCESS, GET_NEWS_LETTER_CHANNEL_TYPE_FAILURE] = createRequestActionTypes(
+    'newsLetter/GET_NEWS_LETTER_CHANNEL_TYPE',
+);
+export const getNewsLetterChannelType = createAction(GET_NEWS_LETTER_CHANNEL_TYPE, ({ channelType, callback }) => ({ channelType, callback }));
 export const [GET_NEWS_LETTER_SEND_LIST, GET_NEWS_LETTER_SEND_LIST_SUCCESS, GET_NEWS_LETTER_SEND_LIST_FAILURE] = createRequestActionTypes('newsLetter/GET_NEWS_LETTER_SEND_LIST');
 export const getNewsLetterSendList = createAction(GET_NEWS_LETTER_SEND_LIST, (...actions) => actions);
 export const [GET_NEWS_LETTER_PASSIVE_LIST, GET_NEWS_LETTER_PASSIVE_LIST_SUCCESS, GET_NEWS_LETTER_PASSIVE_LIST_FAILURE] = createRequestActionTypes(

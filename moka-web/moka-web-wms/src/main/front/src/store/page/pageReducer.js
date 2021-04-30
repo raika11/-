@@ -213,22 +213,19 @@ export default handleActions(
         /**
          * 트리에서 서브 페이지 추가
          */
-        [act.INSERT_SUB_PAGE]: (state, { payload: { parent, latestDomainId } }) => ({
-            ...state,
-            page: {
-                ...initialState.page,
-                domain: {
-                    ...initialState.page.domain,
-                    domainId: latestDomainId,
-                },
-                parent: {
-                    ...parent,
-                },
-                pageUrl: parent ? parent.pageUrl : null,
-            },
-            pageBody: initialState.pageBody,
-            pageError: null,
-        }),
+        [act.INSERT_SUB_PAGE]: (state, { payload: { parent, latestDomainId } }) => {
+            return produce(state, (draft) => {
+                let pageUrl = parent?.pageUrl || '';
+                draft.page = {
+                    ...initialState.page,
+                    domain: { ...initialState.page.domain, domainId: latestDomainId },
+                    parent,
+                    pageUrl: pageUrl.slice(-1) === '/' ? pageUrl : `${pageUrl}/`,
+                };
+                draft.pageError = initialState.pageError;
+                draft.pageBody = initialState.pageBody;
+            });
+        },
         /**
          * 데이터 삭제
          */

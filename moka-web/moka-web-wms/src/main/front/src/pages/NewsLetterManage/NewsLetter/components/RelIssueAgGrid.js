@@ -8,12 +8,11 @@ import { changeIssueSearchOptions, getIssueList, GET_ISSUE_LIST } from '@store/i
  * 이슈/연재/토픽 패키지 검색 모달
  * 구독 여부 Y, 뉴스레터 설정된 패키지는 선택 버튼 비활성
  */
-const RelIssueAgGrid = ({ pkgDiv, onRowClicked }) => {
+const RelIssueAgGrid = ({ pkgDiv, onRowClicked, onHide }) => {
     const dispatch = useDispatch();
     const { search, total, list } = useSelector(({ issue }) => issue, shallowEqual);
     const letterChannelTypeList = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterChannelTypeList);
     const loading = useSelector(({ loading }) => loading[GET_ISSUE_LIST]);
-    // const [gridInstance, setGridInstance] = useState(null);
     const [rowData, setRowData] = useState([]);
 
     /**
@@ -37,11 +36,11 @@ const RelIssueAgGrid = ({ pkgDiv, onRowClicked }) => {
         (data) => {
             if (onRowClicked) {
                 onRowClicked(data);
+                onHide();
             }
         },
-        [onRowClicked],
+        [onRowClicked, onHide],
     );
-    console.log(rowData);
 
     useEffect(() => {
         setRowData(
@@ -57,11 +56,9 @@ const RelIssueAgGrid = ({ pkgDiv, onRowClicked }) => {
 
     return (
         <MokaTable
-            // setGridInstance={setGridInstance}
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             onRowNodeId={(data) => data.pkgSeq}
-            // onRowClicked={() => {}}
             rowData={rowData}
             loading={loading}
             total={total}

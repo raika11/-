@@ -107,7 +107,7 @@ font-*,color,text-align,vertical-align, ...
 .journalist_list .list_item{display:block; width:100%;padding:24px; border:1px solid #e2e2e2;}
 
 /*기자 정보 공통 */
-.journalist_list .profile_area{display:flex; align-items: center;}
+.journalist_list .profile_area{display:flex; align-items: center; height: 80px;}
 .journalist_list .profile_area > *{flex:0 0 auto;}
 .journalist_list .profile_image img{max-width:100%;border-radius:100%;border:1px solid rgba(0,0,0,0.03);}
 .flex_area{display: flex; align-items: center;}

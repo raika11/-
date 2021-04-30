@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -386,7 +385,14 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                     {temp.sendType === 'E' && (
                         <div className="d-flex align-items-center">
                             <Col xs={2} className="p-0 pr-2">
-                                <MokaInput as="radio" value="D" id="direct" inputProps={{ label: '직접 입력', custom: true }} />
+                                <MokaInput
+                                    as="radio"
+                                    name="sendPeriod"
+                                    value="D"
+                                    id="letter-sendPeriod-r"
+                                    inputProps={{ label: '직접 입력', custom: true, checked: temp.sendPeriod === 'R' }}
+                                    disabled
+                                />
                             </Col>
                             <Col xs={6} className="p-0">
                                 <MokaInput className="flex-fill" disabled />

@@ -48,6 +48,9 @@ public class AbTestCaseResultVO {
     @Column(name = "ABTEST_TYPE")
     private String abtestType;
 
+    @Column(name = "ABTEST_TYPE_NM")
+    private String abtestTypeNm;
+
     /**
      * 도메인ID
      */
@@ -94,6 +97,9 @@ public class AbTestCaseResultVO {
     @Column(name = "ABTEST_PURPOSE")
     private String abtestPurpose;
 
+    @Column(name = "ABTEST_PURPOSE_NM")
+    private String abtestPurposeNm;
+
     /**
      * 시작일시
      */
@@ -124,15 +130,4 @@ public class AbTestCaseResultVO {
     @Column(name = "REG_NM")
     private String regNm;
 
-    /**
-     * KPI달성율(A) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
-     */
-    @Column(name = "KPI_VALUE_A")
-    private Long kpiValueA = 0L;
-
-    /**
-     * KPI달성율(B) / TB_ABTEST_INSTANCE(AB테스트 인스턴스)
-     */
-    @Column(name = "KPI_VALUE_B")
-    private Long kpiValueB = 0L;
 }

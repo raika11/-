@@ -173,7 +173,7 @@ const ContainerEdit = ({ onDelete, match }) => {
         >
             <MokaInputLabel className="mb-2" label="컨테이너ID" name="containerSeq" value={temp.containerSeq} inputProps={{ plaintext: true, readOnly: true }} />
 
-            <MokaInputLabel label="사용분류" className="mb-2" as="select" disabled>
+            <MokaInputLabel label="사용분류" className="mb-2" as="select" name="containerGroup" onChange={handleChangeValue}>
                 <option>서비스페이지</option>
             </MokaInputLabel>
 
@@ -198,14 +198,14 @@ const ContainerEdit = ({ onDelete, match }) => {
                 append={<MokaCopyTextButton copyText={inputTag} />}
             />
 
-            <MokaInputLabel label="설명" as="textarea" name="description" inputProps={{ rows: 3 }} className="mb-2" value={container.description} onChange={handleChangeValue} />
+            <MokaInputLabel label="설명" as="textarea" name="containerDesc" inputProps={{ rows: 3 }} className="mb-2" value={temp.containerDesc} onChange={handleChangeValue} />
 
             <MokaInputLabel
                 ref={imgFileRef}
                 label={
                     <React.Fragment>
                         이미지
-                        <Button className="mt-1" size="sm" variant="gray-700" onClick={(e) => imgFileRef.current.rootRef.onClick(e)}>
+                        <Button className="mt-1" size="sm" variant="gray-700" onClick={(e) => imgFileRef.current.openFileDialog(e)}>
                             신규등록
                         </Button>
                     </React.Fragment>
@@ -214,10 +214,15 @@ const ContainerEdit = ({ onDelete, match }) => {
                 inputProps={{
                     width: 284,
                     height: (284 * 9) / 16,
-                    // img: thumbSrc,
-                    //  alt: temp.templateName,
+                    img: temp.containerThumb,
                     deleteButton: true,
-                    //   setFileValue
+                    setFileValue: (data) => {
+                        setTemp({
+                            ...temp,
+                            containerThumbFile: data,
+                            containerThumb: !data ? null : temp.containerThumb,
+                        });
+                    },
                 }}
             />
         </MokaCard>

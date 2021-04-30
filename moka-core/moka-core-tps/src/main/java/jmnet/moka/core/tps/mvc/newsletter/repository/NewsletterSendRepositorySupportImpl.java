@@ -5,6 +5,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberSimpleInfo;
 import jmnet.moka.core.tps.mvc.newsletter.dto.NewsletterSearchDTO;
 import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterSend;
 import jmnet.moka.core.tps.mvc.newsletter.entity.QNewsletterInfo;
@@ -38,6 +39,7 @@ public class NewsletterSendRepositorySupportImpl extends TpsQueryDslRepositorySu
     public Page<NewsletterSend> findAllNewsletterSend(NewsletterSearchDTO searchDTO) {
         QNewsletterInfo qNewsletterInfo = QNewsletterInfo.newsletterInfo;
         QNewsletterSend qNewsletterSend = QNewsletterSend.newsletterSend;
+        QMemberSimpleInfo qMemberSimpleInfo = QMemberSimpleInfo.memberSimpleInfo;
 
         JPQLQuery<NewsletterSend> query = from(qNewsletterSend);
         Pageable pageable = searchDTO.getPageable();
@@ -60,6 +62,8 @@ public class NewsletterSendRepositorySupportImpl extends TpsQueryDslRepositorySu
 
         QueryResults<NewsletterSend> list = query
                 .leftJoin(qNewsletterSend.newsletterInfo, qNewsletterInfo)
+                .fetchJoin()
+                .leftJoin(qNewsletterInfo.regMember, qMemberSimpleInfo)
                 .fetchJoin()
                 .fetchResults();
 

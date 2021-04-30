@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
@@ -50,8 +51,10 @@ public class NewsletterSimpleDTO implements Serializable {
 
     private String letterName;
 
+    @DTODateTimeFormat
     private Date sendStartDt;
 
+    @DTODateTimeFormat
     private Date lastSendDt;
 
     private String sendDay;
@@ -68,6 +71,7 @@ public class NewsletterSimpleDTO implements Serializable {
 
     private String statusName;
 
+    @DTODateTimeFormat
     private Date regDt;
 
     private CodeMgtDtlDTO categoryInfo;

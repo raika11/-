@@ -129,7 +129,7 @@
 
 .code_wrap{clear:both;background:#1e1e1e;}
 .code_wrap code{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace}
-.code_wrap .hljs {padding:20px 15px;max-height:400px;}
+.code_wrap .hljs {padding:0px 15px 20px;max-height:400px;}
 .code_wrap .hljs-tag {line-height:1.38;}
 .code_wrap .hljs-comment, .code_wrap .hljs-quote{font-style:normal;}
 

@@ -3,8 +3,13 @@
 /* No media query this is the default */
 
 /* contents layout */
+.theme_catalog .section_header_wrap,
+.theme_catalog header.title_wrap { border-color: #333; }
+.theme_catalog .title_wrap .title { color: #333; }
 
-
+.theme_catalog .showcase_swiper .swiper-container-horizontal > .swiper-pagination-bullets { width: auto; left: calc((100% / 12 * 8 - 0.01%) + 15px);}
+.theme_catalog .showcase_swiper .swiper-pagination-bullet { background: #d8d8d8; opacity: 1;}
+.theme_catalog .showcase_swiper .swiper-pagination-bullet-active { background: #000; }
 
 
 

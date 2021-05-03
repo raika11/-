@@ -106,6 +106,9 @@ font-*,color,text-align,vertical-align, ...
 ::selection { background-color: #e2e2e2; }
 /* 메모 레이어 */
 .memo_layer { width: 320px; height: 212px; padding: 14px 20px 20px; }
+.memo_layer .layer_header { line-height: 20px; } 
+.memo_layer .layer_body { margin-top: 12px; }
+.memo_layer .memo_textarea { width: 100%; height: 108px; overflow-y: auto; border: 0; font-size: 15px; line-height: 24px; color: #666; }
 .memo_layer .btn_close { right: 12px; top: 12px; }
 
 

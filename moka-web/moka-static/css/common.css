@@ -84,6 +84,7 @@ input,select,textarea,button{border-radius:0;vertical-align:middle;}
 input::-ms-clear{display:none;}
 hr{display:none;}
 button{border:0 none;background-color:transparent;cursor:pointer;}
+button:disabled { cursor: auto; border-color: #cdcdcd; background-color: #cdcdcd; color: #fff; }
 button,input{border-radius:0;border:0;-webkit-border-radius:0;}
 table{border-collapse:collapse;border-spacing:0;}
 body{direction:ltr;word-break:keep-all;word-wrap:break-word;-webkit-text-size-adjust:none;}

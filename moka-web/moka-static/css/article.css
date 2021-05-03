@@ -56,8 +56,8 @@ font-*,color,text-align,vertical-align, ...
 .sticky_menu .ico_share { width: 26px; height: 26px; }
 .sticky_menu .btn_fontsize { padding-top: 17px; }
 .sticky_menu .btn_fontsize:before { content: ''; position: absolute; top: 0; left: 50%; width: 33px; height: 1px; transform: translateX(-50%); background: #e2e2e2;}
-.sticky_menu .ico_fontsize { top: 17px; width: 18px; height: 24px; background: #ddd; }
-.sticky_menu .ico_print { width: 23px; height: 24px; background: #ddd; }
+.sticky_menu .ico_fontsize { top: 17px; width: 18px; height: 24px; }
+.sticky_menu .ico_print { width: 23px; height: 24px; }
 .sticky_menu .reader_area { position: relative; margin-top: 16px; padding-top: 16px; text-align: center; }
 .sticky_menu .reader_area:before { content: ''; position: absolute; top: 0; left: 50%; width: 33px; height: 1px; transform: translateX(-50%); background: #e2e2e2;}
 .sticky_menu .reader_area .cnt { display: block; margin-bottom: 2px; font-family: "Noto Sans KR"; font-size: 16px; line-height: 24px;  color: #111; }

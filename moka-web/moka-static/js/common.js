@@ -1,3 +1,6 @@
+
+
+
 $(document).ready(function() {
 
     //header stiky
@@ -6,7 +9,7 @@ $(document).ready(function() {
         // $('.section_header_wrap').addClass('sticky_top');
     }
     $(window).scroll(function () {
-        var headerHeight = $("header.").height();
+        var headerHeight = $(".section_header_wrap").height();
         if ($(this).scrollTop() > headerHeight) {
             // $('.header').addClass('sticky_top');
             // $('.section_header_wrap').addClass('sticky_top');
@@ -58,7 +61,24 @@ $(document).ready(function() {
         });
     }
 
+    
+
 });
+
+/* datepicker */
+$( function() {
+    $( "#datepicker" ).datepicker({
+        showOn:'button',
+        buttonImageOnly: true,
+        
+    });
+    $('#datepicker').datepicker('setDate', 'today');
+} );
+
+
+
+
+
 
 /* 임시 레이어팝업 */
 function toggleOpenLayer(obj){

@@ -138,7 +138,7 @@
 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
-    .contents {padding-top:44px;padding-bottom:120px;}
+    .contents {padding-bottom:120px;}
     .contents section{margin-bottom:60px;}
 
     /* nav */

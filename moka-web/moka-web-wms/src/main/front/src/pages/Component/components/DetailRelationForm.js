@@ -41,12 +41,13 @@ const DetailRelationForm = ({ addMode, origin, component, setComponent, inputTag
      */
     const handleChangeValue = (e) => {
         const { name, value, checked } = e.target;
+        const newDataType = origin.dataType === DATA_TYPE_NONE ? DATA_TYPE_DESK : origin.dataType;
 
         if (name === 'dataType') {
             // 데이터 on => 기존 데이터셋의 dataType을 셋팅한다
             setComponent({
                 ...component,
-                dataType: checked ? origin.dataType : DATA_TYPE_NONE,
+                dataType: checked ? newDataType : DATA_TYPE_NONE,
             });
         } else {
             setComponent({
@@ -132,6 +133,7 @@ const DetailRelationForm = ({ addMode, origin, component, setComponent, inputTag
                         name="dataType"
                         inputProps={{ checked: component.dataType !== DATA_TYPE_NONE }}
                         onChange={handleChangeValue}
+                        disabled={!addMode}
                     />
                 </Col>
                 {component.dataType !== DATA_TYPE_NONE && (

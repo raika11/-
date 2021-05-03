@@ -6,7 +6,8 @@
 .theme_catalog .section_header_wrap,
 .theme_catalog header.title_wrap { border-color: #333; }
 .theme_catalog .title_wrap .title { color: #333; }
-.theme_catalog .showcase_swiper .swiper-pagination-bullet-active { background: #000; }
+.theme_catalog .showcase_swiper .swiper_list .swiper-pagination-bullet { opacity: 1; background: #d8d8d8; }
+.theme_catalog .showcase_swiper .swiper_list .swiper-pagination-bullet-active { background: #000; }
 
 
 
@@ -14,7 +15,7 @@
 
 
 /***************************************    general     ************************************/
-.showcase_general{padding-top:20px; padding-bottom: 40px;}
+.showcase_general{margin-top:20px;}
 
 
 /***************************************    catalog     ************************************/
@@ -28,10 +29,9 @@
 /***************************************    catalog     ************************************/
 
 /* catalog main swiper */
-.showcase_swiper .swiper-pagination-bullet { opacity: 1;}
 
 /* 최신포토 */
-.section_photo .photo_list_area .date { letter-spacing: -0.5px; ;}
+.section_photo .photo_list_area .date { letter-spacing: -0.5px;}
 
 /* sns - Instagram */
 
@@ -114,8 +114,8 @@
     .showcase_swiper .headline { font-size: 20px; line-height: 30px; }
     .showcase_swiper .description { display: none; }
     .showcase_swiper .card_body { margin: 16px 0 23px; }
-    .showcase_swiper .swiper-container-horizontal > .swiper-pagination-bullets { bottom: 0; }
-    .showcase_swiper [class^='swiper-button'] { display: none; }
+    /* .showcase_swiper .swiper-container-horizontal > .swiper-pagination-bullets { bottom: 0; } */
+    /* .showcase_swiper [class^='swiper-button'] { display: none; } */
     
     /* 추천포토 */
     .section_photo .skin_group { margin-top: 20px; }
@@ -136,6 +136,7 @@
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
     .contents {padding-top:44px;padding-bottom:120px;}
+    .contents section{margin-bottom:60px;}
 
     /* nav */
 
@@ -197,12 +198,12 @@
     
     .swiper_list .card_body .description{display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; height: 102px; word-break: break-all; overflow: hidden;}
 
-    .swiper_list .swiper-btn-wrap{position: relative; width: auto;}
-    .swiper_list .swiper-pagination{width: auto; left:-4px; bottom: 0;}
+    .swiper_list .swiper-btn-wrap{position: relative; display: flex; align-items: center; width: auto;}
+    .swiper_list .swiper-pagination{position: relative;  display: flex; width: auto; left:-4px; bottom: 0;}
     .swiper_list .swiper-pagination .swiper-pagination-bullet{margin: 0 4px; width: 7px; height: 7px; background-color: #f6330a;}
 
     /*swiper 재생/멈춤 */
-    .swiper_list .swiper-btn-wrap [class*="swiper-button-"]{display: none; position: absolute; left: 60px ;bottom: 0;}
+    .swiper_list .swiper-btn-wrap [class*="swiper-button-"]{display: none; bottom: 0;}
     .swiper_list .swiper-btn-wrap [class*="swiper-button-"].active{display: inline-block;  background: #f6330a; z-index:10 ; width: 10px; height: 10px; cursor: pointer;}
     .swiper_list .swiper-btn-wrap .swiper-button-play.active{opacity: 0.5;}
     .swiper_list .swiper-btn-wrap .swiper-button-pause.active{opacity: 1;}
@@ -214,12 +215,11 @@
 
     /* catalog main swiper */
     .showcase_swiper { margin-top: 24px; }
-    .showcase_swiper .swiper-container-horizontal > .swiper-pagination-bullets { width: auto; left: calc((100% / 12 * 8 - 0.01%) + 15px);}
-    .showcase_swiper .swiper-pagination-bullet { background: #d8d8d8; }
+    .showcase_swiper .swiper-btn-wrap { width: auto; left: calc((100% / 12 * 8 - 0.01%) + 15px); bottom: 10px; }
     .showcase_swiper .card { align-items: center;}
     .showcase_swiper .headline { font-size: 32px; line-height: 44px; }
-    .showcase_swiper .description { margin-top: 6px; font-size: 15px; line-height: 24px; color: #666; }
-    .showcase_swiper [class^='swiper-button'] { position: absolute; right: 0; bottom: 10px;}
+    .showcase_swiper .description { font-size: 15px; line-height: 24px; color: #666; }
+    /* .showcase_swiper [class^='swiper-button'] { } */
 
     .section_photo { margin-top: 60px; }
 

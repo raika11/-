@@ -32,6 +32,7 @@
 
 /* 최신포토 */
 .section_photo .photo_list_area .date { letter-spacing: -0.5px;}
+.section_photo .photo_list_area .ico_bookmark { width: 20px; height: 20px; }
 
 /* sns - Instagram */
 
@@ -110,23 +111,24 @@
     
     /* catalog main swiper */
     .showcase_swiper { margin-top: 20px; }
-    .showcase_swiper .swiper-pagination-bullet { background: #ccc; }
     .showcase_swiper .headline { font-size: 20px; line-height: 30px; }
     .showcase_swiper .description { display: none; }
-    .showcase_swiper .card_body { margin: 16px 0 23px; }
-    /* .showcase_swiper .swiper-container-horizontal > .swiper-pagination-bullets { bottom: 0; } */
-    /* .showcase_swiper [class^='swiper-button'] { display: none; } */
+    .showcase_swiper .card_body { margin-top: 16px; }
+    .showcase_swiper .swiper-pagination { position: relative; font-size: 0; }
+    .showcase_swiper .swiper-pagination-bullet { background: #ccc; }
     
     /* 추천포토 */
-    .section_photo .skin_group { margin-top: 20px; }
+    .section_photo .card_skin .card_body { padding-top: 16px; }
 
     /* 최신포토 */
     .section_photo { margin-top: 40px; }
     .section_photo .photo_list_area { margin-top: 15px; }
-    .section_photo .photo_list_area .card { padding-top: 0; }
+    .section_photo .photo_list_area .card { min-height: auto; padding-bottom: 0; }
+    .section_photo .photo_list_area .card:nth-child(1),
+    .section_photo .photo_list_area .card:nth-child(2) { padding-top: 0; }
     .section_photo .photo_list_area .card_group .card:before { display: none; }
     .section_photo .photo_list_area .headline { margin-top: 10px; font-size: 16px; }
-    .section_photo .photo_list_area .meta { padding-top: 0; margin-top: 5px; }    
+    .section_photo .photo_list_area .meta { padding-top: 0; margin-top: 5px; }
 
 
     /***************************************    unique     ************************************/
@@ -215,18 +217,22 @@
 
     /* catalog main swiper */
     .showcase_swiper { margin-top: 24px; }
-    .showcase_swiper .swiper-btn-wrap { width: auto; left: calc((100% / 12 * 8 - 0.01%) + 15px); bottom: 10px; }
+    .showcase_swiper .swiper-btn-wrap { position: absolute; width: auto; left: calc((100% / 12 * 8 - 0.01%) + 15px); bottom: 10px; }
     .showcase_swiper .card { align-items: center;}
     .showcase_swiper .headline { font-size: 32px; line-height: 44px; }
     .showcase_swiper .description { font-size: 15px; line-height: 24px; color: #666; }
-    /* .showcase_swiper [class^='swiper-button'] { } */
 
-    .section_photo { margin-top: 60px; }
+    /* 추천포토 */
+    .section_photo .card_skin .card_body { padding-top: 11px; }
+    .section_photo .card_skin .card_body .headline { font-size: 20px; }
 
     /* 최신포토 */
-    .section_photo .title_wrap { margin-bottom: 24px; }
-    .section_photo .photo_list_area { border-bottom: 1px solid #e2e2e2; }
-    
+    .section_photo .photo_list_area { margin-top: 9px; border-bottom: 1px solid #e2e2e2; }
+    .section_photo .photo_list_area .card { padding-top: 15px; padding-bottom: 15px; }
+    .section_photo .photo_list_area .card:before { height: calc(100% - 30px); }
+    .section_photo .photo_list_area .headline { line-height: 1.56; }
+    .section_photo .photo_list_area + .button_wrap_wide { margin-top: 24px; }
+
 
 }
 
@@ -239,6 +245,7 @@
 @media (min-width:1280px) {
 
 }
+
 
 
 

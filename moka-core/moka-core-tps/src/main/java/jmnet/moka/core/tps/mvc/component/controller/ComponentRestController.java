@@ -158,36 +158,36 @@ public class ComponentRestController extends AbstractCommonController {
         // 데이터 유효성 검사
         validData(componentDTO, ActionType.INSERT);
 
-        if (componentDTO.getDataset() != null && componentDTO
-                .getDataset()
-                .getDatasetSeq() == null) {
-            componentDTO.setDataset(null);
-        }
-
-        if (componentDTO.getEditFormPart() != null && componentDTO
-                .getEditFormPart()
-                .getPartSeq() == null) {
-            componentDTO.setEditFormPart(null);
-        }
+        //        if (componentDTO.getDataset() != null && componentDTO
+        //                .getDataset()
+        //                .getDatasetSeq() == null) {
+        //            componentDTO.setDataset(null);
+        //        }
+        //
+        //        if (componentDTO.getEditFormPart() != null && componentDTO
+        //                .getEditFormPart()
+        //                .getPartSeq() == null) {
+        //            componentDTO.setEditFormPart(null);
+        //        }
 
         Component component = modelMapper.map(componentDTO, Component.class);
 
         try {
-            //저장
-            HistPublishDTO histPublishDTO = HistPublishDTO
-                    .builder()
-                    .status(EditStatusCode.PUBLISH)
-                    .approvalYn(MokaConstants.YES)
-                    .build();
-            Component returnVal = componentService.insertComponent(component, histPublishDTO);
-
             //임시저장
             HistPublishDTO histSaveDTO = HistPublishDTO
                     .builder()
                     .status(EditStatusCode.SAVE)
                     .approvalYn(MokaConstants.NO)
                     .build();
-            ComponentHist componentHist = componentHistService.insertComponentHist(component, histSaveDTO);
+            Component returnVal = componentService.insertComponent(component, histSaveDTO);
+
+            //저장
+            HistPublishDTO histPublishDTO = HistPublishDTO
+                    .builder()
+                    .status(EditStatusCode.PUBLISH)
+                    .approvalYn(MokaConstants.YES)
+                    .build();
+            componentHistService.insertComponentHist(component, histPublishDTO);
 
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
             returnValDTO = this.setPrevDataset(returnValDTO);
@@ -223,25 +223,40 @@ public class ComponentRestController extends AbstractCommonController {
         // 데이터 유효성 검사
         for (ComponentDTO componentDTO : componentDTOs) {
             validData(componentDTO, ActionType.INSERT);
-
-            if (componentDTO.getDataset() != null && componentDTO
-                    .getDataset()
-                    .getDatasetSeq() == null) {
-                componentDTO.setDataset(null);
-            }
-
-            if (componentDTO.getEditFormPart() != null && componentDTO
-                    .getEditFormPart()
-                    .getPartSeq() == null) {
-                componentDTO.setEditFormPart(null);
-            }
+            //            if (componentDTO.getDataset() != null && componentDTO
+            //                    .getDataset()
+            //                    .getDatasetSeq() == null) {
+            //                componentDTO.setDataset(null);
+            //            }
+            //
+            //            if (componentDTO.getEditFormPart() != null && componentDTO
+            //                    .getEditFormPart()
+            //                    .getPartSeq() == null) {
+            //                componentDTO.setEditFormPart(null);
+            //            }
         }
 
         List<Component> components = modelMapper.map(componentDTOs, Component.TYPE);
 
         try {
-            // 한번에 등록한다
-            List<Component> returnVal = componentService.insertComponents(components);
+            List<Component> returnVal = new ArrayList<>();
+            for (Component component : components) {
+                //임시저장
+                HistPublishDTO histSaveDTO = HistPublishDTO
+                        .builder()
+                        .status(EditStatusCode.SAVE)
+                        .approvalYn(MokaConstants.NO)
+                        .build();
+                returnVal.add(componentService.insertComponent(component, histSaveDTO));
+
+                //저장
+                HistPublishDTO histPublishDTO = HistPublishDTO
+                        .builder()
+                        .status(EditStatusCode.PUBLISH)
+                        .approvalYn(MokaConstants.YES)
+                        .build();
+                componentHistService.insertComponentHist(component, histPublishDTO);
+            }
             List<ComponentDTO> returnValDTO = modelMapper.map(returnVal, ComponentDTO.TYPE);
 
             // 리턴 DTO 생성
@@ -290,28 +305,6 @@ public class ComponentRestController extends AbstractCommonController {
                     return new NoDataException(message);
                 });
 
-        if (componentDTO.getDataset() != null && componentDTO
-                .getDataset()
-                .getDatasetSeq() == null) {
-            componentDTO.setDataset(null);
-        }
-
-        if (componentDTO.getEditFormPart() != null && componentDTO
-                .getEditFormPart()
-                .getPartSeq() == null) {
-            componentDTO.setEditFormPart(null);
-        }
-
-        // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
-        //        if (componentDTO
-        //                .getDataType()
-        //                .equals(TpsConstants.DATATYPE_DESK) || componentDTO
-        //                .getDataType()
-        //                .equals(TpsConstants.DATATYPE_FORM)) {
-        //            componentDTO.setViewYn(MokaConstants.NO);
-        //        } else {
-        //            componentDTO.setViewYn(MokaConstants.YES);
-        //        }
 
         try {
             // 업데이트
@@ -331,8 +324,8 @@ public class ComponentRestController extends AbstractCommonController {
                     .status(EditStatusCode.PUBLISH)
                     .approvalYn(MokaConstants.YES)
                     .build();
-
             Component returnVal = componentService.updateComponent(newComponent, orgComponent, histPublishDTO);
+
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
             returnValDTO = this.setPrevDataset(returnValDTO);
 
@@ -579,6 +572,19 @@ public class ComponentRestController extends AbstractCommonController {
                     tpsLogger.fail(actionType, message, true);
                 }
             }
+
+            if (component.getDataset() != null && component
+                    .getDataset()
+                    .getDatasetSeq() == null) {
+                component.setDataset(null);
+            }
+
+            if (component.getEditFormPart() != null && component
+                    .getEditFormPart()
+                    .getPartSeq() == null) {
+                component.setEditFormPart(null);
+            }
+
         }
 
         if (invalidList.size() > 0) {

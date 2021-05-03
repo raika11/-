@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAbTestList } from '@store/ab/abAction';
+import { GET_AB_TEST_LIST, getAbTestList, SAVE_AB_TEST } from '@store/ab/abAction';
 import { ABTEST_TYPE } from '@store/ab/abReducer';
 
 /**
@@ -16,7 +16,11 @@ const EditList = (props) => {
     const history = useHistory();
     const { match } = props;
 
-    const { search, list, total } = useSelector(({ ab }) => ab);
+    const search = useSelector(({ ab }) => ab.search);
+    const list = useSelector(({ ab }) => ab.list);
+    const total = useSelector(({ ab }) => ab.total);
+    const abtestSeq = useSelector(({ ab }) => ab.ab.abtestSeq);
+    const loading = useSelector(({ loading }) => loading[GET_AB_TEST_LIST] || loading[SAVE_AB_TEST]);
 
     const handleClickRow = ({ seq }) => {
         history.push(`/ab-edit/${seq}`);
@@ -35,7 +39,7 @@ const EditList = (props) => {
                     설계 등록
                 </Button>
             </Row>
-            <ABAgGrid rowData={list} searchOptions={search} total={total} columnDefs={EditAgGridColumns} onRowClicked={handleClickRow} />
+            <ABAgGrid rowData={list} searchOptions={search} total={total} columnDefs={EditAgGridColumns} onRowClicked={handleClickRow} selected={abtestSeq} loading={loading} />
         </React.Fragment>
     );
 };

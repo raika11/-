@@ -140,17 +140,19 @@ font-*,color,text-align,vertical-align, ...
 .subscription_info {padding:24px 0 18px;color:#f6330a;font-size: 14px;line-height: 1.5;letter-spacing: normal;word-break: break-all;text-align: justify;}
 
 /*** 팩플레터 ***/
-.subscription_wrap.letter_wrap {display:flex;padding:20px 16px 24px;margin:40px auto;background-color: #f3f3f3;}
+.subscription_wrap.letter_wrap {display:flex;padding:30px 16px 24px;margin:40px auto;background-color: #f4f5fa;}
 .letter_wrap .thum {flex:0 0 auto;display:inline-block;width:62px;margin-top:7px;margin-right:16px;}
 .letter_wrap .pp_letter {width:calc(100% - 78px);}
 .letter_wrap .title_wrap {padding:0;height:28px;}
 .letter_wrap .title {color:#111}
 .letter_wrap .subscription_info {padding-bottom:0;color:#111;}
-
-
-
-
-
+.factpl_wrap { margin: 40px 0; padding: 30px 0; background-color: #f4f5fa; text-align: center; }
+.factpl_wrap header.title_wrap > .title { padding-top: 0; }
+.factpl_wrap .title_wrap .title { color: #1d1d1d; font-size: 16px; font-weight: 700; line-height: 24px;  }
+.factpl_wrap .factpl_info { margin-top: 6px; font-size: 14px; line-height: 22px; color: #1d1d1d; }
+.factpl_wrap .btn_primary { margin: 14px auto 0; }
+.factpl_wrap .btn_more { display: block; margin-top: 13px; font-size: 14px; line-height: 22px; color: #666; }
+.factpl_wrap .btn_more .ico_more { width: 12px; height: 12px; }
 
 /****************************************************************************************************/
 /***                                           관련기사                                            ***/

@@ -501,11 +501,6 @@ html,body {overflow-x: hidden;}
 section {width: 100%;}
 .contents {position: relative;width: 100%;margin: 0 auto;padding-left: 20px;padding-right: 20px;}
 
-<<<<<<< HEAD
-/* .contents section{margin-bottom:60px;} */
-=======
-
->>>>>>> 62e4bc8a81232a3944e926dad33f7285a33d04a0
 /** nav **/
 
 /* 태블릿 디자인 나올때 까지는 아래 분기만 사용 - 2021.04.22 */

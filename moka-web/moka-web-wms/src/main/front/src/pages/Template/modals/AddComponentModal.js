@@ -1,25 +1,22 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import toast from '@utils/toastUtil';
+import { DATA_TYPE_NONE, DATA_TYPE_DESK, DATA_TYPE_AUTO } from '@/constants';
 import { MokaModal, MokaInputLabel, MokaIcon } from '@components';
-import { saveComponentList } from '@store/component';
+import { saveComponentList, SAVE_COMPONENT_LIST } from '@store/component';
+import DetailDatasetForm from '@pages/Component/components/DetailDatasetForm';
 
 /**
  * 컴포넌트 생성 Modal
  */
-const AddComponentModal = (props) => {
-    const { show, onHide } = props;
+const AddComponentModal = ({ show, onHide }) => {
     const dispatch = useDispatch();
+    const loading = useSelector(({ loading }) => loading[SAVE_COMPONENT_LIST]);
+    const template = useSelector(({ template }) => template.template);
     const [componentList, setComponentList] = useState([]);
-
-    const { template } = useSelector((store) => ({
-        template: store.template.template,
-    }));
+    const [error, setError] = useState({});
 
     /**
      * 컴포넌트 리스트 초기화
@@ -31,7 +28,8 @@ const AddComponentModal = (props) => {
                     domainId: template.domain.domainId,
                     templateSeq: template.templateSeq,
                     componentName: `${template.templateName}_컴포넌트`,
-                    isInvalid: false,
+                    dataType: DATA_TYPE_NONE,
+                    viewYn: 'N',
                 },
             ]);
         }
@@ -49,28 +47,31 @@ const AddComponentModal = (props) => {
      * 저장
      */
     const handleSave = useCallback(() => {
-        let invalidCnt = 0;
+        let newError = {};
 
-        setComponentList(
-            componentList.map((component) => {
-                if (component.componentName.length < 1) {
-                    invalidCnt++;
-                    return {
-                        ...component,
-                        isInvalid: true,
-                    };
-                }
-                return {
-                    ...component,
-                    isInvalid: false,
-                };
-            }),
-        );
+        const newComponentList = componentList.map((comp, idx) => {
+            let invalidCnt = 0,
+                ne = {};
+            if (comp.componentName.length < 1) {
+                invalidCnt++;
+                ne.componentName = true;
+            }
+            if (comp.dataType === DATA_TYPE_AUTO && !comp?.dataset?.datasetSeq) {
+                invalidCnt++;
+                ne.dataset = true;
+            }
+            if (invalidCnt > 0) newError[idx] = ne;
+            return {
+                ...comp,
+                viewYn: comp.dataType !== DATA_TYPE_DESK ? 'Y' : comp.viewYn,
+            };
+        });
+        setError(newError);
 
-        if (invalidCnt < 1) {
+        if (Object.keys(newError).length < 1) {
             dispatch(
                 saveComponentList({
-                    componentList,
+                    componentList: newComponentList,
                     callback: ({ header }) => {
                         if (header.success) {
                             toast.success(header.message);
@@ -96,7 +97,8 @@ const AddComponentModal = (props) => {
                     domainId: template.domain.domainId,
                     templateSeq: template.templateSeq,
                     componentName: `${template.templateName}_컴포넌트`,
-                    isInvalid: false,
+                    dataType: DATA_TYPE_NONE,
+                    viewYn: 'N',
                 });
             }),
         );
@@ -127,9 +129,16 @@ const AddComponentModal = (props) => {
         e.stopPropagation();
         setComponentList(
             produce(componentList, (draft) => {
-                draft[idx].componentName = e.target.value;
+                draft[idx][e.target.name] = e.target.value;
             }),
         );
+        if (error[idx]?.[e.target.name]) {
+            setError(
+                produce(error, (draft) => {
+                    draft[idx][e.target.name] = false;
+                }),
+            );
+        }
     };
 
     useEffect(() => {
@@ -147,36 +156,58 @@ const AddComponentModal = (props) => {
                 { text: '저장', variant: 'positive', onClick: handleSave },
                 { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
+            id="add-component"
             centered
             draggable
+            loading={loading}
         >
-            <Form>
-                {componentList.map((component, idx) => (
-                    <Form.Row className="mb-2" key={idx}>
-                        <Col xs={11} className="p-0">
-                            <MokaInputLabel
-                                label="컴포넌트명"
-                                labelWidth={90}
-                                className="mb-0"
-                                value={component.componentName}
-                                onChange={(e) => handleComponentList(e, idx)}
-                                isInvalid={component.isInvalid}
-                            />
-                        </Col>
-                        <Col xs={1} className="p-0 pl-2">
+            {componentList.map((component, idx) => (
+                <React.Fragment key={idx}>
+                    <div className="mb-2 d-flex">
+                        <MokaInputLabel
+                            label="컴포넌트명"
+                            name="componentName"
+                            value={component.componentName}
+                            onChange={(e) => handleComponentList(e, idx)}
+                            isInvalid={error?.[idx]?.componentName}
+                            className="flex-fill mr-2"
+                        />
+                        <div className="flex-shrink-0">
                             {idx === 0 ? (
                                 <Button variant="outline-neutral" onClick={addComponent}>
                                     <MokaIcon iconName="fal-plus" />
                                 </Button>
                             ) : (
-                                <Button variant="negative" onClick={(e) => removeComponent(e, idx)}>
+                                <Button variant="outline-negative" onClick={(e) => removeComponent(e, idx)}>
                                     <MokaIcon iconName="fal-minus" />
                                 </Button>
                             )}
-                        </Col>
-                    </Form.Row>
-                ))}
-            </Form>
+                        </div>
+                    </div>
+                    <DetailDatasetForm
+                        addMode
+                        id={idx}
+                        component={component}
+                        setComponent={(newData) => {
+                            setComponentList(
+                                produce(componentList, (draft) => {
+                                    draft[idx] = newData;
+                                    if (newData.dataType !== DATA_TYPE_AUTO) draft[idx].dataset = null;
+                                }),
+                            );
+                        }}
+                        error={error?.[idx]}
+                        setError={(newError) => {
+                            setError({
+                                ...error,
+                                [idx]: newError,
+                            });
+                        }}
+                    />
+
+                    {componentList.length - 1 !== idx && <hr />}
+                </React.Fragment>
+            ))}
         </MokaModal>
     );
 };

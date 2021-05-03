@@ -224,6 +224,7 @@
     .showcase_swiper .description { font-size: 15px; line-height: 24px; color: #666; }
 
     /* 추천포토 */
+    .section_photo .skin_group { margin-top: 24px; }
     .section_photo .card_skin .card_body { padding-top: 11px; }
     .section_photo .card_skin .card_body .headline { font-size: 20px; }
 

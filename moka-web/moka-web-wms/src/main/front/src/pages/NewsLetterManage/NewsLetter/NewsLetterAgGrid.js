@@ -6,7 +6,7 @@ import { MokaTable } from '@/components';
 import columnDefs from './NewsLetterAgGridColumns';
 import { GET_NEWS_LETTER_LIST, getNewsLetterList, changeNewsLetterSearchOption } from '@store/newsLetter';
 import moment from 'moment';
-import { DATE_FORMAT, NEWS_LETTER_SEND_TYPE, NEWS_LETTER_TYPE, NEWS_LETTER_STATUS } from '@/constants';
+import { DATE_FORMAT, NEWS_LETTER_SEND_TYPE, NEWS_LETTER_TYPE, NEWS_LETTER_STATUS, API_BASE_URL } from '@/constants';
 import { GRID_HEADER_HEIGHT } from '@/style_constants';
 
 /**
@@ -66,7 +66,14 @@ const NewsLetterAgGrid = ({ match }) => {
                 <Button variant="positive" className="mr-1" onClick={() => history.push(`${match.path}/add`)}>
                     상품 등록
                 </Button>
-                <Button variant="outline-neutral">Excel 다운로드</Button>
+                <a
+                    className="btn btn-outline-neutral"
+                    href={`${API_BASE_URL}/api/newsletter/excel?letterType=${search.letterType}&category=${search.category}&status=${search.status}&sendType=${search.sendType}&startDt=${search.startDt}&endDt=${search.endDt}&scbYn=${search.scbYn}&abtestYn=${search.abtestYn}&letterName=${search.letterName}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Excel 다운로드
+                </a>
             </div>
             <MokaTable
                 suppressMultiSort // 다중 정렬 비활성

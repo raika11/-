@@ -15,11 +15,6 @@ const getNewsLetterList = callApiAfterActions(act.GET_NEWS_LETTER_LIST, api.getN
 const getNewsLetter = createRequestSaga(act.GET_NEWS_LETTER, api.getNewsLetter);
 
 /**
- * 뉴스레터 발송 목록 조회
- */
-const getNewsLetterSendList = callApiAfterActions(act.GET_NEWS_LETTER_SEND_LIST, api.getNewsLetterSendList, (state) => state.newsLetter.send);
-
-/**
  * 뉴스레터 채널별 등록된 컨텐츠 조회 후 발송 콘텐츠 목록 조회
  * (ISSUE, TOPIC, SERIES, ARTICLE, REPORTER, JPOD)
  */
@@ -57,6 +52,21 @@ function* saveNewsLetter({ payload: { newsLetter, callback } }) {
 
     yield put(finishLoading(ACTION));
 }
+
+/**
+ * 뉴스레터 히스토리 목록 조회
+ */
+const getNewsLetterHistoryList = createRequestSaga(act.GET_NEWS_LETTER_HISTORY_LIST, api.getNewsLetterHistoryList);
+
+/**
+ * 뉴스레터 히스토리 상세 조회
+ */
+const getNewsLetterHistory = createRequestSaga(act.GET_NEWS_LETTER_HISTORY, api.getNewsLetterHistory);
+
+/**
+ * 뉴스레터 발송 목록 조회
+ */
+const getNewsLetterSendList = callApiAfterActions(act.GET_NEWS_LETTER_SEND_LIST, api.getNewsLetterSendList, (state) => state.newsLetter.send);
 
 /**
  * 수동 뉴스레터 목록 조회
@@ -99,7 +109,10 @@ export default function* newsLetterSaga() {
     yield takeLatest(act.GET_NEWS_LETTER_LIST, getNewsLetterList);
     yield takeLatest(act.GET_NEWS_LETTER, getNewsLetter);
     yield takeLatest(act.GET_NEWS_LETTER_CHANNEL_TYPE, getNewsLetterChannelTypeList);
+    yield takeLatest(act.SAVE_NEWS_LETTER, saveNewsLetter);
+    yield takeLatest(act.GET_NEWS_LETTER_HISTORY_LIST, getNewsLetterHistoryList);
+    yield takeLatest(act.GET_NEWS_LETTER_HISTORY, getNewsLetterHistory);
+
     yield takeLatest(act.GET_NEWS_LETTER_SEND_LIST, getNewsLetterSendList);
     yield takeLatest(act.GET_NEWS_LETTER_PASSIVE_LIST, getNewsLetterPassiveList);
-    yield takeLatest(act.SAVE_NEWS_LETTER, saveNewsLetter);
 }

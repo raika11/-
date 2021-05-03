@@ -382,6 +382,11 @@ textarea {resize: none;}
     .el.el_sm6{-webkit-line-clamp:6;}
     
     .pagination{display:none;}
+
+
+
+    /* 보더 */
+    .bdr_title_sm_w4{border-top:4px solid #f6330a;} /* 보더만 추가된 유형일 때 */
 }
 
 /* Large devices (desktops, 1024px and up) */

@@ -31,16 +31,16 @@ public interface ComponentHistService {
             throws Exception;
 
 
-    /**
-     * 여러개의 히스토리를 한번에 등록
-     *
-     * @param maybeHistories 히스토리 리스트 또는 컴포넌트 리스트
-     * @param histPublishDTO 임시저장/전송/예약 정보
-     * @return 히스토리 리스트
-     * @throws Exception 에러
-     */
-    List<ComponentHist> insertComponentHistList(List<?> maybeHistories, HistPublishDTO histPublishDTO)
-            throws Exception;
+    //    /**
+    //     * 여러개의 히스토리를 한번에 등록
+    //     *
+    //     * @param maybeHistories 히스토리 리스트 또는 컴포넌트 리스트
+    //     * @param histPublishDTO 임시저장/전송/예약 정보
+    //     * @return 히스토리 리스트
+    //     * @throws Exception 에러
+    //     */
+    //    List<ComponentHist> insertComponentHistList(List<?> maybeHistories, HistPublishDTO histPublishDTO)
+    //            throws Exception;
 
     /**
      * 컴포넌트 히스토리 등록

@@ -2,6 +2,7 @@ package jmnet.moka.web.tms.mvc.handler;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.template.exception.TemplateLoadException;
@@ -276,31 +277,59 @@ public class PageHandler extends AbstractHandler {
      * @param httpParamMap 파라미터 맵
      */
     private void processPathParam(MergeContext mergeContext, PageItem pageItem, HttpParamMap httpParamMap) {
-        String urlParam = pageItem.getString(ItemConstants.PAGE_URL_PARAM);
-        if (McpString.isNotEmpty(urlParam)) {
+        String pageUrl = pageItem.getString(ItemConstants.PAGE_URL);
+        if (pageUrl.endsWith(AbstractTemplateLoader.PATH_PARAM_PREFIX)) {
+            String mergePath = (String) mergeContext.get(MokaConstants.MERGE_PATH);
+            PageItem parentPageItem = null;
+            if ( pageUrl.endsWith(AbstractTemplateLoader.PATH_PARAM_PREFIX
+                    + AbstractTemplateLoader.PATH_PARAM_PREFIX)) {
+                // 2단계 인 경우
+                String parentPageId = pageItem.getString(ItemConstants.PAGE_PARENT_ID);
+                if (McpString.isNotEmpty(parentPageId)) {
+                    try {
+                        parentPageItem =
+                                (PageItem)this.domainTemplateMerger.getItem(pageItem.getString(ItemConstants.PAGE_DOMAIN_ID), MokaConstants.ITEM_PAGE, parentPageId);
+                    } catch (TemplateParseException | TemplateMergeException  | TemplateLoadException e) {
+                        logger.warn("Parent Page get Failed: {}' parent {}", pageItem.getItemId(), parentPageId);
+                    }
+                }
+            }
+            List<String> pathList = Arrays.stream(pageUrl.split("/"))
+                  .filter(splitted -> splitted != null && splitted.length() > 0)
+                  .collect(Collectors.toList());
+
+            List<String> mergePathList = Arrays.stream(mergePath.split("/"))
+                                          .filter(splitted -> splitted != null && splitted.length() > 0)
+                                          .collect(Collectors.toList());
+            int paramIndex = 0;
+            for ( int i=0; i<pathList.size();i++) {
+                if ( pathList.get(i).equals("*")) {
+                    paramIndex = i;
+                    break;
+                }
+            }
+            // 2단계, 부모 경로 파라미터 처리, default값 없음
+            if ( parentPageItem != null) {
+                httpParamMap.put(parentPageItem.getString(ItemConstants.PAGE_URL_PARAM), mergePathList.get(paramIndex));
+                paramIndex ++;
+            }
+            // 자식 혹은 1단계 경로 파라미터 처리
+            String urlParam = pageItem.getString(ItemConstants.PAGE_URL_PARAM);
             String paramName = urlParam;
-            String paramValue = null;
+            String paramDefaultValue = null;
             if (urlParam.contains(",")) { // default 파라미터가 있는 경우
                 String[] param = urlParam.split(",");
                 paramName = param[0];
-                paramValue = param[1];
+                paramDefaultValue = param[1]; // default value를 설정해둔다.
             }
-            String mergePath = (String) mergeContext.get(MokaConstants.MERGE_PATH);
-            String noPathParamUrl = pageItem
-                    .getString(ItemConstants.PAGE_URL)
-                    .replace(AbstractTemplateLoader.PATH_PARAM_PREFIX, "");
-            if (!mergePath.equalsIgnoreCase(noPathParamUrl)) { // 경로 파라미터가 있을 경우
-                int length = mergePath.length();
-                int lastSlashIndex = mergePath.lastIndexOf("/");
-                if (lastSlashIndex > 0 && lastSlashIndex < length) {
-                    paramValue = mergePath.substring(lastSlashIndex + 1, length);
-                }
-            }
-            if (paramValue != null) { // default값이나 PathParam이 있을 경우만 추가
-                httpParamMap.put(paramName, paramValue);
+            if ( pathList.size() == mergePathList.size()) { // 경로파라미터 값이 있는 경우
+                httpParamMap.put(paramName, mergePathList.get(paramIndex));
+            } else { // 경로파라미터 값이 없는 경우, default값
+                httpParamMap.put(paramName, paramDefaultValue);
             }
         }
     }
+
 
     private MergeItem getErrorPageItem(String domainId) {
         return getPageItem(domainId, MokaConstants.TMS_ERROR_PAGE);

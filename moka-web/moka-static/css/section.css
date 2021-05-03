@@ -6,7 +6,8 @@
 .theme_catalog .section_header_wrap,
 .theme_catalog header.title_wrap { border-color: #333; }
 .theme_catalog .title_wrap .title { color: #333; }
-.theme_catalog .showcase_swiper .swiper-pagination-bullet-active { background: #000; }
+.theme_catalog .showcase_swiper .swiper_list .swiper-pagination-bullet { opacity: 1; background: #d8d8d8; }
+.theme_catalog .showcase_swiper .swiper_list .swiper-pagination-bullet-active { background: #000; }
 
 
 
@@ -28,10 +29,9 @@
 /***************************************    catalog     ************************************/
 
 /* catalog main swiper */
-.showcase_swiper .swiper-pagination-bullet { opacity: 1;}
 
 /* 최신포토 */
-.section_photo .photo_list_area .date { letter-spacing: -0.5px; ;}
+.section_photo .photo_list_area .date { letter-spacing: -0.5px;}
 
 /* sns - Instagram */
 
@@ -114,8 +114,8 @@
     .showcase_swiper .headline { font-size: 20px; line-height: 30px; }
     .showcase_swiper .description { display: none; }
     .showcase_swiper .card_body { margin: 16px 0 23px; }
-    .showcase_swiper .swiper-container-horizontal > .swiper-pagination-bullets { bottom: 0; }
-    .showcase_swiper [class^='swiper-button'] { display: none; }
+    /* .showcase_swiper .swiper-container-horizontal > .swiper-pagination-bullets { bottom: 0; } */
+    /* .showcase_swiper [class^='swiper-button'] { display: none; } */
     
     /* 추천포토 */
     .section_photo .skin_group { margin-top: 20px; }
@@ -136,6 +136,7 @@
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
     .contents {padding-top:44px;padding-bottom:120px;}
+    .contents section{margin-bottom:60px;}
 
     /* nav */
 
@@ -214,12 +215,11 @@
 
     /* catalog main swiper */
     .showcase_swiper { margin-top: 24px; }
-    .showcase_swiper .swiper-container-horizontal > .swiper-pagination-bullets { width: auto; left: calc((100% / 12 * 8 - 0.01%) + 15px);}
-    .showcase_swiper .swiper-pagination-bullet { background: #d8d8d8; }
+    .showcase_swiper .swiper-btn-wrap { width: auto; left: calc((100% / 12 * 8 - 0.01%) + 15px); bottom: 10px; }
     .showcase_swiper .card { align-items: center;}
     .showcase_swiper .headline { font-size: 32px; line-height: 44px; }
-    .showcase_swiper .description { margin-top: 6px; font-size: 15px; line-height: 24px; color: #666; }
-    .showcase_swiper [class^='swiper-button'] { position: absolute; right: 0; bottom: 10px;}
+    .showcase_swiper .description { font-size: 15px; line-height: 24px; color: #666; }
+    /* .showcase_swiper [class^='swiper-button'] { } */
 
     .section_photo { margin-top: 60px; }
 

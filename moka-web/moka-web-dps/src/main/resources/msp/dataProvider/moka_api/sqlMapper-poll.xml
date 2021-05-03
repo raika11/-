@@ -52,6 +52,7 @@
       #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_nick, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{_SUCCESS, mode=OUT, jdbcType=BOOLEAN, javaType=java.lang.Boolean},
       #{_MESSAGE, mode=OUT, jdbcType=VARCHAR, javaType=string}
       )}
@@ -71,7 +72,6 @@
     {call UPU_TRENDPOLL_VOTE_LIST_SEL_BY_MEM(
       #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{member_nick, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{pcid, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},

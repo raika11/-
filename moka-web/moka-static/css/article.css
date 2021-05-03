@@ -61,16 +61,7 @@ font-*,color,text-align,vertical-align, ...
 .sticky_menu .reader_area:before { content: ''; position: absolute; top: 0; left: 50%; width: 33px; height: 1px; transform: translateX(-50%); background: #e2e2e2;}
 .sticky_menu .reader_area .cnt { display: block; margin-bottom: 2px; font-family: "Noto Sans KR"; font-size: 16px; line-height: 24px;  color: #111; }
 
-.sticky_menu .layer_share { left: 90px; top: 158px; width: 288px; height: 207px; padding: 14px 20px 20px; }
-.sticky_menu .layer_share ul { margin: 1px 5px 0; }
-.sticky_menu .layer_share li { display: inline-block; position: relative; width: 40px; height: 64px; margin: 13px 0 0 20px;}
-.sticky_menu .layer_share li:nth-child(1),
-.sticky_menu .layer_share li:nth-child(4n+1) {margin-left: 0;}
-.sticky_menu .layer_share li button { width: 40px;}
-.sticky_menu .layer_share li button [class^='ico'] { position: relative; width: 40px; height: 40px; border: 1px solid #e2e2e2; border-radius: 50%;  vertical-align: top;}
-.sticky_menu .layer_share li button span { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); font-size: 13px; line-height: 22px; letter-spacing: -0.5px; white-space: nowrap; color: #999; }
-.sticky_menu .layer_share .btn_close { top: 15px; right: 18px; }
-
+.sticky_menu .layer_share { left: 90px; top: 158px; }
 .sticky_menu .layer_fontsize { left: 90px; top: 240px; width: 230px; height: 158px; padding: 14px 20px 20px; }
 .sticky_menu .layer_fontsize .layer_body > p { margin-top: 10px; font-size: 13px; line-height: 22px; letter-spacing: -0.5px; color: #999; }
 .sticky_menu .layer_fontsize .btn_close { top: 15px; right: 18px; }
@@ -232,7 +223,7 @@ font-*,color,text-align,vertical-align, ...
 
     /* sticky_menu */
     .sticky_menu { position: fixed; top: 0; left: 0; transform: none; width: 100%; height: 58px; padding: 19px 0 0; margin: 0; border: none; border-radius: 0; opacity: 0; transition: opacity 0.3s;}
-    .sticky_menu.fixed { opacity: 1; transition: opacity 0.3s;}
+    .sticky_menu.fixed { z-index: 310; opacity: 1; transition: opacity 0.3s;}
     .sticky_menu > button { position: absolute; top: 19px; width: auto; vertical-align: top; }
     .sticky_menu > button:nth-child(n+2) { margin-top: 0;}
     .sticky_menu > button [class*="ico_"] { height: 26px; }
@@ -311,6 +302,9 @@ font-*,color,text-align,vertical-align, ...
     .layer_comment { right: -100%; transition: all 0.8s; width: 560px; padding: 30px 40px; box-shadow: -5px 2px 7px rgba(0, 0, 0, 0.08); }
     .layer_comment .btn_close { position: absolute; right: 40px; top: 30px; }
     .main_sm_text_area { display: none; }
+
+    .sticky_menu .layer_share::before { content: ''; z-index: 1; position: absolute; left: -5px; top: 20px; transform: rotate(-45deg); width: 7px; height: 7px; border-left: 1px solid rgba(0, 0, 0, 0.2); border-top: 1px solid rgba(0, 0, 0, 0.2); background-color: #fff; }
+
     /* 속보티커 */
     .layer_ticker {  top: 64px; height: 52px; }
     .layer_ticker .ticker_content { align-items: center; }

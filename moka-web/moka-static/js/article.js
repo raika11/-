@@ -76,7 +76,7 @@ function bylineControl(width){
 
     $byline.each(function(index, item){
         if(index >= maxReporterNum){
-            $(item).addClass("hide");
+            // $(item).addClass("hide");
         } else {
             $(item).removeClass("hide");
             bylineWidth = $(item).outerWidth();

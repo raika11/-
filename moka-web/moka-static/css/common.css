@@ -91,11 +91,11 @@ body,th,td,input,select,textarea,button{font-size:100%;font-family:-atheme_uniqu
 a{color:inherit;font-size:inherit;line-height:inherit;text-decoration:none;}
 /* a:hover{text-decoration:underline;} */
 a:active{background-color:transparent;}
+mark { word-break: break-all; }
 address,caption,cite,code,dfn,em,var{font-style:normal;font-weight:normal;}
 img{vertical-align:middle;}
 font,b,strong{font-size:inherit;}
 em,i{font-style:normal;}
-::selection { background-color: #e2e2e2; }
 
 /* ==========================================================================
     3.태그공통
@@ -803,10 +803,20 @@ input::-webkit-search-results-decoration{display:none;}
 .bg_primary{background-color:#ff3c14;line-height:1;}
 
 /* 하이라이트 */
-[class*="_highlighted"] { position: relative; }
+[class*="highlighted"] { position: relative; }
+.highlighted { background-color: #e2e2e2; }
+.highlighted::before, 
+.highlighted::after { content: ''; position: absolute; width: 2px; height: 1.5em; background-color: #999; }
+.highlighted::before { top: 0; }
+.highlighted::after { bottom: 0; }
 .text_highlighted { background-color: #ffe1d9; }
 .memo_highlighted { background-color: #ffeec8; }
-.highligth_bx { position: absolute; right: 0; bottom: -40px; height: 40px; padding: 10px 20px; background-color: #333; }
+.highligth_bx { z-index: 1; position: absolute; bottom: -45px; width: 230px; height: 40px; padding: 10px 20px; border-radius: 4px; background-color: #333; }
+.highligth_bx button { font-size: 14px; font-weight: 700; line-height: 20px; vertical-align: top; color: #fff; }
+.highligth_bx button:nth-child(n+2) { margin-left: 13px; }
+.highligth_bx button.active { color: #ff7558; }
+::selection { background-color: #e2e2e2; }
+
 
 /****************************************************************************************************/
 /***                                            리스트                                             ***/

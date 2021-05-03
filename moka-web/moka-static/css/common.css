@@ -802,20 +802,6 @@ input::-webkit-search-results-decoration{display:none;}
 /* background */
 .bg_primary{background-color:#ff3c14;line-height:1;}
 
-/* 하이라이트 */
-[class*="highlighted"] { position: relative; }
-.highlighted { background-color: #e2e2e2; }
-.highlighted::before, 
-.highlighted::after { content: ''; position: absolute; width: 2px; height: 1.5em; background-color: #999; }
-.highlighted::before { top: 0; }
-.highlighted::after { bottom: 0; }
-.text_highlighted { background-color: #ffe1d9; }
-.memo_highlighted { background-color: #ffeec8; }
-.highligth_bx { z-index: 1; position: absolute; bottom: -45px; width: 230px; height: 40px; padding: 10px 20px; border-radius: 4px; background-color: #333; }
-.highligth_bx button { font-size: 14px; font-weight: 700; line-height: 20px; vertical-align: top; color: #fff; }
-.highligth_bx button:nth-child(n+2) { margin-left: 13px; }
-.highligth_bx button.active { color: #ff7558; }
-::selection { background-color: #e2e2e2; }
 
 
 /****************************************************************************************************/
@@ -1383,16 +1369,6 @@ dl.date dd {margin-left: 6px;}
 .layer_popup .layer_header .layer_title{font-size:14px;line-height:20px;color:#333;}
 .layer_popup .btn_close{position:absolute;}
 .layer_popup .btn_close .ico_close{width:20px;height:20px;}
-.layer_datetime{right:0;top:22px;width:192px;padding:30px;}
-.layer_datetime .date{line-height:20px;}
-.layer_datetime .date:nth-child(n + 2){margin-top:6px;}
-.layer_datetime .btn_close{top:10px;right:10px;}
-.layer_byline{top:52px;width:160px;padding:14px 20px 5px;}
-.layer_byline .layer_body{margin-top:12px;}
-.layer_byline .layer_body li:nth-child(n + 2){border-top:1px solid #e2e2e2;}
-.layer_byline .layer_body a{display:flex;justify-content:space-between;align-items:center;height:42px;}
-.layer_byline .layer_body .ico_arrow_right{width:20px;height:20px;}
-.layer_byline .btn_close{top:14px;right:18px;}
 .layer_comment{position:fixed;right:0;top:0;height:100%;background-color:#fff;}
 .layer_info { right: 0; top: 32px; width: 320px; padding: 30px; }
 .layer_info p { font-size: 13px; line-height: 20px;letter-spacing: -0.5px; color: #333; }
@@ -1440,7 +1416,6 @@ dl.date dd {margin-left: 6px;}
     .md_only_hidden{display:none;}
     /* <<- .tb {display:none;}
     */
-    .layer_datetime{display:none!important;}
     .contents{padding-left:34px;padding-right:34px;}
     .side_nav_mobile{display:none;}
     /* button */

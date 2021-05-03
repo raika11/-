@@ -89,6 +89,26 @@ font-*,color,text-align,vertical-align, ...
 .layer_ticker .date { margin-left: 10px; }
 .layer_ticker .btn_close { position: absolute; }
 
+
+/* 하이라이트 */
+[class*="highlighted"] { position: relative; }
+.highlighted { background-color: #e2e2e2; }
+.highlighted::before, 
+.highlighted::after { content: ''; position: absolute; width: 2px; height: 1.5em; background-color: #999; }
+.highlighted::before { top: 0; }
+.highlighted::after { bottom: 0; }
+.text_highlighted { background-color: #ffe1d9; }
+.memo_highlighted { background-color: #ffeec8; }
+.highligth_bx { z-index: 1; position: absolute; bottom: -45px; width: 230px; height: 40px; padding: 10px 20px; border-radius: 4px; background-color: #333; }
+.highligth_bx button { font-size: 14px; font-weight: 700; line-height: 20px; vertical-align: top; color: #fff; }
+.highligth_bx button:nth-child(n+2) { margin-left: 13px; }
+.highligth_bx button.active { color: #ff7558; }
+::selection { background-color: #e2e2e2; }
+/* 메모 레이어 */
+.memo_layer { width: 320px; height: 212px; padding: 14px 20px 20px; }
+.memo_layer .btn_close { right: 12px; top: 12px; }
+
+
 .fs1 {font-size:14px;line-height:1.93;letter-spacing:normal;}
 .fs2 {font-size:16px;line-height:1.81;letter-spacing:normal;}
 .fs3 {font-size:18px;line-height:1.72;letter-spacing:-0.5px;}

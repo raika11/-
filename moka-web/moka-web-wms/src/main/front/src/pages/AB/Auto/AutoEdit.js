@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaCardTabs } from '@components';
 import { ABMainForm, ABEtcForm, ABStatusRow } from '../components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAbtest, saveAbTest } from '@store/ab/abAction';
+import { clearAbTest, getAbtest, saveAbTest, GET_AB_TEST, SAVE_AB_TEST } from '@store/ab/abAction';
 import commonUtil from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 
@@ -17,16 +17,24 @@ const AutoEdit = ({ match }) => {
     const { abTestSeq: abtestSeq } = useParams();
     const history = useHistory();
     const [isAdd, setIsAdd] = useState(true);
+    const [isCopy, setIsCopy] = useState(false);
     const [activeKey, setActiveKey] = useState(0);
     const [temp, setTemp] = useState({});
     const data = useSelector(({ ab: store }) => store.ab);
+    const loading = useSelector(({ loading }) => loading[GET_AB_TEST] || loading[SAVE_AB_TEST]);
 
     useEffect(() => {
         if (!commonUtil.isEmpty(abtestSeq)) {
             dispatch(getAbtest({ abtestSeq }));
-            setIsAdd(true);
-        } else {
             setIsAdd(false);
+            setIsCopy(false);
+        } else {
+            if (!isCopy) {
+                dispatch(clearAbTest());
+            } else {
+                setTemp({ ...temp, abtestSeq: null });
+            }
+            setIsAdd(true);
         }
     }, [dispatch, abtestSeq]);
 
@@ -49,8 +57,12 @@ const AutoEdit = ({ match }) => {
                         dispatch(
                             saveAbTest({
                                 detail: temp,
-                                callback: () => {
-                                    toast.success('성고옹');
+                                callback: (response) => {
+                                    const { header, body } = response;
+                                    toast.result(response);
+                                    if (header.success) {
+                                        dispatch(getAbtest({ abtestSeq: body.abtestSeq }));
+                                    }
                                 },
                             }),
                         );
@@ -98,6 +110,15 @@ const AutoEdit = ({ match }) => {
         [temp],
     );
 
+    const handleChangeObject = (obj) => {
+        setTemp({ ...temp, ...obj });
+    };
+
+    const handleClickCopy = () => {
+        setIsCopy(true);
+        history.push('/ab-auto/add');
+    };
+
     return (
         <MokaCard
             title="AB테스트 제목"
@@ -110,6 +131,7 @@ const AutoEdit = ({ match }) => {
                 'justify-content-center': !isAdd,
             })}
             footerAs={renderFooter()}
+            loading={loading}
         >
             <MokaCardTabs
                 fill={isAdd}
@@ -119,10 +141,10 @@ const AutoEdit = ({ match }) => {
                 tabNavs={renderTabNavs()}
                 tabs={[
                     <React.Fragment>
-                        {!isAdd && <ABStatusRow />}
+                        {!isAdd && <ABStatusRow modDt={temp.modDt} modUser={temp.modId} onCopy={handleClickCopy} />}
                         <ABMainForm data={temp} onChange={handleChange} />
                     </React.Fragment>,
-                    <ABEtcForm data={data} onChange={handleChange} />,
+                    <ABEtcForm data={temp} onChange={handleChangeObject} />,
                 ]}
             />
         </MokaCard>

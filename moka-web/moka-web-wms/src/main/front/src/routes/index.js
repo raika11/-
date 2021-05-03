@@ -126,6 +126,7 @@ const NewsLetterMResult = React.lazy(() => import('@pages/NewsLetterManage/NewsL
 const NewsLetterTResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterResult/NewsLetterTypeResult'));
 const NewsLetterPResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterResult/NewsLetterPeriodResult'));
 const ArticlePackage = React.lazy(() => import('@pages/ArticlePackage'));
+const SubscriptionDesign = React.lazy(() => import('@pages/SubscriptionDesign'));
 
 const routes = [
     {
@@ -851,6 +852,15 @@ const routes = [
         displayName: '기사 패키지',
         component: ArticlePackage,
         side: true,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/subscription-design',
+        name: 'subscriptionDesigh',
+        component: SubscriptionDesign,
+        side: false,
         nonResponsive: true,
         exact: false,
         strict: true,

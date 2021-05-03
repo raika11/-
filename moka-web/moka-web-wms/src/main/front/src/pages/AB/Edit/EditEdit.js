@@ -1,22 +1,73 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaCardTabs } from '@components';
 import { ABMainForm, ABEtcForm, ABStatusRow } from '../components';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearAbTest, GET_AB_TEST, getAbtest, SAVE_AB_TEST, saveAbTest } from '@store/ab/abAction';
+import commonUtil from '@utils/commonUtil';
+import toast from '@utils/toastUtil';
 
 /**
  * A/B 테스트 > 대안 설계 > 등록, 수정
  */
 const EditEdit = ({ match }) => {
-    const isAdd = true;
+    const dispatch = useDispatch();
+    const { abTestSeq: abtestSeq } = useParams();
     const history = useHistory();
+    const [isAdd, setIsAdd] = useState(true);
+    const [isCopy, setIsCopy] = useState(false);
     const [activeKey, setActiveKey] = useState(0);
+    const [temp, setTemp] = useState({});
+    const data = useSelector(({ ab: store }) => store.ab);
+    const loading = useSelector(({ loading }) => loading[GET_AB_TEST] || loading[SAVE_AB_TEST]);
 
-    const renderFooter = useCallback(() => {
+    useEffect(() => {
+        if (!commonUtil.isEmpty(abtestSeq)) {
+            dispatch(getAbtest({ abtestSeq }));
+            setIsAdd(false);
+            setIsCopy(false);
+        } else {
+            if (!isCopy) {
+                dispatch(clearAbTest());
+            } else {
+                setTemp({ ...temp, abtestSeq: null });
+            }
+            setIsAdd(true);
+        }
+    }, [dispatch, abtestSeq]);
+
+    useEffect(() => {
+        if (!commonUtil.isEmpty(`${data.abtestSeq}`)) {
+            setTemp(data);
+        }
+    }, [data]);
+
+    /**
+     * 카드 버튼 렌더러
+     */
+    const renderFooter = () => {
         return (
             <React.Fragment>
-                <Button variant="positive" className="mr-1">
+                <Button
+                    variant="positive"
+                    className="mr-1"
+                    onClick={() => {
+                        dispatch(
+                            saveAbTest({
+                                detail: temp,
+                                callback: (response) => {
+                                    const { header, body } = response;
+                                    toast.result(response);
+                                    if (header.success) {
+                                        dispatch(getAbtest({ abtestSeq: body.abtestSeq }));
+                                    }
+                                },
+                            }),
+                        );
+                    }}
+                >
                     저장
                 </Button>
                 <Button variant="temp" className="mr-1">
@@ -28,7 +79,7 @@ const EditEdit = ({ match }) => {
                 {isAdd && (
                     <Button
                         variant="negative"
-                        style={{ marginLeft: 162 }}
+                        style={{ marginLeft: 170 }}
                         onClick={() => {
                             if (activeKey === 0) setActiveKey(1);
                             else setActiveKey(0);
@@ -39,11 +90,34 @@ const EditEdit = ({ match }) => {
                 )}
             </React.Fragment>
         );
-    }, [activeKey, history, isAdd, match]);
+    };
 
+    /**
+     * 탭 nav 렌더러
+     */
     const renderTabNavs = useCallback(() => {
         return isAdd ? ['STEP 1\n주요 설정', 'STEP 2\n기타 설정'] : ['주요 설정', '기타 설정'];
     }, [isAdd]);
+
+    /**
+     * AB데이터 수정
+     * @param {object} 변경될 값들이 담겨져있는 obj
+     */
+    const handleChange = useCallback(
+        (changeTemp) => {
+            setTemp(changeTemp);
+        },
+        [temp],
+    );
+
+    const handleChangeObject = (obj) => {
+        setTemp({ ...temp, ...obj });
+    };
+
+    const handleClickCopy = () => {
+        setIsCopy(true);
+        history.push('/ab-edit/add');
+    };
 
     return (
         <MokaCard
@@ -56,6 +130,7 @@ const EditEdit = ({ match }) => {
                 'justify-content-end': isAdd,
                 'justify-content-center': !isAdd,
             })}
+            loading={loading}
             footerAs={renderFooter()}
         >
             <MokaCardTabs
@@ -66,10 +141,10 @@ const EditEdit = ({ match }) => {
                 tabNavs={renderTabNavs()}
                 tabs={[
                     <React.Fragment>
-                        {!isAdd && <ABStatusRow />}
-                        <ABMainForm />
+                        {!isAdd && <ABStatusRow modDt={temp.modDt} modUser={temp.modId} onCopy={handleClickCopy} />}
+                        <ABMainForm data={temp} onChange={handleChange} />
                     </React.Fragment>,
-                    <ABEtcForm />,
+                    <ABEtcForm data={temp} onChange={handleChangeObject} />,
                 ]}
             />
         </MokaCard>

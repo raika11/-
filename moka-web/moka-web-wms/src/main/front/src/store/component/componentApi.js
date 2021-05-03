@@ -35,6 +35,8 @@ export const postAllComponents = ({ componentList }) => {
         domain: { domainId: component.domainId },
         template: { templateSeq: component.templateSeq },
         componentName: component.componentName,
+        dataType: component.dataType,
+        dataset: component?.dataset?.datasetSeq ? component.dataset : null,
     }));
 
     return instance

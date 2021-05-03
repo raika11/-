@@ -40,23 +40,7 @@ $(document).ready(function() {
     /* 기자 더보기(외○명) 클릭 */
     $(".btn_byline_more").click(function(){
         $this = $(this);
-        var width = window.innerWidth;
-        $this.addClass("active");
-        if($this.hasClass("active")){
-            if(width >= BREAKPOINT_LARGE){
-                $(".byline > a").removeClass("hide");
-                $this.addClass("hide");
-            } else {
-                setBylinePopPos();
-                $(".layer_byline").toggleClass("active");
-                
-            }
-        }
-    });
-
-    /* byline popup close event */
-    $(".layer_byline .btn_close").click(function(){
-        $(".btn_byline_more").removeClass("active");
+        $this.toggleClass("active");
         bylineControl(window.innerWidth);
     });
 });
@@ -78,42 +62,28 @@ function bylineControl(width){
 
     var $byline = $(".byline > a");
     var $bylineMore = $(".btn_byline_more");
-    var $bylinePop = $(".layer_byline");
     var hiddenCount = $byline.length - maxReporterNum;
 
-    $byline.each(function(index, item){
-        if(index >= maxReporterNum){
-            $(item).addClass("hide");
-        } else {
-            $(item).removeClass("hide");
-            bylineWidth = $(item).outerWidth();
-        }
-    });
 
-    if(hiddenCount>0){
+    if(hiddenCount){
         $bylineMore.removeClass("hide");
-        $bylineMore.find("span").text(hiddenCount)
-
         if($bylineMore.hasClass("active")){
-            if(width >= BREAKPOINT_LARGE){
-                $byline.removeClass("hide");
-                $bylineMore.addClass("hide");
-                $bylinePop.removeClass("active");
-            } else {
-                $bylinePop.addClass("active");
-            }
-        } 
-    } else {
-        $bylineMore.addClass("hide")
+            $byline.removeClass("hide");
+            $bylineMore.find("span").text("닫기");
+        } else {
+            $byline.each(function(index, item){
+                if(index >= maxReporterNum){
+                    $(item).addClass("hide");
+                } else {
+                    $(item).removeClass("hide");
+                }
+            });
+            $bylineMore.removeClass("active");
+            $bylineMore.find("span").text("외 " + hiddenCount + "명");
+        }
+    }  else {
+        $byline.removeClass("hide");
+        $bylineMore.addClass("hide");
     }
-    setBylinePopPos();
-}
-
-/* set byline popup position */
-function setBylinePopPos(){
-    var $bylinePop = $(".layer_byline");
-    var $bylineMore = $(".btn_byline_more");
-    var bylinePopleft = $bylineMore.position().left + $bylineMore.width() - $bylinePop.outerWidth() + 5;
-    $bylinePop.css("left",bylinePopleft+"px");
 }
 

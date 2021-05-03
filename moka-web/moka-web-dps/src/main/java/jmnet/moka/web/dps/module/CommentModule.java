@@ -162,6 +162,7 @@ public class CommentModule implements ModuleInterface {
             if (!checkedParamMap.containsKey("member_memSeq")) {
                 checkedParamMap.put("member_memSeq", null);
                 checkedParamMap.put("member_loginType", null);
+                checkedParamMap.put("member_nick", null);
             }
             List<Map> result = this.call(apiContext, "dps.comment.insertVote", checkedParamMap);
 

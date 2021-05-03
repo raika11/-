@@ -21,7 +21,7 @@ const ABEtcForm = (props) => {
         const { name, value, checked } = e.target;
         let changeData = {};
 
-        if (name === 'device' || name === 'browser' || name === 'referer' || name === 'utm') {
+        if (name === 'devDiv' || name === 'browser' || name === 'referer' || name === 'utm') {
             if (value === 'all') {
                 changeData[name] = checked
                     ? [...document.querySelectorAll(`[name="${name}"]`)]
@@ -35,12 +35,12 @@ const ABEtcForm = (props) => {
                 else arr = arr.filter((f) => f !== value);
                 changeData[name] = arr.join(',');
             }
-        } else if (name === 'subscribeYn' || name === 'pwaYn' || name === 'pushYn') {
+        } else if (name === 'scbYn' || name === 'pwaYn' || name === 'pushYn') {
             changeData[name] = checked ? 'Y' : 'N';
         } else {
             changeData[name] = value;
         }
-
+        console.log(changeData);
         if (Object.keys(changeData).length > 0) {
             onChange(changeData);
         }
@@ -56,17 +56,31 @@ const ABEtcForm = (props) => {
 
     return (
         <div>
-            <Form.Row className="mb-2 align-items-center">
-                <MokaInputLabel
-                    label="구독여부"
-                    as="checkbox"
-                    name="subscribeYn"
-                    id="subscribeYn"
-                    inputProps={{ label: '구독', checked: data.subscribeYn === 'Y' }}
-                    onChange={handleChangeValue}
-                    className="mr-32"
-                    disabled={disabled}
-                />
+            <Form.Row className="d-flex mb-2 align-items-center">
+                <div style={{ width: '200px' }}>
+                    <MokaInputLabel
+                        label="구독여부"
+                        as="checkbox"
+                        name="scbYn"
+                        id="scbYn"
+                        inputProps={{ label: '구독', checked: data.scbYn === 'Y' }}
+                        onChange={handleChangeValue}
+                        className="mr-32"
+                        disabled={disabled}
+                    />
+                </div>
+                <div style={{ width: '100px' }} className="mr-2">
+                    <MokaInput as="select" value="" disabled={true}>
+                        <option value="">분류선택</option>
+                        <option value="JOONGANG">중앙일보</option>
+                        <option value="ARTICLE">기사</option>
+                        <option value="SECTION">섹션</option>
+                        <option value="REPORTER">기자</option>
+                        <option value="PACKAGE">패키지</option>
+                        <option value="JPOD">J팟</option>
+                        <option value="URL">개별페이지</option>
+                    </MokaInput>
+                </div>
                 <MokaInput as="autocomplete" value={data.subscribeSeq} options={[]} placeholder="구독상품 선택" />
             </Form.Row>
 
@@ -117,8 +131,8 @@ const ABEtcForm = (props) => {
                             as="checkbox"
                             id="device-all"
                             value="all"
-                            name="device"
-                            inputProps={{ label: '전체', checked: isAllChecked('device', 3) }}
+                            name="devDiv"
+                            inputProps={{ label: '전체', checked: isAllChecked('devDiv', 3) }}
                             disabled={disabled}
                             onChange={handleChangeValue}
                         />
@@ -128,8 +142,8 @@ const ABEtcForm = (props) => {
                             as="checkbox"
                             id="device-p"
                             value="P"
-                            name="device"
-                            inputProps={{ label: 'PC', checked: isChecked('device', 'P') }}
+                            name="devDiv"
+                            inputProps={{ label: 'PC', checked: isChecked('devDiv', 'P') }}
                             disabled={disabled}
                             onChange={handleChangeValue}
                         />
@@ -139,8 +153,8 @@ const ABEtcForm = (props) => {
                             as="checkbox"
                             id="device-m"
                             value="M"
-                            name="device"
-                            inputProps={{ label: 'Mobile Web', checked: isChecked('device', 'M') }}
+                            name="devDiv"
+                            inputProps={{ label: 'Mobile Web', checked: isChecked('devDiv', 'M') }}
                             disabled={disabled}
                             onChange={handleChangeValue}
                         />
@@ -150,8 +164,8 @@ const ABEtcForm = (props) => {
                             as="checkbox"
                             id="device-a"
                             value="A"
-                            name="device"
-                            inputProps={{ label: 'Mobile APP', checked: isChecked('device', 'A') }}
+                            name="devDiv"
+                            inputProps={{ label: 'Mobile APP', checked: isChecked('devDiv', 'A') }}
                             disabled={disabled}
                             onChange={handleChangeValue}
                         />

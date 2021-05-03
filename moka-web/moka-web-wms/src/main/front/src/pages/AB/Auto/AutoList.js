@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeSearchOption, getAbTestList } from '@store/ab/abAction';
+import { changeSearchOption, getAbTestList, GET_AB_TEST_LIST, SAVE_AB_TEST } from '@store/ab/abAction';
 import { ABTEST_TYPE } from '@store/ab/abReducer';
 
 /**
@@ -17,7 +17,11 @@ const AutoList = (props) => {
     const history = useHistory();
     const { match } = props;
 
-    const { search, list, total } = useSelector(({ ab }) => ab);
+    const search = useSelector(({ ab }) => ab.search);
+    const list = useSelector(({ ab }) => ab.list);
+    const total = useSelector(({ ab }) => ab.total);
+    const abtestSeq = useSelector(({ ab }) => ab.ab.abtestSeq);
+    const loading = useSelector(({ loading }) => loading[GET_AB_TEST_LIST] || loading[SAVE_AB_TEST]);
 
     const handleClickRow = ({ seq }) => {
         history.push(`/ab-auto/${seq}`);
@@ -47,6 +51,8 @@ const AutoList = (props) => {
                 columnDefs={AutoAgGridColumns}
                 onRowClicked={handleClickRow}
                 onChangeSearchOption={handleChangeSearchOption}
+                selected={abtestSeq}
+                loading={loading}
             />
         </React.Fragment>
     );

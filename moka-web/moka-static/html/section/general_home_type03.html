@@ -20,6 +20,7 @@
     <link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">
 
     <link href="//stg-static.joongang.co.kr/css/plugin/slick.css" rel="stylesheet">
+    <link href="//stg-static.joongang.co.kr/css/plugin/swiper.css" rel="stylesheet">
 
     <link href="//stg-static.joongang.co.kr/css/common.css" rel="stylesheet">
     <link href="//stg-static.joongang.co.kr/css/section.css" rel="stylesheet"> 
@@ -111,9 +112,9 @@
                 <!-- //쇼케이스 -->
                 <div class="aside float_right">
                     <!-- 많이 본 기사-->
-                    <section class="">
+                    <section class="chain_wrap">
                         <!-- 소제목형 -->
-                        <header class="title_wrap bdr_none bdr_title_sm_w4">
+                        <div class="title_wrap bdr_title_sm_w4">
                             <div class="title_area">
                                 <h3 class="title">정치 많이 본 기사</h3>
                                 <button type="button" class="btn_info ml_auto" onclick="openLayer(test);"><i class="ico_info"></i></button>
@@ -125,7 +126,7 @@
                                     <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">닫기</span></button>
                                 </div>
                             </div>
-                        </header>
+                        </div>
                         <!-- //소제목형-->
                         <!-- 랭크형스토리리스트 -->
                         <ul class="card_right_list rank_list">
@@ -168,7 +169,38 @@
                                         <h3 class="title">추천 패키지</h3>
                                 </div>
                         </header>
-                        
+                        <div class="scroll_sm_wrap swiper-container">
+                            <ul class="skin_group swiper-wrapper">
+                                <li class="card_skin col_lg4 swiper-slide">
+                                    <div class="card_image">
+                                        <figure><a href="#"><img width="278" src="//via.placeholder.com/278x156" alt="..."></a></figure>
+                                    </div>
+                                    <div class="card_body">
+                                        <h2 class="headline"><a href="#">‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전</a></h2>
+                                    </div>
+                                    <div class="card_foot">
+                                        <h3 class="title"><a href="#">앤츠랩</a></h3>
+                                        <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
+                                    </div>
+                                </li>
+                                <li class=" card_skin col_lg4 swiper-slide">
+                                    <div class="card_body">
+                                        <h2 class="headline"><a href="#">유승민, 경기도 독자적 백신 접종 검토에 “文정부 왜 존재 하는가”</a></h2>
+                                    </div>
+                                    <div class="card_foot">
+                                        <h3 class="title"><a href="#">앤츠랩</a></h3>
+                                        <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
+                                    </div>
+                                </li>
+                                <li class="card_skin skin col_lg4 swiper-slide">
+                                    <div class="card_body">
+                                        <strong class="headline">원하는 뉴스만<br />빠르고 편리하게<br />나만을 위한<br />구독 패키지를 찾아보세요!</strong>
+                                        <button type="button" class="btn btn_outline_white">더 많은 구독 상품 보러가기</button>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="swiper-pagination"></div>
+                        </div>
                     </section>
                     <!-- //추천 패키지 -->
                     <!-- 정정보도 -->

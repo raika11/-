@@ -5,7 +5,7 @@ import moment from 'moment';
 import { MokaCard } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { initialState, getComponent, clearComponent, saveComponent, hasRelationList, changeInvalidList, GET_COMPONENT, SAVE_COMPONENT, DELETE_COMPONENT } from '@store/component';
-import { DB_DATEFORMAT, DATA_TYPE_AUTO } from '@/constants';
+import { DB_DATEFORMAT, DATA_TYPE_DESK } from '@/constants';
 import util from '@utils/commonUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -146,8 +146,8 @@ const ComponentEdit = ({ onDelete, match }) => {
             }
         }
 
-        if (saveData.dataType === DATA_TYPE_AUTO) {
-            // 자동일 경우 반드시 viewYn을 Y로 바꾼다 (중요)
+        if (saveData.dataType !== DATA_TYPE_DESK) {
+            // 편집 컴포넌트가 아닌 경우 반드시 viewYn을 Y로 바꾼다 (중요)
             saveData.viewYn = 'Y';
         }
 

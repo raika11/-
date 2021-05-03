@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './containerAction';
-import { PAGESIZE_OPTIONS } from '@/constants';
+import { PAGESIZE_OPTIONS, CONTAINER_GROUP } from '@/constants';
 
 /**
  * initialState
@@ -18,6 +18,7 @@ export const initialState = {
         searchType: 'all',
         keyword: '',
         usePaging: 'Y',
+        containerGroup: CONTAINER_GROUP[0].value,
     },
     searchTypeList: [
         { id: 'all', name: '전체' },
@@ -36,6 +37,7 @@ export const initialState = {
             domainId: null,
             searchType: 'all',
             keyword: '',
+            containerGroup: CONTAINER_GROUP[0].value,
         },
         container: {},
         containerError: null,
@@ -43,6 +45,7 @@ export const initialState = {
     container: {
         thumbFile: null,
         containerThumb: null,
+        containerGroup: CONTAINER_GROUP[0].value,
     },
     containerBody: '',
     containerError: null,

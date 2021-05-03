@@ -68,28 +68,28 @@ export default [
     {
         headerName: '종료',
         field: 'endYn',
-        width: 40,
+        width: 35,
         cellRenderer: 'usedYnRenderer',
         cellClassRules,
     },
     {
         headerName: '구독',
         field: 'scbYn',
-        width: 40,
+        width: 35,
         cellRenderer: 'usedYnSecondRenderer',
         cellClassRules,
     },
     {
         headerName: '노출',
         field: 'expYn',
-        width: 40,
+        width: 35,
         cellRenderer: 'usedYnThirdRenderer',
         cellClassRules,
     },
     {
         headerName: '바로가기',
         field: 'directLink',
-        width: 70,
+        width: 63,
         cellRenderer: 'buttonRenderer',
         cellRendererParams: {
             text: '보기',

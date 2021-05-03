@@ -58,9 +58,9 @@
     .card_right_list .card_image{float:right;margin-left:12px;}
     .card_right_list .card_image img{width:62px;}
     .card_right_list .card_body{position: relative;}
-    .card_right_list .card_body .headline{width: calc(100% - 62px); padding-right: 16px; font-size: 18px; font-weight: 700; line-height: 27px; }
+    .card_right_list .card_body .headline{width: calc(100% - 62px); padding-right: 16px; font-size: 18px; font-weight: 700; line-height: 27px;min-height: 62px; }
     .card_right_list .rank_count{position: absolute; left: 0; top: 0; width: 28px; font-size: 0; background-position: 0 0;}
-    .card_right_list .card_body .meta{padding-top: 8px;}
+    .card_right_list .card_body .meta{padding-top: 8px; margin-top: unset;}
 
     /* rank_list */
     .rank_list .card_body{padding-left:23px;}

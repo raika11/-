@@ -170,17 +170,6 @@ public class ComponentRestController extends AbstractCommonController {
             componentDTO.setEditFormPart(null);
         }
 
-        // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
-        //        if (componentDTO
-        //                .getDataType()
-        //                .equals(TpsConstants.DATATYPE_DESK) || componentDTO
-        //                .getDataType()
-        //                .equals(TpsConstants.DATATYPE_FORM)) {
-        //            componentDTO.setViewYn(MokaConstants.NO);
-        //        } else {
-        //            componentDTO.setViewYn(MokaConstants.YES);
-        //        }
-
         Component component = modelMapper.map(componentDTO, Component.class);
 
         try {
@@ -234,16 +223,18 @@ public class ComponentRestController extends AbstractCommonController {
         // 데이터 유효성 검사
         for (ComponentDTO componentDTO : componentDTOs) {
             validData(componentDTO, ActionType.INSERT);
-            // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
-            //            if (componentDTO
-            //                    .getDataType()
-            //                    .equals(TpsConstants.DATATYPE_DESK) || componentDTO
-            //                    .getDataType()
-            //                    .equals(TpsConstants.DATATYPE_FORM)) {
-            //                componentDTO.setViewYn(MokaConstants.NO);
-            //            } else {
-            //                componentDTO.setViewYn(MokaConstants.YES);
-            //            }
+
+            if (componentDTO.getDataset() != null && componentDTO
+                    .getDataset()
+                    .getDatasetSeq() == null) {
+                componentDTO.setDataset(null);
+            }
+
+            if (componentDTO.getEditFormPart() != null && componentDTO
+                    .getEditFormPart()
+                    .getPartSeq() == null) {
+                componentDTO.setEditFormPart(null);
+            }
         }
 
         List<Component> components = modelMapper.map(componentDTOs, Component.TYPE);

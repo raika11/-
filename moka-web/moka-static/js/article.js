@@ -43,14 +43,8 @@ $(document).ready(function() {
         var width = window.innerWidth;
         $this.addClass("active");
         if($this.hasClass("active")){
-            if(width >= BREAKPOINT_LARGE){
-                $(".byline > a").removeClass("hide");
-                $this.addClass("hide");
-            } else {
-                setBylinePopPos();
-                $(".layer_byline").toggleClass("active");
-                
-            }
+            $(".byline > a").removeClass("hide");
+            $this.addClass("hide");
         }
     });
 
@@ -78,7 +72,6 @@ function bylineControl(width){
 
     var $byline = $(".byline > a");
     var $bylineMore = $(".btn_byline_more");
-    var $bylinePop = $(".layer_byline");
     var hiddenCount = $byline.length - maxReporterNum;
 
     $byline.each(function(index, item){
@@ -95,25 +88,10 @@ function bylineControl(width){
         $bylineMore.find("span").text(hiddenCount)
 
         if($bylineMore.hasClass("active")){
-            if(width >= BREAKPOINT_LARGE){
-                $byline.removeClass("hide");
-                $bylineMore.addClass("hide");
-                $bylinePop.removeClass("active");
-            } else {
-                $bylinePop.addClass("active");
-            }
+            $byline.removeClass("hide");
+            $bylineMore.addClass("hide");
         } 
     } else {
         $bylineMore.addClass("hide")
     }
-    setBylinePopPos();
 }
-
-/* set byline popup position */
-function setBylinePopPos(){
-    var $bylinePop = $(".layer_byline");
-    var $bylineMore = $(".btn_byline_more");
-    var bylinePopleft = $bylineMore.position().left + $bylineMore.width() - $bylinePop.outerWidth() + 5;
-    $bylinePop.css("left",bylinePopleft+"px");
-}
-

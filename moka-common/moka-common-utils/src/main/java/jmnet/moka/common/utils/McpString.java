@@ -881,10 +881,15 @@ public class McpString extends StringUtils {
     public static String trimEnd(String text, char aChar) {
         if ( text == null || text.length() == 0) return text;
         int lastIndex = text.length() - 1;
-        while ( text.charAt(lastIndex) == aChar) {
-            lastIndex--;
+        int index = lastIndex;
+        while ( text.charAt(index) == aChar) {
+            index--;
         }
-        return text.substring(0,lastIndex+1);
+        if ( index == lastIndex) {
+            return text;
+        } else {
+            return text.substring(0,lastIndex+1);
+        }
     }
 
     /**
@@ -895,11 +900,15 @@ public class McpString extends StringUtils {
      */
     public static String trimStart(String text, char aChar) {
         if ( text == null || text.length() == 0) return text;
-        int firstIndex = 0;
-        while ( text.charAt(firstIndex) == aChar) {
-            firstIndex++;
+        int index = 0;
+        while ( text.charAt(index) == aChar) {
+            index++;
         }
-        return text.substring(firstIndex,text.length());
+        if ( index == 0 ) {
+            return text;
+        } else {
+            return text.substring(index, text.length());
+        }
     }
 
 }

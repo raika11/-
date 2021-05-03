@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.models.Response;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import javax.validation.Valid;
@@ -57,7 +58,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -200,7 +200,7 @@ public class NewsletterController extends AbstractCommonController {
         String[] columns =
                 new String[] {"방법", "유형", "카테고리", "뉴스레터 명", "발송 시작일", "최근 발송일", "일정/콘텐츠", "시간", "구독자 수", "상태", "등록일", "등록자", "전용상품여부", "A/B TEST"};
 
-        map.addAttribute("title", "뉴스레터 상품관리");
+        map.addAttribute("title", "중앙일보_뉴스레터_상품관리");
         map.addAttribute("columnList", CollectionUtils.arrayToList(columns));
         //        map.addAttribute("resultList", new LinkedList<String>());
         map.addAttribute("resultList", result);
@@ -433,6 +433,26 @@ public class NewsletterController extends AbstractCommonController {
             newsletterSendDTO.setHeaderImg(uploadImage(newsletterSendDTO.getHeaderImgFile()));
         }
         NewsletterSend newsletterSend = modelMapper.map(newsletterSendDTO, NewsletterSend.class);
+        Calendar nowPlus2Min = Calendar.getInstance();
+        nowPlus2Min.add(Calendar.MINUTE, 2);
+        if ("Y".equalsIgnoreCase(newsletterSendDTO.getImmediateYn())) {
+            // 즉시발송 (A안)
+            newsletterSend = newsletterSend
+                    .toBuilder()
+                    .sendDt(nowPlus2Min.getTime())
+                    // 대기상태
+                    .sendStatus("P")
+                    .build();
+
+        } else if ("Y".equalsIgnoreCase(newsletterSendDTO.getImmediateYnB())) {
+            // 즉시발송 (B안)
+            newsletterSend = newsletterSend
+                    .toBuilder()
+                    .sendDtB(nowPlus2Min.getTime())
+                    // 대기상태
+                    .sendStatus("P")
+                    .build();
+        }
 
         // 등록
         NewsletterSend returnValue = newsletterService.insertNewsletterSend(newsletterSend, parseExcelFile(newsletterSendDTO.getEmailExcelFile()));
@@ -470,29 +490,41 @@ public class NewsletterController extends AbstractCommonController {
                         .getTestEmails()
                         .split(";"))
                 .forEach(to -> {
-                    EmsSendDTO test = emsService.send(EmsSendDTO
-                            .builder()
-                            .legacyid("NEWSLETTER_TEST_SEND_100")
-                            .mailtype("14")
-                            .email(to)
-                            //                            .name(to)
-                            .sendtime(McpDate.now())
-                            .fromaddress("root@joongang.co.kr")
-                            .fromname("중앙일보")
-                            .title(newsletterSendDTO.getLetterTitle())
-                            .tag1("https://stibee.com/api/v1.0/emails/share/UqDS-Fbt5FH-_LgKj-mF3ZxYP1x4lw=="
-                                    /*newsletterSendDTO
-                                    .getLetterHtml()
-                                    .substring(0, Math.min(256, newsletterSendDTO
-                                            .getLetterHtml()
-                                            .length()))*/) // TODO: 메일본문 url?
-                            .build());
-
+                    sendEms(newsletterSendDTO
+                            .toBuilder()
+                            .sendDt(McpDate.now())
+                            .build(), to);
                 });
 
         // 결과리턴
         ResultDTO resultDto = new ResultDTO(msg("{tps.newsletter.success.test.publish}"));
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * EMS 메일 전송
+     *
+     * @param newsletterSendDTO
+     * @param to
+     */
+    private void sendEms(NewsletterSendDTO newsletterSendDTO, String to) {
+        emsService.send(EmsSendDTO
+                .builder()
+                .legacyid("NEWSLETTER_TEST_SEND_100")
+                .mailtype("14")
+                .email(to)
+                //                            .name(to)
+                .sendtime(newsletterSendDTO.getSendDt())
+                .fromaddress("root@joongang.co.kr")
+                .fromname("중앙일보")
+                .title(newsletterSendDTO.getLetterTitle())
+                .tag1("https://stibee.com/api/v1.0/emails/share/UqDS-Fbt5FH-_LgKj-mF3ZxYP1x4lw=="
+                        /*newsletterSendDTO
+                        .getLetterHtml()
+                        .substring(0, Math.min(256, newsletterSendDTO
+                                .getLetterHtml()
+                                .length()))*/) // TODO: 메일본문 url?
+                .build());
     }
 
     /**
@@ -504,9 +536,9 @@ public class NewsletterController extends AbstractCommonController {
      * @throws Exception
      */
     @ApiOperation(value = "뉴스레터 발송 (수동)수정")
-    @PutMapping(value = "/newsletterSend/{sendSeq}")
+    @PutMapping(value = "/newsletterSend/{sendSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> putNewsletterSend(@ApiParam(value = "뉴스레터발송 일련번호", required = true) @PathVariable("sendSeq") Long sendSeq,
-            @RequestBody @Valid NewsletterSendDTO newsletterSendDTO)
+            @Valid NewsletterSendDTO newsletterSendDTO)
             throws InvalidDataException, Exception {
         if (newsletterSendDTO.getSendSeq() == null) {
             throw new MokaException(msg("tps.common.error.no-data"));

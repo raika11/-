@@ -39,6 +39,9 @@ public class ContainerSearchDTO extends SearchDTO {
     @ApiModelProperty("페이징여부")
     private String usePaging;
 
+    @ApiModelProperty("컨테이너그룹")
+    private String containerGroup;
+
     // 검색 조건의 기본값을 설정
     public ContainerSearchDTO() {
         super(ContainerVO.class, "containerSeq,desc");

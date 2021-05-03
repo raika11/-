@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
-import { API_BASE_URL } from '@/constants';
+import { API_BASE_URL, CONTAINER_GROUP } from '@/constants';
 import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
@@ -181,8 +181,12 @@ const ContainerEdit = ({ onDelete, match }) => {
         >
             <MokaInputLabel className="mb-2" label="컨테이너ID" name="containerSeq" value={temp.containerSeq} inputProps={{ plaintext: true, readOnly: true }} />
 
-            <MokaInputLabel label="사용분류" className="mb-2" as="select" name="containerGroup" onChange={handleChangeValue}>
-                <option>서비스페이지</option>
+            <MokaInputLabel label="사용분류" className="mb-2" as="select" name="containerGroup" value={temp.containerGroup} onChange={handleChangeValue}>
+                {CONTAINER_GROUP.map((grp) => (
+                    <option key={grp.value} value={grp.value}>
+                        {grp.name}
+                    </option>
+                ))}
             </MokaInputLabel>
 
             <MokaInputLabel
@@ -196,15 +200,18 @@ const ContainerEdit = ({ onDelete, match }) => {
                 required
             />
 
-            <MokaInputGroup
-                label="입력태그"
-                as="textarea"
-                value={inputTag}
-                inputProps={{ rows: 2 }}
-                className="mb-2"
-                disabled
-                append={<MokaCopyTextButton copyText={inputTag} />}
-            />
+            {temp.containerGroup === CONTAINER_GROUP[0].value && (
+                // 사용분류가 서비스페이지인 경우에만 입력태그 노출 (뉴스레터를 페이지에 등록하지 못하게)
+                <MokaInputGroup
+                    label="입력태그"
+                    as="textarea"
+                    value={inputTag}
+                    inputProps={{ rows: 2 }}
+                    className="mb-2"
+                    disabled
+                    append={<MokaCopyTextButton copyText={inputTag} />}
+                />
+            )}
 
             <MokaInputLabel label="설명" as="textarea" name="containerDesc" inputProps={{ rows: 3 }} className="mb-2" value={temp.containerDesc} onChange={handleChangeValue} />
 

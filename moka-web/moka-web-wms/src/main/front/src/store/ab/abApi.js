@@ -14,6 +14,18 @@ export const getAbTest = (abtestSeq) => {
     });
 };
 
+export const postAbTest = ({ detail }) => {
+    return instance
+        .post('/api/ab-test', detail, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((error) => {
+            throw error;
+        });
+};
+
 export const putAbTest = ({ detail }) => {
     return instance
         .put(`/api/ab-test/${detail.abtestSeq}`, detail, {

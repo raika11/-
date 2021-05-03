@@ -16,6 +16,8 @@ export const CHANGE_NEWS_LETTER_SEARCH_OPTION = 'newsLetter/CHANGE_NEWS_LETTER_S
 export const changeNewsLetterSearchOption = createAction(CHANGE_NEWS_LETTER_SEARCH_OPTION, (search) => search);
 export const CHANGE_NEWS_LETTER_SEND_SEARCH_OPTION = 'newsLetter/CHANGE_NEWS_LETTER_SEND_SEARCH_OPTION';
 export const changeNewsLetterSendSearchOption = createAction(CHANGE_NEWS_LETTER_SEND_SEARCH_OPTION, (search) => search);
+export const CHANGE_INVALID_LIST = 'newsLetter/CHANGE_INVALID_LIST';
+export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
 /**
  * 조회
@@ -34,3 +36,9 @@ export const [GET_NEWS_LETTER_PASSIVE_LIST, GET_NEWS_LETTER_PASSIVE_LIST_SUCCESS
     'newsLetter/GET_NEWS_LETTER_PASSIVE_LIST',
 );
 export const getNewsLetterPassiveList = createAction(GET_NEWS_LETTER_PASSIVE_LIST);
+
+/**
+ * 저장
+ */
+export const SAVE_NEWS_LETTER = 'newsLetter/SAVE_NEWS_LETTER';
+export const saveNewsLetter = createAction(SAVE_NEWS_LETTER, ({ newsLetter, callback }) => ({ newsLetter, callback }));

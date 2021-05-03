@@ -8,6 +8,7 @@ import { MokaInput, MokaSearchInput } from '@/components';
 import { initialState, getNewsLetterList, changeNewsLetterSearchOption } from '@store/newsLetter';
 import toast from '@/utils/toastUtil';
 import { DB_DATEFORMAT, NEWS_LETTER_TYPE, NEWS_LETTER_SEND_TYPE, NEWS_LETTER_STATUS } from '@/constants';
+import { getLetterCate } from '@/store/codeMgt';
 
 /**
  * 뉴스레터 관리 > 뉴스레터 상품 검색
@@ -15,6 +16,7 @@ import { DB_DATEFORMAT, NEWS_LETTER_TYPE, NEWS_LETTER_SEND_TYPE, NEWS_LETTER_STA
 const NewsLetterSearch = () => {
     const dispatch = useDispatch();
     const storeSearch = useSelector(({ newsLetter }) => newsLetter.newsLetter.search);
+    const letterCateRows = useSelector(({ codeMgt }) => codeMgt.letterCateRows);
     const [search, setSearch] = useState(initialState.newsLetter.search);
     const [period, setPeriod] = useState([7, 'days']);
 
@@ -90,7 +92,7 @@ const NewsLetterSearch = () => {
         const endDt = moment(date).endOf('day').format(DB_DATEFORMAT);
         const ns = { ...search, startDt, endDt };
 
-        dispatch(getNewsLetterList(changeNewsLetterSearchOption(ns)));
+        dispatch(getNewsLetterList(getLetterCate(), changeNewsLetterSearchOption(ns)));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
@@ -107,9 +109,12 @@ const NewsLetterSearch = () => {
                 </MokaInput>
                 <MokaInput as="select" name="category" className="mr-2" value={search.category} onChange={handleChangeValue}>
                     <option value="">카테고리 전체</option>
-                    <option value="1">분야1</option>
-                    <option value="2">분야2</option>
-                    <option value="3">분야3</option>
+                    {letterCateRows &&
+                        letterCateRows.map((l) => (
+                            <option key={l.id} value={l.id}>
+                                {l.name}
+                            </option>
+                        ))}
                 </MokaInput>
                 <MokaInput as="select" name="status" className="mr-2" value={search.status} onChange={handleChangeValue}>
                     <option value="">상태 전체</option>

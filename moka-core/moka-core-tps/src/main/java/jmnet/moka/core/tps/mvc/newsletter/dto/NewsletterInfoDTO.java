@@ -72,8 +72,8 @@ public class NewsletterInfoDTO implements Serializable {
     @ApiModelProperty("채널 데이터 아이디 - 에피소드변호, 기사번호 등")
     private Long channelDateId;
 
-    @ApiModelProperty("발송주기 - W:요일, M:월, C:신규콘텐트")
-    @Pattern(regexp = "^(W)|(M)|(C)$", message = "{tps.newsletter.error.pattern.sendPeriod}")
+    @ApiModelProperty("발송주기 - D:매일, W:요일, M:월, C:신규콘텐트")
+    @Pattern(regexp = "^(D)|(W)|(M)|(C)$", message = "{tps.newsletter.error.pattern.sendPeriod}")
     private String sendPeriod;
 
     @ApiModelProperty("발송요일(일-토:0-6, 복수가능 예를들어 135면 월수금 또는 발송월)")
@@ -189,6 +189,10 @@ public class NewsletterInfoDTO implements Serializable {
     @ApiModelProperty("레터설명")
     @Length(max = 1000, message = "{tps.newsletter.error.size.letterDesc}")
     private String letterDesc;
+
+    @ApiModelProperty("변경사유")
+    @Length(max = 200, message = "{tps.newsletter.error.size.modReason}")
+    private String modReason;
 
     /**
      * 등록자

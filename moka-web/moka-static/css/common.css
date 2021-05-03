@@ -501,7 +501,7 @@ html,body {overflow-x: hidden;}
 section {width: 100%;}
 .contents {position: relative;width: 100%;margin: 0 auto;padding-left: 20px;padding-right: 20px;}
 
-.contents section{margin-bottom:60px;}
+
 /** nav **/
 
 /* 태블릿 디자인 나올때 까지는 아래 분기만 사용 - 2021.04.22 */
@@ -511,6 +511,8 @@ section {width: 100%;}
     .header {height: 58px;}
     .header .uh {padding: 0 20px;}
     .header .uh .header_right_area {right: 20px;}
+
+    .contents section{margin-bottom:40px;}
 }
 
 /* Large devices (desktops, 1024px and up) */
@@ -520,6 +522,8 @@ section {width: 100%;}
     .float_right{float:right;width:calc(100% / 12 * 3 - 30px);}
     .row.float_left{margin:0 !important;}
     .row.float_right{margin-left:-15px; margin-right:-15px;}
+
+    .contents section{margin-bottom:60px;}
 }
 
 

@@ -36,7 +36,7 @@ import org.hibernate.annotations.NotFoundAction;
 @NoArgsConstructor
 @Setter
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @Entity
 @Table(name = "TB_NEWSLETTER_SEND")
 public class NewsletterSend extends RegAudit {

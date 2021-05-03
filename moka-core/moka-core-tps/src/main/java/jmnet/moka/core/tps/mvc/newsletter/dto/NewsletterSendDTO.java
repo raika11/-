@@ -57,13 +57,12 @@ public class NewsletterSendDTO implements Serializable {
     private String abtestYn;
 
     @ApiModelProperty("AB 테스트 변경항목(제목:T,발송일시:D, 발송자명:N, 레이아웃:L)")
-    // TODO: message
-    @Pattern(regexp = "^(T)|(D)|(N)|(L)$", message = "TODO")
+    @Pattern(regexp = "^(T)|(D)|(N)|(L)$", message = "{tps.newsletter.error.pattern.abVariantType}")
     private String abVariantType;
 
     @ApiModelProperty("전송상태(S:성공, F:실패, N:데이터없음, R:예약)")
-    // TODO: message
-    @Pattern(regexp = "^(S)|(F)|(N)|(R)$", message = "TODO")
+    // TODO: P 상태 추가.
+    @Pattern(regexp = "^(S)|(F)|(N)|(R)|(P)$", message = "{tps.newsletter.error.pattern.sendStatus}")
     private String sendStatus;
 
     @ApiModelProperty("발송자명")
@@ -149,4 +148,11 @@ public class NewsletterSendDTO implements Serializable {
     @JsonIgnore
     private MultipartFile headerImgFile;
 
+    @ApiModelProperty("즉시발송 여부")
+    @Pattern(regexp = "^(Y)|(N)$", message = "{tps.newsletter.error.pattern.immediateYn}")
+    private String immediateYn;
+
+    @ApiModelProperty("즉시발송 여부 (B안)")
+    @Pattern(regexp = "^(Y)|(N)$", message = "{tps.newsletter.error.pattern.immediateYn}")
+    private String immediateYnB;
 }

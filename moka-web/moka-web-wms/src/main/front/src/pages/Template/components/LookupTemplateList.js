@@ -41,19 +41,14 @@ const defaultProps = {
 const LookupTemplateList = (props) => {
     const { seq, seqType, show, onAppend } = props;
     const dispatch = useDispatch();
-
-    const { tpSizeRows, tpZoneRows, latestDomainId, search: storeSearch, list, total, UPLOAD_PATH_URL, loading } = useSelector((store) => ({
-        tpSizeRows: store.codeMgt.tpSizeRows,
-        tpZoneRows: store.codeMgt.tpZoneRows,
-        latestDomainId: store.auth.latestDomainId,
-        search: store.template.lookup.search,
-        list: store.template.lookup.list,
-        total: store.template.lookup.total,
-        UPLOAD_PATH_URL: store.app.UPLOAD_PATH_URL,
-        loading: store.loading[GET_TEMPLATE_LOOKUP_LIST],
+    const loading = useSelector(({ loading }) => loading[GET_TEMPLATE_LOOKUP_LIST]);
+    const UPLOAD_PATH_URL = useSelector(({ app }) => app.UPLOAD_PATH_URL);
+    const { tpSizeRows, tpZoneRows } = useSelector(({ codeMgt }) => ({
+        tpSizeRows: codeMgt.tpSizeRows,
+        tpZoneRows: codeMgt.tpZoneRows,
     }));
-
-    // state
+    const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
+    const { search: storeSearch, list, total } = useSelector(({ template }) => template.lookup);
     const [search, setSearch] = useState(initialState.lookup.search);
     const [searchTypeList, setSearchTypeList] = useState(initialState.searchTypeList);
     const [listType, setListType] = useState('list');
@@ -209,9 +204,11 @@ const LookupTemplateList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     useEffect(() => {
-        if (!tpSizeRows) dispatch(getTpSize());
-        if (!tpZoneRows) dispatch(getTpZone());
-    }, [dispatch, tpSizeRows, tpZoneRows]);
+        if (show) {
+            if (!tpSizeRows) dispatch(getTpSize());
+            if (!tpZoneRows) dispatch(getTpZone());
+        }
+    }, [dispatch, show, tpSizeRows, tpZoneRows]);
 
     return (
         <MokaCard title="관련 템플릿" bodyClassName="d-flex flex-column">

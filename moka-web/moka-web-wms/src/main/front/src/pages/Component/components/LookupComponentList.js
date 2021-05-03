@@ -109,8 +109,8 @@ const LookupComponentList = (props) => {
     };
 
     useEffect(() => {
-        if (!tpZoneRows) dispatch(getTpZone());
-    }, [dispatch, tpZoneRows]);
+        if (show && !tpZoneRows) dispatch(getTpZone());
+    }, [dispatch, show, tpZoneRows]);
 
     useEffect(() => {
         return () => {

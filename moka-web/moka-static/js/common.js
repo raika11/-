@@ -9,7 +9,8 @@ $(document).ready(function() {
         // $('.section_header_wrap').addClass('sticky_top');
     }
     $(window).scroll(function () {
-        var headerHeight = $(".section_header_wrap").height();
+        var headerHeight = $(".section_header_wrap").outerHeight(true);
+        // alert(headerHeight);
         if ($(this).scrollTop() > headerHeight) {
             // $('.header').addClass('sticky_top');
             // $('.section_header_wrap').addClass('sticky_top');

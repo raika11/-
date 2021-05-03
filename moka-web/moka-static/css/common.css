@@ -502,11 +502,6 @@ section {width: 100%;}
 main{padding-top:60px;}
 .contents {position: relative;width: 100%;margin: 0px auto 0;padding-left: 20px;padding-right: 20px;}
 
-<<<<<<< HEAD
-/* .contents section{margin-bottom:60px;} */
-=======
-
->>>>>>> 62e4bc8a81232a3944e926dad33f7285a33d04a0
 /** nav **/
 
 /* 태블릿 디자인 나올때 까지는 아래 분기만 사용 - 2021.04.22 */
@@ -543,6 +538,9 @@ main{padding-top:60px;}
 .section_title {color:#111;font-size: 32px;font-weight: 900;line-height: 1.31;}
 h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
 
+.section_header_block_wrap.sticky_top{left:204px;height:60px;border-bottom:none;}
+
+
 .header_area .header_nav {width:auto;}
 .header_area .header_nav .nav_item {padding:0 8px;}
 .header_area .header_nav .nav_item:first-child{padding-left:0;}
@@ -559,7 +557,7 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
     background-repeat:no-repeat;
     background-position: 50% 50%;
 }
-.section_title .title {display:none;font-size: 18px;font-weight: 900;line-height: 1.44;text-align: right;color: #111;}
+.section_title .title {display:none;font-size: 18px;font-weight: 900;line-height: 1.44;color: #111;}
 .sticky .section_title .title{display:block;}
 .header_area .header_nav .nav_item{display:inline-flex;flex:0 0 auto;width:auto;}
 .section_header_wrap .page_title{font-size: 14px;font-weight:700;line-height: 1.57;color: #111;}
@@ -570,11 +568,18 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath fill='%23111' d='M2.727 9.783h1.364V8.478H2.727zm2.728 0h1.363V8.478H5.455zm2.727 0h1.363V8.478H8.182zm2.727 0h1.364V8.478h-1.364zM5.455 7.174h1.363V5.87H5.455zm2.727 0h1.363V5.87H8.182zm2.727 0h1.364V5.87h-1.364zm-8.182 5.217h1.364v-1.304H2.727zm2.728 0h1.363v-1.304H5.455zm2.727 0h1.363v-1.304H8.182zm2.727 0h1.364v-1.304h-1.364z'/%3E%3Cpath fill='%23111' d='M13.636 5.217v8.479H1.363V5.217H0V15h15V5.217z'/%3E%3Cpath fill='%23FF3C14' d='M11.591 0v2.609h-.682V1.305H4.091V0H2.727v2.609h-.681V1.305H0v3.26h14.999v-3.26h-2.044V0z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
+.section_header_wrap.sticky_top .logo_trend{display:none;}
+
+
 
 /* 타입4 */
-.section_header_wrap .btn_group{display:flex;position:absolute;bottom:11px;right:0;}
+.section_header_wrap .btn_group{display:flex;}
 .section_header_wrap .btn_primary{margin-right:10px;padding:3px 13px 4px 13px;font-size:13px;line-height: normal;}
 .section_header_wrap .ico_share{width:28px;height:28px;border-radius: 100%;background-color:#f2f2f2}
+.section_header_wrap .description{width:100%;}
+
+/* 타입4 - sticky */
+
 
 
 /* header - nav */
@@ -595,12 +600,20 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
     .section_title {padding-bottom:12px;}
     .header_nav_wrap .header_nav_area .header_nav{padding-bottom:10px;}
 
+    /* 타입4 */
+    .section_header_wrap.section_header_block_wrap{padding-bottom:24px;}
+    .section_header_block_wrap .section_title{text-align:center;}
+    .section_header_wrap .description {font-size: 14px;line-height: 1.57;text-align: center;}
+    .section_header_wrap .btn_group{width:100%;justify-content: center;margin-top:20px}
+
+    .section_header_block_wrap.sticky_top {display:flex;}
+
     }
 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width: 1024px) {
     .section_header_wrap{padding-top:44px;padding-bottom:20px;}
-    .section_header_wrap .header_area{display:flex;align-items: baseline;}
+    .section_header_wrap .header_area{display:flex;align-items: baseline;flex-wrap: wrap;}
     .section_header_wrap .section_title {width:auto;/*padding-bottom:16px;*/font-size:40px;line-height: 1.25;}
     .section_header_wrap h2.section_title {font-size: 20px;}
 
@@ -627,9 +640,25 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
 
 
     .section_header_wrap.sticky_top{z-index: 305;}
-    .section_header_wrap.trend_header.sticky_top{top:0;left:204px;}
-    .section_header_wrap.trend_header.sticky_top .section_title .logo_trend{display:none;}
+    .section_header_wrap.sticky_top{display:flex;top: 0;padding-left: 204px;max-width: 1200px;left: 50%;transform: translateX(-50%);}
+    .section_header_wrap.sticky_top .header_area {margin-top:-27px}
+    
     .section_header_wrap.trend_header.sticky_top .section_title .title{display: block;}
+    .section_header_wrap.sticky_top .logo_trend,
+    .section_header_wrap.sticky_top .description {display:none;}
+
+
+    /* 타입4 */
+    .section_header_wrap .description{margin-top:4px;font-size: 18px;line-height: 1.56;}
+    .section_header_wrap .btn_group{position:absolute;bottom:20px;right:0;}
+
+    .section_header_wrap.sticky_top .btn_group{right: unset;
+        bottom: unset;
+        position: unset;}
+    .section_header_wrap.sticky_top .btn_group::before{content: '';position:absolute;right:0;top:50%;transform: translateY(-50%) ;width:1px;height:16px;background-color: #e2e2e2 ;}
+
+    /* .section_header_block_wrap.sticky_top{top:60px;width:100%;} */
+    /* .section_header_block_wrap.sticky_top::before{width:100vw;height:1px;bottom:0px;background-color: #e2e2e2;} */
     
 }
 

@@ -31,7 +31,7 @@ const DefaultLayout = () => {
     const resizeFunction = useCallback(() => {
         if (!nonResponsive) {
             // md의 최소width보다 작을 경우 메뉴가 닫힌다.
-            if (matchPoints.sm || matchPoints.xs || matchPoints.md) {
+            if (matchPoints.xs || matchPoints.sm || matchPoints.md) {
                 dispatch(closeSidebar());
             } else {
                 dispatch(openSidebar());
@@ -63,6 +63,7 @@ const DefaultLayout = () => {
         } else {
             dispatch(closeSidebar());
         }
+
         /**
          * 페이지 resize시에만 메뉴 자동 닫힘 호출
          * 닫힌 상태에서 메뉴를 이동하여 화면 이동시에는 메뉴가 닫히지 않도록 함

@@ -314,4 +314,43 @@
     </keys>
   </api>
 
+  <!--하이라이트 삭제-->
+  <api id="highlight.delete" membership="cookie" method="post" expire="0">
+    <description>하이라이트를 삭제한다.</description>
+    <parameter>
+      <id desc="하이라이트키" require="Y" type="number">^[0-9]{1,9}$</id>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_SUCCESS">dps.article.highlightDelete</request>
+    <keys>
+      id
+    </keys>
+  </api>
+
+  <!--하이라이트 메모 수정-->
+  <api id="highlight.update" membership="cookie" method="post" expire="0">
+    <description>하이라이트를 메모를 수정한다.</description>
+    <parameter>
+      <id desc="하이라이트키" require="Y" type="number">^[0-9]{1,9}$</id>
+      <memo desc="메모">^.{0,1000}$</memo>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_SUCCESS">dps.article.highlightUpdate</request>
+    <keys>
+      id
+      memo
+    </keys>
+  </api>
+
+  <!--내 하이라이트 목록-->
+  <api id="highlight.my" membership="cookie">
+    <description>모든 내 하이라이트를 목록을 조회한다.</description>
+    <parameter>
+      <memo desc="메모있는">^[Y]{1}$</memo>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_SUCCESS">dps.article.highlightMy</request>
+    <keys>
+      memo
+      #paging
+    </keys>
+  </api>
+
 </apiConfig>

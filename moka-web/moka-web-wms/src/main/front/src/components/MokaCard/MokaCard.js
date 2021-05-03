@@ -81,10 +81,6 @@ const propTypes = {
      */
     footerButtons: PropTypes.arrayOf(buttonProps),
     /**
-     * children
-     */
-    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-    /**
      * 컴포넌트를 접을 수 있는지 없는지 설정한다. (true | false)
      * @default
      */

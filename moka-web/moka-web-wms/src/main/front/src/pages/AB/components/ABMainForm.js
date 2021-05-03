@@ -19,6 +19,17 @@ const defaultProps = {
     abTestType: 'A',
 };
 
+function areEqual(prevProps, nextProps) {
+    let areEqual = false;
+    if (!commonUtil.isEmpty(prevProps.data) && !commonUtil.isEmpty(nextProps.data)) {
+        if (prevProps.data.abtestSeq === nextProps.data.abtestSeq) {
+            areEqual = true;
+        }
+    }
+
+    return areEqual;
+}
+
 /**
  * A/B 테스트 > 탭 > 정보 > 주요 설정폼
  * 공통 UI
@@ -34,12 +45,6 @@ const ABMainForm = (props) => {
      */
     const handleChangeValue = ({ name, value }) => {
         const changeData = { ...data, [name]: value };
-        setData(changeData);
-        handleDebounce(changeData);
-    };
-
-    const handleChangeObject = (obj) => {
-        const changeData = { ...data, ...obj };
         setData(changeData);
         handleDebounce(changeData);
     };
@@ -158,41 +163,6 @@ const ABMainForm = (props) => {
 
             {/* 그룹생성 방식 > 고정일 때 노출 */}
             {data.abtestGrpMethod === 'S' && (
-                /*<React.Fragment>
-                    <Form.Row className="mb-2 align-items-center">
-                        <MokaInputLabel label=" " as="none" />
-                        <MokaInputLabel label="A그룹" labelWidth={40} as="none" />
-                        {[...Array(10)].map((x, idx) => (
-                            <MokaInput
-                                key={`fix-a-${idx}`}
-                                value={idx}
-                                as="radio"
-                                id={`fix-a-${idx}`}
-                                name={`ab${idx}`}
-                                inputProps={{ label: String(idx), checked: data.abtestGrpA.includes(`${idx}`) }}
-                                disabled={disabled}
-                                value={idx}
-                            />
-                        ))}
-                    </Form.Row>
-
-                    <Form.Row className="mb-2 align-items-center">
-                        <MokaInputLabel label=" " as="none" />
-                        <MokaInputLabel label="B그룹" labelWidth={40} as="none" />
-                        {[...Array(10)].map((x, idx) => (
-                            <MokaInput
-                                key={`fix-b-${idx}`}
-                                value={idx}
-                                as="radio"
-                                name={`ab${idx}`}
-                                id={`fix-b-${idx}`}
-                                inputProps={{ label: String(idx), checked: data.abtestGrpB.includes(`${idx}`) }}
-                                disabled={disabled}
-                                value={idx}
-                            />
-                        ))}
-                    </Form.Row>
-                </React.Fragment>*/
                 <ABFixGroupAreaSelect
                     aGroup={data.abtestFixGrpA}
                     bGroup={data.abtestFixGrpB}
@@ -232,40 +202,79 @@ const ABMainForm = (props) => {
             <Form.Row className="mb-2">
                 <MokaInputLabel label=" " as="none" />
                 <Col xs={3} className="p-0 align-items-center d-flex">
-                    <MokaInput as="checkbox" id="check-time" inputProps={{ label: ' ' }} disabled={disabled} />
-                    <MokaInputLabel label="주기" value={data.endPeriod} labelWidth={32} className="mr-2" disabled={disabled} />
+                    <MokaInput
+                        as="checkbox"
+                        id="check-time"
+                        inputProps={{ label: ' ', checked: !commonUtil.isEmpty(data.endPeriod) && data.endPeriod !== '' }}
+                        disabled={disabled}
+                        onChange={() => {
+                            handleChangeValue({ name: 'endPeriod', value: '' });
+                        }}
+                    />
+                    <MokaInputLabel
+                        label="주기"
+                        name="endPeriod"
+                        value={data.endPeriod}
+                        labelWidth={32}
+                        className="mr-2"
+                        disabled={disabled}
+                        onChange={(e) => {
+                            handleChangeValue(e.target);
+                        }}
+                    />
                     <span>분</span>
                 </Col>
             </Form.Row>
 
             <Form.Row className="mb-2 align-items-center">
-                <MokaInputLabel label="목표 달성" as="checkbox" id="check-aim" inputProps={{ label: '기간' }} disabled={disabled} />
+                <MokaInputLabel label="목표 달성" as="checkbox" id="check-aim" inputProps={{ label: '기간 기준' }} disabled={disabled} />
             </Form.Row>
 
             <Form.Row className="mb-2 align-items-center">
                 <MokaInputLabel label=" " as="none" />
                 <div style={{ width: 90 }} className="d-flex align-items-center">
-                    <MokaInput as="checkbox" id="check-test" inputProps={{ label: 'KPI 기준' }} disabled={disabled} />
+                    <MokaInput as="checkbox" id="check-test" inputProps={{ label: '성과 기준' }} disabled={disabled} />
                 </div>
-                <div style={{ width: 70 }} className="mr-2">
-                    <MokaInput name="endKpi" value={data.endKpi} onChange={handleChangeValue} disabled={disabled} />
-                </div>
-                <span className="mr-2">% 클릭수</span>
-                <div style={{ width: 70 }} className="mr-2">
-                    <MokaInput name="kpiCntCondi" value={data.kpiClickCondi} onChange={handleChangeValue} disabled={disabled} />
-                </div>
-                <span>건 이상일 경우</span>
-            </Form.Row>
-
-            <Form.Row className="mb-2 align-items-center">
-                <MokaInputLabel label=" " as="none" />
                 <span className="mr-2" style={{ marginLeft: '22px' }}>
                     시작 후
                 </span>
                 <div style={{ width: 70 }} className="mr-2">
-                    <MokaInput name="kpiPeriodCondi" value={data.kpiPeriodCondi} onChange={handleChangeValue} disabled={disabled} />
+                    <MokaInput
+                        name="kpiPeriodCondi"
+                        value={data.kpiPeriodCondi}
+                        onChange={(e) => {
+                            handleChangeValue(e.target);
+                        }}
+                        disabled={disabled}
+                    />
                 </div>
                 <span>분 이후부터 적용</span>
+            </Form.Row>
+
+            <Form.Row className="mb-2 align-items-center">
+                <MokaInputLabel label=" " as="none" />
+                <div style={{ width: 70 }} className="mr-2">
+                    <MokaInput
+                        name="endKpi"
+                        value={data.endKpi}
+                        onChange={(e) => {
+                            handleChangeValue(e.target);
+                        }}
+                        disabled={disabled}
+                    />
+                </div>
+                <span className="mr-2">% 클릭수</span>
+                <div style={{ width: 70 }} className="mr-2">
+                    <MokaInput
+                        name="kpiClickCondi"
+                        value={data.kpiClickCondi}
+                        onChange={(e) => {
+                            handleChangeValue(e.target);
+                        }}
+                        disabled={disabled}
+                    />
+                </div>
+                <span>건 이상일 경우</span>
             </Form.Row>
 
             <Form.Row className="mb-2 align-items-center">
@@ -277,7 +286,9 @@ const ABMainForm = (props) => {
                     name="autoApplyYn"
                     inputProps={{ label: '수동반영', checked: data.autoApplyYn === 'N' }}
                     className="mr-32"
-                    onChange={handleChangeValue}
+                    onChange={(e) => {
+                        handleChangeValue(e.target);
+                    }}
                     disabled={disabled}
                 />
                 <MokaInput
@@ -286,12 +297,24 @@ const ABMainForm = (props) => {
                     value="Y"
                     name="autoApplyYn"
                     inputProps={{ label: '자동반영', checked: data.autoApplyYn === 'Y' }}
-                    onChange={handleChangeValue}
+                    onChange={(e) => {
+                        handleChangeValue(e.target);
+                    }}
                     disabled={disabled}
                 />
             </Form.Row>
 
-            <MokaInputLabel label="설명" name="desc" value={data.abtestDesc} onChange={handleChangeValue} as="textarea" inputProps={{ rows: 3 }} disabled={disabled} />
+            <MokaInputLabel
+                label="설명"
+                name="abtestDesc"
+                value={data.abtestDesc}
+                onChange={(e) => {
+                    handleChangeValue(e.target);
+                }}
+                as="textarea"
+                inputProps={{ rows: 3 }}
+                disabled={disabled}
+            />
         </div>
     );
 };
@@ -299,4 +322,4 @@ const ABMainForm = (props) => {
 ABMainForm.propTypes = propTypes;
 ABMainForm.defaultProps = defaultProps;
 
-export default ABMainForm;
+export default React.memo(ABMainForm, areEqual);

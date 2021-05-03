@@ -33,13 +33,10 @@ const defaultProps = {};
 /**
  * 데이터셋 리스트 공통 모달
  */
-const DatsetListModal = (props) => {
-    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, exclude } = props;
+const DatsetListModal = ({ show, onHide, onClickSave, onClickCancle, selected: defaultSelected, exclude, id }) => {
     const dispatch = useDispatch();
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const loading = useSelector(({ loading }) => loading[GET_DATASET_LIST_MODAL]);
-
-    // state
     const [search, setSearch] = useState(initialState.search);
     const [total, setTotal] = useState(initialState.total);
     const [error, setError] = useState(initialState.error);
@@ -181,6 +178,7 @@ const DatsetListModal = (props) => {
             onHide={handleHide}
             title="데이터셋 검색"
             size="md"
+            id={id}
             buttons={[
                 { text: '등록', variant: 'positive', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleClickCancle },

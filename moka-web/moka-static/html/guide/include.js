@@ -12,15 +12,20 @@ var include = {
         document.write('<link rel="apple-touch-icon-precomposed" href="https://images.joins.com/ui_mobile/joongang/icon/ios_114.png">');
         document.write('<link href="https://images.joins.com/ui_mobile/joongang/icon/favicon.ico" rel="shortcut icon">');
         
-        // document.write('<link href="//stg-static.joongang.co.kr/css/plugin/select2.min.css" rel="stylesheet">');
+        document.write('<link href="//stg-static.joongang.co.kr/css/lib/jquery-ui.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/plugin/slick.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/plugin/swiper.css" rel="stylesheet"></link>');
+
+        document.write('<link href="guide.css" rel="stylesheet">');
+        
+
         document.write('<link href="//stg-static.joongang.co.kr/css/common.css" rel="stylesheet">');
         
         document.write('<link href="//stg-static.joongang.co.kr/css/section.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/article.css" rel="stylesheet">');
 
         document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>');
+        document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-ui.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/plugin/slick.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/plugin/swiper.min.js"></script>');
 
@@ -32,7 +37,6 @@ var include = {
         document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs2015.min.css">');
         document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>');
         document.write('<script>hljs.initHighlightingOnLoad();</script>');
-        document.write('<link href="guide.css" rel="stylesheet">');
         document.write('<script src="guide.js"></script>');
     },
 

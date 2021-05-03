@@ -183,86 +183,92 @@ public class ArticleView extends AbstractView {
 
 
     private void brToPTag(Map<String, Object> articleInfo, boolean line) {
-        String originalContent = (String) articleInfo.get("ART_CONTENT");
-        String converted = originalContent;
-        boolean hasBr = PATTERN_BR_CONTAINS.matcher(converted).groupCount() > 0;
-        if ( !hasBr) {
-            converted = converted.replaceAll("\\r", "");
-            converted = converted.replace("\n", "<br/>\n");
-            converted = START_P_TAG + converted +"</p>";
-            articleInfo.put("ART_CONTENT", converted);
-            return ;
+
+        String rtn = (String) articleInfo.get("ART_CONTENT");
+
+        /* 텍스트 기사처리 */
+        if (Pattern.compile("(<br)", Pattern.CASE_INSENSITIVE).matcher(rtn).groupCount() <= 0) {
+            rtn = rtn.replaceAll("\\r", "");
+            rtn = rtn.replace("\n", "<br/>\n");
+            rtn = ("<p class=\"ac\">" + rtn +"</p>");
+
+            articleInfo.put("ART_CONTENT", rtn);
+            return;
         }
 
-        // 시작 줄 공백제거
-        converted = converted.replaceAll("(?i)^(\\s|&nbsp;)*\\s*","");
-        converted = McpString.trimStart(converted, ' ');
-        converted = McpString.trimEnd(converted, ' ');
+        /*1 사전정리*/
+        rtn = rtn.replaceAll("(?i)^(\\s|&nbsp;)*\\s*","");                  /* 줄 시작 공백제거 */
+        rtn = McpString.trimStart(rtn, ' ');                                                     /* 문서 시작 공백제거 */
+        rtn = McpString.trimEnd(rtn, ' ');                                                       /* 문서 끝 공백제거 */
+        //[2021.04.30제외]전체처리와 중복 //rtn = rtn.replaceAll("(<[^>]*)([\\n]+)([^>]+>)", "$1 $3");   /*태그사이 줄바꿈 제거*/
+        rtn = rtn.replace("\n", "").replace("\r", "");    /*줄바꿈 제거*/
 
-        // 태그 사이 줄바꿈 제거
-        converted = converted.replaceAll("(<[^>]*)([\\n]+)([^>]+>)", "$1 $3");
-        converted = converted.replace("\n", ""); //줄바꿈 제거
-        converted = converted.replace("\r", ""); //줄바꿈 제거
-        //rtn=Regex.Replace(rtn, @"<br(\/)?>\n*", "<br />", RegexOptions.IgnoreCase); /*br 태그정리 */
-        converted = converted.replaceAll("(?i)<br[^>]*>\\n*", "<br />"); //br 태그정리
+        rtn = rtn.replaceAll("(?i)<br[^>]*>", "<br />");                    /*br 태그규격화*/
 
-        converted = converted.replaceAll("(?i)>\\s*(\\s|&nbsp;)*\\s*<", "><"); //태그사이 공백정리
-        converted = converted.replaceAll("(?i)(\\s|&nbsp;)*\\s*<br />", "<br />"); //줄뒤 공백제거
+        rtn = rtn.replaceAll("(?i)>\\s*(\\s|&nbsp;)*\\s*<", "><");          /*태그와 태그 사이 공백정리*/
+        rtn = rtn.replaceAll("(?i)(\\s|&nbsp;)*\\s*<br />", "<br />");      /*줄뒤 공백제거*/
+        rtn = rtn.replaceAll("(<br \\/>)*<\\/", "</");                         /*태그내부 br정리*/
+        //rtn=Regex.Replace(rtn, @"<div([^<]*)<br \/>([^<]*)<\/div>", "<div$1<br/>--$2</div>", RegexOptions.IgnoreCase);    /*div 안쪽 br정리*/
 
-        converted = converted.replaceAll("<br \\/><\\/", "</"); //div 안쪽 br정리
 
-        //rtn=Regex.Replace(rtn, @"<div([^<]*)<br \/>([^<]*)<\/div>", "<div$1<br/>--$2</div>", RegexOptions.IgnoreCase);    /* div 안쪽 br정리 */
+        /*2 div(파티클)와 br(텍스트열)을 줄(라인피드)단위로 정리 */
+        rtn = rtn.replaceAll("(?i)<br \\/><div", "<br />\n<div");
+        rtn = rtn.replaceAll("(?i)<br \\/>", "\n<br />");
+        rtn = rtn.replaceAll("(?i)<\\/div>\n*", "</div>");
 
-        // 줄바꿈 변환
-        converted = converted.replaceAll("(?i)<br \\/><div", "<br />\n<div");
-        converted = converted.replaceAll("(?i)<br \\/>", "\n<br />");
-        converted = converted.replaceAll("(?i)<\\/div>\\n*", "</div>");
-        converted = converted.replaceAll("(?i)<\\/div>([^<]+)", "</div>\n<br />$1");
+        /////* div 뒤의 텍스트가 붙어 있는 경우 처리 by kspark */
+        ////converted = converted.replaceAll("(?i)<\\/div>([^<]+)", "</div>\n<br />$1");
 
-        // div 태그와 텍스트 분리
-        converted = converted.replaceAll("(?i)<br />", START_P_TAG);
-        converted = converted.replaceAll("\\n", "</p>\n");
-        converted = converted.replaceAll("(?i)<\\/div>"+START_P_TAG, "</div>\n"+START_P_TAG);
+        /*3 P 태그 묶음 처리*/
+        /*div 태그와 텍스트 분리*/
+        rtn = rtn.replaceAll("(?i)<br />", "<p class=\"ac\">");
+        rtn = rtn.replaceAll("\n", "</p>\n");
+        rtn = rtn.replaceAll("(?i)<\\/div><p class=\"ac\">", "</div>\n<p class=\"ac\">");   /*파티클 위 줄바꿈처리*/
+        rtn = rtn.replaceAll("(?i)div>([^<\n]+)", "div>\n<p class=\"ac\">$1");  /*파티클뒤에 텍스트가 바로오는 경우*/
 
-        if ( converted.endsWith(START_P_TAG)) converted += "</p>";
-        if ( converted.startsWith("<b>")) converted = START_P_TAG + converted;
-        if ( converted.startsWith("<strong>")) converted = START_P_TAG + converted;
-        if ( converted.startsWith("<a ")) converted = START_P_TAG + converted;
-        if ( converted.endsWith(START_P_TAG)) converted+="</p>";
+        if(rtn.endsWith("<p class=\"ac\">")) { rtn += "</p>"; }
+        if(rtn.startsWith("<b>")) { rtn = "<p class=\"ac\">" + rtn; }
+        if(rtn.startsWith("<strong>")) { rtn = "<p class=\"ac\">" + rtn; }
+        if(rtn.startsWith("<a ")) { rtn = "<p class=\"ac\">" + rtn; }
+        if(rtn.endsWith("<p class=\"ac\">")) { rtn+="</p>"; }
 
-        if ( converted.startsWith("</p>")) {
-            // </p>를 지우고, 공백지우고, 개행지우고, 공백지우고, 개행지움
-            converted = converted.substring(4);
-            converted = McpString.trimStart(converted, ' ');
-            converted = McpString.trimStart(converted, '\n');
-            converted = McpString.trimStart(converted, ' ');
-            converted = McpString.trimStart(converted, '\n');
+        /*닫는 p로 시작하는 경우 - 태그, 개행, 공백 삭제 */
+        if ( rtn.startsWith("</p>")) {
+            rtn = rtn.substring(4);
+            rtn = McpString.trimStart(rtn, ' ');
+            rtn = McpString.trimStart(rtn, '\n');
+            rtn = McpString.trimStart(rtn, ' ');
+            rtn = McpString.trimStart(rtn, '\n');
         }
 
-        // 시작태그 없는 경우 처리
-        converted = converted.replaceAll("^(\\s)*([^<])", START_P_TAG);
-        converted = converted.replaceAll("(?i)<\\/div><(b|strong|span)>", "</div>"+START_P_TAG+"<$1>");
+        /*닫는 p 없는 경우 */
+        if(!rtn.endsWith("</p>")&&!rtn.endsWith("</div>")) { rtn=rtn+"</p>"; }
 
-        //rtn=Regex.Replace(rtn, @"<p class=""ac"">((\s|&nbsp;)*\s*)</p>", "<p class=\"ac\"></p>", RegexOptions.IgnoreCase);
+        /*5 시작태그 없는 경우 처리*/
+        rtn = rtn.replaceAll("^(\\s)*([^<])", "<p class=\"ac\">");
+        rtn = rtn.replaceAll("(?i)<\\/div><(b|strong|span)>", "</div><p class=\"ac\"><$1>");
+
+        rtn = rtn.replaceAll("(?i)<p class=\"ac\">((\\s|&nbsp;)*\\s*)</p>", "<p class=\"ac\"></p>"); /* 공백줄 삭제 */
+        /*6 2줄바꿈 문단 처리*/
         if ( line ) { // 문단 사이에 p태그를 없애는 경우
-            converted = converted.replaceAll("(?i)</p>\\n"+START_P_TAG+"([^<])>", "<br  />$1");
-            converted = converted.replaceAll("(?i)"+START_P_TAG+"<br  />", START_P_TAG);
-
-            converted = converted.replaceAll("(?i)</p>\\n"+START_P_TAG+"</p>", "</p>");
-            converted = converted.replaceAll("(?i)\\n"+START_P_TAG+"</p>\\n"+START_P_TAG+"</p>", "\n"+START_P_TAG+"</p>");
+            rtn = rtn.replaceAll("(?i)</p>\n<p class=\"ac\">([^<])>", "<br  />$1");
+            rtn = rtn.replaceAll("(?i)<p class=\"ac\"><br  />", "<p class=\"ac\">");
+            rtn = rtn.replaceAll("(?i)</p>\n<p class=\"ac\"></p>", "</p>");
+            rtn = rtn.replaceAll("(?i)\n<p class=\"ac\"></p>\n<p class=\"ac\"></p>", "\n<p class=\"ac\"></p>");
         }
 
-        // 기사 끝 공백 라인 제거
+        /*7 기사 끝 공백 라인 제거*/
         for ( int i = 0; i<2; i++) {
-            if (converted.endsWith(START_P_TAG)) {
-                converted = converted.substring(0, converted.length() - START_P_TAG.length());
-                converted = McpString.trimEnd(converted, '\n');
+            if (rtn.endsWith("<p class=\"ac\"></p>")) {
+                rtn = rtn.substring(0, rtn.length() - "<p class=\"ac\"></p>".length());
+                rtn = McpString.trimEnd(rtn, '\n');
             }
         }
 
-        // 태그 구조 정리
-        converted = converted.replaceAll("(?i)<hr([^>]*)*>", "\n"+START_P_TAG+"</p>");
-        articleInfo.put("ART_CONTENT", converted);
+        /*9  태그 구조 정리*/
+        rtn = rtn.replaceAll("(?i)<hr([^>]*)*>", "\n<p class=\"ac\"></p>"); /*hr 미사용으로 제거*/
+
+        articleInfo.put("ART_CONTENT", rtn);
     }
 
 

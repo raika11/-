@@ -71,15 +71,18 @@
     .card_right_list .card_image{float:right;margin-left:12px;}
     .card_right_list .card_image img{width:62px;}
     .card_right_list .card_body{position: relative;}
-    .card_right_list .card_body .headline{width: calc(100% - 62px); padding-right: 16px; font-size: 18px; font-weight: 700; line-height: 27px; }
+    .card_right_list .card_body .headline{width: calc(100% - 62px); padding-right: 16px; font-size: 18px; font-weight: 700; line-height: 27px;min-height: 62px; }
     .card_right_list .rank_count{position: absolute; left: 0; top: 0; width: 28px; font-size: 0; background-position: 0 0;}
-    .card_right_list .card_body .meta{padding-top: 8px;}
+    .card_right_list .card_body .meta{padding-top: 8px; margin-top: unset;}
 
     /* rank_list */
     .rank_list .card_body{padding-left:23px;}
 
     /* .card_image + .card_body { padding-top: 8px; } */
     
+    /*추천 패키지 예외 처리*/
+    .skin_group{margin-top: 21px;}
+
     /* 정정보도*/
     .info_wrap{width: 100%; background-color: #f3f3f3; padding: 12px 14px; margin-bottom: 40px;}
     .info_wrap .info_area{display: flex; align-items: center;}
@@ -164,8 +167,9 @@
 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width:1024px) {
-    .contents {padding-top:44px;padding-bottom:120px;}
+    .contents {padding-bottom:120px;}
     .contents section{margin-bottom:60px;}
+    .contents section.chain_wrap{margin-bottom:unset;}
 
     /* nav */
 
@@ -193,6 +197,9 @@
     .card_right_list .rank_count{position: absolute; left: 0; top: 0; width: 28px; font-size: 0; background-position: 0 0;}
     .card_right_list .card_body .meta{margin-top:0;}
     
+    /*추천 패키지 예외 처리*/
+    .skin_group{margin-top: 24px;}
+
     /*많이 본 기사 header 예외 처리*/
     .aside .title_wrap{padding-top:13px;}
 
@@ -200,7 +207,9 @@
     .rank_list .card_body{padding-left:23px;}
 
     /* 정정보도*/
-    .info_wrap{width: 100%; background-color: #f3f3f3; padding: 13px 24px; margin-bottom: 60px;}
+
+    .notice_wrap{margin-top: 40px; margin-bottom: 40px;}
+    .info_wrap{width: 100%; background-color: #f3f3f3; padding: 13px 24px;}
     .info_wrap .info_area{display: flex; align-items: center;}
     .info_wrap .info_area .title{position: relative;  padding-right: 16px; font-size: 16px; line-height: 24px; letter-spacing: -0.4px; color: #f6330a; }
     .info_wrap .info_area .description{padding-left:16px; font-size: 14px; line-height: 22px; letter-spacing: -0.4px; color: #111; overflow: hidden;}
@@ -227,7 +236,7 @@
     
     .swiper_list .card_body .description{display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; height: 102px; word-break: break-all; overflow: hidden;}
 
-    .swiper_list .swiper-btn-wrap{position: relative; display: flex; align-items: center; width: auto;}
+    .swiper_list .swiper-btn-wrap{position: absolute; bottom: 0; display: flex; align-items: center; width: auto;}
     .swiper_list .swiper-pagination{position: relative;  display: flex; width: auto; left:-4px; bottom: 0;}
     .swiper_list .swiper-pagination .swiper-pagination-bullet{margin: 0 4px; width: 7px; height: 7px; background-color: #f6330a;}
 

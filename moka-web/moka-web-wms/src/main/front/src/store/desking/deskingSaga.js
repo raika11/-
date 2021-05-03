@@ -8,7 +8,7 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import * as api from './deskingApi';
 import * as act from './deskingAction';
-import { DEFAULT_LANG, CHANNEL_TYPE } from '@/constants';
+import { DEFAULT_LANG, CHANNEL_TYPE, DESK_STATUS_SAVE, DESK_STATUS_WORK, DESK_STATUS_PUBLISH } from '@/constants';
 
 moment.locale('ko');
 
@@ -133,22 +133,22 @@ function* getComponentWorkList({ payload }) {
 /**
  * 컴포넌트 워크 조회
  */
-const getComponentWork = createDeskingRequestSaga(act.GET_COMPONENT_WORK, api.getComponentWork, 'work');
+const getComponentWork = createDeskingRequestSaga(act.GET_COMPONENT_WORK, api.getComponentWork, DESK_STATUS_WORK);
 
 /**
  * 컴포넌트 워크 수정(스냅샷 제외)
  */
-const putComponentWork = createDeskingRequestSaga(act.PUT_COMPONENT_WORK, api.putComponentWork, 'work');
+const putComponentWork = createDeskingRequestSaga(act.PUT_COMPONENT_WORK, api.putComponentWork, DESK_STATUS_WORK);
 
 /**
  * 컴포넌트 워크 스냅샷 수정
  */
-const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPONENT_WORK, api.putSnapshotComponentWork, 'work');
+const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPONENT_WORK, api.putSnapshotComponentWork, DESK_STATUS_WORK);
 
 /**
  * 컴포넌트 워크 수정(템플릿만)
  */
-const putComponentWorkTemplate = createDeskingRequestSaga(act.PUT_COMPONENT_WORK_TEMPLATE, api.putComponentWorkTemplate, 'work');
+const putComponentWorkTemplate = createDeskingRequestSaga(act.PUT_COMPONENT_WORK_TEMPLATE, api.putComponentWorkTemplate, DESK_STATUS_WORK);
 
 /**
  * 데스킹 워크의 주기사 Row 생성
@@ -515,12 +515,12 @@ function* deskingDragStop({ payload }) {
 /**
  * Work컴포넌트 임시저장
  */
-const postSaveComponentWork = createDeskingRequestSaga(act.POST_SAVE_COMPONENT_WORK, api.postSaveComponentWork, 'save');
+const postSaveComponentWork = createDeskingRequestSaga(act.POST_SAVE_COMPONENT_WORK, api.postSaveComponentWork, DESK_STATUS_SAVE);
 
 /**
  * Work컴포넌트 전송
  */
-const postPublishComponentWork = createDeskingRequestSaga(act.POST_PUBLISH_COMPONENT_WORK, api.postPublishComponentWork, 'publish');
+const postPublishComponentWork = createDeskingRequestSaga(act.POST_PUBLISH_COMPONENT_WORK, api.postPublishComponentWork, DESK_STATUS_PUBLISH);
 
 /**
  * 컴포넌트 워크 임시저장 + 전송
@@ -541,7 +541,7 @@ function* postSavePublishComponentWork({ payload }) {
             if (publishResponse.data.header.success) {
                 yield put({
                     type: act.COMPONENT_WORK_SUCCESS,
-                    payload: { ...publishResponse.data, status: 'publish' },
+                    payload: { ...publishResponse.data, status: DESK_STATUS_PUBLISH },
                 });
             } else {
                 yield put({
@@ -580,7 +580,7 @@ const deleteReserveComponentWork = createDeskingRequestSaga(act.DELETE_RESERVE_C
 /**
  * 컴포넌트 워크에 편집기사 리스트 등록 => 성공 결과) 컴포넌트 워크 데이터가 리턴됨
  */
-const postDeskingWorkList = createDeskingRequestSaga(act.POST_DESKING_WORK_LIST, api.postDeskingWorkList, 'work');
+const postDeskingWorkList = createDeskingRequestSaga(act.POST_DESKING_WORK_LIST, api.postDeskingWorkList, DESK_STATUS_WORK);
 
 /**
  * 컴포넌트 워크 간의 데스킹기사 이동
@@ -589,7 +589,7 @@ function* postDeskingWorkListMove({ payload }) {
     const ACTION = act.POST_DESKING_WORK_LIST_MOVE;
     const { callback } = payload;
     let callbackData,
-        status = 'work';
+        status = DESK_STATUS_WORK;
 
     yield put(startLoading(ACTION));
 
@@ -622,12 +622,12 @@ function* postDeskingWorkListMove({ payload }) {
 /**
  * 컴포넌트 워크의 기사목록 정렬(컴포넌트 내 정렬)
  */
-const putDeskingWorkListSort = createDeskingRequestSaga(act.PUT_DESKING_WORK_LIST_SORT, api.putDeskingWorkListSort, 'work');
+const putDeskingWorkListSort = createDeskingRequestSaga(act.PUT_DESKING_WORK_LIST_SORT, api.putDeskingWorkListSort, DESK_STATUS_WORK);
 
 /**
  * 공백 기사 추가
  */
-const postDeskingWork = createDeskingRequestSaga(act.POST_DESKING_WORK, api.postDeskingWork, 'work');
+const postDeskingWork = createDeskingRequestSaga(act.POST_DESKING_WORK, api.postDeskingWork, DESK_STATUS_WORK);
 
 /**
  * 컴포넌트 워크 HTML 수동편집의 미리보기
@@ -689,12 +689,12 @@ function* onHideSnapshotModal({ payload }) {
 /**
  * 컴포넌트워크의 편집기사 1개 수정 => 결과로 컴포넌트워크가 리턴됨
  */
-const putDeskingWork = createDeskingRequestSaga(act.PUT_DESKING_WORK, api.putDeskingWork, 'work');
+const putDeskingWork = createDeskingRequestSaga(act.PUT_DESKING_WORK, api.putDeskingWork, DESK_STATUS_WORK);
 
 /**
  * work편집기사 삭제
  */
-const deleteDeskingWorkList = createDeskingRequestSaga(act.DELETE_DESKING_WORK_LIST, api.deleteDeskingWorkList, 'work');
+const deleteDeskingWorkList = createDeskingRequestSaga(act.DELETE_DESKING_WORK_LIST, api.deleteDeskingWorkList, DESK_STATUS_WORK);
 
 /**
  * 히스토리 조회(컴포넌트 별)
@@ -709,7 +709,7 @@ const getDeskingWorkHistory = createRequestSaga(act.GET_DESKING_WORK_HISTORY, ap
 /**
  * 히스토리를 편집기사 워크로 등록
  */
-const putDeskingWorkHistory = createDeskingRequestSaga(act.PUT_DESKING_WORK_HISTORY, api.putDeskingWorkHistory, 'work');
+const putDeskingWorkHistory = createDeskingRequestSaga(act.PUT_DESKING_WORK_HISTORY, api.putDeskingWorkHistory, DESK_STATUS_WORK);
 
 /** saga */
 export default function* saga() {

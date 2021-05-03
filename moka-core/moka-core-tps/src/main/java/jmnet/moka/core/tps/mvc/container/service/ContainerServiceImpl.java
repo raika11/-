@@ -9,13 +9,16 @@ import java.util.Map;
 import java.util.Optional;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.template.ParsedItemDTO;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.ItemDTO;
+import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerSearchDTO;
@@ -35,6 +38,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Slf4j
@@ -57,6 +61,9 @@ public class ContainerServiceImpl implements ContainerService {
 
     @Autowired
     ContainerRelMapper containerRelMapper;
+
+    @Autowired
+    private UploadFileHelper uploadFileHelper;
 
     @Override
     public List<ContainerVO> findAllContainer(ContainerSearchDTO search) {
@@ -220,7 +227,8 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public Container updateContainer(Container container)
+    @Transactional
+    public Container updateContainer(Container container, boolean historySave)
             throws Exception {
 
         // 1. 기존 관련아이템은 삭제 후, 저장
@@ -239,7 +247,9 @@ public class ContainerServiceImpl implements ContainerService {
         Container saveContainer = containerRepository.save(container);
 
         // 3. 히스토리저장
-        insertHist(saveContainer, TpsConstants.WORKTYPE_UPDATE, saveContainer.getModId());
+        if (historySave) {
+            insertHist(saveContainer, TpsConstants.WORKTYPE_UPDATE, saveContainer.getModId());
+        }
 
         return saveContainer;
     }
@@ -343,5 +353,37 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public Page<Container> findAllContainerRel(RelationSearchDTO search, Pageable pageable) {
         return containerRepository.findRelList(search, pageable);
+    }
+
+    @Override
+    public String saveContainerImage(Container container, MultipartFile thumbFile)
+            throws Exception {
+        String extension = McpFile
+                .getExtension(thumbFile.getOriginalFilename())
+                .toLowerCase();
+
+        String filename = UUIDGenerator.uuid() + "." + extension;
+
+        // 이미지를 저장할 실제 경로 생성
+        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.CONTAINER_BUSINESS, container
+                .getDomain()
+                .getDomainId(), filename);
+
+        if (uploadFileHelper.saveImage(imageRealPath, thumbFile.getBytes())) {
+            String uri = uploadFileHelper.getDbUri(TpsConstants.CONTAINER_BUSINESS, container
+                    .getDomain()
+                    .getDomainId(), filename);
+            return uri;
+        } else {
+            return "";
+        }
+    }
+
+    @Override
+    public boolean deleteContainerImage(Container container)
+            throws Exception {
+        // 이미지 실제 경로 생성
+        String imageRealPath = uploadFileHelper.getRealPathByDB(container.getContainerThumb());
+        return uploadFileHelper.deleteFile(imageRealPath);
     }
 }

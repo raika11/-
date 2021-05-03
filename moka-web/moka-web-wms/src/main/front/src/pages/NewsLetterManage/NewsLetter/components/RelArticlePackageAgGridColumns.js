@@ -7,14 +7,18 @@ export default [
     },
     {
         headerName: 'ID',
-        field: 'chnlSeq',
+        field: 'seq',
         width: 50,
     },
     {
-        headerName: '채널명',
-        field: 'chnlNm',
+        headerName: '구분',
+        field: 'cate',
+        width: 50,
+    },
+    {
+        headerName: '패키지 명',
+        field: 'pkgTitle',
         flex: 1,
-        tooltipField: 'chnlNm',
     },
     {
         headerName: '뉴스레터 여부',

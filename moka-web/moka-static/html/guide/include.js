@@ -27,6 +27,7 @@ var include = {
         document.write('<script src="//stg-static.joongang.co.kr/js/resource.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/common.js"></script>');
         // document.write('<script src="//stg-static.joongang.co.kr/js/plugin/select2.min.js"></script>');
+        document.write('<script src="//stg-static.joongang.co.kr/js/plugin/tabs.js"></script>');
 
         document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs2015.min.css">');
         document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>');
@@ -110,7 +111,15 @@ var include = {
             document.write('                <li class="nav_item"><a class="nav_link" href="card.html">카드</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="list_group.html">리스트 그룹</a></li>');
             // document.write('                <li class="nav_item"><a class="nav_link" href="rank.html">많이본기사(rank)</a></li>');
-            document.write('                <li class="nav_item"><a class="nav_link" href="reporter.html">기자</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="card_reporter.html">기자</a></li>');
+            document.write('            </ul>');
+            document.write('        </li>');
+
+            document.write('        <li class="nav_item">');
+            document.write('            <a class="nav_link" href="javascript:(0);">카드리스트</a>');
+            document.write('            <ul class="nav">');
+            document.write('                <li class="nav_item"><a class="nav_link" href="card_skin.html">스킨(보더)</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="card_reporter.html">기자</a></li>');
             document.write('            </ul>');
             document.write('        </li>');
             // document.write('        <li class="nav_item">');

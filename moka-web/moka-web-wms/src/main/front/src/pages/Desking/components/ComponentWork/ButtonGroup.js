@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { DATA_TYPE_FORM } from '@/constants';
+import { DATA_TYPE_FORM, DESK_STATUS_WORK, DESK_STATUS_PUBLISH } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
 import { putComponentWork, postSaveComponentWork, postPublishComponentWork, postSavePublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 import ComponentInfo from './ComponentInfo';
@@ -47,7 +47,7 @@ const ButtonGroup = (props) => {
      * 전송
      */
     const handleClickPublish = useCallback(() => {
-        if (workStatus === 'work' || workStatus === 'publish') {
+        if (workStatus === DESK_STATUS_WORK || workStatus === DESK_STATUS_PUBLISH) {
             messageBox.alert(saveFailMsg);
             return;
         }

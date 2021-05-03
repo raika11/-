@@ -298,4 +298,26 @@
       ) }
   </select>
 
+  <!-- highlight -->
+  <select id="highlight" parameterType="map" resultType="map"
+    statementType="CALLABLE">
+    {call UPU_MY_HIGHLIGHT_LIST_SEL(
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!-- highlight 등록-->
+  <select id="highlightInsert" parameterType="map" statementType="CALLABLE">
+    {call UPU_MY_HIGHLIGHT_INS(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{pos, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{content, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{memo, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_nick, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{_SUCCESS, mode=OUT, jdbcType=BOOLEAN, javaType=java.lang.Boolean}
+      ) }
+  </select>
+
 </mapper>

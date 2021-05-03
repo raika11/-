@@ -8,19 +8,17 @@ import NewsLetterPackageModal from '../modals/NewsLetterPackageModal';
 import ReporterListModal from '@/pages/Reporter/modals/ReporterListModal';
 import NewsLetterJpodModal from '../modals/NewsLetterJpodModal';
 import { EditThumbModal } from '@/pages/Desking/modals';
+import NewsLetterArticlePackageModal from '../modals/NewsLetterArticlePackageModal';
 
 /**
  * 뉴스레터 편집 > 기본정보 설정
  */
-const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
+const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
     const storeLetter = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterInfo);
 
-    // 이슈번호, JPOD 채널번호, 기자번호는 channelId로 셋팅되기 때문에 local state로 관리
-    const [issueSeq, setIssueSeq] = useState('');
-    const [reporterSeq, setReporterSeq] = useState('');
-    const [jpodSeq, setJpodSeq] = useState('');
     // 모달 state
     const [pkgModal, setPkgModal] = useState(false);
+    const [articlePkgModal, setArticlePkgModal] = useState(false);
     const [reporterModal, setReporterModal] = useState(false);
     const [jpodModal, setJpodModal] = useState(false);
     const [imgModal, setImgModal] = useState(false);
@@ -31,8 +29,8 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
     const handleChangeValue = (e) => {
         const { name, value, checked } = e.target;
         if (name === 'channelType') {
-            if (value === 'Trend') {
-                onChangeValue({ letterName: '트렌드 뉴스' });
+            if (value === 'TREND') {
+                onChangeValue({ [name]: value, letterName: '트렌드 뉴스' });
             } else {
                 onChangeValue({ [name]: value, letterName: '' });
             }
@@ -48,28 +46,25 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
     };
 
     /**
-     * 기자 모달 > 기자 선택
-     * @param {object} reporter 기자 데이터
+     * 발송 콘텐츠 모달 > 콘텐츠 선택
+     * (뉴스레터 명(한글), 뉴스레터 설명 셋팅)
+     * @param {object} obj 콘텐츠 데이터
      */
-    const addReporter = (reporter) => {
-        setReporterSeq(reporter.repSeq);
-        setTemp({
-            ...temp,
-            channelId: reporter.repSeq,
-        });
-        setReporterModal(false);
-    };
+    const addChannelType = (obj) => {
+        let channelId, letterName, letterDesc;
+        if (temp.channelType === 'ISSUE' || temp.channelType === 'TOPIC' || temp.channelType === 'SERIES') {
+            channelId = obj.pkgSeq;
+            letterName = obj.pkgTitle;
+            letterDesc = obj.pkgDesc;
+        } else if (temp.channelType === 'REPORTER') {
+            channelId = obj.repSeq;
+        } else if (temp.channelType === 'JPOD') {
+            channelId = obj.chnlSeq;
+            letterName = obj.chnlNm;
+            letterDesc = obj.chnlMemo;
+        }
 
-    /**
-     * JPOD 모달 > JPOD 채널 선택
-     * @param {object} chnl 채널 데이터
-     */
-    const addJpod = (chnl) => {
-        setJpodSeq(chnl.chnlSeq);
-        setTemp({
-            ...temp,
-            channelId: chnl.chnlSeq,
-        });
+        onChangeValue({ channelId, letterName, letterDesc });
     };
 
     /**
@@ -77,7 +72,11 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
      * @param {any} data 파일데이터
      */
     const handleFileValue = (data) => {
-        setTemp({ ...temp, letterImgFile: data });
+        if (data) {
+            onChangeValue({ letterImgFile: data });
+        } else {
+            onChangeValue({ letterImg: null, letterImgFile: data });
+        }
     };
 
     /**
@@ -86,23 +85,23 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
      * @param {*} file 파일데이터
      */
     const handleThumbFileApply = (imageSrc, file) => {
-        setTemp({ ...temp, letterImg: imageSrc, letterImgFile: file });
+        onChangeValue({ letterImg: imageSrc, letterImgFile: file });
     };
 
     useEffect(() => {
-        // 채널 타입별 lacal state 변경
-        if (temp.channelType !== 'ISSUE' || temp.channelType !== 'TOPIC' || temp.channelType !== 'SERIES' || temp.channelType !== 'ARTICLE') {
-            setIssueSeq('');
+        // 채널 타입이 바뀌면 channelId, channelDataId 초기화
+        if (temp.channelType !== 'TREND') {
+            onChangeValue({ channelId: '', channelDataId: '', letterName: '', letterDesc: '' });
+        } else {
+            onChangeValue({ channelDataId: '', letterDesc: '' });
         }
-
-        if (temp.channelType !== 'REPORTER') {
-            setReporterSeq('');
-        }
-
-        if (temp.channelType !== 'JPOD') {
-            setJpodSeq('');
-        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [temp.channelType]);
+
+    useEffect(() => {
+        onChangeValue({ channelType: '', channelId: '', channelDataId: '', letterName: '', letterEngName: '', letterDesc: '' });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [temp.sendType]);
 
     return (
         <>
@@ -308,11 +307,13 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                         <div>
                             <Col xs={8} className="p-0">
                                 <MokaSearchInput
-                                    value={issueSeq}
+                                    value={temp.channelId}
                                     placeholder=""
                                     onSearch={() => {
-                                        if (temp.channelType === 'ISSUE' || temp.channelType === 'TOPIC' || temp.channelType === 'SERIES' || temp.channelType === 'ARTICLE') {
+                                        if (temp.channelType === 'ISSUE' || temp.channelType === 'TOPIC' || temp.channelType === 'SERIES') {
                                             setPkgModal(true);
+                                        } else if (temp.channelType === 'ARTICLE') {
+                                            setArticlePkgModal(true);
                                         } else if (temp.channelType === 'REPORTER') {
                                             setReporterModal(true);
                                         } else if (temp.channelType === 'JPOD') {
@@ -326,9 +327,15 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, setTemp, onChangeValue }) => {
                                 />
                             </Col>
                         </div>
-                        <NewsLetterPackageModal show={pkgModal} onHide={() => setPkgModal(false)} channelType={temp.channelType} />
-                        <ReporterListModal show={reporterModal} onHide={() => setReporterModal(false)} onRowClicked={addReporter} />
-                        <NewsLetterJpodModal show={jpodModal} onHide={() => setJpodModal(false)} onRowSelected={addJpod} />
+                        <NewsLetterPackageModal show={pkgModal} onHide={() => setPkgModal(false)} channelType={temp.channelType} onRowClicked={addChannelType} />
+                        <NewsLetterArticlePackageModal
+                            show={articlePkgModal}
+                            onHide={() => setArticlePkgModal(false)}
+                            channelType={temp.channelType}
+                            onRowClicked={addChannelType}
+                        />
+                        <ReporterListModal show={reporterModal} onHide={() => setReporterModal(false)} channelType={temp.channelType} onRowClicked={addChannelType} />
+                        <NewsLetterJpodModal show={jpodModal} onHide={() => setJpodModal(false)} channelType={temp.channelType} onRowClicked={addChannelType} />
                     </div>
                 </Form.Row>
             )}

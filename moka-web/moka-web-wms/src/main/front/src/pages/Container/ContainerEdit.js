@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
+import { API_BASE_URL } from '@/constants';
 import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
@@ -15,9 +16,11 @@ const ContainerEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const loading = useSelector(({ loading }) => loading[GET_CONTAINER] || loading[DELETE_CONTAINER] || loading[SAVE_CONTAINER]);
+    const UPLOAD_PATH_URL = useSelector(({ app }) => app.UPLOAD_PATH_URL);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const { container, inputTag, invalidList } = useSelector(({ container }) => container);
     const [temp, setTemp] = useState(initialState.container);
+    const [thumbSrc, setThumbSrc] = useState(null);
     const [error, setError] = useState({});
     const imgFileRef = useRef(null);
 
@@ -139,8 +142,13 @@ const ContainerEdit = ({ onDelete, match }) => {
 
     useEffect(() => {
         setTemp(container);
+        if (container.containerThumb && container.containerThumb !== '') {
+            setThumbSrc(`${API_BASE_URL}${UPLOAD_PATH_URL}/${container.containerThumb}`);
+        } else {
+            setThumbSrc(null);
+        }
         setError({});
-    }, [container]);
+    }, [UPLOAD_PATH_URL, container]);
 
     useEffect(() => {
         setError(invalidListToError(invalidList));
@@ -173,7 +181,7 @@ const ContainerEdit = ({ onDelete, match }) => {
         >
             <MokaInputLabel className="mb-2" label="컨테이너ID" name="containerSeq" value={temp.containerSeq} inputProps={{ plaintext: true, readOnly: true }} />
 
-            <MokaInputLabel label="사용분류" className="mb-2" as="select" disabled>
+            <MokaInputLabel label="사용분류" className="mb-2" as="select" name="containerGroup" onChange={handleChangeValue}>
                 <option>서비스페이지</option>
             </MokaInputLabel>
 
@@ -198,14 +206,14 @@ const ContainerEdit = ({ onDelete, match }) => {
                 append={<MokaCopyTextButton copyText={inputTag} />}
             />
 
-            <MokaInputLabel label="설명" as="textarea" name="description" inputProps={{ rows: 3 }} className="mb-2" value={container.description} onChange={handleChangeValue} />
+            <MokaInputLabel label="설명" as="textarea" name="containerDesc" inputProps={{ rows: 3 }} className="mb-2" value={temp.containerDesc} onChange={handleChangeValue} />
 
             <MokaInputLabel
                 ref={imgFileRef}
                 label={
                     <React.Fragment>
                         이미지
-                        <Button className="mt-1" size="sm" variant="gray-700" onClick={(e) => imgFileRef.current.rootRef.onClick(e)}>
+                        <Button className="mt-1" size="sm" variant="gray-700" onClick={(e) => imgFileRef.current.openFileDialog(e)}>
                             신규등록
                         </Button>
                     </React.Fragment>
@@ -214,10 +222,15 @@ const ContainerEdit = ({ onDelete, match }) => {
                 inputProps={{
                     width: 284,
                     height: (284 * 9) / 16,
-                    // img: thumbSrc,
-                    //  alt: temp.templateName,
+                    img: thumbSrc,
                     deleteButton: true,
-                    //   setFileValue
+                    setFileValue: (data) => {
+                        setTemp({
+                            ...temp,
+                            thumbFile: data,
+                            containerThumb: !data ? null : temp.containerThumb,
+                        });
+                    },
                 }}
             />
         </MokaCard>

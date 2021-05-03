@@ -13,6 +13,7 @@ import jmnet.moka.core.tps.mvc.container.vo.ContainerVO;
 import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ContainerService {
     /**
@@ -44,11 +45,12 @@ public interface ContainerService {
     /**
      * 컨테이너정보 수정
      *
-     * @param container 수정할 컨테이너정보
+     * @param container   수정할 컨테이너정보
+     * @param historySave 히스토리 저장여부
      * @return 등록된 컨테이너정보
      * @throws TemplateParseException, UnsupportedEncodingException, IOException
      */
-    public Container updateContainer(Container container)
+    public Container updateContainer(Container container, boolean historySave)
             throws Exception;
 
     /**
@@ -96,4 +98,22 @@ public interface ContainerService {
      */
     public Page<Container> findAllContainerRel(RelationSearchDTO search, Pageable pageable);
 
+    /**
+     * 이미지저장
+     *
+     * @param container 컨테이너정보
+     * @param thumbFile 저장할 이미지
+     * @return 저장경로
+     */
+    String saveContainerImage(Container container, MultipartFile thumbFile)
+            throws Exception;
+
+    /**
+     * 이미지 삭제
+     *
+     * @param container 컨테이너정보
+     * @return 성공실패
+     */
+    boolean deleteContainerImage(Container container)
+            throws Exception;
 }

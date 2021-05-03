@@ -282,5 +282,34 @@
     </keys>
   </api>
 
+  <!--하이라이트 조회-->
+  <api id="highlight">
+    <description>실시간 하이라이트를 조회한다.</description>
+    <parameter>
+      <count desc="조회건수" default="5" require="Y" type="number">^[0-9]{1,6}$</count>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.article.highlight</request>
+    <keys>
+      count
+    </keys>
+  </api>
+
+  <!--하이라이트 등록-->
+  <api id="highlight.insert" membership="cookie" method="post" expire="0">
+    <description>하이라이트를 등록한다.</description>
+    <parameter>
+      <pos desc="단락위치" default="0" require="Y" type="number">^[0-9]{1,6}$</pos>
+      <id desc="기사키" require="Y" type="number">^[0-9]{1,9}$</id>
+      <content desc="하이라이트내용">^.{0,1000}$</content>
+      <memo desc="메모">^.{0,1000}$</memo>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_SUCCESS">dps.article.highlightInsert</request>
+    <keys>
+      pos
+      id
+      content
+      memo
+    </keys>
+  </api>
 
 </apiConfig>

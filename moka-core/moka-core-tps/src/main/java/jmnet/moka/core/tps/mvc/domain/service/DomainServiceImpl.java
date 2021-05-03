@@ -86,6 +86,9 @@ public class DomainServiceImpl implements DomainService {
         // 템플릿 이미지 폴더 생성
         uploadFileHelper.createBusinessDir("template", returnVal.getDomainId());
 
+        // 컨테이너 이미지 폴더 생성
+        uploadFileHelper.createBusinessDir("container", returnVal.getDomainId());
+
         // 페이지(메인홈) 등록
         jmnet.moka.core.tps.mvc.page.entity.Page root = jmnet.moka.core.tps.mvc.page.entity.Page.builder()
                                                                                                 //                                                                                                .regDt(McpDate.now())

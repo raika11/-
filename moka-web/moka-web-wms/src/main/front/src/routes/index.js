@@ -770,7 +770,7 @@ const routes = [
         name: 'newsLetter',
         displayName: '뉴스레터 상품 관리',
         component: NewsLetter,
-        side: true,
+        side: false,
         nonResponsive: true,
         exact: false,
         strict: true,

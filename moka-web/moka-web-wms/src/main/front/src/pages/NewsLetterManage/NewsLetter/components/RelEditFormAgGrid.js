@@ -1,18 +1,24 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@/components';
-import columnDefs from './RelJpodAgGridColumns';
-import { changeChnlSearchOption, getChnlList, GET_CHNL_LIST } from '@store/jpod';
+import columnDefs from './RelEditFormAgGridColumns';
+import { getEditFormList, GET_EDIT_FORM_LIST, changeSearchOption } from '@store/editForm';
 
 /**
- * J팟 검색 모달 AgGrid
- * 뉴스레터 구독 여부가 Y, 연계된 뉴스레터가 있는 J팟은 비활성화
+ * 편집폼 검색 모달 AgGrid
  */
-const RelJpodAgGrid = ({ onRowClicked, onHide }) => {
+const RelEditFormAgGrid = ({ onRowClicked, onHide }) => {
     const dispatch = useDispatch();
-    const { search, list, total, channel } = useSelector(({ jpod }) => jpod.channel, shallowEqual);
-    const letterChannelTypeList = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterChannelTypeList);
-    const loading = useSelector(({ loading }) => loading[GET_CHNL_LIST]);
+    const { list, total, search, loading } = useSelector(
+        (store) => ({
+            editForm: store.editForm.editForm,
+            list: store.editForm.list,
+            total: store.editForm.total,
+            search: store.editForm.search,
+            loading: store.loading[GET_EDIT_FORM_LIST],
+        }),
+        shallowEqual,
+    );
     const [rowData, setRowData] = useState([]);
 
     /**
@@ -21,9 +27,10 @@ const RelJpodAgGrid = ({ onRowClicked, onHide }) => {
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
             let temp = { ...search, [key]: value };
-            if (key !== 'page') temp['page'] = 0;
-            dispatch(changeChnlSearchOption(temp));
-            dispatch(getChnlList({ search: temp }));
+            if (key !== 'page') {
+                temp['page'] = 0;
+            }
+            dispatch(getEditFormList(changeSearchOption(temp)));
         },
         [dispatch, search],
     );
@@ -44,29 +51,27 @@ const RelJpodAgGrid = ({ onRowClicked, onHide }) => {
 
     useEffect(() => {
         setRowData(
-            list.map((j) => ({
-                ...j,
-                letterYn: letterChannelTypeList.indexOf(j.chnlSeq) > -1 ? 'Y' : 'N',
+            list.map((f) => ({
+                ...f,
                 onClick: handleRowClicked,
             })),
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [list, handleRowClicked]);
+    }, [list]);
 
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
-            onRowNodeId={(data) => data.chnlSeq}
+            onRowNodeId={(data) => data.formSeq}
             rowData={rowData}
             loading={loading}
             total={total}
             page={search.page}
             size={search.size}
             onChangeSearchOption={handleChangeSearchOption}
-            selected={channel.chnlSeq}
         />
     );
 };
 
-export default RelJpodAgGrid;
+export default RelEditFormAgGrid;

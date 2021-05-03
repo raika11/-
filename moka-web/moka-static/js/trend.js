@@ -22,11 +22,6 @@ function topSwiper() {
                 nextEl: $('.list' + index).siblings('.swiper-button-next'),
                 prevEl: $('.list' + index).siblings('.swiper-button-prev'),
             },
-            breakpoints: {
-                1023: {
-                    slidesPerView : 1,
-                }
-            },
         });
         
         if ( $(window).width() < 1024 ) {

@@ -1,5 +1,6 @@
 import qs from 'qs';
 import instance from '@store/commons/axios';
+import { objectToFormData } from '@utils/convertUtil';
 
 // 컨테이너 목록 조회
 export const getContainerList = ({ search }) => {
@@ -16,28 +17,30 @@ export const getContainer = ({ containerSeq }) => {
     });
 };
 
-// 컨테이너 저장
+// 컨테이너 등록(폼데이터)
 export const postContainer = ({ container }) => {
-    const containerSet = {
-        ...container,
-        'domain.domainId': container.domain.domainId,
-    };
-    delete containerSet.domain;
-    return instance.post('/api/containers', qs.stringify(containerSet)).catch((err) => {
-        throw err;
-    });
+    return instance
+        .post('/api/containers', objectToFormData(container), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
 
-// 컨테이너 수정
+// 컨테이너 수정(폼데이터)
 export const putContainer = ({ container }) => {
-    const containerSet = {
-        ...container,
-        'domain.domainId': container.domain.domainId,
-    };
-    delete containerSet.domain;
-    return instance.put(`/api/containers/${containerSet.containerSeq}`, qs.stringify(containerSet)).catch((err) => {
-        throw err;
-    });
+    return instance
+        .put(`/api/containers/${container.containerSeq}`, objectToFormData(container), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
 
 // 관련 아이템 확인

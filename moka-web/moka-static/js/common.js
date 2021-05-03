@@ -2,17 +2,17 @@ $(document).ready(function() {
 
     //header stiky
     if ($(this).scrollTop() > 0) {
-        $('.header').addClass('sticky_top');
+        // $('.header').addClass('sticky_top');
         // $('.section_header_wrap').addClass('sticky_top');
     }
     $(window).scroll(function () {
-        var headerHeight = $("header").height();
+        var headerHeight = $("header.").height();
         if ($(this).scrollTop() > headerHeight) {
-            $('.header').addClass('sticky_top');
+            // $('.header').addClass('sticky_top');
             // $('.section_header_wrap').addClass('sticky_top');
             $("body").css("margin-top",headerHeight+"px");
         } else {
-            $('.header').removeClass('sticky_top');
+            // $('.header').removeClass('sticky_top');
             // $('.section_header_wrap').removeClass('sticky_top');
             $("body").css("margin-top","0px");
         }
@@ -43,6 +43,21 @@ $(document).ready(function() {
     if($.tabs){
         $.tabs.init();
     }
+
+
+    //swiper
+    // - mobile 전용
+    if($(".scroll_sm_wrap").length > 0){
+        mobileSwiper();
+        var mtimer;
+        $(window).resize(function(){
+            if (mtimer) {
+                clearTimeout(mtimer);
+            }
+            mtimer = setTimeout(mobileSwiper, 10);
+        });
+    }
+
 });
 
 /* 임시 레이어팝업 */
@@ -88,3 +103,25 @@ function changeToSlider($target, slickOptions){
         $target.slick('unslick');
     };
 }
+
+/* mobile swiper */
+/* 카드 좌측 정렬 */
+function mobileSwiper() {
+    var swiper = new Swiper('.scroll_sm_wrap', {
+        slidesPerView: 1.2,
+        slidesPerGroup: 1,
+        spaceBetween: 10,
+        // init: false,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        }
+    });
+
+    if (window.innerWidth >= BREAKPOINT_LARGE) {
+        if (swiper) {
+            swiper.destroy();
+        }
+    }
+
+};

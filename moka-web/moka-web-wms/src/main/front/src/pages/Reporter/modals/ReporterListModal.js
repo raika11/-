@@ -6,8 +6,9 @@ import { messageBox } from '@utils/toastUtil';
 import { JPLUS_REP_DIV_DEFAULT } from '@/constants';
 import { GRID_ROW_HEIGHT } from '@/style_constants';
 import { initialState, getReporterListModal, GET_REPORTER_LIST_MODAL } from '@store/reporter';
+import { getNewsLetterChannelType } from '@store/newsLetter';
 import { getJplusRep } from '@store/codeMgt';
-import columnDefs from './ReporterListModalColumns';
+import { repColumnDefs } from './ReporterListModalColumns';
 
 const propTypes = {
     show: PropTypes.bool,
@@ -16,16 +17,23 @@ const propTypes = {
      * row click (add버튼)
      */
     onRowClicked: PropTypes.func,
+    /**
+     * 뉴스레터 채널 타입(뉴스레터 channelType='REPORTER')
+     */
+    channelType: PropTypes.string,
 };
-const defaultProps = {};
+const defaultProps = {
+    channelType: null,
+};
 
 /**
  * 기자 목록 모달
  */
 const ReporterListModal = (props) => {
-    const { show, onHide, onRowClicked } = props;
+    const { show, onHide, onRowClicked, channelType } = props;
     const dispatch = useDispatch();
     const jplusRepRows = useSelector(({ codeMgt }) => codeMgt.jplusRepRows);
+    const letterChannelTypeList = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterChannelTypeList);
     const loading = useSelector(({ loading }) => loading[GET_REPORTER_LIST_MODAL]);
     const [setGridInstance] = useState(null);
     const [search, setSearch] = useState(initialState.search);
@@ -40,9 +48,12 @@ const ReporterListModal = (props) => {
         (row) => {
             if (onRowClicked) {
                 onRowClicked(row);
+                if (channelType) {
+                    onHide();
+                }
             }
         },
-        [onRowClicked],
+        [onRowClicked, channelType, onHide],
     );
 
     /**
@@ -50,30 +61,63 @@ const ReporterListModal = (props) => {
      */
     const getReporterList = useCallback(
         ({ search: appendSearch }) => {
-            const ns = { ...search, ...appendSearch };
-            setSearch(ns);
+            setSearch({ ...search, ...appendSearch });
 
-            dispatch(
-                getReporterListModal({
-                    search: ns,
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            setRowData(
-                                body.list.map((reporter) => ({
-                                    ...reporter,
-                                    jplusRepDivNm: (reporter.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
-                                    onClick: handleRowClicked,
-                                })),
-                            );
-                            setTotal(body.totalCnt);
-                        } else {
-                            messageBox.alert(header.message);
-                        }
-                    },
-                }),
-            );
+            if (channelType) {
+                dispatch(
+                    getNewsLetterChannelType({
+                        channelType,
+                        callback: ({ header, body }) => {
+                            if (header.success && body) {
+                                dispatch(
+                                    getReporterListModal({
+                                        search,
+                                        callback: ({ header, body }) => {
+                                            if (header.success) {
+                                                setRowData(
+                                                    body.list.map((reporter) => ({
+                                                        ...reporter,
+                                                        jplusRepDivNm: (reporter.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
+                                                        letterYn: letterChannelTypeList.indexOf(reporter.repSeq) > -1 ? 'Y' : 'N',
+                                                        onClick: handleRowClicked,
+                                                    })),
+                                                );
+                                                setTotal(body.totalCnt);
+                                            } else {
+                                                messageBox.alert(header.message);
+                                            }
+                                        },
+                                    }),
+                                );
+                            } else {
+                                messageBox.alert(header.message);
+                            }
+                        },
+                    }),
+                );
+            } else {
+                dispatch(
+                    getReporterListModal({
+                        search,
+                        callback: ({ header, body }) => {
+                            if (header.success) {
+                                setRowData(
+                                    body.list.map((reporter) => ({
+                                        ...reporter,
+                                        jplusRepDivNm: (reporter.jplusRepDivNm || JPLUS_REP_DIV_DEFAULT).slice(0, 2),
+                                        onClick: handleRowClicked,
+                                    })),
+                                );
+                                setTotal(body.totalCnt);
+                            } else {
+                                messageBox.alert(header.message);
+                            }
+                        },
+                    }),
+                );
+            }
         },
-        [search, dispatch, handleRowClicked],
+        [search, channelType, dispatch, letterChannelTypeList, handleRowClicked],
     );
 
     /**
@@ -132,18 +176,6 @@ const ReporterListModal = (props) => {
         if (show && !jplusRepRows) dispatch(getJplusRep());
     }, [dispatch, jplusRepRows, show]);
 
-    useEffect(() => {
-        if (show) {
-            setRowData(
-                rowData.map((row) => ({
-                    ...row,
-                    onClick: handleRowClicked,
-                })),
-            );
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, handleRowClicked]);
-
     return (
         <MokaModal show={show} onHide={handleHide} title="기자 검색" size="xl" bodyClassName="d-flex flex-column" width={970} height={800} centered draggable>
             <div className="mb-14 d-flex">
@@ -163,11 +195,10 @@ const ReporterListModal = (props) => {
             </div>
             <MokaTable
                 className="overflow-hidden flex-fill"
-                columnDefs={columnDefs}
+                columnDefs={repColumnDefs(props)}
                 rowData={rowData}
                 rowHeight={GRID_ROW_HEIGHT.C[0]}
                 onRowNodeId={(reporter) => reporter.repSeq}
-                onRowClicked={() => {}}
                 loading={loading}
                 total={total}
                 page={search.page}

@@ -104,6 +104,8 @@
 .guide .page_title{margin-bottom:24px;font-size:36px;font-weight:500;}
 .guide_title {margin-top:32px;font-size:28px;line-height:1.5;font-weight:500;letter-spacing:-1.25px;}
 .code_wrap + .guide_title {margin-top:48px;}
+.guide_title + p{display:block;padding:5px 0 16px;line-height: 1.65;}
+.guide_title + p strong{color:#f6330a;}
 .sample_wrap{display:inline-block;width:100%;padding:32px;border:1px solid #dee2e6;}
 .sample_wrap + .sample_wrap{margin-top:48px;}
 
@@ -127,7 +129,7 @@
 
 .code_wrap{clear:both;background:#1e1e1e;}
 .code_wrap code{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace}
-.code_wrap .hljs {padding:20px 15px;max-height:400px;}
+.code_wrap .hljs {padding:0px 15px 20px;max-height:400px;}
 .code_wrap .hljs-tag {line-height:1.38;}
 .code_wrap .hljs-comment, .code_wrap .hljs-quote{font-style:normal;}
 

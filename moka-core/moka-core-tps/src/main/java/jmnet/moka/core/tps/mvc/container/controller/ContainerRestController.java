@@ -24,6 +24,7 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.helper.PurgeHelper;
+import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerSearchDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
@@ -34,6 +35,7 @@ import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,10 +62,14 @@ public class ContainerRestController extends AbstractCommonController {
 
     private final PurgeHelper purgeHelper;
 
-    public ContainerRestController(ContainerService containerService, RelationService relationService, PurgeHelper purgeHelper) {
+    private final UploadFileHelper uploadFileHelper;
+
+    public ContainerRestController(ContainerService containerService, RelationService relationService, PurgeHelper purgeHelper,
+            UploadFileHelper uploadFileHelper) {
         this.containerService = containerService;
         this.relationService = relationService;
         this.purgeHelper = purgeHelper;
+        this.uploadFileHelper = uploadFileHelper;
     }
 
     /**
@@ -174,7 +180,7 @@ public class ContainerRestController extends AbstractCommonController {
      * @throws Exception
      */
     @ApiOperation(value = "컨테이너 등록")
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> postContainer(@Valid ContainerDTO containerDTO)
             throws Exception {
 
@@ -185,6 +191,22 @@ public class ContainerRestController extends AbstractCommonController {
         try {
             // 등록
             Container returnValue = containerService.insertContainer(container);
+
+            // 이미지등록
+            if (containerDTO.getThumbFile() != null) {
+                // 이미지파일 저장(multipartFile)
+                String imgPath = containerService.saveContainerImage(returnValue, containerDTO.getThumbFile());
+                if (imgPath.length() > 0) {
+                    tpsLogger.success(ActionType.UPLOAD, true);
+                    returnValue.setContainerThumb(imgPath);
+
+                    // 썸네일경로 업데이트(히스토리 생성X)
+                    returnValue = containerService.updateContainer(returnValue, false);
+                } else {
+                    tpsLogger.fail(ActionType.UPLOAD, "IMAGE FILE UPLOAD FAIL");
+                }
+
+            }
 
             // 결과리턴
             ContainerDTO dto = modelMapper.map(returnValue, ContainerDTO.class);
@@ -231,7 +253,42 @@ public class ContainerRestController extends AbstractCommonController {
                 });
 
         try {
-            Container returnValue = containerService.updateContainer(newContainer);
+            /*
+             * 이미지 파일 저장 새로운 파일이 있으면 기존 파일이 있으면 삭제하고 새 파일을 저장한다.
+             * 새로운 파일이 없는데 기존 파일이 있으면 기존 파일을 삭제한다
+             */
+            if (containerDTO.getThumbFile() != null) {
+
+                // 기존이미지 삭제
+                if (McpString.isNotEmpty(orgContainer.getContainerThumb())) {
+                    containerService.deleteContainerImage(orgContainer);
+                    tpsLogger.success(ActionType.FILE_DELETE, true);
+                }
+                // 새로운 이미지 저장
+                String imgPath = containerService.saveContainerImage(newContainer, containerDTO.getThumbFile());
+                if (imgPath.length() > 0) {
+                    tpsLogger.success(ActionType.UPLOAD, true);
+                } else {
+                    tpsLogger.fail(ActionType.UPLOAD, "IMAGE FILE UPLOAD FAIL");
+                }
+
+                // 이미지 파일명 수정
+                newContainer.setContainerThumb(imgPath);
+
+            } else if (McpString.isNotEmpty(orgContainer.getContainerThumb()) && McpString.isEmpty(newContainer.getContainerThumb())) {
+                containerService.deleteContainerImage(orgContainer);
+                tpsLogger.success(ActionType.FILE_DELETE, true);
+            }
+
+            // 수정 (바디가 변경되었을 때만 히스토리를 생성한다)
+            Container returnValue;
+            if (orgContainer.getContainerBody() != null && orgContainer
+                    .getContainerBody()
+                    .equals(newContainer.getContainerBody())) {
+                returnValue = containerService.updateContainer(newContainer, false);
+            } else {
+                returnValue = containerService.updateContainer(newContainer, true);
+            }
 
             // 결과리턴
             ContainerDTO dto = modelMapper.map(returnValue, ContainerDTO.class);

@@ -87,8 +87,8 @@
 .catalog_home .card_body .headline {margin-top:4px;}
 .catalog_home .card_body .headline a {height:2.8em;-webkit-line-clamp:2;font-size:20px;font-weight:700;line-height:1.4;letter-spacing:-0.4px;color:#111;}
 .catalog_home .card_body .description a {display:block;max-height:3.06em;-webkit-line-clamp:2;font-size:15px;line-height:1.53;letter-spacing:-0.4px;color:#777;overflow:hidden;}
-.catalog_home .card_body .date {line-height:1.62;letter-spacing:-0.2px;color:#aaa;}
-.catalog_home .card_body .byline {line-height:1.62;letter-spacing:-0.2px;color:#aaa;}
+.catalog_home .card_body .date {line-height:1.62;color:#aaa;}
+.catalog_home .card_body .byline {line-height:1.62;color:#aaa;}
 
 
 /* sns - Instagram */
@@ -311,7 +311,7 @@
     /* nav */
     .header_nav_wrap{border-bottom-width:4px;}
     .header_nav_wrap .header_nav_area .page_title {padding-top:10px;font-size:40px;letter-spacing:-0.5px;}
-    .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2 {font-size:16px;letter-spacing:-0.2px;}
+    .header_nav_wrap .header_nav_area .header_nav .nav .nav_item .nav_link h2 {font-size:16px;}
     
     /* sub title 영역 */
     .title_wrap .title {font-size:18px;}

@@ -31,31 +31,20 @@
 
     <div class="container ">
         <section class="contents">
-            <section class="">
-                <!-- <script>include.aside.menu0()</script> -->
-                <main class="main_guide col_sm12 col_md12 col_lg12">
+            <div class="row">
+                <script>include.aside.menu0()</script>
+                <main class="main_guide col_sm12 col_md12 col_lg9">
                     <!-- 가이드 내용 시작 -->
                     
 
-
-                    
-
-
-
-                    <h2 class="guide_title">보더</h2>
+                    <h2 class="guide_title">슬라이딩 - 모바일 한정</h2>
+                    <p>슬라이딩 플러그인은 swiper를 사용합니다. 그룹형의 skin_group 를 감싸는 <strong>scroll_sm_wrap</strong>클래스가 필요합니다. </p>
                     <div class="sample_wrap">
-                        <div class="view_btn_wrap">
-                            <button type="button" class="btn_view" data-rel="375px">375</button>
-                            <button type="button" class="btn_view" data-rel="768px">768</button>
-                            <button type="button" class="btn_view" data-rel=" ">clear</button>
-                        </div>
-                        <div class="scroll_wrap">
+                        <div class="scroll_sm_wrap swiper-container">
                             <ul class="skin_group swiper-wrapper"> <!-- row  -->
                                 <li class="card_skin col_lg4 swiper-slide">
                                     <div class="card_image">
-                                        <figure>
-                                                <a href="#"><img srcset="//via.placeholder.com/278x156 1x, //via.placeholder.com/556x312 2x, //via.placeholder.com/834x468 3x" width="278" src="//via.placeholder.com/278x156" alt="..."></a>
-                                        </figure>
+                                        <figure><a href="#"><img srcset="//via.placeholder.com/278x156 1x, //via.placeholder.com/556x312 2x, //via.placeholder.com/834x468 3x" width="278" src="//via.placeholder.com/278x156" alt="..."></a></figure>
                                     </div>
                                     <div class="card_body">
                                         <h2 class="headline"><a href="#">‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전</a></h2>
@@ -74,81 +63,27 @@
                                         <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
                                     </div>
                                 </li>
-                                <li class=" card_skin col_lg4 swiper-slide">
+                                <li class="card_skin skin col_lg4 swiper-slide">
                                     <div class="card_body">
                                         <strong class="headline">원하는 뉴스만<br />빠르고 편리하게<br />나만을 위한<br />구독 패키지를 찾아보세요!</strong>
                                         <button type="button" class="btn btn_outline_white">더 많은 구독 상품 보러가기</button>
                                     </div>
                                 </li>
                             </ul>
-                        </div>
-
-                        <p class="mt_30 pb_30 bdr_title_w4"></p>
-
-                        <div class="scroll_wrap  swiper_wrap2">
-                            <ul class="skin_group swiper-wrapper"> <!-- row  -->
-                                <li class="swiper-slide col_lg4">
-                                    <div class="card card_skin">
-                                        <div class="card_image">
-                                            <figure>
-                                                    <a href="#"><img srcset="//via.placeholder.com/278x156 1x, //via.placeholder.com/556x312 2x, //via.placeholder.com/834x468 3x" width="278" src="//via.placeholder.com/278x156" alt="..."></a>
-                                            </figure>
-                                        </div>
-                                        <div class="card_body">
-                                            <h2 class="headline"><a href="#">‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전</a></h2>
-                                        </div>
-                                        <div class="card_foot">
-                                            <h3 class="title"><a href="#">앤츠랩</a></h3>
-                                            <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="swiper-slide col_lg4 ">
-                                    <div class="card card_skin">
-                                        <div class="card_body">
-                                            <h2 class="headline"><a href="#">유승민, 경기도 독자적 백신 접종 검토에 “文정부 왜 존재 하는가”</a></h2>
-                                        </div>
-                                        <div class="card_foot">
-                                            <h3 class="title"><a href="#">앤츠랩</a></h3>
-                                            <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="swiper-slide col_lg4">
-                                    <div class="card skin">
-                                        <div class="card_body">
-                                            <strong class="headline">원하는 뉴스만<br />빠르고 편리하게<br />나만을 위한<br />구독 패키지를 찾아보세요!</strong>
-                                            <button type="button" class="btn ">더 많은 구독 상품 보러가기</button>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+                            <div class="swiper-pagination"></div>
                         </div>
                     </div>
                     <div class="code_wrap">
 <pre><code class="html">
-&lt;div class="card_image"&gt;
-    &lt;a href="javasctipt:(0);"&gt;&lt;img src="http://placehold.it/273x153"  alt="..." /&gt;&lt;/a&gt;
-&lt;/div&gt;
-&lt;div class="card_body"&gt;
-    &lt;h3 class="title"&gt;&lt;a href="javasctipt:(0);"&gt;양성희의 시시각각&lt;/a&gt;&lt;/h3&gt;
-    &lt;h2 class="headline"&gt;&lt;a href="javasctipt:(0);"&gt;&lt;/a&gt;'조선구마사' 의 교훈&lt;/a&gt;&lt;/h2&gt;
-    &lt;p class="description"&gt;&lt;a href="javasctipt:(0);"&gt;&lt;/a&gt;역사 왜곡 논란과 반중 정서로 시청자 불만이 쇄도해 2회 만에 전격 종영한 SBS 드라마 ‘조선구마사’ 얘기다. 드라마 제작사의 모회사인 YG엔터테인먼트에 중국 자본이 들어와 있고, 극본을 쓴 박계옥 작가가 한·중 합작 제작사와 계약관계라는 것도 논란을 키웠다. 박계옥 작가는 전작 ‘철인왕후’(tvN)에서도 현대 남&lt;/a&gt;&lt;/p&gt;
-    &lt;p class="date"&gt;3시간전&lt;/p&gt;
-    &lt;p class="byline"&gt;김선일 기자&lt;/p&gt;
+&lt;div class="card"&gt;
+
 &lt;/div&gt;
 </code></pre>
                     </div>
 
-
-
-
-
-
-
                     <!-- //가이드 내용 -->
                 </main>
-            </section>
+            </div>
         </section>
     </div>
     <script>include.footer()</script>
@@ -158,43 +93,44 @@
 <script>
 
 
-var swiper = new Swiper('.swiper_wrap', {
-        slidesPerView: '1',
-        spaceBetween: 30,
-        pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-        },
-
-    });
-
-
 $(document).ready(function() {
-    if ( $(window).width() < 1024 ) {
-        scrollSwiper();
-    };
+    mobileSwiper();
+
+    var mtimer;
+    $(window).resize(function(){
+        if (mtimer) {
+            clearTimeout(mtimer);
+        }
+        mtimer = setTimeout(mobileSwiper, 10);
+    });
 });
 
 
-function scrollSwiper() {
-    var swiper = new Swiper('.scroll_wrap3', {
-        slidesPerView: '1',
-        spaceBetween: 30,
+
+function mobileSwiper() {
+
+    var swiper = new Swiper('.scroll_sm_wrap', {
+        slidesPerView: 1.5,
+        slidesPerGroup: 1,
+        spaceBetween: 10,
+        // init: false,
         pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-        },
-
+            el: '.swiper-pagination',
+            clickable: true,
+        }
+        
     });
 
-    $(document).resize(function() {
-        if ( $(window).width() > 1023 ) {
-                if (swiper) {
-                    swiper.destroy();
-                } 
-            };
-    });
+
+
+    if ( $(window).width() > 1023 ) {
+        if (swiper) {
+            swiper.destroy();
+        }
+    }
+
 };
+
 </script>
 </body>
 </html>

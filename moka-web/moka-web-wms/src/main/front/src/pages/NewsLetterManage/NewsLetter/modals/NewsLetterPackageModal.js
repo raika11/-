@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaModal, MokaSearchInput } from '@/components';
 import { initialState, getIssueList, clearSearch, changeIssueSearchOptions } from '@store/issue';
 import { getNewsLetterChannelType } from '@store/newsLetter';
-import RelIssueAgGrid from '../components/RelIssueAgGrid';
+import IssueAgGrid from '../components/RelIssueAgGrid';
 import { messageBox } from '@/utils/toastUtil';
 
 /**
@@ -80,7 +80,7 @@ const NewsLetterPackageModal = ({ show, onHide, channelType, onRowClicked }) => 
                     />
                 </Form.Row>
             </Form>
-            <RelIssueAgGrid pkgDiv={pkgDiv} onRowClicked={onRowClicked} onHide={onHide} />
+            <IssueAgGrid pkgDiv={pkgDiv} onRowClicked={onRowClicked} onHide={onHide} />
         </MokaModal>
     );
 };

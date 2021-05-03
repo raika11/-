@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
+import { API_BASE_URL } from '@/constants';
 import util from '@utils/commonUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
@@ -15,9 +16,11 @@ const ContainerEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const loading = useSelector(({ loading }) => loading[GET_CONTAINER] || loading[DELETE_CONTAINER] || loading[SAVE_CONTAINER]);
+    const UPLOAD_PATH_URL = useSelector(({ app }) => app.UPLOAD_PATH_URL);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const { container, inputTag, invalidList } = useSelector(({ container }) => container);
     const [temp, setTemp] = useState(initialState.container);
+    const [thumbSrc, setThumbSrc] = useState(null);
     const [error, setError] = useState({});
     const imgFileRef = useRef(null);
 
@@ -139,8 +142,13 @@ const ContainerEdit = ({ onDelete, match }) => {
 
     useEffect(() => {
         setTemp(container);
+        if (container.containerThumb && container.containerThumb !== '') {
+            setThumbSrc(`${API_BASE_URL}${UPLOAD_PATH_URL}/${container.containerThumb}`);
+        } else {
+            setThumbSrc(null);
+        }
         setError({});
-    }, [container]);
+    }, [UPLOAD_PATH_URL, container]);
 
     useEffect(() => {
         setError(invalidListToError(invalidList));
@@ -214,12 +222,12 @@ const ContainerEdit = ({ onDelete, match }) => {
                 inputProps={{
                     width: 284,
                     height: (284 * 9) / 16,
-                    img: temp.containerThumb,
+                    img: thumbSrc,
                     deleteButton: true,
                     setFileValue: (data) => {
                         setTemp({
                             ...temp,
-                            containerThumbFile: data,
+                            thumbFile: data,
                             containerThumb: !data ? null : temp.containerThumb,
                         });
                     },

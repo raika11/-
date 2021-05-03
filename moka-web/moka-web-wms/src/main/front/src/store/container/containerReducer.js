@@ -40,7 +40,10 @@ export const initialState = {
         container: {},
         containerError: null,
     },
-    container: {},
+    container: {
+        thumbFile: null,
+        containerThumb: null,
+    },
     containerBody: '',
     containerError: null,
     inputTag: '',

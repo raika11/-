@@ -1,6 +1,3 @@
-import React from 'react';
-import { GRID_LINE_HEIGHT } from '@/style_constants';
-
 const cellClassRules = {
     'ag-pre-cell': () => true,
 };
@@ -30,13 +27,13 @@ export default [
         width: 55,
     },
     {
-        headerName: '분야',
+        headerName: '카테고리',
         field: 'category',
         sortable: true,
         unSortIcon: true,
         sort: null,
         sortingOrder: ['asc', 'desc'],
-        width: 55,
+        width: 80,
     },
     {
         headerName: '뉴스레터 명',

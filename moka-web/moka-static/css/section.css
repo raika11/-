@@ -15,7 +15,7 @@
 
 
 /***************************************    general     ************************************/
-.showcase_general{padding-top:20px; padding-bottom: 40px;}
+.showcase_general{margin-top:20px;}
 
 
 /***************************************    catalog     ************************************/
@@ -203,7 +203,7 @@
     .swiper_list .swiper-pagination .swiper-pagination-bullet{margin: 0 4px; width: 7px; height: 7px; background-color: #f6330a;}
 
     /*swiper 재생/멈춤 */
-    .swiper_list .swiper-btn-wrap [class*="swiper-button-"]{display: none; position: absolute; left: 60px ;bottom: 0;}
+    .swiper_list .swiper-btn-wrap [class*="swiper-button-"]{display: none; position: absolute; bottom: 0;}
     .swiper_list .swiper-btn-wrap [class*="swiper-button-"].active{display: inline-block;  background: #f6330a; z-index:10 ; width: 10px; height: 10px; cursor: pointer;}
     .swiper_list .swiper-btn-wrap .swiper-button-play.active{opacity: 0.5;}
     .swiper_list .swiper-btn-wrap .swiper-button-pause.active{opacity: 1;}

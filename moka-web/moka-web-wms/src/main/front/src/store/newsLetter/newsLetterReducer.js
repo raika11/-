@@ -46,6 +46,7 @@ export const initialState = {
             sendPeriod: 'D',
             sendDay: '',
             sendTime: null,
+            sendTimeEdit: '',
             sendMinCnt: 1,
             sendMaxCnt: 1,
             sendOrder: 'N',
@@ -66,7 +67,7 @@ export const initialState = {
             modId: '',
             lastSendDt: '',
             category: '',
-            titleType: 'N',
+            titleType: '',
             dateTab: 6,
             dateType: 1,
             artTitleYn: 'N',
@@ -118,6 +119,7 @@ export const initialState = {
             letterBody: '',
         },
     },
+    invalidList: [],
 };
 
 /**
@@ -130,9 +132,10 @@ export default handleActions(
         [act.CLEAR_NEWS_LETTER]: (state) => {
             return produce(state, (draft) => {
                 draft.newsLetter.letterInfo = initialState.newsLetter.letterInfo;
+                draft.invalidList = initialState.invalidList;
             });
         },
-        // 검색조건 변경
+        // 데이터 변경
         [act.CHANGE_NEWS_LETTER_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.newsLetter.search = payload;
@@ -141,6 +144,11 @@ export default handleActions(
         [act.CHANGE_NEWS_LETTER_SEND_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.send.search = payload;
+            });
+        },
+        [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.invalidList = payload;
             });
         },
         // 뉴스레터 상품 목록 조회

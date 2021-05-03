@@ -38,7 +38,7 @@ const columnDefs = [
         headerName: '대표여부',
         cellRenderer: 'usedYnRenderer',
         field: 'field4',
-        width: 63,
+        width: 58,
     },
     {
         headerName: '게시일',

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaCard } from '@components';
+import { MokaCard, MokaIconTabs, MokaIcon } from '@components';
 import SubscriptionDesignList from './SubscriptionDesignList';
 import SubscriptionDesignEdit from './SubscriptionDesignEdit';
 
@@ -30,7 +30,19 @@ const SubscriptionDesign = ({ match }) => {
             </Col>
 
             <Col xs={5}>
-                <Route path={[`${match.path}/add`, `${match.path}/:seqNo`]} exact render={() => <SubscriptionDesignEdit match={match} />} />
+                <Route
+                    path={[`${match.path}/add`, `${match.path}/:seqNo`]}
+                    exact
+                    render={() => (
+                        <MokaIconTabs
+                            tabs={[<SubscriptionDesignEdit match={match} />]}
+                            tabNavs={[
+                                { title: '구독 상세', text: 'Info' },
+                                { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
+                            ]}
+                        />
+                    )}
+                />
             </Col>
         </Row>
     );

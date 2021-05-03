@@ -22,6 +22,19 @@ export const postNewsLetter = ({ newsLetter }) => {
         });
 };
 
+// 뉴스레터 상품 수정
+export const putNewsLetter = ({ newsLetter }) => {
+    return instance
+        .put(`/api/newsletter/${newsLetter.letterSeq}`, objectToFormData(newsLetter), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
 // 뉴스레터 상품 상세 조회
 export const getNewsLetter = (letterSeq) => {
     return instance.get(`/api/newsletter/${letterSeq}`).catch((err) => {

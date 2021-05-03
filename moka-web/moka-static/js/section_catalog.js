@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var showcase= new Swiper('.showcase_swiper .swiper-container', {
+    /*var showcase= new Swiper('.showcase_swiper .swiper-container', {
         autoplay: {
             delay: 3000,
             disableOnInteraction: true
@@ -21,7 +21,7 @@ $(document).ready(function() {
         $('.swiper_list .swiper-button-play').addClass('active');
         $(this).toggleClass('active');
         return false;
-    });
+    });*/
  
 });
 

@@ -108,7 +108,7 @@
                             <div class="time_bx">
                                 <p class="date">입력 2021.01.25 15:00</p>
                                 <p class="date">수정 2021.01.25 15:00</p>
-                                <button type="button" class="btn_datetime" ><i class="ico_arrow_down"></i></button>
+                                <button type="button" class="btn_datetime" onclick="toggleOpen(this);" ><i class="ico_arrow"></i></button>
                             </div>
                             <a href="" class="epaper" title="지면 구독신청">지면보기</a>
                         </div>
@@ -120,25 +120,7 @@
                             <a href="">이중앙 기자</a>
                             <a href="">최중앙 기자</a>
                             <a href="">박중앙 기자</a>
-                            <button type="button" id="byline_more" class="btn_byline_more">외 <span></span>명</button>
-                            <div class="layer_popup layer_byline" id="modal_byline"><!-- 여기에 개별 클래스 추가 -->
-                                <div class="layer_header">
-                                    <strong class="layer_title">작성한 기자</strong>
-                                </div>
-                                <div class="layer_body">
-                                    <ul>
-                                        <li><a href="">정혜정 기자 <i class="ico_arrow_right"></i></a></li>
-                                        <li><a href="">김중앙 기자 <i class="ico_arrow_right"></i></a></li>
-                                        <li><a href="">김유미 기자 <i class="ico_arrow_right"></i></a></li>
-                                        <li><a href="">홍길동 기자 <i class="ico_arrow_right"></i></a></li>
-                                        <li><a href="">김아무개 기자 <i class="ico_arrow_right"></i></a></li>
-                                        <li><a href="">이중앙 기자 <i class="ico_arrow_right"></i></a></li>
-                                        <li><a href="">최중앙 기자 <i class="ico_arrow_right"></i></a></li>
-                                        <li><a href="">박중앙 기자 <i class="ico_arrow_right"></i></a></li>
-                                    </ul>
-                                </div>
-                                <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
-                            </div>
+                            <button type="button" id="byline_more" class="btn_byline_more"  onclick="toggleOpen(this);" >외 <span></span>명<i class="ico_arrow"></i></button>
                         </div>
                     </header>
                     <div class="article_body fs3">

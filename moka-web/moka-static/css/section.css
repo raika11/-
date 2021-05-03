@@ -42,6 +42,7 @@
 /* 태블릿 디자인 나올때 까지는 아래 분기만 사용 - 2021.04.22 */
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width:1023px) {
+    .contents section{margin-bottom:40px;}
 
     /* card */
 
@@ -58,7 +59,7 @@
     .card_right_list .card_body{position: relative;}
     .card_right_list .card_body .headline{width: calc(100% - 62px); padding-right: 16px; font-size: 18px; font-weight: 700; line-height: 27px; }
     .card_right_list .rank_count{position: absolute; left: 0; top: 0; width: 28px; font-size: 0; background-position: 0 0;}
-    .card_right_list .card_body .meta{margin-top:0;}
+    .card_right_list .card_body .meta{padding-top: 8px;}
 
     /* rank_list */
     .rank_list .card_body{padding-left:23px;}

@@ -199,6 +199,12 @@ export const BULKS_CODE = {
     },
 };
 
+// 컨테이너의 사용분류 (서비스페이지, 뉴스레터)
+export const CONTAINER_GROUP = [
+    { name: '서비스 페이지', value: 'SERVICE' },
+    { name: '뉴스레터', value: 'NEWSLETTER' },
+];
+
 // 편집영역 메뉴에 따른 리스트 조회 별도 처리
 export const AREA_HOME = [
     { name: '홈 섹션편집', value: '3' },

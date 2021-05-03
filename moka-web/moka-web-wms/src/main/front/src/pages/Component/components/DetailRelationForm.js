@@ -28,8 +28,7 @@ const popover = (
  * 컴포넌트 > 템플릿, 데이터셋, 입력태그, 삭제 단어
  * 편집폼 관련 소스 주석 처리
  */
-const DetailRelationForm = (props) => {
-    const { addMode, component, setComponent, inputTag, error, setError } = props;
+const DetailRelationForm = ({ addMode, origin, component, setComponent, inputTag, error, setError }) => {
     const [templateModalShow, setTemplateModalShow] = useState(false);
     const [datasetModalShow, setDatasetModalShow] = useState(false);
     // const [formModalShow, setFormModalShow] = useState(false);
@@ -45,10 +44,9 @@ const DetailRelationForm = (props) => {
 
         if (name === 'dataType') {
             // 데이터 on => 기존 데이터셋의 dataType을 셋팅한다
-            const originType = component?.dataset?.autoCreateYn === 'Y' ? DATA_TYPE_AUTO : DATA_TYPE_DESK;
             setComponent({
                 ...component,
-                dataType: checked ? originType : DATA_TYPE_NONE,
+                dataType: checked ? origin.dataType : DATA_TYPE_NONE,
             });
         } else {
             setComponent({

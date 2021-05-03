@@ -29,18 +29,18 @@
   <select id="findArticlePageChildRelList" parameterType="ContainerSearchDTO"
     resultType="ContainerVO"
     statementType="CALLABLE">
-		{ call UPA_WMS_CONTAINER_LIST_SEL_BY_ARTPAGE(
-		#{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
-		#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
-		#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
-		#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
-		#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
-		) }
-	</select>
+    { call UPA_WMS_CONTAINER_LIST_SEL_BY_ARTPAGE(
+      #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+      #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+      #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
+  </select>
 
   <select id="findAll" parameterType="ContainerSearchDTO" resultType="ContainerVO"
     statementType="CALLABLE">
-    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_CONTAINER_LIST_SEL(
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_CONTAINER_LIST_SEL2(
     #{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
     <choose>
       <when test="searchType == 'all' and keyword != null and keyword != ''">
@@ -72,6 +72,15 @@
     <choose>
       <when test="searchType == 'containerBody' and keyword != null and keyword != ''">
         #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="containerGroup != null and containerGroup != ''">
+        #{containerGroup},
       </when>
       <otherwise>
         NULL,

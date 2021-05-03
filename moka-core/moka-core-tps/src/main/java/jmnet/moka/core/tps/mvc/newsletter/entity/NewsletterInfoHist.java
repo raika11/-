@@ -152,4 +152,7 @@ public class NewsletterInfoHist extends RegAudit {
 
     @Column(name = "WORK_TYPE")
     private String workType;
+
+    @Column(name = "MOD_REASON")
+    private String modReason;
 }

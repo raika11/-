@@ -180,6 +180,10 @@ public class NewsletterInfoHistDTO implements Serializable {
     @Length(max = 1000, message = "{tps.newsletter.error.size.letterDesc}")
     private String letterDesc;
 
+    @ApiModelProperty("변경사유")
+    @Length(max = 200, message = "{tps.newsletter.error.size.modReason}")
+    private String modReason;
+
     /**
      * 등록자
      */

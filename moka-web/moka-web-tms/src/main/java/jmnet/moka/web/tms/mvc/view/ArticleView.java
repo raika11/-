@@ -48,6 +48,8 @@ import org.springframework.web.servlet.view.AbstractView;
 public class ArticleView extends AbstractView {
     private static final Logger logger = LoggerFactory.getLogger(ArticleView.class);
     private static Pattern PATTERN_BR = Pattern.compile("<br\\/?>(\\s|&nbsp;)*?<br\\/?>", Pattern.CASE_INSENSITIVE);
+    private static Pattern PATTERN_BR_CONTAINS = Pattern.compile("(<br)", Pattern.CASE_INSENSITIVE);
+    private static String START_P_TAG = "<p class=\"ac\">";
     @Value("${tms.mte.debug}")
     private boolean templateMergeDebug;
     @Value("${tms.page.cache}")
@@ -122,6 +124,7 @@ public class ArticleView extends AbstractView {
                 Map<String, Object> articleInfo = (Map<String, Object>)jsonResult.get("article");
                 this.convertContent(articleInfo);
                 this.setEPaper(articleInfo,mergeContext);
+                this.brToPTag(articleInfo,true);
                 mergeContext.set("article", articleInfo);
                 this.setCodesAndMenus(loader, articleInfo, mergeContext);
                 StringBuilder sb =
@@ -177,6 +180,91 @@ public class ArticleView extends AbstractView {
             }
         }
     }
+
+
+    private void brToPTag(Map<String, Object> articleInfo, boolean line) {
+        String originalContent = (String) articleInfo.get("ART_CONTENT");
+        String converted = originalContent;
+        boolean hasBr = PATTERN_BR_CONTAINS.matcher(converted).groupCount() > 0;
+        if ( !hasBr) {
+            converted = converted.replaceAll("\\r", "");
+            converted = converted.replace("\n", "<br/>\n");
+            converted = START_P_TAG + converted +"</p>";
+            articleInfo.put("ART_CONTENT", converted);
+            return ;
+        }
+
+        // 시작 줄 공백제거
+        converted = converted.replaceAll("(?i)^(\\s|&nbsp;)*\\s*","");
+        converted = McpString.trimStart(converted, ' ');
+        converted = McpString.trimEnd(converted, ' ');
+
+        // 태그 사이 줄바꿈 제거
+        converted = converted.replaceAll("(<[^>]*)([\\n]+)([^>]+>)", "$1 $3");
+        converted = converted.replace("\n", ""); //줄바꿈 제거
+        converted = converted.replace("\r", ""); //줄바꿈 제거
+        //rtn=Regex.Replace(rtn, @"<br(\/)?>\n*", "<br />", RegexOptions.IgnoreCase); /*br 태그정리 */
+        converted = converted.replaceAll("(?i)<br[^>]*>\\n*", "<br />"); //br 태그정리
+
+        converted = converted.replaceAll("(?i)>\\s*(\\s|&nbsp;)*\\s*<", "><"); //태그사이 공백정리
+        converted = converted.replaceAll("(?i)(\\s|&nbsp;)*\\s*<br />", "<br />"); //줄뒤 공백제거
+
+        converted = converted.replaceAll("<br \\/><\\/", "</"); //div 안쪽 br정리
+
+        //rtn=Regex.Replace(rtn, @"<div([^<]*)<br \/>([^<]*)<\/div>", "<div$1<br/>--$2</div>", RegexOptions.IgnoreCase);    /* div 안쪽 br정리 */
+
+        // 줄바꿈 변환
+        converted = converted.replaceAll("(?i)<br \\/><div", "<br />\n<div");
+        converted = converted.replaceAll("(?i)<br \\/>", "\n<br />");
+        converted = converted.replaceAll("(?i)<\\/div>\\n*", "</div>");
+        converted = converted.replaceAll("(?i)<\\/div>([^<]+)", "</div>\n<br />$1");
+
+        // div 태그와 텍스트 분리
+        converted = converted.replaceAll("(?i)<br />", START_P_TAG);
+        converted = converted.replaceAll("\\n", "</p>\n");
+        converted = converted.replaceAll("(?i)<\\/div>"+START_P_TAG, "</div>\n"+START_P_TAG);
+
+        if ( converted.endsWith(START_P_TAG)) converted += "</p>";
+        if ( converted.startsWith("<b>")) converted = START_P_TAG + converted;
+        if ( converted.startsWith("<strong>")) converted = START_P_TAG + converted;
+        if ( converted.startsWith("<a ")) converted = START_P_TAG + converted;
+        if ( converted.endsWith(START_P_TAG)) converted+="</p>";
+
+        if ( converted.startsWith("</p>")) {
+            // </p>를 지우고, 공백지우고, 개행지우고, 공백지우고, 개행지움
+            converted = converted.substring(4);
+            converted = McpString.trimStart(converted, ' ');
+            converted = McpString.trimStart(converted, '\n');
+            converted = McpString.trimStart(converted, ' ');
+            converted = McpString.trimStart(converted, '\n');
+        }
+
+        // 시작태그 없는 경우 처리
+        converted = converted.replaceAll("^(\\s)*([^<])", START_P_TAG);
+        converted = converted.replaceAll("(?i)<\\/div><(b|strong|span)>", "</div>"+START_P_TAG+"<$1>");
+
+        //rtn=Regex.Replace(rtn, @"<p class=""ac"">((\s|&nbsp;)*\s*)</p>", "<p class=\"ac\"></p>", RegexOptions.IgnoreCase);
+        if ( line ) { // 문단 사이에 p태그를 없애는 경우
+            converted = converted.replaceAll("(?i)</p>\\n"+START_P_TAG+"([^<])>", "<br  />$1");
+            converted = converted.replaceAll("(?i)"+START_P_TAG+"<br  />", START_P_TAG);
+
+            converted = converted.replaceAll("(?i)</p>\\n"+START_P_TAG+"</p>", "</p>");
+            converted = converted.replaceAll("(?i)\\n"+START_P_TAG+"</p>\\n"+START_P_TAG+"</p>", "\n"+START_P_TAG+"</p>");
+        }
+
+        // 기사 끝 공백 라인 제거
+        for ( int i = 0; i<2; i++) {
+            if (converted.endsWith(START_P_TAG)) {
+                converted = converted.substring(0, converted.length() - START_P_TAG.length());
+                converted = McpString.trimEnd(converted, '\n');
+            }
+        }
+
+        // 태그 구조 정리
+        converted = converted.replaceAll("(?i)<hr([^>]*)*>", "\n"+START_P_TAG+"</p>");
+        articleInfo.put("ART_CONTENT", converted);
+    }
+
 
     private void convertContent(Map<String, Object> articleInfo) {
         String originalContent = (String) articleInfo.get("ART_CONTENT");
@@ -335,4 +423,6 @@ public class ArticleView extends AbstractView {
         String articleType =  (String)articleInfo.get("ART_TYPE");
         return templateMerger.getArticlePageId(domainId, articleType);
     }
+
+
 }

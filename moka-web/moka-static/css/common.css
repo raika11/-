@@ -501,7 +501,11 @@ html,body {overflow-x: hidden;}
 section {width: 100%;}
 .contents {position: relative;width: 100%;margin: 0 auto;padding-left: 20px;padding-right: 20px;}
 
+<<<<<<< HEAD
+/* .contents section{margin-bottom:60px;} */
+=======
 
+>>>>>>> 62e4bc8a81232a3944e926dad33f7285a33d04a0
 /** nav **/
 
 /* 태블릿 디자인 나올때 까지는 아래 분기만 사용 - 2021.04.22 */
@@ -1356,6 +1360,25 @@ dl.date dd {margin-left: 6px;}
 .layer_info p { font-size: 13px; line-height: 20px;letter-spacing: -0.5px; color: #333; }
 .layer_info .date { margin-top: 10px; font-size: 12px;  color: #999; }
 .layer_info .btn_close {top:10px; right:10px;}
+
+/* 공유 */
+.layer_share { width: 300px; height: 200px; padding: 14px 20px 20px; }
+.layer_share ul { display: flex; flex-wrap: wrap; padding-top: 18px; }
+.layer_share li { display: flex; justify-content: center; align-items: flex-end; position: relative; height: 52px; }
+.layer_share li:nth-child(1),
+.layer_share li:nth-child(5) { width: 46px; }
+.layer_share li:nth-child(2),
+.layer_share li:nth-child(6) { margin-left: 10px; width: 60px; }
+.layer_share li:nth-child(3),
+.layer_share li:nth-child(7) { margin-left: 12px; width: 70px; }
+.layer_share li:nth-child(4),
+.layer_share li:nth-child(8) { margin-left: 10px; width: 50px; }
+.layer_share li:nth-child(n+5) { margin-top: 24px; }
+.layer_share li button { position: relative; vertical-align: top; }
+.layer_share li button [class^='ico'] { position: relative; width: 24px; height: 24px; }
+.layer_share li button span { display: block; margin-top: 6px; font-size: 13px; line-height: 22px; letter-spacing: -0.5px; white-space: nowrap; color: #999; }
+.layer_share .btn_close { top: 12px; right: 12px; }
+
 
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width: 1023px) {

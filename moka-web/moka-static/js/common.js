@@ -2,17 +2,17 @@ $(document).ready(function() {
 
     //header stiky
     if ($(this).scrollTop() > 0) {
-        $('.header').addClass('sticky_top');
+        // $('.header').addClass('sticky_top');
         // $('.section_header_wrap').addClass('sticky_top');
     }
     $(window).scroll(function () {
-        var headerHeight = $("header").height();
+        var headerHeight = $("header.").height();
         if ($(this).scrollTop() > headerHeight) {
-            $('.header').addClass('sticky_top');
+            // $('.header').addClass('sticky_top');
             // $('.section_header_wrap').addClass('sticky_top');
             $("body").css("margin-top",headerHeight+"px");
         } else {
-            $('.header').removeClass('sticky_top');
+            // $('.header').removeClass('sticky_top');
             // $('.section_header_wrap').removeClass('sticky_top');
             $("body").css("margin-top","0px");
         }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+  -->
+
+<apiConfig>
+
+  <!--게시판 정보를 조회-->
+  <api id="bbs.info">
+    <description>게시판 정보를 조회한다.</description>
+    <parameter>
+      <id desc="게시판ID" type="number" require="Y">^[0-9]{1,9}$</id>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.bbs.info</request>
+    <keys>
+      id
+    </keys>
+  </api>
+
+  <!--게시글 목록-->
+  <api id="bbs">
+    <description>게시글 목록을 조회한다.</description>
+    <parameter>
+      <id desc="게시판ID" type="number" require="Y">^[0-9]{1,9}$</id>
+      <kwd desc="검색어">^.{0,20}$</kwd>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_TOTAL">dps.bbs.list</request>
+    <keys>
+      id
+      kwd
+      #paging
+    </keys>
+  </api>
+
+
+</apiConfig>
+

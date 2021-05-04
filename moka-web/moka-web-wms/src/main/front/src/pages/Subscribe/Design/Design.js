@@ -5,13 +5,14 @@ import { Route } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard, MokaIconTabs, MokaIcon } from '@components';
-import SubscriptionDesignList from './SubscriptionDesignList';
-import SubscriptionDesignEdit from './SubscriptionDesignEdit';
+import DesignList from './DesignList';
+import DesignEdit from './DesignEdit';
+import DesignHistory from './DesignHistory';
 
 /**
  * 구독 관리 > 구독 설계
  */
-const SubscriptionDesign = ({ match }) => {
+const Design = ({ match }) => {
     const currentMenu = useSelector(({ auth }) => auth.currentMenu);
 
     return (
@@ -25,7 +26,7 @@ const SubscriptionDesign = ({ match }) => {
             {/* 리스트 */}
             <Col xs={7} className="pr-gutter">
                 <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={currentMenu?.menuDisplayNm}>
-                    <SubscriptionDesignList match={match} />
+                    <DesignList match={match} />
                 </MokaCard>
             </Col>
 
@@ -35,7 +36,8 @@ const SubscriptionDesign = ({ match }) => {
                     exact
                     render={() => (
                         <MokaIconTabs
-                            tabs={[<SubscriptionDesignEdit match={match} />]}
+                            activeKey={1}
+                            tabs={[<DesignEdit match={match} />, <DesignHistory match={match} />]}
                             tabNavs={[
                                 { title: '구독 상세', text: 'Info' },
                                 { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
@@ -48,4 +50,4 @@ const SubscriptionDesign = ({ match }) => {
     );
 };
 
-export default SubscriptionDesign;
+export default Design;

@@ -49,12 +49,10 @@ public class ArticlePackageDTO implements Serializable {
     private Long pkgSeq;
 
     @ApiModelProperty("패키지 유형(A:전체기사, S:섹션, D:출고일)")
-    // TODO: msg
-    @Pattern(regexp = "^(A)|(S)|(D)$", message = "{tps.newsletter.error.pattern.sendType}")
+    @Pattern(regexp = "^(A)|(S)|(D)$", message = "{tps.article-package.error.pattern.pkgDiv}")
     private String pkgDiv;
 
     @ApiModelProperty("패키지 타이틀")
-    // TODO: msg
     @Length(max = 100, message = "{tps.newsletter.error.size.senderName}")
     private String pkgTitle;
 
@@ -65,7 +63,6 @@ public class ArticlePackageDTO implements Serializable {
     private String exceptCatList;
 
     @ApiModelProperty("제외 AND OR (A:AND, O:OR)")
-    // TODO: msg
     @Pattern(regexp = "^(A)|(O)$", message = "{tps.newsletter.error.pattern.exceptAndOr}")
     private String exceptAndOr;
 
@@ -73,12 +70,15 @@ public class ArticlePackageDTO implements Serializable {
     private String exceptTagList;
 
     @ApiModelProperty("검색 시작일")
+    @Pattern(regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$", message = "{tps.issue.error.pattern.sDate}")
     private String sDate;
 
     @ApiModelProperty("검색 종료일")
+    @Pattern(regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$", message = "{tps.issue.error.pattern.eDate}")
     private String eDate;
 
     @ApiModelProperty("사용 여부(Y:사용, E:검색종료(노출))")
+    @Pattern(regexp = "^(Y)|(E)$", message = "{tps.article-package.error.pattern.usedYn}")
     private String usedYn;
 
     @ApiModelProperty("출고일시")
@@ -86,8 +86,7 @@ public class ArticlePackageDTO implements Serializable {
     private Date distDt;
 
     @ApiModelProperty("B:이전 / A:이후")
-    // TODO: msg
-    @Pattern(regexp = "^(A)|(B)$", message = "{tps.newsletter.error.pattern.sendType}")
+    @Pattern(regexp = "^(A)|(B)$", message = "{tps.article-package.error.pattern.beforeAfter}")
     private String beforeAfter;
 
     @ApiModelProperty("출고후기간(일)")

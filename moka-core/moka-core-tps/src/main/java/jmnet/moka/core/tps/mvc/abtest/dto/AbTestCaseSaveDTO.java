@@ -384,4 +384,10 @@ public class AbTestCaseSaveDTO {
     @ApiModelProperty(value = "UTM CONTENT 태그")
     @Size(max = 100, message = "{tps.abtest.error.size.utmContent}")
     private String utmContent;
+
+    /**
+     * 중복 케이스 체크 컬럼
+     */
+    @Builder.Default
+    private String dupChk = "Y";
 }

@@ -228,6 +228,6 @@ public class AbTestCaseResultDtlVO {
     @Column(name = "ART_CONTENT_B")
     private String artContentB;
 
-
-
+    @Builder.Default
+    private String dupChk = "Y";
 }

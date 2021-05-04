@@ -8,7 +8,7 @@ import { MokaInput, MokaSearchInput } from '@components';
 /**
  * 구독 관리 > 구독 설계 > 리스트 > 검색
  */
-const SubscriptionDesignSearch = ({ match }) => {
+const DesignSearch = ({ match }) => {
     const history = useHistory();
 
     return (
@@ -58,4 +58,4 @@ const SubscriptionDesignSearch = ({ match }) => {
     );
 };
 
-export default SubscriptionDesignSearch;
+export default DesignSearch;

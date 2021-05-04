@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { GRID_ROW_HEIGHT, GRID_HEADER_HEIGHT } from '@/style_constants';
 import { MokaTable } from '@components';
-import columnDefs from './SubscriptionDesignAgGridColumns';
+import columnDefs from './DesignAgGridColumns';
 
 const exampleData = [
     {
@@ -22,7 +22,7 @@ const exampleData = [
 /**
  * 구독 관리 > 구독 설계 > 리스트 > AgGrid
  */
-const SubscriptionDesignAgGrid = ({ match }) => {
+const DesignAgGrid = ({ match }) => {
     const history = useHistory();
 
     /**
@@ -50,4 +50,4 @@ const SubscriptionDesignAgGrid = ({ match }) => {
     );
 };
 
-export default SubscriptionDesignAgGrid;
+export default DesignAgGrid;

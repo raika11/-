@@ -42,6 +42,20 @@ export const getNewsLetter = (letterSeq) => {
     });
 };
 
+// 뉴스레터 상품 히스토리 목록 조회
+export const getNewsLetterHistoryList = ({ letterSeq, search }) => {
+    return instance.get(`/api/newsletter/${letterSeq}/historys?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 뉴스레터 히스토리 상세 조회
+export const getNewsLetterHistory = (histSeq) => {
+    return instance.get(`/api/newsletter/historys/${histSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
 // 뉴스레터 채널별 등록된 컨텐츠 조회(뉴스레터 여부 검색)
 export const getNewsLetterChannelType = ({ channelType }) => {
     return instance.get(`/api/newsletter/channelType/${channelType}`).catch((err) => {

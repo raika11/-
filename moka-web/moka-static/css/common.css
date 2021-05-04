@@ -1144,6 +1144,8 @@ dl.date dd {margin-left: 6px;}
 @media (max-width: 1023px) {
     /* 카드 아이템 간격 */
     .card .headline + .description,.card .headline ~ .meta,.card .headline ~ .date,.card .headline ~ .byline{padding-top:4px;}
+
+    .card_body .meta{clear: both;}
 }
 
 /* Large devices (desktops, 1024px and up) */
@@ -1556,10 +1558,10 @@ dl.date dd {margin-left: 6px;}
 .comment .more_option_area .btn_toggle { position: relative; right: -8px; width: 20px; height: 20px;  }
 .comment .more_option_area .btn_outline_gray { display: none; position: absolute; right: 0; top: 30px; }
 .comment .more_option_area.open .btn_outline_gray { display: block; }
-.comment_content { margin-top: 10px; font-size: 14px; line-height: 20px; }
-.comment_content .comment_text { color: #111; }
-.comment_content .report_text { display: flex; align-items: center; color: #666; }
-.comment_content .report_text .ico_bang { margin-right: 5px; width: 18px; height: 18px;  }
+.comment_body { margin-top: 10px; font-size: 14px; line-height: 20px; }
+.comment_body .comment_text { color: #111; }
+.comment_body .report_text { display: flex; align-items: center; color: #666; }
+.comment_body .report_text .ico_bang { margin-right: 5px; width: 18px; height: 18px;  }
 .comment_footer { margin-top: 12px; }
 .comment_footer::after { display: block; content: ''; clear: both; }
 .comment_footer .btn_reply_cnt,

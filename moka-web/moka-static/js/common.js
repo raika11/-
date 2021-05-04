@@ -53,33 +53,18 @@ $(document).ready(function() {
     // - mobile 전용
     if($(".scroll_sm_wrap").length > 0){
         mobileSwiper();
-        var mtimer;
-        $(window).resize(function(){
-            if (mtimer) {
-                clearTimeout(mtimer);
-            }
-            mtimer = setTimeout(mobileSwiper, 10);
-        });
     }
 
-    
-
+        /* datepicker */
+    if($("#datepicker").length > 0){
+        $( "#datepicker" ).datepicker({
+            showOn:'button',
+            buttonImageOnly: true,
+            
+        });
+        $('#datepicker').datepicker('setDate', 'today');
+    }
 });
-
-/* datepicker */
-$( function() {
-    $( "#datepicker" ).datepicker({
-        showOn:'button',
-        buttonImageOnly: true,
-        
-    });
-    $('#datepicker').datepicker('setDate', 'today');
-} );
-
-
-
-
-
 
 /* 임시 레이어팝업 */
 function toggleOpenLayer(obj){
@@ -126,24 +111,24 @@ function changeToSlider($target, slickOptions){
 }
 
 /* mobile swiper */
-/* 카드 좌측 정렬 */
 function mobileSwiper() {
     var swiper = new Swiper('.scroll_sm_wrap', {
-        slidesPerView: 1.2,
+        slidesPerView: 3,
         slidesPerGroup: 1,
         spaceBetween: 10,
-        // init: false,
+        allowTouchMove:false,
+        centeredSlidesBounds: true,
+        freeMode: true,
         pagination: {
             el: '.swiper-pagination',
             clickable: true,
-            type: "progressbar",
-        }
+        },
+
+          breakpoints:{
+              1024:{
+                allowTouchMove:true,
+                slidesPerView: 1.2,
+              }
+          }
     });
-
-    if (window.innerWidth >= BREAKPOINT_LARGE) {
-        if (swiper) {
-            swiper.destroy();
-        }
-    }
-
 };

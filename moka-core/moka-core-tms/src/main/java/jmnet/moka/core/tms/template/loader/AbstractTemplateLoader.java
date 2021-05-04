@@ -115,14 +115,25 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         if (itemKey != null) { // REST방식 URL이 아닌 경우
             return itemKey;
         }
-        // REST 방식 중 default 파라미터를 사용하는 경우
+        // 경로 파라미터 방식 중 default 파라미터를 사용하는 경우
         if (this.uri2ItemMap.containsKey(uri + AbstractTemplateLoader.PATH_PARAM_PREFIX)) {
             return this.uri2ItemMap.get(uri + AbstractTemplateLoader.PATH_PARAM_PREFIX);
         }
-        // REST 방식인 경우 마지막 경로를 제거하고 PageItem을 찾는다.
+        // 경로파라미터 방식인 경우 마지막 경로를 제거하고 PageItem을 찾는다.
         int lastSlashIndex = uri.lastIndexOf("/");
         if (lastSlashIndex > 0) { // URL_PARAM을 사용하는  페이지의 경우
-            return this.uri2ItemMap.get(uri.substring(0, lastSlashIndex) + AbstractTemplateLoader.PATH_PARAM_PREFIX);
+
+            // 경로 파라미터 방식인 경우 마지막 경로를 제거하고 PageItem을 찾는다.
+            String paramTrimUri = uri.substring(0, lastSlashIndex);
+            itemKey = this.uri2ItemMap.get(paramTrimUri + AbstractTemplateLoader.PATH_PARAM_PREFIX);
+            if ( itemKey != null) return itemKey;
+
+            // 2단계(부모도 경로파라미터방식) 경로파라미터 방식인 경우 마지막 경로와 그전 경로를 제거하고 PageItem을 찾는다.
+            int parentLastSlashIndex = paramTrimUri.lastIndexOf("/");
+            if (parentLastSlashIndex > 0) { // URL_PARAM을 사용하는  페이지의 경우
+                return this.uri2ItemMap.get(paramTrimUri.substring(0, parentLastSlashIndex) + AbstractTemplateLoader.PATH_PARAM_PREFIX
+                        + AbstractTemplateLoader.PATH_PARAM_PREFIX);
+            }
         }
         return null;
     }

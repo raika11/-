@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { MokaCard, MokaCardTabs } from '@components';
+import DesignStep1Form from '../components/DesignStep1Form';
 
 /**
  * 구독 관리 > 구독 설계 > 등록, 수정
  */
-const SubscriptionDesignEdit = () => {
+const DesignEdit = ({ match }) => {
     const { seqNo } = useParams();
+    const history = useHistory();
     const [activeKey, setActiveKey] = useState(0);
+
+    /**
+     * 취소
+     */
+    const handleCancle = () => {
+        history.push(match.path);
+    };
 
     return (
         <MokaCard
@@ -31,6 +40,7 @@ const SubscriptionDesignEdit = () => {
                     text: '취소',
                     variant: 'negative',
                     className: 'mr-1',
+                    onClick: handleCancle,
                 },
                 seqNo && {
                     text: '중지',
@@ -45,10 +55,12 @@ const SubscriptionDesignEdit = () => {
                     text: '취소',
                     variant: 'negative',
                     className: 'mr-1',
+                    onClick: handleCancle,
                 },
                 !seqNo && {
                     text: '등록',
                     variant: 'positive',
+                    disabled: activeKey !== 3,
                 },
                 activeKey !== 3 && {
                     text: '다음',
@@ -63,11 +75,11 @@ const SubscriptionDesignEdit = () => {
                 activeKey={activeKey}
                 onSelectNav={(key) => setActiveKey(key)}
                 className="w-100 h-100 shadow-none"
-                tabs={[<div>상세</div>]}
+                tabs={[<DesignStep1Form />]}
                 tabNavs={['STEP 1\n기본정보 설정', 'STEP 2\n대상고객 설정', 'STEP 3\n구독제안 설정', 'STEP 4\n제안방법 설정']}
             />
         </MokaCard>
     );
 };
 
-export default SubscriptionDesignEdit;
+export default DesignEdit;

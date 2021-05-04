@@ -150,7 +150,7 @@
 
     /* 최신 포토 */
     .catalog_list_wrap { margin-top: 40px; }
-    .catalog_list_wrap .photo_list_area { margin-top: 15px; }
+    .catalog_list_wrap .photo_list_area { margin-top: 19px; }
     .catalog_list_wrap .photo_list_area .card { min-height: auto; padding-bottom: 0; }
     .catalog_list_wrap .photo_list_area .card:nth-child(1),
     .catalog_list_wrap .photo_list_area .card:nth-child(2) { padding-top: 0; }
@@ -163,6 +163,10 @@
     .showcase_swiper .video_time,
 
     /* 추천 영상 */
+    .catalog_list_wrap .skin_group { margin-top: 0; }
+    .catalog_list_wrap .skin_group li { margin-top: 16px; margin-bottom: 16px; }
+    .catalog_list_wrap .skin_group li:first-child { margin-top: 19px; }
+    .catalog_list_wrap .skin_group li:last-child { margin-bottom: 0; }
     .catalog_list_wrap .card_skin .video_time { bottom: 8px; right: 8px;}
 
     /* 인기 영상*/

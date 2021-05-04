@@ -1145,7 +1145,7 @@ dl.date dd {margin-left: 6px;}
     /* 카드 아이템 간격 */
     .card .headline + .description,.card .headline ~ .meta,.card .headline ~ .date,.card .headline ~ .byline{padding-top:4px;}
 
-    .meta{clear: both;}
+    .card_body .meta{clear: both;}
 }
 
 /* Large devices (desktops, 1024px and up) */

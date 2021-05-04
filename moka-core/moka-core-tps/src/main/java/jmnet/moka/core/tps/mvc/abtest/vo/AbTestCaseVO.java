@@ -269,4 +269,10 @@ public class AbTestCaseVO {
      */
     @Column(name = "UTM_CONTENT")
     private String utmContent;
+
+    /**
+     * 중복 케이스 체크 컬럼
+     */
+    @Builder.Default
+    private String dupChk = "Y";
 }

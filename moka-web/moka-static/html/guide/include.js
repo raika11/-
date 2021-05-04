@@ -113,18 +113,18 @@ var include = {
             // document.write('                <li class="nav_item"><a class="nav_link" href="javascript:(0);">Menu3</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="icon.html">아이콘</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="button.html">버튼</a></li>');
-            document.write('                <li class="nav_item"><a class="nav_link" href="card.html">카드</a></li>');
-            document.write('                <li class="nav_item"><a class="nav_link" href="list_group.html">리스트 그룹</a></li>');
-            // document.write('                <li class="nav_item"><a class="nav_link" href="rank.html">많이본기사(rank)</a></li>');
-            document.write('                <li class="nav_item"><a class="nav_link" href="card_reporter.html">기자</a></li>');
             document.write('            </ul>');
             document.write('        </li>');
 
             document.write('        <li class="nav_item">');
             document.write('            <a class="nav_link" href="javascript:(0);">카드리스트</a>');
             document.write('            <ul class="nav">');
+            document.write('                <li class="nav_item"><a class="nav_link" href="card.html">카드</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="card_photo.html">포토리스트</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="card_story.html">스토리리스트</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="card_skin.html">스킨(보더)</a></li>');
             document.write('                <li class="nav_item"><a class="nav_link" href="card_reporter.html">기자</a></li>');
+            document.write('                <li class="nav_item"><a class="nav_link" href="list_group.html">리스트 그룹</a></li>');
             document.write('            </ul>');
             document.write('        </li>');
             // document.write('        <li class="nav_item">');

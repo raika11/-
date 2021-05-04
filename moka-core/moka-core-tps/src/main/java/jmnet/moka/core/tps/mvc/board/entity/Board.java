@@ -152,8 +152,7 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      * 삭제여부
      */
     @Column(name = "DEL_YN", nullable = false)
-    @Builder.Default
-    private String delYn = MokaConstants.NO;
+    private String delYn;
 
     /**
      * 답변등록여부

@@ -6,7 +6,6 @@ import java.util.Date;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,8 +43,7 @@ public class BoardSearchDTO extends SearchDTO {
     private Date endDt;
 
     @ApiModelProperty("삭제여부")
-    @Builder.Default
-    private String delYn = MokaConstants.NO;
+    private String delYn;
 
     /**
      * 말머리1

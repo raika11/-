@@ -192,6 +192,9 @@
     .contents {padding-bottom:120px;}
     .contents section{margin-bottom:60px;}
     .contents section.chain_wrap{margin-bottom:unset;}
+    
+    .section_header_wrap.sticky_top .section_title { font-size: 18px; line-height: 28px; }
+    .section_header_wrap.sticky_top .section_title:only-child { margin-top: -27px; }
 
     /* nav */
 

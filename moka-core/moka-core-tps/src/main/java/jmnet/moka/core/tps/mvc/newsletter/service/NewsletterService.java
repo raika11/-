@@ -75,9 +75,10 @@ public interface NewsletterService {
      * 뉴스레터 상품 수정
      *
      * @param newsletterInfo
+     * @param modReason      변경사유
      * @return
      */
-    NewsletterInfo updateNewsletterInfo(NewsletterInfo newsletterInfo);
+    NewsletterInfo updateNewsletterInfo(NewsletterInfo newsletterInfo, String modReason);
 
     /**
      * 뉴스레터 발송 조회

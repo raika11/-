@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeSimple;
@@ -42,7 +44,7 @@ import org.hibernate.annotations.NotFoundAction;
 @NoArgsConstructor
 @Setter
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @Entity
 @Table(name = "TB_NEWSLETTER_INFO")
 public class NewsletterInfo extends BaseAudit {
@@ -73,13 +75,13 @@ public class NewsletterInfo extends BaseAudit {
     private String statusName;
 
     @Column(name = "CHANNEL_TYPE")
-    private String channelType;
+    private String channelType = "";
 
     @Column(name = "CHANNEL_ID")
-    private Long channelId;
+    private Long channelId = 0L;
 
     @Column(name = "CHANNEL_DATA_ID")
-    private Long channelDateId;
+    private Long channelDateId = 0L;
 
     @Column(name = "SEND_PERIOD")
     private String sendPeriod;
@@ -91,22 +93,22 @@ public class NewsletterInfo extends BaseAudit {
     private String sendTime;
 
     @Column(name = "SEND_MIN_CNT")
-    private Long sendMinCnt = 0L;
+    private Long sendMinCnt = 1L;
 
     @Column(name = "SEND_MAX_CNT")
-    private Long sendMaxCnt = 0L;
+    private Long sendMaxCnt = 1L;
 
     @Column(name = "SEND_ORDER")
     private String sendOrder;
 
     @Column(name = "SENDER_NAME")
-    private String senderName;
+    private String senderName = "";
 
     @Column(name = "SCB_YN")
     private String scbYn;
 
     @Column(name = "SENDER_EMAIL")
-    private String senderEmail;
+    private String senderEmail = "";
 
     @Column(name = "SEND_START_DT")
     private Date sendStartDt;
@@ -145,10 +147,10 @@ public class NewsletterInfo extends BaseAudit {
     private String letterTitle;
 
     @Column(name = "DATE_TAB")
-    private Long dateTab;
+    private Long dateTab = 0L;
 
     @Column(name = "DATE_TYPE")
-    private Long dateType;
+    private Long dateType = 0L;
 
     @Column(name = "ART_TITLE_YN")
     private String artTitleYn;
@@ -203,4 +205,16 @@ public class NewsletterInfo extends BaseAudit {
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "MOD_ID", insertable = false, updatable = false)
     private MemberSimpleInfo modMember;
+
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        this.channelDateId = this.channelDateId == null ? 0L : this.channelDateId;
+        this.dateTab = this.dateTab == null ? 0L : this.dateTab;
+        this.dateType = this.dateType == null ? 0L : this.dateType;
+        this.sendMinCnt = this.sendMinCnt == null ? 1L : this.sendMinCnt;
+        this.sendMaxCnt = this.sendMaxCnt == null ? 1L : this.sendMaxCnt;
+        this.channelId = this.channelId == null ? 0L : this.channelId;
+    }
+
 }

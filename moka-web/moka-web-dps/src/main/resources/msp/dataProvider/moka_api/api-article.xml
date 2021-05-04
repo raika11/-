@@ -353,4 +353,22 @@
     </keys>
   </api>
 
+  <!--검색키워드등록-->
+  <api id="search.keyword.insert" membership="cookie" method="post" expire="0">
+    <description>검색키워드를 등록한다.</description>
+    <parameter>
+      <kwd desc="키워드" reqire="Y">^.{0,100}$</kwd>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA" outParam="_SUCCESS">dps.article.searchInsert</request>
+    <keys>
+      kwd
+    </keys>
+  </api>
+
+  <!--내 검색키워드목록-->
+  <api id="search.keyword" membership="cookie">
+    <description>내 검색키워드목록을 조회한다</description>
+    <request dmlType="sp" setNames="_DATA" outParam="_SUCCESS">dps.article.search</request>
+  </api>
+
 </apiConfig>

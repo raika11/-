@@ -151,13 +151,14 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     /**
      * 삭제여부
      */
-    @Column(name = "DEL_YN", nullable = false)
-    private String delYn;
+    @Column(name = "DEL_YN")
+    @Builder.Default
+    private String delYn = MokaConstants.NO;
 
     /**
      * 답변등록여부
      */
-    @Column(name = "ANSW_YN", nullable = false)
+    @Column(name = "ANSW_YN")
     @Builder.Default
     private String answYn = MokaConstants.NO;
 
@@ -177,8 +178,7 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      * 답변 푸시 수신 여부
      */
     @Column(name = "PUSH_RECEIVE_YN")
-    @Builder.Default
-    private String pushReceiveYn = MokaConstants.NO;
+    private String pushReceiveYn;
 
     /**
      * 답변 이메일 수신 여부

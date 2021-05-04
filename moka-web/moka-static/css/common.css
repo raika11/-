@@ -1064,7 +1064,7 @@ dl.date dd {margin-left: 6px;}
 
 /** 기본 **/
 .btn{display:flex;align-items:center; justify-content: center; width:auto;padding:3px 14px;border-radius:50px;border:1px solid transparent;background-color:transparent;color:#111;font-size:13px;letter-spacing: -0.5px; font-weight: 700; line-height:20px;text-align:center;white-space:nowrap;}
-.btn:nth-of-type(n+2) {margin-left:4px;}
+.btn:nth-of-type(n+2) {margin-left:10px;}
 .btn [class*="ico_"]{margin-right:2px;}
 
 /* 구독 */

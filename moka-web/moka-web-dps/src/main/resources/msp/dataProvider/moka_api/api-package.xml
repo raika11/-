@@ -7,7 +7,7 @@
 
   <!-- 패키지상세 -->
   <api id="package.info" resultWrap="N">
-    <description>패키지 상세정보를 조회한다.</description>
+    <description>패키지 상세정보를 조회한다.(이슈/토픽/연재 홈용)</description>
     <parameter>
       <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
     </parameter>
@@ -23,6 +23,22 @@
       packageMap.put("package",map);
       packageMap;
     </request>
+    <keys>
+      id
+      start
+      end
+      #paging
+    </keys>
+  </api>
+
+  <!-- 패키지상세 -->
+  <api id="hashtag.info">
+    <description>패키지 상세정보를 조회한다.</description>
+    <parameter>
+      <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA,DESKING">dps.package.info</request>
+    <request type="apiCall" resultName="LIST" apiId="package.article"/>
     <keys>
       id
       start

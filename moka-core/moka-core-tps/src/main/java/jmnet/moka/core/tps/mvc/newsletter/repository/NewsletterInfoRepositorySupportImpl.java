@@ -49,7 +49,9 @@ public class NewsletterInfoRepositorySupportImpl extends TpsQueryDslRepositorySu
                 .leftJoin(qNewsletterInfo.regMember, qMemberSimpleInfo)
                 .fetchJoin()
                 .leftJoin(qNewsletterInfo.categoryInfo, qCodeSimple)
-                .where(qCodeSimple.grpCd.eq("LETTER_CATE"))
+                .where(qCodeSimple.grpCd
+                        .eq("LETTER_CATE")
+                        .or(qCodeSimple.grpCd.isNull()))
                 .fetchJoin()
                 .distinct();
         Pageable pageable = searchDTO.getPageable();

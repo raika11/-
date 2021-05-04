@@ -231,16 +231,16 @@ public class NewsletterController extends AbstractCommonController {
     }
 
     /**
-     * 뉴스레터 상품등록
+     * 뉴스레터 상품 등록
      *
      * @param newsletterInfoDTO 뉴스레터 상품
      * @return
      * @throws InvalidDataException
      * @throws Exception
      */
-    @ApiOperation(value = "뉴스레터 상품등록")
+    @ApiOperation(value = "뉴스레터 상품 임시저장")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> postNewsletterInfo(@Valid NewsletterInfoDTO newsletterInfoDTO)
+    public ResponseEntity<?> postNewsletterInfo(NewsletterInfoDTO newsletterInfoDTO)
             throws InvalidDataException, Exception {
         if (newsletterInfoDTO.getLetterSeq() != null) {
             throw new MokaException(msg("tps.common.error.duplicated.key"));
@@ -273,15 +273,22 @@ public class NewsletterController extends AbstractCommonController {
         }
     }
 
-
-    @ApiOperation(value = "뉴스레터 상품수정")
-    @PutMapping(value = "/{letterSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> putNewsletterInfo(@ApiParam(value = "뉴스레터 상품 일련번호", required = true) @PathVariable("letterSeq") Long letterSeq,
-            @Valid NewsletterInfoDTO newsletterInfoDTO)
-            throws Exception {
-        if (newsletterInfoDTO.getLetterSeq() == null) {
-            throw new MokaException(msg("tps.common.error.no-data"));
+    /**
+     * 뉴스레터 상품 임시저장
+     *
+     * @param newsletterInfoDTO 뉴스레터 상품
+     * @return
+     * @throws InvalidDataException
+     * @throws Exception
+     */
+    @ApiOperation(value = "뉴스레터 상품 임시저장")
+    @PostMapping(value = "/temp", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> postNewsletterInfoTemp(NewsletterInfoDTO newsletterInfoDTO)
+            throws InvalidDataException, Exception {
+        if (newsletterInfoDTO.getLetterSeq() != null) {
+            throw new MokaException(msg("tps.common.error.duplicated.key"));
         }
+
         try {
             // 상단 이미지 저장
             if (newsletterInfoDTO.getHeaderImgFile() != null) {
@@ -292,8 +299,111 @@ public class NewsletterController extends AbstractCommonController {
                 newsletterInfoDTO.setLetterImg(uploadImage(newsletterInfoDTO.getLetterImgFile()));
             }
             NewsletterInfo newsletterInfo = modelMapper.map(newsletterInfoDTO, NewsletterInfo.class);
+
+            // 등록
+            NewsletterInfo returnValue = newsletterService.insertNewsletterInfo(newsletterInfo
+                    .toBuilder()
+                    .status("P")
+                    .build());
+
+            // 결과리턴
+            NewsletterInfoDTO dto = modelMapper.map(returnValue, NewsletterInfoDTO.class);
+            ResultDTO<NewsletterInfoDTO> resultDto = new ResultDTO<NewsletterInfoDTO>(dto, msg("tps.common.success.insert"));
+
+            tpsLogger.success(ActionType.INSERT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO SAVE NEWSLETTER INFO]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO SAVE NEWSLETTER INFO]", e, true);
+            throw new Exception(msg("tps.common.error.insert"), e);
+        }
+    }
+
+
+    @ApiOperation(value = "뉴스레터 상품수정")
+    @PutMapping(value = "/{letterSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> putNewsletterInfo(@ApiParam(value = "뉴스레터 상품 일련번호", required = true) @PathVariable("letterSeq") Long letterSeq,
+            @Valid NewsletterInfoDTO newsletterInfoDTO)
+            throws Exception {
+        if (newsletterInfoDTO.getLetterSeq() == null) {
+            throw new MokaException(msg("tps.common.error.no-data"));
+        }
+
+        // old
+        NewsletterInfo old = newsletterService
+                .findByLetterSeq(newsletterInfoDTO.getLetterSeq())
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        try {
+            // 상단 이미지 저장
+            if (newsletterInfoDTO.getHeaderImgFile() != null) {
+                if (McpString.isNotEmpty(old.getHeaderImg())) {
+                    // 기존 상단이미지 삭제
+                    deleteFile(old.getHeaderImg());
+                }
+                newsletterInfoDTO.setHeaderImg(uploadImage(newsletterInfoDTO.getHeaderImgFile()));
+            }
+            // 뉴스레터 이미지 저장
+            if (newsletterInfoDTO.getLetterImgFile() != null) {
+                if (McpString.isNotEmpty(old.getLetterImg())) {
+                    // 기존 뉴스레터 이미지 삭제
+                    deleteFile(old.getLetterImg());
+                }
+                newsletterInfoDTO.setLetterImg(uploadImage(newsletterInfoDTO.getLetterImgFile()));
+            }
+            NewsletterInfo newsletterInfo = modelMapper.map(newsletterInfoDTO, NewsletterInfo.class);
             // 수정
             NewsletterInfo returnValue = newsletterService.updateNewsletterInfo(newsletterInfo);
+
+            // 결과리턴
+            NewsletterInfoDTO dto = modelMapper.map(returnValue, NewsletterInfoDTO.class);
+            ResultDTO<NewsletterInfoDTO> resultDto = new ResultDTO<NewsletterInfoDTO>(dto, msg("tps.common.success.update"));
+
+            tpsLogger.success(ActionType.UPDATE);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO SAVE NEWSLETTER INFO]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO SAVE NEWSLETTER INFO]", e, true);
+            throw new Exception(msg("tps.common.error.update"), e);
+        }
+    }
+
+    @ApiOperation(value = "뉴스레터 상품 임시저장 수정")
+    @PutMapping(value = "/temp/{letterSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> putNewsletterInfoTemp(@ApiParam(value = "뉴스레터 상품 일련번호", required = true) @PathVariable("letterSeq") Long letterSeq,
+            NewsletterInfoDTO newsletterInfoDTO)
+            throws Exception {
+        if (newsletterInfoDTO.getLetterSeq() == null) {
+            throw new MokaException(msg("tps.common.error.no-data"));
+        }
+        // old
+        NewsletterInfo old = newsletterService
+                .findByLetterSeq(newsletterInfoDTO.getLetterSeq())
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        try {
+            // 상단 이미지 저장
+            if (newsletterInfoDTO.getHeaderImgFile() != null) {
+                if (McpString.isNotEmpty(old.getHeaderImg())) {
+                    // 기존 상단이미지 삭제
+                    deleteFile(old.getHeaderImg());
+                }
+                newsletterInfoDTO.setHeaderImg(uploadImage(newsletterInfoDTO.getHeaderImgFile()));
+            }
+            // 뉴스레터 이미지 저장
+            if (newsletterInfoDTO.getLetterImgFile() != null) {
+                if (McpString.isNotEmpty(old.getLetterImg())) {
+                    // 기존 뉴스레터 이미지 삭제
+                    deleteFile(old.getLetterImg());
+                }
+                newsletterInfoDTO.setLetterImg(uploadImage(newsletterInfoDTO.getLetterImgFile()));
+            }
+            NewsletterInfo newsletterInfo = modelMapper.map(newsletterInfoDTO, NewsletterInfo.class);
+            // 수정
+            NewsletterInfo returnValue = newsletterService.updateNewsletterInfo(newsletterInfo
+                    .toBuilder()
+                    .status("P")
+                    .build());
 
             // 결과리턴
             NewsletterInfoDTO dto = modelMapper.map(returnValue, NewsletterInfoDTO.class);
@@ -543,8 +653,17 @@ public class NewsletterController extends AbstractCommonController {
         if (newsletterSendDTO.getSendSeq() == null) {
             throw new MokaException(msg("tps.common.error.no-data"));
         }
+        // old
+        NewsletterSend old = newsletterService
+                .findNewsletterSendBySendSeq(newsletterSendDTO.getSendSeq())
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
         // 상단 이미지 저장
         if (newsletterSendDTO.getHeaderImgFile() != null) {
+            if (McpString.isNotEmpty(old.getHeaderImg())) {
+                // 기존 상단이미지 삭제
+                deleteFile(old.getHeaderImg());
+            }
             newsletterSendDTO.setHeaderImg(uploadImage(newsletterSendDTO.getHeaderImgFile()));
         }
         NewsletterSend newsletterSend = modelMapper.map(newsletterSendDTO, NewsletterSend.class);
@@ -579,6 +698,12 @@ public class NewsletterController extends AbstractCommonController {
         tpsLogger.success(ActionType.UPLOAD, message);
 
         return imageUrl;
+    }
+
+    public boolean deleteFile(String imgUrl) {
+        String saveFilePath = imgUrl.replaceAll(pdsUrl, "");
+        String[] pathAndName = McpFile.getFilepathAndName(saveFilePath);
+        return ftpHelper.delete(FtpHelper.PDS, pathAndName[0], pathAndName[1]);
     }
 
 

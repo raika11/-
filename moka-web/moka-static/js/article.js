@@ -85,5 +85,33 @@ function bylineControl(width){
         $byline.removeClass("hide");
         $bylineMore.addClass("hide");
     }
+
+    // 별점
+    (function () {
+        var starEls = document.querySelectorAll('#starRating .bg_star');
+        var rate = 0;
+    
+        loop(starEls, function (el, index) {
+            el.addEventListener('click', function () {
+                rating(index + 1);
+            });
+        });
+    
+        function loop(list, func) {
+            Array.prototype.forEach.call(list, func);
+        }
+    
+        function rating(score) {
+            loop(starEls, function (el, index) {
+                if (index < score) {
+                    el.classList.add('on');
+                } else {
+                    el.classList.remove('on');
+                }
+            });
+    
+            rate = score;
+        }
+    })();
 }
 

@@ -22,6 +22,10 @@ font-*,color,text-align,vertical-align, ...
 /*header_sticky*/
 .header_reporter_sticky{display: none;}
 
+.section_header_wrap.sticky_top{border: 0;}
+.section_header_wrap.sticky_top .section_title{font-size: 18px; line-height: 28px;}
+.section_header_wrap.sticky_top .section_title:only-child{margin-top: -27px;}
+
 /* journalist_header */
 .journalist_header {position:relative; padding-top: 24px; }
 .journalist_header .profile_area {display:flex; align-items:center;}

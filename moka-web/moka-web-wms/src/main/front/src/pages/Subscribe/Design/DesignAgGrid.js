@@ -6,16 +6,16 @@ import columnDefs from './DesignAgGridColumns';
 
 const exampleData = [
     {
-        seqNo: '10',
-        field1: '패키지',
-        field2: '백성호의 현문우답',
-        field3: '로그인,일반 구독, 뉴스레터, 내 구독, 기사 열람',
-        field4: 'N',
-        field5: '2021-05-03',
-        field6: '100',
-        field7: '김중앙(SSC1)\n2021-05-03',
-        field8: '-',
-        field9: '개시',
+        scbNo: '10',
+        recomScb: '패키지',
+        scbName: '백성호의 현문우답',
+        scbMethod: '로그인,일반 구독, 뉴스레터, 내 구독, 기사 열람',
+        mainYn: 'N',
+        startDt: '2021-05-03',
+        scbCnt: '100',
+        regInfo: '김중앙(SSC1)\n2021-05-03',
+        modDt: '-',
+        statusText: '개시',
     },
 ];
 

@@ -50,7 +50,7 @@ const defaultProps = {
     isInvalid: false,
     uncontrolled: false,
 };
-const newlineRegex = /[\n|\\n]/;
+const newlineRegex = /[\n\\n]/;
 
 /**
  * 라벨 + input

@@ -8,6 +8,7 @@
 
 package jmnet.moka.core.tps.mvc.abtest.repository;
 
+import java.util.List;
 import jmnet.moka.core.tps.mvc.abtest.entity.AbTestCase;
 
 /**
@@ -23,6 +24,6 @@ import jmnet.moka.core.tps.mvc.abtest.entity.AbTestCase;
  * @since 2021-04-21 17:07
  */
 public interface AbTestCaseRepositorySupport {
-    AbTestCase findByPageTypeAndPageValueAndZoneDivAndZoneSeqAndAbtestPurpose(String pageType, String pageValue, String zoneDiv, String zoneSeq,
+    List<AbTestCase> findByPageTypeAndPageValueAndZoneDivAndZoneSeqAndAbtestPurpose(String pageType, String pageValue, String zoneDiv, String zoneSeq,
             String abtestPurpose);
 }

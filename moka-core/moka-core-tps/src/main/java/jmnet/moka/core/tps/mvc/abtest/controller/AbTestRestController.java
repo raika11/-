@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.abtest.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
@@ -126,14 +127,33 @@ public class AbTestRestController extends AbstractCommonController {
         AbTestCaseSaveVO abTestCaseSaveVO = modelMapper.map(abTestCaseSaveDTO, AbTestCaseSaveVO.class);
 
         try {
-            AbTestCase abtestCase = abTestCaseService.findChk(abTestCaseSaveDTO);
 
-            //확인 알럿 - 페이지, 영역, 테스트대상을 비교하여 중복 케이스가 있을경우  확인 알럿 띄움
-            if (McpString.isNotEmpty(abtestCase)) {
-                if (McpString.isNotEmpty(abtestCase.getAbtestSeq())) {
-                    log.info("getAbtestSeq {}", abtestCase.getAbtestSeq());
-                    throw new Exception(messageByLocale.get("tps.abtest.error.insert.dup", abtestCase.getPageValue()));
+            if (McpString.isNotEmpty(abTestCaseSaveVO.getDupChk())) {
+                if (abTestCaseSaveVO
+                        .getDupChk()
+                        .equals("Y")) {
+
+                    List<AbTestCase> abtestCase = abTestCaseService.findChk(abTestCaseSaveDTO);
+
+                    //확인 알럿 - 페이지, 영역, 테스트대상을 비교하여 중복 케이스가 있을경우  확인 알럿 띄움
+                    System.out.println("abtestCase.size======" + abtestCase.size());
+                    if (McpString.isNotEmpty(abtestCase)) {
+                        if (McpString.isNotEmpty(abtestCase
+                                .get(0)
+                                .getAbtestSeq())) {
+                            log.info("getAbtestSeq {}", abtestCase
+                                    .get(0)
+                                    .getAbtestSeq());
+                            throw new Exception(messageByLocale.get("tps.abtest.error.insert.dup", abtestCase
+                                    .get(0)
+                                    .getPageValue(), abtestCase
+                                    .get(0)
+                                    .getAbtestPurpose()));
+                        }
+                    }
+
                 }
+
             }
 
             // insert

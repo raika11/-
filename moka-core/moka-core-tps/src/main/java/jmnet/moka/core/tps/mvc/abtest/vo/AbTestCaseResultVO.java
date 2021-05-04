@@ -130,4 +130,9 @@ public class AbTestCaseResultVO {
     @Column(name = "REG_NM")
     private String regNm;
 
+    /**
+     * 중복 케이스 체크 컬럼
+     */
+    @Builder.Default
+    private String dupChk = "Y";
 }

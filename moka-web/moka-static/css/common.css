@@ -1035,7 +1035,7 @@ dl.date dd {margin-left: 6px;}
 .btn_default_bg{background-color:#999;color:#fff;font-weight:700;}
 .btn_primary{border-color:#ff3c14;color:#ff3c14;font-weight:700;}
 .btn_primary_bg{background-color:#ff3c14;color:#fff;font-weight:700;}
-.btn_dark { background-color: #111; color: #fff; }
+.btn_black { background-color: #111; color: #fff; }
 /* 모양 */
 .btn.btn_square {padding: 5px 16px;border-radius: 0;}
 
@@ -1701,3 +1701,6 @@ dl.date dd {margin-left: 6px;}
     .el.el_md5{-webkit-line-clamp:5;}
     .el.el_md6{-webkit-line-clamp:6;}
 }
+
+/* 광고영역 */
+.ad_wrap{width:100%;padding:30% 30%;background:#eee;text-align:center}

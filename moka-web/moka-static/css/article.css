@@ -22,7 +22,8 @@ font-*,color,text-align,vertical-align, ...
 .article_header {border-bottom:4px solid #ff4620;}
 .article_header .reader_area {display:flex;font-size:14px;}
 .article_header .reader_area .badge {margin-right:5px;padding:0;font-size:14px;color:#f6330a;}
-.article_header .headline {margin-top:15px;font-size:24px;line-height:34px;font-weight:700;}
+.article_header .headline:not(.fixed) {margin-top:15px;font-size:24px;line-height:34px;font-weight:700;}
+.article_header .headline.fixed br { display: none; }
 .article_header .info_area {display:flex;}
 .article_header .datetime {display:flex;position:relative;margin-top:26px;padding-bottom:15px;border-bottom:1px solid #d8d8d8;}
 .article_header .datetime .source {position:relative; margin-right: 10px; padding-right: 11px; font-size:13px;line-height:20px;color:#999;}
@@ -81,9 +82,9 @@ font-*,color,text-align,vertical-align, ...
 .scroll_indicator span { position: absolute;  height: 4px; background-color: #f6330a; }
 
 /* 속보 티커 */
-.layer_ticker { display: none; z-index: 100; position: fixed; left: 0; width: 100%; background-color: #fff6e2; }
+.layer_ticker { display: none; z-index: 310; position: fixed; left: 0; width: 100%; background-color: #fff6e2; }
 .layer_ticker.active { display: block; }
-.layer_ticker .ticker_content { display: flex; position: relative; max-width: 580px; width: 100%; height: 100%; margin: 0 auto; }
+.layer_ticker .layer_body { display: flex; position: relative; max-width: 580px; width: 100%; height: 100%; margin: 0 auto; }
 .layer_ticker .badge { height: 24px; }
 .layer_ticker .headline { margin-left: 10px; }
 .layer_ticker .date { margin-left: 10px; }
@@ -104,12 +105,13 @@ font-*,color,text-align,vertical-align, ...
 .highligth_bx button:nth-child(n+2) { margin-left: 13px; }
 .highligth_bx button.active { color: #ff7558; }
 /* 메모 레이어 */
-.memo_layer { width: 320px; height: 212px; padding: 14px 20px 20px; }
-.memo_layer .layer_header { line-height: 20px; } 
-.memo_layer .layer_body { margin-top: 12px; }
-.memo_layer .memo_textarea { width: 100%; height: 108px; overflow-y: auto; border: 0; font-size: 15px; line-height: 24px; color: #666; }
-.memo_layer .btn_close { right: 12px; top: 12px; }
-
+.layer_memo { width: 320px; height: 212px; padding: 14px 20px 20px; }
+.layer_memo .layer_header { line-height: 20px; } 
+.layer_memo .layer_body { margin-top: 12px; }
+.layer_memo textarea { width: 100%; height: 108px; overflow-y: auto; border: 0; font-size: 15px; line-height: 24px; color: #666; }
+.layer_memo .text_count { font-size: 13px; line-height: 22px; letter-spacing: -0.5px; color: #999;  }
+.layer_memo .layer_footer { display: flex; align-items: center; justify-content: space-between; overflow: hidden; margin-top: 10px; }
+.layer_memo .btn_close { right: 12px; top: 12px; }
 
 .fs1 {font-size:14px;line-height:1.93;letter-spacing:normal;}
 .fs2 {font-size:16px;line-height:1.81;letter-spacing:normal;}
@@ -271,7 +273,7 @@ font-*,color,text-align,vertical-align, ...
     /* 속보 티커 */
     .layer_ticker { top: 62px; }
     .layer_ticker .date { display: none; }
-    .layer_ticker .ticker_content { max-width: 100%; padding: 10px 52px 10px 20px; }
+    .layer_ticker .layer_body { max-width: 100%; padding: 10px 52px 10px 20px; }
     .layer_ticker .btn_close { right: 20px; }
 
 
@@ -303,6 +305,7 @@ font-*,color,text-align,vertical-align, ...
     .article_header .datetime .time_bx > .date:nth-of-type(1):nth-last-of-type(2) { margin-right: 10px; }
     .article_header > .byline  { min-height: 52px; padding: 11px 0; }
     .article_header > .byline > a { margin: 5px 0; line-height: 20px; }
+    .article_header .headline.fixed { z-index: 500; position: fixed; left: 50%; top: 0; transform: translateX(-50%); padding: 18px 0; font-size: 16px; line-height: 24px; color: #111; }
 
     .ab_photo.photo_center {left: 50%;transform: translateX(-50%);}
     /* .ab_photo.photo_center .image {max-width:100vw;} */
@@ -334,8 +337,8 @@ font-*,color,text-align,vertical-align, ...
     .sticky_menu .layer_share::before { content: ''; z-index: 1; position: absolute; left: -5px; top: 20px; transform: rotate(-45deg); width: 7px; height: 7px; border-left: 1px solid rgba(0, 0, 0, 0.2); border-top: 1px solid rgba(0, 0, 0, 0.2); background-color: #fff; }
 
     /* 속보티커 */
-    .layer_ticker {  top: 64px; height: 52px; }
-    .layer_ticker .ticker_content { align-items: center; }
+    .layer_ticker { top: 64px; height: 52px; }
+    .layer_ticker .layer_body { align-items: center; }
 
 
     .scroll_indicator { top: 60px; }

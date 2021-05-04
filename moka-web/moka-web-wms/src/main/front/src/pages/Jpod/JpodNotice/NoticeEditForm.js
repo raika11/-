@@ -257,29 +257,41 @@ const NoticeEditForm = ({ data, onChange }) => {
                         </p>
                     </Form.Row>
                 )}
-                <Form.Row className="mb-2 align-items-center">
-                    <MokaInputLabel
-                        as="switch"
-                        name="pushReceiveYn"
-                        id="pushReceiveYn"
-                        label="PUSH"
-                        inputProps={{ custom: true, checked: data.pushReceiveYn === 'Y', disabled: boardSeq && !parentBoardSeq }}
-                        onChange={handleChangeValue}
-                    />
-                    <p className="mb-0 ml-2">답변에 대한 APP 푸쉬를 받을 수 있습니다.</p>
-                </Form.Row>
-                <Form.Row className="mb-2">
-                    <MokaInputLabel
-                        as="switch"
-                        name="emailReceiveYn"
-                        id="emailReceiveYn"
-                        className="mr-2"
-                        label="발송 이메일"
-                        inputProps={{ custom: true, checked: data.emailReceiveYn === 'Y' }}
-                        onChange={handleChangeValue}
-                    />
-                    <MokaInputLabel label="이메일" labelWidth={40} className="flex-fill" name="email" placeholder="이메일" value={data.email} onChange={handleChangeValue} />
-                </Form.Row>
+                {jpodBoard.answYn === 'Y' && (
+                    <>
+                        <Form.Row className="mb-2 align-items-center">
+                            <MokaInputLabel
+                                as="switch"
+                                name="pushReceiveYn"
+                                id="pushReceiveYn"
+                                label="PUSH"
+                                inputProps={{ custom: true, checked: data.pushReceiveYn === 'Y', disabled: boardSeq && !parentBoardSeq }}
+                                onChange={handleChangeValue}
+                            />
+                            <p className="mb-0 ml-2">답변에 대한 APP 푸쉬를 받을 수 있습니다.</p>
+                        </Form.Row>
+                        <Form.Row className="mb-2">
+                            <MokaInputLabel
+                                as="switch"
+                                name="emailReceiveYn"
+                                id="emailReceiveYn"
+                                className="mr-2"
+                                label="발송 이메일"
+                                inputProps={{ custom: true, checked: data.emailReceiveYn === 'Y' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInputLabel
+                                label="이메일"
+                                labelWidth={40}
+                                className="flex-fill"
+                                name="email"
+                                placeholder="이메일"
+                                value={data.email}
+                                onChange={handleChangeValue}
+                            />
+                        </Form.Row>
+                    </>
+                )}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0 pr-2">
                         <MokaInputLabel

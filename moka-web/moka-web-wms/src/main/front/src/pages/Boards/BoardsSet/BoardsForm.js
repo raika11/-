@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaInputLabel, MokaInput } from '@components';
-// import { selectItem } from '@pages/Boards/BoardConst';
 import { MokaEditorCore } from '@/components/MokaEditor';
 import FileExtSelector from './components/FileExtSelector';
 
@@ -11,9 +10,7 @@ import FileExtSelector from './components/FileExtSelector';
  * 게시판 관리 > 전체 게시판 > 편집 폼(등록, 수정)
  */
 const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError }) => {
-    const { boardInfo } = useSelector((store) => ({
-        boardInfo: store.board.setMenu.boardInfo,
-    }));
+    const boardInfo = useSelector(({ board }) => board.setMenu.boardInfo);
 
     // 게시판 체크박스 컬럼 state
     const [items, setItems] = useState({
@@ -33,7 +30,13 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
             onChange({ [name]: checked ? 'Y' : 'N' });
         } else if (type === 'checkbox') {
             // 답변 checkbox 버튼 checked시 답변메일 발신, 답변 PUSH 발송 활성화
-            if (name === 'allowItem') {
+            if (name === 'answYn') {
+                if (checked) {
+                    onChange({ [name]: 'Y', emailReceiveYn: 'Y', answPushYn: 'Y' });
+                } else {
+                    onChange({ [name]: 'N', emailReceiveYn: 'N', answPushYn: 'N' });
+                }
+            } else if (name === 'allowItem') {
                 // 로컬 state 사용 컬럼 상태 업데이트
                 setItems({ ...items, [value]: checked ? true : false });
             } else {
@@ -103,7 +106,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
         // Monaco 에디터 내용 처리
         setTmpHeaderContent(boardInfo.headerContent);
         setTmpFooterContent(boardInfo.footerContent);
-    }, [boardInfo]);
+    }, [boardInfo.headerContent, boardInfo.footerContent]);
 
     return (
         <Form>
@@ -114,7 +117,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                     name="usedYn"
                     id="usedYn"
                     label="사용"
-                    inputProps={{ custom: true, checked: boardInfoData.usedYn === 'Y' ? true : false }}
+                    inputProps={{ custom: true, checked: boardInfoData.usedYn === 'Y' }}
                     onChange={handleChangeValue}
                     value={boardInfoData.usedYn}
                 />
@@ -173,42 +176,42 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                     name="editorYn"
                     id="editorYn"
                     onChange={handleChangeValue}
-                    inputProps={{ label: '에디터', custom: true, checked: boardInfoData.editorYn === 'Y' ? true : false }}
+                    inputProps={{ label: '에디터', custom: true, checked: boardInfoData.editorYn === 'Y' }}
                 />
                 <MokaInput
                     as="checkbox"
                     name="answYn"
                     id="answYn"
                     onChange={handleChangeValue}
-                    inputProps={{ label: '답변', custom: true, checked: boardInfoData.answYn === 'Y' ? true : false }}
+                    inputProps={{ label: '답변', custom: true, checked: boardInfoData.answYn === 'Y' }}
                 />
                 <MokaInput
                     as="checkbox"
                     name="replyYn"
                     id="replyYn"
                     onChange={handleChangeValue}
-                    inputProps={{ label: '댓글', custom: true, checked: boardInfoData.replyYn === 'Y' ? true : false }}
+                    inputProps={{ label: '댓글', custom: true, checked: boardInfoData.replyYn === 'Y' }}
                 />
                 <MokaInput
                     as="checkbox"
                     name="declareYn"
                     id="declareYn"
                     onChange={handleChangeValue}
-                    inputProps={{ label: '신고', custom: true, checked: boardInfoData.declareYn === 'Y' ? true : false }}
+                    inputProps={{ label: '신고', custom: true, checked: boardInfoData.declareYn === 'Y' }}
                 />
                 <MokaInput
                     as="checkbox"
                     name="captchaYn"
                     id="captchaYn"
                     onChange={handleChangeValue}
-                    inputProps={{ label: '캡챠', custom: true, checked: boardInfoData.captchaYn === 'Y' ? true : false }}
+                    inputProps={{ label: '캡챠', custom: true, checked: boardInfoData.captchaYn === 'Y' }}
                 />
                 <MokaInput
                     as="checkbox"
                     name="secretYn"
                     id="secretYn"
                     onChange={handleChangeValue}
-                    inputProps={{ label: '비밀글', custom: true, checked: boardInfoData.secretYn === 'Y' ? true : false }}
+                    inputProps={{ label: '비밀글', custom: true, checked: boardInfoData.secretYn === 'Y' }}
                 />
             </Form.Row>
 
@@ -221,8 +224,8 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                     id="emailReceiveYn"
                     className="mr-40"
                     label="답변 메일"
-                    inputProps={{ custom: true, checked: boardInfoData.emailReceiveYn === 'Y' ? true : false }}
-                    disabled={boardInfoData.answYn !== 'Y' ? true : false}
+                    inputProps={{ custom: true, checked: boardInfoData.emailReceiveYn === 'Y' }}
+                    disabled={boardInfoData.answYn !== 'Y'}
                     onChange={handleChangeValue}
                 />
 
@@ -235,7 +238,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                     value={boardInfoData.receiveEmail}
                     isInvalid={error.receiveEmail}
                     onChange={handleChangeValue}
-                    disabled={boardInfoData.answYn !== 'Y' || boardInfoData.emailReceiveYn !== 'Y' ? true : false}
+                    disabled={boardInfoData.answYn !== 'Y' || boardInfoData.emailReceiveYn !== 'Y'}
                 />
             </Form.Row>
 
@@ -247,8 +250,8 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                     className="mr-40"
                     id="answPushYn"
                     label="PUSH 발송"
-                    inputProps={{ custom: true, label: '답변', checked: boardInfoData.answPushYn === 'Y' ? true : false }}
-                    disabled={boardInfoData.answYn !== 'Y' ? true : false}
+                    inputProps={{ custom: true, label: '답변', checked: boardInfoData.answPushYn === 'Y' }}
+                    disabled={boardInfoData.answYn !== 'Y'}
                     onChange={handleChangeValue}
                     value={boardInfoData.answPushYn}
                 />
@@ -257,7 +260,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                     as="switch"
                     name="pushYn"
                     id="pushYn"
-                    inputProps={{ custom: true, label: '작성글', checked: boardInfoData.pushYn === 'Y' ? true : false }}
+                    inputProps={{ custom: true, label: '작성글', checked: boardInfoData.pushYn === 'Y' }}
                     onChange={handleChangeValue}
                     value={boardInfoData.pushYn}
                 />
@@ -272,7 +275,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                     id="emailSendYn"
                     className="mr-40"
                     label="게시물 메일"
-                    inputProps={{ custom: true, checked: boardInfoData.emailSendYn === 'Y' ? true : false }}
+                    inputProps={{ custom: true, checked: boardInfoData.emailSendYn === 'Y' }}
                     onChange={handleChangeValue}
                 />
 
@@ -285,7 +288,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                     isInvalid={error.sendEmail}
                     value={boardInfoData.sendEmail}
                     onChange={handleChangeValue}
-                    disabled={boardInfoData.emailSendYn !== 'Y' ? true : false}
+                    disabled={boardInfoData.emailSendYn !== 'Y'}
                 />
             </Form.Row>
 
@@ -320,7 +323,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                         id="answLevel"
                         value={boardInfoData.answLevel}
                         isInvalid={error.answLevel}
-                        disabled={boardInfoData.answYn !== 'Y' ? true : false}
+                        disabled={boardInfoData.answYn !== 'Y'}
                     >
                         <option value="0">전체</option>
                         <option value="1">회원</option>
@@ -362,7 +365,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                     id="fileYn"
                     label="파일"
                     className="mr-2"
-                    inputProps={{ custom: true, checked: boardInfoData.fileYn === 'Y' ? true : false }}
+                    inputProps={{ custom: true, checked: boardInfoData.fileYn === 'Y' }}
                     onChange={handleChangeValue}
                 />
                 <Col xs={2} className="p-0 pr-2">
@@ -373,7 +376,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                         value={boardInfoData.allowFileCnt}
                         isInvalid={error.allowFileCnt}
                         onChange={handleChangeValue}
-                        disabled={boardInfoData.fileYn !== 'Y' ? true : false}
+                        disabled={boardInfoData.fileYn !== 'Y'}
                     />
                 </Col>
                 <Col xs={3} className="p-0 pr-2">
@@ -385,7 +388,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                         value={boardInfoData.allowFileSize}
                         isInvalid={error.allowFileSize}
                         onChange={handleChangeValue}
-                        disabled={boardInfoData.fileYn !== 'Y' ? true : false}
+                        disabled={boardInfoData.fileYn !== 'Y'}
                     />
                 </Col>
 
@@ -395,7 +398,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                 {/* 확장자 선택 */}
                 <FileExtSelector
                     value={boardInfoData.allowFileExt}
-                    disabled={boardInfoData.fileYn !== 'Y' ? true : false}
+                    disabled={boardInfoData.fileYn !== 'Y'}
                     onChange={(value) => {
                         if (value.indexOf('all') > -1) {
                             onChange({
@@ -482,7 +485,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
                     name="ordYn"
                     id="ordYn"
                     label="순서 지정"
-                    inputProps={{ custom: true, checked: boardInfoData.ordYn === 'Y' ? true : false }}
+                    inputProps={{ custom: true, checked: boardInfoData.ordYn === 'Y' }}
                     onChange={handleChangeValue}
                     value={boardInfoData.ordYn}
                 />
@@ -493,7 +496,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
             <Form.Row className="mb-2">
                 <MokaInputLabel label="헤더" as="none" />
                 <div className="flex-fill input-border overflow-hidden" style={{ height: '200px' }}>
-                    <MokaEditorCore value={tmpHeaderContent} onBlur={(value) => setTmpHeaderContent(value)} />
+                    <MokaEditorCore defaultValue={tmpHeaderContent} value={tmpHeaderContent} onBlur={(value) => setTmpHeaderContent(value)} />
                 </div>
             </Form.Row>
 
@@ -501,7 +504,7 @@ const BoardsForm = ({ channelTypeList, boardInfoData, onChange, error, setError 
             <Form.Row className="mb-2">
                 <MokaInputLabel label="푸터" as="none" />
                 <div className="flex-fill input-border overflow-hidden" style={{ height: '200px' }}>
-                    <MokaEditorCore value={tmpFooterContent} onBlur={(value) => setTmpFooterContent(value)} />
+                    <MokaEditorCore defaultValue={tmpFooterContent} value={tmpFooterContent} onBlur={(value) => setTmpFooterContent(value)} />
                 </div>
             </Form.Row>
 

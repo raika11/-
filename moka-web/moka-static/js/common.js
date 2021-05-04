@@ -115,20 +115,26 @@ function mobileSwiper() {
     var swiper = new Swiper('.scroll_sm_wrap', {
         slidesPerView: 3,
         slidesPerGroup: 1,
-        spaceBetween: 10,
-        allowTouchMove:false,
-        centeredSlidesBounds: true,
-        freeMode: true,
+        spaceBetween: 30,
+        // allowTouchMove:true,
+        // centeredSlidesBounds: true,
+        // freeMode: true,
         pagination: {
             el: '.swiper-pagination',
             clickable: true,
+            type: "progressbar",
         },
 
-          breakpoints:{
-              1024:{
+        breakpoints:{
+            768:{
+                allowTouchMove:true,
+                slidesPerView: 2,
+            },
+            500:{
                 allowTouchMove:true,
                 slidesPerView: 1.2,
-              }
-          }
+                spaceBetween: 10,
+            },
+        }
     });
 };

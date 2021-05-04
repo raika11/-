@@ -89,17 +89,17 @@ public class NewsletterServiceImpl implements NewsletterService {
         // 저장
         NewsletterInfo result = newsletterInfoRepository.save(newsletterInfo);
         // 히스토리저장
-        insertNewsletterInfoHist(result, TpsConstants.WORKTYPE_INSERT);
+        insertNewsletterInfoHist(result, "", TpsConstants.WORKTYPE_INSERT);
         return result;
     }
 
     @Transactional
     @Override
-    public NewsletterInfo updateNewsletterInfo(NewsletterInfo newsletterInfo) {
+    public NewsletterInfo updateNewsletterInfo(NewsletterInfo newsletterInfo, String modReason) {
         // 저장
         NewsletterInfo result = newsletterInfoRepository.save(newsletterInfo);
         // 히스토리 저장
-        insertNewsletterInfoHist(result, TpsConstants.WORKTYPE_UPDATE);
+        insertNewsletterInfoHist(result, modReason, TpsConstants.WORKTYPE_UPDATE);
         return result;
     }
 
@@ -109,7 +109,7 @@ public class NewsletterServiceImpl implements NewsletterService {
      * @param newsletterInfo 뉴스레터 상품
      * @param workType       작업유형
      */
-    private void insertNewsletterInfoHist(NewsletterInfo newsletterInfo, String workType) {
+    private void insertNewsletterInfoHist(NewsletterInfo newsletterInfo, String modReason, String workType) {
         // 히스토리저장
         newsletterInfoHistRepository.save(NewsletterInfoHist
                 .builder()
@@ -145,6 +145,11 @@ public class NewsletterServiceImpl implements NewsletterService {
                 .letterEngName(newsletterInfo.getLetterEngName())
                 .letterImg(newsletterInfo.getLetterImg())
                 .letterDesc(newsletterInfo.getLetterDesc())
+                .dateTab(newsletterInfo.getDateTab())
+                .dateType(newsletterInfo.getDateType())
+                .artTitleYn(newsletterInfo.getArtTitleYn())
+                .editTitle(newsletterInfo.getEditTitle())
+                .modReason(modReason)
                 .workType(workType)
                 .build());
     }

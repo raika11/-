@@ -353,7 +353,7 @@ public class NewsletterController extends AbstractCommonController {
             }
             NewsletterInfo newsletterInfo = modelMapper.map(newsletterInfoDTO, NewsletterInfo.class);
             // 수정
-            NewsletterInfo returnValue = newsletterService.updateNewsletterInfo(newsletterInfo);
+            NewsletterInfo returnValue = newsletterService.updateNewsletterInfo(newsletterInfo, newsletterInfoDTO.getModReason());
 
             // 결과리턴
             NewsletterInfoDTO dto = modelMapper.map(returnValue, NewsletterInfoDTO.class);
@@ -403,7 +403,7 @@ public class NewsletterController extends AbstractCommonController {
             NewsletterInfo returnValue = newsletterService.updateNewsletterInfo(newsletterInfo
                     .toBuilder()
                     .status("P")
-                    .build());
+                    .build(), newsletterInfoDTO.getModReason());
 
             // 결과리턴
             NewsletterInfoDTO dto = modelMapper.map(returnValue, NewsletterInfoDTO.class);

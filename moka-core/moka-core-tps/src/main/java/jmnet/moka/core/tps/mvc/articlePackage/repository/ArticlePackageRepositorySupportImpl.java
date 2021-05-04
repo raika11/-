@@ -8,7 +8,7 @@ import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.articlePackage.dto.ArticlePackageSearchDTO;
 import jmnet.moka.core.tps.mvc.articlePackage.entity.ArticlePackage;
 import jmnet.moka.core.tps.mvc.articlePackage.entity.QArticlePackage;
-import jmnet.moka.core.tps.mvc.newsletter.entity.QNewsletterInfo;
+import jmnet.moka.core.tps.mvc.newsletter.entity.QNewsletterInfoSimple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +36,7 @@ public class ArticlePackageRepositorySupportImpl extends TpsQueryDslRepositorySu
     @Override
     public Page<ArticlePackage> findAllArticlePackage(ArticlePackageSearchDTO searchDTO) {
         QArticlePackage qArticlePackage = QArticlePackage.articlePackage;
-        QNewsletterInfo qNewsletterInfo = QNewsletterInfo.newsletterInfo;
+        QNewsletterInfoSimple qNewsletterInfo = QNewsletterInfoSimple.newsletterInfoSimple;
 
         JPQLQuery<ArticlePackage> query = from(qArticlePackage).distinct();
         Pageable pageable = searchDTO.getPageable();
@@ -85,13 +85,11 @@ public class ArticlePackageRepositorySupportImpl extends TpsQueryDslRepositorySu
         }
 
         QueryResults<ArticlePackage> list = query
-                //                                .leftJoin(qNewsletterInfo.newsletterSubscribes, qNewsletterSubscribe)
-                //                .fetchJoin()
-                //                .leftJoin(qNewsletterInfo.newsletterLogs, qNewsletterLog)
-                //                .fetchJoin()
-                //                .leftJoin(qNewsletterInfo.newsletterSends, qNewsletterSend)
-                //                .fetchJoin()
-
+                .leftJoin(qArticlePackage.newsletterInfo, qNewsletterInfo)
+                .fetchJoin()
+                .where(qNewsletterInfo.channelType
+                        .containsIgnoreCase("ARTPKG")
+                        .or(qNewsletterInfo.channelType.isNull()))
                 .fetchResults();
 
         return new PageImpl<ArticlePackage>(list.getResults(), pageable, list.getTotal());

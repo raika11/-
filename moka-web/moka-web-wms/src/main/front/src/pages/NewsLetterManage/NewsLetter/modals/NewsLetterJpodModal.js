@@ -15,9 +15,20 @@ const NewsLetterJpodModal = ({ show, onHide, channelType, onRowClicked }) => {
     const storeSearch = useSelector(({ jpod }) => jpod.channel.search);
     const [search, setSearch] = useState(initialState.channel.search);
 
+    /**
+     * 검색
+     */
     const handleClickSearch = () => {
         let ns = { ...search, page: 0 };
         dispatch(getChnlList({ search: ns }));
+    };
+
+    /**
+     * 모달 닫기
+     */
+    const handleClickHide = () => {
+        dispatch(clearStore());
+        onHide();
     };
 
     useEffect(() => {
@@ -39,14 +50,12 @@ const NewsLetterJpodModal = ({ show, onHide, channelType, onRowClicked }) => {
                     },
                 }),
             );
-        } else if (!show) {
-            dispatch(clearStore());
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show, channelType]);
 
     return (
-        <MokaModal size="md" width={600} height={800} show={show} onHide={onHide} bodyClassName="d-flex flex-column" title="J팟 채널 검색" draggable>
+        <MokaModal size="md" width={600} height={800} show={show} onHide={handleClickHide} bodyClassName="d-flex flex-column" title="J팟 채널 검색" draggable>
             <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
                 <MokaSearchInput
                     className="flex-fill"

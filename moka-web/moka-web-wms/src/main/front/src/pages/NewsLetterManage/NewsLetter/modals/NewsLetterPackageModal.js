@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaModal, MokaSearchInput } from '@/components';
-import { initialState, getIssueList, clearSearch, changeIssueSearchOptions } from '@store/issue';
+import { initialState, getIssueList, clearStore, changeIssueSearchOptions } from '@store/issue';
 import { getNewsLetterChannelType } from '@store/newsLetter';
 import IssueAgGrid from '../components/RelIssueAgGrid';
 import { messageBox } from '@/utils/toastUtil';
@@ -23,6 +23,14 @@ const NewsLetterPackageModal = ({ show, onHide, channelType, onRowClicked }) => 
     const handleClickSearch = () => {
         let ns = { ...search, page: 0 };
         dispatch(getIssueList({ search: ns }));
+    };
+
+    /**
+     * 모달 닫기
+     */
+    const handleClickHide = () => {
+        dispatch(clearStore());
+        onHide();
     };
 
     useEffect(() => {
@@ -52,14 +60,12 @@ const NewsLetterPackageModal = ({ show, onHide, channelType, onRowClicked }) => 
                     },
                 }),
             );
-        } else if (!show) {
-            dispatch(clearSearch());
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show, channelType]);
 
     return (
-        <MokaModal size="md" width={600} height={800} show={show} onHide={onHide} bodyClassName="d-flex flex-column" title="패키지 검색" draggable>
+        <MokaModal size="md" width={600} height={800} show={show} onHide={handleClickHide} bodyClassName="d-flex flex-column" title="패키지 검색" draggable>
             <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
                 <Form.Row>
                     <Col xs={3} className="p-0 pr-2">

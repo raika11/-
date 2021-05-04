@@ -1181,7 +1181,11 @@ dl.date dd {margin-left: 6px;}
 
 /*** meta ***/
 .meta{display:flex;margin-top:10px;align-items: center;}
+.meta .ico_up{display: block;min-width: 26px;height: 16px;padding: 2px 5px;margin-right: 6px;border: 1px solid #f6330a;border-radius: 10px;font-size: 10px;font-weight: 700;color: #f6330a;}
 .meta .btn_bookmark{margin-left:auto;}
+.meta .count{position:relative;padding-left:16px;font-size: 13px;line-height: 1.69;letter-spacing: -0.5px;color: #999;}
+.meta .count::before{content:'';position: absolute;left:8px;top:50%;transform: translateY(-50%) ;width:1px;height:10px;background-color: #bcbcbc;}
+
 
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width: 1023px) {
@@ -1236,6 +1240,10 @@ dl.date dd {margin-left: 6px;}
 
 
 /* 카드리스트 */
+.list_item{border:1px solid #e2e2e2;}
+.list_item .headline{font-size: 18px;}
+.list_item .description{display:block;display: -webkit-box;width: 100%;height:3.14em;font-size: 14px;line-height: 1.57em;overflow:hidden;white-space: normal;word-wrap: break-word; text-overflow:ellipsis;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+.list_item .ico_new{width:19px;height:19px;margin-left:6px;border-radius:100%;background-color:#f6330a;}
 
 /* 태블릿 디자인 나올때 까지는 아래 분기만 사용 - 2021.04.22 */
 /* Mobile devices (mobile + tablet, 1023px and down) */
@@ -1263,11 +1271,26 @@ dl.date dd {margin-left: 6px;}
     .scroll_sm_wrap .skin_group.swiper-wrapper{padding-bottom:20px;}
     .scroll_sm_wrap .swiper-pagination-progressbar{width: calc(100% - 40px);margin-left:20px;bottom:0;top:unset;height:3px;background-color:transparent;border-bottom:1px solid #e2e2e2;}
     .scroll_sm_wrap .swiper-pagination-progressbar-fill{height:3px;background-color:#f6330a;}
+
+    /* 카드리스트 */
+    .list_item{padding:16px;}
+    .list_item .headline{line-height: 1.5;}
+    .list_item .description{margin-top:9px;}
+    .list_item .meta{margin-top:13px;}
+
     
 }
 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width: 1024px) {
+
+    /* 카드리스트 */
+    .list_item{padding:18px 20px;}
+    .list_item .headline{line-height: 1.56;}
+    .list_item .description{margin-top:10px;}
+    .list_item .meta{margin-top:16px;}
+
+
     /* 각요소 */
     .card_skin .headline{font-size: 20px;}
     .card_skin .card_image + .card_body .headline{font-size:18px;}
@@ -1463,6 +1486,12 @@ dl.date dd {margin-left: 6px;}
 .news_date{margin-top:10px;vertical-align:middle;font-size:13px;line-height:1.69;letter-spacing:-0.5px;}
 .news_date .ico_update{height:17px;padding:0 6px;margin-right:8px;border:1px solid #999;border-radius:20px;color:#999;font-size:11px;font-weight:700;letter-spacing:-.18px;line-height:normal;}
 .news_date .ico_update.new{border-color:#ff3c14;color:#ff3c14;}
+
+
+
+
+
+
 
 
 /****************************************************************************************************/

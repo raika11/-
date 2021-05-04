@@ -23,6 +23,7 @@ var include = {
         
         document.write('<link href="//stg-static.joongang.co.kr/css/section.css" rel="stylesheet">');
         document.write('<link href="//stg-static.joongang.co.kr/css/article.css" rel="stylesheet">');
+        document.write('<link href="//stg-static.joongang.co.kr/css/journalist.css" rel="stylesheet">');
 
         document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-3.3.1.min.js"></script>');
         document.write('<script src="//stg-static.joongang.co.kr/js/lib/jquery-ui.js"></script>');

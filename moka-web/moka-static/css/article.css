@@ -148,8 +148,9 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 /***                                             tag                                              ***/
 /****************************************************************************************************/
-.tag_wrap {display:flex;align-items:center;}
-.tag_wrap .tag {display: inline-flex;flex: 0 0 auto;width:auto;padding: 3px 12px 4px;margin-bottom:7px;background:#fff4f1;border:1px solid #f6330a;color:#f6330a;font-size: 13px;font-weight: bold;line-height:normal;}
+.tag_wrap ul { display:flex; flex-flow: wrap; align-items:center; margin: -7px -3px 0; }
+.tag_wrap ul li { margin-top: 7px; padding: 0 3px; }
+.tag_wrap .tag {flex: 0 0 auto; padding: 0 12px;background:#fff4f1;border:1px solid #f6330a;color:#f6330a;font-weight: bold;}
 
 
 /****************************************************************************************************/
@@ -261,6 +262,12 @@ font-*,color,text-align,vertical-align, ...
     .sticky_menu .layer_fontsize { top: 73px; right: 20px; left: auto; }
     /* Medium devices (only tablet, 768px and 1023px) */
 
+    /****************************************************************************************************/
+    /***                                             tag                                              ***/
+    /****************************************************************************************************/
+    .tag_wrap .tag { padding: 3px 12px 4px; font-size: 13px; line-height: 19px; letter-spacing: -0.5px; }
+
+
     /* 속보 티커 */
     .layer_ticker { top: 62px; }
     .layer_ticker .date { display: none; }
@@ -305,7 +312,7 @@ font-*,color,text-align,vertical-align, ...
     /****************************************************************************************************/
     /***                                             tag                                              ***/
     /****************************************************************************************************/
-    .tag_wrap .tag {padding: 2px 12px 4px;font-size: 12px;}
+    .tag_wrap .tag {padding: 2px 12px 4px; font-size: 12px; line-height: 18px; }
 
     /****************************************************************************************************/
     /***                                            구독                                              ***/

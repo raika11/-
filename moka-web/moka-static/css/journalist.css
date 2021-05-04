@@ -118,7 +118,7 @@ font-*,color,text-align,vertical-align, ...
 .journalist_list .profile_info{margin-top: 4px;color: #111;font-size: 14px;line-height: 1.4;}
 .journalist_list .profile_image img{max-width:100%;border-radius:100%;border:1px solid rgba(0,0,0,0.03);}
 .journalist_list .meta{display:flex; margin-top:6px;}
-.journalist_list .meta .ico_up span{min-width:28px; height:18px; padding:3px 6px; margin-right:6px; border: 1px solid #f6330a; border-radius:10px; font-size:10px; font-weight: 700; color: #f6330a;}
+.journalist_list .meta .ico_up span{display: block;min-width: 26px;height: 16px;padding: 2px 5px;margin-right:6px;border: 1px solid #f6330a;border-radius:10px;font-size:10px;font-weight: 700;color: #f6330a;}
 .journalist_list .meta .date{font-size:13px; line-height: 22px;letter-spacing: -0.5px; color: #999999;}
 
 

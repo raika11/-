@@ -41,6 +41,9 @@ const ABAgGrid = ({ selected, columnDefs, rowData, total, searchOptions, onRowCl
                 onRowNodeId={(data) => data.seq}
                 onChangeSearchOption={onChangeSearchOption}
                 frameworkComponents={{ statusRenderer: StatusRenderer }}
+                refreshCellsParams={{
+                    force: true,
+                }}
             />
         </React.Fragment>
     );

@@ -163,7 +163,7 @@
     .showcase_swiper .video_time,
 
     /* 추천 영상 */
-    .catalog_list_wrap .skin_group .video_time { bottom: 8px; right: 8px;}
+    .catalog_list_wrap .card_skin .video_time { bottom: 8px; right: 8px;}
 
     /* 인기 영상*/
     .catalog_list_wrap .title_area { justify-content: space-between;}
@@ -286,7 +286,7 @@
     .showcase_swiper .description { font-size: 15px; line-height: 24px; color: #666; }
 
     /* 추천 포토 */
-    .catalog_list_wrap .skin_group { margin-top: 24px; }
+    .catalog_list_wrap .skin_group { margin-top: 8px; }
     .catalog_list_wrap .card_skin .card_body { padding-top: 11px; }
     .catalog_list_wrap .card_skin .card_body .headline { font-size: 20px; }
 
@@ -300,7 +300,7 @@
     .showcase_swiper .card_image .ico_play { /*top: 169px; left: 356px;*/ width: 100px; height: 100px;}
     
     .showcase_swiper .video_time,
-    .catalog_list_wrap .skin_group .video_time { right: 12px; bottom: 12px; }
+    .catalog_list_wrap .card_skin .video_time { right: 12px; bottom: 12px; }
 
     /* 인기 영상 */
     .catalog_list_wrap .title_wrap .btn_info { margin-left: 11px; }

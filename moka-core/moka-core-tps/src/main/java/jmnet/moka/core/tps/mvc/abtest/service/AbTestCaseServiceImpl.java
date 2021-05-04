@@ -58,7 +58,7 @@ public class AbTestCaseServiceImpl implements AbTestCaseService {
     }
 
     @Override
-    public AbTestCase findChk(AbTestCaseSaveDTO abTestCaseSaveDTO) {
+    public List<AbTestCase> findChk(AbTestCaseSaveDTO abTestCaseSaveDTO) {
 
         String pageType = abTestCaseSaveDTO.getPageType();
         String pageValue = abTestCaseSaveDTO.getPageValue();

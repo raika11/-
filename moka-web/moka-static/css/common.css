@@ -1256,6 +1256,9 @@ dl.date dd {margin-left: 6px;}
     .skin_group.swiper-wrapper{display:flex;margin-top:20px;}
     .skin_group.swiper-wrapper li{margin-top:0;}
 
+    .scroll_sm_wrap .swiper-button-next,
+    .scroll_sm_wrap .swiper-button-prev{display:none;}
+
     .scroll_sm_wrap {width: 100vw;margin-left: -20px;padding-left: 20px;padding-right:20px;}
     .scroll_sm_wrap .skin_group.swiper-wrapper{padding-bottom:20px;}
     .scroll_sm_wrap .swiper-pagination-progressbar{width: calc(100% - 40px);margin-left:20px;bottom:0;top:unset;height:3px;background-color:transparent;border-bottom:1px solid #e2e2e2;}
@@ -1278,7 +1281,22 @@ dl.date dd {margin-left: 6px;}
 
     .card_skin.skin{padding:24px 20px;background-color:#f6330a;border:none;}
     .card_skin.skin .btn{margin-top:24px;}
+
+
+    /* 슬라이딩 */
+    .scroll_sm_wrap{position: relative;z-index: 2;margin-top: -30px;padding-top: 30px;}
+    .scroll_sm_wrap .swiper-pagination{display:none;}
+
+    
+    .scroll_sm_wrap .swiper-button-prev,
+    .scroll_sm_wrap .swiper-button-next{width:25px;height:25px;top:27px;border:1px solid #e5e5e5;border-radius: 100%;background-color:#fff;background-size: 13px auto;background-position:50% 50%;}
+
+    .scroll_sm_wrap .swiper-button-prev{left:unset;right:30px;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 13'%3E%3Cpath d='M13 13V0H0v13h13z' fill='none'/%3E%3Cpath d='M9 2.7L8.3 2 3.8 6.5 8.3 11l.7-.7-3.8-3.8L9 2.7z' fill-rule='evenodd' clip-rule='evenodd' fill='%231d1d1d'/%3E%3C/svg%3E");}
+    .scroll_sm_wrap .swiper-button-next{right:0;background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0v13h13V0z'/%3E%3Cpath fill='%231D1D1D' d='M4 10.342l.707.707 4.52-4.52-.006-.005.006-.004L4.707 2 4 2.707l3.817 3.817L4 10.342z'/%3E%3C/g%3E%3C/svg%3E");}
 }
+
+
+
 
 
 

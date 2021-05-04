@@ -354,4 +354,22 @@
       ) }
   </select>
 
+  <!--검색키워드등록-->
+  <select id="searchInsert" parameterType="map" statementType="CALLABLE">
+    {call UPU_MY_SEARCH_INS(
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_nick, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{kwd, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{_SUCCESS, mode=OUT, jdbcType=BOOLEAN, javaType=java.lang.Boolean}
+      ) }
+  </select>
+
+  <!--내 검색키워드목록-->
+  <select id="search" parameterType="map" resultType="map" statementType="CALLABLE">
+    {call UPU_MY_SEARCH_LIST_SEL(
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
 </mapper>

@@ -1200,7 +1200,7 @@ dl.date dd {margin-left: 6px;}
     .card_skin .card_image + .card_body .headline{font-size:18px;}
 
     /* 리스트 */
-    .skin_group {display:inline-block;}
+    .skin_group {display:inline-block; width:100%;}
     .skin_group li {align-items:stretch;height:auto;min-height:273px;margin-top:16px;}
     .skin_group li:first-child{margin-top:20px;}
     .section_photo li{min-height:317px;}

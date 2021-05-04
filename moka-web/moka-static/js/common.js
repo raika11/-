@@ -64,6 +64,20 @@ $(document).ready(function() {
         });
         $('#datepicker').datepicker('setDate', 'today');
     }
+
+    $(".btn_subscribe").on("click", function(){
+        alert("111");
+        $(this).toggleClass("active");
+        
+        if($(this).hasClass("active")){
+            $(this).text("구독중");
+        }
+        else {
+            $(this).text("구독");
+        };
+    });
+
+   
 });
 
 /* 임시 레이어팝업 */

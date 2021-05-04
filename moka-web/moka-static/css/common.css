@@ -1067,7 +1067,7 @@ dl.date dd {margin-left: 6px;}
 .btn:nth-of-type(n+2) {margin-left:10px;}
 .btn [class*="ico_"]{margin-right:2px;}
 
-/* 구독 */
+/*  */
 .btn_primary{border-color:#ff3c14;color:#ff3c14;font-weight:700;}
 
 /* 상태 */
@@ -1106,6 +1106,9 @@ dl.date dd {margin-left: 6px;}
 
 /* sns */
 .btn_sns {width: 40px;height: 40px;padding: 0 0;border-color: #e2e2e2;background-color: #fff;}
+
+/* 구독 */
+.btn_subscribe{border-color:#ff3c14;color:#ff3c14;font-weight:700;}
 
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width: 1023px) {

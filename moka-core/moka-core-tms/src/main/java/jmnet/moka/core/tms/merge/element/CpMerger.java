@@ -11,7 +11,7 @@ import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
@@ -45,10 +45,10 @@ public class CpMerger extends MokaAbstractElementMerger {
                 .getName());
     }
 
-    public String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot, MergeContext context) {
+    public String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot, MergeContext mergeContext) {
         String domainId = ((MokaTemplateMerger) this.templateMerger).getDomainId();
-        return KeyResolver.makeCpItemCacheKey(domainId, element.getAttribute("id"), templateRoot.getPageIdForCache(context),
-                templateRoot.getTotalIdForCache(context), templateRoot.getParamForCache(context, true));
+        return CacheHelper.makeCpItemCacheKey(domainId, element.getAttribute("id"), templateRoot.getPageIdForCache(mergeContext),
+                templateRoot.getTotalIdForCache(mergeContext), templateRoot.getParamForCache(mergeContext, true), mergeContext);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class CpMerger extends MokaAbstractElementMerger {
         boolean isDebug = context
                 .getMergeOptions()
                 .isDebug();
-        if (isDebug == false && this.appendCached(KeyResolver.CACHE_CP_MERGE, cacheKey, sb)) {
+        if (isDebug == false && this.appendCached(CacheHelper.CACHE_CP_MERGE, cacheKey, sb)) {
             return;
         }
 
@@ -165,7 +165,7 @@ public class CpMerger extends MokaAbstractElementMerger {
         }
 
         if (isDebug == false) {
-            this.setCache(KeyResolver.CACHE_CP_MERGE, cacheKey, cpSb);
+            this.setCache(CacheHelper.CACHE_CP_MERGE, cacheKey, cpSb);
         }
         sb.append(cpSb);
     }

@@ -16,7 +16,7 @@ import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 
@@ -40,12 +40,12 @@ public class TpMerger extends MokaAbstractElementMerger {
 	}
 	
     public String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot,
-            MergeContext context) {
+            MergeContext mergeContext) {
         String domainId = ((MokaTemplateMerger) this.templateMerger).getDomainId();
-        String relCp = (String) context.get(MokaConstants.ATTR_REL_CP);
-        return KeyResolver.makeTpItemCacheKey(domainId, element.getAttribute("id"),
-                templateRoot.getPageIdForCache(context), templateRoot.getTotalIdForCache(context),
-                relCp, templateRoot.getParamForCache(context, false));
+        String relCp = (String) mergeContext.get(MokaConstants.ATTR_REL_CP);
+        return CacheHelper.makeTpItemCacheKey(domainId, element.getAttribute("id"),
+                templateRoot.getPageIdForCache(mergeContext), templateRoot.getTotalIdForCache(mergeContext),
+                relCp, templateRoot.getParamForCache(mergeContext, false), mergeContext);
     }
 	
 	@Override
@@ -73,7 +73,7 @@ public class TpMerger extends MokaAbstractElementMerger {
         String relCp = element.getAttribute(MokaConstants.ATTR_REL_CP);
 
         String cacheKey = makeCacheKey(element, (MokaTemplateRoot) templateRoot, childContext);
-        if (isDebug == false && this.appendCached(KeyResolver.CACHE_TP_MERGE, cacheKey, sb)) {
+        if (isDebug == false && this.appendCached(CacheHelper.CACHE_TP_MERGE, cacheKey, sb)) {
             return;
         }
 
@@ -113,7 +113,7 @@ public class TpMerger extends MokaAbstractElementMerger {
 		}
 
         if (isDebug == false) {
-            this.setCache(KeyResolver.CACHE_TP_MERGE, cacheKey, tpSb);
+            this.setCache(CacheHelper.CACHE_TP_MERGE, cacheKey, tpSb);
         }
         sb.append(tpSb);
 	}

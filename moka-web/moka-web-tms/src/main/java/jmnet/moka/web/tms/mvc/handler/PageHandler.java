@@ -15,7 +15,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -85,8 +85,8 @@ public class PageHandler extends AbstractHandler {
             if (itemKey != null) {
                 // 머지 옵션설정
                 mergeContext.set(MokaConstants.MERGE_PATH, requestPath);
-                mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_TYPE));
-                mergeContext.set(MokaConstants.MERGE_ITEM_ID, KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_ID));
+                mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, CacheHelper.getItemKeyFactor(itemKey, CacheHelper.ITEM_TYPE));
+                mergeContext.set(MokaConstants.MERGE_ITEM_ID, CacheHelper.getItemKeyFactor(itemKey, CacheHelper.ITEM_ID));
                 request.setAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
 
             } else {
@@ -101,8 +101,8 @@ public class PageHandler extends AbstractHandler {
                     return null;
                 }
                 mergeContext.set(MokaConstants.MERGE_PATH, MokaConstants.TMS_ERROR_PAGE);
-                mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_TYPE));
-                mergeContext.set(MokaConstants.MERGE_ITEM_ID, KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_ID));
+                mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, CacheHelper.getItemKeyFactor(itemKey, CacheHelper.ITEM_TYPE));
+                mergeContext.set(MokaConstants.MERGE_ITEM_ID, CacheHelper.getItemKeyFactor(itemKey, CacheHelper.ITEM_ID));
                 request.setAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
             }
             return this.handlerMethod;
@@ -153,6 +153,10 @@ public class PageHandler extends AbstractHandler {
     public String merge(HttpServletRequest request, HttpServletResponse response, Model model) {
         // 머지 옵션설정
         MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
+        // 캐시키에 추가할 파라미터 설정
+        CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_CATEGORY);
+        CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_FILTER);
+        CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_DATE);
 
         if (request
                 .getParameterMap()
@@ -312,6 +316,7 @@ public class PageHandler extends AbstractHandler {
             if ( parentPageItem != null) {
                 httpParamMap.put(parentPageItem.getString(ItemConstants.PAGE_URL_PARAM), mergePathList.get(paramIndex));
                 paramIndex ++;
+                CacheHelper.addExtraCacheParam(mergeContext, parentPageItem.getString(ItemConstants.PAGE_URL_PARAM));
             }
             // 자식 혹은 1단계 경로 파라미터 처리
             String urlParam = pageItem.getString(ItemConstants.PAGE_URL_PARAM);
@@ -327,6 +332,7 @@ public class PageHandler extends AbstractHandler {
             } else { // 경로파라미터 값이 없는 경우, default값
                 httpParamMap.put(paramName, paramDefaultValue);
             }
+            CacheHelper.addExtraCacheParam(mergeContext, paramName);
         }
     }
 
@@ -347,8 +353,8 @@ public class PageHandler extends AbstractHandler {
         try {
             String itemKey = this.domainTemplateMerger.getItemKey(domainId, uri);
             if (itemKey != null) {
-                String itemType = KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_TYPE);
-                String itemId = KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_ID);
+                String itemType = CacheHelper.getItemKeyFactor(itemKey, CacheHelper.ITEM_TYPE);
+                String itemId = CacheHelper.getItemKeyFactor(itemKey, CacheHelper.ITEM_ID);
                 item = this.domainTemplateMerger.getItem(domainId, itemType, itemId);
                 if (item == null) {
                     logger.error("PageItem not found : {} {} {}", uri, itemType, itemId);

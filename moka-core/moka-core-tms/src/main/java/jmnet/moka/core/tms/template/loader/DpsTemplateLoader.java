@@ -15,15 +15,17 @@ import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
+import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.exception.TmsException;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
 import jmnet.moka.core.tms.mvc.HttpParamFactory;
+import jmnet.moka.core.tms.mvc.HttpParamMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -137,7 +139,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
                 // PG일 경우 URL과 매핑한다.
                 if (pageItem.getBoolYN(ItemConstants.PAGE_USE_YN)) { // 사용일 경우만 등록한다.
                     // case-insensitive를 지원하기 위해 소문자로 변환
-                    String itemKey = KeyResolver.makeItemKey(this.domainId, pageItem.getItemType(), pageItem.getItemId());
+                    String itemKey = CacheHelper.makeItemKey(this.domainId, pageItem.getItemType(), pageItem.getItemId());
                     String uri = getPageUriLowerCase(pageItem.getString(ItemConstants.PAGE_URL), pageItem.getString(ItemConstants.PAGE_URL_PARAM));
                     logger.debug("load uri: {} {}", this.domainId, uri);
                     newUri2ItemMap.put(uri, itemKey);
@@ -149,8 +151,14 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
                             String mergedPage = "";
                             if (mergedPageFile.exists()) {
                                 mergedPage = new String(Files.readAllBytes(mergedPageFile.toPath()), "UTF-8");
-                                this.cacheManager.set(KeyResolver.getCacheType(MokaConstants.ITEM_PAGE),
-                                        KeyResolver.makePgItemCacheKey(this.domainId, pageItem.getItemId(), this.httpParamFactory.createDefault()),
+                                // 머지 옵션설정
+                                MergeContext mergeContext = new MergeContext();
+                                // 캐시키에 추가할 파라미터 설정
+                                CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_CATEGORY);
+                                CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_FILTER);
+                                CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_DATE);
+                                this.cacheManager.set(CacheHelper.getCacheType(MokaConstants.ITEM_PAGE),
+                                        CacheHelper.makePgItemCacheKey(this.domainId, pageItem.getItemId(), mergeContext),
                                         mergedPage, 24 * 60 * 60 * 1000L);
                                 logger.debug("Merged Page Loaded:{}", uri);
                             }
@@ -225,7 +233,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             JSONArray jsonArray = (JSONArray) jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
             JSONObject jsonObject = (JSONObject) jsonArray.get(0);
             item = DPS_ITEM_FACTORY.getItem(itemType, jsonObject);
-            String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
+            String itemKey = CacheHelper.makeItemKey(this.domainId, itemType, itemId);
             // PG일 경우 URL과 매핑한다.
             if (itemType.equals(MokaConstants.ITEM_PAGE)) {
                 if (item.getBoolYN(ItemConstants.PAGE_USE_YN)) {
@@ -254,7 +262,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
 
     public MergeItem getItem(String itemType, String itemId, boolean force)
             throws TemplateParseException, TemplateLoadException {
-        String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
+        String itemKey = CacheHelper.makeItemKey(this.domainId, itemType, itemId);
         MergeItem item;
         if (force || !cacheable || !this.mergeItemMap.containsKey(itemKey)) {
             item = this.loadJson(itemType, itemId);

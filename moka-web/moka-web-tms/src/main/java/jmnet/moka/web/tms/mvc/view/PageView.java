@@ -1,25 +1,18 @@
 package jmnet.moka.web.tms.mvc.view;
 
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import jmnet.moka.common.JSONResult;
 import jmnet.moka.common.cache.CacheManager;
-import jmnet.moka.common.template.exception.DataLoadException;
-import jmnet.moka.common.template.exception.TemplateMergeException;
-import jmnet.moka.common.template.exception.TemplateParseException;
-import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
@@ -94,19 +87,19 @@ public class PageView extends MokaAbstractView {
         String itemType = (String) mergeContext.get(MokaConstants.MERGE_ITEM_TYPE);
         boolean isPageItem = itemType.equals(MokaConstants.ITEM_PAGE);
         String itemId = (String) mergeContext.get(MokaConstants.MERGE_ITEM_ID);
-        String cid = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_ARTICLE_ID);
+        String articleId = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_ARTICLE_ID);
         HttpParamMap httpParamMap = (HttpParamMap) mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
-        String cacheType = KeyResolver.getCacheType(itemType);
+        String cacheType = CacheHelper.getCacheType(itemType);
         String cacheKey = null;
         switch (itemType) {
             case MokaConstants.ITEM_PAGE:
-                cacheKey = KeyResolver.makePgItemCacheKey(domainId, itemId, httpParamMap);
+                cacheKey = CacheHelper.makePgItemCacheKey(domainId, itemId, mergeContext);
                 break;
             case MokaConstants.ITEM_CONTAINER:
-                cacheKey = KeyResolver.makeCtItemCacheKey(domainId, itemId, null, null, httpParamMap);
+                cacheKey = CacheHelper.makeCtItemCacheKey(domainId, itemId, null, null, httpParamMap, mergeContext);
                 break;
             case MokaConstants.ITEM_COMPONENT:
-                cacheKey = KeyResolver.makeCpItemCacheKey(domainId, itemId, null, cid, httpParamMap);
+                cacheKey = CacheHelper.makeCpItemCacheKey(domainId, itemId, null, articleId, httpParamMap, mergeContext);
                 break;
             case MokaConstants.ITEM_TEMPLATE:
                 Object relCp = mergeContext.get(MokaConstants.ATTR_REL_CP);
@@ -115,7 +108,7 @@ public class PageView extends MokaAbstractView {
                         relCp = httpParamMap.get(MokaConstants.PARAM_REL_CP);
                     }
                 }
-                cacheKey = KeyResolver.makeTpItemCacheKey(domainId, itemId, null, cid, relCp == null ? null : relCp.toString(), httpParamMap);
+                cacheKey = CacheHelper.makeTpItemCacheKey(domainId, itemId, null, articleId, relCp == null ? null : relCp.toString(), httpParamMap, mergeContext);
                 break;
         }
 

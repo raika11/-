@@ -20,7 +20,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DatasetItem;
@@ -191,7 +191,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             jsonResult = loader.getJSONResult(uri, datasetParam, false);
         }
         if (jsonResult != null) {
-            merger.setData(context, KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
+            merger.setData(context, CacheHelper.makeDataId(this.getItemType(), this.getId()), jsonResult);
         }
         return jsonResult;
     }
@@ -228,10 +228,10 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 if (context.has(MokaConstants.MERGE_CONTEXT_ABTEST)) {
                     AbTest abTest = (AbTest) context.get(MokaConstants.MERGE_CONTEXT_ABTEST);
                     if (!abTest.hasDataset()) {
-                        jsonResult = dataMap.get(KeyResolver.makeDataId(this.getItemType(), this.getId()));
+                        jsonResult = dataMap.get(CacheHelper.makeDataId(this.getItemType(), this.getId()));
                     }
                 } else {
-                    jsonResult = dataMap.get(KeyResolver.makeDataId(this.getItemType(), this.getId()));
+                    jsonResult = dataMap.get(CacheHelper.makeDataId(this.getItemType(), this.getId()));
                 }
             }
             if (jsonResult == null) {

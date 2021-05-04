@@ -14,13 +14,10 @@ import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.parse.TemplateElementBuilder;
 import jmnet.moka.common.template.parse.model.TemplateElement;
-import jmnet.moka.common.template.parse.model.TemplateNode;
-import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
-import jmnet.moka.core.tms.merge.item.AdItem;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
@@ -29,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 /**
  * <pre>
@@ -53,7 +49,7 @@ public class ZoneMerger extends MokaAbstractElementMerger {
     public String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot,
             MergeContext context) {
         String domainId = ((MokaTemplateMerger) this.templateMerger).getDomainId();
-        return KeyResolver.makeAdItemCacheKey(domainId, element.getAttribute("id"));
+        return CacheHelper.makeAdItemCacheKey(domainId, element.getAttribute("id"));
     }
 
     @Override
@@ -74,7 +70,7 @@ public class ZoneMerger extends MokaAbstractElementMerger {
 
         String cacheKey = makeCacheKey(element, (MokaTemplateRoot) cpTemplateRoot, context);
         boolean isDebug = context.getMergeOptions().isDebug();
-        if (isDebug == false && this.appendCached(KeyResolver.CACHE_AD_MERGE, cacheKey, sb)) {
+        if (isDebug == false && this.appendCached(CacheHelper.CACHE_AD_MERGE, cacheKey, sb)) {
             return;
         }
 

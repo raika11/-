@@ -24,7 +24,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaFunctions;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
@@ -97,8 +97,8 @@ public class ArticleView extends AbstractView {
         MokaTemplateMerger templateMerger = null;
         PrintWriter writer = null;
 
-        String cacheType = KeyResolver.CACHE_ARTICLE_MERGE;
-        String cacheKey = KeyResolver.makeArticleCacheKey(domainId, articleId);
+        String cacheType = CacheHelper.CACHE_ARTICLE_MERGE;
+        String cacheKey = CacheHelper.makeArticleCacheKey(domainId, articleId);
 
         String cached = null;
         // 캐시된 경우

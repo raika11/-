@@ -14,7 +14,7 @@ import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.item.AdItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
@@ -40,7 +40,7 @@ public class AdMerger extends MokaAbstractElementMerger {
     public String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot,
             MergeContext context) {
         String domainId = ((MokaTemplateMerger) this.templateMerger).getDomainId();
-        return KeyResolver.makeAdItemCacheKey(domainId, element.getAttribute("id"));
+        return CacheHelper.makeAdItemCacheKey(domainId, element.getAttribute("id"));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class AdMerger extends MokaAbstractElementMerger {
         }
         String cacheKey = makeCacheKey(element, (MokaTemplateRoot) templateRoot, context);
         boolean isDebug = context.getMergeOptions().isDebug();
-        if (isDebug == false && this.appendCached(KeyResolver.CACHE_AD_MERGE, cacheKey, sb)) {
+        if (isDebug == false && this.appendCached(CacheHelper.CACHE_AD_MERGE, cacheKey, sb)) {
             return;
         }
 
@@ -98,7 +98,7 @@ public class AdMerger extends MokaAbstractElementMerger {
         if (isDebug)
             debug("END  ", element, childIndent, adSb);
         if (isDebug == false) {
-            this.setCache(KeyResolver.CACHE_AD_MERGE, cacheKey, adSb);
+            this.setCache(CacheHelper.CACHE_AD_MERGE, cacheKey, adSb);
         }
         sb.append(adSb);
     }

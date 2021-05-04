@@ -146,16 +146,22 @@
                                     <div class="button_wrap">
                                         <button class="btn btn_outline_black" onclick="openLayer(layer_memo_del);">삭제</button> 
                                         <!-- 텍스트 입력 전 비활성화 -->
-                                        <!-- <button class="btn btn_dark" disabled="desabled">저장</button> -->
+                                        <!-- <button class="btn btn_black" disabled="desabled">저장</button> -->
                                         <!-- 텍스트 입력 후 활성화 -->
-                                        <button class="btn btn_dark">저장</button> 
+                                        <button class="btn btn_black">저장</button> 
                                     </div>
                                 </div>
                                 <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
                             </div>
                             <!-- //메모 레이어 -->
-                            <div class="layer_popup layer_memo" id="layer_memo_del">
-                                <p>메모를 삭제 하시겠습니까?</p>
+                            <div class="layer_popup layer_memo layer_alert" id="layer_memo_del">
+                                <div class="alert_body">
+                                    <p>메모를 삭제 하시겠습니까?</p>
+                                    <div class="button_wrap_wide">
+                                        <button type="button" class="btn btn_outline_black btn_lg" >아니요</button>
+                                        <button type="button" class="btn btn_black btn_lg" >네</button>
+                                    </div>
+                                </div>
                             </div>
                         </mark>
                         구체적으로 ‘코박스 퍼실러티(COVAX Facility)를 통해 약 1000만 명분 글로벌 백신 기업을 통해 약 3400만 명분이다. <br />

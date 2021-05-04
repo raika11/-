@@ -15,8 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
-import jmnet.moka.core.tps.mvc.codemgt.entity.CodeSimple;
 import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
+import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfoSimple;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,7 +41,7 @@ import org.hibernate.annotations.NotFoundAction;
 @NoArgsConstructor
 @Setter
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @Entity
 @Table(name = "TB_ARTICLE_PACKAGE")
 public class ArticlePackage extends BaseAudit {
@@ -129,13 +129,12 @@ public class ArticlePackage extends BaseAudit {
      */
     @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "PKG_SEQ", referencedColumnName = "DTL_CD", insertable = false, updatable = false)
-    private CodeSimple categoryInfo;
+    @JoinColumn(name = "PKG_SEQ", referencedColumnName = "CHANNEL_ID", insertable = false, updatable = false)
+    private NewsletterInfoSimple newsletterInfo;
 
     //    @PrePersist
     //    @PreUpdate
     //    public void prePersist() {
-    //        this.D = McpString.defaultValue(this.pkgType, "B");
     //    }
 
 }

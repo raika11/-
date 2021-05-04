@@ -3,8 +3,11 @@ package jmnet.moka.core.tps.mvc.articlePackage.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.Date;
+import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -18,7 +21,9 @@ import jmnet.moka.core.tps.mvc.articlePackage.dto.ArticlePackageSearchDTO;
 import jmnet.moka.core.tps.mvc.articlePackage.dto.ArticlePackageSimpleDTO;
 import jmnet.moka.core.tps.mvc.articlePackage.entity.ArticlePackage;
 import jmnet.moka.core.tps.mvc.articlePackage.service.ArticlePackageService;
+import jmnet.moka.core.tps.mvc.newsletter.entity.NewsletterInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,31 +73,12 @@ public class ArticlePackageRestController extends AbstractCommonController {
             throws Exception {
         Page<ArticlePackage> returnValue = articlePackageService.findAll(search);
 
-        //        Converter<Set, Long> getSubscribeCount = ctx -> ctx.getSource() == null
-        //                ? null
-        //                : (long) ctx
-        //                        .getSource()
-        //                        .size();
-        //        Converter<Set<NewsletterSend>, Date> getLastSendDt = ctx -> ctx.getSource() == null || ctx
-        //                .getSource()
-        //                .size() == 0
-        //                ? null
-        //                : ctx
-        //                        .getSource()
-        //                        .stream()
-        //                        .map(NewsletterSend::getSendDt)
-        //                        .max(Date::compareTo)
-        //                        .get();
-
-        //        ModelMapper countModelMapper = new ModelMapper();
-        //        countModelMapper
-        //        modelMapper.typeMap(NewsletterInfo.class, NewsletterProductDTO.class)
-        //                   //                .addMappings(mapper -> mapper
-        //                   //                        .using(getSubscribeCount)
-        //                   //                        .map(NewsletterInfo::getNewsletterSubscribes, NewsletterProductDTO::setSubscribeCount))
-        //                   .addMappings(mapping -> mapping
-        //                           .using(getLastSendDt)
-        //                           .map(NewsletterInfo::getNewsletterSends, NewsletterProductDTO::setLastSendDt));
+        Converter<NewsletterInfo, String> newsletterYn = ctx -> ctx.getSource() == null ? "N" : "Y";
+        modelMapper
+                .typeMap(ArticlePackage.class, ArticlePackageSimpleDTO.class)
+                .addMappings(mapping -> mapping
+                        .using(newsletterYn)
+                        .map(ArticlePackage::getNewsletterInfo, (destination, value) -> destination.setNewsletterYn(value != null ? "Y" : "N")));
 
         // 리턴값 설정
         ResultListDTO<ArticlePackageSimpleDTO> resultListMessage = new ResultListDTO<>();
@@ -188,5 +174,66 @@ public class ArticlePackageRestController extends AbstractCommonController {
 
         tpsLogger.success(ActionType.UPDATE);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 기사패키지 종료
+     *
+     * @return 종료된 패키지
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "기사패키지 종료")
+    @PutMapping("/{pkgSeq}/done")
+    public ResponseEntity<?> putArticlePackage(@ApiParam(value = "기사패키지 일련번호", required = true) @PathVariable("pkgSeq") Long pkgSeq)
+            throws InvalidDataException, Exception {
+
+        ArticlePackage articlePackage = articlePackageService
+                .findByPkgSeq(pkgSeq)
+                .orElseThrow(() -> new MokaException(msg("tps.common.error.no-data")));
+        
+        // 수정
+        ArticlePackage returnValue = articlePackageService.updateArticlePackage(articlePackage
+                .toBuilder()
+                .endDt(new Date())
+                .usedYn("E")
+                .build());
+
+        // 결과리턴
+        ArticlePackageDTO dto = modelMapper.map(returnValue, ArticlePackageDTO.class);
+        ResultDTO<ArticlePackageDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.update"));
+
+        tpsLogger.success(ActionType.UPDATE);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 기사패키지 타이틀 중복 체크
+     *
+     * @param pkgTitle 패키지 타이틀
+     * @return 중복 여부
+     */
+    @ApiOperation(value = "패키지 타이틀 중복 여부")
+    @GetMapping("/{pkgTitle}/exists")
+    public ResponseEntity<?> duplicatePkgTitle(@ApiParam(value = "패키지 타이틀", required = true) @PathVariable("pkgTitle")
+    @Size(min = 1, max = 100, message = "{tps.issue.error.length.pkgTitle}") String pkgTitle) {
+
+        boolean duplicated = articlePackageService
+                .findByPkgTitle(pkgTitle)
+                .isPresent();
+        ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
+     * 기사패키지 패키지타이틀 목록
+     *
+     * @return 중복 여부
+     */
+    @ApiOperation(value = "기사패키지 패키지타이틀 목록")
+    @GetMapping("/pkgTitle")
+    public ResponseEntity<?> getPkgTitleList() {
+        ResultDTO<Set<String>> resultDTO = new ResultDTO<>(articlePackageService.findAllPkgTitle());
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 }

@@ -21,6 +21,14 @@ const NewsLetterEditFormModal = ({ show, onHide, onRowClicked }) => {
         dispatch(getEditFormList(changeSearchOption(ns)));
     };
 
+    /**
+     * 모달 닫기
+     */
+    const handleClickHide = () => {
+        dispatch(clearStore());
+        onHide();
+    };
+
     useEffect(() => {
         setSearch(storeSearch);
     }, [storeSearch]);
@@ -28,13 +36,11 @@ const NewsLetterEditFormModal = ({ show, onHide, onRowClicked }) => {
     useEffect(() => {
         if (show) {
             dispatch(getEditFormList());
-        } else {
-            dispatch(clearStore());
         }
     }, [show, dispatch]);
 
     return (
-        <MokaModal size="md" width={600} height={800} show={show} onHide={onHide} bodyClassName="d-flex flex-column" title="편집폼 검색" draggable>
+        <MokaModal size="md" width={600} height={800} show={show} onHide={handleClickHide} bodyClassName="d-flex flex-column" title="편집폼 검색" draggable>
             <Form className="mb-14" onSubmit={(e) => e.preventDefault()}>
                 <MokaSearchInput
                     className="flex-fill"

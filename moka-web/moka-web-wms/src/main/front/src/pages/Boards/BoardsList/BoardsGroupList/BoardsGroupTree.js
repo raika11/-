@@ -55,7 +55,7 @@ const BoardsGroupTree = (props) => {
                 }),
         );
         // }
-    }, [boardId, boardType, groupList]);
+    }, [boardType, groupList]);
 
     useEffect(() => {
         if (boardId) {

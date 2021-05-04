@@ -14,7 +14,7 @@ const labelWidth = 35;
  * 구독 설계 공통 폼
  * 구독 방법(구독 옵션), 개시 일정
  */
-const DesignCommonForm = ({ scb, onChangeValue }) => {
+const DesignCommonForm = ({ scb, onChangeValue, CHANNEL_TYPE }) => {
     const [repeatDy, setRepeatDy] = useState([]);
 
     /**
@@ -53,10 +53,10 @@ const DesignCommonForm = ({ scb, onChangeValue }) => {
         <React.Fragment>
             {/* 구독 방법 | 구독 옵션 */}
             <Row noGutters>
-                <Col xs={3}>
+                <Col xs={2}>
                     <MokaInputLabel as="none" label="구독 방법&nbsp;&nbsp;|&nbsp;&nbsp;구독 옵션" labelClassName="w-100" />
                 </Col>
-                <Col xs={9} className="d-flex flex-column">
+                <Col xs={10} className="d-flex flex-column pl-3">
                     <div className="mb-2">
                         <MokaInput
                             as="checkbox"
@@ -95,6 +95,15 @@ const DesignCommonForm = ({ scb, onChangeValue }) => {
                             id="myScb"
                             inputProps={{ label: '내 구독', checked: scb.myScb === 'Y' }}
                             onChange={handleChangeValue}
+                            disabled={
+                                scb.channelType === CHANNEL_TYPE[0].code ||
+                                scb.channelType === CHANNEL_TYPE[1].code ||
+                                scb.channelType === CHANNEL_TYPE[2].code ||
+                                scb.channelType === CHANNEL_TYPE[3].code ||
+                                scb.channelType === CHANNEL_TYPE[4].code ||
+                                scb.channelType === CHANNEL_TYPE[5].code ||
+                                scb.channelType === CHANNEL_TYPE[6].code
+                            }
                         />
                         <MokaInput
                             as="checkbox"
@@ -104,6 +113,15 @@ const DesignCommonForm = ({ scb, onChangeValue }) => {
                             id="newsletter"
                             inputProps={{ label: '뉴스레터', checked: scb.newsletter === 'Y' }}
                             onChange={handleChangeValue}
+                            disabled={
+                                scb.channelType === CHANNEL_TYPE[0].code ||
+                                scb.channelType === CHANNEL_TYPE[1].code ||
+                                scb.channelType === CHANNEL_TYPE[2].code ||
+                                scb.channelType === CHANNEL_TYPE[3].code ||
+                                scb.channelType === CHANNEL_TYPE[4].code ||
+                                scb.channelType === CHANNEL_TYPE[5].code ||
+                                scb.channelType === CHANNEL_TYPE[6].code
+                            }
                         />
                         <MokaInput
                             as="checkbox"
@@ -113,6 +131,15 @@ const DesignCommonForm = ({ scb, onChangeValue }) => {
                             id="push"
                             inputProps={{ label: 'App Push', checked: scb.push === 'Y' }}
                             onChange={handleChangeValue}
+                            disabled={
+                                scb.channelType === CHANNEL_TYPE[0].code ||
+                                scb.channelType === CHANNEL_TYPE[1].code ||
+                                scb.channelType === CHANNEL_TYPE[2].code ||
+                                scb.channelType === CHANNEL_TYPE[3].code ||
+                                scb.channelType === CHANNEL_TYPE[4].code ||
+                                scb.channelType === CHANNEL_TYPE[5].code ||
+                                scb.channelType === CHANNEL_TYPE[6].code
+                            }
                         />
                         <MokaInput
                             as="checkbox"
@@ -122,6 +149,7 @@ const DesignCommonForm = ({ scb, onChangeValue }) => {
                             id="artView"
                             inputProps={{ label: '기사 열람', checked: scb.artView === 'Y' }}
                             onChange={handleChangeValue}
+                            disabled={scb.channelType === CHANNEL_TYPE[0].code}
                         />
                     </div>
                 </Col>
@@ -129,10 +157,10 @@ const DesignCommonForm = ({ scb, onChangeValue }) => {
             <hr className="divider" />
             {/* 개시 일정 */}
             <Row noGutters>
-                <Col xs={3}>
+                <Col xs={2}>
                     <MokaInputLabel as="none" label="개시 일정" labelClassName="w-100" />
                 </Col>
-                <Col xs={9} className="d-flex flex-column">
+                <Col xs={10} className="d-flex flex-column pl-3">
                     <div className="d-flex align-items-center mb-2">
                         <ToggleButtonGroup value={scb.reserveYn} className="mr-3" name="reserveYn" size="sm" type="radio" onChange={(val) => onChangeValue({ reserveYn: val })}>
                             <ToggleButton type="radio" variant="outline-gray-700" value="N">
@@ -155,9 +183,11 @@ const DesignCommonForm = ({ scb, onChangeValue }) => {
                     <MokaInput
                         as="dateTimePicker"
                         className="top mb-2"
+                        name="endDt"
                         inputProps={{ width: 180 }}
                         value={scb.endDt}
-                        onChange={(date) => handleChangeDate('endDt', handleChangeDate)}
+                        onChange={(date) => handleChangeDate('endDt', date)}
+                        disabled={scb.endDtYn !== 'Y'}
                     />
                     <MokaInput
                         as="switch"

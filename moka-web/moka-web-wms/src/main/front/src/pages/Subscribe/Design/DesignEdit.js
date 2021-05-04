@@ -46,6 +46,7 @@ const DesignEdit = ({ match }) => {
     const [activeKey, setActiveKey] = useState(0);
     const [temp, setTemp] = useState({
         channelType: CHANNEL_TYPE[0].code,
+        artView: 'Y',
         reserveYn: 'N',
     });
     const [commentModalShow, setCommentModalShow] = useState(false);
@@ -53,9 +54,10 @@ const DesignEdit = ({ match }) => {
     /**
      * 구독 임시데이터 변경
      * @param {object} newData 변경 데이터
+     * @param {boolean} reset newData를 spread로 넣을지 말지
      */
-    const handleChangeValue = (newData) => {
-        setTemp({ ...temp, ...newData });
+    const handleChangeValue = (newData, reset = false) => {
+        setTemp(reset ? newData : { ...temp, ...newData });
     };
 
     /**

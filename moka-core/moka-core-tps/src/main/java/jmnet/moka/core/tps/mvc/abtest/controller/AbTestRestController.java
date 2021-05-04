@@ -134,6 +134,7 @@ public class AbTestRestController extends AbstractCommonController {
                         .equals("Y")) {
 
                     List<AbTestCase> abtestCase = abTestCaseService.findChk(abTestCaseSaveDTO);
+
                     //확인 알럿 - 페이지, 영역, 테스트대상을 비교하여 중복 케이스가 있을경우  확인 알럿 띄움
                     System.out.println("abtestCase.size======" + abtestCase.size());
                     if (McpString.isNotEmpty(abtestCase)) {

@@ -323,4 +323,53 @@
       ) }
   </select>
 
+  <!-- highlight 삭제-->
+  <select id="highlightDelete" parameterType="map" statementType="CALLABLE">
+    {call UPU_MY_HIGHLIGHT_DEL(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{_SUCCESS, mode=OUT, jdbcType=BOOLEAN, javaType=java.lang.Boolean}
+      ) }
+  </select>
+
+  <!-- 하이라이트 메모 수정-->
+  <select id="highlightUpdate" parameterType="map" statementType="CALLABLE">
+    {call UPU_MY_HIGHLIGHT_UPD(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{memo, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{_SUCCESS, mode=OUT, jdbcType=BOOLEAN, javaType=java.lang.Boolean}
+      ) }
+  </select>
+
+  <!-- 내 하이라이트 목록-->
+  <select id="highlightMy" parameterType="map" resultType="map" statementType="CALLABLE">
+    {call UPU_MY_HIGHLIGHT_LIST_SEL_BY_MEM(
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{memo, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{_TOTAL, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
+  <!--검색키워드등록-->
+  <select id="searchInsert" parameterType="map" statementType="CALLABLE">
+    {call UPU_MY_SEARCH_INS(
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{member_loginType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{member_nick, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{kwd, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{_SUCCESS, mode=OUT, jdbcType=BOOLEAN, javaType=java.lang.Boolean}
+      ) }
+  </select>
+
+  <!--내 검색키워드목록-->
+  <select id="search" parameterType="map" resultType="map" statementType="CALLABLE">
+    {call UPU_MY_SEARCH_LIST_SEL(
+      #{member_memSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
 </mapper>

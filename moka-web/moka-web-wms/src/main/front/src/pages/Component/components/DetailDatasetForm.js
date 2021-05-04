@@ -120,7 +120,7 @@ const DetailDatasetForm = ({ className, component, setComponent, origin, addMode
                         {component.dataType === DATA_TYPE_DESK && (
                             <div className="d-flex">
                                 {/* 편집 데이터셋 ID 노출 */}
-                                <MokaInput placeholder="ID" className="flex-fill" value={component.prevDeskDataset ? component.prevDeskdataset?.datasetSeq : ''} disabled />
+                                <MokaInput placeholder="ID" className="flex-fill" value={origin?.dataset ? origin?.dataset?.datasetSeq : ''} disabled />
 
                                 {/* viewYn 설정 => 등록 시에만 설정할 수 있음!!!! */}
                                 {addMode && (

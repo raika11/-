@@ -103,9 +103,11 @@ font-*,color,text-align,vertical-align, ...
 .highligth_bx button { font-size: 14px; font-weight: 700; line-height: 20px; vertical-align: top; color: #fff; }
 .highligth_bx button:nth-child(n+2) { margin-left: 13px; }
 .highligth_bx button.active { color: #ff7558; }
-::selection { background-color: #e2e2e2; }
 /* 메모 레이어 */
 .memo_layer { width: 320px; height: 212px; padding: 14px 20px 20px; }
+.memo_layer .layer_header { line-height: 20px; } 
+.memo_layer .layer_body { margin-top: 12px; }
+.memo_layer .memo_textarea { width: 100%; height: 108px; overflow-y: auto; border: 0; font-size: 15px; line-height: 24px; color: #666; }
 .memo_layer .btn_close { right: 12px; top: 12px; }
 
 
@@ -146,8 +148,9 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 /***                                             tag                                              ***/
 /****************************************************************************************************/
-.tag_wrap {display:flex;align-items:center;}
-.tag_wrap .tag {display: inline-flex;flex: 0 0 auto;width:auto;padding: 3px 12px 4px;margin-bottom:7px;background:#fff4f1;border:1px solid #f6330a;color:#f6330a;font-size: 13px;font-weight: bold;line-height:normal;}
+.tag_wrap ul { display:flex; flex-flow: wrap; align-items:center; margin: -7px -3px 0; }
+.tag_wrap ul li { margin-top: 7px; padding: 0 3px; }
+.tag_wrap .tag {flex: 0 0 auto; padding: 0 12px;background:#fff4f1;border:1px solid #f6330a;color:#f6330a;font-weight: bold;}
 
 
 /****************************************************************************************************/
@@ -161,19 +164,12 @@ font-*,color,text-align,vertical-align, ...
 .subscription_info {padding:24px 0 18px;color:#f6330a;font-size: 14px;line-height: 1.5;letter-spacing: normal;word-break: break-all;text-align: justify;}
 
 /*** 팩플레터 ***/
-.subscription_wrap.letter_wrap {display:flex;padding:30px 16px 24px;margin:40px auto;background-color: #f4f5fa;}
-.letter_wrap .thum {flex:0 0 auto;display:inline-block;width:62px;margin-top:7px;margin-right:16px;}
-.letter_wrap .pp_letter {width:calc(100% - 78px);}
-.letter_wrap .title_wrap {padding:0;height:28px;}
-.letter_wrap .title {color:#111}
-.letter_wrap .subscription_info {padding-bottom:0;color:#111;}
-.factpl_wrap { margin: 40px 0; padding: 30px 0; background-color: #f4f5fa; text-align: center; }
-.factpl_wrap header.title_wrap > .title { padding-top: 0; }
-.factpl_wrap .title_wrap .title { color: #1d1d1d; font-size: 16px; font-weight: 700; line-height: 24px;  }
-.factpl_wrap .factpl_info { margin-top: 6px; font-size: 14px; line-height: 22px; color: #1d1d1d; }
-.factpl_wrap .btn_primary { margin: 14px auto 0; }
-.factpl_wrap .btn_more { display: block; margin-top: 13px; font-size: 14px; line-height: 22px; color: #666; }
-.factpl_wrap .btn_more .ico_more { width: 12px; height: 12px; }
+.letter_wrap { margin: 40px 0; padding: 30px 0; background-color: #f4f5fa; text-align: center; }
+.letter_wrap .title { color: #1d1d1d; font-size: 16px; font-weight: 700; line-height: 24px;  }
+.letter_wrap .description { margin-top: 6px; font-size: 14px; line-height: 22px; color: #1d1d1d; }
+.letter_wrap .btn_primary { margin: 14px auto 0; }
+.letter_wrap .btn_more { display: block; margin-top: 13px; font-size: 14px; line-height: 22px; color: #666; }
+.letter_wrap .btn_more .ico_more { width: 12px; height: 12px; }
 
 /****************************************************************************************************/
 /***                                           관련기사                                            ***/
@@ -266,6 +262,12 @@ font-*,color,text-align,vertical-align, ...
     .sticky_menu .layer_fontsize { top: 73px; right: 20px; left: auto; }
     /* Medium devices (only tablet, 768px and 1023px) */
 
+    /****************************************************************************************************/
+    /***                                             tag                                              ***/
+    /****************************************************************************************************/
+    .tag_wrap .tag { padding: 3px 12px 4px; font-size: 13px; line-height: 19px; letter-spacing: -0.5px; }
+
+
     /* 속보 티커 */
     .layer_ticker { top: 62px; }
     .layer_ticker .date { display: none; }
@@ -310,7 +312,7 @@ font-*,color,text-align,vertical-align, ...
     /****************************************************************************************************/
     /***                                             tag                                              ***/
     /****************************************************************************************************/
-    .tag_wrap .tag {padding: 2px 12px 4px;font-size: 12px;}
+    .tag_wrap .tag {padding: 2px 12px 4px; font-size: 12px; line-height: 18px; }
 
     /****************************************************************************************************/
     /***                                            구독                                              ***/
@@ -323,16 +325,12 @@ font-*,color,text-align,vertical-align, ...
     /****************************************************************************************************/
 
     /*** 팩플레터 ***/
-    .subscription_wrap.letter_wrap {padding:18px 16px;}
-    .letter_wrap .thum {width:70px;margin-top:0;}
-    .letter_wrap .pp_letter {width:calc(100% - 86px);}
-    .letter_wrap .subscription_info {padding-bottom:0;color:#111;}
 
     /* 댓글레이어 */
     .layer_comment { right: -100%; transition: all 0.8s; width: 560px; padding: 30px 40px; box-shadow: -5px 2px 7px rgba(0, 0, 0, 0.08); }
     .layer_comment .btn_close { position: absolute; right: 40px; top: 30px; }
     .main_sm_text_area { display: none; }
-
+    .sticky_menu .layer_fontsize::before,
     .sticky_menu .layer_share::before { content: ''; z-index: 1; position: absolute; left: -5px; top: 20px; transform: rotate(-45deg); width: 7px; height: 7px; border-left: 1px solid rgba(0, 0, 0, 0.2); border-top: 1px solid rgba(0, 0, 0, 0.2); background-color: #fff; }
 
     /* 속보티커 */

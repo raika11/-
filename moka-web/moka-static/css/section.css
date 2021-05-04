@@ -218,10 +218,13 @@
     .aside .title_wrap{padding-top:13px;}
 
     /* rank_list */
+    .rank_list{margin-bottom: 40px;}
     .rank_list .card_body{padding-left:23px;}
 
-    /* 정정보도*/
+    /*최신기사 예외처리*/
+    .float_left .story_list{padding-top: 8px;}
 
+    /* 정정보도*/
     .notice_wrap{margin-top: 40px; margin-bottom: 40px;}
     .info_wrap{width: 100%; background-color: #f3f3f3; padding: 13px 24px;}
     .info_wrap .info_area{display: flex; align-items: center;}

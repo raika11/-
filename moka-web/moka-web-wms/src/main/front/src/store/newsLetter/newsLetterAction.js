@@ -14,8 +14,12 @@ export const clearNewsLetter = createAction(CLEAR_NEWS_LETTER, (payload) => payl
  */
 export const CHANGE_NEWS_LETTER_SEARCH_OPTION = 'newsLetter/CHANGE_NEWS_LETTER_SEARCH_OPTION';
 export const changeNewsLetterSearchOption = createAction(CHANGE_NEWS_LETTER_SEARCH_OPTION, (search) => search);
+export const CHANGE_NEWS_LETTER_HISTORY_SEARCH_OPTION = 'newsLetter/CHANGE_NEWS_LETTER_HISTORY_SEARCH_OPTION';
+export const changeNewsLetterHitorySearchOption = createAction(CHANGE_NEWS_LETTER_HISTORY_SEARCH_OPTION, (search) => search);
 export const CHANGE_NEWS_LETTER_SEND_SEARCH_OPTION = 'newsLetter/CHANGE_NEWS_LETTER_SEND_SEARCH_OPTION';
 export const changeNewsLetterSendSearchOption = createAction(CHANGE_NEWS_LETTER_SEND_SEARCH_OPTION, (search) => search);
+export const CHANGE_INVALID_LIST = 'newsLetter/CHANGE_INVALID_LIST';
+export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
 /**
  * 조회
@@ -28,9 +32,21 @@ export const [GET_NEWS_LETTER_CHANNEL_TYPE, GET_NEWS_LETTER_CHANNEL_TYPE_SUCCESS
     'newsLetter/GET_NEWS_LETTER_CHANNEL_TYPE',
 );
 export const getNewsLetterChannelType = createAction(GET_NEWS_LETTER_CHANNEL_TYPE, ({ channelType, callback }) => ({ channelType, callback }));
+export const [GET_NEWS_LETTER_HISTORY_LIST, GET_NEWS_LETTER_HISTORY_LIST_SUCCESS, GET_NEWS_LETTER_HISTORY_LIST_FAILURE] = createRequestActionTypes(
+    'newsLetter/GET_NEWS_LETTER_HISTORY_LIST',
+);
+export const getNewsLetterHistoryList = createAction(GET_NEWS_LETTER_HISTORY_LIST, ({ letterSeq, search }) => ({ letterSeq, search }));
+export const [GET_NEWS_LETTER_HISTORY, GET_NEWS_LETTER_HISTORY_SUCCESS, GET_NEWS_LETTER_HISTORY_FAILURE] = createRequestActionTypes('newsLetter/GET_NEWS_LETTER_HISTORY');
+export const getNewsLetterHistory = createAction(GET_NEWS_LETTER_HISTORY, (histSeq) => histSeq);
 export const [GET_NEWS_LETTER_SEND_LIST, GET_NEWS_LETTER_SEND_LIST_SUCCESS, GET_NEWS_LETTER_SEND_LIST_FAILURE] = createRequestActionTypes('newsLetter/GET_NEWS_LETTER_SEND_LIST');
 export const getNewsLetterSendList = createAction(GET_NEWS_LETTER_SEND_LIST, (...actions) => actions);
 export const [GET_NEWS_LETTER_PASSIVE_LIST, GET_NEWS_LETTER_PASSIVE_LIST_SUCCESS, GET_NEWS_LETTER_PASSIVE_LIST_FAILURE] = createRequestActionTypes(
     'newsLetter/GET_NEWS_LETTER_PASSIVE_LIST',
 );
 export const getNewsLetterPassiveList = createAction(GET_NEWS_LETTER_PASSIVE_LIST);
+
+/**
+ * 저장
+ */
+export const SAVE_NEWS_LETTER = 'newsLetter/SAVE_NEWS_LETTER';
+export const saveNewsLetter = createAction(SAVE_NEWS_LETTER, ({ newsLetter, callback }) => ({ newsLetter, callback }));

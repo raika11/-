@@ -145,9 +145,7 @@
                     </div>
 
                     <h2 class="guide_title">그룹</h2>
-                    <p>class명은 ul에 <strong>skin_group</strong> 사용<br />
-                        기본 높이 값은 skin_group에 <strong>pc - min-height:291px</strong>을 주었습니다.
-                    </p>
+                    <p>class명은 ul에 <strong>skin_group</strong> 사용</p>
                     <div class="sample_wrap">
                         <div class="chain_wrap">
                             <ul class="skin_group row_mg">
@@ -171,7 +169,7 @@
                     <div class="code_wrap">
 <pre><code class="html">
 &lt;div class="chain_wrap"&gt;
-    &lt;ul class="skin_group "&gt;
+    &lt;ul class="skin_group row_mg"&gt;
         &lt;li class="card_skin col_sm12 col_lg4 "&gt;
             &lt;div class="card_image"&gt;
                 &lt;figure&gt;&lt;a href="#"&gt;&lt;img width="278" src="//via.placeholder.com/278x156" alt="..."&gt;&lt;/a&gt;&lt;/figure&gt;
@@ -194,10 +192,10 @@
                     
 
                     <h2 class="guide_title">조합형</h2>
-                    <p>flex의 <strong>align-items: stretch</strong> 속성으로 가장 높은 객체의 높이를 동일 적용 시켰습니다.</p>
+                    <p>조합형은 각 높이가 다르기 때문에 <strong>skin_mix</strong> class명을 추가하여 <strong>align-items: stretch</strong> 속성으로 가장 높은 객체의 높이를 동일 적용 시켜줍니다.</p>
                     <div class="sample_wrap">
                         <div class="chain_wrap">
-                            <ul class="skin_group row_mg">
+                            <ul class="skin_group skin_mix row_mg">
                                 <li class="card_skin col_sm12 col_lg4">
                                     <div class="card_image">
                                         <figure><a href="#"><img width="278" src="//via.placeholder.com/278x156" alt="..."></a></figure>
@@ -233,7 +231,7 @@
                     <div class="code_wrap">
 <pre><code class="html">
 &lt;div class="chain_wrap"&gt;
-    &lt;ul class="skin_group row_mg"&gt;
+    &lt;ul class="skin_group skin_mix row_mg"&gt;
         &lt;li class="card_skin col_sm12 col_lg4"&gt;
             &lt;div class="card_image"&gt;
                 &lt;figure&gt;&lt;a href="#"&gt;&lt;img width="278" src="//via.placeholder.com/278x156" alt="..."&gt;&lt;/a&gt;&lt;/figure&gt;
@@ -266,10 +264,13 @@
 </code></pre>
                     </div>
 
-                    <h2 class="guide_title">슬라이딩 - 모바일 한정</h2>
+                    <h2 class="guide_title">슬라이딩1</h2>
                     <p>슬라이딩 플러그인은 swiper를 사용합니다. 그룹형의 skin_group 를 감싸는 <strong>scroll_sm_wrap</strong>클래스로 script를 호출 합니다.<br />
                         슬라이딩시 페이지네이션이나 스크롤 버튼은 아직 디자인상 없습니다. 디자인 나오면 추가/수정 예정 입니다.</p>
                     <div class="sample_wrap">
+                        <header class="title_wrap">
+                            <h3 class="title">문화 많이 본 기사</h3>
+                        </header>
                         <div class="scroll_sm_wrap swiper-container">
                             <ul class="skin_group swiper-wrapper">
                                 <li class="card_skin col_lg4 swiper-slide">
@@ -299,13 +300,20 @@
                                         <button type="button" class="btn btn_outline_white">더 많은 구독 상품 보러가기</button>
                                     </div>
                                 </li>
+                                <li class="card_skin col_lg4 swiper-slide"><div class="card_image"><figure><a href="#"><img width="278" src="//via.placeholder.com/278x156" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전</a></h2></div><div class="card_foot"><h3 class="title"><a href="#">앤츠랩</a></h3><button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button></div></li></li>
+                                <li class="card_skin col_lg4 swiper-slide"><div class="card_image"><figure><a href="#"><img width="278" src="//via.placeholder.com/278x156" alt="..."></a></figure></div><div class="card_body"><h2 class="headline"><a href="#">‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전</a></h2></div><div class="card_foot"><h3 class="title"><a href="#">앤츠랩</a></h3><button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button></div></li></li>
                             </ul>
                             <div class="swiper-pagination orange"></div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
                         </div>
                     </div>
                     <div class="code_wrap">
 <pre><code class="html">
-    &lt;div class="scroll_sm_wrap swiper-container"&gt;
+&lt;header class="title_wrap"&gt;
+    &lt;h3 class="title"&gt;문화 많이 본 기사&lt;/h3&gt;
+&lt;/header&gt;
+&lt;div class="scroll_sm_wrap swiper-container"&gt;
     &lt;ul class="skin_group swiper-wrapper"&gt;
         &lt;li class="card_skin col_lg4 swiper-slide"&gt;
             &lt;div class="card_image"&gt;
@@ -334,8 +342,12 @@
                 &lt;button type="button" class="btn btn_outline_white"&gt;더 많은 구독 상품 보러가기&lt;/button&gt;
             &lt;/div&gt;
         &lt;/li&gt;
+        &lt;li class="card_skin col_lg4 swiper-slide"&gt;&lt;div class="card_image"&gt;&lt;figure&gt;&lt;a href="#"&gt;&lt;img width="278" src="//via.placeholder.com/278x156" alt="..."&gt;&lt;/a&gt;&lt;/figure&gt;&lt;/div&gt;&lt;div class="card_body"&gt;&lt;h2 class="headline"&gt;&lt;a href="#"&gt;‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전&lt;/a&gt;&lt;/h2&gt;&lt;/div&gt;&lt;div class="card_foot"&gt;&lt;h3 class="title"&gt;&lt;a href="#"&gt;앤츠랩&lt;/a&gt;&lt;/h3&gt;&lt;button type="button" class="btn btn_outline_orange"&gt;&lt;i class="ico_plus_orange"&gt;&lt;/i&gt;구독&lt;/button&gt;&lt;/div&gt;&lt;/li&gt;&lt;/li&gt;
+        &lt;li class="card_skin col_lg4 swiper-slide"&gt;&lt;div class="card_image"&gt;&lt;figure&gt;&lt;a href="#"&gt;&lt;img width="278" src="//via.placeholder.com/278x156" alt="..."&gt;&lt;/a&gt;&lt;/figure&gt;&lt;/div&gt;&lt;div class="card_body"&gt;&lt;h2 class="headline"&gt;&lt;a href="#"&gt;‘개발자님이시여’…쏘카ㆍ컬리 등 스타트업 6개사 CEO 구애작전&lt;/a&gt;&lt;/h2&gt;&lt;/div&gt;&lt;div class="card_foot"&gt;&lt;h3 class="title"&gt;&lt;a href="#"&gt;앤츠랩&lt;/a&gt;&lt;/h3&gt;&lt;button type="button" class="btn btn_outline_orange"&gt;&lt;i class="ico_plus_orange"&gt;&lt;/i&gt;구독&lt;/button&gt;&lt;/div&gt;&lt;/li&gt;&lt;/li&gt;
     &lt;/ul&gt;
-    &lt;div class="swiper-pagination"&gt;&lt;/div&gt;
+    &lt;div class="swiper-pagination orange"&gt;&lt;/div&gt;
+    &lt;div class="swiper-button-next"&gt;&lt;/div&gt;
+    &lt;div class="swiper-button-prev"&gt;&lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
                     </div>

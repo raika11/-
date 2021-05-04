@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.articlePackage.service;
 
 import java.util.Optional;
+import java.util.Set;
 import jmnet.moka.core.tps.mvc.articlePackage.dto.ArticlePackageSearchDTO;
 import jmnet.moka.core.tps.mvc.articlePackage.entity.ArticlePackage;
 import org.springframework.data.domain.Page;
@@ -49,4 +50,19 @@ public interface ArticlePackageService {
      * @return
      */
     ArticlePackage updateArticlePackage(ArticlePackage articlePackage);
+
+    /**
+     * 패키지 타이틀로 기사패키지 조회
+     *
+     * @param pkgTitle 패키지 타이틀
+     * @return
+     */
+    Optional<ArticlePackage> findByPkgTitle(String pkgTitle);
+
+    /**
+     * 패키지 타이틀 리스트
+     *
+     * @return
+     */
+    Set<String> findAllPkgTitle();
 }

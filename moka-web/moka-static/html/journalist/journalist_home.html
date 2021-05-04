@@ -35,6 +35,7 @@
         <header id="header" class="header">
             <div class="uh">
                 <a href="javascript:(0);" class="logo"><h2>The JoongAng</h2></a>
+                
                 <div class="header_right_area">
                     <div class="header_option_area">
                         <button type="button" class="btn_search"><i class="ico_search"></i><span class="visually_hidden">검색</span></button>
@@ -47,6 +48,32 @@
 
         <!-- container -->
         <main role="main" id="container">
+            <!-- header_sticky -->
+            <div class="header_reporter_sticky fixed">      
+                <h3 class="name">이하경</h3>
+                <p class="profile_info">중앙일보 주필·부사장</p>
+                <button type="button" class="btn btn_default">구독</button>
+                <button type="button" class="btn_share" onclick="openLayer(header_layer_share);"><i class="ico_share"></i><span class="visually_hidden">공유</span></button>
+                <div class="layer_popup layer_share" id="header_layer_share"><!-- 여기에 개별 클래스 추가 -->
+                    <div class="layer_header">
+                        <strong class="layer_title">공유</strong>
+                    </div>
+                    <div class="layer_body">
+                        <ul>
+                            <li><button type="button"><i class="ico_sns_ktalk">카카오톡 이미지</i><span>카카오톡</span></button></li>
+                            <li><button type="button"><i class="ico_sns_face">f</i><span>페이스북</span></button></li>
+                            <li><button type="button"><i class="ico_sns_ktory">카카오스토리 이미지</i><span>카카오스토리</span></button></li>
+                            <li><button type="button"><i class="ico_sns_twt">트위터 이미지</i><span>트위터</span></button></li>
+                            <li><button type="button"><i class="ico_sns_mail">메일 이미지</i><span>메일</span></button></li>
+                            <li><button type="button"><i class="ico_sns_pinter">핀터레스트 이미지</i><span>핀터레스트</span></button></li>
+                            <li><button type="button"><i class="ico_sns_band">네이버밴드 이미지</i><span>밴드</span></button></li>
+                            <li><button type="button"><i class="ico_sns_url">url 이미지</i><span>URL 복사</span></button></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+                </div>
+            </div>
+            <!-- //header_sticky -->
             <!-- contents -->
             <section class="contents">
                 <header class="section_header_wrap section_header_custom_wrap">

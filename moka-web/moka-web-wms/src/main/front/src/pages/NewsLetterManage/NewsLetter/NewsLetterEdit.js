@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -24,13 +24,13 @@ const NewsLetterEdit = ({ match }) => {
     const invalidList = useSelector(({ newsLetter }) => newsLetter.invalidList);
     const [temp, setTemp] = useState(initialState.newsLetter.letterInfo);
     const [error, setError] = useState({});
-    const sendInfoRef = useRef(null);
 
     /**
      * 입력값 변경
      */
     const handleChangeValue = useCallback(
         (data) => {
+            console.log(data);
             setTemp({ ...temp, ...data });
             Object.keys(data).forEach((key) => {
                 if (error[key]) {
@@ -48,7 +48,6 @@ const NewsLetterEdit = ({ match }) => {
     const validate = (obj) => {
         let isInvalid = false;
         let errList = [];
-
         // 발송 방법 체크
         if (commonUtil.isEmpty(obj.sendType)) {
             errList.push({
@@ -73,6 +72,34 @@ const NewsLetterEdit = ({ match }) => {
             });
             isInvalid = isInvalid || true;
         }
+        // 발송 콘텐츠 채널 타입 체크
+        if (obj.sendType === 'A' && commonUtil.isEmpty(obj.channelType)) {
+            errList.push({
+                field: 'channelType',
+                reason: '발송 콘텐츠 타입을 선택하세요',
+            });
+            isInvalid = isInvalid || true;
+        }
+        // 채널 아이디 체크
+        if (
+            obj.sendType === 'A' &&
+            Number(obj.channelId) === 0 &&
+            (obj.channelType === 'ISSUE' || obj.channelType === 'TOPIC' || obj.channelType === 'SERIES' || obj.channelType === 'JPOD' || obj.channelType === 'REPORTER')
+        ) {
+            errList.push({
+                field: 'channelId',
+                reason: '콘텐츠 타입의 이슈, J팟 채널, 기자 등 해당 채널 값을 선택하세요',
+            });
+            isInvalid = isInvalid || true;
+        }
+        // 채널 데이터 아이디 체크
+        if (obj.sendType === 'A' && Number(obj.channelDataId) === 0 && obj.channelType === 'ARTPKG') {
+            errList.push({
+                field: 'channelDataId',
+                reason: '콘텐츠 타입의 에피소드 또는 기사를 선택하세요',
+            });
+            isInvalid = isInvalid || true;
+        }
         // 뉴스레터 명 체크
         if (commonUtil.isEmpty(obj.letterName)) {
             errList.push({
@@ -89,32 +116,40 @@ const NewsLetterEdit = ({ match }) => {
             });
             isInvalid = isInvalid || true;
         }
+        // // 발송 조건 체크
+        // if (obj.sendType === 'A' && (commonUtil.isEmpty(obj.sendOrder) || commonUtil.isEmpty(String(obj.sendMinCnt)) || commonUtil.isEmpty(String(obj.sendMaxCnt)))) {
+        //     errList.push({
+        //         field: 'sendCondition',
+        //         reason: '레이아웃에 맞는 발송 조건과 콘텐츠 조건을 입력하세요',
+        //     });
+        //     isInvalid = isInvalid || true;
+        // }
         // 발송 방법이 자동일 때 체크할 목록
         if (obj.sendType === 'A') {
-            // 채널 타입 체크
-            if (commonUtil.isEmpty(obj.channelType)) {
-                errList.push({
-                    field: 'channelType',
-                    reason: '채널 타입을 선택하세요',
-                });
-                isInvalid = isInvalid || true;
-            }
-            // 채널 아이디 체크
-            if (commonUtil.isEmpty(obj.channelId) && (obj.channelType === 'ISSUE' || obj.channelType === 'JPOD' || obj.channelType === 'REPORTER')) {
-                errList.push({
-                    field: 'channelId',
-                    reason: '이슈, J팟 채널, 기자 등 해당 채널 값을 선택하세요',
-                });
-                isInvalid = isInvalid || true;
-            }
-            // 채널 데이터 아이디 체크
-            if (commonUtil.isEmpty(obj.channelDataId) && obj.channelType === 'ARTPKG') {
-                errList.push({
-                    field: 'channelDataId',
-                    reason: '에피소드 또는 기사를 선택하세요',
-                });
-                isInvalid = isInvalid || true;
-            }
+            // // 채널 타입 체크
+            // if (commonUtil.isEmpty(obj.channelType)) {
+            //     errList.push({
+            //         field: 'channelType',
+            //         reason: '발송 콘텐츠 타입을 선택하세요',
+            //     });
+            //     isInvalid = isInvalid || true;
+            // }
+            // // 채널 아이디 체크
+            // if (commonUtil.isEmpty(obj.channelId) && (obj.channelType === 'ISSUE' || obj.channelType === 'JPOD' || obj.channelType === 'REPORTER')) {
+            //     errList.push({
+            //         field: 'channelId',
+            //         reason: '이슈, J팟 채널, 기자 등 해당 채널 값을 선택하세요',
+            //     });
+            //     isInvalid = isInvalid || true;
+            // }
+            // // 채널 데이터 아이디 체크
+            // if (commonUtil.isEmpty(obj.channelDataId) && obj.channelType === 'ARTPKG') {
+            //     errList.push({
+            //         field: 'channelDataId',
+            //         reason: '에피소드 또는 기사를 선택하세요',
+            //     });
+            //     isInvalid = isInvalid || true;
+            // }
             // 발송 조건 체크
             if (commonUtil.isEmpty(obj.sendOrder) || commonUtil.isEmpty(String(obj.sendMinCnt)) || commonUtil.isEmpty(String(obj.sendMaxCnt))) {
                 errList.push({
@@ -133,7 +168,7 @@ const NewsLetterEdit = ({ match }) => {
             } else if (obj.sendPeriod === 'D' && commonUtil.isEmpty(obj.sendTime)) {
                 errList.push({
                     field: 'sendPeriodInfo',
-                    reason: '매일 발송될 시간을 입력하세요',
+                    reason: '발송 시간을 입력하세요',
                 });
                 isInvalid = isInvalid || true;
             } else if ((obj.sendPeriod === 'W' || obj.sendPeriod === 'M') && (commonUtil.isEmpty(obj.sendDay) || commonUtil.isEmpty(obj.sendTime))) {
@@ -228,6 +263,13 @@ const NewsLetterEdit = ({ match }) => {
             });
             isInvalid = isInvalid || true;
         }
+        if (commonUtil.isEmpty(obj.sendStartDt)) {
+            errList.push({
+                field: 'sendStartDt',
+                reason: '발송 시작일을 입력하세요',
+            });
+            isInvalid = isInvalid || true;
+        }
 
         dispatch(changeInvalidList(errList));
         return !isInvalid;
@@ -237,18 +279,24 @@ const NewsLetterEdit = ({ match }) => {
      * 저장
      */
     const handleClickSave = () => {
-        if (validate(temp)) {
-            dispatch(
-                saveNewsLetter({
-                    newsLetter: temp,
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            toast.success(header.message);
-                        } else {
-                            toast.fail(header.message);
-                        }
-                    },
-                }),
+        let nt = { ...temp, sendTime: temp.sendTime.isValid() ? moment(temp.sendTime).format('HH:mm') : null };
+        if (validate(nt)) {
+            messageBox.confirm(
+                '뉴스레터 상품을 등록하시겠습니까?',
+                () =>
+                    dispatch(
+                        saveNewsLetter({
+                            newsLetter: nt,
+                            callback: ({ header, body }) => {
+                                if (header.success) {
+                                    toast.success(header.message);
+                                } else {
+                                    toast.fail(header.message);
+                                }
+                            },
+                        }),
+                    ),
+                () => {},
             );
         } else {
             console.log(error);
@@ -259,7 +307,71 @@ const NewsLetterEdit = ({ match }) => {
      * 임시저장
      */
     const handleClickTempSave = () => {
-        let nt = { ...temp, status: 'P' };
+        // 임시 저장 (status: P})
+        let nt = { ...temp, status: 'P', sendTime: temp.sendTime.isValid() ? moment(temp.sendTime).format('HH:mm') : null };
+        delete nt.letterSeq;
+        // if (validate(nt)) {
+        dispatch(
+            saveNewsLetter({
+                newsLetter: nt,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                        history.push(`${match.path}/${body.letterSeq}`);
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
+        // } else {
+        //     console.log(error);
+        // }
+    };
+
+    /**
+     * 중지
+     */
+    const handleClickStop = () => {
+        // 중지 (status: S)
+        let nt = { ...temp, status: 'S', sendTime: temp.sendTime.isValid() ? moment(temp.sendTime).format('HH:mm') : null };
+        dispatch(
+            saveNewsLetter({
+                newsLetter: nt,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
+    /**
+     * 취소
+     */
+    const handleClickCancel = () => {
+        if (!letterSeq) {
+            messageBox.confirm(
+                '뉴스레터 상품 등록을 취소 하시겠습니까?',
+                () => {
+                    history.push(match.path);
+                },
+                () => {},
+            );
+        } else {
+            history.push(match.path);
+        }
+    };
+
+    /**
+     * 재개
+     */
+    const handleClickResume = () => {
+        // 유효성 검사를 통해 활성 상태로 전환 (status: Y)
+        let nt = { ...temp, status: 'Y', sendTime: temp.sendTime.isValid() ? moment(temp.sendTime).format('HH:mm') : null };
         if (validate(nt)) {
             dispatch(
                 saveNewsLetter({
@@ -273,59 +385,29 @@ const NewsLetterEdit = ({ match }) => {
                     },
                 }),
             );
-        } else {
-            console.log(error);
         }
-    };
-
-    /**
-     * 취소
-     */
-    const handleClickCancel = () => {
-        messageBox.confirm(
-            '뉴스레터 상품 등록을 취소 하시겠습니까?',
-            () => {
-                history.push(match.path);
-            },
-            () => {},
-        );
     };
 
     useEffect(() => {
         // 뉴스레터 상세 조회
         if (letterSeq) {
             dispatch(getNewsLetter(letterSeq));
+        } else {
+            dispatch(clearNewsLetter());
         }
     }, [letterSeq, dispatch]);
 
     useEffect(() => {
-        return () => {
-            dispatch(clearNewsLetter());
-        };
-    }, [dispatch]);
-
-    useEffect(() => {
         // local temp 셋팅
+        const nd = new Date();
         let st = moment(storeLetter.sendTime, DB_DATEFORMAT);
-        if (!st.isValid()) st = null;
+        if (!st.isValid()) st = moment(nd);
         let ssd = moment(storeLetter.sendStartDt, DB_DATEFORMAT);
-        if (!ssd.isValid()) st = null;
+        if (!ssd.isValid()) ssd = null;
 
         setTemp({ ...storeLetter, sendTime: st, sendStartDt: ssd });
         setError({});
     }, [storeLetter]);
-
-    useEffect(() => {
-        // 발송자 명이 바뀌면 발송자 정보 셋팅
-        if (sendInfoRef.current) {
-            if (sendInfoRef.current.sender.value === 'ja') {
-                setTemp({ ...temp, senderName: '중앙일보', senderEmail: 'root@joongang.co.kr' });
-            } else {
-                setTemp({ ...temp, senderName: '', senderEmail: '' });
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sendInfoRef]);
 
     useEffect(() => {
         // 발송 방법이 바뀌면 상세 정보 초기화
@@ -335,7 +417,12 @@ const NewsLetterEdit = ({ match }) => {
 
     useEffect(() => {
         setError(invalidListToError(invalidList));
+        if (invalidList.length > 0) {
+            messageBox.alert(invalidList[0].reason);
+        }
     }, [invalidList]);
+
+    console.log(temp.sendTime);
 
     return (
         <MokaCard
@@ -343,36 +430,50 @@ const NewsLetterEdit = ({ match }) => {
             title={`뉴스레터 상품 ${letterSeq ? '수정' : '등록'}`}
             footer
             footerButtons={[
-                letterSeq && {
-                    text: '미리보기',
-                    variant: 'outline-neutral',
-                    className: 'mr-1',
-                },
+                letterSeq &&
+                    temp.status === 'Y' && {
+                        text: '미리보기',
+                        variant: 'outline-neutral',
+                        className: 'mr-1',
+                    },
                 {
                     text: '임시저장',
                     variant: 'temp',
                     className: 'mr-1',
                     onClick: handleClickTempSave,
                 },
-                {
-                    text: letterSeq ? '수정' : '저장',
+                temp.status !== 'Y' && {
+                    text: letterSeq ? (temp.status === 'P' ? '저장' : '수정') : '저장',
                     variant: 'positive',
-                    disabled: !temp.containerSeq ? true : false,
+                    disabled: !temp.containerSeq,
                     className: 'mr-1',
                     onClick: handleClickSave,
                 },
+                letterSeq &&
+                    temp.status === 'Y' && {
+                        text: '중지',
+                        variant: 'negative',
+                        className: 'mr-1',
+                        onClick: handleClickStop,
+                    },
                 {
                     text: '취소',
                     variant: 'negative',
                     onClick: handleClickCancel,
                 },
+                letterSeq &&
+                    temp.status === 'S' && {
+                        text: '재개',
+                        variant: 'positive',
+                        onClick: handleClickResume,
+                    },
             ].filter(Boolean)}
         >
             <Form>
                 {/* 뉴스레터 기본정보 */}
                 <NewsLetterBasicInfo letterSeq={letterSeq} temp={temp} onChangeValue={handleChangeValue} error={error} setError={setError} />
                 {/* 뉴스레터 발송정보 */}
-                <NewsLetterSendInfo ref={sendInfoRef} temp={temp} onChangeValue={handleChangeValue} error={error} setError={setError} />
+                <NewsLetterSendInfo temp={temp} onChangeValue={handleChangeValue} error={error} setError={setError} />
                 {/* 뉴스레터 설정 */}
                 {/* <NewsLetterSetInfo temp={temp} setTemp={setTemp} onChangeValue={handleChangeValue} /> */}
             </Form>

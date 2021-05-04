@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@/components';
@@ -15,7 +15,7 @@ import { GRID_HEADER_HEIGHT } from '@/style_constants';
 const NewsLetterAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { total, list, search } = useSelector(({ newsLetter }) => newsLetter.newsLetter);
+    const { total, list, search, letterInfo } = useSelector(({ newsLetter }) => newsLetter.newsLetter, shallowEqual);
     const loading = useSelector(({ loading }) => loading[GET_NEWS_LETTER_LIST]);
     const [rowData, setRowData] = useState([]);
 
@@ -88,6 +88,7 @@ const NewsLetterAgGrid = ({ match }) => {
                 size={search.size}
                 total={total}
                 onChangeSearchOption={handleChangeSearchOption}
+                selected={letterInfo.letterSeq}
             />
         </>
     );

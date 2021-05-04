@@ -68,9 +68,9 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
     /**
      * 삭제여부
      */
-    @Column(name = "DEL_YN", nullable = false)
+    @Column(name = "DEL_YN")
     @Builder.Default
-    private String delYn = MokaConstants.YES;
+    private String delYn = MokaConstants.NO;
 
     /**
      * 말머리1 이름

@@ -113,6 +113,11 @@ font-*,color,text-align,vertical-align, ...
 .layer_memo .layer_footer { display: flex; align-items: center; justify-content: space-between; overflow: hidden; margin-top: 10px; }
 .layer_memo .btn_close { right: 12px; top: 12px; }
 
+.layer_memo.layer_alert { padding: 0; }
+.layer_memo .alert_body { height: 100%; padding: 68px 0; }
+.layer_memo .alert_body p { font-size: 14px; text-align: center; color: #111; }
+.layer_memo .alert_body .button_wrap_wide { margin-top: 20px; }
+
 .fs1 {font-size:14px;line-height:1.93;letter-spacing:normal;}
 .fs2 {font-size:16px;line-height:1.81;letter-spacing:normal;}
 .fs3 {font-size:18px;line-height:1.72;letter-spacing:-0.5px;}

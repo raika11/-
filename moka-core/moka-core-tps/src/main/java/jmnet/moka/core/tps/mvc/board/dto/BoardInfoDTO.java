@@ -68,8 +68,6 @@ public class BoardInfoDTO {
     @Size(min = 0, max = 24, message = "{tps.board-info.error.size.channelType}")
     private String channelType;
 
-
-
     /**
      * 사용여부
      */
@@ -77,6 +75,13 @@ public class BoardInfoDTO {
     @Builder.Default
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.usedYn}")
     private String usedYn = MokaConstants.YES;
+
+    /**
+     * 삭제여부
+     */
+    @ApiModelProperty("삭제여부")
+    @Builder.Default
+    private String delYn = MokaConstants.NO;
 
     /**
      * 말머리1

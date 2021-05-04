@@ -35,6 +35,7 @@
         <header id="header" class="header">
             <div class="uh">
                 <a href="javascript:(0);" class="logo"><h2>The JoongAng</h2></a>
+                
                 <div class="header_right_area">
                     <div class="header_option_area">
                         <button type="button" class="btn_search"><i class="ico_search"></i><span class="visually_hidden">검색</span></button>
@@ -47,6 +48,32 @@
 
         <!-- container -->
         <main role="main" id="container">
+            <!-- header_sticky -->
+            <div class="header_reporter_sticky fixed">      
+                <h3 class="name">이하경</h3>
+                <p class="profile_info">중앙일보 주필·부사장</p>
+                <button type="button" class="btn btn_default">구독</button>
+                <button type="button" class="btn_share" onclick="openLayer(header_layer_share);"><i class="ico_share"></i><span class="visually_hidden">공유</span></button>
+                <div class="layer_popup layer_share" id="header_layer_share"><!-- 여기에 개별 클래스 추가 -->
+                    <div class="layer_header">
+                        <strong class="layer_title">공유</strong>
+                    </div>
+                    <div class="layer_body">
+                        <ul>
+                            <li><button type="button"><i class="ico_sns_ktalk">카카오톡 이미지</i><span>카카오톡</span></button></li>
+                            <li><button type="button"><i class="ico_sns_face">f</i><span>페이스북</span></button></li>
+                            <li><button type="button"><i class="ico_sns_ktory">카카오스토리 이미지</i><span>카카오스토리</span></button></li>
+                            <li><button type="button"><i class="ico_sns_twt">트위터 이미지</i><span>트위터</span></button></li>
+                            <li><button type="button"><i class="ico_sns_mail">메일 이미지</i><span>메일</span></button></li>
+                            <li><button type="button"><i class="ico_sns_pinter">핀터레스트 이미지</i><span>핀터레스트</span></button></li>
+                            <li><button type="button"><i class="ico_sns_band">네이버밴드 이미지</i><span>밴드</span></button></li>
+                            <li><button type="button"><i class="ico_sns_url">url 이미지</i><span>URL 복사</span></button></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+                </div>
+            </div>
+            <!-- //header_sticky -->
             <!-- contents -->
             <section class="contents">
                 <header class="section_header_wrap section_header_custom_wrap">
@@ -107,9 +134,6 @@
                                 <li>
                                     <button type="button" class="btn_twitter"><i class="ico_twitter"></i><span class="visually_hidden">트위터</span></button>
                                 </li>
-                                <li class="">
-                                    <button type="button" class="btn_share"><i class="ico_share"></i><span class="visually_hidden">공유</span></button>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -117,7 +141,7 @@
                     <div class="journalist_popularity row">
                         <div class="col_sm6 col_lg6">
                             <dl>
-                                <dt>응원<button type="button" class="btn_info" onclick="openLayer(layer_cheer);"><i class="ico_info"></i></button></dt>
+                                <dt>응원<button type="button" class="btn_info" onclick="openLayer(layer_cheer);"><i class="ico_info"></i><span class="visually_hidden">정보</span></button></dt>
                                 <dd>1,562</dd>
                             </dl>
                             <button type="button" class="btn btn_default">응원</button>
@@ -162,7 +186,7 @@
                         </li>
                     </ul>
                 </section>
-                <section class="journalist_body">
+                <div class="journalist_body">
                     <section class="chain_wrap float_left">
                         <header class="title_wrap">
                             <nav class="tab_nav">
@@ -192,8 +216,8 @@
                             </div>
                         </header>
                         <!-- Tab panes -->
-                        <ul class="tab_content">
-                            <li class="tab_pane" id="tab1_1" role="tabpanel" aria-labelledby="tabPanel1_1">
+                        <div class="tab_content">
+                            <div class="tab_pane" id="tab1_1" role="tabpanel" aria-labelledby="tabPanel1_1">
                                 <!-- 랭크형스토리리스트 -->
                                 <ul class="story_list story_rank journalist_story_list">
                                     <li class="card">
@@ -278,8 +302,8 @@
                                     </li>
                                 </ul>
                                 <!-- //랭크형스토리리스트 -->
-                            </li>
-                            <li class="tab_pane" id="tab1_2" role="tabpanel" aria-labelledby="tabPanel1_2" hidden="hidden">
+                            </div>
+                            <div class="tab_pane" id="tab1_2" role="tabpanel" aria-labelledby="tabPanel1_2" hidden="hidden">
                                 <!-- 랭크형스토리리스트 -->
                                 <ul class="story_list story_rank journalist_story_list">
                                     <li class="card">
@@ -364,8 +388,8 @@
                                     </li>
                                 </ul>
                                 <!-- //랭크형스토리리스트 -->
-                            </li>
-                            <li class="tab_pane" id="tab1_3" role="tabpanel" aria-labelledby="tabPanel1_3" hidden="hidden">
+                            </div>
+                            <div class="tab_pane" id="tab1_3" role="tabpanel" aria-labelledby="tabPanel1_3" hidden="hidden">
                                 <!-- 랭크형스토리리스트 -->
                                 <ul class="story_list story_rank journalist_story_list">
                                     <li class="card">
@@ -450,8 +474,8 @@
                                     </li>
                                 </ul>
                                 <!-- //랭크형스토리리스트 -->
-                            </li>
-                        </ul>
+                            </div>
+                        </div>
                     </section>
                     <section class="highlight_wrap float_right">
                         <header class="title_wrap">
@@ -518,8 +542,8 @@
                             </nav>
                         </header>
                         <!-- Tab panes -->
-                        <ul class="tab_content">
-                            <li class="tab_pane" id="tab2_1" role="tabpanel" aria-labelledby="tabPanel2_1">
+                        <div class="tab_content">
+                            <div class="tab_pane" id="tab2_1" role="tabpanel" aria-labelledby="tabPanel2_1">
                                 <div class="list_option_area flex_sm_col_reverse">
                                     <p class="all_count">총 2개</p>
                                     <form class="search_form">
@@ -581,8 +605,8 @@
                                     <button type="button" class="btn btn_outline_gray">더 보기</button>
                                 </div> -->
                                 <!-- //기사 -->
-                            </li>
-                            <li class="tab_pane" id="tab2_2" role="tabpanel" aria-labelledby="tabPanel2_2" hidden="hidden">
+                            </div>
+                            <div class="tab_pane" id="tab2_2" role="tabpanel" aria-labelledby="tabPanel2_2" hidden="hidden">
                                 <!-- 기자에게 한마디 -->
                                 <div class="comment_wrap">
                                     <div class="comment_state">
@@ -768,10 +792,10 @@
                                     <button type="button" class="btn btn_full">댓글 <span class="font_orange">2,346</span>개 보기 <i class="ico_arrow_right"></i></button>
                                 </div>
                                 <!-- //기자에게 한마디 -->
-                            </li>
-                        </ul>
+                            </div>
+                        </div>
                     </section>
-                </section>
+                </div>
 
             </section>
             <!-- // contents -->

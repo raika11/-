@@ -42,8 +42,14 @@
 .catalog_list_wrap .photo_list_area .ico_bookmark { width: 20px; height: 20px; }
 
 /* 인기 영상 */
+.catalog_list_wrap .title_wrap { z-index: 2; }
+.catalog_list_wrap .title_wrap .btn_info { transform: translateY(1px); font-size: 0;}
 .catalog_list_wrap .meta .hits { font-size: 13px; line-height: 1.5; letter-spacing: -0.5px; color: #999; }
 .catalog_list_wrap .meta .hits:after { display: inline-block; content: ''; transform: translateY(1px); width: 1px; height: 12px; padding-right: 6px; margin-right: 8px; border-right: 1px solid #e2e2e2; }
+
+.layer_videoInfo { top: 37px; width: 185px; padding: 30px; }
+.layer_videoInfo p { font-size: 13px; line-height: 22px; letter-spacing: -0.5px; text-align: left; }
+.layer_videoInfo .btn_close { top: 10px; right: 10px; }
 
 .photo_list_area .card_group.swiper-wrapper { width: auto; }
 .photo_list_area .card_group.swiper-wrapper .card { padding-bottom: 0; }
@@ -161,6 +167,8 @@
 
     /* 인기 영상*/
     .catalog_list_wrap .title_area { justify-content: space-between;}
+    .layer_videoInfo { right: 0; }
+
     .photo_list_area.swiper-container .headline { font-size: 18px; line-height: 27px; }
     .photo_list_area.swiper-container .ico_bookmark { width: 24px; height: 24px; }
 
@@ -184,6 +192,9 @@
     .contents {padding-bottom:120px;}
     .contents section{margin-bottom:60px;}
     .contents section.chain_wrap{margin-bottom:unset;}
+    
+    .section_header_wrap.sticky_top .section_title { font-size: 18px; line-height: 28px; }
+    .section_header_wrap.sticky_top .section_title:only-child { margin-top: -27px; }
 
     /* nav */
 
@@ -293,7 +304,8 @@
 
     /* 인기 영상 */
     .catalog_list_wrap .title_wrap .btn_info { margin-left: 11px; }
-    
+    .layer_videoInfo { left: 0; }
+
     .photo_list_area.swiper-container .headline { font-size: 20px; line-height: 30px; }
     
     .catalog_list_wrap { position: relative; }

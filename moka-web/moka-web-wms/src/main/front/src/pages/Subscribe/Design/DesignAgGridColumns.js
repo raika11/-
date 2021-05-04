@@ -75,3 +75,32 @@ const columnDefs = [
 ];
 
 export default columnDefs;
+
+export const histColumnDefs = [
+    {
+        headerName: 'No',
+        field: 'seqNo',
+        width: 50,
+        tooltipField: 'seqNo',
+    },
+    {
+        headerName: '구분',
+        field: 'field1',
+        width: 63,
+    },
+    {
+        headerName: '변경일시',
+        field: 'field2',
+        width: 120,
+    },
+    {
+        headerName: '변경사유',
+        field: 'field3',
+        flex: 1,
+    },
+    {
+        headerName: '작업자',
+        field: 'field4',
+        width: 120,
+    },
+];

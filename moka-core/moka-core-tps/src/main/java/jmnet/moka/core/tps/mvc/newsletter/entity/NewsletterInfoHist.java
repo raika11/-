@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.RegAudit;
 import lombok.AllArgsConstructor;
@@ -155,4 +157,15 @@ public class NewsletterInfoHist extends RegAudit {
 
     @Column(name = "MOD_REASON")
     private String modReason;
+
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        this.channelDateId = this.channelDateId == null ? 0L : this.channelDateId;
+        this.dateTab = this.dateTab == null ? 0L : this.dateTab;
+        this.dateType = this.dateType == null ? 0L : this.dateType;
+        this.sendMinCnt = this.sendMinCnt == null ? 1L : this.sendMinCnt;
+        this.sendMaxCnt = this.sendMaxCnt == null ? 1L : this.sendMaxCnt;
+        this.channelId = this.channelId == null ? 0L : this.channelId;
+    }
 }

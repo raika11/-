@@ -126,7 +126,7 @@ const NewsLetterMResult = React.lazy(() => import('@pages/NewsLetterManage/NewsL
 const NewsLetterTResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterResult/NewsLetterTypeResult'));
 const NewsLetterPResult = React.lazy(() => import('@pages/NewsLetterManage/NewsLetterResult/NewsLetterPeriodResult'));
 const ArticlePackage = React.lazy(() => import('@pages/ArticlePackage'));
-const SubscriptionDesign = React.lazy(() => import('@pages/SubscriptionDesign'));
+const SubscriptionDesign = React.lazy(() => import('@pages/Subscribe/Design'));
 
 const routes = [
     {

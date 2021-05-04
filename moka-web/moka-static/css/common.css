@@ -75,7 +75,7 @@ pre,code,form,fieldset,legend,textarea,p,blockquote,
 th,td,
 input,select,button,figure {margin: 0;padding: 0;}
 body * {box-sizing: border-box;forced-color-adjust: #fb502f; letter-spacing: -0.4px;}
-body *:focus {border-color: #fb502f;}
+/* body *:focus {border-color: #fb502f;} */
 fieldset,img {border: 0 none;}
 dl,ul,ol,menu,li{list-style:none;}
 blockquote,q{quotes:none;}
@@ -1053,7 +1053,7 @@ dl.date dd {margin-left: 6px;}
 .btn_default_bg{background-color:#999;color:#fff;font-weight:700;}
 .btn_primary{border-color:#ff3c14;color:#ff3c14;font-weight:700;}
 .btn_primary_bg{background-color:#ff3c14;color:#fff;font-weight:700;}
-
+.btn_black { background-color: #111; color: #fff; }
 /* 모양 */
 .btn.btn_square {padding: 5px 16px;border-radius: 0;}
 
@@ -1063,6 +1063,7 @@ dl.date dd {margin-left: 6px;}
 
 /* outline */
 .btn_outline_default {border: 1px solid #333;}
+.btn_outline_black { border: 1px solid #111; font-weight: 700; }
 .btn_outline_gray {border: 1px solid #d5d5d5;background-color: #fff;}
 .btn_outline_orange {border: 1px solid #f0320a !important;color: #f0320a;}
 .btn_outline_white {border: 1px solid #fff !important;background-color: transparent;color: #fff;}
@@ -1717,3 +1718,6 @@ dl.date dd {margin-left: 6px;}
     .el.el_md5{-webkit-line-clamp:5;}
     .el.el_md6{-webkit-line-clamp:6;}
 }
+
+/* 광고영역 */
+.ad_wrap{width:100%;padding:30% 30%;background:#eee;text-align:center}

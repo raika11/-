@@ -32,11 +32,10 @@ const Design = ({ match }) => {
 
             <Col xs={5}>
                 <Route
-                    path={[`${match.path}/add`, `${match.path}/:seqNo`]}
+                    path={[`${match.path}/add`, `${match.path}/:scbNo`]}
                     exact
                     render={() => (
                         <MokaIconTabs
-                            activeKey={1}
                             tabs={[<DesignEdit match={match} />, <DesignHistory match={match} />]}
                             tabNavs={[
                                 { title: '구독 상세', text: 'Info' },

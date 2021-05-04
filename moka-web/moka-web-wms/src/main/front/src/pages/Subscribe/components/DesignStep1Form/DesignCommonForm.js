@@ -100,7 +100,9 @@ const DesignCommonForm = ({ scb, onChangeValue, CHANNEL_TYPE }) => {
                                 scb.channelType === CHANNEL_TYPE[1].code ||
                                 scb.channelType === CHANNEL_TYPE[2].code ||
                                 scb.channelType === CHANNEL_TYPE[3].code ||
-                                scb.channelType === CHANNEL_TYPE[4].code
+                                scb.channelType === CHANNEL_TYPE[4].code ||
+                                scb.channelType === CHANNEL_TYPE[5].code ||
+                                scb.channelType === CHANNEL_TYPE[6].code
                             }
                         />
                         <MokaInput
@@ -116,7 +118,9 @@ const DesignCommonForm = ({ scb, onChangeValue, CHANNEL_TYPE }) => {
                                 scb.channelType === CHANNEL_TYPE[1].code ||
                                 scb.channelType === CHANNEL_TYPE[2].code ||
                                 scb.channelType === CHANNEL_TYPE[3].code ||
-                                scb.channelType === CHANNEL_TYPE[4].code
+                                scb.channelType === CHANNEL_TYPE[4].code ||
+                                scb.channelType === CHANNEL_TYPE[5].code ||
+                                scb.channelType === CHANNEL_TYPE[6].code
                             }
                         />
                         <MokaInput
@@ -132,7 +136,9 @@ const DesignCommonForm = ({ scb, onChangeValue, CHANNEL_TYPE }) => {
                                 scb.channelType === CHANNEL_TYPE[1].code ||
                                 scb.channelType === CHANNEL_TYPE[2].code ||
                                 scb.channelType === CHANNEL_TYPE[3].code ||
-                                scb.channelType === CHANNEL_TYPE[4].code
+                                scb.channelType === CHANNEL_TYPE[4].code ||
+                                scb.channelType === CHANNEL_TYPE[5].code ||
+                                scb.channelType === CHANNEL_TYPE[6].code
                             }
                         />
                         <MokaInput

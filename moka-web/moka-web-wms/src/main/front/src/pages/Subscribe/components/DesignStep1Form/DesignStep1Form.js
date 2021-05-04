@@ -31,7 +31,7 @@ const DesignStep1Form = ({ scb, onChangeValue, CHANNEL_TYPE }) => {
                             // 초기값 데이터 추가해야함
                             [name]: value,
                             artView: value === CHANNEL_TYPE[0].code ? 'Y' : 'N',
-                            myScb: value === CHANNEL_TYPE[2].code || value === CHANNEL_TYPE[3].code ? 'Y' : 'N',
+                            myScb: value === CHANNEL_TYPE[2].code || value === CHANNEL_TYPE[3].code || value === CHANNEL_TYPE[5].code ? 'Y' : 'N',
                             newsletter: value === CHANNEL_TYPE[4].code ? 'Y' : 'N',
                         },
                         true,

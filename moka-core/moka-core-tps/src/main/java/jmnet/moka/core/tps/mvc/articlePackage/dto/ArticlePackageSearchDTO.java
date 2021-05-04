@@ -40,24 +40,21 @@ public class ArticlePackageSearchDTO extends SearchDTO {
      * 유형
      */
     @ApiModelProperty("패키지 유형(A:전체기사, S:섹션, D:출고일)")
-    // TODO: msg
-    @Pattern(regexp = "^()|(A)|(A)|(D)$", message = "{tps.newsletter.error.pattern.letterType}")
+    @Pattern(regexp = "^()|(A)|(A)|(D)$", message = "{tps.article-package.error.pattern.pkgDiv}")
     private String pkgDiv;
 
     /**
      * 구독 가능 여부
      */
     @ApiModelProperty("구독 가능 여부")
-    // TODO: msg
-    @Pattern(regexp = "^()|(Y)|(N)$", message = "{tps.newsletter.error.pattern.letterType}")
+    @Pattern(regexp = "^()|(Y)|(N)$", message = "{tps.article-package.error.pattern.pkgDiv}")
     private String scbYn;
 
     /**
      * 검색일 기준
      */
     @ApiModelProperty("검색일 기준 (S: 등록일, E: 종료일")
-    // TODO: msg
-    @Pattern(regexp = "^(S)|(E)$", message = "{tps.newsletter.error.pattern.letterType}")
+    @Pattern(regexp = "^()|(S)|(E)$", message = "{tps.article-package.error.pattern.searchDtType}")
     private String searchDtType = "S";
 
     @ApiModelProperty(value = "시작일시 검색")

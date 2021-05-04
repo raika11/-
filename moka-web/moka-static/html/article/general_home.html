@@ -129,28 +129,34 @@
                             <!-- 메뉴 옵션 위치 확인 필요 -->
                             <div class="highligth_bx">
                                 <button type="button" class="">하이라이트</button>
-                                <button type="button" class="active">메모</button>
+                                <button type="button" class="active" onclick="openLayer(layer_memo);">메모</button>
                                 <button type="button" class="">공유</button>
                                 <button type="button" class="">복사</button>
                             </div>
                             <!-- 메모 레이어 -->
-                            <div class="layer_popup memo_layer" style="display: block;">
+                            <div class="layer_popup layer_memo" id="layer_memo">
                                 <div class="layer_header">
-                                    <strong class="layer_title">메모</span></strong>
-                                    <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+                                    <strong class="layer_title">메모</strong>
                                 </div>
                                 <div class="layer_body">
-                                    <textarea class="memo_textarea" title="메모 입력창" placeholder="메모를 입력해 주세요"></textarea>
+                                    <textarea placeholder="메모를 입력해 주세요">지난달 코박스 퍼실러티에 선입금 했고,  100만 명분 백신을 확보한 상황이다. 박능후 보건복지부 장관은 8일 브리핑에서 글로벌 제약사와 개별 협상 관련해 아슽트라제네카 2000 의 얀센은 1회 접종만을 </textarea>
                                 </div>
                                 <div class="layer_footer">
-                                    
-                                    <!-- 텍스트 입력 전 비활성화 -->
-                                    <button class="btn btn_default" disabled="desabled">저장</button>
-                                    <!-- 텍스트 입력 후 활성화 -->
-                                    <!-- <button class="btn btn_default">저장</button> -->
+                                    <span class="text_count">0/500</span>
+                                    <div class="button_wrap">
+                                        <button class="btn btn_outline_black" onclick="openLayer(layer_memo_del);">삭제</button> 
+                                        <!-- 텍스트 입력 전 비활성화 -->
+                                        <!-- <button class="btn btn_dark" disabled="desabled">저장</button> -->
+                                        <!-- 텍스트 입력 후 활성화 -->
+                                        <button class="btn btn_dark">저장</button> 
+                                    </div>
                                 </div>
+                                <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
                             </div>
                             <!-- //메모 레이어 -->
+                            <div class="layer_popup layer_memo" id="layer_memo_del">
+                                <p>메모를 삭제 하시겠습니까?</p>
+                            </div>
                         </mark>
                         구체적으로 ‘코박스 퍼실러티(COVAX Facility)를 통해 약 1000만 명분 글로벌 백신 기업을 통해 약 3400만 명분이다. <br />
                         <mark class="text_highlighted">정부는 그간 코로나19 백신 확보를 위해 투트랙으로 접근했다.
@@ -1009,7 +1015,7 @@
 
         <!-- 속보 티커 -->
         <div class="layer_ticker active">
-            <div class="ticker_content">
+            <div class="layer_body">
                 <strong class="badge bg_orange">속보</strong>
                 <h3 class="headline">신규확진 첫 1000명대 ‘역대 최다’ … 진짜 대유행 시작됐다</h3>
                 <p class="date">1분전</p>

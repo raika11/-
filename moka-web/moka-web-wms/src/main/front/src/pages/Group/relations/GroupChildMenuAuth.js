@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { GET_GROUP_MENU_AUTH, changeGroupMenuAuth, getGroupMenuAuth, updateGroupMenuAuth, UPDATE_GROUP_MENU_AUTH } from '@store/group';
 import toastUtil from '@utils/toastUtil';

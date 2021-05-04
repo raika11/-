@@ -66,7 +66,7 @@ $(document).ready(function() {
     }
 
     $(".btn_subscribe").on("click", function(){
-        alert("111");
+        // alert("111");
         $(this).toggleClass("active");
         
         if($(this).hasClass("active")){
@@ -77,7 +77,7 @@ $(document).ready(function() {
         };
     });
 
-   
+
 });
 
 /* 임시 레이어팝업 */

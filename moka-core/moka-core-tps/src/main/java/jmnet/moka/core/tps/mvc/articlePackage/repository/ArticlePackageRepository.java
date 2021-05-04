@@ -17,5 +17,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 2021-05-03 오후 4:11
  */
 public interface ArticlePackageRepository
-        extends JpaRepository<ArticlePackage, Long>, JpaSpecificationExecutor<ArticlePackage>/*, NewsletterInfoRepositorySupport */ {
+        extends JpaRepository<ArticlePackage, Long>, JpaSpecificationExecutor<ArticlePackage>, ArticlePackageRepositorySupport {
 }

@@ -58,7 +58,7 @@ public class ArticlePackageSearchDTO extends SearchDTO {
     @ApiModelProperty("검색일 기준 (S: 등록일, E: 종료일")
     // TODO: msg
     @Pattern(regexp = "^(S)|(E)$", message = "{tps.newsletter.error.pattern.letterType}")
-    private String searchDtType;
+    private String searchDtType = "S";
 
     @ApiModelProperty(value = "시작일시 검색")
     @DTODateTimeFormat

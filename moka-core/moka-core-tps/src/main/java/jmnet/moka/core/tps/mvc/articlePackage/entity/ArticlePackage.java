@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeSimple;
 import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -122,4 +123,19 @@ public class ArticlePackage extends BaseAudit {
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "articlePackage", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST})
     private Set<ArticlePackageKwd> keywords = new LinkedHashSet<>();
+
+    /**
+     * 뉴스레터상품
+     */
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "PKG_SEQ", referencedColumnName = "DTL_CD", insertable = false, updatable = false)
+    private CodeSimple categoryInfo;
+
+    //    @PrePersist
+    //    @PreUpdate
+    //    public void prePersist() {
+    //        this.D = McpString.defaultValue(this.pkgType, "B");
+    //    }
+
 }

@@ -118,6 +118,7 @@
       if ($param.get("member_memSeq") == null) {
       $param.put("member_memSeq", null);
       $param.put("member_loginType", null);
+      $param.put("member_nick", null);
       }
       queryId;
     </request>

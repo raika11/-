@@ -22,9 +22,36 @@ export const postNewsLetter = ({ newsLetter }) => {
         });
 };
 
+// 뉴스레터 상품 수정
+export const putNewsLetter = ({ newsLetter }) => {
+    return instance
+        .put(`/api/newsletter/${newsLetter.letterSeq}`, objectToFormData(newsLetter), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
 // 뉴스레터 상품 상세 조회
 export const getNewsLetter = (letterSeq) => {
     return instance.get(`/api/newsletter/${letterSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 뉴스레터 상품 히스토리 목록 조회
+export const getNewsLetterHistoryList = ({ letterSeq, search }) => {
+    return instance.get(`/api/newsletter/${letterSeq}/historys?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 뉴스레터 히스토리 상세 조회
+export const getNewsLetterHistory = (histSeq) => {
+    return instance.get(`/api/newsletter/historys/${histSeq}`).catch((err) => {
         throw err;
     });
 };

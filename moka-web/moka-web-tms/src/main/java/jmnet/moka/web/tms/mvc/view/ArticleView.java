@@ -48,6 +48,8 @@ import org.springframework.web.servlet.view.AbstractView;
 public class ArticleView extends AbstractView {
     private static final Logger logger = LoggerFactory.getLogger(ArticleView.class);
     private static Pattern PATTERN_BR = Pattern.compile("<br\\/?>(\\s|&nbsp;)*?<br\\/?>", Pattern.CASE_INSENSITIVE);
+    private static Pattern PATTERN_BR_CONTAINS = Pattern.compile("(<br)", Pattern.CASE_INSENSITIVE);
+    private static String START_P_TAG = "<p class=\"ac\">";
     @Value("${tms.mte.debug}")
     private boolean templateMergeDebug;
     @Value("${tms.page.cache}")
@@ -122,6 +124,7 @@ public class ArticleView extends AbstractView {
                 Map<String, Object> articleInfo = (Map<String, Object>)jsonResult.get("article");
                 this.convertContent(articleInfo);
                 this.setEPaper(articleInfo,mergeContext);
+                this.brToPTag(articleInfo,true);
                 mergeContext.set("article", articleInfo);
                 this.setCodesAndMenus(loader, articleInfo, mergeContext);
                 StringBuilder sb =
@@ -177,6 +180,97 @@ public class ArticleView extends AbstractView {
             }
         }
     }
+
+
+    private void brToPTag(Map<String, Object> articleInfo, boolean line) {
+
+        String rtn = (String) articleInfo.get("ART_CONTENT");
+
+        /* 텍스트 기사처리 */
+        if (Pattern.compile("(<br)", Pattern.CASE_INSENSITIVE).matcher(rtn).groupCount() <= 0) {
+            rtn = rtn.replaceAll("\\r", "");
+            rtn = rtn.replace("\n", "<br/>\n");
+            rtn = ("<p class=\"ac\">" + rtn +"</p>");
+
+            articleInfo.put("ART_CONTENT", rtn);
+            return;
+        }
+
+        /*1 사전정리*/
+        rtn = rtn.replaceAll("(?i)^(\\s|&nbsp;)*\\s*","");                  /* 줄 시작 공백제거 */
+        rtn = McpString.trimStart(rtn, ' ');                                                     /* 문서 시작 공백제거 */
+        rtn = McpString.trimEnd(rtn, ' ');                                                       /* 문서 끝 공백제거 */
+        //[2021.04.30제외]전체처리와 중복 //rtn = rtn.replaceAll("(<[^>]*)([\\n]+)([^>]+>)", "$1 $3");   /*태그사이 줄바꿈 제거*/
+        rtn = rtn.replace("\n", "").replace("\r", "");    /*줄바꿈 제거*/
+
+        rtn = rtn.replaceAll("(?i)<br[^>]*>", "<br />");                    /*br 태그규격화*/
+
+        rtn = rtn.replaceAll("(?i)>\\s*(\\s|&nbsp;)*\\s*<", "><");          /*태그와 태그 사이 공백정리*/
+        rtn = rtn.replaceAll("(?i)(\\s|&nbsp;)*\\s*<br />", "<br />");      /*줄뒤 공백제거*/
+        rtn = rtn.replaceAll("(<br \\/>)*<\\/", "</");                         /*태그내부 br정리*/
+        //rtn=Regex.Replace(rtn, @"<div([^<]*)<br \/>([^<]*)<\/div>", "<div$1<br/>--$2</div>", RegexOptions.IgnoreCase);    /*div 안쪽 br정리*/
+
+
+        /*2 div(파티클)와 br(텍스트열)을 줄(라인피드)단위로 정리 */
+        rtn = rtn.replaceAll("(?i)<br \\/><div", "<br />\n<div");
+        rtn = rtn.replaceAll("(?i)<br \\/>", "\n<br />");
+        rtn = rtn.replaceAll("(?i)<\\/div>\n*", "</div>");
+
+        /////* div 뒤의 텍스트가 붙어 있는 경우 처리 by kspark */
+        ////converted = converted.replaceAll("(?i)<\\/div>([^<]+)", "</div>\n<br />$1");
+
+        /*3 P 태그 묶음 처리*/
+        /*div 태그와 텍스트 분리*/
+        rtn = rtn.replaceAll("(?i)<br />", "<p class=\"ac\">");
+        rtn = rtn.replaceAll("\n", "</p>\n");
+        rtn = rtn.replaceAll("(?i)<\\/div><p class=\"ac\">", "</div>\n<p class=\"ac\">");   /*파티클 위 줄바꿈처리*/
+        rtn = rtn.replaceAll("(?i)div>([^<\n]+)", "div>\n<p class=\"ac\">$1");  /*파티클뒤에 텍스트가 바로오는 경우*/
+
+        if(rtn.endsWith("<p class=\"ac\">")) { rtn += "</p>"; }
+        if(rtn.startsWith("<b>")) { rtn = "<p class=\"ac\">" + rtn; }
+        if(rtn.startsWith("<strong>")) { rtn = "<p class=\"ac\">" + rtn; }
+        if(rtn.startsWith("<a ")) { rtn = "<p class=\"ac\">" + rtn; }
+        if(rtn.endsWith("<p class=\"ac\">")) { rtn+="</p>"; }
+
+        /*닫는 p로 시작하는 경우 - 태그, 개행, 공백 삭제 */
+        if ( rtn.startsWith("</p>")) {
+            rtn = rtn.substring(4);
+            rtn = McpString.trimStart(rtn, ' ');
+            rtn = McpString.trimStart(rtn, '\n');
+            rtn = McpString.trimStart(rtn, ' ');
+            rtn = McpString.trimStart(rtn, '\n');
+        }
+
+        /*닫는 p 없는 경우 */
+        if(!rtn.endsWith("</p>")&&!rtn.endsWith("</div>")) { rtn=rtn+"</p>"; }
+
+        /*5 시작태그 없는 경우 처리*/
+        rtn = rtn.replaceAll("^(\\s)*([^<])", "<p class=\"ac\">");
+        rtn = rtn.replaceAll("(?i)<\\/div><(b|strong|span)>", "</div><p class=\"ac\"><$1>");
+
+        rtn = rtn.replaceAll("(?i)<p class=\"ac\">((\\s|&nbsp;)*\\s*)</p>", "<p class=\"ac\"></p>"); /* 공백줄 삭제 */
+        /*6 2줄바꿈 문단 처리*/
+        if ( line ) { // 문단 사이에 p태그를 없애는 경우
+            rtn = rtn.replaceAll("(?i)</p>\n<p class=\"ac\">([^<])>", "<br  />$1");
+            rtn = rtn.replaceAll("(?i)<p class=\"ac\"><br  />", "<p class=\"ac\">");
+            rtn = rtn.replaceAll("(?i)</p>\n<p class=\"ac\"></p>", "</p>");
+            rtn = rtn.replaceAll("(?i)\n<p class=\"ac\"></p>\n<p class=\"ac\"></p>", "\n<p class=\"ac\"></p>");
+        }
+
+        /*7 기사 끝 공백 라인 제거*/
+        for ( int i = 0; i<2; i++) {
+            if (rtn.endsWith("<p class=\"ac\"></p>")) {
+                rtn = rtn.substring(0, rtn.length() - "<p class=\"ac\"></p>".length());
+                rtn = McpString.trimEnd(rtn, '\n');
+            }
+        }
+
+        /*9  태그 구조 정리*/
+        rtn = rtn.replaceAll("(?i)<hr([^>]*)*>", "\n<p class=\"ac\"></p>"); /*hr 미사용으로 제거*/
+
+        articleInfo.put("ART_CONTENT", rtn);
+    }
+
 
     private void convertContent(Map<String, Object> articleInfo) {
         String originalContent = (String) articleInfo.get("ART_CONTENT");
@@ -335,4 +429,6 @@ public class ArticleView extends AbstractView {
         String articleType =  (String)articleInfo.get("ART_TYPE");
         return templateMerger.getArticlePageId(domainId, articleType);
     }
+
+
 }

@@ -13,7 +13,7 @@ import NewsLetterArticlePackageModal from '../modals/NewsLetterArticlePackageMod
 /**
  * 뉴스레터 편집 > 기본정보 설정
  */
-const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
+const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue, error, setError }) => {
     const storeLetter = useSelector(({ newsLetter }) => newsLetter.newsLetter.letterInfo);
 
     // 모달 state
@@ -98,11 +98,6 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [temp.channelType]);
 
-    useEffect(() => {
-        onChangeValue({ channelType: '', channelId: '', channelDataId: '', letterName: '', letterEngName: '', letterDesc: '' });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [temp.sendType]);
-
     return (
         <>
             {letterSeq && (
@@ -159,7 +154,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
             <p className="mb-2">※ 기본정보 설정</p>
 
             <Form.Row className="mb-2 align-items-center">
-                <MokaInputLabel as="none" label="발송 방법" required />
+                <MokaInputLabel as="none" label="발송 방법" required isInvalid={error.sendType} />
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput
                         as="radio"
@@ -182,7 +177,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2 align-items-center">
-                <MokaInputLabel as="none" label="유형" required />
+                <MokaInputLabel as="none" label="유형" required isInvalid={error.letterType} />
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput
                         as="radio"
@@ -231,14 +226,14 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
                 <MokaInputLabel as="none" label="카테고리" required />
                 <div className="flex-fill">
                     <Col xs={8} className="p-0">
-                        <MokaSearchInput placeholder="" disabled />
+                        <MokaSearchInput placeholder="" disabled isInvalid={error.category} />
                     </Col>
                 </div>
             </Form.Row>
 
             {temp.sendType === 'A' && (
                 <Form.Row className="mb-2 align-items-center">
-                    <MokaInputLabel as="none" label="발송 콘텐츠 선택" required />
+                    <MokaInputLabel as="none" label="발송 콘텐츠 선택" required isInvalid={error.channelType} />
                     <div className="flex-fill">
                         <div className="mb-2 d-flex align-items-center" style={{ height: 31 }}>
                             <MokaInput
@@ -272,9 +267,9 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
                                 as="radio"
                                 className="mr-2"
                                 name="channelType"
-                                value="ARTICLE"
+                                value="ARTPKG"
                                 id="letter-channelType-article"
-                                inputProps={{ label: '기사', custom: true, checked: temp.channelType === 'ARTICLE' }}
+                                inputProps={{ label: '기사', custom: true, checked: temp.channelType === 'ARTPKG' }}
                                 onChange={handleChangeValue}
                             />
                             <MokaInput
@@ -307,12 +302,13 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
                         <div>
                             <Col xs={8} className="p-0">
                                 <MokaSearchInput
-                                    value={temp.channelId}
+                                    value={temp.channelType === 'ARTPKG' ? temp.channelDataId : temp.channelId}
+                                    isInvalid={error.channelId || error.channelDataId}
                                     placeholder=""
                                     onSearch={() => {
                                         if (temp.channelType === 'ISSUE' || temp.channelType === 'TOPIC' || temp.channelType === 'SERIES') {
                                             setPkgModal(true);
-                                        } else if (temp.channelType === 'ARTICLE') {
+                                        } else if (temp.channelType === 'ARTPKG') {
                                             setArticlePkgModal(true);
                                         } else if (temp.channelType === 'REPORTER') {
                                             setReporterModal(true);
@@ -339,7 +335,15 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
                     </div>
                 </Form.Row>
             )}
-            <MokaInputLabel label="뉴스레터 명(한글)" name="letterName" className="mb-2" value={temp.letterName} onChange={handleChangeValue} required />
+            <MokaInputLabel
+                label="뉴스레터 명(한글)"
+                name="letterName"
+                className="mb-2"
+                value={temp.letterName}
+                onChange={handleChangeValue}
+                required
+                isInvalid={error.letterName}
+            />
             <MokaInputLabel label="뉴스레터 명(영문)" name="letterEngName" className="mb-2" value={temp.letterEngName} onChange={handleChangeValue} />
             <MokaInputLabel
                 as="textarea"
@@ -347,6 +351,7 @@ const NewsLetterBasicInfo = ({ letterSeq, temp, onChangeValue }) => {
                 name="letterDesc"
                 label="뉴스레터 설명"
                 value={temp.letterDesc}
+                isInvalid={error.letterDesc}
                 inputClassName="resize-none"
                 inputProps={{ rows: 3 }}
                 onChange={handleChangeValue}

@@ -72,11 +72,11 @@
                                 <h1 class="section_title">정치</h1>
                                 <nav class="header_nav">
                                     <ul class="nav">
-                                        <li class="nav_item"><h2><a href="#">국회정당</a></h2></li>
-                                        <li class="nav_item active"><h2><a href="#">청와대</a></h2></li>
-                                        <li class="nav_item"><h2><a href="#">외교</a></h2></li>
-                                        <li class="nav_item"><h2><a href="#">국방</a></h2></li>
-                                        <li class="nav_item"><h2><a href="#">북한</a></h2></li>
+                                        <li class="nav_item"><h2><a href="javascript:void(null);">국회정당</a></h2></li>
+                                        <li class="nav_item active"><h2><a href="javascript:void(null);">청와대</a></h2></li>
+                                        <li class="nav_item"><h2><a href="javascript:void(null);">외교</a></h2></li>
+                                        <li class="nav_item"><h2><a href="javascript:void(null);">국방</a></h2></li>
+                                        <li class="nav_item"><h2><a href="javascript:void(null);">북한</a></h2></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -85,7 +85,18 @@
                     <div class="code_wrap">
 <pre><code class="html">
 &lt;header class="section_header_wrap"&gt;
-    &lt;h1 class="section_title"&gt;포토&lt;/h1&gt;
+    &lt;div class="header_area"&gt;
+        &lt;h1 class="section_title"&gt;정치&lt;/h1&gt;
+        &lt;nav class="header_nav"&gt;
+            &lt;ul class="nav"&gt;
+                &lt;li class="nav_item"&gt;&lt;h2&gt;&lt;a href="javascript:void(null);"&gt;국회정당&lt;/a&gt;&lt;/h2&gt;&lt;/li&gt;
+                &lt;li class="nav_item active"&gt;&lt;h2&gt;&lt;a href="javascript:void(null);"&gt;청와대&lt;/a&gt;&lt;/h2&gt;&lt;/li&gt;
+                &lt;li class="nav_item"&gt;&lt;h2&gt;&lt;a href="javascript:void(null);"&gt;외교&lt;/a&gt;&lt;/h2&gt;&lt;/li&gt;
+                &lt;li class="nav_item"&gt;&lt;h2&gt;&lt;a href="javascript:void(null);"&gt;국방&lt;/a&gt;&lt;/h2&gt;&lt;/li&gt;
+                &lt;li class="nav_item"&gt;&lt;h2&gt;&lt;a href="javascript:void(null);"&gt;북한&lt;/a&gt;&lt;/h2&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/nav&gt;
+    &lt;/div&gt;
 &lt;/header&gt;
 </code></pre>
                     </div>
@@ -93,236 +104,433 @@
 
                     <h2 class="guide_title">타입3 : 서비스명 + 네비 타입</h2>
                     <div class="sample_wrap">
-                        <header class="section_header_wrap">
+                        <!-- sub gnb -->
+                        <header class="section_header_wrap trend_header">
                             <div class="header_area">
-                                <h2 class="section_title"><i class="logo_trand"></i><!--img src="이미지" width="" height="" alt="트렌드뉴스"--> <span class="title">트렌드뉴스</span></h2>
+                                <h2 class="section_title"><i class="logo_trend"></i> <span class="title">트렌드뉴스</span></h2>
                                 <h1 class="page_title">지난 Top기사</h1>
                             </div>
-                            <div class="date_wrap">20201.03.18 <button type="button" class="btn_calendar"><i class="ico_calendar"></i><span class="visually_hidden">달력 레이어 호출</span></button></div>
+                            <div class="date_wrap"><input type="text" id="datepicker" /></div>
                         </header>
+                        <!-- //sub gnb -->
                     </div>
                     <div class="code_wrap">
 <pre><code class="html">
-&lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
+&lt;!-- sub gnb --&gt;
+&lt;header class="section_header_wrap trend_header"&gt;
+    &lt;div class="header_area"&gt;
+        &lt;h2 class="section_title"&gt;&lt;i class="logo_trend"&gt;&lt;/i&gt; &lt;span class="title"&gt;트렌드뉴스&lt;/span&gt;&lt;/h2&gt;
+        &lt;h1 class="page_title"&gt;지난 Top기사&lt;/h1&gt;
+    &lt;/div&gt;
+    &lt;div class="date_wrap"&gt;&lt;input type="text" id="datepicker" /&gt;&lt;/div&gt;
 &lt;/header&gt;
+&lt;!-- //sub gnb --&gt;
 </code></pre>
                     </div>
 
 
                     <h2 class="guide_title">타입4 : 이미지명 + 서비스명 인라인 타입 (트렌드뉴스 예외 타입)</h2>
                     <div class="sample_wrap">
+                        <!-- sub gnb -->
                         <header class="section_header_wrap section_header_block_wrap">
                             <div class="header_area">
-                                <h2 class="section_title"><i class="logo_trand"></i><!--img src="이미지" width="" height="" alt="트렌드뉴스"--> <span class="title">트렌드뉴스</span></h2>
-                                <p class="description">뉴스를 보는 새로운 시각, 트렌드뉴스! 한 주간 가장 이슈 되었던 뉴스를 이메일로 받아보세요.</p>
+                                <h2 class="section_title"><i class="logo_trend"></i><span class="title">트렌드뉴스</span></h2>
+                                <p class="description">뉴스를 보는 새로운 시각, 트렌드뉴스!<br class="mo" />한 주간 가장 이슈 되었던 뉴스를 이메일로 받아보세요.</p>
                             </div>
                             <div class="btn_group">
-                                <button type="button" class="btn">구독</button>
+                                <button type="button" class="btn btn_primary">구독</button>
                                 <button type="button" class="btn_share"><i class="ico_share"></i><span class="visually_hidden">공유</span></button>
                             </div>
                         </header>
-                        <div class="section_header_stiky">
-                            sdf
-                        </div>
+                        <!-- //sub gnb -->
                     </div>
                     <div class="code_wrap">
 <pre><code class="html">
-&lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
+&lt;!-- sub gnb --&gt;
+&lt;header class="section_header_wrap section_header_block_wrap"&gt;
+    &lt;div class="header_area"&gt;
+        &lt;h2 class="section_title"&gt;&lt;i class="logo_trend"&gt;&lt;/i&gt;&lt;span class="title"&gt;트렌드뉴스&lt;/span&gt;&lt;/h2&gt;
+        &lt;p class="description"&gt;뉴스를 보는 새로운 시각, 트렌드뉴스!&lt;br class="mo" /&gt;한 주간 가장 이슈 되었던 뉴스를 이메일로 받아보세요.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="btn_group"&gt;
+        &lt;button type="button" class="btn btn_primary"&gt;구독&lt;/button&gt;
+        &lt;button type="button" class="btn_share"&gt;&lt;i class="ico_share"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;공유&lt;/span&gt;&lt;/button&gt;
+    &lt;/div&gt;
 &lt;/header&gt;
+&lt;!-- //sub gnb --&gt;
 </code></pre>
                     </div>
 
 
                     <h2 class="guide_title">타입5 : 타입4 아래에 네비 타입이 붙는 타입</h2>
                     <div class="sample_wrap">
+                        <!-- sub gnb -->
                         <header class="section_header_wrap section_header_block_wrap">
                             <div class="header_area">
-                                <h2 class="section_title"><i class="logo_trand"></i><!--img src="이미지" width="" height="" alt="트렌드뉴스"--> </h2>
-                                <p class="description">뉴스를 보는 새로운 시각, 트렌드뉴스! 한 주간 가장 이슈 되었던 뉴스를 이메일로 받아보세요.</p>
+                                <h2 class="section_title"><i class="logo_trend"></i><span class="title">트렌드뉴스</span></h2>
+                                <p class="description">뉴스를 보는 새로운 시각, 트렌드뉴스!<br class="mo" />한 주간 가장 이슈 되었던 뉴스를 이메일로 받아보세요.</p>
                             </div>
                             <div class="btn_group">
-                                <button type="button" class="btn">구독</button>
+                                <button type="button" class="btn btn_primary">구독</button>
                                 <button type="button" class="btn_share"><i class="ico_share"></i><span class="visually_hidden">공유</span></button>
                             </div>
                         </header>
+                        <!-- //sub gnb -->
+
                         
+                        <!-- tab nav -->
                         <section class="chain_wrap">
                             <header class="title_wrap">
                                 <nav class="header_nav">
                                     <ul class="nav">
-                                        <li class="nav_item"><h1><a href="#">실시간</a></h1></li>
-                                        <li class="nav_item"><h2><a href="#">주간</a></h2></li>
-                                        <li class="nav_item"><h2><a href="#">월간</a></h2></li>
-                                        <li class="nav_item"><h2><a href="#">지난 TOP기사</a></h2></li>
+                                        <li class="nav_item"><h1><a href="javascript:void(null);" class="nav_link" aria-selected="true" >실시간</a></h1></li>
+                                        <li class="nav_item"><h2><a href="javascript:void(null);" class="nav_link">주간</a></h2></li>
+                                        <li class="nav_item"><h2><a href="javascript:void(null);" class="nav_link">월간</a></h2></li>
                                     </ul>
+                                    <span class="btn_link_txt"><h2><a href="javascript:void(null);">지난 TOP기사<i class="ico_arrow_right"></i></a></h2></span>
                                 </nav>
                                 <div class="btn_group">
-                                    <button type="button" class="btn_option"><span>댓글 많은 순</span><i class="ico_arrow"></i></button>
-                                    <button type="button" class="btn_info"><i class="ico_info"></i><span class="visually_hidden">정보</span></button>
+                                    <div class="info_bx">
+                                        <button type="button" class="btn_info" onclick="openLayer(layer_info);" ><i class="ico_info"></i><span class="visually_hidden">정보</span></button>
+                                        <div class="layer_popup layer_info" id="layer_info"><!-- 여기에 개별 클래스 추가 -->
+                                            <div class="layer_body">
+                                                <p>플랫폼 업계로 확산된 임금인상 도미노…출혈경쟁 vs 마땅한 댓가</p>
+                                                <ul class="date">
+                                                    <li>실시간  2021.04.02  08:15 ~ 2021.04.30 09:00 기준</li>
+                                                    <li>주간    2021.04.02  08:15 ~ 2021.04.30 09:00 기준</li>
+                                                    <li>월간    2021.04.02. 08:15 ~ 2021.04.30 09:10 기준</li>
+                                                </ul>
+                                            </div>
+                                            <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">닫기</span></button>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown ">
+                                        <button type="button" class="dropdown_toggle">북마크 많은 순<i class="ico_arrow"></i></button>
+                                        <div id="dropdown" class="dropdown_menu right">
+                                            <ul role="listbox">
+                                                <li class="dropdown_item" role="option"><a href="javascript:void(null);">종합</a></li>
+                                                <li class="dropdown_item" role="option"><a href="javascript:void(null);">많이 본 순</a></li>
+                                                <li class="dropdown_item" role="option"><a href="javascript:void(null);">댓글 많은 순</a></li>
+                                                <li class="dropdown_item" role="option"><a href="javascript:void(null);">공유 많은 순</a></li>
+                                                <li class="dropdown_item" role="option"><a href="javascript:void(null);">공감 많은 순</a></li>
+                                                <li class="dropdown_item" role="option"><a href="javascript:void(null);" class="active">북마크 많은 순</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </header>
-                            <ul class=""></ul>
+
+                            <ul class=""> 탭내용 </ul>
                         </section>
+                        <!-- //tab nav -->
                     </div>
                     <div class="code_wrap">
 <pre><code class="html">
-&lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
+&lt;!-- sub gnb --&gt;
+&lt;header class="section_header_wrap section_header_block_wrap"&gt;
+    &lt;div class="header_area"&gt;
+        &lt;h2 class="section_title"&gt;&lt;i class="logo_trend"&gt;&lt;/i&gt;&lt;span class="title"&gt;트렌드뉴스&lt;/span&gt;&lt;/h2&gt;
+        &lt;p class="description"&gt;뉴스를 보는 새로운 시각, 트렌드뉴스!&lt;br class="mo" /&gt;한 주간 가장 이슈 되었던 뉴스를 이메일로 받아보세요.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="btn_group"&gt;
+        &lt;button type="button" class="btn btn_primary"&gt;구독&lt;/button&gt;
+        &lt;button type="button" class="btn_share"&gt;&lt;i class="ico_share"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;공유&lt;/span&gt;&lt;/button&gt;
+    &lt;/div&gt;
 &lt;/header&gt;
+&lt;!-- //sub gnb --&gt;
+
+
+&lt;!-- tab nav --&gt;
+&lt;section class="chain_wrap"&gt;
+    &lt;header class="title_wrap"&gt;
+        &lt;nav class="header_nav"&gt;
+            &lt;ul class="nav"&gt;
+                &lt;li class="nav_item"&gt;&lt;h1&gt;&lt;a href="javascript:void(null);" class="nav_link" aria-selected="true" &gt;실시간&lt;/a&gt;&lt;/h1&gt;&lt;/li&gt;
+                &lt;li class="nav_item"&gt;&lt;h2&gt;&lt;a href="javascript:void(null);" class="nav_link"&gt;주간&lt;/a&gt;&lt;/h2&gt;&lt;/li&gt;
+                &lt;li class="nav_item"&gt;&lt;h2&gt;&lt;a href="javascript:void(null);" class="nav_link"&gt;월간&lt;/a&gt;&lt;/h2&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;span class="btn_link_txt"&gt;&lt;h2&gt;&lt;a href="javascript:void(null);"&gt;지난 TOP기사&lt;i class="ico_arrow_right"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/h2&gt;&lt;/span&gt;
+        &lt;/nav&gt;
+        &lt;div class="btn_group"&gt;
+            &lt;div class="info_bx"&gt;
+                &lt;button type="button" class="btn_info" onclick="openLayer(layer_info);" &gt;&lt;i class="ico_info"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;정보&lt;/span&gt;&lt;/button&gt;
+                &lt;div class="layer_popup layer_info" id="layer_info"&gt;&lt;!-- 여기에 개별 클래스 추가 --&gt;
+                    &lt;div class="layer_body"&gt;
+                        &lt;p&gt;플랫폼 업계로 확산된 임금인상 도미노…출혈경쟁 vs 마땅한 댓가&lt;/p&gt;
+                        &lt;ul class="date"&gt;
+                            &lt;li&gt;실시간  2021.04.02  08:15 ~ 2021.04.30 09:00 기준&lt;/li&gt;
+                            &lt;li&gt;주간    2021.04.02  08:15 ~ 2021.04.30 09:00 기준&lt;/li&gt;
+                            &lt;li&gt;월간    2021.04.02. 08:15 ~ 2021.04.30 09:10 기준&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/div&gt;
+                    &lt;button type="button" class="btn_close" title="Close"&gt;&lt;i class="ico_close"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;닫기&lt;/span&gt;&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="dropdown "&gt;
+                &lt;button type="button" class="dropdown_toggle"&gt;북마크 많은 순&lt;i class="ico_arrow"&gt;&lt;/i&gt;&lt;/button&gt;
+                &lt;div id="dropdown" class="dropdown_menu right"&gt;
+                    &lt;ul role="listbox"&gt;
+                        &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;종합&lt;/a&gt;&lt;/li&gt;
+                        &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;많이 본 순&lt;/a&gt;&lt;/li&gt;
+                        &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;댓글 많은 순&lt;/a&gt;&lt;/li&gt;
+                        &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;공유 많은 순&lt;/a&gt;&lt;/li&gt;
+                        &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);"&gt;공감 많은 순&lt;/a&gt;&lt;/li&gt;
+                        &lt;li class="dropdown_item" role="option"&gt;&lt;a href="javascript:void(null);" class="active"&gt;북마크 많은 순&lt;/a&gt;&lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;ul class=""&gt; 탭내용 &lt;/ul&gt;
+&lt;/section&gt;
+&lt;!-- //tab nav --&gt;
 </code></pre>
                     </div>
 
 
                     <h2 class="guide_title">예외 타입6 : PC 화면에서는 서비스명, 스티키 시 기자이름 + 구독, 공유 아이콘이 붙는 타입 </h2>
                     <div class="sample_wrap">
+                        <!-- journalist sub gnb -->
                         <header class="section_header_wrap section_header_custom_wrap">
                             <h2 class="section_title">기자</h2>
                             <div class="header_area">
-                                <strong class="name">이하경</strong>
-                                <span class="info">중앙일보 주필∙부사장</span>
+                                    <strong class="name">이하경</strong>
+                                    <span class="info">중앙일보 주필∙부사장</span>
                             </div>
                             <div class="btn_group">
-                                <button type="button" class="btn">구독</button>
-                                <button type="button" class="btn_share"><i class="ico_share"></i><span class="visually_hidden">공유</span></button>
+                                    <button type="button" class="btn">구독</button>
+                                    <button type="button" class="btn_share"><i class="ico_share"></i><span class="visually_hidden">공유</span></button>
                             </div>
                         </header>
+                        <!-- //journalist sub gnb -->
+
+                        <!-- journalist info -->
+                        <section class="journalist_header">
+                            <div class="profile_area">
+                                <div class="profile_image">
+                                    <figure>
+                                        <img src="https://pds.joins.com/repoter/svc/1038.png" alt="프로필 사진" />
+                                    </figure>
+                                </div>
+                                <div class="profile_body">
+                                    <div class="flex_area">
+                                        <h1 class="name">이하경</h1>
+                                        <strong class="badge_opinion"><span class="visually_hidden">필진</span></strong>
+                                        <button type="button" class="btn_share" onclick="openLayer(layer_share);"><i class="ico_share"></i><span class="visually_hidden">공유</span></button>
+                                        
+                                        <div class="layer_popup layer_share" id="layer_share"><!-- 여기에 개별 클래스 추가 -->
+                                            <div class="layer_header">
+                                                <strong class="layer_title">공유</strong>
+                                            </div>
+                                            <div class="layer_body">
+                                                <ul>
+                                                    <li><button type="button"><i class="ico_sns_ktalk">카카오톡 이미지</i><span>카카오톡</span></button></li>
+                                                    <li><button type="button"><i class="ico_sns_face">f</i><span>페이스북</span></button></li>
+                                                    <li><button type="button"><i class="ico_sns_ktory">카카오스토리 이미지</i><span>카카오스토리</span></button></li>
+                                                    <li><button type="button"><i class="ico_sns_twt">트위터 이미지</i><span>트위터</span></button></li>
+                                                    <li><button type="button"><i class="ico_sns_mail">메일 이미지</i><span>메일</span></button></li>
+                                                    <li><button type="button"><i class="ico_sns_pinter">핀터레스트 이미지</i><span>핀터레스트</span></button></li>
+                                                    <li><button type="button"><i class="ico_sns_band">네이버밴드 이미지</i><span>밴드</span></button></li>
+                                                    <li><button type="button"><i class="ico_sns_url">url 이미지</i><span>URL 복사</span></button></li>
+                                                </ul>
+                                            </div>
+                                            <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">Close</span></button>
+                                        </div>
+                                    </div>
+                                    <p class="profile_info">중앙일보 주필·부사장</p>
+                                    <ul class="journalist_share">
+                                        <li>
+                                            <button type="button" class="btn_email">
+                                                <i class="ico_email lg_hidden"></i><span class="visually_hidden">이메일</span>
+                                                <strong class="text_email sm_hidden">lee.hakyung@joongang.co.kr</strong>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="btn_facebook"><i class="ico_facebook"></i><span class="visually_hidden">페이스북</span></button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="btn_twitter"><i class="ico_twitter"></i><span class="visually_hidden">트위터</span></button>
+                                        </li>
+                                        <li class="">
+                                            <button type="button" class="btn_share"><i class="ico_share"></i><span class="visually_hidden">공유</span></button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p class="journalist_introduce">중앙일보 문화부, 사회부, 정치부와 JTBC 사회2부에서 근무했습니다. 지금은 중앙일보 논설위원으로 일하고 있습니다. 제보주시면 열심히 취재하겠습니다. 기자 소개글 두 줄 이상 떨어질 때.</p>
+                            <div class="journalist_popularity row">
+                                <div class="col_sm6 col_lg6">
+                                    <dl>
+                                        <dt>응원<button type="button" class="btn_info" onclick="openLayer(layer_cheer);"><i class="ico_info"></i></button></dt>
+                                        <dd>1,562</dd>
+                                    </dl>
+                                    <button type="button" class="btn btn_default">응원</button>
+                                    <div class="layer_popup layer_cheer" id="layer_cheer"><!-- 여기에 개별 클래스 추가 -->
+                                        <div class="layer_body">
+                                            <p>기자에게 보내는 응원은 하루 1번 가능합니다.</p>
+                                            <p class="desc">(0시 기준)</p>
+                                        </div>
+                                        <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">닫기</span></button>
+                                    </div>
+                                </div>
+                                <div class="col_sm6 col_lg6">
+                                    <dl>
+                                        <dt>구독</dt>
+                                        <dd>312</dd>
+                                    </dl>
+                                    <button type="button" class="btn btn_default">구독</button>
+                                </div>
+                            </div>
+        
+                            <ul class="package_list">
+                                <li>
+                                    <a href="">
+                                        <strong>바퀴와 날개</strong>
+                                        <span>생활 속 다양한 교통 현안을 살펴봅니다. </span>
+                                        <i class="ico_arrow_right"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <strong>미래로 달리는 교통</strong>
+                                        <span>대중교통의 소식을 가장 빠르게 전달합니다.</span>
+                                        <i class="ico_arrow_right"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <strong>한국의 실리콘밸리 판교</strong>
+                                        <span>대중교통의 소식을 가장 빠르게 전달합니다.</span>
+                                        <i class="ico_arrow_right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </section>
+                        <!-- //journalist info -->
                     </div>
                     <div class="code_wrap">
 <pre><code class="html">
-&lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
+&lt;!-- journalist sub gnb --&gt;
+&lt;header class="section_header_wrap section_header_custom_wrap"&gt;
+    &lt;h2 class="section_title"&gt;기자&lt;/h2&gt;
+    &lt;div class="header_area"&gt;
+            &lt;strong class="name"&gt;이하경&lt;/strong&gt;
+            &lt;span class="info"&gt;중앙일보 주필∙부사장&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="btn_group"&gt;
+            &lt;button type="button" class="btn"&gt;구독&lt;/button&gt;
+            &lt;button type="button" class="btn_share"&gt;&lt;i class="ico_share"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;공유&lt;/span&gt;&lt;/button&gt;
+    &lt;/div&gt;
 &lt;/header&gt;
+&lt;!-- //journalist sub gnb --&gt;
+
+&lt;!-- journalist info --&gt;
+&lt;section class="journalist_header"&gt;
+    &lt;div class="profile_area"&gt;
+        &lt;div class="profile_image"&gt;
+            &lt;figure&gt;
+                &lt;img src="https://pds.joins.com/repoter/svc/1038.png" alt="프로필 사진" /&gt;
+            &lt;/figure&gt;
+        &lt;/div&gt;
+        &lt;div class="profile_body"&gt;
+            &lt;div class="flex_area"&gt;
+                &lt;h1 class="name"&gt;이하경&lt;/h1&gt;
+                &lt;strong class="badge_opinion"&gt;&lt;span class="visually_hidden"&gt;필진&lt;/span&gt;&lt;/strong&gt;
+                &lt;button type="button" class="btn_share" onclick="openLayer(layer_share);"&gt;&lt;i class="ico_share"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;공유&lt;/span&gt;&lt;/button&gt;
+                
+                &lt;div class="layer_popup layer_share" id="layer_share"&gt;&lt;!-- 여기에 개별 클래스 추가 --&gt;
+                    &lt;div class="layer_header"&gt;
+                        &lt;strong class="layer_title"&gt;공유&lt;/strong&gt;
+                    &lt;/div&gt;
+                    &lt;div class="layer_body"&gt;
+                        &lt;ul&gt;
+                            &lt;li&gt;&lt;button type="button"&gt;&lt;i class="ico_sns_ktalk"&gt;카카오톡 이미지&lt;/i&gt;&lt;span&gt;카카오톡&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;button type="button"&gt;&lt;i class="ico_sns_face"&gt;f&lt;/i&gt;&lt;span&gt;페이스북&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;button type="button"&gt;&lt;i class="ico_sns_ktory"&gt;카카오스토리 이미지&lt;/i&gt;&lt;span&gt;카카오스토리&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;button type="button"&gt;&lt;i class="ico_sns_twt"&gt;트위터 이미지&lt;/i&gt;&lt;span&gt;트위터&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;button type="button"&gt;&lt;i class="ico_sns_mail"&gt;메일 이미지&lt;/i&gt;&lt;span&gt;메일&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;button type="button"&gt;&lt;i class="ico_sns_pinter"&gt;핀터레스트 이미지&lt;/i&gt;&lt;span&gt;핀터레스트&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;button type="button"&gt;&lt;i class="ico_sns_band"&gt;네이버밴드 이미지&lt;/i&gt;&lt;span&gt;밴드&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;button type="button"&gt;&lt;i class="ico_sns_url"&gt;url 이미지&lt;/i&gt;&lt;span&gt;URL 복사&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/div&gt;
+                    &lt;button type="button" class="btn_close" title="Close"&gt;&lt;i class="ico_close"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;Close&lt;/span&gt;&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;p class="profile_info"&gt;중앙일보 주필·부사장&lt;/p&gt;
+            &lt;ul class="journalist_share"&gt;
+                &lt;li&gt;
+                    &lt;button type="button" class="btn_email"&gt;
+                        &lt;i class="ico_email lg_hidden"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;이메일&lt;/span&gt;
+                        &lt;strong class="text_email sm_hidden"&gt;lee.hakyung@joongang.co.kr&lt;/strong&gt;
+                    &lt;/button&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;button type="button" class="btn_facebook"&gt;&lt;i class="ico_facebook"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;페이스북&lt;/span&gt;&lt;/button&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;button type="button" class="btn_twitter"&gt;&lt;i class="ico_twitter"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;트위터&lt;/span&gt;&lt;/button&gt;
+                &lt;/li&gt;
+                &lt;li class=""&gt;
+                    &lt;button type="button" class="btn_share"&gt;&lt;i class="ico_share"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;공유&lt;/span&gt;&lt;/button&gt;
+                &lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;p class="journalist_introduce"&gt;중앙일보 문화부, 사회부, 정치부와 JTBC 사회2부에서 근무했습니다. 지금은 중앙일보 논설위원으로 일하고 있습니다. 제보주시면 열심히 취재하겠습니다. 기자 소개글 두 줄 이상 떨어질 때.&lt;/p&gt;
+    &lt;div class="journalist_popularity row"&gt;
+        &lt;div class="col_sm6 col_lg6"&gt;
+            &lt;dl&gt;
+                &lt;dt&gt;응원&lt;button type="button" class="btn_info" onclick="openLayer(layer_cheer);"&gt;&lt;i class="ico_info"&gt;&lt;/i&gt;&lt;/button&gt;&lt;/dt&gt;
+                &lt;dd&gt;1,562&lt;/dd&gt;
+            &lt;/dl&gt;
+            &lt;button type="button" class="btn btn_default"&gt;응원&lt;/button&gt;
+            &lt;div class="layer_popup layer_cheer" id="layer_cheer"&gt;&lt;!-- 여기에 개별 클래스 추가 --&gt;
+                &lt;div class="layer_body"&gt;
+                    &lt;p&gt;기자에게 보내는 응원은 하루 1번 가능합니다.&lt;/p&gt;
+                    &lt;p class="desc"&gt;(0시 기준)&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;button type="button" class="btn_close" title="Close"&gt;&lt;i class="ico_close"&gt;&lt;/i&gt;&lt;span class="visually_hidden"&gt;닫기&lt;/span&gt;&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="col_sm6 col_lg6"&gt;
+            &lt;dl&gt;
+                &lt;dt&gt;구독&lt;/dt&gt;
+                &lt;dd&gt;312&lt;/dd&gt;
+            &lt;/dl&gt;
+            &lt;button type="button" class="btn btn_default"&gt;구독&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;ul class="package_list"&gt;
+        &lt;li&gt;
+            &lt;a href=""&gt;
+                &lt;strong&gt;바퀴와 날개&lt;/strong&gt;
+                &lt;span&gt;생활 속 다양한 교통 현안을 살펴봅니다. &lt;/span&gt;
+                &lt;i class="ico_arrow_right"&gt;&lt;/i&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;a href=""&gt;
+                &lt;strong&gt;미래로 달리는 교통&lt;/strong&gt;
+                &lt;span&gt;대중교통의 소식을 가장 빠르게 전달합니다.&lt;/span&gt;
+                &lt;i class="ico_arrow_right"&gt;&lt;/i&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;a href=""&gt;
+                &lt;strong&gt;한국의 실리콘밸리 판교&lt;/strong&gt;
+                &lt;span&gt;대중교통의 소식을 가장 빠르게 전달합니다.&lt;/span&gt;
+                &lt;i class="ico_arrow_right"&gt;&lt;/i&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/section&gt;
+&lt;!-- //journalist info --&gt;
 </code></pre>
                     </div>
 
-
-                    <h2 class="guide_title">기본형</h2>
-                    <div class="sample_wrap">
-                        <div class="view_btn_wrap">
-                            <button type="button" class="btn_view" data-rel="375px">375</button>
-                            <button type="button" class="btn_view" data-rel="768px">768</button>
-                            <button type="button" class="btn_view" data-rel="">clear</button>
-                        </div>
-                        <header class="title_wrap">
-                            <h2 class="title">문화 많이 본 기사</h2>
-                        </header>
-                    </div>
-                    <div class="code_wrap">
-<pre><code class="html">
-&lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
-&lt;/header&gt;
-</code></pre>
-                    </div>
-
-
-                    <h2 class="guide_title">기본형</h2>
-                    <div class="sample_wrap">
-                        <div class="view_btn_wrap">
-                            <button type="button" class="btn_view" data-rel="375px">375</button>
-                            <button type="button" class="btn_view" data-rel="768px">768</button>
-                            <button type="button" class="btn_view" data-rel="">clear</button>
-                        </div>
-                        <header class="title_wrap">
-                            <h2 class="title">문화 많이 본 기사</h2>
-                        </header>
-                    </div>
-                    <div class="code_wrap">
-<pre><code class="html">
-&lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
-&lt;/header&gt;
-</code></pre>
-                    </div>
-
-
-
-                    <h2 class="guide_title">기본형</h2>
-                    <div class="sample_wrap">
-                        <div class="view_btn_wrap">
-                            <button type="button" class="btn_view" data-rel="375px">375</button>
-                            <button type="button" class="btn_view" data-rel="768px">768</button>
-                            <button type="button" class="btn_view" data-rel="">clear</button>
-                        </div>
-                        <header class="title_wrap">
-                            <h2 class="title">문화 많이 본 기사</h2>
-                        </header>
-                    </div>
-                    <div class="code_wrap">
-<pre><code class="html">
-&lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
-&lt;/header&gt;
-</code></pre>
-                    </div>
-
-
-                    <h2 class="guide_title">기본형</h2>
-                    <div class="sample_wrap">
-                        <div class="view_btn_wrap">
-                            <button type="button" class="btn_view" data-rel="375px">375</button>
-                            <button type="button" class="btn_view" data-rel="768px">768</button>
-                            <button type="button" class="btn_view" data-rel="">clear</button>
-                        </div>
-                        <header class="title_wrap">
-                            <h2 class="title">문화 많이 본 기사</h2>
-                        </header>
-                    </div>
-                    <div class="code_wrap">
-<pre><code class="html">
-&lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
-&lt;/header&gt;
-</code></pre>
-                    </div>
-
-
-                    <h2 class="guide_title">기본형</h2>
-                    <div class="sample_wrap">
-                        <div class="view_btn_wrap">
-                            <button type="button" class="btn_view" data-rel="375px">375</button>
-                            <button type="button" class="btn_view" data-rel="768px">768</button>
-                            <button type="button" class="btn_view" data-rel="">clear</button>
-                        </div>
-                        <header class="title_wrap">
-                            <h2 class="title">문화 많이 본 기사</h2>
-                        </header>
-                    </div>
-                    <div class="code_wrap">
-<pre><code class="html">
-&lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
-&lt;/header&gt;
-</code></pre>
-                    </div>
-
-
-                    <h2 class="guide_title">기본형</h2>
-                    <div class="sample_wrap">
-                        <div class="view_btn_wrap">
-                            <button type="button" class="btn_view" data-rel="375px">375</button>
-                            <button type="button" class="btn_view" data-rel="768px">768</button>
-                            <button type="button" class="btn_view" data-rel="">clear</button>
-                        </div>
-                        <header class="title_wrap">
-                            <h2 class="title">문화 많이 본 기사</h2>
-                        </header>
-                    </div>
-                    <div class="code_wrap">
-<pre><code class="html">
-&lt;header class="title_wrap"&gt;
-    &lt;h2 class="title"&gt;문화 많이 본 기사&lt;/h2&gt;
-&lt;/header&gt;
-</code></pre>
-                    </div>
-
-
-                    
-
-
-                    
 
                     <!-- //가이드 내용 -->
                 </main>

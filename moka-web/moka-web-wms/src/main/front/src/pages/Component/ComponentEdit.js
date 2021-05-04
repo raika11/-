@@ -228,8 +228,7 @@ const ComponentEdit = ({ onDelete, match }) => {
             dispatch(clearComponent());
             setAddMode(false);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
         <MokaCard width={688} title={`컴포넌트 ${componentSeq ? '수정' : '등록'}`} className="flex-fill mr-gutter" loading={loading} bodyClassName="pb-0 d-flex flex-column">
@@ -245,7 +244,7 @@ const ComponentEdit = ({ onDelete, match }) => {
             />
             <hr className="divider" />
             <div className="custom-scroll component-padding-box py-0" style={{ height: 615 }}>
-                <DetailRelationForm addMode={addMode} component={temp} setComponent={setTemp} inputTag={inputTag} error={error} setError={setError} />
+                <DetailRelationForm addMode={addMode} origin={component} component={temp} setComponent={setTemp} inputTag={inputTag} error={error} setError={setError} />
                 <hr className="divider" />
                 <DetailPeriodForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} error={error} setError={setError} />
                 <hr className="divider" />

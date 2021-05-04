@@ -7,15 +7,15 @@ import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@/components';
 import toast from '@/utils/toastUtil';
-import NewsLetterLayoutModal from '../modals/NewsLetterLayoutModal';
 import { EditThumbModal } from '@/pages/Desking/modals';
 import { DB_DATEFORMAT, DATE_FORMAT, TIME_FORMAT } from '@/constants';
+import NewsLetterLayoutModal from '../modals/NewsLetterLayoutModal';
 import NewsLetterEditFormModal from '../modals/NewsLetterEditFormModal';
 
 /**
  * 뉴스레터 편집 > 발송정보 설정
  */
-const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
+const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue, error, setError }, ref) => {
     // 발송 주기(일/주/월) state
     const [sendTime, setSendTime] = useState({
         D: moment(new Date(), DB_DATEFORMAT).startOf('day'),
@@ -76,6 +76,12 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
             } else {
                 onChangeValue({ [name]: value });
             }
+        } else if (name === 'sendPeriod') {
+            if (value === '') {
+                onChangeValue({ [name]: '' });
+            } else {
+                onChangeValue({ [name]: value, sendTimeEdit: '' });
+            }
         } else {
             onChangeValue({ [name]: value });
         }
@@ -100,6 +106,13 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
      */
     const handleThumbFileApply = (imageSrc, file) => {
         onChangeValue({ headerImg: imageSrc, headerImgFile: file });
+    };
+
+    /**
+     * 레이아웃 선택 (자동 혹은 수동)
+     */
+    const addLayout = (obj) => {
+        onChangeValue({ containerSeq: obj.containerSeq });
     };
 
     /**
@@ -187,6 +200,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                         name="containerSeq"
                         placeholder="레이아웃을 검색해 주세요"
                         value={temp.containerSeq}
+                        isInvalid={error.containerSeq}
                         onChange={handleChangeValue}
                         onSearch={() => setLayoutModal(true)}
                         inputProps={{ readOnly: true }}
@@ -194,11 +208,11 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                     />
                     <p className="mb-0 color-primary">※ 레이아웃이 미정인 경우 상품은 자동 임시저장 상태 값으로 지정됩니다.</p>
                 </div>
-                <NewsLetterLayoutModal show={layoutModal} onHide={() => setLayoutModal(false)} />
+                <NewsLetterLayoutModal show={layoutModal} onHide={() => setLayoutModal(false)} onRowClicked={addLayout} />
             </Form.Row>
             {temp.sendType === 'A' && (
                 <Form.Row className="mb-2 align-items-center">
-                    <MokaInputLabel as="none" label="발송 조건" required />
+                    <MokaInputLabel as="none" label="발송 조건" required isInvalid={error.sendCondition} />
                     <Col xs={5} className="p-0 d-flex align-items-center">
                         <MokaInput
                             as="radio"
@@ -228,7 +242,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                 </Form.Row>
             )}
             <Form.Row className="mb-2">
-                <MokaInputLabel as="none" label="발송 주기" required />
+                <MokaInputLabel as="none" label="발송 주기" required isInvalid={error.sendPeriodInfo} />
                 <div className="flex-fill">
                     {/* 매일 */}
                     <div className="mb-2 d-flex align-items-center">
@@ -387,15 +401,15 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                             <Col xs={2} className="p-0 pr-2">
                                 <MokaInput
                                     as="radio"
+                                    value=""
                                     name="sendPeriod"
-                                    value="D"
-                                    id="letter-sendPeriod-r"
-                                    inputProps={{ label: '직접 입력', custom: true, checked: temp.sendPeriod === 'R' }}
-                                    disabled
+                                    id="letter-sendPeriod-direct"
+                                    inputProps={{ label: '직접 입력', custom: true, checked: temp.sendPeriod === '' }}
+                                    onChange={handleChangeValue}
                                 />
                             </Col>
                             <Col xs={6} className="p-0">
-                                <MokaInput className="flex-fill" disabled />
+                                <MokaInput className="flex-fill" name="sendTimeEdit" value={temp.sendTimeEdit} onChange={handleChangeValue} disabled={temp.sendPeriod !== ''} />
                             </Col>
                         </div>
                     )}
@@ -425,7 +439,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
             </Form.Row>
             {temp.sendType === 'E' && (
                 <Form.Row className="mb-2 align-items-center">
-                    <MokaInputLabel as="none" label="레터 편집" required />
+                    <MokaInputLabel as="none" label="레터 편집" required isInvalid={error.letterEdit} />
                     <Col xs={2} className="p-0 pr-2">
                         <MokaInput
                             as="radio"
@@ -468,9 +482,23 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                     </MokaInput>
                 </Col>
                 <Col xs={2} className="p-0 pr-2">
-                    <MokaInput name="senderName" value={temp.senderName} onChange={handleChangeValue} inputProps={{ readOnly: sn === 'ja' ? true : false }} required />
+                    <MokaInput
+                        name="senderName"
+                        value={temp.senderName}
+                        onChange={handleChangeValue}
+                        inputProps={{ readOnly: sn === 'ja' ? true : false }}
+                        required
+                        isInvalid={error.senderName}
+                    />
                 </Col>
-                <MokaInput name="senderEmail" value={temp.senderEmail} onChange={handleChangeValue} inputProps={{ readOnly: sn === 'ja' ? true : false }} required />
+                <MokaInput
+                    name="senderEmail"
+                    value={temp.senderEmail}
+                    onChange={handleChangeValue}
+                    inputProps={{ readOnly: sn === 'ja' ? true : false }}
+                    required
+                    isInvalid={error.senderEmail}
+                />
             </Form.Row>
             <Form.Row className="mb-2 align-items-center">
                 {temp.sendType === 'A' && (
@@ -480,6 +508,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                             <MokaInput
                                 as="dateTimePicker"
                                 value={sendStartDt.date}
+                                isInvalid={error.sendStartDt}
                                 inputProps={{ timeFormat: null }}
                                 onChange={(date) => {
                                     if (typeof date === 'object') {
@@ -501,6 +530,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                             <MokaInput
                                 as="dateTimePicker"
                                 value={sendStartDt.time}
+                                isInvalid={error.sendStartDt}
                                 inputProps={{ dateFormat: null }}
                                 onChange={(date) => {
                                     if (typeof date === 'object') {
@@ -522,7 +552,17 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                         </div>
                     </>
                 )}
-                {temp.sendType === 'E' && <MokaInputLabel className="flex-fill" name="editTitle" label="발송 제목" value={temp.editTitle} onChange={handleChangeValue} required />}
+                {temp.sendType === 'E' && (
+                    <MokaInputLabel
+                        className="flex-fill"
+                        name="editTitle"
+                        label="발송 제목"
+                        value={temp.editTitle}
+                        onChange={handleChangeValue}
+                        required
+                        isInvalid={error.editTitle}
+                    />
+                )}
             </Form.Row>
 
             {temp.sendType === 'E' && (
@@ -561,7 +601,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
 
             {temp.sendType === 'A' && (
                 <Form.Row className="align-items-center">
-                    <MokaInputLabel as="none" label="발송 제목" required />
+                    <MokaInputLabel as="none" label="발송 제목" required isInvalid={error.sendTitle} />
                     <div className="flex-fill">
                         <p className="mb-0">1) 고정 표기</p>
                         <Col xs={10} className="p-0 pl-3 mb-2 d-flex" style={{ height: 31 }}>

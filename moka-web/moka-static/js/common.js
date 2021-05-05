@@ -1,14 +1,14 @@
 $(document).ready(function() {
     //header stiky
-    var stickyHeight = $(".sticky").outerHeight(); 
+    var stickyHeight = $("#sticky").outerHeight(); 
     setSticky(stickyHeight);
     $(window).scroll(function () {
         setSticky(stickyHeight);
     });
 
     $(window).resize(function () {
-        $(".sticky").removeClass("sticky_top");
-        stickyHeight = $(".sticky").outerHeight(); 
+        $("#sticky").removeClass("sticky_top");
+        stickyHeight = $("#sticky").outerHeight(); 
         setSticky(stickyHeight);
     });
 

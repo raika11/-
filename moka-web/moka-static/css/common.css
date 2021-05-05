@@ -597,7 +597,7 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
     background-position: 50% 50%;
 }
 .section_title .title {display:none;font-size: 18px;font-weight: 900;line-height: 1.44;color: #111;}
-.sticky .section_title .title{display:block;}
+.section_title .title{display:block;}
 .header_area .header_nav .nav_item{display:inline-flex;flex:0 0 auto;width:auto;}
 .section_header_wrap .page_title{font-size: 14px;font-weight:700;line-height: 1.57;color: #111;}
 .section_header_wrap .date_wrap{position:absolute;bottom:11px;right:0;}
@@ -679,7 +679,7 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
 
 
     .section_header_wrap.sticky_top{z-index: 305;}
-    .section_header_wrap.sticky_top{display:flex;top: 0;padding-left: 204px;max-width: 1200px;left: 50%;transform: translateX(-50%);}
+    .section_header_wrap.sticky_top{display:flex;top: 0;padding-left: 204px;max-width: 1200px;left: 50%;transform: translateX(-50%); border-bottom: 0;}
     .section_header_wrap.sticky_top .header_area {margin-top:-27px}
     
     .section_header_wrap.trend_header.sticky_top .section_title .title{display: block;}

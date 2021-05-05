@@ -72,10 +72,10 @@ $(document).ready(function() {
 //header stiky
 function setSticky(stickyHeight){
     if ($(window).scrollTop() > stickyHeight) {
-        $('.sticky').addClass('sticky_top');
+        $('#sticky').addClass('sticky_top');
         $("main").css("margin-top",stickyHeight + "px");
     } else {
-        $('.sticky').removeClass('sticky_top');
+        $('#sticky').removeClass('sticky_top');
         $("main").css("margin-top","0px");
     }
 }

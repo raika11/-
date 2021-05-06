@@ -200,14 +200,15 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 
 .related_link {width:100%;padding:15px 20px;border:1px solid #e2e2e2}
-
+.related_link .title_wrap{padding-bottom:14px;border-bottom:1px solid #e2e2e2}
+.related_link .title_wrap .title{color: #333;font-size: 16px;line-height: 1.63;letter-spacing: -0.5px;}
 .row.gutter0 {margin-left: 0;margin-right: 0;}
 .row.gutter0 > * {padding-left: 0;padding-right: 0;}
 
 
 /* 스토리리스트형 */
 .related_link .story_list .card_image img{width:125px;}
-
+.related_link .story_list .headline{font-size:18px;line-height: 1.56;}
 
 /* 텍스트형 */
 /* 2016-06-22 모듈 추가(박스기사, 관련기사, 소제목) */

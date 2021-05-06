@@ -39,6 +39,8 @@ public class ArticlePackageSimpleDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<ArticlePackageSimpleDTO>>() {
     }.getType();
 
+    private Long pkgSeq;
+
     private String pkgDiv;
 
     private String pkgTitle;

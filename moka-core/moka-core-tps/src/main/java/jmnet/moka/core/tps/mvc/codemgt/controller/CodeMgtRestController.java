@@ -746,5 +746,35 @@ public class CodeMgtRestController extends AbstractCommonController {
             throw new Exception(messageByLocale.get("tps.codeMgt.error.duplicate.dtlCd"));
         }
     }
+
+    /**
+     * 코드 상세조회(abTest용)
+     *
+     * @param grpCd 그룹코드
+     * @param dtlCd 상세코드
+     * @return 상세코드정보
+     * @throws Exception
+     */
+    @ApiOperation(value = "코드 상세조회(abTest용)")
+    @GetMapping("/{grpCd}/abtest/{dtlCd}")
+    public ResponseEntity<?> getAbTest(@ApiParam(value = "그룹코드(필수)", required = true) @PathVariable("grpCd")
+    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
+            @ApiParam(value = "상세코드(필수)", required = true) @PathVariable("dtlCd")
+            @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgt.error.pattern.dtlCd}") String dtlCd)
+            throws Exception {
+
+        // 데이타유효성검사.
+        //        validData(seqNo, null, ActionType.SELECT);
+
+        List<CodeMgt> returnValue = codeMgtService.findByDtlCd(grpCd, dtlCd);
+
+        ResultDTO<CodeMgtDTO> resultDto = new ResultDTO<CodeMgtDTO>();
+        if (returnValue.size() > 0) {
+            CodeMgtDTO dto = modelMapper.map(returnValue.get(0), CodeMgtDTO.class);
+            resultDto.setBody(dto);
+        }
+        tpsLogger.success(ActionType.SELECT, true);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
 }
 

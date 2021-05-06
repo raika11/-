@@ -9,6 +9,7 @@ import jmnet.moka.core.tps.mvc.board.entity.BoardInfo;
 import jmnet.moka.core.tps.mvc.board.entity.QBoardInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -54,12 +55,14 @@ public class BoardInfoRepositorySupportImpl extends TpsQueryDslRepositorySupport
         }
 
         Pageable pageable = searchDTO.getPageable();
+        Pageable pageables = PageRequest.of(0, 1000);
+
         if (McpString.isYes(searchDTO.getUseTotal()) && getQuerydsl() != null) {
-            query = getQuerydsl().applyPagination(pageable, query);
+            query = getQuerydsl().applyPagination(pageables, query);
         }
 
         QueryResults<BoardInfo> list = query.fetchResults();
 
-        return new PageImpl<>(list.getResults(), pageable, list.getTotal());
+        return new PageImpl<>(list.getResults(), pageables, list.getTotal());
     }
 }

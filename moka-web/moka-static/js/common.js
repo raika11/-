@@ -1,17 +1,23 @@
 $(document).ready(function() {
     //header stiky
-    var stickyHeight = $("#sticky").outerHeight(); 
-    setSticky(stickyHeight);
-    $(window).scroll(function () {
+    //header stiky
+    if($("#sticky").length>0){
+        var stickyHeight = $("#sticky").outerHeight(); 
         setSticky(stickyHeight);
+    }
+    $(window).scroll(function () {
+        if($("#sticky").length>0){
+            setSticky(stickyHeight);
+        }
     });
 
     $(window).resize(function () {
-        $("#sticky").removeClass("sticky_top");
-        stickyHeight = $("#sticky").outerHeight(); 
-        setSticky(stickyHeight);
+        if($("#sticky").length>0){
+            $("#sticky").removeClass("sticky_top");
+            stickyHeight = $("#sticky").outerHeight(); 
+            setSticky(stickyHeight);
+        }
     });
-
     //li형 select box
     $(".dropdown_toggle").on("click", function(){
         $(this).parent(".dropdown").toggleClass("open");

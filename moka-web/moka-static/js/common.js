@@ -1,28 +1,23 @@
-
-
-
 $(document).ready(function() {
-
     //header stiky
-    if ($(this).scrollTop() > 0) {
-        // $('.header').addClass('sticky_top');
-        // $('.section_header_wrap').addClass('sticky_top');
+    //header stiky
+    if($("#sticky").length>0){
+        var stickyHeight = $("#sticky").outerHeight(); 
+        setSticky(stickyHeight);
     }
     $(window).scroll(function () {
-        var headerHeight = $(".section_header_wrap").outerHeight(true);
-        // alert(headerHeight);
-        if ($(this).scrollTop() > headerHeight) {
-            // $('.header').addClass('sticky_top');
-            // $('.section_header_wrap').addClass('sticky_top');
-            $("body").css("margin-top",headerHeight+"px");
-        } else {
-            // $('.header').removeClass('sticky_top');
-            // $('.section_header_wrap').removeClass('sticky_top');
-            $("body").css("margin-top","0px");
+        if($("#sticky").length>0){
+            setSticky(stickyHeight);
         }
     });
 
-
+    $(window).resize(function () {
+        if($("#sticky").length>0){
+            $("#sticky").removeClass("sticky_top");
+            stickyHeight = $("#sticky").outerHeight(); 
+            setSticky(stickyHeight);
+        }
+    });
     //li형 select box
     $(".dropdown_toggle").on("click", function(){
         $(this).parent(".dropdown").toggleClass("open");
@@ -80,6 +75,17 @@ $(document).ready(function() {
 
 });
 
+//header stiky
+function setSticky(stickyHeight){
+    if ($(window).scrollTop() > stickyHeight) {
+        $('#sticky').addClass('sticky_top');
+        $("main").css("margin-top",stickyHeight + "px");
+    } else {
+        $('#sticky').removeClass('sticky_top');
+        $("main").css("margin-top","0px");
+    }
+}
+
 /* 임시 레이어팝업 */
 function toggleOpenLayer(obj){
 	$(obj).toggleClass("active");
@@ -130,9 +136,6 @@ function mobileSwiper() {
         slidesPerView: 3,
         slidesPerGroup: 1,
         spaceBetween: 30,
-        // allowTouchMove:true,
-        // centeredSlidesBounds: true,
-        // freeMode: true,
         pagination: {
             el: '.swiper-pagination',
             clickable: true,

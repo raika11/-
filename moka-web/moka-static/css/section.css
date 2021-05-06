@@ -51,8 +51,6 @@
 .layer_videoInfo p { font-size: 13px; line-height: 22px; letter-spacing: -0.5px; text-align: left; }
 .layer_videoInfo .btn_close { top: 10px; right: 10px; }
 
-.photo_list_area .card_group.swiper-wrapper { width: auto; }
-.photo_list_area .card_group.swiper-wrapper .card { padding-bottom: 0; }
 .photo_list_area .card_group.swiper-wrapper .card:before { height: calc(100% - 15px); }
 
 /* 최신 영상 */
@@ -69,6 +67,8 @@
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width:1023px) {
     .contents section{margin-bottom:40px;}
+    .section_header_wrap.sticky_top { position: inherit !important; }
+    .section_header_wrap .section_title:only-child { padding-bottom: 0; }
 
     /* card */
 
@@ -149,7 +149,7 @@
     .catalog_list_wrap .card_skin .card_body { padding-top: 16px; }
 
     /* 최신 포토 */
-    .catalog_list_wrap { margin-top: 40px; }
+    /* .catalog_list_wrap { margin-top: 40px; } */
     .catalog_list_wrap .photo_list_area { margin-top: 19px; }
     .catalog_list_wrap .photo_list_area .card { min-height: auto; padding-bottom: 0; }
     .catalog_list_wrap .photo_list_area .card:nth-child(1),
@@ -180,6 +180,7 @@
     .photo_list_area .card_group.swiper-wrapper .card { padding-top: 0; }
 
     .catalog_list_wrap [class*='swiper-button-'] { display: none; }
+    .photo_list_area.swiper-container .swiper-pagination { display: none; }
 
 
     /* 최신 영상*/
@@ -296,7 +297,7 @@
 
     /* 최신 포토 */
     .catalog_list_wrap .photo_list_area { margin-top: 9px; border-bottom: 1px solid #e2e2e2; }
-    .catalog_list_wrap .photo_list_area .card { padding-top: 15px; padding-bottom: 15px; }
+    .catalog_list_wrap .photo_list_area .card { padding-top: 15px; padding-bottom: 15px; border-top: none; }
     .catalog_list_wrap .photo_list_area .card:before { height: calc(100% - 30px); }
     .catalog_list_wrap .photo_list_area .headline { line-height: 1.56; }
 
@@ -313,11 +314,11 @@
     .photo_list_area.swiper-container .headline { font-size: 20px; line-height: 30px; }
     
     .catalog_list_wrap { position: relative; }
-    .catalog_list_wrap .photo_list_area.swiper-container { border-bottom: none; }
+    .catalog_list_wrap .photo_list_area.swiper-container { padding-top: 0; margin-top: -30px; border-bottom: none; }
+    .catalog_list_wrap .photo_list_area.swiper-container .card { padding-top: 54px; padding-bottom: 0;}
+    .photo_list_area .card_group.swiper-wrapper .card:before { left: -15px; }
     .catalog_list_wrap .swiper-button-disabled { background-color: #F7F7F7; }
-    .catalog_list_wrap [class*='swiper-button-'] { top: 16px; width: 25px; height: 25px; margin-top: 0; border: 1px solid #e2e2e2; border-radius: 50%; background-size: 13px 13px; }
-    .catalog_list_wrap .swiper-button-prev { left: inherit; right: 31px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M15 0v15H0V0z'/%3E%3Cpath fill='%231D1D1D' d='M9.75 2.284l.53.53-4.684 4.687 4.683 4.683-.53.53L4.534 7.5 9.75 2.285z'/%3E%3C/g%3E%3C/svg%3E"); }
-    .catalog_list_wrap .swiper-button-next { right: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0v15h15V0z'/%3E%3Cpath fill='%231D1D1D' d='M5.25 2.284l-.53.53 4.684 4.687-4.683 4.683.53.53L10.466 7.5 5.25 2.285z'/%3E%3C/g%3E%3C/svg%3E"); }
+    .catalog_list_wrap .swiper-pagination { display: none; }
 
     /* 최신 영상 */
     .catalog_list_wrap .photo_list_area .ico_play { left: 8px; bottom: 8px; }

@@ -64,6 +64,11 @@ public class BoardInfoServiceImpl implements BoardInfoService {
     }
 
     @Override
+    public void delBoardInfo(BoardInfo boardInfo) {
+        boardInfoRepository.save(boardInfo);
+    }
+
+    @Override
     public void deleteBoardInfo(Integer boardId) {
         boardInfoRepository.deleteById(boardId);
     }

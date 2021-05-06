@@ -15,7 +15,7 @@ import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateNode;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
@@ -214,7 +214,7 @@ public class PagingMerger extends MokaAbstractElementMerger {
         // relCp가 있는지 확인하여 있을 경우 데이터를 로딩한다.
         //        String relCp = getRelatedComponentId(context, httpParamMap);
         try {
-            String dataId = KeyResolver.makeDataId(MokaConstants.ITEM_COMPONENT, relCp);
+            String dataId = CacheHelper.makeDataId(MokaConstants.ITEM_COMPONENT, relCp);
             jsonResult = ((MokaTemplateMerger) this.templateMerger).getData(context, dataId);
             if (jsonResult == null && relCp != null) {
                 jsonResult = cpTemplateRoot.loadData(this.templateMerger, context);

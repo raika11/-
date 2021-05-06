@@ -13,7 +13,7 @@ import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.exception.TmsException;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
 import org.json.simple.JSONArray;
@@ -89,7 +89,7 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
             JSONArray jsonArray = (JSONArray) jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
             JSONObject jsonObject = (JSONObject) jsonArray.get(0);
             item = DPS_ITEM_FACTORY.getItem(itemType, jsonObject);
-            String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
+            String itemKey = CacheHelper.makeItemKey(this.domainId, itemType, itemId);
             // PG일 경우 URL과 매핑한다.
             if (itemType.equals(MokaConstants.ITEM_PAGE) && item.getBoolYN(ItemConstants.PAGE_USE_YN)) {
                 this.addUri((PageItem) item);

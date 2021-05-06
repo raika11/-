@@ -11,14 +11,14 @@
     <parameter>
       <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
     </parameter>
-    <request dmlType="sp" setNames="_DATA,_DESKING">dps.package.info</request>
+    <request dmlType="sp" setNames="_DATA,DESKING">dps.package.info</request>
     <request type="apiCall" resultName="LIST" apiId="package.article"/>
     <request type="script" resultName="_DATA">
       var result = $ac.getAllResult();
       var packageMap = new("java.util.LinkedHashMap");
       var map = new("java.util.LinkedHashMap");
       map.put("info", empty(result._DATA)? null:result._DATA[0]);
-      map.put("desking",result._DESKING._DATA);
+      map.put("desking",result.DESKING._DATA);
       map.put("articles",result.LIST._DATA);
       packageMap.put("package",map);
       packageMap;

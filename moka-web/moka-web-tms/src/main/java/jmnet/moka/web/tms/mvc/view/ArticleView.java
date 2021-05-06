@@ -24,7 +24,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaFunctions;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
@@ -97,8 +97,8 @@ public class ArticleView extends AbstractView {
         MokaTemplateMerger templateMerger = null;
         PrintWriter writer = null;
 
-        String cacheType = KeyResolver.CACHE_ARTICLE_MERGE;
-        String cacheKey = KeyResolver.makeArticleCacheKey(domainId, articleId);
+        String cacheType = CacheHelper.CACHE_ARTICLE_MERGE;
+        String cacheKey = CacheHelper.makeArticleCacheKey(domainId, articleId);
 
         String cached = null;
         // 캐시된 경우
@@ -196,12 +196,14 @@ public class ArticleView extends AbstractView {
             return;
         }
 
+
         /*1 사전정리*/
         rtn = rtn.replaceAll("(?i)^(\\s|&nbsp;)*\\s*","");                  /* 줄 시작 공백제거 */
         rtn = McpString.trimStart(rtn, ' ');                                                     /* 문서 시작 공백제거 */
         rtn = McpString.trimEnd(rtn, ' ');                                                       /* 문서 끝 공백제거 */
         //[2021.04.30제외]전체처리와 중복 //rtn = rtn.replaceAll("(<[^>]*)([\\n]+)([^>]+>)", "$1 $3");   /*태그사이 줄바꿈 제거*/
         rtn = rtn.replace("\n", "").replace("\r", "");    /*줄바꿈 제거*/
+        rtn = rtn.replaceAll("(?i)<hr([^>]*)*>", "<br />"); /*hr 미사용으로 제거 23233186*/
 
         rtn = rtn.replaceAll("(?i)<br[^>]*>", "<br />");                    /*br 태그규격화*/
 
@@ -225,6 +227,7 @@ public class ArticleView extends AbstractView {
         rtn = rtn.replaceAll("\n", "</p>\n");
         rtn = rtn.replaceAll("(?i)<\\/div><p class=\"ac\">", "</div>\n<p class=\"ac\">");   /*파티클 위 줄바꿈처리*/
         rtn = rtn.replaceAll("(?i)div>([^<\n]+)", "div>\n<p class=\"ac\">$1");  /*파티클뒤에 텍스트가 바로오는 경우*/
+        rtn = rtn.replaceAll("(?i)div><(b |b>|strong|a )", "div>\n<p class=\"ac\"><$1");    /*2021.05.04 파티클뒤에 b/a/strong 등 태그가 오는 경우-23234689*/
 
         if(rtn.endsWith("<p class=\"ac\">")) { rtn += "</p>"; }
         if(rtn.startsWith("<b>")) { rtn = "<p class=\"ac\">" + rtn; }
@@ -257,16 +260,9 @@ public class ArticleView extends AbstractView {
             rtn = rtn.replaceAll("(?i)\n<p class=\"ac\"></p>\n<p class=\"ac\"></p>", "\n<p class=\"ac\"></p>");
         }
 
-        /*7 기사 끝 공백 라인 제거*/
-        for ( int i = 0; i<2; i++) {
-            if (rtn.endsWith("<p class=\"ac\"></p>")) {
-                rtn = rtn.substring(0, rtn.length() - "<p class=\"ac\"></p>".length());
-                rtn = McpString.trimEnd(rtn, '\n');
-            }
-        }
-
-        /*9  태그 구조 정리*/
-        rtn = rtn.replaceAll("(?i)<hr([^>]*)*>", "\n<p class=\"ac\"></p>"); /*hr 미사용으로 제거*/
+        /*7 기사 끝 공백 라인 제거 23234322*/
+        //rtn = rtn.replaceAll("\n<p class=\"ac\"></p>", ""); /* 공백줄 전체 삭제 */
+        while (rtn.endsWith("\n<p class=\"ac\"></p>")) { rtn = rtn.substring(0, rtn.length() - "\n<p class=\"ac\"></p>".length()); }
 
         articleInfo.put("ART_CONTENT", rtn);
     }

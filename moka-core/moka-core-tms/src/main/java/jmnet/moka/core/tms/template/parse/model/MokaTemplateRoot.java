@@ -11,7 +11,7 @@ import jmnet.moka.common.template.parse.TemplateParser;
 import jmnet.moka.common.template.parse.model.TemplateNode;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.common.template.parse.model.TemplateToken;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
@@ -127,7 +127,7 @@ public abstract class MokaTemplateRoot extends TemplateRoot {
             if (hasParamToken() || hasPagingElement() || hasSectionMenuToken()) {
                 return (HttpParamMap) context.get(MokaConstants.MERGE_CONTEXT_PARAM);
             } else {
-                return KeyResolver.EMPTY_MAP;
+                return CacheHelper.EMPTY_MAP;
             }
         }
     }

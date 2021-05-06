@@ -7,6 +7,7 @@ import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.mvc.HttpParamFactory;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
@@ -72,7 +73,11 @@ public class PackageHandler extends AbstractHandler {
     public String merge(HttpServletRequest request, HttpServletResponse response, Model model) {
         // 머지 옵션설정
         MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
-        model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
+
+        // 캐시키에 추가할 파라미터 설정
+        CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_CATEGORY);
+        CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_FILTER);
+        CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_DATE);
 
         // Http 파라미터 설정
         HttpParamMap httpParamMap = this.httpParamFactory.creatHttpParamMap(request);

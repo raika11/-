@@ -7,18 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.JSONResult;
 import jmnet.moka.common.cache.CacheManager;
-import jmnet.moka.common.template.exception.DataLoadException;
-import jmnet.moka.common.template.exception.TemplateMergeException;
-import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.DpsApiConstants;
-import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -104,9 +100,31 @@ public class PackageView extends MokaAbstractView {
             homeUrl = topicHomeUrl;
         }
         String itemKey = this.domainTemplateMerger.getItemKey(domainId, homeUrl);
-        String itemType = KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_TYPE);
-        String itemId = KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_ID);
+        String itemType = CacheHelper.getItemKeyFactor(itemKey, CacheHelper.ITEM_TYPE);
+        String itemId = CacheHelper.getItemKeyFactor(itemKey, CacheHelper.ITEM_ID);
         MergeItem item = this.domainTemplateMerger.getItem(domainId, itemType, itemId);
+
+        // 캐시키 설정
+        CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.MERGE_CONTEXT_PACKAGE_TYPE);
+        httpParamMap.put(MokaConstants.MERGE_CONTEXT_PACKAGE_TYPE, packageType);
+        CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.MERGE_CONTEXT_PACKAGE_ID);
+        httpParamMap.put(MokaConstants.MERGE_CONTEXT_PACKAGE_ID, packageId);
+
+        String cacheType = CacheHelper.CACHE_PG_MERGE;
+        String cacheKey = CacheHelper.makePgItemCacheKey(domainId, itemId, mergeContext );
+
+        String cached = null;
+        // 캐시된 경우
+        if (this.cacheManager != null) {
+            cached = this.cacheManager.get(cacheType, cacheKey);
+            if (cached != null) { // cache가 있을 경우
+                writeContent(request, response, cached);
+                actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
+                        System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME),
+                        packageType+"_"+packageId);
+                return;
+            }
+        }
 
         // 이슈, 시리즈, 토픽에 필요한 데이터를 설정한다.
         MokaTemplateMerger templateMerger = this.domainTemplateMerger.getTemplateMerger(domainId);
@@ -126,6 +144,9 @@ public class PackageView extends MokaAbstractView {
             writer = response.getWriter();
             this.setCodesAndMenus(this.domainTemplateMerger, domainId, item, mergeContext);
             sb = domainTemplateMerger.merge(domainId, itemType, itemId, mergeContext);
+            if (this.cacheManager != null) {
+                this.cacheManager.set(cacheType, cacheKey, sb.toString());
+            }
             writer.append(sb);
             actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
                     System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), path);
@@ -146,4 +167,19 @@ public class PackageView extends MokaAbstractView {
 
     }
 
+    private void writeContent(HttpServletRequest request, HttpServletResponse response, String content) {
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter writer = null;
+        try {
+            writer = response.getWriter();
+            writer.append(content);
+        } catch (Exception e) {
+            logger.error("Request:{}, Exception: {}", request.getRequestURI(), e.toString());
+        } finally {
+            if (writer != null) {
+                writer.flush();
+                writer.close();
+            }
+        }
+    }
 }

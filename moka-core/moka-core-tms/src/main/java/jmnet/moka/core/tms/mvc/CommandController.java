@@ -31,13 +31,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.cache.exception.CacheException;
+import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.purge.model.PurgeItem;
 import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -268,8 +269,8 @@ public class CommandController {
                         if (!itemType.equals(MokaConstants.ITEM_DATASET) && !itemType.equals(MokaConstants.ITEM_ARTICLE_PAGE)) {
                             // Dataset 데이터는 캐시하지 않음
                             // 기사페이지는 기사정보를 매번 조회해야 기사페이지별 캐시가 가능하므로 성능상 불리하므로 이미 캐싱된 기사는 만료시간후 반영
-                            String cacheType = KeyResolver.getCacheType(itemType);
-                            String cacheKey = KeyResolver.makeItemKey(domainId, itemType, itemId);
+                            String cacheType = CacheHelper.getCacheType(itemType);
+                            String cacheKey = CacheHelper.makeItemKey(domainId, itemType, itemId);
                             List<Map<String, Object>> purgeResult = this.cacheManager.purgeStartsWith(cacheType, cacheKey);
                             list.add(purgeResult);
                         }
@@ -300,16 +301,16 @@ public class CommandController {
             String articleId = request.getParameter("articleId");
             if (McpString.isNotEmpty(articleId)) {
                 // 기사페이지 purge
-                String cacheType = KeyResolver.CACHE_ARTICLE_MERGE;
+                String cacheType = CacheHelper.CACHE_ARTICLE_MERGE;
                 for (DomainItem domainItem : domainResolver.getDomainInfoList()) {
-                    String cacheKey = KeyResolver.makeArticleCacheKey(domainItem.getItemId(), articleId);
+                    String cacheKey = CacheHelper.makeArticleCacheKey(domainItem.getItemId(), articleId);
                     List<Map<String, Object>> purgeResult = this.cacheManager.purge(cacheType, cacheKey);
                     list.add(purgeResult);
                 }
                 // 기사페이지중 AMP 페이지 purge
-                cacheType = KeyResolver.CACHE_AMP_ARTICLE_MERGE;
+                cacheType = CacheHelper.CACHE_AMP_ARTICLE_MERGE;
                 for (DomainItem domainItem : domainResolver.getDomainInfoList()) {
-                    String cacheKey = KeyResolver.makeArticleCacheKey(domainItem.getItemId(), articleId);
+                    String cacheKey = CacheHelper.makeArticleCacheKey(domainItem.getItemId(), articleId);
                     List<Map<String, Object>> purgeResult = this.cacheManager.purge(cacheType, cacheKey);
                     list.add(purgeResult);
                 }
@@ -381,11 +382,19 @@ public class CommandController {
             @RequestParam String itemId, @RequestParam(required = false) String category, @RequestParam String html) {
         try {
             if (McpString.isNotEmpty(html)) {
+                // 머지 옵션설정
+                MergeContext mergeContext = new MergeContext();
+                // 캐시키에 추가할 파라미터 설정
+                CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_CATEGORY);
+                CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_FILTER);
+                CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_DATE);
                 HttpParamMap httpParamMap = this.httpParamFactory.creatHttpParamMap(request);
-                String cacheKey = KeyResolver.makePgItemCacheKey(domainId, itemId, httpParamMap);
+                mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, httpParamMap);
+
+                String cacheKey = CacheHelper.makePgItemCacheKey(domainId, itemId, mergeContext);
                 MergeItem pageItem = this.domainTemplateMerger.getItem(domainId, MokaConstants.ITEM_PAGE, itemId);
                 if (pageItem.getBoolYN(ItemConstants.PAGE_FILE_YN)) {
-                    this.cacheManager.set(KeyResolver.CACHE_PG_MERGE, cacheKey, html, 24 * 60 * 60 * 1000L);
+                    this.cacheManager.set(CacheHelper.CACHE_PG_MERGE, cacheKey, html, 24 * 60 * 60 * 1000L);
                     // page내용을 저장한다.
                     String domainPath = String.join("/", this.savePagePath, domainId);
                     String pagePath = domainPath + "/" + itemId;
@@ -402,7 +411,7 @@ public class CommandController {
                         logger.error("Page Not Saved: {}", pagePath);
                     }
                 } else {
-                    this.cacheManager.set(KeyResolver.CACHE_PG_MERGE, cacheKey, html);
+                    this.cacheManager.set(CacheHelper.CACHE_PG_MERGE, cacheKey, html);
                 }
             } else {
                 throw new CacheException("page content not found");

@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 게시판설정정보
+ * 게시판 설정 정보
  */
 @Entity
 @Table(name = "TB_BOARD_INFO")

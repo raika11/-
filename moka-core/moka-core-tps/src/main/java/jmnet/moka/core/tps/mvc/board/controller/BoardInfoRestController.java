@@ -80,6 +80,7 @@ public class BoardInfoRestController extends AbstractCommonController {
 
         ResultListDTO<BoardInfoDTO> resultListMessage = new ResultListDTO<>();
 
+        search.setDelYn(MokaConstants.NO);
         // 조회
         Page<BoardInfo> returnValue = boardInfoService.findAllBoardInfo(search);
 
@@ -111,6 +112,7 @@ public class BoardInfoRestController extends AbstractCommonController {
         BoardInfoSearchDTO search = BoardInfoSearchDTO
                 .builder()
                 .usedYn(MokaConstants.YES)
+                .delYn(MokaConstants.NO)
                 .build();
 
         Page<BoardInfo> resultValue = boardInfoService.findAllBoardInfo(search);
@@ -298,7 +300,7 @@ public class BoardInfoRestController extends AbstractCommonController {
             @ApiParam("게시판코드") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId) {
 
         boolean exists = boardInfoService.hasContents(boardId);
-        String message = exists ? msg("tps.board-info.success.select.exist-board") : "";
+        String message = exists ? msg("tps.board-info.success.select.exist-boardContent") : "";
 
         // 결과리턴
         ResultDTO<Boolean> resultDto = new ResultDTO<>(exists, message);
@@ -337,7 +339,10 @@ public class BoardInfoRestController extends AbstractCommonController {
 
         try {
             // 삭제
-            boardInfoService.deleteBoardInfo(boardInfo);
+            boardInfo.setUsedYn(MokaConstants.NO);
+            boardInfo.setDelYn(MokaConstants.YES);
+            boardInfoService.delBoardInfo(boardInfo);
+            //boardInfoService.deleteBoardInfo(boardInfo);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.DELETE);

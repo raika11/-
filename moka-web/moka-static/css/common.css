@@ -607,6 +607,7 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
 }
 
 .section_header_wrap.sticky_top .logo_trend{display:none;}
+.section_header_wrap.sticky_top .date_wrap{display:none;}
 
 
 

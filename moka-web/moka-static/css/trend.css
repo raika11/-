@@ -77,7 +77,7 @@ header.title_wrap{border-top: none;}
     .top_history_list .top_history_info { padding-top: 16px; }
     .top_history_list .top_history_info .cnt:before { display: inline-block; content: ''; width: 1px; height: 14px; padding-left: 10px; margin-left: 10px; border-left: 1px solid #bcbcbc; }
     .top_history_list .list_item { padding: 0; }
-    .top_history_list .list_item .card:before { width: calc(100% + 30px); border-top: 1px solid #f6330a;}
+    .top_history_list .list_item .card:before { width: calc(100% + 30px); border-top: 1px solid #f6330a; transform: translateY(1px); }
     .top_history_list .card.last_time:before { border-top: none; }
     .top_history_list .card_body .time { transform: translateY(-5px); height: 26px; font-size: 13px; line-height: 22px; letter-spacing: -0.5px;  }
     .top_history_list .card_body .time.first_item:before { display: block; }

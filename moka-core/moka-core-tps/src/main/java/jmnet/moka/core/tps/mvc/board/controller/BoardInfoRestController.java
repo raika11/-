@@ -111,6 +111,7 @@ public class BoardInfoRestController extends AbstractCommonController {
         BoardInfoSearchDTO search = BoardInfoSearchDTO
                 .builder()
                 .usedYn(MokaConstants.YES)
+                .delYn(MokaConstants.NO)
                 .build();
 
         Page<BoardInfo> resultValue = boardInfoService.findAllBoardInfo(search);
@@ -298,7 +299,7 @@ public class BoardInfoRestController extends AbstractCommonController {
             @ApiParam("게시판코드") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId) {
 
         boolean exists = boardInfoService.hasContents(boardId);
-        String message = exists ? msg("tps.board-info.success.select.exist-board") : "";
+        String message = exists ? msg("tps.board-info.success.select.exist-boardContent") : "";
 
         // 결과리턴
         ResultDTO<Boolean> resultDto = new ResultDTO<>(exists, message);

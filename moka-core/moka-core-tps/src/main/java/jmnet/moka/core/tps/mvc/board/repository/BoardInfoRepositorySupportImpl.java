@@ -38,6 +38,9 @@ public class BoardInfoRepositorySupportImpl extends TpsQueryDslRepositorySupport
         if (McpString.isNotEmpty(searchDTO.getUsedYn())) {
             query.where(qBoardInfo.usedYn.eq(searchDTO.getUsedYn()));
         }
+        if (McpString.isNotEmpty(searchDTO.getDelYn())) {
+            query.where(qBoardInfo.delYn.eq(searchDTO.getDelYn()));
+        }
 
         if (McpString.isNotEmpty(searchDTO.getBoardType())) {
             query.where(qBoardInfo.boardType.eq(searchDTO.getBoardType()));

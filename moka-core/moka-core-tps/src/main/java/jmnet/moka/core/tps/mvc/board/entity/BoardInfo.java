@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 게시판설정정보
+ * 게시판 설정 정보
  */
 @Entity
 @Table(name = "TB_BOARD_INFO")
@@ -295,7 +295,7 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
      * 생성일시
      */
     @Column(name = "REG_DT")
-    private Date regDt;
+    private Date regDt = new Date();
 
     /**
      * 생성자

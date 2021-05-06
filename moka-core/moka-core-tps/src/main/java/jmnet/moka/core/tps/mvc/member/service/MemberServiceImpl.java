@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
@@ -113,10 +114,13 @@ public class MemberServiceImpl implements MemberService {
             if (errorCnt > -1) {
                 member.setErrCnt(errorCnt);
             }
+
+            String toDay = McpDate.dateStr(McpDate.now(), "yyyy-MM-dd hh:mm");
+
             if (McpString.isNotEmpty(member.getRemark())) {
-                member.setRemark(member.getRemark() + "\n" + remark);
+                member.setRemark(member.getRemark() + "\n" + "· " + toDay + " " + remark);
             } else {
-                member.setRemark(remark);
+                member.setRemark("· " + toDay + " " + remark);
             }
             member = updateMember(member);
         }
@@ -125,7 +129,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberInfo updateMemberStatus(String memberId, MemberStatusCode status, String remark) {
-        return updateMemberStatus(memberId, status, -1, remark);
+        String toDay = McpDate.dateStr(McpDate.now(), "yyyy-MM-dd hh:mm");
+        return updateMemberStatus(memberId, status, -1, "· " + toDay + " " + remark);
     }
 
     @Override

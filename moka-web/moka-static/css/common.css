@@ -597,7 +597,6 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
     background-position: 50% 50%;
 }
 .section_title .title {display:none;font-size: 18px;font-weight: 900;line-height: 1.44;color: #111;}
-.section_title .title{display:block;}
 .header_area .header_nav .nav_item{display:inline-flex;flex:0 0 auto;width:auto;}
 .section_header_wrap .page_title{font-size: 14px;font-weight:700;line-height: 1.57;color: #111;}
 .section_header_wrap .date_wrap{position:absolute;bottom:11px;right:0;}
@@ -646,8 +645,8 @@ h2.section_title {font-size:16px;line-height: 1.5;font-weight: 700;}
     .section_header_wrap .description {font-size: 14px;line-height: 1.57;text-align: center;}
     .section_header_wrap .btn_group{width:100%;justify-content: center;margin-top:20px}
 
-    .section_header_block_wrap.sticky_top {display:flex;}
-
+    .section_header_block_wrap.sticky_top {display:flex; }
+    .sticky_top .section_title .title{display:inline-block;}
     }
 
 /* Large devices (desktops, 1024px and up) */
@@ -1110,15 +1109,12 @@ dl.date dd {margin-left: 6px;}
 .btn_sns {width: 40px;height: 40px;padding: 0 0;border-color: #e2e2e2;background-color: #fff;}
 
 /* 구독 */
-.btn_subscribe{padding-left:23px;border-color:#ff3c14;color:#ff3c14;font-weight:700;background-position:8px 50%;
+.btn_subscribe{border-color:#ff3c14;color:#ff3c14;font-weight:700;background-position:8px 50%;}
+.btn_subscribe [class*="ico_"]{width:13px;height:13px;}
+.btn_subscribe.active{background-color:#ffe2ca;border-color:transparent;}
+.btn_subscribe .ico_plus{background-image: url("data:image/svg+xml,%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' x='0' y='0' viewBox='0 0 13 13' xml:space='preserve'%3E%3Cstyle%3E.st1%7Bfill-rule:evenodd;clip-rule:evenodd;fill:%23f6330a%7D%3C/style%3E%3Cpath d='M8 8h13v13H8V8z' fill='none' transform='translate(-8 -8)'/%3E%3Cpath class='st1' d='M6 2h1v9.5H6V2z'/%3E%3Cpath class='st1' d='M2 6h9.5v1H2V6z'/%3E%3C/svg%3E");}
+.btn_subscribe .ico_check{background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.964706 0 0 0 0 0.200000 0 0 0 0 0.039216 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h13v13H0z'/%3E%3Cg filter='url(%23a)'%3E%3Cpath fill='%23F6330A' fill-rule='nonzero' d='M2 6.296l3.818 3.818 6.294-6.298-1.094-1.094-5.197 5.203L3.096 5.2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
 
-    /* background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.964706 0 0 0 0 0.200000 0 0 0 0 0.039216 0 0 0 1.000000 0'/%3E%3C/filter%3E%3Cfilter id='b'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.964706 0 0 0 0 0.200000 0 0 0 0 0.039216 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23a)' transform='translate(-8 -8)' fill='none' fill-rule='evenodd'%3E%3Cpath d='M8 8h13v13H8z'/%3E%3Cg filter='url(%23b)' transform='translate(8 8)'%3E%3Cg fill='%23F6330A'%3E%3Cpath d='M6 2h1.5v9.5H6z'/%3E%3Cpath d='M2 6h9.5v1.5H2z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); */
-    background-image: url("data:image/svg+xml,%3Csvg width='13' height='13' version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' x='0' y='0' viewBox='0 0 13 13' xml:space='preserve'%3E%3Cstyle%3E.st1%7Bfill-rule:evenodd;clip-rule:evenodd;fill:%23f6330a%7D%3C/style%3E%3Cpath d='M0 0h13v13H0V0z' fill='none'/%3E%3Cpath class='st1' d='M6 2h1v9.5H6V2z'/%3E%3Cpath class='st1' d='M2 6h9.5v1H2V6z'/%3E%3C/svg%3E");
-}
-.btn_subscribe.active{background-color:#ffe2ca;border-color:transparent;
-    
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13'%3E%3Cdefs%3E%3Cfilter id='a'%3E%3CfeColorMatrix in='SourceGraphic' values='0 0 0 0 0.964706 0 0 0 0 0.200000 0 0 0 0 0.039216 0 0 0 1.000000 0'/%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h13v13H0z'/%3E%3Cg filter='url(%23a)'%3E%3Cpath fill='%23F6330A' fill-rule='nonzero' d='M2 6.296l3.818 3.818 6.294-6.298-1.094-1.094-5.197 5.203L3.096 5.2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
 /* Mobile devices (mobile + tablet, 1023px and down) */
 @media (max-width: 1023px) {
     [class*="_list"] + .button_wrap_wide { margin-top: 16px; }

@@ -386,7 +386,7 @@ input[type="file"] { position:absolute; overflow:hidden; width:1px; height:1px; 
 /* border 기타 */
 .border_type1 {border-top:1px solid #000;}
 
-
+ 
 /*** swiper ***/
 :root {--swiper-theme-color: #000;}
 .swiper-scrollbar {background:transparent;}

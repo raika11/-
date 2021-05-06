@@ -71,7 +71,6 @@ public class BoardInfoRestController extends AbstractCommonController {
      * 게시판목록조회
      *
      * @param search 검색조건
-     * @param search 검색조건
      * @return 게시판목록
      */
     @ApiOperation(value = "게시판 목록 조회")
@@ -81,6 +80,7 @@ public class BoardInfoRestController extends AbstractCommonController {
         ResultListDTO<BoardInfoDTO> resultListMessage = new ResultListDTO<>();
 
         // 조회
+        search.setDelYn(MokaConstants.NO);
         Page<BoardInfo> returnValue = boardInfoService.findAllBoardInfo(search);
 
         // 리턴값 설정
@@ -338,7 +338,10 @@ public class BoardInfoRestController extends AbstractCommonController {
 
         try {
             // 삭제
-            boardInfoService.deleteBoardInfo(boardInfo);
+            boardInfo.setUsedYn(MokaConstants.NO);
+            boardInfo.setDelYn(MokaConstants.YES);
+            boardInfoService.delBoardInfo(boardInfo);
+            //boardInfoService.deleteBoardInfo(boardInfo);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.DELETE);

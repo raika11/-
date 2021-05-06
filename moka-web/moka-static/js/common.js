@@ -1,15 +1,22 @@
 $(document).ready(function() {
     //header stiky
-    var stickyHeight = $("#sticky").outerHeight(); 
-    setSticky(stickyHeight);
-    $(window).scroll(function () {
+    if($("#sticky").length>0){
+        var stickyHeight = $("#sticky").outerHeight(); 
         setSticky(stickyHeight);
+    }
+
+    $(window).scroll(function () {
+        if($("#sticky").length>0){
+            setSticky(stickyHeight);
+        }
     });
 
     $(window).resize(function () {
-        $("#sticky").removeClass("sticky_top");
-        stickyHeight = $("#sticky").outerHeight(); 
-        setSticky(stickyHeight);
+        if($("#sticky").length>0){
+            $("#sticky").removeClass("sticky_top");
+            stickyHeight = $("#sticky").outerHeight(); 
+            setSticky(stickyHeight);
+        }
     });
 
     //li형 select box
@@ -59,10 +66,10 @@ $(document).ready(function() {
         $(this).toggleClass("active");
         
         if($(this).hasClass("active")){
-            $(this).text("구독중");
+            $(this).html("<i class=\"ico_check\"></i>구독중");
         }
         else {
-            $(this).text("구독");
+            $(this).html("<i class=\"ico_plus\"></i>구독");
         };
     });
 
@@ -71,7 +78,7 @@ $(document).ready(function() {
 
 //header stiky
 function setSticky(stickyHeight){
-    if ($(window).scrollTop() > stickyHeight) {
+    if ($(window).scrollTop() > stickyHeight && window.innerWidth >= BREAKPOINT_LARGE) {
         $('#sticky').addClass('sticky_top');
         $("main").css("margin-top",stickyHeight + "px");
     } else {

@@ -140,6 +140,15 @@ font-*,color,text-align,vertical-align, ...
 .fs4 {font-size:20px;line-height:1.8;letter-spacing:-0.5px;}
 .fs5 {font-size:22px;line-height:1.73;letter-spacing:-0.52px;}
 
+/* 기사하단 기자프로필 */
+.article_profile { margin-top: 40px; border-top: 1px solid #e2e2e2; border-bottom: 1px solid #e2e2e2; }
+.article_profile .image { overflow: hidden; border-radius: 50%; }
+.article_profile .image img { max-width: 100%; height: auto;}
+.article_profile .profile_name { font-size: 14px; font-weight: 700; line-height: 22px; color: #111; }
+.article_profile .introduce { margin-top: 13px; font-size: 14px; line-height: 23px;}
+.article_profile .mail { display: flex; justify-content: space-between; margin-top: 10px; }
+.article_profile .btn_text { font-size: 16px; line-height: 24px; color: #ff3c14; }
+
 
 /****************************************************************************************************/
 /***                                           content                                            ***/
@@ -198,9 +207,17 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 /***                                           관련기사                                            ***/
 /****************************************************************************************************/
+
+.related_link {width:100%;padding:15px 20px;border:1px solid #e2e2e2}
+.related_link .title_wrap{padding-bottom:14px;border-bottom:1px solid #e2e2e2}
+.related_link .title_wrap .title{color: #333;font-size: 16px;line-height: 1.63;letter-spacing: -0.5px;}
 .row.gutter0 {margin-left: 0;margin-right: 0;}
 .row.gutter0 > * {padding-left: 0;padding-right: 0;}
 
+
+/* 스토리리스트형 */
+.related_link .story_list .card_image img{width:125px;}
+.related_link .story_list .headline{font-size:18px;line-height: 1.56;}
 
 /* 텍스트형 */
 /* 2016-06-22 모듈 추가(박스기사, 관련기사, 소제목) */
@@ -314,6 +331,16 @@ font-*,color,text-align,vertical-align, ...
     .layer_comment .btn_close { z-index: 101; position: fixed; right: 20px; top: 20px; }
     .main_sm_text_area + .comment_state { margin-top: 20px; padding-top: 30px; border-top: 1px solid #d8d8d8; }
 
+    /* 기사하단 기자프로필 */
+    .article_profile { position: relative; padding: 20px 0 30px; }
+    .article_profile .image { position: absolute; top: 20px; left: 0; width: 56px; height: 56px;}
+    .article_profile .profile_name span + span { position: relative; padding-left: 11px; margin-left: 5px; }
+    .article_profile .profile_name span + span:before { display: inline-block; content: ''; position: absolute; top: 5px; left: 0; width: 1px; height: 12px; border-right: 1px solid #000; }
+    .article_profile .image + .profile_content .profile_name { display: inline-flex; flex-direction:column; justify-content: center; min-height: 56px; padding-left: 71px; vertical-align: top; }
+    .article_profile .image + .profile_content .profile_name span { padding-left: 0; margin-left: 0; }
+    .article_profile .image + .profile_content .profile_name span + span:before { display: none;}
+
+
 
 }
 
@@ -373,6 +400,13 @@ font-*,color,text-align,vertical-align, ...
     .layer_ticker .btn_close { position: absolute; right: 20px; top: 12.5px; }
 
     .related_link .card_image {margin-right:15px;}
+
+    /* 기사하단 기자프로필 */
+    .article_profile { display: flex; padding: 30px 0; }
+    .article_profile .image { flex: 0 0 80px; width: 80px; height: 80px; margin-right: 20px; }
+    .article_profile .profile_name span + span { position: relative; padding-left: 11px; margin-left: 5px; }
+    .article_profile .profile_name span + span:before { display: inline-block; content: ''; position: absolute; top: 5px; left: 0; width: 1px; height: 12px; border-right: 1px solid #000; }
+    
 
 }
 

@@ -198,8 +198,15 @@ font-*,color,text-align,vertical-align, ...
 /****************************************************************************************************/
 /***                                           관련기사                                            ***/
 /****************************************************************************************************/
+
+.related_link {width:100%;padding:15px 20px;border:1px solid #e2e2e2}
+
 .row.gutter0 {margin-left: 0;margin-right: 0;}
 .row.gutter0 > * {padding-left: 0;padding-right: 0;}
+
+
+/* 스토리리스트형 */
+.related_link .story_list .card_image img{width:125px;}
 
 
 /* 텍스트형 */

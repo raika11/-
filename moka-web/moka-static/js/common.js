@@ -70,10 +70,10 @@ $(document).ready(function() {
         $(this).toggleClass("active");
         
         if($(this).hasClass("active")){
-            $(this).text("구독중");
+            $(this).html("<i class=\"ico_check\"></i>구독중");
         }
         else {
-            $(this).text("구독");
+            $(this).html("<i class=\"ico_plus\"></i>구독");
         };
     });
 

@@ -1,12 +1,12 @@
 $(document).ready(function() {
     /* 기자 홈 sticky */
-    setSticky();
+    setCustomSticky();
     $(window).scroll(function () {
-        setSticky();
+        setCustomSticky();
     });
 
     $(window).resize(function () {
-        setSticky();
+        setCustomSticky();
     });
     
     var swiper_highlight = new Swiper('.swiper-container.swiper_highlight_list', {
@@ -41,7 +41,7 @@ $(document).ready(function() {
 });
 
 /* 기자 홈 sticky */
-function setSticky(stickyHeight){
+function setCustomSticky(stickyHeight){
     var stickyHeight = $(".journalist_header").height() - $(".package_list").height();;
 
     if ($(window).scrollTop() > stickyHeight) {

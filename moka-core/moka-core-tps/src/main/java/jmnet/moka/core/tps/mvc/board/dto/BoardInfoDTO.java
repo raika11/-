@@ -27,7 +27,7 @@ import lombok.Setter;
  *
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.board.dto
- * ClassName : BoardInfo
+ * ClassName : BoardInfoDTO
  * Created : 2020-12-17 ince
  * </pre>
  *

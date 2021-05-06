@@ -45,7 +45,7 @@ public class MemberInfo extends BaseAudit {
     private String memberId;
 
     /**
-     * 비고
+     * 비밀번호
      */
     @Column(name = "PWD")
     @Builder.Default

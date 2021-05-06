@@ -215,7 +215,9 @@ public class MemberJoinRestController extends AbstractCommonController {
                 throw new MokaException(passwordSameMessage);
             }
 
-            member.setRemark(memberDTO.getRequestReason());
+            String toDay = McpDate.dateStr(McpDate.now(), "yyyy-MM-dd hh:mm");
+
+            member.setRemark("· " + toDay + " " + memberDTO.getRequestReason());
             MemberInfo returnValue = processUserSave(member, memberDTO.getMemberGroups(), MemberRequestCode.NEW_SMS.getNextStatus());
 
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
@@ -403,11 +405,14 @@ public class MemberJoinRestController extends AbstractCommonController {
                 //            }
             }
 
+            String toDay = McpDate.dateStr(McpDate.now(), "yyyy-MM-dd hh:mm");
+
             String remark = McpString.defaultValue(member.getRemark());
+
             if (McpString.isNotEmpty(remark)) {
                 remark += "\n";
             }
-            remark += "· " + memberRequestDTO.getRequestReason();
+            remark += "· " + toDay + " " + memberRequestDTO.getRequestReason();
             member.setRemark(remark);
 
             // 잠금 해제

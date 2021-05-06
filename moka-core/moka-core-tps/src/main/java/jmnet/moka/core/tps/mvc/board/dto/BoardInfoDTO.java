@@ -322,8 +322,9 @@ public class BoardInfoDTO {
     private String footerContent;
 
     @ApiModelProperty(value = "등록일", hidden = true)
+    @Builder.Default
     @DTODateTimeFormat
-    private Date regDt;
+    private Date regDt = new Date();
 
     /**
      * 생성자
@@ -335,8 +336,9 @@ public class BoardInfoDTO {
      * 수정일시
      */
     @ApiModelProperty(value = "수정일", hidden = true)
+    @Builder.Default
     @DTODateTimeFormat
-    private Date modDt;
+    private Date modDt = new Date();
 
     /**
      * 수정자

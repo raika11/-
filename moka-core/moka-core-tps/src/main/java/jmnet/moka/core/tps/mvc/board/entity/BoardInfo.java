@@ -295,7 +295,7 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
      * 생성일시
      */
     @Column(name = "REG_DT")
-    private Date regDt;
+    private Date regDt = new Date();
 
     /**
      * 생성자

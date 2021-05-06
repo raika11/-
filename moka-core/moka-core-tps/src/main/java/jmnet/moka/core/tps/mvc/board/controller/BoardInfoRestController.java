@@ -80,6 +80,7 @@ public class BoardInfoRestController extends AbstractCommonController {
 
         ResultListDTO<BoardInfoDTO> resultListMessage = new ResultListDTO<>();
 
+        search.setDelYn(MokaConstants.NO);
         // 조회
         Page<BoardInfo> returnValue = boardInfoService.findAllBoardInfo(search);
 

@@ -338,7 +338,10 @@ public class BoardInfoRestController extends AbstractCommonController {
 
         try {
             // 삭제
-            boardInfoService.deleteBoardInfo(boardInfo);
+            boardInfo.setUsedYn(MokaConstants.NO);
+            boardInfo.setDelYn(MokaConstants.YES);
+            boardInfoService.delBoardInfo(boardInfo);
+            //boardInfoService.deleteBoardInfo(boardInfo);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.DELETE);

@@ -11,6 +11,7 @@ import jmnet.moka.core.tps.mvc.issue.dto.IssueDeskingHistGroupSearchDTO;
 import jmnet.moka.core.tps.mvc.issue.dto.PackageSearchDTO;
 import jmnet.moka.core.tps.mvc.issue.vo.IssueDeskingHistGroupVO;
 import jmnet.moka.core.tps.mvc.issue.vo.PackageVO;
+import org.springframework.stereotype.Repository;
 
 /**
  * Description: 이슈 mapper
@@ -18,6 +19,7 @@ import jmnet.moka.core.tps.mvc.issue.vo.PackageVO;
  * @author ssc
  * @since 2021-03-22
  */
+@Repository
 public interface IssueMapper extends BaseMapper<PackageVO, PackageSearchDTO> {
 
     /**

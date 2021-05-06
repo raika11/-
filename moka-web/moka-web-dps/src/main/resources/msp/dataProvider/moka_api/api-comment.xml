@@ -78,6 +78,7 @@
       <cid desc="컨텐트아이디" type="number">^[0-9]{1,9}$</cid>
       <ctype desc="컨텐트타입">^[A|D|J|R|M]$</ctype>
       <content desc="댓글내용"></content>
+      <dev desc="등록기기">^.{0,1}$</dev>
       <remoteIp/>
     </parameter>
     <request type="module" setNames="_DATA" methodName="insert"
@@ -91,6 +92,7 @@
       ctype
       parentSeq
       content
+      dev
     </keys>
   </api>
 

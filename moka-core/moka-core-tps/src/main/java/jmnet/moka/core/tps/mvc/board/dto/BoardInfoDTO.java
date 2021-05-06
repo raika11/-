@@ -27,7 +27,7 @@ import lombok.Setter;
  *
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.board.dto
- * ClassName : BoardInfo
+ * ClassName : BoardInfoDTO
  * Created : 2020-12-17 ince
  * </pre>
  *
@@ -68,8 +68,6 @@ public class BoardInfoDTO {
     @Size(min = 0, max = 24, message = "{tps.board-info.error.size.channelType}")
     private String channelType;
 
-
-
     /**
      * 사용여부
      */
@@ -77,6 +75,13 @@ public class BoardInfoDTO {
     @Builder.Default
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.usedYn}")
     private String usedYn = MokaConstants.YES;
+
+    /**
+     * 삭제여부
+     */
+    @ApiModelProperty("삭제여부")
+    @Builder.Default
+    private String delYn = MokaConstants.NO;
 
     /**
      * 말머리1
@@ -317,8 +322,9 @@ public class BoardInfoDTO {
     private String footerContent;
 
     @ApiModelProperty(value = "등록일", hidden = true)
+    @Builder.Default
     @DTODateTimeFormat
-    private Date regDt;
+    private Date regDt = new Date();
 
     /**
      * 생성자
@@ -330,8 +336,9 @@ public class BoardInfoDTO {
      * 수정일시
      */
     @ApiModelProperty(value = "수정일", hidden = true)
+    @Builder.Default
     @DTODateTimeFormat
-    private Date modDt;
+    private Date modDt = new Date();
 
     /**
      * 수정자

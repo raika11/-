@@ -86,6 +86,8 @@ export const CODETYPE_JPLUS_REP = 'JPLUS_REP';
 export const CODETYPE_AT = 'AT';
 // 시스템코드 : 서비스 기사 타입
 export const CODETYPE_SVC_AT = 'SVC_AT';
+// 시스템코드 : 뉴스레터 카테고리
+export const CODETYPE_LETTER_CATE = 'LETTER_CATE';
 
 // 기본 필진 코드타입 텍스트 (JPLUS_REP_DIV === null 일 때 노출하는 텍스트)
 export const JPLUS_REP_DIV_DEFAULT = '일보기자';

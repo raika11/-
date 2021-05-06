@@ -71,15 +71,15 @@ public interface ComponentService {
     public Component insertComponent(Component component, HistPublishDTO histPublishDTO)
             throws NoDataException, Exception;
 
-    /**
-     * 여러개의 컴포넌트 등록
-     *
-     * @param components 등록할 컴포넌트 리스트
-     * @return 등록된 컴포넌트 리스트
-     * @throws Exception 에러
-     */
-    public List<Component> insertComponents(List<Component> components)
-            throws Exception;
+    //    /**
+    //     * 여러개의 컴포넌트 등록
+    //     *
+    //     * @param components 등록할 컴포넌트 리스트
+    //     * @return 등록된 컴포넌트 리스트
+    //     * @throws Exception 에러
+    //     */
+    //    public List<Component> insertComponents(List<Component> components)
+    //            throws Exception;
 
     /**
      * 컴포넌트 업데이트

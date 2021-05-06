@@ -48,7 +48,7 @@
         <main role="main" id="container">
             <!-- contents -->
             <section class="contents">
-                <header class="section_header_wrap">
+                <header id="sticky" class="section_header_wrap section_header_block_wrap">
                     <h1 class="section_title">영상</h1>
                 </header>
 
@@ -61,6 +61,8 @@
                                     <div class="card_image col_sm12 col_md8 col_lg8 ">
                                         <a href="javasctipt:(0);">
                                             <img width="790" src="//via.placeholder.com/790x443" alt="...">
+                                            <span class="ico_play"></span>
+                                            <span class="video_time">02:18</span>
                                         </a>
                                     </div>
 
@@ -75,6 +77,8 @@
                                     <div class="card_image col_sm12 col_md8 col_lg8 ">
                                         <a href="javasctipt:(0);">
                                             <img width="790" src="//via.placeholder.com/790x443" alt="...">
+                                            <span class="ico_play"></span>
+                                            <span class="video_time">02:18</span>
                                         </a>
                                     </div>
 
@@ -89,6 +93,8 @@
                                     <div class="card_image col_sm12 col_md8 col_lg8 ">
                                         <a href="javasctipt:(0);">
                                             <img width="790" src="//via.placeholder.com/790x443" alt="...">
+                                            <span class="ico_play"></span>
+                                            <span class="video_time">02:18</span>
                                         </a>
                                     </div>
 
@@ -102,76 +108,190 @@
                         <!-- swiper btn-->
                         <div class="swiper-btn-wrap">
                             <!-- Pagination -->
-                            <div class="swiper-pagination pagination_fraction"></div>
+                            <div class="swiper-pagination"></div>
                             <div class="swiper-button-pause active"></div>
                             <div class="swiper-button-play"></div>
                         </div>
                     </div>
                 </section>
-                
-                <section class="section_photo">
+
+                <section class="catalog_list_wrap">
                     <header class="title_wrap">
                         <div class="title_area">
-                            <h3 class="title">추천 포토</h3>
+                            <h3 class="title">인기 영상</h3>
+                            <button type="button" class="btn_info" onclick="openLayer(layer_videoInfo);"><i class="ico_info">정보</i></button>
+                            <div class="layer_popup layer_videoInfo" id="layer_videoInfo"><!-- 여기에 개별 클래스 추가 -->
+                                <div class="layer_body">
+                                    <p>재생수가 높은 영상을 제공합니다.</p>
+                                </div>
+                                <button type="button" class="btn_close" title="Close"><i class="ico_close"></i><span class="visually_hidden">닫기</span></button>
+                            </div>
                         </div>
                     </header>
 
-                    <ul class="skin_group">
+                    <div class="photo_list_area scroll_sm_wrap swiper-container">
+                        <ul class="card_group swiper-wrapper">
+                            <li class="card col_sm4 col_lg4 swiper-slide">
+                                <div class="card_image">
+                                    <figure>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="video_time">02:18</span>
+                                        </a>
+                                    </figure>
+                                </div>
+                                <div class="card_body">
+                                    <h2 class="headline">
+                                        <a href="">머리 쓰다듬자 벌러덩…아기판다 푸바오 애교에 심쿵</a>
+                                    </h2>
+                                    <div class="meta">
+                                        <p class="hits">조회 3.2만</p>
+                                        <p class="date">2021.03.29  05:00</p>
+                                        <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="card col_sm4 col_lg4 swiper-slide">
+                                <div class="card_image">
+                                    <figure>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="video_time">02:18</span>
+                                        </a>
+                                    </figure>
+                                </div>
+                                <div class="card_body">
+                                    <h2 class="headline">
+                                        <a href="">머리 쓰다듬자 벌러덩…아기판다 푸바오 애교에 심쿵</a>
+                                    </h2>
+                                    <div class="meta">
+                                        <p class="hits">조회 3.2만</p>
+                                        <p class="date">2021.03.29  05:00</p>
+                                        <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="card col_sm4 col_lg4 swiper-slide">
+                                <div class="card_image">
+                                    <figure>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="video_time">02:18</span>
+                                        </a>
+                                    </figure>
+                                </div>
+                                <div class="card_body">
+                                    <h2 class="headline">
+                                        <a href="">머리 쓰다듬자 벌러덩…아기판다 푸바오 애교에 심쿵</a>
+                                    </h2>
+                                    <div class="meta">
+                                        <p class="hits">조회 3.2만</p>
+                                        <p class="date">2021.03.29  05:00</p>
+                                        <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button>
+                                    </div>
+                                </div>
+                            </li> 
+
+                            <li class="card col_sm4 col_lg4 swiper-slide">
+                                <div class="card_image">
+                                    <figure>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="video_time">02:18</span>
+                                        </a>
+                                    </figure>
+                                </div>
+                                <div class="card_body">
+                                    <h2 class="headline">
+                                        <a href="">머리 쓰다듬자 벌러덩…아기판다 푸바오 애교에 심쿵</a>
+                                    </h2>
+                                    <div class="meta">
+                                        <p class="hits">조회 3.2만</p>
+                                        <p class="date">2021.03.29  05:00</p>
+                                        <button type="button" class="btn_bookmark"><i class="ico_bookmark"></i><span class="visually_hidden">북마크</span></button>
+                                    </div>
+                                </div>
+                            </li> 
+                                                       
+                        </ul>
+                        <!-- Arrows -->
+                        <div class="swiper-pagination orange"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                    </div>
+                </section>
+                
+                <section class="catalog_list_wrap">
+                    <header class="title_wrap">
+                        <div class="title_area">
+                            <h3 class="title">추천 영상</h3>
+                        </div>
+                    </header>
+
+                    <ul class="skin_group row_mg">
                         <li class="card_skin col_sm12 col_lg4">
                             <div class="card_image">
                                 <figure>
-                                    <a href=""><img width="380" src="//via.placeholder.com/380x214" alt="..."></a>
+                                    <a href="">
+                                        <img width="380" src="//via.placeholder.com/380x214" alt="...">
+                                        <span class="video_time">02:18</span>
+                                    </a>
                                 </figure>
                             </div>
                             <div class="card_body">
                                 <h2 class="headline">
-                                    <a href="">Essence of Asia에 선정된 낭푼밥상의 주인장 양용진</a>
+                                    <a href="">흙수저당 만든 87년생 그녀, 강남역에서 '강남해체' 외치다</a>
                                 </h2>
                             </div>
                             <div class="card_foot">
-                                <h3 class="title"><a href="#">권혁재의 사람사진</a></h3>
-                                <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
+                                <h3 class="title"><a href="#">놀터뷰</a></h3>
                             </div>
                         </li>
                         <li class="card_skin col_sm12 col_lg4">
                             <div class="card_image">
                                 <figure>
-                                    <a href=""><img width="380" src="//via.placeholder.com/380x214" alt="..."></a>
+                                    <a href="">
+                                        <img width="380" src="//via.placeholder.com/380x214" alt="...">
+                                        <span class="video_time">02:18</span>
+                                    </a>
                                 </figure>
                             </div>
                             <div class="card_body">
                                 <h2 class="headline">
-                                    <a href="">Essence of Asia에 선정된 낭푼밥상의 주인장 양용진</a>
+                                    <a href="">흙수저당 만든 87년생 그녀, 강남역에서 '강남해체' 외치다</a>
                                 </h2>
                             </div>
                             <div class="card_foot">
-                                <h3 class="title"><a href="#">권혁재의 사람사진</a></h3>
-                                <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
+                                <h3 class="title"><a href="#">알려드림</a></h3>
                             </div>
                         </li>
                         <li class="card_skin col_sm12 col_lg4">
                             <div class="card_image">
                                 <figure>
-                                    <a href=""><img width="380" src="//via.placeholder.com/380x214" alt="..."></a>
+                                    <a href="">
+                                        <img width="380" src="//via.placeholder.com/380x214" alt="...">
+                                        <span class="video_time">02:18</span>
+                                    </a>
                                 </figure>
                             </div>
                             <div class="card_body">
                                 <h2 class="headline">
-                                    <a href="">Essence of Asia에 선정된 낭푼밥상의 주인장 양용진</a>
+                                    <a href="">흙수저당 만든 87년생 그녀, 강남역에서 '강남해체' 외치다</a>
                                 </h2>
                             </div>
                             <div class="card_foot">
-                                <h3 class="title"><a href="#">권혁재의 사람사진</a></h3>
-                                <button type="button" class="btn btn_outline_orange"><i class="ico_plus_orange"></i>구독</button>
+                                <h3 class="title"><a href="#">서소문 사진관</a></h3>
                             </div>
                         </li>
                     </ul>
                 </section>
 
-                <section class="section_photo">
+                <section class="catalog_list_wrap">
                     <header class="title_wrap">
                         <div class="title_area">
-                            <h3 class="title">최신 포토</h3>
+                            <h3 class="title">최신 영상</h3>
                         </div>
                     </header>
                     
@@ -180,7 +300,11 @@
                             <li class="card col_sm6 col_lg3">
                                 <div class="card_image">
                                     <figure>
-                                        <a href=""><img width="278" src="//via.placeholder.com/278x156" alt="..."></a>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="ico_play"></span>
+                                            <span class="video_time">02:18</span>
+                                        </a>
                                     </figure>
                                 </div>
                                 <div class="card_body">
@@ -196,7 +320,11 @@
                             <li class="card col_sm6 col_lg3">
                                 <div class="card_image">
                                     <figure>
-                                        <a href=""><img width="278" src="//via.placeholder.com/278x156" alt="..."></a>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="ico_play"></span>
+                                            <span class="video_time">02:18</span>
+                                        </a>
                                     </figure>
                                 </div>
                                 <div class="card_body">
@@ -212,7 +340,11 @@
                             <li class="card col_sm6 col_lg3">
                                 <div class="card_image">
                                     <figure>
-                                        <a href=""><img width="278" src="//via.placeholder.com/278x156" alt="..."></a>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="ico_play"></span>
+                                            <span class="video_time">02:18</span>
+                                        </a>
                                     </figure>
                                 </div>
                                 <div class="card_body">
@@ -228,7 +360,11 @@
                             <li class="card col_sm6 col_lg3">
                                 <div class="card_image">
                                     <figure>
-                                        <a href=""><img width="278" src="//via.placeholder.com/278x156" alt="..."></a>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="ico_play"></span>
+                                            <span class="video_time">02:18</span>
+                                        </a>
                                     </figure>
                                 </div>
                                 <div class="card_body">
@@ -244,7 +380,11 @@
                             <li class="card col_sm6 col_lg3">
                                 <div class="card_image">
                                     <figure>
-                                        <a href=""><img width="278" src="//via.placeholder.com/278x156" alt="..."></a>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="ico_play"></span>
+                                            <span class="video_time">02:18</span>
+                                        </a>
                                     </figure>
                                 </div>
                                 <div class="card_body">
@@ -260,7 +400,11 @@
                             <li class="card col_sm6 col_lg3">
                                 <div class="card_image">
                                     <figure>
-                                        <a href=""><img width="278" src="//via.placeholder.com/278x156" alt="..."></a>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="ico_play"></span>
+                                            <span class="video_time">02:18</span>
+                                        </a>
                                     </figure>
                                 </div>
                                 <div class="card_body">
@@ -276,7 +420,11 @@
                             <li class="card col_sm6 col_lg3">
                                 <div class="card_image">
                                     <figure>
-                                        <a href=""><img width="278" src="//via.placeholder.com/278x156" alt="..."></a>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="ico_play"></span>
+                                            <span class="video_time">02:18</span>
+                                        </a>
                                     </figure>
                                 </div>
                                 <div class="card_body">
@@ -292,7 +440,11 @@
                             <li class="card col_sm6 col_lg3">
                                 <div class="card_image">
                                     <figure>
-                                        <a href=""><img width="278" src="//via.placeholder.com/278x156" alt="..."></a>
+                                        <a href="">
+                                            <img width="278" src="//via.placeholder.com/278x156" alt="...">
+                                            <span class="ico_play"></span>
+                                            <span class="video_time">02:18</span>
+                                        </a>
                                     </figure>
                                 </div>
                                 <div class="card_body">

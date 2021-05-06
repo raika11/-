@@ -88,6 +88,7 @@ public class MokaConstants {
     public static final String MERGE_CONTEXT_RESERVED = "reserved";
     public static final String MERGE_CONTEXT_PAGE = "page";
     public static final String MERGE_CONTEXT_PARAM = Constants.PARAM;
+    public static final String MERGE_CONTEXT_CACHE_PARAM_LIST = "cacheParamList";
     public static final String MERGE_CONTEXT_MENUS = "menus";
     public static final String MERGE_CONTEXT_SECTION_MENU = "menus.sectionMenu";
     public static final String MERGE_CONTEXT_CODES = "codes";
@@ -117,6 +118,7 @@ public class MokaConstants {
     public static final String PARAM_START = "start";
     public static final String PARAM_REG_ID = "regId";
     public static final String PARAM_FILTER = "filter";
+    public static final String PARAM_DATE = "date";
     public static final String PARAM_EDITION_SEQ = "editionSeq";
     public static final String COMPONENT_PAGING_TYPE_NUMBER = "N";
     public static final String COMPONENT_PAGING_TYPE_MORE = "M";

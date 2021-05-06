@@ -134,8 +134,7 @@ public class BoardDTO {
      * 삭제여부
      */
     @ApiModelProperty(hidden = true, value = "삭제여부")
-    @Builder.Default
-    private String delYn = MokaConstants.NO;
+    private String delYn;
 
     /**
      * 등록IP주소

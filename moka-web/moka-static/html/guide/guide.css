@@ -114,7 +114,8 @@
 @media (max-width: 1023px) {
     .guide .contents{padding: 0;}
     .sample_wrap {padding:20px;}
-    }
+    .guide .contents > section{width:unset}
+}
 
 /* Large devices (desktops, 1024px and up) */
 @media (min-width: 1024px) {    }

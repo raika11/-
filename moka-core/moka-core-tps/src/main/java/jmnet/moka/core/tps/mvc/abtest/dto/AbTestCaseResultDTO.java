@@ -263,4 +263,10 @@ public class AbTestCaseResultDTO {
 
     @ApiModelProperty(value = "B테스트 기사내용")
     private String artContentB;
+
+    /**
+     * 중복 케이스 체크 컬럼
+     */
+    @Builder.Default
+    private String dupChk = "Y";
 }

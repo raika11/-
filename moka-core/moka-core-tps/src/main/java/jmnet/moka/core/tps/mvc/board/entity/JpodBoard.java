@@ -152,16 +152,15 @@ public class JpodBoard extends jmnet.moka.core.tps.common.entity.BaseAudit imple
     /**
      * 삭제여부
      */
-    @Column(name = "DEL_YN", nullable = false)
+    @Column(name = "DEL_YN")
     @Builder.Default
     private String delYn = MokaConstants.NO;
 
     /**
      * 답변등록여부
      */
-    @Column(name = "ANSW_YN", nullable = false)
-    @Builder.Default
-    private String answYn = MokaConstants.NO;
+    @Column(name = "ANSW_YN")
+    private String answYn;
 
     /**
      * 내용

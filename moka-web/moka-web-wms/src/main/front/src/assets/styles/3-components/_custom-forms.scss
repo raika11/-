@@ -24,10 +24,8 @@
 
 .custom-switch {
     .custom-control-label {
-        margin-top: 1px;
-
         &::before, &::after {
-            margin-top: -1px;
+            margin-top: 1.3px;
         }
     }
 }

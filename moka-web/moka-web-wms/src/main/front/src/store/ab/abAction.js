@@ -18,3 +18,9 @@ export const getAbtest = createAction(GET_AB_TEST);
 
 export const SAVE_AB_TEST = 'ab/SAVE_AB_TEST';
 export const saveAbTest = createAction(SAVE_AB_TEST);
+
+export const CLOSE_AB_TEST = 'ab/CLOSE_AB_TEST';
+export const closeAbTest = createAction(CLOSE_AB_TEST);
+
+export const DELETE_AB_TEST = 'ab/DELETE_AB_TEST';
+export const deleteAbTest = createAction(DELETE_AB_TEST);

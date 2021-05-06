@@ -24,7 +24,7 @@
     <parameter>
       <id desc="기자순번" require="Y" type="number">^[0-9]{1,9}$</id>
     </parameter>
-    <request dmlType="sp" setNames="_DATA,_PACKAGE,_ARTICLE,_HGHLY" outParam="_START_DAY">
+    <request dmlType="sp" setNames="_DATA,PACKAGE,MOSTVIEW,HGHLY" outParam="_START_DAY">
       dps.reporter.info
     </request>
     <keys>
@@ -118,6 +118,7 @@
       if ($param.get("member_memSeq") == null) {
       $param.put("member_memSeq", null);
       $param.put("member_loginType", null);
+      $param.put("member_nick", null);
       }
       queryId;
     </request>

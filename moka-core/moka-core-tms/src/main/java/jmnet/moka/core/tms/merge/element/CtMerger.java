@@ -11,7 +11,7 @@ import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 
@@ -35,12 +35,12 @@ public class CtMerger extends MokaAbstractElementMerger {
 	}
 	
     public String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot,
-            MergeContext context) {
+            MergeContext mergeContext) {
         String domainId = ((MokaTemplateMerger) this.templateMerger).getDomainId();
 
-        return KeyResolver.makeCtItemCacheKey(domainId, element.getAttribute("id"),
-                templateRoot.getPageIdForCache(context), templateRoot.getTotalIdForCache(context),
-                templateRoot.getParamForCache(context, false));
+        return CacheHelper.makeCtItemCacheKey(domainId, element.getAttribute("id"),
+                templateRoot.getPageIdForCache(mergeContext), templateRoot.getTotalIdForCache(mergeContext),
+                templateRoot.getParamForCache(mergeContext, false), mergeContext);
     }
 
 	@Override
@@ -58,7 +58,7 @@ public class CtMerger extends MokaAbstractElementMerger {
         }
         String cacheKey = makeCacheKey(element, (MokaTemplateRoot) templateRoot, context);
         boolean isDebug = context.getMergeOptions().isDebug();
-        if (isDebug == false && this.appendCached(KeyResolver.CACHE_CT_MERGE, cacheKey, sb)) {
+        if (isDebug == false && this.appendCached(CacheHelper.CACHE_CT_MERGE, cacheKey, sb)) {
             return;
         }
 
@@ -89,7 +89,7 @@ public class CtMerger extends MokaAbstractElementMerger {
 			throw new TemplateMergeException("Child Template Merge Fail", element, e);
 		}
         if (isDebug == false) {
-            this.setCache(KeyResolver.CACHE_CT_MERGE, cacheKey, ctSb);
+            this.setCache(CacheHelper.CACHE_CT_MERGE, cacheKey, ctSb);
         }
         sb.append(ctSb);
 	}

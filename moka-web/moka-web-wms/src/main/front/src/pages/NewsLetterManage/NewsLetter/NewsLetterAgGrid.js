@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@/components';
 import columnDefs from './NewsLetterAgGridColumns';
 import { GET_NEWS_LETTER_LIST, getNewsLetterList, changeNewsLetterSearchOption } from '@store/newsLetter';
 import moment from 'moment';
-import { DATE_FORMAT, NEWS_LETTER_SEND_TYPE, NEWS_LETTER_TYPE, NEWS_LETTER_STATUS } from '@/constants';
+import { DATE_FORMAT, NEWS_LETTER_SEND_TYPE, NEWS_LETTER_TYPE, NEWS_LETTER_STATUS, API_BASE_URL } from '@/constants';
 import { GRID_HEADER_HEIGHT } from '@/style_constants';
 
 /**
@@ -15,7 +15,7 @@ import { GRID_HEADER_HEIGHT } from '@/style_constants';
 const NewsLetterAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { total, list, search } = useSelector(({ newsLetter }) => newsLetter.newsLetter);
+    const { total, list, search, letterInfo } = useSelector(({ newsLetter }) => newsLetter.newsLetter, shallowEqual);
     const loading = useSelector(({ loading }) => loading[GET_NEWS_LETTER_LIST]);
     const [rowData, setRowData] = useState([]);
 
@@ -66,7 +66,14 @@ const NewsLetterAgGrid = ({ match }) => {
                 <Button variant="positive" className="mr-1" onClick={() => history.push(`${match.path}/add`)}>
                     상품 등록
                 </Button>
-                <Button variant="outline-neutral">Excel 다운로드</Button>
+                <a
+                    className="btn btn-outline-neutral"
+                    href={`${API_BASE_URL}/api/newsletter/excel?letterType=${search.letterType}&category=${search.category}&status=${search.status}&sendType=${search.sendType}&startDt=${search.startDt}&endDt=${search.endDt}&scbYn=${search.scbYn}&abtestYn=${search.abtestYn}&letterName=${search.letterName}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Excel 다운로드
+                </a>
             </div>
             <MokaTable
                 suppressMultiSort // 다중 정렬 비활성
@@ -81,6 +88,7 @@ const NewsLetterAgGrid = ({ match }) => {
                 size={search.size}
                 total={total}
                 onChangeSearchOption={handleChangeSearchOption}
+                selected={letterInfo.letterSeq}
             />
         </>
     );

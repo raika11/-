@@ -7,8 +7,10 @@ import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
+import jmnet.moka.core.tms.mvc.HttpParamFactory;
+import jmnet.moka.core.tms.mvc.HttpParamMap;
 import jmnet.moka.core.tms.mvc.handler.AbstractHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,9 @@ import org.springframework.web.method.HandlerMethod;
 public class PackageHandler extends AbstractHandler {
     private static final Logger logger = LoggerFactory.getLogger(PackageHandler.class);
 
+    @Autowired
+    private HttpParamFactory httpParamFactory;
+
     private final MokaDomainTemplateMerger domainTemplateMerger;
 
     public PackageHandler(@Autowired MokaDomainTemplateMerger domainTemplateMerger) {
@@ -40,11 +45,15 @@ public class PackageHandler extends AbstractHandler {
     public HandlerMethod resolvable(HttpServletRequest request, String requestPath, List<String> pathList, String domainId)
             throws TemplateMergeException, TemplateParseException {
         // case-insensitive URI 처리
-        if (pathList.size() == 2 && !pathList.get(1).equals("list") &&
-                ( requestPath.toLowerCase().startsWith(MokaConstants.MERGE_ISSUE_PREFIX)
-                || requestPath.toLowerCase().startsWith(MokaConstants.MERGE_SERIES_PREFIX)
-                || requestPath.toLowerCase().startsWith(MokaConstants.MERGE_TOPIC_PREFIX)
-                )) {
+        if (pathList.size() == 2 && !pathList
+                .get(1)
+                .equals("list") && (requestPath
+                .toLowerCase()
+                .startsWith(MokaConstants.MERGE_ISSUE_PREFIX) || requestPath
+                .toLowerCase()
+                .startsWith(MokaConstants.MERGE_SERIES_PREFIX) || requestPath
+                .toLowerCase()
+                .startsWith(MokaConstants.MERGE_TOPIC_PREFIX))) {
             // 패키지 처리 : /issue,series,topic(case insensitive)/id, list는 제외
             String packageType = pathList.get(0);
             String packageId = pathList.get(1);
@@ -64,7 +73,16 @@ public class PackageHandler extends AbstractHandler {
     public String merge(HttpServletRequest request, HttpServletResponse response, Model model) {
         // 머지 옵션설정
         MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
-        model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
+
+        // 캐시키에 추가할 파라미터 설정
+        CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_CATEGORY);
+        CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_FILTER);
+        CacheHelper.addExtraCacheParam(mergeContext, MokaConstants.PARAM_DATE);
+
+        // Http 파라미터 설정
+        HttpParamMap httpParamMap = this.httpParamFactory.creatHttpParamMap(request);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, httpParamMap);
+
         return this.viewName;
     }
 

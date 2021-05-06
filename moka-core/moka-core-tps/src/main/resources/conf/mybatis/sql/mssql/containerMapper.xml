@@ -40,7 +40,7 @@
 
   <select id="findAll" parameterType="ContainerSearchDTO" resultType="ContainerVO"
     statementType="CALLABLE">
-    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_CONTAINER_LIST_SEL2(
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_CONTAINER_LIST_SEL(
     #{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
     <choose>
       <when test="searchType == 'all' and keyword != null and keyword != ''">

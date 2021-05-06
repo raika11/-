@@ -18,8 +18,7 @@ import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.util.HttpHelper;
-import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
@@ -124,11 +123,11 @@ public class ArticleHandler extends AbstractHandler {
         // 기사 플래그 캐시를 확인
         Map<String, Object> flagMap = null;
         if ( this.cacheManager != null) {
-            String cached = this.cacheManager.get(KeyResolver.CACHE_ARTICLE_FLAG, articleId);
+            String cached = this.cacheManager.get(CacheHelper.CACHE_ARTICLE_FLAG, articleId);
             JSONResult jsonResult = null;
             if ( cached == null ) {
                 jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE_FLAG, paramMap, true);
-                this.cacheManager.set(KeyResolver.CACHE_ARTICLE_FLAG, articleId, jsonResult.toString());
+                this.cacheManager.set(CacheHelper.CACHE_ARTICLE_FLAG, articleId, jsonResult.toString());
                 flagMap = jsonResult.getDataListFirst();
             } else {
                 try {

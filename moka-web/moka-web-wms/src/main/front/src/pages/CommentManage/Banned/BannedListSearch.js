@@ -105,13 +105,13 @@ const BannedListSearch = ({ match }) => {
         dispatch(getCommentsBlocks(changeBannedsSearchOption({ ...searchData, page: 0 })));
     };
 
-    const handleOnClickMemoryButton = () => {
-        messageBox.alert('서비스 준비 중입니다.');
-    };
+    // const handleOnClickMemoryButton = () => {
+    //     messageBox.alert('서비스 준비 중입니다.');
+    // };
 
-    const handleOnClickApplyButton = () => {
-        messageBox.alert('서비스 준비 중입니다.');
-    };
+    // const handleOnClickApplyButton = () => {
+    //     messageBox.alert('서비스 준비 중입니다.');
+    // };
 
     useEffect(() => {
         // 페이지 구분값이 변경 되었을때 모달에 전달할 구분값 업데이트.

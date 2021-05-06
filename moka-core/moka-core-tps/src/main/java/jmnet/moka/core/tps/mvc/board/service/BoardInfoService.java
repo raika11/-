@@ -59,6 +59,8 @@ public interface BoardInfoService {
      */
     BoardInfo updateBoardInfo(BoardInfo boardInfo);
 
+    void delBoardInfo(BoardInfo boardInfo);
+
     /**
      * 게시판 정보 삭제
      *

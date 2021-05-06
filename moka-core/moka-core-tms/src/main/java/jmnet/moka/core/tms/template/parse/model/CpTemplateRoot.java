@@ -20,7 +20,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DatasetItem;
@@ -191,7 +191,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             jsonResult = loader.getJSONResult(uri, datasetParam, false);
         }
         if (jsonResult != null) {
-            merger.setData(context, KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
+            merger.setData(context, CacheHelper.makeDataId(this.getItemType(), this.getId()), jsonResult);
         }
         return jsonResult;
     }
@@ -228,10 +228,10 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 if (context.has(MokaConstants.MERGE_CONTEXT_ABTEST)) {
                     AbTest abTest = (AbTest) context.get(MokaConstants.MERGE_CONTEXT_ABTEST);
                     if (!abTest.hasDataset()) {
-                        jsonResult = dataMap.get(KeyResolver.makeDataId(this.getItemType(), this.getId()));
+                        jsonResult = dataMap.get(CacheHelper.makeDataId(this.getItemType(), this.getId()));
                     }
                 } else {
-                    jsonResult = dataMap.get(KeyResolver.makeDataId(this.getItemType(), this.getId()));
+                    jsonResult = dataMap.get(CacheHelper.makeDataId(this.getItemType(), this.getId()));
                 }
             }
             if (jsonResult == null) {
@@ -245,28 +245,30 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             }
             // 데이터를 참조할 수 있도록 _RESULT에 추가
             context.set(DEFAULT_DATA_NAME, jsonResult);
-            int dataSize = jsonResult
-                    .getDataList()
-                    .size();
-            context.set(DEFAULT_LOOP_DATA_SIZE, dataSize);
-            rowDataContext.set(Constants.CURRENT_DATA_ID, this.item.getItemType() + this.item.getItemId());
-            // loop 커스텀태그 없이(혹은 결과가 1건인 경우) 첫번째 데이터를 사용하는 경우를 위해 첫 row를 context에
-            rowDataContext.set(Constants.LOOP_INDEX, 0);
-            Object resultObject = jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
-            if (resultObject != null) {
-                if (resultObject instanceof List && ((List<?>) resultObject).size() > 0) {
-                    rowDataContext.set(Constants.LOOP_DATA_ROW, ((List<?>) resultObject).get(0));
-                } else {
-                    // 리스트 형태가 아닐 경우 _DATA로 넣어준다.
-                    context.set(Constants.DEFAULT_LOOP_DATA_SELECT, resultObject);
+            if (jsonResult.getDataList() != null) { // _DATA로 시작하는 경우
+                int dataSize = jsonResult
+                        .getDataList()
+                        .size();
+                context.set(DEFAULT_LOOP_DATA_SIZE, dataSize);
+                rowDataContext.set(Constants.CURRENT_DATA_ID, this.item.getItemType() + this.item.getItemId());
+                // loop 커스텀태그 없이(혹은 결과가 1건인 경우) 첫번째 데이터를 사용하는 경우를 위해 첫 row를 context에
+                rowDataContext.set(Constants.LOOP_INDEX, 0);
+                Object resultObject = jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
+                if (resultObject != null) {
+                    if (resultObject instanceof List && ((List<?>) resultObject).size() > 0) {
+                        rowDataContext.set(Constants.LOOP_DATA_ROW, ((List<?>) resultObject).get(0));
+                    } else {
+                        // 리스트 형태가 아닐 경우 _DATA로 넣어준다.
+                        context.set(Constants.DEFAULT_LOOP_DATA_SELECT, resultObject);
+                    }
                 }
+                // TOTAL 처리
+                int total = jsonResult.getTotal();
+                if (total == 0 & dataSize > 0) {
+                    total = dataSize;
+                }
+                rowDataContext.set(ApiResult.MAIN_TOTAL, total);
             }
-            // TOTAL 처리
-            int total = jsonResult.getTotal();
-            if (total == 0 & dataSize > 0) {
-                total = dataSize;
-            }
-            rowDataContext.set(ApiResult.MAIN_TOTAL, total);
         } else {
             rowDataContext.set(ApiResult.MAIN_TOTAL, 0);
         }

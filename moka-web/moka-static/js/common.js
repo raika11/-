@@ -1,27 +1,23 @@
-
-
-
 $(document).ready(function() {
-
     //header stiky
-    if ($(this).scrollTop() > 0) {
-        // $('.header').addClass('sticky_top');
-        // $('.section_header_wrap').addClass('sticky_top');
+    //header stiky
+    if($("#sticky").length>0){
+        var stickyHeight = $("#sticky").outerHeight(); 
+        setSticky(stickyHeight);
     }
     $(window).scroll(function () {
-        var headerHeight = $(".section_header_wrap").height();
-        if ($(this).scrollTop() > headerHeight) {
-            // $('.header').addClass('sticky_top');
-            // $('.section_header_wrap').addClass('sticky_top');
-            $("body").css("margin-top",headerHeight+"px");
-        } else {
-            // $('.header').removeClass('sticky_top');
-            // $('.section_header_wrap').removeClass('sticky_top');
-            $("body").css("margin-top","0px");
+        if($("#sticky").length>0){
+            setSticky(stickyHeight);
         }
     });
 
-
+    $(window).resize(function () {
+        if($("#sticky").length>0){
+            $("#sticky").removeClass("sticky_top");
+            stickyHeight = $("#sticky").outerHeight(); 
+            setSticky(stickyHeight);
+        }
+    });
     //li형 select box
     $(".dropdown_toggle").on("click", function(){
         $(this).parent(".dropdown").toggleClass("open");
@@ -52,33 +48,43 @@ $(document).ready(function() {
     // - mobile 전용
     if($(".scroll_sm_wrap").length > 0){
         mobileSwiper();
-        var mtimer;
-        $(window).resize(function(){
-            if (mtimer) {
-                clearTimeout(mtimer);
-            }
-            mtimer = setTimeout(mobileSwiper, 10);
-        });
     }
 
-    
+        /* datepicker */
+    if($("#datepicker").length > 0){
+        $( "#datepicker" ).datepicker({
+            showOn:'button',
+            buttonImageOnly: true,
+            
+        });
+        $('#datepicker').datepicker('setDate', 'today');
+    }
+
+    $(".btn_subscribe").on("click", function(){
+        // alert("111");
+        $(this).toggleClass("active");
+        
+        if($(this).hasClass("active")){
+            $(this).text("구독중");
+        }
+        else {
+            $(this).text("구독");
+        };
+    });
+
 
 });
 
-/* datepicker */
-$( function() {
-    $( "#datepicker" ).datepicker({
-        showOn:'button',
-        buttonImageOnly: true,
-        
-    });
-    $('#datepicker').datepicker('setDate', 'today');
-} );
-
-
-
-
-
+//header stiky
+function setSticky(stickyHeight){
+    if ($(window).scrollTop() > stickyHeight) {
+        $('#sticky').addClass('sticky_top');
+        $("main").css("margin-top",stickyHeight + "px");
+    } else {
+        $('#sticky').removeClass('sticky_top');
+        $("main").css("margin-top","0px");
+    }
+}
 
 /* 임시 레이어팝업 */
 function toggleOpenLayer(obj){
@@ -125,23 +131,31 @@ function changeToSlider($target, slickOptions){
 }
 
 /* mobile swiper */
-/* 카드 좌측 정렬 */
 function mobileSwiper() {
     var swiper = new Swiper('.scroll_sm_wrap', {
-        slidesPerView: 1.2,
+        slidesPerView: 3,
         slidesPerGroup: 1,
-        spaceBetween: 10,
-        // init: false,
+        spaceBetween: 30,
         pagination: {
             el: '.swiper-pagination',
             clickable: true,
+            type: "progressbar",
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+
+        breakpoints:{
+            768:{
+                allowTouchMove:true,
+                slidesPerView: 2,
+            },
+            500:{
+                allowTouchMove:true,
+                slidesPerView: 1.2,
+                spaceBetween: 10,
+            },
         }
     });
-
-    if (window.innerWidth >= BREAKPOINT_LARGE) {
-        if (swiper) {
-            swiper.destroy();
-        }
-    }
-
 };

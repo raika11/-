@@ -15,7 +15,7 @@ import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.exception.TmsException;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.item.AdItem;
 import jmnet.moka.core.tms.merge.item.ArticlePageItem;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
@@ -115,14 +115,25 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         if (itemKey != null) { // REST방식 URL이 아닌 경우
             return itemKey;
         }
-        // REST 방식 중 default 파라미터를 사용하는 경우
+        // 경로 파라미터 방식 중 default 파라미터를 사용하는 경우
         if (this.uri2ItemMap.containsKey(uri + AbstractTemplateLoader.PATH_PARAM_PREFIX)) {
             return this.uri2ItemMap.get(uri + AbstractTemplateLoader.PATH_PARAM_PREFIX);
         }
-        // REST 방식인 경우 마지막 경로를 제거하고 PageItem을 찾는다.
+        // 경로파라미터 방식인 경우 마지막 경로를 제거하고 PageItem을 찾는다.
         int lastSlashIndex = uri.lastIndexOf("/");
         if (lastSlashIndex > 0) { // URL_PARAM을 사용하는  페이지의 경우
-            return this.uri2ItemMap.get(uri.substring(0, lastSlashIndex) + AbstractTemplateLoader.PATH_PARAM_PREFIX);
+
+            // 경로 파라미터 방식인 경우 마지막 경로를 제거하고 PageItem을 찾는다.
+            String paramTrimUri = uri.substring(0, lastSlashIndex);
+            itemKey = this.uri2ItemMap.get(paramTrimUri + AbstractTemplateLoader.PATH_PARAM_PREFIX);
+            if ( itemKey != null) return itemKey;
+
+            // 2단계(부모도 경로파라미터방식) 경로파라미터 방식인 경우 마지막 경로와 그전 경로를 제거하고 PageItem을 찾는다.
+            int parentLastSlashIndex = paramTrimUri.lastIndexOf("/");
+            if (parentLastSlashIndex > 0) { // URL_PARAM을 사용하는  페이지의 경우
+                return this.uri2ItemMap.get(paramTrimUri.substring(0, parentLastSlashIndex) + AbstractTemplateLoader.PATH_PARAM_PREFIX
+                        + AbstractTemplateLoader.PATH_PARAM_PREFIX);
+            }
         }
         return null;
     }
@@ -142,7 +153,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
      */
     protected void addUri(PageItem pageItem) {
         String uri = getPageUriLowerCase(pageItem.getString(ItemConstants.PAGE_URL), pageItem.getString(ItemConstants.PAGE_URL_PARAM));
-        String itemKey = KeyResolver.makeItemKey(this.domainId, pageItem.getItemType(), pageItem.getItemId());
+        String itemKey = CacheHelper.makeItemKey(this.domainId, pageItem.getItemType(), pageItem.getItemId());
         if (uri != null) {
             this.uri2ItemMap.put(uri, itemKey);
             logger.debug("Uri added:{} {}", this.domainId, uri);
@@ -174,7 +185,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
     @Override
     public TemplateRoot setItem(String itemType, String itemId, MergeItem item)
             throws TemplateParseException {
-        String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
+        String itemKey = CacheHelper.makeItemKey(this.domainId, itemType, itemId);
         if (cacheable) {
             this.mergeItemMap.put(itemKey, item);
         }
@@ -209,7 +220,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
             throws TemplateParseException, TemplateLoadException {
         MokaTemplateRoot templateRoot;
         MergeItem remoteItem = null;
-        String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
+        String itemKey = CacheHelper.makeItemKey(this.domainId, itemType, itemId);
         if (cacheable && (templateRoot = this.templateRootMap.get(itemKey)) != null) {
             MergeItem localItem = templateRoot.getItem();
             // expire time을 초과하면 item을 가져와 변경여부를 체크한다.
@@ -246,7 +257,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
      * @param itemId   아이템 ID
      */
     public void purgeItem(String itemType, String itemId) {
-        String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
+        String itemKey = CacheHelper.makeItemKey(this.domainId, itemType, itemId);
         if (this.mergeItemMap != null) {
             if (this.mergeItemMap.containsKey(itemKey)) { // 존재하면 remove
                 this.mergeItemMap.remove(itemKey);

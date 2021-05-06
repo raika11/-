@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
@@ -7,15 +7,15 @@ import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@/components';
 import toast from '@/utils/toastUtil';
-import NewsLetterLayoutModal from '../modals/NewsLetterLayoutModal';
 import { EditThumbModal } from '@/pages/Desking/modals';
 import { DB_DATEFORMAT, DATE_FORMAT, TIME_FORMAT } from '@/constants';
+import NewsLetterLayoutModal from '../modals/NewsLetterLayoutModal';
 import NewsLetterEditFormModal from '../modals/NewsLetterEditFormModal';
 
 /**
  * 뉴스레터 편집 > 발송정보 설정
  */
-const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
+const NewsLetterSendInfo = ({ temp, onChangeValue, error, setError }) => {
     // 발송 주기(일/주/월) state
     const [sendTime, setSendTime] = useState({
         D: moment(new Date(), DB_DATEFORMAT).startOf('day'),
@@ -44,8 +44,6 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
     const [layoutModal, setLayoutModal] = useState(false);
     const [imgModal, setImgModal] = useState(false);
     const [editFormModal, setEditFormModal] = useState(false);
-    // 발송자 명 ref
-    const senderInfoRef = useRef(null);
 
     /**
      * 입력값 변경
@@ -76,6 +74,12 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
             } else {
                 onChangeValue({ [name]: value });
             }
+        } else if (name === 'sendPeriod') {
+            if (value === '') {
+                onChangeValue({ [name]: '' });
+            } else {
+                onChangeValue({ [name]: value, sendTimeEdit: '' });
+            }
         } else {
             onChangeValue({ [name]: value });
         }
@@ -103,20 +107,19 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
     };
 
     /**
+     * 레이아웃 선택 (자동 혹은 수동)
+     */
+    const addLayout = (obj) => {
+        onChangeValue({ containerSeq: obj.containerSeq });
+    };
+
+    /**
      * 수동 상품 편집폼 등록
      * @param {object} form 폼 데이터
      */
     const addFormSeq = (form) => {
         onChangeValue({ formSeq: form.formSeq });
     };
-
-    useImperativeHandle(
-        ref,
-        () => ({
-            sender: senderInfoRef.current,
-        }),
-        [],
-    );
 
     useEffect(() => {
         if (sendStartDt.date && sendStartDt.time) {
@@ -135,6 +138,46 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [temp.sendMaxCnt, temp.sendMinCnt]);
+
+    // useEffect(() => {
+    //     // 발송 제목 형식 확인
+    //     let fix, date, title;
+    //     // 고정 요소
+    //     if (temp.titleType === 'N') {
+    //         fix = '[뉴스레터 상품명]';
+    //     } else if (temp.titleType === 'J') {
+    //         fix = '[중앙일보]';
+    //     } else if (temp.titleType === 'A') {
+    //         fix = '[광고]';
+    //     } else {
+    //         fix = '';
+    //     }
+
+    //     if (Number(temp.dateTab) === 1) {
+    //         date = '○○월';
+    //     } else if (Number(temp.dateTab) === 2) {
+    //         date = '○○월 ○○주';
+    //     } else if (Number(temp.dateTab) === 3) {
+    //         date = 'MM/DD ~ MM/DD';
+    //     } else if (Number(temp.dateTab) === 4) {
+    //         date = '○○월 ○○일';
+    //     } else if (Number(temp.dateTab) === 5) {
+    //         date = '○요일';
+    //     } else {
+    //         date = '';
+    //     }
+
+    //     if (temp.editTitle) {
+    //         title = temp.editTitle;
+    //     } else if (temp.artTitleYn === 'Y') {
+    //         title = '[기사 제목]';
+    //     } else {
+    //         title = '';
+    //     }
+
+    //     setSendTitleType(`${fix}   ${date}   ${title}`);
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [temp.titleType, temp.dateTab, temp.editTitle]);
 
     useEffect(() => {
         // 발송 제목 형식 확인
@@ -176,6 +219,23 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [temp.titleType, temp.dateTab, temp.editTitle]);
 
+    useEffect(() => {
+        if (temp.senderName !== '중앙일보') {
+            setSn('');
+        } else if (temp.senderName === '중앙일보') {
+            setSn('ja');
+        }
+    }, [temp.senderName]);
+
+    useEffect(() => {
+        if (sn === 'ja') {
+            onChangeValue({ senderName: '중앙일보', senderEmail: 'root@joongang.co.kr' });
+        } else {
+            onChangeValue({ senderName: '', senderEmail: '' });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sn]);
+
     return (
         <>
             {/* 뉴스레터 발송정보 */}
@@ -187,14 +247,16 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                         name="containerSeq"
                         placeholder="레이아웃을 검색해 주세요"
                         value={temp.containerSeq}
+                        isInvalid={error.containerSeq}
                         onChange={handleChangeValue}
                         onSearch={() => setLayoutModal(true)}
                         inputProps={{ readOnly: true }}
+                        disabled={temp.status === 'Y'}
                         required
                     />
                     <p className="mb-0 color-primary">※ 레이아웃이 미정인 경우 상품은 자동 임시저장 상태 값으로 지정됩니다.</p>
                 </div>
-                <NewsLetterLayoutModal show={layoutModal} onHide={() => setLayoutModal(false)} />
+                <NewsLetterLayoutModal show={layoutModal} onHide={() => setLayoutModal(false)} onRowClicked={addLayout} />
             </Form.Row>
             {temp.sendType === 'A' && (
                 <Form.Row className="mb-2 align-items-center">
@@ -207,7 +269,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                             id="letter-sendOrder-n"
                             inputProps={{ label: '최신 등록순', custom: true, checked: temp.sendOrder === 'N' }}
                             onChange={handleChangeValue}
-                            disabled={temp.channelType === 'TREND' ? true : false}
+                            disabled={temp.status === 'Y' || temp.channelType === 'TREND'}
                         />
                         <MokaInput
                             as="radio"
@@ -216,14 +278,14 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                             id="letter-sendOrder-h"
                             inputProps={{ label: '조회 높은순', custom: true, checked: temp.sendOrder === 'H' }}
                             onChange={handleChangeValue}
-                            disabled={temp.channelType === 'TREND' ? true : false}
+                            disabled={temp.status === 'Y' || temp.channelType === 'TREND'}
                         />
                     </Col>
                     <p className="mb-0 mr-2">신규 콘텐츠</p>
                     <Col xs={3} className="p-0 d-flex align-items-center">
-                        <MokaInput name="sendMinCnt" value={temp.sendMinCnt} onChange={handleChangeValue} disabled={temp.channelType === 'TREND' ? true : false} />
+                        <MokaInput name="sendMinCnt" value={temp.sendMinCnt} onChange={handleChangeValue} disabled={temp.status === 'Y' || temp.channelType === 'TREND'} />
                         <p className="mb-0 mx-2">~</p>
-                        <MokaInput name="sendMaxCnt" value={temp.sendMaxCnt} onChange={handleChangeValue} disabled={temp.channelType === 'TREND' ? true : false} />
+                        <MokaInput name="sendMaxCnt" value={temp.sendMaxCnt} onChange={handleChangeValue} disabled={temp.status === 'Y' || temp.channelType === 'TREND'} />
                     </Col>
                 </Form.Row>
             )}
@@ -240,6 +302,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 id="letter-sendPeriod-d"
                                 inputProps={{ label: '1일', custom: true, checked: temp.sendPeriod === 'D' }}
                                 onChange={handleChangeValue}
+                                disabled={temp.status === 'Y'}
                             />
                         </Col>
                         <div style={{ width: 120 }}>
@@ -247,7 +310,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 as="dateTimePicker"
                                 value={sendTime.D}
                                 inputProps={{ dateFormat: null }}
-                                disabled={temp.sendPeriod !== 'D'}
+                                disabled={temp.status === 'Y' || temp.sendPeriod !== 'D'}
                                 onChange={(date) => {
                                     if (typeof date === 'object') {
                                         setSendTime({ ...sendTime, D: date });
@@ -270,6 +333,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 id="letter-sendPeriod-w"
                                 inputProps={{ label: '매 주', custom: true, checked: temp.sendPeriod === 'W' }}
                                 onChange={handleChangeValue}
+                                disabled={temp.status === 'Y'}
                             />
                         </Col>
                         <ToggleButtonGroup
@@ -287,25 +351,25 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 }
                             }}
                         >
-                            <ToggleButton variant="outline-table-btn" value="1" disabled={temp.sendPeriod !== 'W'}>
+                            <ToggleButton variant="outline-table-btn" value="1" disabled={temp.status === 'Y' || temp.sendPeriod !== 'W'}>
                                 월
                             </ToggleButton>
-                            <ToggleButton variant="outline-table-btn" value="2" disabled={temp.sendPeriod !== 'W'}>
+                            <ToggleButton variant="outline-table-btn" value="2" disabled={temp.status === 'Y' || temp.sendPeriod !== 'W'}>
                                 화
                             </ToggleButton>
-                            <ToggleButton variant="outline-table-btn" value="3" disabled={temp.sendPeriod !== 'W'}>
+                            <ToggleButton variant="outline-table-btn" value="3" disabled={temp.status === 'Y' || temp.sendPeriod !== 'W'}>
                                 수
                             </ToggleButton>
-                            <ToggleButton variant="outline-table-btn" value="4" disabled={temp.sendPeriod !== 'W'}>
+                            <ToggleButton variant="outline-table-btn" value="4" disabled={temp.status === 'Y' || temp.sendPeriod !== 'W'}>
                                 목
                             </ToggleButton>
-                            <ToggleButton variant="outline-table-btn" value="5" disabled={temp.sendPeriod !== 'W'}>
+                            <ToggleButton variant="outline-table-btn" value="5" disabled={temp.status === 'Y' || temp.sendPeriod !== 'W'}>
                                 금
                             </ToggleButton>
-                            <ToggleButton variant="outline-table-btn" value="6" disabled={temp.sendPeriod !== 'W'}>
+                            <ToggleButton variant="outline-table-btn" value="6" disabled={temp.status === 'Y' || temp.sendPeriod !== 'W'}>
                                 토
                             </ToggleButton>
-                            <ToggleButton variant="outline-table-btn" value="0" disabled={temp.sendPeriod !== 'W'}>
+                            <ToggleButton variant="outline-table-btn" value="0" disabled={temp.status === 'Y' || temp.sendPeriod !== 'W'}>
                                 일
                             </ToggleButton>
                         </ToggleButtonGroup>
@@ -315,7 +379,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 className="right"
                                 value={sendTime.W}
                                 inputProps={{ dateFormat: null }}
-                                disabled={temp.sendPeriod !== 'W'}
+                                disabled={temp.status === 'Y' || temp.sendPeriod !== 'W'}
                                 onChange={(date) => {
                                     if (typeof date === 'object') {
                                         setSendTime({ ...sendTime, W: date });
@@ -339,10 +403,11 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 id="letter-sendPeriod-m"
                                 inputProps={{ label: '매 월', custom: true, checked: temp.sendPeriod === 'M' }}
                                 onChange={handleChangeValue}
+                                disabled={temp.status === 'Y'}
                             />
                         </Col>
                         <Col xs={2} className="p-0 pr-2">
-                            <MokaInput as="select" name="sendDay" value={sendDay} onChange={handleChangeValue} disabled={temp.sendPeriod !== 'M'}>
+                            <MokaInput as="select" name="sendDay" value={sendDay} onChange={handleChangeValue} disabled={temp.status === 'Y' || temp.sendPeriod !== 'M'}>
                                 {[...Array(30)].map((d, idx) => {
                                     return (
                                         <option key={idx} value={idx + 1}>
@@ -359,7 +424,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 className="right"
                                 value={sendTime.M}
                                 inputProps={{ dateFormat: null }}
-                                disabled={temp.sendPeriod !== 'M'}
+                                disabled={temp.status === 'Y' || temp.sendPeriod !== 'M'}
                                 onChange={(date) => {
                                     if (typeof date === 'object') {
                                         setSendTime({ ...sendTime, M: date });
@@ -379,6 +444,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 id="letter-sendPeriod-c"
                                 inputProps={{ label: '발송 조건 만족 시', custom: true, checked: temp.sendPeriod === 'C' }}
                                 onChange={handleChangeValue}
+                                disabled={temp.status === 'Y'}
                             />
                         )}
                     </div>
@@ -387,15 +453,22 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                             <Col xs={2} className="p-0 pr-2">
                                 <MokaInput
                                     as="radio"
+                                    value=""
                                     name="sendPeriod"
-                                    value="D"
-                                    id="letter-sendPeriod-r"
-                                    inputProps={{ label: '직접 입력', custom: true, checked: temp.sendPeriod === 'R' }}
-                                    disabled
+                                    id="letter-sendPeriod-direct"
+                                    inputProps={{ label: '직접 입력', custom: true, checked: temp.sendPeriod === '' }}
+                                    onChange={handleChangeValue}
+                                    disabled={temp.status === 'Y'}
                                 />
                             </Col>
                             <Col xs={6} className="p-0">
-                                <MokaInput className="flex-fill" disabled />
+                                <MokaInput
+                                    className="flex-fill"
+                                    name="sendTimeEdit"
+                                    value={temp.sendTimeEdit}
+                                    onChange={handleChangeValue}
+                                    disabled={temp.status === 'Y' || temp.sendPeriod !== ''}
+                                />
                             </Col>
                         </div>
                     )}
@@ -416,6 +489,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                             </div>
                         }
                         inputProps={{ img: temp.headerImg, setFileValue: handleFileValue, height: 80, deleteButton: true, accept: 'image/jpeg, image/png' }}
+                        disabled={temp.status === 'Y'}
                     />
                     <div className="d-flex align-items-center">
                         <MokaInputLabel as="none" label=" " />
@@ -434,6 +508,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                             id="letter-editLetterType-f"
                             inputProps={{ label: '직접 작성', custom: true, checked: temp.editLetterType === 'F' }}
                             onChange={handleChangeValue}
+                            disabled={temp.status === 'Y' || temp.status === 'S'}
                         />
                     </Col>
                     <Col xs={2} className="p-0 pr-2">
@@ -444,6 +519,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                             id="letter-editLetterType-l"
                             inputProps={{ label: '전용폼', custom: true, checked: temp.editLetterType === 'L' }}
                             onChange={handleChangeValue}
+                            disabled={temp.status === 'Y' || temp.status === 'S'}
                         />
                     </Col>
                     <MokaSearchInput
@@ -454,7 +530,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                         onChange={handleChangeValue}
                         onSearch={() => setEditFormModal(true)}
                         inputProps={{ readOnly: true }}
-                        disabled={temp.editLetterType !== 'L' ? true : false}
+                        disabled={temp.status === 'Y' || temp.editLetterType !== 'L' || temp.status === 'S'}
                     />
                     <NewsLetterEditFormModal show={editFormModal} onHide={() => setEditFormModal(false)} onRowClicked={addFormSeq} />
                 </Form.Row>
@@ -462,15 +538,31 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
             <Form.Row className="mb-2">
                 <MokaInputLabel as="none" label="발송자 명" required />
                 <Col xs={2} className="p-0 pr-2">
-                    <MokaInput ref={senderInfoRef} as="select" name="sn" value={sn} onChange={handleChangeValue}>
+                    <MokaInput as="select" name="sn" value={sn} onChange={handleChangeValue} disabled={temp.status === 'Y'}>
                         <option value="ja">중앙일보</option>
                         <option value="">직접 입력</option>
                     </MokaInput>
                 </Col>
                 <Col xs={2} className="p-0 pr-2">
-                    <MokaInput name="senderName" value={temp.senderName} onChange={handleChangeValue} inputProps={{ readOnly: sn === 'ja' ? true : false }} required />
+                    <MokaInput
+                        name="senderName"
+                        value={temp.senderName}
+                        onChange={handleChangeValue}
+                        inputProps={{ readOnly: sn === 'ja' }}
+                        required
+                        isInvalid={error.senderName}
+                        disabled={temp.status === 'Y'}
+                    />
                 </Col>
-                <MokaInput name="senderEmail" value={temp.senderEmail} onChange={handleChangeValue} inputProps={{ readOnly: sn === 'ja' ? true : false }} required />
+                <MokaInput
+                    name="senderEmail"
+                    value={temp.senderEmail}
+                    onChange={handleChangeValue}
+                    inputProps={{ readOnly: sn === 'ja' }}
+                    required
+                    isInvalid={error.senderEmail}
+                    disabled={temp.status === 'Y'}
+                />
             </Form.Row>
             <Form.Row className="mb-2 align-items-center">
                 {temp.sendType === 'A' && (
@@ -480,6 +572,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                             <MokaInput
                                 as="dateTimePicker"
                                 value={sendStartDt.date}
+                                isInvalid={error.sendStartDt}
                                 inputProps={{ timeFormat: null }}
                                 onChange={(date) => {
                                     if (typeof date === 'object') {
@@ -495,12 +588,14 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                         setSendStartDt({ ...sendStartDt, date: null });
                                     }
                                 }}
+                                disabled={temp.status === 'Y'}
                             />
                         </Col>
                         <div style={{ width: 120 }}>
                             <MokaInput
                                 as="dateTimePicker"
                                 value={sendStartDt.time}
+                                isInvalid={error.sendStartDt}
                                 inputProps={{ dateFormat: null }}
                                 onChange={(date) => {
                                     if (typeof date === 'object') {
@@ -518,11 +613,23 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                         setSendStartDt({ ...sendStartDt, time: null });
                                     }
                                 }}
+                                disabled={temp.status === 'Y'}
                             />
                         </div>
                     </>
                 )}
-                {temp.sendType === 'E' && <MokaInputLabel className="flex-fill" name="editTitle" label="발송 제목" value={temp.editTitle} onChange={handleChangeValue} required />}
+                {temp.sendType === 'E' && (
+                    <MokaInputLabel
+                        className="flex-fill"
+                        name="editTitle"
+                        label="발송 제목"
+                        value={temp.editTitle}
+                        onChange={handleChangeValue}
+                        required
+                        isInvalid={error.editTitle}
+                        disabled={temp.status === 'Y'}
+                    />
+                )}
             </Form.Row>
 
             {temp.sendType === 'E' && (
@@ -538,6 +645,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                     id="letter-scbLinkYn-y"
                                     inputProps={{ label: '구독자 연동', custom: true, checked: temp.scbLinkYn === 'Y' }}
                                     onChange={handleChangeValue}
+                                    disabled={temp.status === 'Y'}
                                 />
                             </Col>
                             <Col xs={3} className="p-0 pr-2">
@@ -548,9 +656,10 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                     id="letter-scbLinkYn-n"
                                     inputProps={{ label: '직접 등록', custom: true, checked: temp.scbLinkYn === 'N' }}
                                     onChange={handleChangeValue}
+                                    disabled={temp.status === 'Y'}
                                 />
                             </Col>
-                            <Button variant="positive" size="sm" style={{ overflow: 'visible' }}>
+                            <Button variant="positive" size="sm" style={{ overflow: 'visible' }} disabled={temp.status === 'Y'}>
                                 Excel 업로드
                             </Button>
                         </div>
@@ -573,6 +682,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 id="letter-titleType-n"
                                 inputProps={{ label: '[뉴스레터 상품명]', custom: true, checked: temp.titleType === 'N' }}
                                 onChange={handleChangeValue}
+                                disabled={temp.status === 'Y'}
                             />
                             <MokaInput
                                 as="radio"
@@ -582,6 +692,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 id="letter-titleType-j"
                                 inputProps={{ label: '[중앙일보]', custom: true, checked: temp.titleType === 'J' }}
                                 onChange={handleChangeValue}
+                                disabled={temp.status === 'Y'}
                             />
                             <MokaInput
                                 as="radio"
@@ -591,6 +702,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 id="letter-titleType-a"
                                 inputProps={{ label: '[광고]', custom: true, checked: temp.titleType === 'A' }}
                                 onChange={handleChangeValue}
+                                disabled={temp.status === 'Y'}
                             />
                             <MokaInput
                                 as="radio"
@@ -599,6 +711,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 id="letter-titleType-empty"
                                 inputProps={{ label: '해당 없음', custom: true, checked: temp.titleType === '' }}
                                 onChange={handleChangeValue}
+                                disabled={temp.status === 'Y'}
                             />
                         </Col>
                         <p className="mb-0">2) 날짜 표기</p>
@@ -613,6 +726,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                         id="letter-dateTab-first"
                                         inputProps={{ label: '월(month)-○○월:', custom: true, checked: String(temp.dateTab) === '1' }}
                                         onChange={handleChangeValue}
+                                        disabled={temp.status === 'Y'}
                                     />
                                 </div>
                                 <div className="mr-2">
@@ -626,7 +740,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                             setDateType({ ...dateType, M: Number(e.target.value) });
                                             handleChangeValue(e);
                                         }}
-                                        disabled={Number(temp.dateTab) !== 1 ? true : false}
+                                        disabled={temp.status === 'Y' || Number(temp.dateTab) !== 1}
                                     />
                                 </div>
                                 <div>
@@ -640,7 +754,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                             setDateType({ ...dateType, M: Number(e.target.value) });
                                             handleChangeValue(e);
                                         }}
-                                        disabled={Number(temp.dateTab) !== 1 ? true : false}
+                                        disabled={temp.status === 'Y' || Number(temp.dateTab) !== 1}
                                     />
                                 </div>
                             </div>
@@ -654,6 +768,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                         id="letter-dateTab-second"
                                         inputProps={{ label: '주(week)-○○월 ○○주:', custom: true, checked: String(temp.dateTab) === '2' }}
                                         onChange={handleChangeValue}
+                                        disabled={temp.status === 'Y'}
                                     />
                                 </div>
                                 <div className="mr-2">
@@ -667,7 +782,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                             setDateType({ ...dateType, WK: Number(e.target.value) });
                                             handleChangeValue(e);
                                         }}
-                                        disabled={Number(temp.dateTab) !== 2 ? true : false}
+                                        disabled={temp.status === 'Y' || Number(temp.dateTab) !== 2}
                                     />
                                 </div>
                                 <div>
@@ -681,7 +796,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                             setDateType({ ...dateType, WK: Number(e.target.value) });
                                             handleChangeValue(e);
                                         }}
-                                        disabled={Number(temp.dateTab) !== 2 ? true : false}
+                                        disabled={temp.status === 'Y' || Number(temp.dateTab) !== 2}
                                     />
                                 </div>
                             </div>
@@ -695,6 +810,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                         id="letter-dateTab-third"
                                         inputProps={{ label: '주(week)-MM/DD ~ MM/DD:', custom: true, checked: String(temp.dateTab) === '3' }}
                                         onChange={handleChangeValue}
+                                        disabled={temp.status === 'Y'}
                                     />
                                 </div>
                                 <div className="mr-2">
@@ -708,7 +824,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                             setDateType({ ...dateType, WE: Number(e.target.value) });
                                             handleChangeValue(e);
                                         }}
-                                        disabled={Number(temp.dateTab) !== 3 ? true : false}
+                                        disabled={temp.status === 'Y' || Number(temp.dateTab) !== 3}
                                     />
                                 </div>
                                 <div>
@@ -722,7 +838,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                             setDateType({ ...dateType, WE: Number(e.target.value) });
                                             handleChangeValue(e);
                                         }}
-                                        disabled={Number(temp.dateTab) !== 3 ? true : false}
+                                        disabled={temp.status === 'Y' || Number(temp.dateTab) !== 3}
                                     />
                                 </div>
                             </div>
@@ -736,6 +852,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                         id="letter-dateTab-fourth"
                                         inputProps={{ label: '일(day)-○○월 ○○일:', custom: true, checked: String(temp.dateTab) === '4' }}
                                         onChange={handleChangeValue}
+                                        disabled={temp.status === 'Y'}
                                     />
                                 </div>
                                 <div className="mr-2">
@@ -749,7 +866,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                             setDateType({ ...dateType, D: Number(e.target.value) });
                                             handleChangeValue(e);
                                         }}
-                                        disabled={Number(temp.dateTab) !== 4 ? true : false}
+                                        disabled={temp.status === 'Y' || Number(temp.dateTab) !== 4}
                                     />
                                 </div>
                                 <div>
@@ -763,7 +880,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                             setDateType({ ...dateType, D: Number(e.target.value) });
                                             handleChangeValue(e);
                                         }}
-                                        disabled={Number(temp.dateTab) !== 4 ? true : false}
+                                        disabled={temp.status === 'Y' || Number(temp.dateTab) !== 4}
                                     />
                                 </div>
                             </div>
@@ -777,6 +894,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                         id="letter-dateTab-fifth"
                                         inputProps={{ label: '요일:', custom: true, checked: String(temp.dateTab) === '5' }}
                                         onChange={handleChangeValue}
+                                        disabled={temp.status === 'Y'}
                                     />
                                 </div>
                                 <div className="mr-2">
@@ -790,7 +908,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                             setDateType({ ...dateType, WD: Number(e.target.value) });
                                             handleChangeValue(e);
                                         }}
-                                        disabled={Number(temp.dateTab) !== 5 ? true : false}
+                                        disabled={temp.status === 'Y' || Number(temp.dateTab) !== 5}
                                     />
                                 </div>
                                 <div className="mr-2">
@@ -804,7 +922,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                             setDateType({ ...dateType, WD: Number(e.target.value) });
                                             handleChangeValue(e);
                                         }}
-                                        disabled={Number(temp.dateTab) !== 5 ? true : false}
+                                        disabled={temp.status === 'Y' || Number(temp.dateTab) !== 5}
                                     />
                                 </div>
                             </div>
@@ -815,6 +933,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                 id="letter-dateTab-sixth"
                                 inputProps={{ label: '해당 없음', custom: true, checked: String(temp.dateTab) === '6' }}
                                 onChange={handleChangeValue}
+                                disabled={temp.status === 'Y'}
                             />
                         </Col>
                         <p className="mb-0">3) 직접 입력</p>
@@ -826,7 +945,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                     onChange={(e) => {
                                         handleChangeValue(e);
                                     }}
-                                    disabled={temp.artTitleYn === 'Y' || Number(temp.sendMaxCnt) - Number(temp.sendMinCnt) > 1 ? true : false}
+                                    disabled={temp.status === 'Y' || temp.artTitleYn === 'Y' || Number(temp.sendMaxCnt) - Number(temp.sendMinCnt) > 1}
                                 />
                             </div>
                             <div>
@@ -836,6 +955,7 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
                                     id="letter-artTitle-yn"
                                     inputProps={{ label: '기사 제목 포함', custom: true, checked: temp.artTitleYn === 'Y' }}
                                     onChange={handleChangeValue}
+                                    disabled={temp.status === 'Y' || temp.channelType === 'TREND' || Number(temp.sendMaxCnt) - Number(temp.sendMinCnt) > 1}
                                 />
                             </div>
                         </Col>
@@ -851,6 +971,6 @@ const NewsLetterSendInfo = forwardRef(({ temp, onChangeValue }, ref) => {
             <EditThumbModal show={imgModal} cropWidth={290} cropHeight={180} onHide={() => setImgModal(false)} thumbFileName={temp.headerImg} apply={handleThumbFileApply} />
         </>
     );
-});
+};
 
 export default NewsLetterSendInfo;

@@ -8,7 +8,6 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.mvc.articlepage.service.ArticlePageService;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
@@ -157,18 +156,6 @@ public class ComponentServiceImpl implements ComponentService {
             log.debug("[COMPONENT INSERT] seq: {} History Insert success", returnComp.getComponentSeq());
         }
 
-        // 컴포넌트광고가 있으면 insert
-        //        if (ads != null && ads.size() > 0) {
-        //            for (ComponentAd ad : ads) {
-        //                ad.setComponentSeq(returnComp.getComponentSeq());
-        //            }
-        //            Set<ComponentAd> returnAds = componentAdService.insertComponentAdList(ads);
-        //            log.debug("[COMPONENT INSERT] seq: {} AdList Insert success",
-        //                    returnComp.getComponentSeq());
-        //
-        //            returnComp.setComponentAdList(returnAds);
-        //        }
-
         // DB반영
         entityManager.refresh(returnComp);
 
@@ -308,33 +295,33 @@ public class ComponentServiceImpl implements ComponentService {
         log.debug("[COMPONENT DELETE] seq: {}", seq);
     }
 
-    @Override
-    @Transactional
-    public List<Component> insertComponents(List<Component> components)
-            throws Exception {
-
-        //저장
-        HistPublishDTO histPublishDTO = HistPublishDTO
-                .builder()
-                .status(EditStatusCode.PUBLISH)
-                .approvalYn(MokaConstants.YES)
-                .build();
-
-        List<Component> result = componentRepository.saveAll(components);
-        componentHistService.insertComponentHistList(result, histPublishDTO);
-
-        //임시저장
-        HistPublishDTO histSaveDTO = HistPublishDTO
-                .builder()
-                .status(EditStatusCode.SAVE)
-                .approvalYn(MokaConstants.NO)
-                .build();
-        for (Component component : components) {
-            componentHistService.insertComponentHist(component, histSaveDTO);
-        }
-
-        return result;
-    }
+    //    @Override
+    //    @Transactional
+    //    public List<Component> insertComponents(List<Component> components)
+    //            throws Exception {
+    //
+    //        //저장
+    //        HistPublishDTO histPublishDTO = HistPublishDTO
+    //                .builder()
+    //                .status(EditStatusCode.PUBLISH)
+    //                .approvalYn(MokaConstants.YES)
+    //                .build();
+    //
+    //        List<Component> result = componentRepository.saveAll(components);
+    //        componentHistService.insertComponentHistList(result, histPublishDTO);
+    //
+    //        //임시저장
+    //        HistPublishDTO histSaveDTO = HistPublishDTO
+    //                .builder()
+    //                .status(EditStatusCode.SAVE)
+    //                .approvalYn(MokaConstants.NO)
+    //                .build();
+    //        for (Component component : components) {
+    //            componentHistService.insertComponentHist(component, histSaveDTO);
+    //        }
+    //
+    //        return result;
+    //    }
 
     @Override
     public Page<Component> findAllComponentRel(RelationSearchDTO search, Pageable pageable) {

@@ -23,10 +23,12 @@ const defaultProps = {
 /**
  * A/B 테스트 > 전체 목록 > 리스트 > AgGrid
  */
-const ABAgGrid = ({ columnDefs, rowData, total, searchOptions, onRowClicked, onChangeSearchOption }) => {
+const ABAgGrid = ({ selected, columnDefs, rowData, total, searchOptions, onRowClicked, onChangeSearchOption, loading }) => {
     return (
         <React.Fragment>
             <MokaTable
+                selected={selected}
+                loading={loading}
                 headerHeight={GRID_HEADER_HEIGHT[1]}
                 className="ag-grid-align-center overflow-hidden flex-fill"
                 rowHeight={GRID_ROW_HEIGHT.C[1]}
@@ -39,6 +41,9 @@ const ABAgGrid = ({ columnDefs, rowData, total, searchOptions, onRowClicked, onC
                 onRowNodeId={(data) => data.seq}
                 onChangeSearchOption={onChangeSearchOption}
                 frameworkComponents={{ statusRenderer: StatusRenderer }}
+                refreshCellsParams={{
+                    force: true,
+                }}
             />
         </React.Fragment>
     );

@@ -26,7 +26,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
-import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.CacheHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaFunctions;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
@@ -116,8 +116,8 @@ public class AmpArticleView extends AbstractView {
 
         MokaTemplateMerger templateMerger = null;
         PrintWriter writer = null;
-        String cacheType = KeyResolver.CACHE_AMP_ARTICLE_MERGE;
-        String cacheKey = KeyResolver.makeAmpArticleCacheKey(domainId, articleId);
+        String cacheType = CacheHelper.CACHE_AMP_ARTICLE_MERGE;
+        String cacheKey = CacheHelper.makeAmpArticleCacheKey(domainId, articleId);
         try {
             String cached = null;
             if (this.cacheManager != null) {

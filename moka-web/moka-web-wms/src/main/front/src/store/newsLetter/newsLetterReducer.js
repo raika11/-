@@ -39,26 +39,27 @@ export const initialState = {
             letterSeq: '',
             sendType: 'A',
             letterType: 'O',
-            status: 'P',
+            status: '',
             channelType: '',
-            channelId: '',
-            channelDataId: '',
+            channelId: 0,
+            channelDataId: 0,
             sendPeriod: 'D',
-            sendDay: '',
+            sendDay: null,
             sendTime: null,
+            sendTimeEdit: '',
             sendMinCnt: 1,
             sendMaxCnt: 1,
             sendOrder: 'N',
             scbYn: 'N',
             scbLinkYn: 'Y',
-            senderName: '',
-            senderEmail: '',
+            senderName: '중앙일보',
+            senderEmail: 'root@joongang.co.kr',
             sendStartDt: null,
-            containerSeq: null,
+            containerSeq: 1,
             formSeq: null,
             headerImg: '',
             editLetterType: 'F',
-            abtestYn: '',
+            abtestYn: 'N',
             memo: '',
             regDt: '',
             regId: '',
@@ -66,7 +67,7 @@ export const initialState = {
             modId: '',
             lastSendDt: '',
             category: '',
-            titleType: 'N',
+            titleType: '',
             dateTab: 6,
             dateType: 1,
             artTitleYn: 'N',
@@ -76,6 +77,15 @@ export const initialState = {
             letterEngName: '',
             letterImg: '',
             letterDesc: '',
+        },
+        history: {
+            total: 0,
+            list: [],
+            search: {
+                page: 0,
+                size: PAGESIZE_OPTIONS[0],
+            },
+            letterHistory: {},
         },
     },
     send: {
@@ -118,6 +128,7 @@ export const initialState = {
             letterBody: '',
         },
     },
+    invalidList: [],
 };
 
 /**
@@ -130,17 +141,28 @@ export default handleActions(
         [act.CLEAR_NEWS_LETTER]: (state) => {
             return produce(state, (draft) => {
                 draft.newsLetter.letterInfo = initialState.newsLetter.letterInfo;
+                draft.invalidList = initialState.invalidList;
             });
         },
-        // 검색조건 변경
+        // 데이터 변경
         [act.CHANGE_NEWS_LETTER_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.newsLetter.search = payload;
             });
         },
+        [act.CHANGE_NEWS_LETTER_HISTORY_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.newsLetter.history.search = payload;
+            });
+        },
         [act.CHANGE_NEWS_LETTER_SEND_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.send.search = payload;
+            });
+        },
+        [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.invalidList = payload;
             });
         },
         // 뉴스레터 상품 목록 조회
@@ -172,12 +194,36 @@ export default handleActions(
         // 뉴스레터 채널별 등록된 컨텐츠 조회
         [act.GET_NEWS_LETTER_CHANNEL_TYPE_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.newsLetter.letterChannelTypeList = body;
+                draft.newsLetter.historyList = body;
             });
         },
         [act.GET_NEWS_LETTER_CHANNEL_TYPE_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.newsLetter.letterChannelTypeList = initialState.newsLetter.letterChannelTypeList;
+            });
+        },
+        // 뉴스레터 히스토리 목록 조회
+        [act.GET_NEWS_LETTER_HISTORY_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.newsLetter.history.total = body.totalCnt;
+                draft.newsLetter.history.list = body.list;
+            });
+        },
+        [act.GET_NEWS_LETTER_HISTORY_LIST_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.newsLetter.history.total = initialState.newsLetter.history.total;
+                draft.newsLetter.history.list = initialState.newsLetter.history.list;
+            });
+        },
+        // 뉴스레터 히스토리 상세 조회
+        [act.GET_NEWS_LETTER_HISTORY_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.newsLetter.history.letterHistory = body;
+            });
+        },
+        [act.GET_NEWS_LETTER_HISTORY_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.newsLetter.history.letterHistory = initialState.newsLetter.history.letterHistory;
             });
         },
         // 뉴스레터 발송 목록 조회

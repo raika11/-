@@ -6,7 +6,7 @@ import produce from 'immer';
 import { ABTEST_PURPOSE, ABTEST_TYPE } from '@store/ab/abReducer';
 import commonUtil from '@utils/commonUtil';
 import moment from 'moment';
-import { BASIC_DATEFORMAT } from '@/constants';
+import { BASIC_DATEFORMAT, DB_DATEFORMAT } from '@/constants';
 
 const toAbTestTypeNameForTypeCode = (code) => {
     const { ALTERNATIVE_INPUT, DIRECT_DESIGN, JAM, NEWSLETTER } = ABTEST_TYPE;
@@ -104,7 +104,7 @@ const toAbTestListData = (list) => {
 };
 
 function* getAbTestList({ type, payload: search }) {
-    yield startLoading(type);
+    yield put(startLoading(type));
     try {
         const response = yield call(api.getAbTestList, search);
         if (response.data.header.success) {
@@ -118,7 +118,7 @@ function* getAbTestList({ type, payload: search }) {
     } catch (e) {
         console.log(e);
     }
-    yield finishLoading(type);
+    yield put(finishLoading(type));
 }
 
 const toAbTestData = (data) => {
@@ -142,7 +142,7 @@ const toAbTestData = (data) => {
 };
 
 function* getAbTest({ type, payload: { abtestSeq, callback } }) {
-    yield startLoading(type);
+    yield put(startLoading(type));
     try {
         const response = yield call(api.getAbTest, abtestSeq);
         const abtestData = toAbTestData(response.data.body);
@@ -153,10 +153,14 @@ function* getAbTest({ type, payload: { abtestSeq, callback } }) {
     } catch (e) {
         console.log(e);
     }
+    yield put(finishLoading(type));
 }
 
 const toSaveAbtestData = (data) => {
-    const { abtestGrpMethod, abtestRandomGrpA, abtestRandomGrpB, abtestFixGrpA, abtestFixGrpB, ...rest } = data;
+    const { abtestGrpMethod, abtestRandomGrpA, abtestRandomGrpB, abtestFixGrpA, abtestFixGrpB, startDt: detailStartDt, endDt: detailEndDt, ...rest } = data;
+    const startDt = commonUtil.isEmpty(detailStartDt) ? detailStartDt : moment(detailStartDt).format(DB_DATEFORMAT);
+    const endDt = commonUtil.isEmpty(detailEndDt) ? detailEndDt : moment(detailEndDt).format(DB_DATEFORMAT);
+
     let abtestGrpA = '';
     let abtestGrpB = '';
 
@@ -170,21 +174,50 @@ const toSaveAbtestData = (data) => {
         abtestGrpB = abtestFixGrpB;
     }
 
-    return { ...rest, abtestGrpMethod, abtestGrpA, abtestGrpB };
+    return { ...rest, abtestGrpMethod, abtestGrpA, abtestGrpB, startDt, endDt };
 };
 
 function* saveAbTest({ type, payload }) {
-    console.log('save', payload);
+    yield put(startLoading(type));
     const { detail, callback } = payload;
     const saveAbtestData = toSaveAbtestData(detail);
-    yield call(api.putAbTest, { detail: saveAbtestData });
-    if (callback instanceof Function) {
-        callback();
+
+    let apiUrl = api.postAbTest;
+    if (!commonUtil.isEmpty(saveAbtestData.abtestSeq) && saveAbtestData.abtestSeq !== '') {
+        apiUrl = api.putAbTest;
     }
+
+    const response = yield call(apiUrl, { detail: saveAbtestData });
+    if (callback instanceof Function) {
+        callback(response.data);
+    }
+    yield put(finishLoading(type));
+}
+
+function* closeAbTest({ type, payload }) {
+    yield put(startLoading(type));
+    const { abtestSeq, callback } = payload;
+    const response = yield call(api.putCloseAbtest, abtestSeq);
+    if (callback instanceof Function) {
+        callback(response.data);
+    }
+    yield put(finishLoading(type));
+}
+
+function* deleteAbTest({ type, payload }) {
+    yield put(startLoading(type));
+    const { abtestSeq, callback } = payload;
+    const response = yield call(api.deleteAbtest, abtestSeq);
+    if (callback instanceof Function) {
+        callback(response.data);
+    }
+    yield put(finishLoading(type));
 }
 
 export default function* abSaga() {
     yield takeLatest(action.GET_AB_TEST_LIST, getAbTestList);
     yield takeLatest(action.GET_AB_TEST, getAbTest);
     yield takeLatest(action.SAVE_AB_TEST, saveAbTest);
+    yield takeLatest(action.CLOSE_AB_TEST, closeAbTest);
+    yield takeLatest(action.DELETE_AB_TEST, deleteAbTest);
 }

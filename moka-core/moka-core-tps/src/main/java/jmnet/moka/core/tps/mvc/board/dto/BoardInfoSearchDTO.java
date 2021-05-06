@@ -34,6 +34,8 @@ public class BoardInfoSearchDTO extends SearchDTO {
 
     @ApiModelProperty("사용여부")
     private String usedYn;
+    @ApiModelProperty("삭제여부")
+    private String delYn;
 
     @ApiModelProperty("게시판유형(S:서비스 / A:관리자)")
     @NotNull(message = "{tps.board-info.error.pattern.boardType}")

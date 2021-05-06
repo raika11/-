@@ -79,15 +79,12 @@ public class CodeMgtDTO implements Serializable {
     private String cdComment;
 
     @ApiModelProperty("코드기타1")
-    @Length(max = 512, message = "{tps.codeMgt.error.length.cdNmEtc1}")
     private String cdNmEtc1;
 
     @ApiModelProperty("코드기타2")
-    @Length(max = 1024, message = "{tps.codeMgt.error.length.cdNmEtc2}")
     private String cdNmEtc2;
 
     @ApiModelProperty("코드기타3")
-    @Length(max = 1024, message = "{tps.codeMgt.error.length.cdNmEtc3}")
     private String cdNmEtc3;
 
     @ApiModelProperty("사용여부(Y:사용, N:미사용)")

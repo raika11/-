@@ -1,10 +1,10 @@
 $(document).ready(function() {
     //header stiky
-    //header stiky
     if($("#sticky").length>0){
         var stickyHeight = $("#sticky").outerHeight(); 
         setSticky(stickyHeight);
     }
+
     $(window).scroll(function () {
         if($("#sticky").length>0){
             setSticky(stickyHeight);
@@ -18,6 +18,7 @@ $(document).ready(function() {
             setSticky(stickyHeight);
         }
     });
+
     //li형 select box
     $(".dropdown_toggle").on("click", function(){
         $(this).parent(".dropdown").toggleClass("open");
@@ -77,7 +78,7 @@ $(document).ready(function() {
 
 //header stiky
 function setSticky(stickyHeight){
-    if ($(window).scrollTop() > stickyHeight) {
+    if ($(window).scrollTop() > stickyHeight && window.innerWidth >= BREAKPOINT_LARGE) {
         $('#sticky').addClass('sticky_top');
         $("main").css("margin-top",stickyHeight + "px");
     } else {
